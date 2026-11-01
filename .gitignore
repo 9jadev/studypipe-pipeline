@@ -1,0 +1,11 @@
+node_modules/
+exports/*.zip
+topics/*/qa/
+kits/*/qa/
+batch.log
+.DS_Store
+# Copyrighted sources stay on your computer, not in Git
+topics/*/sources/*.pdf
+topics/*/sources/*.jpg
+topics/*/sources/*.jpeg
+topics/*/sources/*.png

@@ -1,0 +1,18 @@
+{
+  "id": "pendulum",
+  "version": 1,
+  "title": "Simple pendulum on a retort stand",
+  "type": "interactive-3d",
+  "needs3d": true,
+  "subjects": ["Physics"],
+  "concepts": ["simple harmonic motion", "period", "acceleration due to gravity", "oscillation"],
+  "params": {
+    "length_m": { "type": "number", "default": 0.8, "min": 0.2, "max": 1.5, "doc": "string length in metres" },
+    "angle_deg": { "type": "number", "default": 10, "min": 2, "max": 30, "doc": "release angle in degrees" },
+    "g": { "type": "number", "default": 9.81, "doc": "gravitational field strength in m/s^2" }
+  },
+  "events": {
+    "timed": "{ oscillations, seconds, expected_period } when the student stops the stopwatch"
+  },
+  "used_in": ["_example-simple-pendulum"]
+}

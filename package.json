@@ -1,0 +1,16 @@
+{
+  "name": "studypipe-studio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Content studio: WAEC/NECO/JAMB topics to offline interactive 3D HTML lessons",
+  "scripts": {
+    "setup": "npx playwright install chromium",
+    "qa": "node scripts/qa.mjs",
+    "qa:example": "node scripts/qa.mjs topics/_example-simple-pendulum",
+    "qa:kit": "node scripts/qa.mjs kits/pendulum/demo.html"
+  },
+  "devDependencies": {
+    "playwright": "^1.47.0"
+  }
+}
