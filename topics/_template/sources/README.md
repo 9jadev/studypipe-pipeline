@@ -1,6 +1,6 @@
 # Sources for this topic
 
-Drop in anything that helps Claude understand the topic. These are for understanding only —
+Drop in anything that helps the agent understand the topic. These are for understanding only —
 the pipeline never copies text from them word for word.
 
 - Textbook pages (PDF or photos) for this topic

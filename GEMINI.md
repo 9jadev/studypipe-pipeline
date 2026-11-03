@@ -9,7 +9,7 @@ into a phone WebView. Nothing here is a web app; we only produce content.
 
 | Path | What lives there |
 |---|---|
-| `.claude/skills/` | The pipeline skills (one folder per skill) |
+| `.agents/skills/` | The pipeline skills (one folder per skill) |
 | `topics/<slug>/` | One folder per topic. `sources/` holds what the human uploads |
 | `topics/_template/` | Copied by `scripts/new-topic.sh` to start a topic |
 | `kits/` | Reusable 3D/SVG kits. **`kits/catalog.md` is the index — read it before building anything visual** |

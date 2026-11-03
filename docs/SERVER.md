@@ -9,16 +9,16 @@ adduser studio && usermod -aG sudo studio
 ufw allow OpenSSH && ufw enable          # add 443 later if you host a review site
 # as the studio user
 curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash - && sudo apt install -y nodejs git zip tmux
-curl -fsSL https://claude.ai/install.sh | bash        # Claude Code CLI (check docs if this changes)
+# install the Antigravity CLI (agy) per https://antigravity.google/docs/cli
 git clone <your-private-repo> ~/studypipe-studio && cd ~/studypipe-studio
 npm install && npx playwright install --with-deps chromium
-claude            # first run: sign in with the link it shows, then /exit
+agy               # first run: sign in with the prompts it shows, then /exit
 ```
 Source PDFs are not in Git. Copy them over with `scp` or `rsync`, e.g.
 `rsync -av topics/*/sources server:~/studypipe-studio/topics/`.
 
 ## Run
-- **Watch live:** `tmux new -s studio`, run `claude`, say "run the queue in batch mode",
+- **Watch live:** `tmux new -s studio`, run `agy`, say "run the queue in batch mode",
   then detach with `Ctrl-b d`. Reattach later with `tmux attach -t studio` (Termius works on a phone).
 - **Nightly, automatic:** `crontab -e` and add
   `0 23 * * * cd ~/studypipe-studio && bash scripts/run-batch.sh >> batch.log 2>&1`
@@ -31,5 +31,4 @@ Source PDFs are not in Git. Copy them over with `scp` or `rsync`, e.g.
 
 ## Notes
 - Plan usage limits apply. A long batch may pause until your limit resets.
-- Never run Claude as root. Keep the permissions in `.claude/settings.json` narrow.
-- Alternative with no server: Claude Code on the web runs against your GitHub repo in Anthropic's cloud.
+- Never run the agent as root. Use `agy --sandbox` if you want shell commands isolated.
