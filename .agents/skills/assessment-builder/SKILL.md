@@ -1,45 +1,38 @@
 ---
 name: assessment-builder
-description: Writes original WAEC/NECO/JAMB-style questions with answers, explanations for every option, and Bloom levels into 03-questions.md. Step 3 of the StudyPipe pipeline.
+description: Writes 12 original WAEC/NECO/JAMB-style interactive MCQs (for window.LESSON_QUIZ) plus a 30-mark structured written & practical assignment (with locked solutions and marking schemes) into 03-questions.md. Step 3 of the StudyPipe pipeline.
 ---
 
 # Assessment Builder
 
-Goal: a question bank that checks every objective, matches exam style, and teaches through feedback.
+Goal: write a complete, exam-rigorous assessment suite that tests every learning objective, teaches through rich explanatory feedback, and includes both instant-feedback MCQs and a 30-mark structured written assignment.
 
 ## Inputs
-`01-topic-map.md`, `02-lesson.md`, past questions in `sources/` (style reference only).
+`01-topic-map.md`, `02-lesson.md`, past questions in `sources/` (used for exam style and difficulty calibration only).
 
-## Rules
-- **Original questions only.** Study past-question style, numbers and traps, then write new ones.
-  Never reproduce a past question's wording or exact numbers.
-- Every objective in the map is covered by ≥2 questions.
-- Mix: ~60% objective (4 options A–D), ~25% theory/short answer, ~15% practical/data
-  (tables, graphs, readings) for practical topics.
-- Bloom spread: ≤30% Remember; the rest Understand/Apply/Analyse (a few Evaluate).
-- Every option gets a one-line explanation. Wrong options target real misconceptions.
-- Calculations: show full working in the answer, with units and significant figures as WAEC expects.
-- Total 12–20 questions per topic; mark 5 as `exam_ready: true` for the end-of-lesson test.
+## Non-Negotiable Copyright & Paraphrasing Rule
+- **100% Original Questions Only.** Study the structure, concepts, and common examiner traps in past WAEC/NECO/JAMB papers, then **invent brand-new scenarios, fresh numbers, and original stems**.
+- Never copy or lightly edit a copyrighted past question or online reference problem.
 
-## Output: `03-questions.md`
-Each question as a fenced block the renderer can parse:
+## Output Structure in `03-questions.md`
 
-````markdown
-```question
-id: q1
-type: mcq            # mcq | short | practical
-bloom: apply
-objective: 1
-exam_style: WAEC
-exam_ready: true
-stem: 25.0 cm3 of 0.10 mol/dm3 NaOH needed 20.0 cm3 of HCl. What is the concentration of the HCl?
-options:
-  A: 0.080 mol/dm3 | Divided the wrong way round.
-  B: 0.125 mol/dm3 | Correct: moles NaOH = 0.0025; ratio 1:1; 0.0025 / 0.020 = 0.125.
-  C: 0.20 mol/dm3 | Forgot to convert cm3 to dm3 correctly.
-  D: 1.25 mol/dm3 | Decimal-place error.
-answer: B
-working: |
-  n(NaOH) = 0.10 × 25.0/1000 = 0.0025 mol ...
-```
-````
+### Part 1: 12 Interactive Quiz Questions (`window.LESSON_QUIZ`)
+- 12 four-option (`A`–`D`) multiple-choice questions that populate `#quiz-list` via `LessonKit`.
+- Every learning objective in `01-topic-map.md` must be tested by at least 2 questions.
+- Bloom spread: max 3 `Remember` questions; at least 9 `Understand`, `Apply`, and `Analyse` questions (including calculations, experimental error directions, graph interpretation, and phenomenon application).
+- Each question specifies:
+  - `q`: question stem (may use `<strong>`, `<sub>`, `<sup>`)
+  - `o`: array of 4 concise options
+  - `a`: 0-based index of the correct option (`0`–`3`)
+  - `e`: clear 1–3 sentence explanation of *why* the correct answer is right and why the main distractor is wrong
+  - `src`: exam style tag (`"WAEC-style"`, `"NECO-style"`, `"JAMB-style"`, `"WAEC Practical"`)
+
+### Part 2: Home Investigation & 30-Mark Written Assignment
+Used to populate `#assignment` in the rendered lesson (with locked-until-attempted solutions):
+- **Part A · Practical Home / Everyday Investigation:** A safe, hands-on observation or measurement task using everyday Nigerian household items, with a sample results table and marking guidance.
+- **Part B · Written Exam Questions (30 marks total across 8 questions `b1`–`b8`):**
+  - Mix of definitions (`3–4 marks`), conceptual explanations (`3–4 marks`), derivations/equations (`4–6 marks`), multi-step numerical calculations (`4–6 marks`), practical data/graph/error analysis (`4–6 marks`), and safety/precautions written in the **past tense** (`2–3 marks`).
+  - Every question includes:
+    - Question heading + mark badge (`e.g. 4 marks`)
+    - Full step-by-step model solution with mark points `<b>(1)</b>`
+    - Examiner's `mark-scheme` note highlighting common candidate errors to avoid.

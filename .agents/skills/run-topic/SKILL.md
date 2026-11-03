@@ -20,14 +20,14 @@ You coordinate the other skills. You do not write lesson content yourself.
 2. Read `topics/<slug>/status.md`. Resume from the first step not marked done. Never redo a
    finished step unless the human asks or a later step sent it back.
 3. Run each step by following that skill's SKILL.md exactly:
-   1. `curriculum-mapper` → `01-topic-map.md`
-   2. `lesson-designer` → `02-lesson.md`
-   3. `assessment-builder` → `03-questions.md`
+   1. `curriculum-mapper` → `01-topic-map.md` (Anchor phenomenon, 5-phase inquiry arc, L1–L7 competences, paraphrased syllabus scope)
+   2. `lesson-designer` → `02-lesson.md` (Full 5-phase phenomenon-based lesson, 3D story beats, sort, 3D lab, concept zoom, worked examples, bridge, self-rating, 30-mark assignment)
+   3. `assessment-builder` → `03-questions.md` (12 interactive MCQs + Part A home investigation + Part B 30-mark written paper with locked solutions)
    4. `content-reviewer` → `04-review.md`
       - If verdict is **FIX**: send the listed fixes back to `lesson-designer` / `assessment-builder`,
         then review again. Maximum 2 fix loops, then `NEEDS-HUMAN`.
       - Interactive mode: after PASS, show the human a 10-line summary and wait for approval.
-   5. `lesson-renderer` → `html/` (it calls `kit-builder` for any missing kit)
+   5. `lesson-renderer` → `html/` (uses `story-builder` for `story.js`, `kit-builder` for `bench.js`/`zoom.js`, and `narration-choreographer` for `narration.js`)
    6. `html-qa` → `05-qa-report.md`. If it fails, send issues to `lesson-renderer`
       (max 2 loops), then `NEEDS-HUMAN`.
    7. `packager` → `exports/<slug>.zip`

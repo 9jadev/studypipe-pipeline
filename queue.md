@@ -7,7 +7,7 @@ Create each topic first with `bash scripts/new-topic.sh <slug>` and add its sour
 ## Demo pack (8 priority topics)
 - [ ] ss2-chem-acid-base-titration
 - [ ] ss3-chem-qualitative-analysis
-- [ ] ss2-phy-simple-pendulum
+- [x] ss2-phy-simple-harmonic-motion   (SHM, includes simple pendulum / determining g)
 - [ ] ss2-phy-refraction-glass-block
 - [ ] ss2-phy-ohms-law-circuits
 - [ ] ss1-bio-cell-structure

@@ -1,34 +1,27 @@
 ---
 name: kit-builder
-description: Builds a new reusable, parametric 3D or SVG kit (three.js or SVG) for a scene that no existing kit covers, tests it, and registers it in kits/catalog.md. Called by lesson-renderer; can also be run directly ("build a kit for ...").
+description: Builds reusable, studio-lit 3D or interactive stages using SceneKit (scene-kit.js) and three.js — supporting 3D part spotlighting (rect/highlight) and narrator actions/events. Called by lesson-renderer or directly.
 ---
 
-# Kit Builder
+# Kit & 3D Stage Builder
 
-A **kit** is a reusable visual or interactive building block (e.g. `pendulum`, `titration-bench`,
-`plant-cell-3d`, `circle-theorems`). Kits are the studio's long-term asset: build each one so many
-future topics can reuse it by changing parameters.
+Goal: build studio-quality, physically accurate 3D laboratory benches and concept zoom stages using `SceneKit` (`assets/js/scene-kit.js`) and `window.THREE` (`kits/_vendor/three-bundle.min.js`), registered on `window.StudyScenes[name]` (and optionally `window.StudyPipeKits[kitId]`).
 
-Read first: `references/kit-contract.md` (required). Look at `kits/pendulum/` as the reference kit.
+Read first: `references/kit-contract.md` (required).
 
 ## Procedure
-1. Re-check `kits/catalog.md`. If an existing kit can do it with new params or a small,
-   backward-compatible extension, extend that kit instead (bump its `version` in kit.json).
-2. Design the kit's **parameters** and **events** first (what can a future topic change?
-   what student actions should be reported?). Write them into `kit.json`.
-3. Build `kits/<kit-id>/kit.js` following the contract. Realism matters: correct proportions,
-   realistic colours for chemicals and tissues, correct physics (use real equations, real units).
-4. Build `kits/<kit-id>/demo.html` that mounts the kit full screen with default params.
-5. Test: `node scripts/qa.mjs kits/<kit-id>/demo.html`. Fix every console error; look at the
-   screenshot. Then **self-review** against the checklist below and fix before finishing.
-6. Add one row to `kits/catalog.md`.
-
-## Self-review checklist
-- [ ] Scientifically correct (values, colours, motion, labels)
-- [ ] Obvious first action shown in the scene; reset button works
-- [ ] Labels beside what they label; never covering moving parts
-- [ ] Works with touch (tap, drag, pinch/rotate where relevant) at 360×740
-- [ ] `destroy()` stops animation frames, listeners and disposes WebGL resources
-- [ ] No network requests, no ES modules, only `window.THREE` from the vendor bundle
-- [ ] ≤ 50k triangles; smooth on a low-end phone (pixel ratio capped at 2)
-- [ ] All params documented in kit.json with defaults
+1. Check `kits/catalog.md` to see if an existing kit covers the scene or can be extended.
+2. Build 3D scenes on top of `window.SceneKit.createStage({ root, canvas, fov, target, pitch, yaw, fitWidth, distance, onFrame })` which automatically provides:
+   - Procedural studio PMREM environment lighting + ACES Filmic tone mapping + key/rim/fill lights
+   - Smooth touch/pointer orbit + pinch/wheel zoom
+   - Automatic pause when scrolled off-screen (`IntersectionObserver`) or tab hidden
+   - `SceneKit.labelTexture(text, opts)` for crisp 3D sprite labels
+   - `SceneKit.glowSprite(color, size)` for soft additive highlight halos
+   - `stage.rectOf(objOrArray, padPx)` to project any 3D mesh/group to a 2D `{ left, top, width, height }` screen box for `StudyNarrator` spotlighting!
+   - `stage.pick(event, objects)` for raycast tap/click selection on 3D apparatus.
+3. Register the scene on `window.StudyScenes[sceneName]` with:
+   - `rect(part)`: returns `stage.rectOf(...)` for every named part referenced in `narration.js`
+   - `highlight(part)`: pulses a glow ring or emissive highlight on the named part
+   - Action methods callable from `narration.js` (e.g. `test(i)`, `setLength(L)`, `setMode(m)`, `reset()`)
+   - Custom DOM events (`document.dispatchEvent(new CustomEvent(...))`) when the student completes an investigation so `StudyNarrator`'s `"Your turn!"` waits trigger and react automatically.
+4. Test with `node scripts/qa.mjs` and verify zero console errors and crisp visual layout at `360×740`.

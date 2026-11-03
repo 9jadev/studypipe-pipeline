@@ -1,0 +1,18 @@
+{
+  "id": "mass-spring",
+  "version": 1,
+  "title": "Vertical mass on a helical spring (3D)",
+  "type": "interactive-3d",
+  "needs3d": true,
+  "subjects": ["Physics"],
+  "concepts": ["simple harmonic motion", "hookes law", "spring constant", "period of mass on spring"],
+  "params": {
+    "mass_kg": { "type": "number", "default": 0.5, "min": 0.2, "max": 1.2, "doc": "hanging mass in kg" },
+    "k_Npm": { "type": "number", "default": 50, "min": 20, "max": 120, "doc": "spring constant in N/m" },
+    "amplitude_m": { "type": "number", "default": 0.12, "min": 0.04, "max": 0.2, "doc": "vertical displacement in m" }
+  },
+  "events": {
+    "timed": "{ mass_kg, k_Npm, period_s } when student changes parameters or times motion"
+  },
+  "used_in": ["ss2-phy-simple-harmonic-motion"]
+}

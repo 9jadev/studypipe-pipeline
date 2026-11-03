@@ -1,0 +1,18 @@
+{
+  "id": "shm-kinematics-2d",
+  "version": 1,
+  "title": "SHM 2D Visualizer: acceleration/velocity vectors, circular-motion shadow, damping & resonance",
+  "type": "interactive-2d",
+  "needs3d": false,
+  "subjects": ["Physics"],
+  "concepts": ["simple harmonic motion", "circular motion projection", "velocity and acceleration in SHM", "damping", "resonance", "bartons pendulums"],
+  "params": {
+    "mode": { "type": "string", "default": "arrows", "doc": "arrows | circle | va | resonance" },
+    "amplitude_m": { "type": "number", "default": 0.10, "doc": "amplitude A in metres" },
+    "period_s": { "type": "number", "default": 2.0, "doc": "period T in seconds" }
+  },
+  "events": {
+    "interacted": "{ mode, action } when student interacts with the scene"
+  },
+  "used_in": ["ss2-phy-simple-harmonic-motion"]
+}
