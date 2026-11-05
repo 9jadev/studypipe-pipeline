@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 1 · Refraction at Plane Surfaces, Wavefront Speed &amp; Snell’s Law · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): Refraction at Plane Surfaces, Wavefront Speed, Wavelength Compression, Snell's Law (n = sin i / sin r), Glancing Angle Trap, and n = tan i.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='22' width='44' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l01">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 1 of 5 · <b>Snell’s Law &amp; Wavefront Speed</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 1 of 5 · 50 minutes</span>
+        <h1 class="display reveal" data-hook>Refraction at Plane Surfaces, Wavefront Speed &amp; <em>Snell’s Law</em></h1>
+        <p class="question reveal">Why does a laser beam entering a glass block at <code>45°</code> bend sharply towards the normal to <code>28.1°</code> while its frequency and colour remain completely unchanged?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Define <strong>refraction of light</strong> and state the <strong>two laws of refraction (Snell’s law)</strong> at a plane boundary.</span></li>
+          <li><b>02</b><span>Explain refraction using <strong>wavefront slowing</strong>: why wave speed <strong>v</strong> and wavelength <strong>λ</strong> decrease in glass (<code>n = c/v = λ₁/λ₂</code>) while <strong>frequency f remains constant</strong>.</span></li>
+          <li><b>03</b><span>Avoid the <strong>glancing-angle trap</strong> (<code>i = 90° − g</code>) and explain <strong>normal incidence (<code>i = 0°, r = 0°</code>)</strong>.</span></li>
+          <li><b>04</b><span>Apply the principle of <strong>reversibility of light</strong> (<code><sub>g</sub>n<sub>a</sub> = 1 / <sub>a</sub>n<sub>g</sub></code>) and relative refractive index <code><sub>1</sub>n<sub>2</sub> = n<sub>2</sub> / n<sub>1</sub></code>.</span></li>
+          <li><b>05</b><span>Prove and apply the <strong>90° reflected–refracted shortcut (<code>n = tan i</code>)</strong> when the reflected and refracted rays are perpendicular.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <!-- Schematic Air/Glass Boundary & Snell's Law -->
+          <rect x="28" y="130" width="264" height="104" rx="10" fill="rgba(56,189,248,0.18)" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="160" y1="24" x2="160" y2="236" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 5"/>
+          <line x1="72" y1="42" x2="160" y2="130" stroke="#ffb23f" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="160" y1="130" x2="248" y2="42" stroke="#a855f7" stroke-width="2" stroke-dasharray="4 4"/>
+          <line x1="160" y1="130" x2="212" y2="226" stroke="#3ee6c4" stroke-width="3.5" stroke-linecap="round"/>
+          <text x="134" y="82" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="12">i = 45°</text>
+          <text x="168" y="192" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12">r = 28.1°</text>
+          <text x="86" y="218" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="12">n = sin i / sin r = 1.50</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Wavefront sort</a></li>
+        <li><a href="#practical">3D laser bench</a></li>
+        <li><a href="#concepts">Snell’s law &amp; v</a></li>
+        <li><a href="#neutralise">Wavefront zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up your wave &amp; optics toolkit</em></h2>
+        <p class="intro">Four foundational building blocks on the speed of light in air, the wave equation <code>v = fλ</code>, measuring angles from the normal, and the law of reflection. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>A laser-bending puzzle at <em>Dr Kunle’s Clinic, Surulere</em></h2>
+        <p class="intro">At an optometry calibration clinic in Surulere, Lagos, SS2 students Zainab and Kelechi watch a green laser strike a flat crown-glass slab at <code>45°</code> and bend sharply to <code>28.1°</code> without changing colour.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas id="story-canvas" aria-label="Animated 3D story: Zainab, Kelechi, and Dr Kunle at the Surulere Optometry Clinic comparing normal and oblique laser refraction, then Mrs Adebayo at the SS2 Physics Lab."></canvas>
+            <div class="stage-label"><i></i>3D story · Surulere Clinic → SS2 Optics Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Surulere Optometry Clinic:</strong> Zainab points at the calibration block: <em>“Dr Kunle! Why did the green laser beam entering this flat glass block at 45° suddenly bend down to 28.1° inside the glass?”</em></p>
+            <p><strong>Scene 2 · Kelechi’s assumption:</strong> <em>“Maybe the glass slows down the oscillations so the frequency changes — or maybe only curved lenses are supposed to bend light!”</em></p>
+            <p><strong>Scene 3 · Dr Kunle’s explanation:</strong> <em>“Frequency f never changes! The laser stays at 5.0 × 10¹⁴ Hz, but its wave speed drops from 3.0 × 10⁸ m s⁻¹ in air to 2.0 × 10⁸ m s⁻¹ in crown glass, compressing wavelength λ and pivoting each wavefront.”</em></p>
+            <p><strong>Scene 4 · Rig A (i = 0°) vs Rig B (i = 45°):</strong> Along the normal (<code>i = 0°</code>), every part of the wavefront slows simultaneously so <code>r = 0°</code>. At oblique incidence (<code>i = 45°</code>), one edge slows first and obeys Snell’s law: <code>sin i / sin r = n = 1.50</code>.</p>
+            <p><strong>Scene 5 · The 90° shortcut:</strong> Dr Kunle shows that at <code>i = 56.3°</code>, the partially reflected ray and the refracted ray are perpendicular (<code>90°</code> apart), giving <code>n = tan i = 1.50</code>.</p>
+            <p><strong>Scene 6 · SS2 Optics Lab:</strong> Mrs Adebayo sets up a 360° protractor disc, laser ray box, and crown-glass slab to test five angles of incidence and verify Snell’s law.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">What changes and what stays constant when light enters glass? Pin your prediction before we test it on the 3D laser bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that when light enters glass, its speed and wavelength… while frequency…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Why does frequency stay constant when light enters glass?</button>
+            <button type="button">What if the question gives the glancing angle to the surface?</button>
+            <button type="button">Does light slow down at normal incidence (i = 0°)?</button>
+            <button type="button">Why does n = tan i when reflected ⊥ refracted?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>What Changes, What Stays Constant &amp; <em>Special Angle Rules</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Changes When Entering Glass</strong>, <strong>Remains Strictly Constant</strong>, and <strong>Special Angle Rules &amp; Exam Traps</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Changes When Entering Glass bin">
+              <h4><i></i>Changes in Glass</h4>
+              <small>v, λ, r &amp; deviation</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Remains Strictly Constant bin">
+              <h4><i></i>Remains Constant</h4>
+              <small>f, period T &amp; sin i / sin r</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Special Angle Rules bin">
+              <h4><i></i>Special Angle Rules</h4>
+              <small>glancing g, i=0° &amp; n=tan i</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D Snell’s Law Bench: <em>Measuring sin i and sin r Across Five Angles</em></h2>
+        <p class="intro">Step up to Mrs Adebayo’s 3D optical bench. Fire the laser at five angles of incidence <strong>i</strong> from <code>15°</code> to <code>60°</code> into crown glass (<code>n = 1.50</code>), compare with diamond (<code>n = 2.42</code>) and the <code>90°</code> reflected–refracted angle (<code>i = 56.3°</code>), and record <code>sin i</code> and <code>sin r</code> to 3 decimal places.</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Golden WAEC Optics Rules:</strong> Always measure angles <strong>i</strong> and <strong>r</strong> between the ray and the <strong>normal NN′</strong> (if given glancing angle <code>g</code> to the surface, first compute <code>i = 90° − g</code>). Record trigonometric values (<code>sin i, sin r</code>) to <strong>3 decimal places</strong>.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Draw the normal NN′</h4><p>Construct normal <code>NN′</code> strictly perpendicular (<code>90°</code>) to the air–glass boundary at point of incidence <code>O</code>.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Measure i from the normal</h4><p>Set angle of incidence <code>i</code> from the normal (never from the glass face!) and direct the incident ray at <code>O</code>.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Read refracted angle r</h4><p>Measure the angle of refraction <code>r</code> between the refracted ray inside the glass and the normal <code>NN′</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Compute sin i ÷ sin r</h4><p>Tabulate <code>sin i</code> and <code>sin r</code> to 3 d.p. and verify that <code>sin i ÷ sin r = n = 1.50</code>.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Snell's law optical bench with 360-degree protractor disc, laser ray box, crown glass block, incident ray, partially reflected ray, and refracted ray."></canvas>
+            <div class="stage-label"><i></i>3D Snell’s Law Bench · drag to rotate · tap trials A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D optical bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Optical condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Crown Glass (n = 1.50)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Diamond (n = 2.42)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">90° Refl ⊥ Refr (i = 56.3°)</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 15°</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 30°</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 45°</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 56.3°</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 60°</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
+          </div>
+        </div>
+
+        <h3>Record your WAEC Snell’s Law readings</h3>
+        <p>As you test Trials A–E on the 3D bench (in Crown Glass, <code>n = 1.50</code>), select the matching <strong>sin i</strong>, <strong>sin r</strong>, and <strong>n = sin i ÷ sin r</strong> below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Angle i (°)</th>
+                <th>sin i (3 d.p.)</th>
+                <th>sin r (3 d.p.)</th>
+                <th>Ratio n = sin i ÷ sin r</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC table &amp; sin i vs sin r slope calculation <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>i (°)</th><th>r (°)</th><th>sin i</th><th>sin r</th><th>n = sin i ÷ sin r</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>15.0</td><td>9.9</td><td>0.259</td><td>0.173</td><td>1.50</td></tr>
+                  <tr><td>B</td><td>30.0</td><td>19.5</td><td>0.500</td><td>0.333</td><td>1.50</td></tr>
+                  <tr><td>C</td><td>45.0</td><td>28.1</td><td>0.707</td><td>0.471</td><td>1.50</td></tr>
+                  <tr><td>D</td><td>56.3</td><td>33.7</td><td>0.832</td><td>0.555</td><td>1.50</td></tr>
+                  <tr><td>E</td><td>60.0</td><td>35.3</td><td>0.866</td><td>0.577</td><td>1.50</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Slope of sin i (vertical) against sin r (horizontal):</strong></p>
+            <div class="eq light">Slope S = Δ(sin i) ÷ Δ(sin r) = (0.866 − 0.259) ÷ (0.577 − 0.173) = 0.607 ÷ 0.404 = 1.50 = n</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l01-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why must we plot <code>sin i</code> against <code>sin r</code> rather than plotting angle <code>i</code> directly against angle <code>r</code> to obtain a straight line?</li>
+            <li>In Trial D (<code>i = 56.3°, r = 33.7°</code>), what is the angle between the partially reflected ray and the refracted ray, and what special formula connects <code>n</code> and <code>i</code>?</li>
+            <li>If a student plots <code>sin r</code> on the vertical axis against <code>sin i</code> on the horizontal axis, what is the gradient of the graph for crown glass (<code>n = 1.50</code>)?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Snell’s law states that the ratio of the <strong>sines</strong> of the angles is constant (<code>sin i = n sin r</code>), whereas <code>i ÷ r</code> is not constant (except as an approximation at very small angles).</li>
+                <li>Since <code>i + r = 56.3° + 33.7° = 90.0°</code>, the angle between the reflected and refracted rays is <code>180° − 90° = 90°</code> (perpendicular), and <code>n = tan i = tan 56.3° = 1.50</code>.</li>
+                <li>The gradient of <code>sin r</code> (vertical) against <code>sin i</code> (horizontal) is <code>1 ÷ n = 1 ÷ 1.50 = 0.67</code>.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
+        <h2>Laws of Refraction, Wavefront Speed &amp; <em>Angle Shortcuts</em></h2>
+        <p class="intro">Let’s connect your 3D laser bench observations to the exact equations tested in WAEC, NECO, and JAMB Physics.</p>
+
+        <h3 id="def-shm">1 · The Two Laws of Refraction (Snell’s Law)</h3>
+        <p><strong>Refraction of light</strong> is the change in direction (bending) of a light ray as it passes obliquely from one transparent medium into another of different optical density, caused by a <strong>change in wave speed</strong>.</p>
+        <ul>
+          <li><strong>First Law:</strong> The incident ray, the refracted ray, and the normal at the point of incidence all lie in the <strong>same plane</strong>.</li>
+          <li><strong>Second Law (Snell’s Law):</strong> The ratio of the sine of the angle of incidence <code>i</code> to the sine of the angle of refraction <code>r</code> is a constant for a given pair of media and wavelength:</li>
+        </ul>
+        <div class="eq" id="eq-shm" data-hook><sub>1</sub>n<sub>2</sub> = sin i ÷ sin r = n<sub>2</sub> ÷ n<sub>1</sub> = v<sub>1</sub> ÷ v<sub>2</sub> = λ<sub>1</sub> ÷ λ<sub>2</sub> &nbsp;&nbsp;<span class="st">(while frequency f = constant!)</span></div>
+
+        <h3 id="def-terms">2 · Absolute Refractive Index, Reversibility &amp; Special Cases</h3>
+        <p>For light travelling from air or vacuum (<code>c = 3.0 × 10<sup>8</sup> m s<sup>−1</sup></code>) into a medium of refractive index <strong>n</strong>:</p>
+        <div class="eq" id="eq-omega">n = c ÷ v = λ<sub>air</sub> ÷ λ<sub>medium</sub> = sin i ÷ sin r &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">and by reversibility:</span>&nbsp;&nbsp;&nbsp;&nbsp; <sub>g</sub>n<sub>a</sub> = 1 ÷ <sub>a</sub>n<sub>g</sub></div>
+        <div class="eq" id="eq-vel">When Reflected Ray ⊥ Refracted Ray (90° apart): &nbsp; i + r = 90° &nbsp;<span class="arr">⇒</span>&nbsp; sin r = cos i &nbsp;<span class="arr">⇒</span>&nbsp; n = tan i</div>
+        <div class="eq" id="eq-pend">Single-Boundary Deviation: &nbsp; D = |i − r| &nbsp;&nbsp;·&nbsp;&nbsp; Glancing Angle Conversion: &nbsp; i = 90° − g</div>
+
+        <aside class="l-sec" id="movement-break" style="margin:24px 0;padding:18px;border-radius:var(--r-md);background:rgba(62,230,196,.08);border:1px solid rgba(62,230,196,.3)">
+          <p style="margin:0"><strong>Active 5-Minute Movement Break (Wavefront Pivot Walk):</strong> Stand up with a partner (or hold both arms wide like a horizontal wavefront bar)! Walk forward at steady speed ("air"). Now imagine crossing a diagonal chalk line onto thick carpet ("glass") where your right hand/side slows down to two-thirds speed first while your left side takes one more fast step — feel how your shoulders automatically pivot towards the normal!</p>
+        </aside>
+
+        <h3 id="props">Air vs Glass Wave Properties &amp; Special Incidence Cases</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Property / Case</th><th>In Air (n₁ = 1.00)</th><th>In Crown Glass (n₂ = 1.50)</th><th>Key Exam Rule</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Wave Speed (v)</strong></td><td><code>c = 3.00 × 10⁸ m s⁻¹</code></td><td><code>v = c / 1.50 = 2.00 × 10⁸ m s⁻¹</code></td><td>Decreases by factor <code>n</code> in optically denser media.</td></tr>
+              <tr><td><strong>Wavelength (λ)</strong></td><td><code>λ₀ = 600 nm</code></td><td><code>λ = λ₀ / 1.50 = 400 nm</code></td><td>Compresses in exact proportion to speed (<code>λ ∝ v</code>).</td></tr>
+              <tr><td><strong>Frequency (f)</strong></td><td><code>f = 5.00 × 10¹⁴ Hz</code></td><td><code>f = 5.00 × 10¹⁴ Hz</code></td><td><strong>Strictly constant!</strong> Never changes on refraction.</td></tr>
+              <tr><td><strong>Normal Incidence (i = 0°)</strong></td><td><code>i = 0°</code> (along normal)</td><td><code>r = 0°, D = 0°</code></td><td>Zero angular bending, though speed still drops to <code>c/n</code>!</td></tr>
+              <tr><td><strong>Reflected ⊥ Refracted</strong></td><td><code>i = tan⁻¹(n) = 56.3°</code></td><td><code>r = 90° − i = 33.7°</code></td><td>Shortcut: <code>n = sin i / cos i = tan i</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Optical Media &amp; Wavefront Speed Explorer</h3>
+        <p>Tap any pin below to see how refractive index <strong>n</strong> controls wave speed <strong>v</strong>, wavelength <strong>λ</strong> (for <code>600 nm</code> light), and refracted angle <strong>r</strong> at <code>i = 45°</code>:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Fast / Low Optical Density</div><div>Crown Glass (n = 1.50)</div><div>Slow / High Optical Density →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect how n controls speed v, wavelength λ, and angle r.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. WAVEFRONT ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Wavefront Pivoting Zoom</span>
+        <h2>Inside the boundary: <em>why slowing down forces wavefronts to pivot</em></h2>
+        <p class="intro">Watch the <strong>amber plane wavefronts in air</strong> cross the boundary into glass and become <strong>closely spaced cyan wavefronts</strong>. Switch between oblique incidence in crown glass, normal incidence (<code>i = 0°</code>), and diamond (<code>n = 2.42</code>)!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D wavefront pivoting zoom showing plane wavefronts slowing down and compressing wavelength as they enter glass, while frequency remains constant."></canvas>
+            <div class="stage-label"><i></i>3D Wavefront Zoom · Air (amber, λ₀) → Medium (cyan, λ₀/n)</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D wavefront zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Wavefront view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Crown Glass (i = 45°)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Normal Incidence (i = 0°)</button>
+              <button type="button" data-mode="base" aria-pressed="false">Diamond (n = 2.42)</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Switch to 540 nm Green Laser</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset wavefronts</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#7cc4ff"></i>Index n<b data-c="h">1.50</b></span>
+              <span class="counter"><i style="--c:#3ee6c4"></i>Speed v<b data-c="oh">2.00e8</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>λ_med<b data-c="na">400 nm</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>Freq f<b data-c="cl">500 THz</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Angle r<b data-c="w">28.1°</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Attempt each problem on paper first, then check the step-by-step WAEC/JAMB working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Glancing angle trap &amp; Snell’s law</h4></div>
+          <div class="example-body">
+            <p class="q">A ray of light in air strikes the flat surface of a rectangular glass block at a glancing angle of 35° to the surface. If the refractive index of the glass is 1.52, calculate: (a) the angle of incidence i, (b) the angle of refraction r inside the glass, and (c) the angle of deviation at this surface.</p>
+            <ol class="steps-sol">
+              <li><strong>Convert glancing angle g to angle of incidence i:</strong> <code>i = 90° − g = 90° − 35° = 55.0°</code>.</li>
+              <li><strong>Apply Snell’s law for r:</strong> <code>sin r = sin i ÷ n = sin 55.0° ÷ 1.52 = 0.8192 ÷ 1.52 = 0.5389 ⇒ r = sin⁻¹(0.5389) = 32.6°</code>.</li>
+              <li><strong>Angular deviation at single boundary:</strong> <code>D = i − r = 55.0° − 32.6° = 22.4°</code> towards the normal.</li>
+            </ol>
+            <div class="answer-line">(a) i = 55.0° &nbsp;·&nbsp; (b) r = 32.6° &nbsp;·&nbsp; (c) D = 22.4°</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Wave speed, wavelength &amp; constant frequency in glass</h4></div>
+          <div class="example-body">
+            <p class="q">Monochromatic yellow light of wavelength 5.89 × 10⁻⁷ m (589 nm) in air enters a rectangular glass block of refractive index 1.50. Taking the speed of light in air as 3.00 × 10⁸ m s⁻¹, calculate: (a) the frequency of the light in air and in glass, (b) the speed of the light in the glass, and (c) the wavelength inside the glass.</p>
+            <ol class="steps-sol">
+              <li><strong>Frequency f (constant in both media):</strong> <code>f = c ÷ λ_air = (3.00 × 10⁸) ÷ (5.89 × 10⁻⁷) = 5.09 × 10¹⁴ Hz</code>.</li>
+              <li><strong>Wave speed v in glass:</strong> <code>v = c ÷ n = (3.00 × 10⁸) ÷ 1.50 = 2.00 × 10⁸ m s⁻¹</code>.</li>
+              <li><strong>Wavelength λ_glass:</strong> <code>λ_glass = λ_air ÷ n = 589 nm ÷ 1.50 = 393 nm = 3.93 × 10⁻⁷ m</code>.</li>
+            </ol>
+            <div class="answer-line">(a) f = 5.09 × 10<sup>14</sup> Hz &nbsp;·&nbsp; (b) v = 2.00 × 10<sup>8</sup> m s<sup>−1</sup> &nbsp;·&nbsp; (c) λ<sub>g</sub> = 3.93 × 10<sup>−7</sup> m</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Perpendicular (90°) reflected and refracted rays</h4></div>
+          <div class="example-body">
+            <p class="q">A ray of light in air strikes a horizontal glass block of refractive index n = 1.60. At what angle of incidence i (and glancing angle g) will the partially reflected ray and the refracted ray be perpendicular (90° apart)?</p>
+            <ol class="steps-sol">
+              <li><strong>Geometry along the normal:</strong> Since angle of reflection equals <code>i</code> and the angle between reflected and refracted rays is <code>90°</code>, we have <code>i + 90° + r = 180° ⇒ r = 90° − i</code>.</li>
+              <li><strong>Substitute into Snell’s law:</strong> <code>n = sin i ÷ sin(90° − i) = sin i ÷ cos i = tan i</code>.</li>
+              <li><strong>Solve for i and g:</strong> <code>i = tan⁻¹(1.60) = 58.0°</code>; glancing angle <code>g = 90° − 58.0° = 32.0°</code>.</li>
+            </ol>
+            <div class="answer-line">Angle of incidence i = 58.0° &nbsp;·&nbsp; Glancing angle g = 32.0°</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to Surulere: <em>decode Dr Kunle’s 90° laser test!</em></h2>
+        <p class="intro">At <code>i = 56.3°</code> (glancing angle <code>33.7°</code>), Dr Kunle notices that the reflected ray and refracted ray are exactly perpendicular (<code>90°</code> apart). Use this 3-step decoder to find the refractive index and wave speed of the glass block!</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Incident &amp; Reflected Rays <small style="color:var(--muted);font-weight:500">· g = 33.7°, i = 56.3°</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#f59e0b,#a855f7);box-shadow:0 0 18px rgba(245,158,11,.5)"></div>
+              </div>
+              <div class="vt-count"><span id="time-a">i = 56.3° · Refl = 56.3°</span><small>90° angle to refracted ray</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Refracted Ray &amp; Glass Index <small style="color:var(--muted);font-weight:500" id="len-b-label">· Reflected ⊥ Refracted at i = 56.3°</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#38bdf8,#10b981)"></div>
+              </div>
+              <div class="vt-count"><span id="time-b">n = ? · v = ?</span><small>run Steps 1–3 below</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Use i + 90° + r = 180° to find r</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Substitute sin r = cos i → n = tan i</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Compute Wave Speed v = c ÷ n</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset decoder</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">At i = 56.3° (glancing angle 33.7°), the reflected and refracted rays are 90° apart. Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 1:</strong> Refraction occurs because wavefronts change speed across a boundary while <strong>frequency f stays constant</strong>: <strong>n = sin i ÷ sin r = c ÷ v = λ<sub>air</sub> ÷ λ<sub>medium</sub></strong>. Always measure angles from the normal, and remember that when reflected and refracted rays are perpendicular, <strong>n = tan i</strong>!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 1.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can state the two laws of refraction (Snell's law) and explain why angles are measured from the normal.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain why speed v and wavelength λ decrease in glass while frequency f remains strictly constant.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can convert a glancing angle g using i = 90° − g and explain normal incidence (i = 0°, r = 0°).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can apply reversibility (g_n_a = 1 / a_n_g) and relative refractive index (1_n_2 = n_2 / n_1).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can prove and use n = tan i when the reflected and refracted rays are perpendicular (90° apart).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l01-exit">
+          <div class="aq-top"><h4>In two sentences: why does the frequency of light stay constant when it enters a glass block while its wavelength decreases, and why is n = tan i when the reflected and refracted rays are perpendicular?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Frequency <code>f</code> is fixed by the source of oscillations, so when wave speed drops to <code>v = c/n</code> in glass, wavelength <code>λ = v/f</code> must decrease by the same factor <code>n</code> <b>(1)</b>. When the reflected and refracted rays are 90° apart, <code>r = 90° − i</code> so <code>sin r = cos i</code> and <code>n = sin i / cos i = tan i</code> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Snell’s Law &amp; Wavefront Refraction</em></h2>
+        <p class="intro">Complete Part A (pencil-in-water boundary observation) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home Observation: Straight vs Tilted Pencil in Water</h3>
+        <div class="aq" data-answer="l01-a1">
+          <div class="aq-top"><h4>Place a straight pencil vertically (i = 0°) into a clear glass of water and view it from above/side, then tilt the pencil at 45°. Why does the tilted pencil look sharply bent at the water surface while the vertical one does not?</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your observation and explanation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Light rays from the submerged part of the tilted pencil cross the water–air boundary obliquely and refract away from the normal (since <code>n_water &gt; n_air</code>), making the submerged section appear bent upward. When held vertically along the normal (<code>i = 0°</code>), rays along the normal have <code>r = 0°</code> (zero angular deviation).</p></div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l01-b1">
+          <div class="aq-top"><h4>1. (a) State the two laws of refraction of light. (b) Explain using wavefronts why a ray bends towards the normal when entering glass obliquely, and state what happens to speed, wavelength, and frequency. (c) Monochromatic light of wavelength 600 nm in air enters crown glass (n = 1.50). Calculate its frequency, speed in glass, and wavelength in glass. (c = 3.0 × 10⁸ m s⁻¹)</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) (i) The incident ray, refracted ray, and normal at the point of incidence all lie in the same plane <b>(1)</b>. (ii) <code>sin i / sin r = constant (n)</code> for a given pair of media <b>(1)</b>.<br>
+            (b) The edge of the wavefront entering glass first slows down (<code>v &lt; c</code>) while the outer edge in air continues at speed <code>c</code>, pivoting the wavefront towards the normal <b>(2)</b>. Speed and wavelength decrease, while frequency remains constant <b>(2)</b>.<br>
+            (c) <code>f = c / λ_air = (3.0 × 10⁸) / (6.0 × 10⁻⁷) = 5.0 × 10¹⁴ Hz</code> <b>(2)</b>; <code>v = c / n = 2.0 × 10⁸ m s⁻¹</code> <b>(1)</b>; <code>λ_g = 600 / 1.50 = 400 nm (4.0 × 10⁻⁷ m)</code> <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b2">
+          <div class="aq-top"><h4>2. (a) A ray in air strikes a flat glass block at a glancing angle g = 35° to the surface and refracts at r = 32.6°. Calculate the angle of incidence i, the refractive index n, and the angular deviation at this surface. (b) If the absolute refractive indices of water and flint glass are 4/3 and 5/3 respectively, find the refractive index of flint glass with respect to water (w_n_g).</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>i = 90° − 35° = 55.0°</code> <b>(2)</b>. <code>n = sin 55.0° / sin 32.6° = 0.8192 / 0.5388 = 1.52</code> <b>(3)</b>. Angular deviation <code>D = i − r = 55.0° − 32.6° = 22.4°</code> <b>(2)</b>.<br>
+            (b) <code>w_n_g = n_g / n_w = (5/3) ÷ (4/3) = 5/4 = 1.25</code> <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b3">
+          <div class="aq-top"><h4>3. A ray of light in air is incident on a plane glass block at an angle of incidence i. The partially reflected ray and the refracted ray are perpendicular (90°) to each other. (a) Prove that n = tan i. (b) If i = 57.5°, calculate the angle of refraction r, the refractive index n, and the speed of light inside the glass block.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Along the straight normal, <code>i_refl + 90° + r = 180°</code>. Since <code>i_refl = i</code>, <code>r = 90° − i</code> <b>(2)</b>. By Snell’s law, <code>n = sin i / sin(90° − i) = sin i / cos i = tan i</code> <b>(2)</b>.<br>
+            (b) <code>r = 90° − 57.5° = 32.5°</code> <b>(2)</b>; <code>n = tan 57.5° = 1.57</code> <b>(2)</b>; <code>v = c / n = (3.0 × 10⁸) / 1.57 = 1.91 × 10⁸ m s⁻¹</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../../index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Unit Welcome Hub</a>
+          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 — Lateral Displacement &amp; Dispersion →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

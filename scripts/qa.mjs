@@ -78,12 +78,16 @@ async function checkEditorialLesson(lessonHtmlPath, prefix) {
     hasNarrator: Boolean(window.StudyNarrator && document.querySelector(".narr-dock")),
     hasNarrationScript: Boolean(window.NARRATION && Array.isArray(window.NARRATION.script) && window.NARRATION.script.length >= 4),
     hasLessonKit: Boolean(window.LessonKit),
+    hasStudyMath: Boolean(window.StudyMath && document.querySelectorAll(".sp-math[data-latex]").length > 0),
+    mathStepsCount: document.querySelectorAll(".m-step-note, .m-eq-note").length,
     quizRendered: document.querySelectorAll("#quiz-list .qcard").length,
     secCount: document.querySelectorAll(".l-sec").length
   }));
   if (!engineCheck.hasNarrator) add("BLOCKING", where, "StudyNarrator dock (.narr-dock) did not mount");
   if (!engineCheck.hasNarrationScript) add("BLOCKING", where, "window.NARRATION.script is missing or has fewer than 4 chapters");
   if (!engineCheck.hasLessonKit) add("BLOCKING", where, "window.LessonKit is missing");
+  if (!engineCheck.hasStudyMath) add("BLOCKING", where, "window.StudyMath or rendered LaTeX (.sp-math[data-latex]) is missing");
+  if (engineCheck.mathStepsCount < 3) add("BLOCKING", where, `StudyMath rendered only ${engineCheck.mathStepsCount} calculation explainer notes (expected >= 3)`);
   if (engineCheck.quizRendered < 5) add("BLOCKING", where, `#quiz-list rendered only ${engineCheck.quizRendered} questions (expected 6–12)`);
 
   // Hero screenshot
@@ -110,7 +114,20 @@ async function checkEditorialLesson(lessonHtmlPath, prefix) {
     }, s.id);
     await page.waitForTimeout(450);
     // Save screenshots for key interactive sections or all if single-lesson
-    if (prefix === "lesson" || ["story", "sort", "concepts", "neutralise", "zoom", "bridge", "quiz"].includes(s.id)) {
+    if (prefix === "lesson" || ["story", "sort", "concepts", "neutralise", "zoom", "examples", "bridge", "quiz"].includes(s.id)) {
+      if (s.id === "examples") {
+        await page.evaluate(() => {
+          const calc = document.querySelector("#examples .m-calc-wrap, #examples .example");
+          if (calc) calc.scrollIntoView({ behavior: "instant", block: "start" });
+        });
+        await page.waitForTimeout(250);
+      } else if (s.id === "concepts") {
+        await page.evaluate(() => {
+          const eq = document.querySelector("#concepts .eq");
+          if (eq) eq.scrollIntoView({ behavior: "instant", block: "center" });
+        });
+        await page.waitForTimeout(250);
+      }
       shots.push(await checkScreen(`${prefix}-${String(i + 1).padStart(2, "0")}-${s.id}`, `#${s.id}`));
     }
   }

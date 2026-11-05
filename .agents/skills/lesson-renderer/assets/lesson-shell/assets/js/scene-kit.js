@@ -118,28 +118,219 @@
       clock: new THREE.Clock(), fitHeight: o.fitHeight || null, fitWidth: o.fitWidth || null
     };
 
-    // drag to orbit (yaw only, clamped)
+    // ---- input: one-finger horizontal drag orbits (yaw, clamped); two-finger pinch zooms & pans ----
     var dragging = false, lastX = 0, vel = 0;
     var minYaw = o.minYaw != null ? o.minYaw : -0.9, maxYaw = o.maxYaw != null ? o.maxYaw : 0.9;
-    canvas.addEventListener("pointerdown", function (e) { if (o.noOrbit) return; dragging = true; lastX = e.clientX; try { canvas.setPointerCapture(e.pointerId); } catch (er) {} });
-    canvas.addEventListener("pointermove", function (e) { if (!dragging) return; var dx = e.clientX - lastX; lastX = e.clientX; vel = dx * 0.006; stage.yaw += vel; });
-    function end() { dragging = false; }
+    var ZMIN = 0.45, ZMAX = 1.7;
+    var pointers = {}, pinch = null;
+    function ptrList() { return Object.keys(pointers).map(function (k) { return pointers[k]; }); }
+    canvas.addEventListener("pointerdown", function (e) {
+      pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+      try { canvas.setPointerCapture(e.pointerId); } catch (er) {}
+      var l = ptrList();
+      if (l.length === 2) {
+        dragging = false;
+        pinch = { d: Math.hypot(l[0].x - l[1].x, l[0].y - l[1].y), z: stage.zoom, mx: (l[0].x + l[1].x) / 2, my: (l[0].y + l[1].y) / 2 };
+      } else if (l.length === 1 && !o.noOrbit) { dragging = true; lastX = e.clientX; }
+    });
+    canvas.addEventListener("pointermove", function (e) {
+      if (!pointers[e.pointerId]) return;
+      pointers[e.pointerId] = { x: e.clientX, y: e.clientY };
+      var l = ptrList();
+      if (pinch && l.length >= 2) {
+        var d = Math.hypot(l[0].x - l[1].x, l[0].y - l[1].y);
+        stage.setZoom(pinch.z * pinch.d / Math.max(20, d));
+        var mx = (l[0].x + l[1].x) / 2, my = (l[0].y + l[1].y) / 2;
+        panBy(mx - pinch.mx, my - pinch.my);
+        pinch.mx = mx; pinch.my = my;
+        return;
+      }
+      if (!dragging) return;
+      var dx = e.clientX - lastX; lastX = e.clientX; vel = dx * 0.006; stage.yaw += vel;
+    });
+    function end(e) {
+      delete pointers[e.pointerId];
+      if (ptrList().length < 2) pinch = null;
+      if (!ptrList().length) dragging = false;
+    }
     canvas.addEventListener("pointerup", end); canvas.addEventListener("pointercancel", end);
+    // trackpad pinch arrives as ctrl+wheel; a plain wheel keeps scrolling the page
+    canvas.addEventListener("wheel", function (e) {
+      if (!e.ctrlKey) return;
+      e.preventDefault();
+      stage.setZoom(stage.zoom * Math.exp(e.deltaY * 0.01));
+    }, { passive: false });
+
+    // pan the look-at point in the camera plane (only meaningful when zoomed in)
+    var panRight = new THREE.Vector3(), panUp = new THREE.Vector3();
+    function panBy(dxPx, dyPx) {
+      var h = holder.clientHeight || 1;
+      var worldPerPx = 2 * Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * stage.dist * stage.zoom / h;
+      panRight.setFromMatrixColumn(camera.matrixWorld, 0);
+      panUp.setFromMatrixColumn(camera.matrixWorld, 1);
+      target.addScaledVector(panRight, -dxPx * worldPerPx).addScaledVector(panUp, dyPx * worldPerPx);
+      clampTarget();
+    }
+    function clampTarget() {
+      if (!stage.fitBox) return;
+      var b = stage.fitBox;
+      target.x = Math.max(b.min.x, Math.min(b.max.x, target.x));
+      target.y = Math.max(b.min.y, Math.min(b.max.y, target.y));
+      target.z = Math.max(b.min.z, Math.min(b.max.z, target.z));
+    }
+
+    stage.setZoom = function (z) {
+      stage.zoom = Math.max(ZMIN, Math.min(ZMAX, z));
+      // ease the look-at point back to the framed centre as you zoom out
+      if (stage.zoom >= 0.98 && stage.fitTarget) target.lerp(stage.fitTarget, 0.35);
+    };
+    var homeYaw = stage.yaw, basePitch = stage.pitch;
+    stage.recentre = function () {
+      stage.zoom = 1; stage.yaw = homeYaw; vel = 0;
+      if (stage.fitTarget) target.copy(stage.fitTarget);
+    };
+
+    // ---- framing: fit the apparatus (not the table top) into the viewport, whatever the aspect ----
+    // Big thin slabs (bench tops, floors) are ignored so the camera frames the kit sitting on them.
+    function computeFitBox() {
+      var boxes = [], all = new THREE.Box3();
+      rig.updateWorldMatrix(true, true);
+      (function walk(ob) {
+        if (!ob.visible || ob.userData.noFit) return;
+        if ((ob.isMesh || ob.isSprite || ob.isLine || ob.isPoints) && ob.geometry) {
+          var b = new THREE.Box3().setFromObject(ob);
+          if (!b.isEmpty() && isFinite(b.min.x)) { boxes.push(b); all.union(b); }
+        }
+        ob.children.forEach(walk);
+      })(rig);
+      if (!boxes.length) return null;
+      var allFp = Math.max(1e-6, (all.max.x - all.min.x) * (all.max.z - all.min.z));
+      var fit = new THREE.Box3(), sz = new THREE.Vector3();
+      boxes.forEach(function (b) {
+        b.getSize(sz);
+        if (sz.y < 0.35 && sz.x * sz.z > allFp * 0.3) return; // a slab
+        fit.union(b);
+      });
+      return fit.isEmpty() ? all : fit;
+    }
+    var corner = new THREE.Vector3();
+    var ext = { x0: 0, x1: 0, y0: 0, y1: 0 };
+    // ov = px covered by caption overlays at the top of the canvas; content is centred in the space below them
+    function fits(d, margin, ov, h, ob) {
+      camera.position.set(
+        target.x + Math.sin(stage.yaw) * Math.cos(stage.pitch) * d,
+        target.y + Math.sin(stage.pitch) * d,
+        target.z + Math.cos(stage.yaw) * Math.cos(stage.pitch) * d
+      );
+      camera.lookAt(target); camera.updateMatrixWorld(true);
+      var b = stage.fitBox, my = margin.y * (h - ov - ob) / h; // setViewOffset later moves the frame into the band between the overlays
+      ext.x0 = ext.y0 = Infinity; ext.x1 = ext.y1 = -Infinity;
+      for (var i = 0; i < 8; i++) {
+        corner.set(i & 1 ? b.max.x : b.min.x, i & 2 ? b.max.y : b.min.y, i & 4 ? b.max.z : b.min.z).project(camera);
+        if (corner.z > 1) return false;
+        ext.x0 = Math.min(ext.x0, corner.x); ext.x1 = Math.max(ext.x1, corner.x);
+        ext.y0 = Math.min(ext.y0, corner.y); ext.y1 = Math.max(ext.y1, corner.y);
+        if (Math.abs(corner.x) > margin.x || Math.abs(corner.y) > my) return false;
+      }
+      return true;
+    }
+    function autoFitDistance(ov, h, ob) {
+      if (!stage.fitBox) return null;
+      var lo = 0.4, hi = 80, margin = { x: o.fitMarginX || 0.92, y: o.fitMarginY || 0.9 };
+      if (!fits(hi, margin, ov, h, ob)) return null;
+      for (var k = 0; k < 28; k++) { var mid = (lo + hi) / 2; if (fits(mid, margin, ov, h, ob)) hi = mid; else lo = mid; }
+      fits(hi, margin, ov, h, ob); // leave ext describing the final framing
+      return hi;
+    }
+    function topOverlay(h) {
+      var ov = 0;
+      Array.prototype.forEach.call(holder.children, function (c) {
+        if (c === canvas || c.classList.contains("stage-zoom") || c.classList.contains("stage-toast") || c.classList.contains("stage-fallback")) return;
+        var cs = getComputedStyle(c);
+        if (cs.position !== "absolute" || cs.display === "none" || cs.visibility === "hidden") return;
+        var top = c.offsetTop, bot = top + c.offsetHeight;
+        if (top < h * 0.3 && c.offsetWidth > holder.clientWidth * 0.4) ov = Math.max(ov, bot + 6);
+      });
+      return Math.min(ov, h * 0.35);
+    }
+    function boostLabels() {
+      var k = holder.clientWidth < 560 ? (o.labelBoost || 1.15) : 1;
+      rig.traverse(function (ob) {
+        if (!ob.isSprite || !ob.material || !ob.material.map || !ob.material.map.userData || !ob.material.map.userData.aspect) return;
+        var prev = ob.userData._boost || 1;
+        if (prev !== k) { ob.scale.multiplyScalar(k / prev); ob.userData._boost = k; }
+      });
+    }
+    stage.refit = function () {
+      if (o.autoFit === false) return;
+      boostLabels();
+      stage.fitBox = computeFitBox();
+      if (!stage.fitBox) return;
+      stage.fitTarget = stage.fitBox.getCenter(new THREE.Vector3());
+      // keep the author's look-at height if it's inside the kit, otherwise use the kit's centre
+      if (o.target && o.target.y >= stage.fitBox.min.y && o.target.y <= stage.fitBox.max.y) stage.fitTarget.y = (stage.fitTarget.y + o.target.y) / 2;
+      target.copy(stage.fitTarget);
+      resize();
+    };
 
     function resize() {
       var w = holder.clientWidth, h = holder.clientHeight;
       if (!w || !h) return;
       renderer.setSize(w, h, false);
       camera.aspect = w / h;
+      camera.clearViewOffset();
+      camera.updateProjectionMatrix();
+      // portrait / square phones: look down a little more so the bench's depth fills the height
+      var boost = o.portraitPitch != null ? o.portraitPitch : 0.26;
+      var t = Math.max(0, Math.min(1, (1.25 - camera.aspect) / 0.5));
+      stage.pitch = Math.min(1.15, basePitch + boost * t);
       var vFov = THREE.MathUtils.degToRad(camera.fov);
       var d = baseDist;
-      if (stage.fitHeight) d = Math.max(d * 0, (stage.fitHeight / 2) / Math.tan(vFov / 2));
-      if (stage.fitWidth) {
-        var hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
-        d = Math.max(d, (stage.fitWidth / 2) / Math.tan(hFov / 2));
+      var ov = stage.fitBox ? topOverlay(h) : 0;
+      var ob = o.zoomUi !== false ? 46 : 0; // keep the zoom buttons off the apparatus
+      var fitD = stage.fitBox ? autoFitDistance(ov, h, ob) : null;
+      if (fitD) {
+        d = fitD;
+        // phones: trim the canvas to the kit's shape so there's no dead band under a wide bench
+        if (o.adaptiveHeight !== false && w < 720 && !holder.classList.contains("sk-fixed")) {
+          var contentPx = (ext.y1 - ext.y0) / 2 * h;
+          var want = Math.round(contentPx / (o.fitMarginY || 0.9) + ov + ob + 8);
+          var minH = o.minHeight || 250, maxH = o.maxHeight || Math.max(h, 420);
+          want = Math.max(minH, Math.min(maxH, want));
+          if (Math.abs(want - h) > 6 && !holder._skLock) {
+            holder._skLock = true; // one adjustment per layout, then let the observer settle
+            holder.style.height = want + "px";
+            setTimeout(function () { holder._skLock = false; }, 300);
+            return; // ResizeObserver calls back with the new size
+          }
+        }
+        if (ov || ob) { camera.setViewOffset(w, h, 0, -(ov - ob) / 2, w, h); }
+      } else {
+        if (stage.fitHeight) d = Math.max(d * 0, (stage.fitHeight / 2) / Math.tan(vFov / 2));
+        if (stage.fitWidth) {
+          var hFov = 2 * Math.atan(Math.tan(vFov / 2) * camera.aspect);
+          d = Math.max(d, (stage.fitWidth / 2) / Math.tan(hFov / 2));
+        }
       }
       stage.dist = d;
-      camera.updateProjectionMatrix();
+    }
+
+    // zoom / recentre buttons
+    if (o.zoomUi !== false) {
+      var zui = document.createElement("div");
+      zui.className = "stage-zoom";
+      zui.innerHTML =
+        '<button type="button" data-z="in" aria-label="Zoom in">+</button>' +
+        '<button type="button" data-z="out" aria-label="Zoom out">−</button>' +
+        '<button type="button" data-z="home" aria-label="Recentre view"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></button>';
+      zui.addEventListener("click", function (e) {
+        var b = e.target.closest("button"); if (!b) return;
+        var z = b.getAttribute("data-z");
+        if (z === "in") stage.setZoom(stage.zoom / 1.25);
+        else if (z === "out") stage.setZoom(stage.zoom * 1.25);
+        else stage.recentre();
+      });
+      holder.appendChild(zui);
     }
     stage.resize = resize;
     if (window.ResizeObserver) new ResizeObserver(resize).observe(holder); else window.addEventListener("resize", resize);
@@ -197,7 +388,11 @@
       if (o.onFrame) o.onFrame(dt, stage.clock.elapsedTime);
       renderer.render(scene, camera);
     }
-    stage.start = function () { requestAnimationFrame(frame); };
+    stage.start = function () {
+      // content is built by now, so frame it
+      if (o.autoFit !== false) { stage.refit(); homeYaw = stage.yaw; }
+      requestAnimationFrame(frame);
+    };
     return stage;
   }
 

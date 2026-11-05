@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 4 · Critical Angle, Total Internal Reflection &amp; Optical Fibre Engineering · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): Critical Angle (sin c = 1/n = n₂/n₁), Speed Shortcut (v = c₀ sin c), Total Internal Reflection (TIR), 45° Prisms, Optical Fibres (n_core > n_cladding), and Mirages.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='22' width='44' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l04">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 4 of 5 · <b>Critical Angle &amp; Optical Fibres</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 4 of 5 · 50 minutes</span>
+        <h1 class="display reveal" data-hook>Critical Angle, <em>Total Internal Reflection</em> &amp; Optical Fibres</h1>
+        <p class="question reveal">Why does a laser beam inside a crown-glass block suddenly stop exiting into air once its internal angle exceeds <code>41.8°</code> — reflecting off the transparent boundary with <code>100%</code> brightness?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Define the <strong>critical angle c</strong> and apply <strong>sin c = 1 ÷ n</strong> (for medium to air) and <strong>sin c = n<sub>2</sub> ÷ n<sub>1</sub></strong> (for two media where <code>n₁ &gt; n₂</code>).</span></li>
+          <li><b>02</b><span>Combine <code>n = c₀/v</code> and <code>sin c = 1/n</code> to use the JAMB/WAEC speed shortcut <strong>v = c<sub>0</sub> sin c</strong>.</span></li>
+          <li><b>03</b><span>State the <strong>two mandatory conditions for Total Internal Reflection (TIR)</strong> and distinguish the three regimes: <code>i &lt; c</code>, <code>i = c</code>, and <code>i &gt; c</code>.</span></li>
+          <li><b>04</b><span>Explain how <strong>step-index optical fibres (<code>n_core &gt; n_cladding</code>)</strong> guide high-speed laser signals across cities and oceans.</span></li>
+          <li><b>05</b><span>Explain why <strong>45°–45°–90° glass prisms</strong> outperform silvered mirrors in periscopes and binoculars (no tarnishing, no multiple ghost images) and how <strong>hot-road mirages</strong> form.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <!-- Schematic Three Regimes: i < c, i = c (90° graze), i > c (100% TIR) -->
+          <rect x="28" y="128" width="264" height="104" rx="10" fill="rgba(56,189,248,0.18)" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="160" y1="24" x2="160" y2="232" stroke="#94a3b8" stroke-width="1.8" stroke-dasharray="5 5"/>
+          <line x1="68" y1="216" x2="160" y2="128" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="160" y1="128" x2="284" y2="128" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="4 4"/>
+          <line x1="160" y1="128" x2="252" y2="216" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+          <text x="176" y="118" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="11">i = c = 41.8° (r = 90°)</text>
+          <text x="176" y="198" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="12">i &gt; c → 100% TIR!</text>
+          <text x="58" y="54" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="12">sin c = 1 / n · v = c₀ sin c</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">TIR regime sort</a></li>
+        <li><a href="#practical">3D TIR &amp; fibre lab</a></li>
+        <li><a href="#concepts">sin c = 1/n &amp; fibres</a></li>
+        <li><a href="#neutralise">Prism &amp; mirage zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1–3</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards on apparent depth, multi-layer slabs, far-face shift <code>EF</code>, and reversibility of light. Answer each in your head <strong>before</strong> flipping.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>The trapped laser beam at <em>Tunde’s Yaba Fibre Hub</em></h2>
+        <p class="intro">At a telecommunications splice hub in Yaba, Lagos, Engr. Tunde shows Zainab and Kelechi why a laser inside crown glass stops escaping into air above <code>41.8°</code> — and how optical fibres guide internet signals across Nigeria.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas id="story-canvas" aria-label="Animated 3D story: Zainab, Kelechi, and Engr. Tunde at the Yaba Fibre-Optic Hub testing the 41.8-degree critical angle and total internal reflection."></canvas>
+            <div class="stage-label"><i></i>3D story · Yaba Fibre Hub → SS2 Optics Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Yaba Fibre Hub:</strong> Zainab watches the laser inside the glass block: <em>“Broda Tunde! Why did the beam suddenly stop exiting into the air once you tilted it past 41.8°, bouncing off the clear glass surface like a mirror?”</em></p>
+            <p><strong>Scene 2 · Kelechi’s question:</strong> <em>“Does that mean if I shine a torch from air into a glass window at 45°, it will also undergo Total Internal Reflection?”</em></p>
+            <p><strong>Scene 3 · Two mandatory conditions:</strong> Tunde explains: <em>“Never from air into glass! Total Internal Reflection requires TWO strict conditions: (1) light must travel from an optically denser medium to a less dense medium, and (2) the angle of incidence must exceed the critical angle c!”</em></p>
+            <p><strong>Scene 4 · Critical angle vs TIR:</strong> At <code>i = c = 41.8°</code> (<code>sin c = 1/1.50</code>), the refracted ray grazes the surface at <code>r = 90°</code>. For <code>i &gt; 41.8°</code>, 100% of the light reflects internally.</p>
+            <p><strong>Scene 5 · Fibres &amp; 45° prisms:</strong> Optical fibres trap laser pulses inside a high-index core surrounded by a lower-index cladding (<code>n_core &gt; n_cladding</code>), while 45° glass prisms turn rays through 90° or 180° without ghost images.</p>
+            <p><strong>Scene 6 · SS2 Optics Lab:</strong> Mrs Adebayo sweeps the internal laser from <code>20°</code> to <code>60°</code> on the 3D Critical Angle Bench.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">When does a transparent boundary act like a 100% perfect mirror? Pin your prediction before we sweep the laser on the 3D bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that Total Internal Reflection happens only when light travels from… and angle i is…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Why can't TIR happen from air into glass?</button>
+            <button type="button">What is the angle of refraction at the critical angle c?</button>
+            <button type="button">Why must n_core be greater than n_cladding in an optical fibre?</button>
+            <button type="button">Why do thick silvered mirrors form multiple ghost images?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>Refraction (i ≤ c), Total Internal Reflection (i &gt; c) &amp; <em>Applications</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Refraction / Critical Angle (i ≤ c)</strong>, <strong>Total Internal Reflection (i &gt; c)</strong>, and <strong>Engineering &amp; Natural Applications of TIR</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Refraction and Critical Angle bin">
+              <h4><i></i>Refraction / Critical (i ≤ c)</h4>
+              <small>sin c = 1/n, r = 90° &amp; v = c₀ sin c</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Total Internal Reflection bin">
+              <h4><i></i>Total Internal Refl (i &gt; c)</h4>
+              <small>n₁ &gt; n₂, i &gt; c &amp; 100% reflection</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Applications of TIR bin">
+              <h4><i></i>TIR Applications</h4>
+              <small>optical fibres, 45° prisms &amp; mirages</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D Critical Angle &amp; Optical Fibre Bench: <em>Sweeping i Across c = 41.8°</em></h2>
+        <p class="intro">Direct an internal ray from inside crown glass (<code>n = 1.50, c = 41.8°</code>) towards the flat glass–air boundary at five angles from <code>20.0°</code> to <code>60.0°</code>. Compare with diamond (<code>n = 2.42, c = 24.4°</code>) and switch to the 3D Optical Fibre Waveguide!</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Compulsory WAEC Two-Condition Check:</strong> Before applying <code>sin c = 1/n</code> or claiming Total Internal Reflection, always verify: <strong>(1)</strong> Is the ray in the optically denser medium heading towards the less dense medium? <strong>(2)</strong> Is the internal angle of incidence strictly greater than the critical angle (<code>i &gt; c</code>)?</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Sub-critical (i &lt; c)</h4><p>At <code>i = 20°</code> and <code>30°</code>, most light refracts out into air away from the normal (<code>r &gt; i</code>) with a faint partial internal reflection.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Critical angle (i = c = 41.8°)</h4><p>At <code>i = 41.8°</code>, the refracted ray skims right along the glass–air boundary at <code>r = 90°</code> (<code>sin c = 1/1.50 = 0.667</code>).</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Total Internal Reflection (i &gt; c)</h4><p>At <code>i = 45°</code> and <code>60°</code>, zero light escapes into air — 100% reflects back into the glass at angle <code>i</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Optical Fibre Waveguide</h4><p>Switch to the Fibre mode to watch the laser bounce down a cylindrical glass core (<code>n_core &gt; n_cladding</code>).</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D critical angle and optical fibre bench showing internal laser in glass hitting the glass-air boundary across sub-critical, critical, and total internal reflection angles."></canvas>
+            <div class="stage-label"><i></i>3D Critical Angle &amp; Fibre Bench · drag to rotate · tap trials A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Medium condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Crown Glass (c = 41.8°)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Diamond (c = 24.4°)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Optical Fibre Core/Cladding</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 20.0°</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 30.0°</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 41.8° (c)</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 45.0° (TIR)</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 60.0° (TIR)</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
+          </div>
+        </div>
+
+        <h3>Record your Critical Angle &amp; TIR Regime observations</h3>
+        <p>For each internal angle of incidence <strong>i (°)</strong> in Crown Glass (<code>n = 1.50</code>), select the emergent/reflected outcome, the optical regime, and the refractive index <strong>n</strong>:</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Internal Angle i (°)</th>
+                <th>Refracted Angle r in Air</th>
+                <th>Optical Regime</th>
+                <th>Refractive Index n = 1 ÷ sin c</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected table &amp; critical angle calculation <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>Internal Angle i (°)</th><th>Angle in Air r</th><th>Regime</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>20.0</td><td>30.9°</td><td>Refraction (i &lt; c)</td></tr>
+                  <tr><td>B</td><td>30.0</td><td>48.6°</td><td>Refraction (i &lt; c)</td></tr>
+                  <tr><td>C</td><td>41.8</td><td>90.0° (Graze)</td><td>Critical Angle (i = c)</td></tr>
+                  <tr><td>D</td><td>45.0</td><td>None (TIR at 45°)</td><td>Total Internal Reflection (i &gt; c)</td></tr>
+                  <tr><td>E</td><td>60.0</td><td>None (TIR at 60°)</td><td>Total Internal Reflection (i &gt; c)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">sin c = 1 ÷ n = 1 ÷ 1.50 = 0.6667 ⇒ c = 41.8° &nbsp;·&nbsp; v = c₀ sin c = 3.0 × 10⁸ × 0.6667 = 2.0 × 10⁸ m s⁻¹</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l04-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>State the two compulsory conditions for Total Internal Reflection of light to occur.</li>
+            <li>Why does a right-angled isosceles crown-glass prism (<code>45°–45°–90°, n = 1.50</code>) reflect 100% of light striking its hypotenuse internally at <code>45°</code>?</li>
+            <li>Give two reasons why a totally reflecting glass prism is superior to a plane silvered mirror in periscopes and binoculars.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>(i) Light must travel from an optically denser medium to an optically less dense medium. (ii) The angle of incidence in the denser medium must be greater than the critical angle (<code>i &gt; c</code>).</li>
+                <li>Because the critical angle of crown glass is <code>c = sin⁻¹(1/1.50) = 41.8°</code>, and the internal angle of incidence <code>i = 45°</code> is greater than <code>41.8°</code>.</li>
+                <li>1. A glass prism reflects 100% of incident light by TIR with no metallic absorption or tarnishing/peeling of silvering.<br>2. It produces a single sharp image rather than multiple blurred ghost images formed by front and back reflections in a thick mirror.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
+        <h2>Critical Angle, Total Internal Reflection &amp; <em>Optical Fibres</em></h2>
+        <p class="intro">Let’s connect the critical angle equations to optical fibre engineering, reflecting prisms, and mirages.</p>
+
+        <h3 id="def-shm">1 · Critical Angle (c) &amp; Wave Speed Shortcut</h3>
+        <p>The <strong>critical angle (c)</strong> is the angle of incidence in an optically denser medium for which the angle of refraction in the optically less dense medium is <strong>90°</strong> (the refracted ray grazes the boundary):</p>
+        <div class="eq" id="eq-shm" data-hook>n<sub>1</sub> sin c = n<sub>2</sub> sin 90° = n<sub>2</sub> &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; sin c = n<sub>2</sub> ÷ n<sub>1</sub> = v<sub>1</sub> ÷ v<sub>2</sub></div>
+        <div class="eq" id="eq-omega">For medium (n) into air (n<sub>2</sub> = 1): &nbsp; sin c = 1 ÷ n &nbsp;&nbsp;·&nbsp;&nbsp; Speed in medium: &nbsp; v = c<sub>0</sub> ÷ n = c<sub>0</sub> sin c</div>
+
+        <h3 id="def-terms">2 · Total Internal Reflection (TIR) &amp; Optical Fibres</h3>
+        <p><strong>Total Internal Reflection (TIR)</strong> is the complete reflection of a light ray back into an optically denser medium when it strikes the boundary with a less dense medium at an angle of incidence <strong>greater than the critical angle (<code>i &gt; c</code>)</strong>:</p>
+        <div class="eq" id="eq-vel">Mandatory Condition 1: &nbsp; n<sub>1</sub> &gt; n<sub>2</sub> (Denser → Less Dense) &nbsp;&nbsp;·&nbsp;&nbsp; Mandatory Condition 2: &nbsp; i &gt; c</div>
+        <div class="eq" id="eq-pend">Step-Index Optical Fibre: &nbsp; n<sub>core</sub> &gt; n<sub>cladding</sub> &nbsp;&nbsp;·&nbsp;&nbsp; sin c = n<sub>cladding</sub> ÷ n<sub>core</sub></div>
+
+        <aside class="l-sec" id="movement-break" style="margin:24px 0;padding:18px;border-radius:var(--r-md);background:rgba(62,230,196,.08);border:1px solid rgba(62,230,196,.3)">
+          <p style="margin:0"><strong>Active 5-Minute Movement Break (The Three Regimes Arm Sweep):</strong> Stand up and hold your left arm straight out horizontally in front of you ("the glass–air boundary") and point your right arm upward at 30° from the vertical ("sub-critical ray"). Slowly tilt your right arm further from the vertical until it reaches <code>41.8°</code> — snap your left hand flat along the boundary ("critical angle: r = 90° graze!"). Now tilt your right arm to <code>45°</code> and bounce it downward symmetrically ("Total Internal Reflection!").</p>
+        </aside>
+
+        <h3 id="props">45°–45°–90° Totally Reflecting Prism vs Plane Silvered Mirror</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>45°–45°–90° Glass Prism (TIR)</th><th>Thick Plane Silvered Mirror</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Reflection Efficiency</strong></td><td><strong>100%</strong> of light reflected at hypotenuse (<code>i = 45° &gt; 41.8°</code>)</td><td>Only ~80–90% reflected (metallic silver absorbs part of light)</td></tr>
+              <tr><td><strong>Image Sharpness</strong></td><td><strong>Single, crisp image</strong> (normal entry/exit at short faces)</td><td>Forms <strong>multiple faint ghost images</strong> from front glass + back silver</td></tr>
+              <tr><td><strong>Durability</strong></td><td>No metallic coating needed; <strong>never tarnishes or peels</strong></td><td>Silver backing oxidises, peels, and tarnishes in humid Nigerian air</td></tr>
+              <tr><td><strong>Instruments</strong></td><td>Submarine periscopes, prism binoculars, SLR camera pentaprisms</td><td>Household dressing mirrors</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Critical Angle &amp; Waveguide Explorer</h3>
+        <p>Tap any pin below to compare critical angle <strong>c</strong>, wave speed <strong>v = c<sub>0</sub> sin c</strong>, and TIR behaviour across water, crown glass, flint glass, optical fibres, and diamond:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Water (c = 48.6°)</div><div>Crown Glass (c = 41.8°)</div><div>Fibre &amp; Diamond (c = 24.4°) →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect critical angle c and wave speed v.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. PRISM & MIRAGE ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Prism, Mirror Ghost &amp; Mirage Zoom</span>
+        <h2>Inside the instrument: <em>why 45° prisms beat thick mirrors</em></h2>
+        <p class="intro">Compare a <strong>45°–45°–90° prism</strong> (turning a ray through 90° or 180° with zero ghost images), a <strong>thick silvered mirror</strong> (showing front- and back-surface ghost reflections), and a <strong>hot-asphalt road mirage</strong>!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom comparing 100% total internal reflection in a 45-degree prism, multiple ghost reflections in a thick silvered mirror, and upward total internal reflection in a road mirage."></canvas>
+            <div class="stage-label"><i></i>3D TIR Zoom · 45° Prism (100% Single Ray) vs Mirror Ghosts &amp; Mirage</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D prism zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="TIR application view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">45° Prism (100% TIR)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Thick Mirror (Ghost Images!)</button>
+              <button type="button" data-mode="base" aria-pressed="false">Hot-Road Mirage (TIR)</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Switch to 180° Binocular Double-TIR</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#10b981"></i>Refl<b data-c="h">100% TIR</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>Ghosts<b data-c="oh">0 Ghosts</b></span>
+              <span class="counter"><i style="--c:#38bdf8"></i>Incidence<b data-c="na">i = 45° &gt; c</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Critical<b data-c="cl">c = 41.8°</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Mode<b data-c="w">90° Turn</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Attempt each problem on paper first, then check the step-by-step WAEC/JAMB working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Critical angle &amp; speed of light in the medium</h4></div>
+          <div class="example-body">
+            <p class="q">The critical angle for light travelling from a certain dense flint glass into air is 37.3°. Taking the speed of light in air as c₀ = 3.00 × 10⁸ m s⁻¹, calculate: (a) the refractive index n of the flint glass, and (b) the speed of light v inside the flint glass.</p>
+            <ol class="steps-sol">
+              <li><strong>Refractive index from sin c = 1/n:</strong> <code>n = 1 ÷ sin 37.3° = 1 ÷ 0.6060 = 1.65</code>.</li>
+              <li><strong>Wave speed v inside glass:</strong> <code>v = c₀ sin c = 3.00 × 10⁸ × 0.6060 = 1.82 × 10⁸ m s⁻¹</code>.</li>
+            </ol>
+            <div class="answer-line">(a) n = 1.65 &nbsp;·&nbsp; (b) v = 1.82 × 10<sup>8</sup> m s<sup>−1</sup></div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Optical fibre core–cladding critical angle</h4></div>
+          <div class="example-body">
+            <p class="q">An optical fibre used in a telecommunications link has a central glass core of refractive index n₁ = 1.55 surrounded by a cladding of refractive index n₂ = 1.40. Calculate: (a) the critical angle c at the core–cladding interface, and (b) state what happens to a laser ray inside the core that strikes the interface at an angle of incidence of 72°.</p>
+            <ol class="steps-sol">
+              <li><strong>Critical angle at core–cladding boundary:</strong> <code>sin c = n₂ ÷ n₁ = 1.40 ÷ 1.55 = 0.9032 ⇒ c = sin⁻¹(0.9032) = 64.6°</code>.</li>
+              <li><strong>Outcome at i = 72°:</strong> Since the ray is in the denser core (<code>1.55 &gt; 1.40</code>) and <code>i = 72° &gt; c = 64.6°</code>, it undergoes <strong>100% Total Internal Reflection</strong> back into the core at an angle of reflection of <code>72°</code>.</li>
+            </ol>
+            <div class="answer-line">(a) c = 64.6° &nbsp;·&nbsp; (b) 100% Total Internal Reflection at 72°</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Ray hitting the side wall of a rectangular glass block</h4></div>
+          <div class="example-body">
+            <p class="q">A ray of light in air enters the top horizontal face of a rectangular glass block (n = 1.50, c = 41.8°) at an angle of incidence i₁ = 45° and refracts at r₁ = 28.1°. The refracted ray then strikes the vertical side wall of the block. Calculate the internal angle of incidence i₂ on the vertical side wall and state whether the ray escapes into the air through the side wall.</p>
+            <ol class="steps-sol">
+              <li><strong>Geometry of perpendicular faces:</strong> Because the vertical side wall is perpendicular (<code>90°</code>) to the top horizontal face, their normals are perpendicular: <code>i₂ = 90° − r₁ = 90° − 28.1° = 61.9°</code>.</li>
+              <li><strong>Compare i₂ with critical angle c:</strong> Since <code>i₂ = 61.9° &gt; c = 41.8°</code>, the ray <strong>does NOT escape</strong> through the vertical side wall; it undergoes <strong>Total Internal Reflection</strong> back into the block at <code>61.9°</code>!</li>
+            </ol>
+            <div class="answer-line">i<sub>2</sub> = 61.9° (&gt; 41.8°) &nbsp;·&nbsp; Undergoes Total Internal Reflection on the side wall!</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to Yaba: <em>verify Tunde’s 45° prism &amp; fibre link!</em></h2>
+        <p class="intro">Step through the three critical-angle checks below to prove why a <code>45°</code> crown-glass prism and a step-index optical fibre trap 100% of the laser signal.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>45°–45°–90° Crown-Glass Prism <small style="color:var(--muted);font-weight:500">· n = 1.50 in Air</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#f59e0b,#10b981);box-shadow:0 0 18px rgba(16,185,129,.5)"></div>
+              </div>
+              <div class="vt-count"><span id="time-a">Internal Incidence i = 45.0°</span><small>on hypotenuse face</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Critical Angle &amp; Fibre Check <small style="color:var(--muted);font-weight:500" id="len-b-label">· Crown Glass n = 1.50 · Internal Angle i = 45°</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#38bdf8,#10b981)"></div>
+              </div>
+              <div class="vt-count"><span id="time-b">c = ? · Outcome = ?</span><small>run Steps 1–3 below</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Compute Critical Angle sin c = 1 / n</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compare Internal i = 45° with c = 41.8°</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Verify Fibre Core/Cladding sin c = n₂ / n₁</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset check</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">A laser inside crown glass (n = 1.50) hits the boundary at i = 45°. Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 4:</strong> At the critical angle <strong>c</strong> (where <code>sin c = 1/n = n₂/n₁</code> and <code>v = c₀ sin c</code>), the refracted ray grazes the surface at <code>90°</code>. Whenever light travels from an <strong>optically denser to a less dense medium</strong> at <strong>i &gt; c</strong>, it undergoes <strong>100% Total Internal Reflection</strong> — powering 45° prisms and global fibre-optic networks!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 4.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can define critical angle c and apply sin c = 1/n and sin c = n₂/n₁.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can use the JAMB speed shortcut v = c₀ sin c to relate critical angle and wave speed.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can state the two mandatory conditions for Total Internal Reflection (TIR).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain how optical fibres (n_core > n_cladding) guide light pulses by repeated TIR.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can explain why 45° prisms beat silvered mirrors (no ghost images) and how mirages form.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l04-exit">
+          <div class="aq-top"><h4>In two sentences: state the two mandatory conditions for Total Internal Reflection, and explain why a thick plane mirror forms multiple ghost images while a 45° prism does not.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Total Internal Reflection requires light to travel from an optically denser to a less dense medium at an angle of incidence greater than the critical angle (<code>i &gt; c</code>) <b>(1)</b>. A thick silvered mirror reflects light at both its front glass surface and back silvered surface (forming multiple faint ghost images), whereas a 45° prism enters and exits normal to the short faces and reflects 100% at a single hypotenuse surface <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Critical Angle &amp; Total Internal Reflection</em></h2>
+        <p class="intro">Complete Part A (spoon/underside water surface reflection) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home Observation: Mirror-Like Underside of Water</h3>
+        <div class="aq" data-answer="l04-a1">
+          <div class="aq-top"><h4>Fill a clear drinking glass with water, hold it slightly above eye level, and look obliquely upward at the underside of the top water–air surface. Why does the underside of the water surface look like a bright silver mirror?</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your observation and explanation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Light from submerged objects or the side of the glass travels through water (optically denser, <code>n = 1.33, c = 48.6°</code>) towards the top air boundary at an oblique angle greater than <code>48.6°</code>, undergoing 100% Total Internal Reflection so the water surface acts like a mirror.</p></div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l04-b1">
+          <div class="aq-top"><h4>1. (a) Define critical angle and Total Internal Reflection. (b) State the two conditions required for Total Internal Reflection. (c) The speed of light in air is 3.0 × 10⁸ m s⁻¹ and in a glass block is 1.95 × 10⁸ m s⁻¹. Calculate the refractive index and critical angle of the glass.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Critical angle is the angle of incidence in the optically denser medium for which the angle of refraction in the less dense medium is 90° <b>(2)</b>. Total Internal Reflection is the complete reflection of light back into the denser medium when <code>i &gt; c</code> <b>(2)</b>.<br>
+            (b) (i) Light must travel from optically denser to less dense medium; (ii) <code>i &gt; c</code> <b>(2)</b>.<br>
+            (c) <code>n = c₀ / v = 3.0 / 1.95 = 1.54</code> <b>(2)</b>; <code>sin c = v / c₀ = 1.95 / 3.0 = 0.6500 ⇒ c = 40.5°</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b2">
+          <div class="aq-top"><h4>2. (a) Explain with a labelled structure how a step-index optical fibre transmits laser pulses over long distances, stating the required relationship between n_core and n_cladding. (b) An optical fibre has core refractive index 1.56 and cladding refractive index 1.41. Calculate the critical angle at the core–cladding boundary. (c) State three advantages of optical fibres over copper cables in telecommunications.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) A central transparent core of high refractive index (<code>n_core</code>) is surrounded by cladding of lower refractive index (<code>n_cladding &lt; n_core</code>) so rays strike the boundary at <code>i &gt; c</code> and undergo repeated TIR <b>(4)</b>.<br>
+            (b) <code>sin c = 1.41 / 1.56 = 0.9038 ⇒ c = 64.7°</code> <b>(3)</b>.<br>
+            (c) Much higher bandwidth/data capacity, lower signal attenuation over long distances, and immunity to electromagnetic interference <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b3">
+          <div class="aq-top"><h4>3. (a) Explain why right-angled isosceles glass prisms (45°–45°–90°) are preferred to plane silvered mirrors in periscopes and prism binoculars. (b) Explain how an optical mirage is formed on a tarred Nigerian highway on a hot sunny afternoon.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Prisms reflect 100% of light by TIR (<code>i = 45° &gt; c = 41.8°</code>), have no silver coating to tarnish or peel, and do not form multiple faint ghost images like thick silvered mirrors <b>(5)</b>.<br>
+            (b) Air layers near the hot tarred road are hotter and optically less dense than cooler air above. Rays from the sky bend progressively away from the normal as they travel downward until <code>i &gt; c</code>, undergoing upward Total Internal Reflection so the observer sees an inverted reflection of the sky looking like a pool of water <b>(5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 3: Apparent Depth</a>
+          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5 — WAEC Paper 3 Practical &amp; 7 Graphs →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

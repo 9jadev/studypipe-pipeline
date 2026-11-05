@@ -356,7 +356,8 @@
       // small delay after cancel() — some engines drop an utterance spoken immediately after it
       later(function () {
         if (token !== state.token) return;
-        var u = new SpeechSynthesisUtterance(step.say);
+        var sp = speakMap(step.say);
+        var u = new SpeechSynthesisUtterance(sp.text);
         if (voice) { u.voice = voice; u.lang = voice.lang || "en-NG"; } else { u.lang = "en-NG"; }
         u.rate = rate; u.pitch = 1.02; u.volume = 1;
         var gotBoundary = false;
@@ -369,7 +370,7 @@
           if (token !== state.token) return;
           if (e.name && e.name !== "word") return;
           gotBoundary = true; stopWordTimer();
-          highlightAt(e.charIndex);
+          highlightAt(sp.map ? (sp.map[e.charIndex] != null ? sp.map[e.charIndex] : e.charIndex) : e.charIndex);
         };
         u.onend = done;
         u.onerror = function (e) {
@@ -487,6 +488,23 @@
     }
     if (last < text.length) el.caption.appendChild(document.createTextNode(text.slice(last)));
   }
+  // read subscript shorthand aloud the way a teacher would: "I_g" → "I g", "r_eq" → "r equivalent",
+  // "I_main" → "I main", "V_AJ" → "V A J". map[] points each spoken character back to the caption text.
+  function speakMap(s) {
+    if (!s || s.indexOf("_") < 0) return { text: s, map: null };
+    var RE = /([A-Za-zηρΔ])_(\{([^}]+)\}|[A-Za-z0-9]+)/g, out = "", map = [], last = 0, m, i;
+    while ((m = RE.exec(s))) {
+      for (i = last; i <= m.index; i++) { map.push(i); out += s[i]; }
+      var k = m[3] || m[2];
+      var w = " " + (k === "eq" ? "equivalent" : (/^[a-z]{3,}$/.test(k) ? k : k.split("").join(" "))) + " ";
+      for (i = 0; i < w.length; i++) map.push(m.index + 1);
+      out += w;
+      last = m.index + m[0].length;
+    }
+    for (i = last; i < s.length; i++) { map.push(i); out += s[i]; }
+    return { text: out, map: map };
+  }
+
   function highlightAt(ci) {
     for (var i = 0; i < words.length; i++) {
       var w = words[i];
@@ -600,7 +618,8 @@
       if (s.phase !== "run") window.StudyLab.reset();
       later(function () { window.StudyLab.openTapFor(2600); }, 700);
     } else if (kind === "combo") {
-      var tab = document.querySelector('.combo[data-combo="' + arg + '"]');
+      var key = parts.slice(1).join(":");
+      var tab = document.querySelector('.combo-tab[data-combo="' + key + '"], .combo[data-combo="' + key + '"]');
       if (tab) tab.click();
     } else if (kind === "flip") {
       document.querySelectorAll(".myth").forEach(function (m, i) {

@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 3 · Real &amp; Apparent Depth, Multi-Layer Slabs &amp; The No-Parallax Method · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): Real Depth and Apparent Depth (n = R/A), Upward Vertical Displacement d_v = R(1 − 1/n), Multi-Layer Slabs, Travelling Microscope, and the No-Parallax Method.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='22' width='44' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l03">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 3 of 5 · <b>Real &amp; Apparent Depth</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 3 of 5 · 50 minutes</span>
+        <h1 class="display reveal" data-hook>Real &amp; Apparent Depth, Multi-Layer Slabs &amp; <em>The No-Parallax Method</em></h1>
+        <p class="question reveal">Why does a printed eye chart beneath a <code>6.0 cm</code> rectangular glass block look as if it is floating at a depth of <code>4.0 cm</code> (raised upward by <code>2.0 cm</code>)?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Explain using diverging ray cones why an object at the bottom of an optically denser slab appears shallower, and apply <strong>n = Real Depth (R) ÷ Apparent Depth (A)</strong>.</span></li>
+          <li><b>02</b><span>Calculate the <strong>upward vertical displacement (apparent rise) <code>d<sub>v</sub> = R − A = R(1 − 1/n)</code></strong> and avoid confusing <em>“appears raised by x”</em> with <em>“appears at depth y”</em>.</span></li>
+          <li><b>03</b><span>Calculate total apparent depth across <strong>multiple immiscible transparent layers</strong>: <strong>A<sub>total</sub> = (t<sub>1</sub> ÷ n<sub>1</sub>) + (t<sub>2</sub> ÷ n<sub>2</sub>) + …</strong></span></li>
+          <li><b>04</b><span>Describe the <strong>no-parallax search-pin method</strong> and the <strong>travelling microscope method</strong> for measuring refractive index.</span></li>
+          <li><b>05</b><span>Determine refractive index <strong>n</strong> from the slope of a <strong>Real Depth R vs Apparent Depth A graph</strong>.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <!-- Schematic Real Depth R, Apparent Depth A, and Upward Shift d_v -->
+          <rect x="52" y="72" width="216" height="144" rx="8" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>
+          <circle cx="160" cy="212" r="6" fill="#f59e0b"/>
+          <circle cx="160" cy="166" r="6" fill="#3ee6c4"/>
+          <line x1="160" y1="212" x2="124" y2="72" stroke="#f59e0b" stroke-width="2.5"/>
+          <line x1="160" y1="212" x2="196" y2="72" stroke="#f59e0b" stroke-width="2.5"/>
+          <line x1="124" y1="72" x2="96" y2="24" stroke="#10b981" stroke-width="2.5"/>
+          <line x1="196" y1="72" x2="224" y2="24" stroke="#10b981" stroke-width="2.5"/>
+          <line x1="160" y1="166" x2="124" y2="72" stroke="#3ee6c4" stroke-width="1.8" stroke-dasharray="4 4"/>
+          <line x1="160" y1="166" x2="196" y2="72" stroke="#3ee6c4" stroke-width="1.8" stroke-dasharray="4 4"/>
+          <text x="174" y="170" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="11">I (A = 4.0 cm)</text>
+          <text x="174" y="210" fill="#f59e0b" font-family="JetBrains Mono, monospace" font-size="11">O (R = 6.0 cm)</text>
+          <text x="64" y="242" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="12">n = R / A · d_v = R(1 − 1/n)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Depth &amp; shift sort</a></li>
+        <li><a href="#practical">3D no-parallax lab</a></li>
+        <li><a href="#concepts">n = R/A &amp; layers</a></li>
+        <li><a href="#neutralise">Ray cone zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1 &amp; 2</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards on parallel emergence, lateral displacement, rectangular block vs prism dispersion, and Snell’s law. Answer each in your head <strong>before</strong> flipping.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>The floating patient chart at <em>Dr Kunle’s Clinic</em></h2>
+        <p class="intro">Zainab places a <code>6.0 cm</code> rectangular glass block over a printed eye chart and sees the letters floating <code>2.0 cm</code> above the table — while Kelechi nearly falls for the #1 WAEC Real/Apparent Depth wording trap.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas id="story-canvas" aria-label="Animated 3D story: Zainab, Kelechi, and Dr Kunle investigating real depth, apparent depth, and upward vertical displacement in single and multi-layer slabs."></canvas>
+            <div class="stage-label"><i></i>3D story · Surulere Clinic → SS2 Optics Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Surulere Clinic:</strong> Zainab looks straight down through the <code>6.0 cm</code> glass block: <em>“Dr Kunle! The printed letters underneath look as if they are floating 2.0 cm above the table!”</em></p>
+            <p><strong>Scene 2 · Kelechi’s wording trap:</strong> <em>“If the letters appear raised by 2.0 cm under a 6.0 cm block, does that mean apparent depth A = 2.0 cm and n = 6.0 ÷ 2.0 = 3.0?”</em></p>
+            <p><strong>Scene 3 · Dr Kunle’s correction:</strong> <em>“No! ‘Appears raised by 2.0 cm’ is the upward vertical shift d<sub>v</sub> = 2.0 cm. Apparent depth from the top surface is A = R − d<sub>v</sub> = 6.0 − 2.0 = 4.0 cm, so n = R ÷ A = 6.0 ÷ 4.0 = 1.50!”</em></p>
+            <p><strong>Scene 4 · Ray cones &amp; multi-layer slabs:</strong> Rays leaving the bottom object bend away from the normal on entering air, forming virtual image <code>I</code> at <code>A = R/n</code>. For multiple layers, <code>A_total = t₁/n₁ + t₂/n₂</code>.</p>
+            <p><strong>Scene 5 · The No-Parallax method:</strong> Clamping a search pin on a retort stand beside the glass block lets us locate virtual image <code>I</code> when there is zero relative motion between image and search pin as the head sways.</p>
+            <p><strong>Scene 6 · SS2 Optics Lab:</strong> Mrs Adebayo sets up five glass thicknesses from <code>3.0 cm</code> to <code>15.0 cm</code> to measure <code>A</code> and <code>d_v</code> and plot <code>R</code> against <code>A</code>.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Why do objects under water or glass appear raised, and how do we measure apparent depth accurately? Pin your prediction below.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that an object at depth R under glass of index n = 1.50 will appear at…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">What is the difference between A and d_v?</button>
+            <button type="button">How do we add apparent depth for water over glass?</button>
+            <button type="button">Does an air gap under the block change the upward shift d_v?</button>
+            <button type="button">How do we know when no-parallax is achieved?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>Apparent Depth A, Upward Shift d<sub>v</sub> &amp; <em>No-Parallax</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Real &amp; Apparent Depth (R, A)</strong>, <strong>Upward Vertical Shift (d<sub>v</sub> = R − A)</strong>, and <strong>No-Parallax &amp; Ray-Cone Mechanism</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Real and Apparent Depth bin">
+              <h4><i></i>Real &amp; Apparent Depth</h4>
+              <small>R, A = R/n &amp; Σ(t_i/n_i)</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Upward Vertical Shift bin">
+              <h4><i></i>Upward Shift d_v</h4>
+              <small>d_v = R − A = R(1 − 1/n)</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="No-Parallax and Ray Cone bin">
+              <h4><i></i>No-Parallax &amp; Rays</h4>
+              <small>search pin, head sway &amp; ray cone</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D No-Parallax Practical: <em>Measuring Apparent Depth Across Five Thicknesses</em></h2>
+        <p class="intro">Use the retort-stand search pin <strong>P<sub>2</sub></strong> beside the crown-glass block (<code>n = 1.50</code>) to locate the virtual image <strong>I</strong> of object pin <strong>P<sub>1</sub></strong> at the bottom across five real depths <strong>R</strong> from <code>3.0 cm</code> to <code>15.0 cm</code>.</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>No-Parallax Practical Rule:</strong> Adjust the height of the search pin on the retort stand while looking vertically from above and swaying your head gently from side to side. When the search pin and the virtual image move together with <strong>zero relative separation</strong>, measure the search pin’s height <code>d_v</code> above the bench and compute <code>A = R − d_v</code>.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Place object pin P₁ at bottom</h4><p>Rest object pin <code>P₁</code> on the bench directly beneath the rectangular glass block of real depth <code>R</code>.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>View vertically from above</h4><p>Look straight down through the top face of the glass block to see the raised virtual image <code>I</code> of pin <code>P₁</code>.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Slide search pin P₂ to no-parallax</h4><p>Adjust search pin <code>P₂</code> on the retort stand until <code>P₂</code> and virtual image <code>I</code> stay locked together as you sway your head.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Measure d_v and A = R − d_v</h4><p>Read the upward shift <code>d_v</code> on the vertical ruler, find apparent depth <code>A = R − d_v</code>, and compute <code>n = R ÷ A</code>.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D no-parallax bench with retort stand, search pin, vertical ruler, glass block, real object pin at bottom, and raised virtual image."></canvas>
+            <div class="stage-label"><i></i>3D No-Parallax Bench · drag to rotate · tap trials A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Parallax condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">No-Parallax Locked (n = 1.50)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">2-Layer (Glass + Water)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Parallax Error (Pin Too High!)</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 3.0 cm</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 6.0 cm</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 9.0 cm</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 12.0 cm</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 15.0 cm</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
+          </div>
+        </div>
+
+        <h3>Record your Real Depth, Apparent Depth &amp; Upward Shift readings</h3>
+        <p>For each real depth <strong>R (cm)</strong> in Trials A–E, select the matching <strong>Apparent Depth A (cm)</strong>, <strong>Upward Shift d<sub>v</sub> = R − A (cm)</strong>, and <strong>n = R ÷ A</strong>:</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Real Depth R (cm)</th>
+                <th>Apparent Depth A (cm)</th>
+                <th>Upward Shift d_v = R − A (cm)</th>
+                <th>Refractive Index n = R ÷ A</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected table &amp; R vs A graph slope calculation <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>Real Depth R (cm)</th><th>Apparent Depth A (cm)</th><th>Upward Shift d_v (cm)</th><th>n = R ÷ A</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>3.0</td><td>2.00</td><td>1.00</td><td>1.50</td></tr>
+                  <tr><td>B</td><td>6.0</td><td>4.00</td><td>2.00</td><td>1.50</td></tr>
+                  <tr><td>C</td><td>9.0</td><td>6.00</td><td>3.00</td><td>1.50</td></tr>
+                  <tr><td>D</td><td>12.0</td><td>8.00</td><td>4.00</td><td>1.50</td></tr>
+                  <tr><td>E</td><td>15.0</td><td>10.00</td><td>5.00</td><td>1.50</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">Slope of Real Depth R (vertical) vs Apparent Depth A (horizontal) = (15.0 − 3.0) ÷ (10.0 − 2.0) = 12.0 ÷ 8.0 = 1.50 = n</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l03-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>If a candidate plots Apparent Depth <code>A</code> on the vertical axis against Real Depth <code>R</code> on the horizontal axis, what is the gradient of the line?</li>
+            <li>Why does the upward shift <code>d_v = t(1 − 1/n)</code> stay equal to <code>2.0 cm</code> even if the <code>6.0 cm</code> glass block is lifted <code>4.0 cm</code> above the object on the table?</li>
+            <li>State two precautions taken during the no-parallax real and apparent depth experiment.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Since <code>A = (1/n) R</code>, the gradient of <code>A</code> (vertical) against <code>R</code> (horizontal) equals <strong><code>1 ÷ n</code></strong> (<code>= 0.67</code> for crown glass).</li>
+                <li>Because rays in the air gap below the block travel straight without refraction; all refraction happens at the two parallel faces of the glass slab of thickness <code>t</code>, shifting the virtual image upward by <code>d_v = t(1 − 1/n)</code> regardless of slab height.</li>
+                <li>1. <em>“I viewed the object pin vertically from directly above the glass block.”</em><br>2. <em>“I ensured there was no parallax between the search pin and the virtual image before taking each reading.”</em></li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
+        <h2>Real Depth, Apparent Depth &amp; <em>Multi-Layer Slabs</em></h2>
+        <p class="intro">Let’s derive the paraxial depth equations and master the wording distinction that decides WAEC and JAMB marks.</p>
+
+        <h3 id="def-shm">1 · Refractive Index from Real &amp; Apparent Depth</h3>
+        <p>When a small object <strong>O</strong> at the bottom of a transparent medium of real thickness <strong>R</strong> and refractive index <strong>n</strong> is viewed nearly vertically from air above, rays from <code>O</code> refract <strong>away from the normal</strong> into air (<code>sin e = n sin r</code>). For small paraxial angles where <code>sin θ ≈ tan θ</code>:</p>
+        <div class="eq" id="eq-shm" data-hook>n = sin e ÷ sin r ≈ tan e ÷ tan r = Real Depth (R) ÷ Apparent Depth (A) &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; A = R ÷ n</div>
+
+        <h3 id="def-terms">2 · Upward Vertical Shift (d<sub>v</sub>) &amp; Multi-Layer Summation</h3>
+        <p>The distance through which the object appears <strong>lifted or raised upward</strong> towards the top surface is the <strong>vertical displacement (d<sub>v</sub>)</strong>:</p>
+        <div class="eq" id="eq-omega">d<sub>v</sub> = R − A = R − (R ÷ n) = R (1 − 1 ÷ n) &nbsp;&nbsp;<span class="st">(also equals travelling microscope raise Δh!)</span></div>
+        <div class="eq" id="eq-vel">Multi-layer immiscible slabs: &nbsp; A<sub>total</sub> = (t<sub>1</sub> ÷ n<sub>1</sub>) + (t<sub>2</sub> ÷ n<sub>2</sub>) + (t<sub>3</sub> ÷ n<sub>3</sub>) + …</div>
+        <div class="eq" id="eq-pend">Total upward shift across layers: &nbsp; d<sub>v,total</sub> = R<sub>total</sub> − A<sub>total</sub> = Σ t<sub>i</sub>(1 − 1 ÷ n<sub>i</sub>)</div>
+
+        <aside class="l-sec" id="movement-break" style="margin:24px 0;padding:18px;border-radius:var(--r-md);background:rgba(62,230,196,.08);border:1px solid rgba(62,230,196,.3)">
+          <p style="margin:0"><strong>Active 5-Minute Movement Break (The No-Parallax Finger Test):</strong> Hold your left index finger at arm’s length ("object image I") and your right index finger 15 cm closer to your nose ("misaligned search pin"). Sway your head left and right — see how your two fingers slide apart (parallax)! Now bring your right finger to touch the tip of your left finger and sway your head again — they stay locked together with <strong>zero relative motion (no parallax)</strong>!</p>
+        </aside>
+
+        <h3 id="props">The #1 WAEC/JAMB Wording Trap: “Appears at Depth” vs “Appears Raised By”</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Exact Phrase in Question</th><th>Symbol Given</th><th>Formula to Use</th><th>Example (R = 6.0 cm, n = 1.50)</th></tr></thead>
+            <tbody>
+              <tr><td><em>“The coin appears to be at a depth of y cm…”</em></td><td>Apparent Depth <strong><code>A = y</code></strong></td><td><code>n = R ÷ A</code></td><td><code>A = 4.0 cm ⇒ n = 6.0 ÷ 4.0 = 1.50</code></td></tr>
+              <tr><td><em>“The coin appears raised (or lifted) by x cm…”</em></td><td>Upward Shift <strong><code>d_v = x</code></strong></td><td><code>A = R − d_v</code> or <code>d_v = R(1 − 1/n)</code></td><td><code>d_v = 2.0 cm ⇒ A = 6.0 − 2.0 = 4.0 cm</code></td></tr>
+              <tr><td><em>“The microscope must be raised by Δh cm to refocus…”</em></td><td>Upward Shift <strong><code>d_v = Δh</code></strong></td><td><code>Δh = R(1 − 1/n)</code></td><td><code>Δh = 2.0 cm ⇒ R = Δh ÷ (1 − 1/1.5) = 6.0 cm</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Apparent Depth &amp; Multi-Layer Explorer</h3>
+        <p>Tap any pin below to compare real depth <strong>R</strong>, apparent depth <strong>A</strong>, and upward shift <strong>d<sub>v</sub></strong> across water, crown glass, multi-layer tanks, and diamond:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Water (A = ¾ R)</div><div>Crown Glass (A = ⅔ R)</div><div>Layered &amp; Diamond →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect R, A, and d_v.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. RAY CONE ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Virtual-Image Ray Cone Zoom</span>
+        <h2>Inside the slab: <em>diverging rays &amp; virtual image I</em></h2>
+        <p class="intro">Watch how rays from the bottom object <strong>O (amber)</strong> refract away from the normal at the top surface into air, so your eyes trace the backward extensions (cyan) to the raised virtual image <strong>I</strong>!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D virtual-image ray cone zoom showing real object O at depth R, rays refracting away from normal into air, and backward extensions meeting at virtual image I at depth A."></canvas>
+            <div class="stage-label"><i></i>3D Ray Cone Zoom · Real Object O (amber) → Virtual Image I (cyan)</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D ray cone zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Medium view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Crown Glass (n = 1.50)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Water (n = 1.33)</button>
+              <button type="button" data-mode="base" aria-pressed="false">2-Layer (Glass + Water)</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Increase Real Depth R (6.0 → 9.0 cm)</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset cone</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#38bdf8"></i>Real R<b data-c="h">6.0 cm</b></span>
+              <span class="counter"><i style="--c:#3ee6c4"></i>App A<b data-c="oh">4.00 cm</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>Shift d_v<b data-c="na">2.00 cm</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Medium<b data-c="cl">n = 1.50</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Ratio A/R<b data-c="w">67% R</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Attempt each problem on paper first, then check the step-by-step WAEC/JAMB working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Finding real depth from upward vertical shift d_v</h4></div>
+          <div class="example-body">
+            <p class="q">A printed letter underneath a rectangular glass block of refractive index 1.50 appears to be raised by 2.4 cm when viewed vertically from above. Calculate: (a) the real thickness R of the glass block, and (b) the apparent depth A of the letter.</p>
+            <ol class="steps-sol">
+              <li><strong>Identify given quantity:</strong> “Appears raised by 2.4 cm” gives upward shift <code>d_v = 2.4 cm</code>.</li>
+              <li><strong>Use <code>d_v = R(1 − 1/n)</code> to find R:</strong> <code>2.4 = R × (1 − 1/1.50) = R × (1 − 2/3) = R ÷ 3 ⇒ R = 3 × 2.4 = 7.2 cm</code>.</li>
+              <li><strong>Apparent depth A:</strong> <code>A = R − d_v = 7.2 − 2.4 = 4.8 cm</code> (check: <code>7.2 ÷ 4.8 = 1.50</code>).</li>
+            </ol>
+            <div class="answer-line">(a) Real thickness R = 7.2 cm &nbsp;·&nbsp; (b) Apparent depth A = 4.8 cm</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Multi-layer immiscible media (glass + water)</h4></div>
+          <div class="example-body">
+            <p class="q">A rectangular glass block of thickness 6.0 cm and refractive index 1.50 rests at the bottom of a flat-bottomed beaker. Water of refractive index 4/3 is poured into the beaker to a depth of 8.0 cm above the top of the glass block. Calculate: (a) the total apparent depth of a coin under the glass block when viewed vertically from above, and (b) the total upward vertical shift of the coin.</p>
+            <ol class="steps-sol">
+              <li><strong>Apparent depth through glass layer:</strong> <code>A₁ = t₁ ÷ n₁ = 6.0 ÷ 1.50 = 4.0 cm</code>.</li>
+              <li><strong>Apparent depth through water layer:</strong> <code>A₂ = t₂ ÷ n₂ = 8.0 ÷ (4/3) = 8.0 × 3/4 = 6.0 cm</code>.</li>
+              <li><strong>Total apparent depth &amp; upward shift:</strong> <code>A_total = A₁ + A₂ = 4.0 + 6.0 = 10.0 cm</code>. Since <code>R_total = 6.0 + 8.0 = 14.0 cm</code>, upward shift <code>d_v = 14.0 − 10.0 = 4.0 cm</code>.</li>
+            </ol>
+            <div class="answer-line">(a) A<sub>total</sub> = 10.0 cm &nbsp;·&nbsp; (b) Total upward shift d<sub>v</sub> = 4.0 cm</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Travelling microscope 3-reading method</h4></div>
+          <div class="example-body">
+            <p class="q">In a travelling microscope experiment: (1) focused on an ink cross on the bench, the vertical scale reads h₁ = 1.40 cm; (2) with a glass block placed over the cross and refocused on the image of the cross, it reads h₂ = 3.50 cm; (3) focused on lycopodium powder sprinkled on the top surface of the glass block, it reads h₃ = 7.70 cm. Calculate the real thickness R, apparent depth A, and refractive index n of the glass block.</p>
+            <ol class="steps-sol">
+              <li><strong>Real thickness R of block:</strong> <code>R = h₃ − h₁ = 7.70 − 1.40 = 6.30 cm</code>.</li>
+              <li><strong>Apparent depth A (from top surface to image):</strong> <code>A = h₃ − h₂ = 7.70 − 3.50 = 4.20 cm</code> (and upward shift <code>d_v = h₂ − h₁ = 2.10 cm</code>).</li>
+              <li><strong>Refractive index n:</strong> <code>n = R ÷ A = 6.30 ÷ 4.20 = 1.50</code>.</li>
+            </ol>
+            <div class="answer-line">R = 6.30 cm &nbsp;·&nbsp; A = 4.20 cm &nbsp;·&nbsp; n = 1.50</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to Surulere: <em>bust Kelechi’s “appears raised by” trap!</em></h2>
+        <p class="intro">Walk through the 3-step correction below so you never confuse upward vertical shift <code>d_v</code> with apparent depth <code>A</code> in WAEC or JAMB.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Clinic Observation <small style="color:var(--muted);font-weight:500">· Block R = 6.0 cm</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#f59e0b,#3ee6c4);box-shadow:0 0 18px rgba(62,230,196,.45)"></div>
+              </div>
+              <div class="vt-count"><span id="time-a">“Chart appears raised by 2.0 cm”</span><small>measured from the bottom</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Step-by-Step Correction <small style="color:var(--muted);font-weight:500" id="len-b-label">· Kelechi's Wrong Guess: n = 6.0 / 2.0 = 3.0?</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#38bdf8,#10b981)"></div>
+              </div>
+              <div class="vt-count"><span id="time-b">A = ? · n = ?</span><small>run Steps 1–3 below</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Identify d_v = 2.0 cm (Upward Shift)</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compute Apparent Depth A = R − d_v</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Calculate True Index n = R ÷ A</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset trap buster</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">A chart under a 6.0 cm block appears raised by 2.0 cm. Start with Step 1 to fix Kelechi's calculation.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 3:</strong> Rays leaving an optically denser medium bend away from the normal, creating a virtual image at <strong>Apparent Depth A = R ÷ n</strong> and lifting the image upward by <strong>d<sub>v</sub> = R − A = R(1 − 1/n)</strong>. For layered media, add apparent depths: <strong>A<sub>total</sub> = Σ(t<sub>i</sub> ÷ n<sub>i</sub>)</strong>!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 3.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can explain why objects under glass/water appear shallower and use n = R / A.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can calculate upward vertical shift d_v = R(1 − 1/n) and distinguish it from apparent depth A.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate total apparent depth for multiple immiscible layers: A_total = Σ(t_i / n_i).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can describe the no-parallax search-pin and travelling microscope methods.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can find refractive index n from the slope of a Real Depth R vs Apparent Depth A graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l03-exit">
+          <div class="aq-top"><h4>In two sentences: what is the difference between apparent depth A and vertical displacement d_v, and how do you know when a search pin is in no-parallax alignment with a virtual image?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Apparent depth <code>A = R/n</code> is measured downward from the top surface to the virtual image, whereas vertical displacement <code>d_v = R − A = R(1 − 1/n)</code> is how far the image is raised upward from the bottom <b>(1)</b>. No-parallax alignment is achieved when the virtual image and the search pin stay locked together with zero relative motion as the observer moves the eye from side to side <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Real &amp; Apparent Depth</em></h2>
+        <p class="intro">Complete Part A (coin-in-bucket apparent depth check) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home Practical: Coin in a Bowl of Water</h3>
+        <div class="aq" data-answer="l03-a1">
+          <div class="aq-top"><h4>Place a coin at the bottom of a bowl or bucket filled with 12 cm of water (n = 4/3). Hold a second coin in the air beside the bowl and adjust its height while looking from above until both coins appear at the same level (no parallax). Calculate the expected apparent depth A and upward rise d_v.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your observation and calculation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>For <code>R = 12.0 cm</code> and <code>n = 4/3</code>: apparent depth <code>A = R ÷ n = 12.0 ÷ (4/3) = 9.0 cm</code> below the water surface, so the submerged coin appears raised by <code>d_v = 12.0 − 9.0 = 3.0 cm</code> from the bottom.</p></div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l03-b1">
+          <div class="aq-top"><h4>1. (a) Distinguish between real depth and apparent depth. (b) Prove that the upward vertical displacement d_v of an object viewed vertically through a parallel-sided block of thickness R and refractive index n is d_v = R(1 − 1/n). (c) A glass block of refractive index 1.50 makes an ink dot on paper appear raised by 1.8 cm. Find the thickness of the block and the apparent depth of the dot.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Real depth <code>R</code> is the actual physical distance of an object below the surface of a medium, while apparent depth <code>A</code> is the distance of its virtual image below the surface when viewed from outside <b>(2)</b>.<br>
+            (b) Since <code>n = R / A ⇒ A = R / n</code>, upward displacement <code>d_v = R − A = R − R/n = R(1 − 1/n)</code> <b>(4)</b>.<br>
+            (c) <code>1.8 = R(1 − 1/1.50) = R/3 ⇒ R = 5.4 cm</code> <b>(2)</b>; <code>A = 5.4 − 1.8 = 3.6 cm</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b2">
+          <div class="aq-top"><h4>2. A rectangular tank has a 9.0 cm thick glass slab (n = 1.50) at its base, covered by 12.0 cm of water (n = 4/3) and 7.0 cm of kerosene (n = 1.40). Calculate: (a) the total real depth of the bottom, (b) the total apparent depth when viewed vertically from above, and (c) the total apparent upward shift of the bottom.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>R_total = 9.0 + 12.0 + 7.0 = 28.0 cm</code> <b>(2)</b>.<br>
+            (b) <code>A_total = (9.0 / 1.50) + (12.0 / (4/3)) + (7.0 / 1.40) = 6.0 + 9.0 + 5.0 = 20.0 cm</code> <b>(5)</b>.<br>
+            (c) Total upward shift <code>d_v = R_total − A_total = 28.0 − 20.0 = 8.0 cm</code> <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b3">
+          <div class="aq-top"><h4>3. Describe with the aid of equations how you would determine the refractive index of a rectangular glass block in the school laboratory using: (a) the no-parallax method with two optical pins, and (b) a travelling microscope and lycopodium powder.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Place object pin <code>P₁</code> beneath the glass block of measured thickness <code>R</code>. Clamp search pin <code>P₂</code> on a retort stand beside the block and adjust its height while viewing vertically from above until there is no parallax between <code>P₂</code> and the virtual image of <code>P₁</code>. Measure height <code>d_v</code> of <code>P₂</code> above the table; compute <code>A = R − d_v</code> and <code>n = R / A</code> <b>(5)</b>.<br>
+            (b) Record microscope vertical scale readings when focused on (i) an ink mark on the bench (<code>h₁</code>), (ii) the virtual image of the mark through the block (<code>h₂</code>), and (iii) lycopodium powder on the top surface of the block (<code>h₃</code>). Compute <code>R = h₃ − h₁</code>, <code>A = h₃ − h₂</code>, and <code>n = (h₃ − h₁) / (h₃ − h₂)</code> <b>(5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-02/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 2: Lateral Shift</a>
+          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4 — Critical Angle &amp; Optical Fibres →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

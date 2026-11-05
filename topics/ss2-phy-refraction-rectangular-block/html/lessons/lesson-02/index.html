@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 2 · Path Through a Rectangular Glass Block, Lateral Displacement &amp; Dispersion · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): Parallel Emergence (e = i), Zero Net Angular Deviation, Lateral Displacement d = t sin(i − r)/cos r, Far-Face Shift EF = t tan r, and Rectangular Block vs Triangular Prism Dispersion.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='22' width='44' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l02">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 2 of 5 · <b>Lateral Displacement &amp; Dispersion</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 2 of 5 · 50 minutes</span>
+        <h1 class="display reveal" data-hook>Path Through a Rectangular Glass Block, <em>Lateral Displacement</em> &amp; Dispersion</h1>
+        <p class="question reveal">Why does a ray entering a <code>6.0 cm</code> rectangular glass block at <code>45°</code> emerge at the exact same angle <code>e = 45°</code> — yet miss its original line of action by <code>1.98 cm</code> sideways?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Prove using parallel normals (<code>r<sub>1</sub> = i<sub>2</sub></code>) and Snell’s law that the <strong>emergent angle equals the incident angle (<code>e = i</code>)</strong>, giving <strong>zero net angular deviation</strong>.</span></li>
+          <li><b>02</b><span>Define <strong>lateral displacement d</strong> and apply <strong>d = t sin(i − r) ÷ cos r</strong> to calculate sideways ray shifts.</span></li>
+          <li><b>03</b><span>State how <strong>block thickness t</strong>, <strong>angle of incidence i</strong>, <strong>refractive index n</strong>, and <strong>wavelength λ</strong> affect lateral displacement, including the grazing limit <code>d → t</code> as <code>i → 90°</code>.</span></li>
+          <li><b>04</b><span>Calculate the <strong>far-face shift <code>EF = t tan r</code></strong> and internal ray length <code>ON = t ÷ cos r</code>, and use <code>(EF, t)</code> to find refractive index <code>n</code>.</span></li>
+          <li><b>05</b><span>Contrast <strong>white light in a rectangular glass block</strong> (parallel red &amp; violet emergent rays) with a <strong>60° triangular prism</strong> (diverging angular spectrum).</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <!-- Schematic Rectangular Glass Block & Lateral Shift d -->
+          <rect x="48" y="84" width="224" height="88" rx="8" fill="rgba(56,189,248,0.18)" stroke="#38bdf8" stroke-width="2"/>
+          <line x1="116" y1="24" x2="252" y2="236" stroke="#fbbf24" stroke-width="1.6" stroke-dasharray="5 5"/>
+          <line x1="76" y1="24" x2="116" y2="84" stroke="#f59e0b" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="116" y1="84" x2="156" y2="172" stroke="#38bdf8" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="156" y1="172" x2="198" y2="236" stroke="#10b981" stroke-width="3.5" stroke-linecap="round"/>
+          <line x1="156" y1="172" x2="188" y2="148" stroke="#f43f5e" stroke-width="3"/>
+          <text x="196" y="154" fill="#f43f5e" font-family="JetBrains Mono, monospace" font-size="12">d = 1.98 cm</text>
+          <text x="64" y="218" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="12">e = i · d = t sin(i−r)/cos r</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Block vs prism sort</a></li>
+        <li><a href="#practical">3D shift bench</a></li>
+        <li><a href="#concepts">Lateral shift &amp; EF</a></li>
+        <li><a href="#neutralise">Dispersion zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lesson 1 (Snell’s Law &amp; Wave Speed)</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards from Lesson 1. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>The 1.98 cm target miss at <em>Dr Kunle’s Clinic</em></h2>
+        <p class="intro">Zainab aims a calibration laser at <code>45°</code> towards a sensor behind a <code>6.0 cm</code> rectangular crown-glass block — and discovers that the emergent ray travels parallel to the original ray, shifted sideways by <code>1.98 cm</code>.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas id="story-canvas" aria-label="Animated 3D story: Zainab, Kelechi, and Dr Kunle testing lateral displacement through a 6.0 cm rectangular glass block and comparing it with a 60-degree triangular prism."></canvas>
+            <div class="stage-label"><i></i>3D story · Surulere Clinic → SS2 Optics Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Surulere Clinic:</strong> Zainab asks: <em>“Dr Kunle! Why did the laser beam entering this 6.0 cm glass block at 45° miss the target bullseye by 1.98 cm sideways, yet emerge at the exact same 45° angle?”</em></p>
+            <p><strong>Scene 2 · Kelechi’s question:</strong> <em>“And when we shine white light through the rectangular block, why doesn’t it spread out into a rainbow fan like a triangular prism?”</em></p>
+            <p><strong>Scene 3 · Parallel normals proof:</strong> Dr Kunle explains that because opposite faces of a rectangular block are parallel, their normals are parallel. Alternate interior angles are equal (<code>r₁ = i₂</code>), so <code>sin e = n sin r₁ = sin i ⇒ e = i</code>.</p>
+            <p><strong>Scene 4 · Block vs Prism:</strong> In a rectangular block, red and violet rays both return to <code>e = i</code> in air and emerge parallel to each other. In a 60° triangular prism, the inclined faces bend rays towards the base twice.</p>
+            <p><strong>Scene 5 · Lateral displacement formula:</strong> From the internal right triangles, hypotenuse <code>ON = t / cos r</code> and perpendicular shift <code>d = ON sin(i − r) = t sin(i − r) / cos r</code>.</p>
+            <p><strong>Scene 6 · SS2 Optics Lab:</strong> Mrs Adebayo sets up the 3D Rectangular Block Bench to measure <code>r</code>, lateral shift <code>d</code>, and far-face shift <code>EF = t tan r</code> across five angles.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">How do block thickness, angle of incidence, and wavelength affect lateral displacement? Pin your prediction before we test it on the 3D bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that doubling the thickness t of the glass block will… because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Why is net angular deviation zero in a rectangular block?</button>
+            <button type="button">Does violet or red shift further sideways in glass?</button>
+            <button type="button">What happens to lateral shift d at normal incidence (i = 0°)?</button>
+            <button type="button">How is far-face shift EF related to tan r?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>Parallel-Face Rules, Shift Factors &amp; <em>Prism Contrasts</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Parallel-Sided Block Properties</strong>, <strong>Changes That Increase Lateral Shift d</strong>, and <strong>Prism / Right-Triangle Geometry</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Parallel-Sided Block Properties bin">
+              <h4><i></i>Parallel-Sided Block</h4>
+              <small>e = i, D_net = 0° &amp; r₁ = i₂</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Increases Lateral Shift d bin">
+              <h4><i></i>Increases Shift d</h4>
+              <small>larger t, i, n or violet λ</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Prism and Triangle Geometry bin">
+              <h4><i></i>Prism &amp; Triangle Rules</h4>
+              <small>60° prism, i=0°, EF &amp; ON</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D Rectangular Block Bench: <em>Lateral Shift d &amp; Far-Face Shift EF</em></h2>
+        <p class="intro">Test five angles of incidence <strong>i</strong> from <code>15°</code> to <code>75°</code> through a <code>t = 6.0 cm</code> crown-glass block (<code>n = 1.50</code>). Observe the crimson perpendicular lateral shift <strong>d</strong> and the violet far-face shift <strong>EF = t tan r</strong>, and compare with a thicker <code>9.0 cm</code> block or dense flint glass (<code>n = 1.65</code>).</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Exam Distinction Alert:</strong> Do not confuse <strong>perpendicular lateral displacement</strong> <code>d = t sin(i − r) ÷ cos r</code> (measured perpendicular to the extended incident ray) with <strong>far-face shift</strong> <code>EF = t tan r</code> (measured along the bottom edge of the glass block from the foot of the normal)!</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Trace outline ABCD</h4><p>Place the rectangular glass block of width <code>t = 6.0 cm</code> on the white sheet and trace its parallel faces <code>AB</code> and <code>DC</code>.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Extend undeviated path</h4><p>Extend the incident ray straight through the block outline as a dashed line to represent the original path.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Measure perpendicular shift d</h4><p>Drop a perpendicular from the emergent ray to the extended incident line and measure <code>d = t sin(i − r) ÷ cos r</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Measure far-face shift EF</h4><p>Measure the distance <code>EF = t tan r</code> along face <code>DC</code> from the foot of the normal <code>F</code> to emergence point <code>E</code>.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D rectangular glass block bench showing incident ray, refracted ray, parallel emergent ray, undeviated dashed line, perpendicular lateral shift d, and far-face shift EF."></canvas>
+            <div class="stage-label"><i></i>3D Lateral Shift Bench · drag to rotate · tap trials A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D optical bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Block condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Crown Glass (t = 6.0 cm, n = 1.50)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Thick Slab (t = 9.0 cm)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Flint Glass (n = 1.65)</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 15°</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 30°</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 45°</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 60°</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 75°</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
+          </div>
+        </div>
+
+        <h3>Record your Lateral Displacement &amp; Far-Face Shift readings</h3>
+        <p>For the standard <code>t = 6.0 cm, n = 1.50</code> block, select the refracted angle <strong>r</strong>, lateral displacement <strong>d (cm)</strong>, and far-face shift <strong>EF (cm)</strong> for Trials A–E:</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Angle i (°)</th>
+                <th>Refracted Angle r</th>
+                <th>Lateral Shift d (cm)</th>
+                <th>Far-Face Shift EF = t tan r (cm)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected table &amp; sample calculations <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>i (°)</th><th>r (°)</th><th>e (°)</th><th>d = t sin(i−r)/cos r (cm)</th><th>EF = t tan r (cm)</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>15.0</td><td>9.9</td><td>15.0</td><td>0.55</td><td>1.05</td></tr>
+                  <tr><td>B</td><td>30.0</td><td>19.5</td><td>30.0</td><td>1.16</td><td>2.12</td></tr>
+                  <tr><td>C</td><td>45.0</td><td>28.1</td><td>45.0</td><td>1.98</td><td>3.21</td></tr>
+                  <tr><td>D</td><td>60.0</td><td>35.3</td><td>60.0</td><td>3.07</td><td>4.24</td></tr>
+                  <tr><td>E</td><td>75.0</td><td>40.1</td><td>75.0</td><td>4.49</td><td>5.06</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">At i = 45°: d = 6.0 × sin(45° − 28.1°) ÷ cos 28.1° = 6.0 × 0.2907 ÷ 0.8821 = 1.98 cm</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l02-prac-q">
+          <div class="aq-top"><h4>Answer these three analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why does the angle of emergence <code>e</code> equal the angle of incidence <code>i</code> for every trial in the table?</li>
+            <li>If the <code>6.0 cm</code> crown-glass block is replaced by a <code>9.0 cm</code> crown-glass block at <code>i = 45°</code>, what happens to the lateral displacement <code>d</code>?</li>
+            <li>How can you calculate the refractive index <code>n</code> if an exam question gives you only the incident angle <code>i</code>, block thickness <code>t</code>, and far-face shift <code>EF</code>?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Because opposite faces <code>AB</code> and <code>DC</code> are parallel, their normals are parallel and alternate interior angles are equal (<code>r₁ = i₂</code>). By Snell’s law, <code>sin e = n sin r₁ = sin i ⇒ e = i</code>.</li>
+                <li>Since <code>d ∝ t</code> at constant <code>i</code> and <code>n</code>, increasing thickness by <code>9.0 ÷ 6.0 = 1.5×</code> increases lateral displacement from <code>1.98 cm</code> to <code>1.98 × 1.5 = 2.97 cm</code>.</li>
+                <li>First compute hypotenuse <code>ON = √(t² + EF²)</code>, then <code>sin r = EF ÷ ON</code>, and finally <code>n = sin i ÷ sin r</code>.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
+        <h2>Parallel Emergence, Lateral Displacement &amp; <em>Dispersion</em></h2>
+        <p class="intro">Let’s derive the exact geometric equations governing a parallel-sided rectangular glass block.</p>
+
+        <h3 id="def-shm">1 · Proof of Parallel Emergence (e = i) &amp; Zero Net Angular Deviation</h3>
+        <p>When a light ray in air enters the top face <code>AB</code> of a rectangular glass block at angle of incidence <strong>i</strong> and refracts at <strong>r<sub>1</sub></strong>, it travels to the opposite parallel face <code>DC</code> and strikes it at internal angle of incidence <strong>i<sub>2</sub></strong>:</p>
+        <ul>
+          <li>Because faces <code>AB</code> and <code>DC</code> are parallel, the two normals are parallel lines cut by the internal ray transversal, so <strong>alternate interior angles are equal: <code>r<sub>1</sub> = i<sub>2</sub> = r</code></strong>.</li>
+          <li>Applying Snell’s law at entry (air → glass) and exit (glass → air): <code>sin i = n sin r</code> and <code>n sin r = sin e</code>.</li>
+        </ul>
+        <div class="eq" id="eq-shm" data-hook>sin e = sin i &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; e = i &nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp; Net Angular Deviation D<sub>net</sub> = (i − r) − (e − r) = 0°</div>
+
+        <h3 id="def-terms">2 · Deriving Lateral Displacement d &amp; Far-Face Shift EF</h3>
+        <p><strong>Lateral displacement (d)</strong> is the perpendicular distance between the original extended path of the incident ray and the emergent ray leaving a parallel-sided refracting slab of thickness <strong>t</strong>:</p>
+        <div class="eq" id="eq-omega">Internal path length: &nbsp; ON = t ÷ cos r &nbsp;&nbsp;·&nbsp;&nbsp; Lateral displacement: &nbsp; d = ON sin(i − r) = t sin(i − r) ÷ cos r</div>
+        <div class="eq" id="eq-vel">Far-face shift along opposite face: &nbsp; EF = t tan r &nbsp;&nbsp;·&nbsp;&nbsp; sin r = EF ÷ √(t<sup>2</sup> + EF<sup>2</sup>)</div>
+        <div class="eq" id="eq-pend">Small-angle approximation: &nbsp; d ≈ t i (1 − 1/n) &nbsp;&nbsp;·&nbsp;&nbsp; Grazing limit (i → 90°): &nbsp; d<sub>max</sub> = t</div>
+
+        <aside class="l-sec" id="movement-break" style="margin:24px 0;padding:18px;border-radius:var(--r-md);background:rgba(62,230,196,.08);border:1px solid rgba(62,230,196,.3)">
+          <p style="margin:0"><strong>Active 5-Minute Movement Break (The Parallel Sidestep):</strong> Stand facing the front of the room ("incident ray at angle i"). Pivot 17° to your right and take two diagonal steps ("refracted ray inside the block"). Now pivot 17° back to your left so you face the exact original direction again ("emergent ray e = i") — notice you are facing the exact same direction as before, but shifted one tile sideways ("lateral displacement d")!</p>
+        </aside>
+
+        <h3 id="props">Rectangular Glass Block vs 60° Triangular Prism</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Rectangular Glass Block</th><th>60° Triangular Glass Prism</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Opposite Refracting Faces</strong></td><td><strong>Parallel</strong> to each other</td><td><strong>Inclined</strong> at prism angle <code>A</code> (e.g. <code>60°</code>)</td></tr>
+              <tr><td><strong>Emergent Ray Direction</strong></td><td><strong>Parallel</strong> to incident ray (<code>e = i</code>)</td><td>Bent strongly towards the prism <strong>base</strong></td></tr>
+              <tr><td><strong>Net Angular Deviation</strong></td><td><strong>Zero (<code>D_net = 0°</code>)</strong> — only sideways shift <code>d</code></td><td>Large angular deviation <code>D = (i₁ + e) − A</code></td></tr>
+              <tr><td><strong>Effect on White Light</strong></td><td>Violet shifts laterally slightly more than red (<code>d_v &gt; d_r</code>), but rays emerge <strong>parallel</strong> (no rainbow fan)</td><td>Produces a wide diverging <strong>angular rainbow spectrum</strong> on a screen</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Lateral Displacement &amp; Thickness Explorer</h3>
+        <p>Tap any pin below to inspect how angle of incidence <strong>i</strong> and block thickness <strong>t</strong> control lateral displacement <strong>d</strong> and far-face shift <strong>EF</strong>:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Zero Shift (i = 0°)</div><div>Clinic Benchmark (d = 1.98 cm)</div><div>Large Shift (Steep i / Thick t) →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect how i and t control lateral displacement d.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. DISPERSION ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Parallel-Normal &amp; Dispersion Zoom</span>
+        <h2>Inside the glass: <em>parallel red/violet shift vs prism rainbow fan</em></h2>
+        <p class="intro">Compare a monochromatic ray in a rectangular block, a white beam splitting into parallel red and violet rays inside a rectangular block, and a 60° triangular prism fanning white light into a diverging spectrum!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom comparing parallel normals in a rectangular block, parallel red and violet emergent rays in a rectangular block, and angular dispersion in a 60-degree prism."></canvas>
+            <div class="stage-label"><i></i>3D Dispersion Zoom · Rect Block (Parallel) vs 60° Prism (Diverging Fan)</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D dispersion zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Dispersion view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Monochromatic (e = i)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">White Light in Block (∥)</button>
+              <button type="button" data-mode="base" aria-pressed="false">White Light in 60° Prism</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Increase Thickness t (6.0 → 9.0 cm)</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#7cc4ff"></i>Width t<b data-c="h">6.0 cm</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>Red d_r<b data-c="oh">1.98 cm</b></span>
+              <span class="counter"><i style="--c:#a855f7"></i>Violet d_v<b data-c="na">2.05 cm</b></span>
+              <span class="counter"><i style="--c:#3ee6c4"></i>Net Dev<b data-c="cl">0.0° (e=i)</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Emergence<b data-c="w">Parallel</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Attempt each problem on paper first, then check the step-by-step WAEC/JAMB working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Lateral displacement &amp; internal path length</h4></div>
+          <div class="example-body">
+            <p class="q">A ray of light strikes a rectangular crown-glass block of thickness t = 6.0 cm and refractive index n = 1.50 at an angle of incidence i = 45°. Calculate: (a) the angle of refraction r, (b) the distance ON travelled by the ray inside the glass, (c) the lateral displacement d of the emergent ray, and (d) the angle of emergence e.</p>
+            <ol class="steps-sol">
+              <li><strong>Angle of refraction r:</strong> <code>sin r = sin 45° ÷ 1.50 = 0.7071 ÷ 1.50 = 0.4714 ⇒ r = 28.1°</code>.</li>
+              <li><strong>Internal path length ON:</strong> <code>ON = t ÷ cos r = 6.0 ÷ cos 28.1° = 6.0 ÷ 0.8821 = 6.80 cm</code>.</li>
+              <li><strong>Lateral displacement d:</strong> <code>d = ON sin(i − r) = 6.80 × sin(45° − 28.1°) = 6.80 × sin 16.9° = 6.80 × 0.2907 = 1.98 cm</code>.</li>
+              <li><strong>Angle of emergence e:</strong> Since opposite faces are parallel, <code>e = i = 45.0°</code>.</li>
+            </ol>
+            <div class="answer-line">(a) r = 28.1° &nbsp;·&nbsp; (b) ON = 6.80 cm &nbsp;·&nbsp; (c) d = 1.98 cm &nbsp;·&nbsp; (d) e = 45.0°</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Finding refractive index n from far-face shift EF and thickness t</h4></div>
+          <div class="example-body">
+            <p class="q">A ray of light is incident at i = 30° on the top face of a parallel-sided glass block of thickness t = 6.0 cm. The refracted ray strikes the opposite parallel face at a point E located EF = 2.0 cm from the foot F of the normal. Calculate the refractive index n of the glass.</p>
+            <ol class="steps-sol">
+              <li><strong>Find hypotenuse ON inside the block:</strong> <code>ON = √(t² + EF²) = √(6.0² + 2.0²) = √(36 + 4) = √40 = 6.325 cm</code>.</li>
+              <li><strong>Find sin r from the right-angled triangle:</strong> <code>sin r = opposite ÷ hypotenuse = EF ÷ ON = 2.0 ÷ 6.325 = 0.3162</code>.</li>
+              <li><strong>Apply Snell’s law:</strong> <code>n = sin i ÷ sin r = sin 30° ÷ 0.3162 = 0.500 ÷ 0.3162 = 1.58</code>.</li>
+            </ol>
+            <div class="answer-line">Refractive index n = 1.58</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Comparing red and violet lateral shifts in a glass slab</h4></div>
+          <div class="example-body">
+            <p class="q">A narrow beam of white light strikes a 10.0 cm thick flint-glass slab at i = 60°. In this glass, red light has refractive index n_r = 1.62 and violet light has n_v = 1.66. Calculate the lateral displacement for each colour and their sideways separation upon emergence.</p>
+            <ol class="steps-sol">
+              <li><strong>Red light (n_r = 1.62):</strong> <code>sin r_r = sin 60° ÷ 1.62 = 0.5346 ⇒ r_r = 32.3°</code>. Shift <code>d_r = 10.0 × sin(60° − 32.3°) ÷ cos 32.3° = 10.0 × 0.4648 ÷ 0.8453 = 5.50 cm</code>.</li>
+              <li><strong>Violet light (n_v = 1.66):</strong> <code>sin r_v = sin 60° ÷ 1.66 = 0.5217 ⇒ r_v = 31.4°</code>. Shift <code>d_v = 10.0 × sin(60° − 31.4°) ÷ cos 31.4° = 10.0 × 0.4787 ÷ 0.8536 = 5.61 cm</code>.</li>
+              <li><strong>Parallel sideways separation:</strong> <code>Δd = d_v − d_r = 5.61 − 5.50 = 0.11 cm (1.1 mm)</code>, with both rays emerging parallel at <code>e = 60°</code>.</li>
+            </ol>
+            <div class="answer-line">d<sub>r</sub> = 5.50 cm &nbsp;·&nbsp; d<sub>v</sub> = 5.61 cm &nbsp;·&nbsp; Parallel separation Δd = 0.11 cm</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to Surulere: <em>re-align Zainab’s laser target!</em></h2>
+        <p class="intro">Step through the three geometric equations of the <code>6.0 cm</code> rectangular block at <code>i = 45°</code> to position the optical detector at the exact emergent beam location.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Incident Laser Beam <small style="color:var(--muted);font-weight:500">· i = 45.0° in Air</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#f59e0b,#fbbf24);box-shadow:0 0 18px rgba(245,158,11,.5)"></div>
+              </div>
+              <div class="vt-count"><span id="time-a">i = 45.0° · t = 6.0 cm</span><small>Crown Glass (n = 1.50)</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Emergent Beam &amp; Detector Offset <small style="color:var(--muted);font-weight:500" id="len-b-label">· t = 6.0 cm, n = 1.50, i = 45°</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#38bdf8,#10b981)"></div>
+              </div>
+              <div class="vt-count"><span id="time-b">e = ? · d = ?</span><small>run Steps 1–3 below</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Find r and Internal Path ON = t / cos r</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compute Lateral Shift d = ON sin(i − r)</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Verify Parallel Emergence e = i = 45°</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset alignment</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">A laser enters a 6.0 cm glass block (n = 1.50) at i = 45°. Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 2:</strong> In a parallel-sided rectangular glass block, opposite normals are parallel (<code>r₁ = i₂</code>), so the emergent ray always leaves <strong>parallel to the incident ray (<code>e = i</code>, net angular deviation = 0°)</strong>, shifted sideways by <strong>d = t sin(i − r) ÷ cos r</strong>!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 2.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can prove why the emergent angle equals the incident angle (e = i) with zero net angular deviation.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can derive and apply the lateral displacement formula d = t sin(i − r) / cos r.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can state how thickness t, incident angle i, refractive index n, and wavelength λ affect lateral shift d.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can calculate far-face shift EF = t tan r and use EF and t to find refractive index n.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can explain why a rectangular glass block does not fan white light into an angular rainbow like a prism.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l02-exit">
+          <div class="aq-top"><h4>In two sentences: why is the net angular deviation through a rectangular glass block zero, and what three factors increase its lateral displacement d?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Because opposite faces are parallel, the inward bending at the first face (<code>i − r</code>) is exactly cancelled by the outward bending at the second face (<code>e − r</code>, with <code>e = i</code>) <b>(1)</b>. Lateral displacement <code>d</code> increases with greater block thickness <code>t</code>, larger angle of incidence <code>i</code>, and higher refractive index <code>n</code> (or shorter wavelength) <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Lateral Displacement &amp; Block Geometry</em></h2>
+        <p class="intro">Complete Part A (thick-glass ruler line shift) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home Observation: Looking Obliquely Through a Thick Glass</h3>
+        <div class="aq" data-answer="l02-a1">
+          <div class="aq-top"><h4>Draw a straight ink line on paper and place a thick flat glass slab (or the flat thick base of a drinking glass) across part of the line. View the line from straight above (i = 0°) and then at a 45° angle. Describe and explain what happens to the segment seen through the glass.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your observation and explanation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Viewed straight from above (<code>i = 0°</code>), there is zero sideways shift (<code>d = 0</code>) so the line looks continuous. Viewed obliquely at <code>45°</code>, the segment seen through the glass appears shifted sideways (laterally displaced by <code>d = t sin(i − r)/cos r</code>) while remaining strictly parallel to the outer parts of the line (<code>e = i</code>).</p></div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l02-b1">
+          <div class="aq-top"><h4>1. (a) Define lateral displacement. (b) Prove using Snell's law and parallel normals that a ray entering a parallel-sided glass block at angle i emerges into air at e = i. (c) Calculate the lateral displacement of a ray incident at 50° on a glass block of thickness 7.5 cm and refractive index 1.50.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Lateral displacement is the perpendicular distance between the original extended path of an incident ray and the emergent ray from a parallel-sided refracting medium <b>(2)</b>.<br>
+            (b) At face 1, <code>sin i = n sin r₁</code>. Since opposite faces are parallel, normals are parallel and alternate angles <code>i₂ = r₁</code>. At face 2, <code>n sin i₂ = sin e ⇒ sin e = sin i ⇒ e = i</code> <b>(4)</b>.<br>
+            (c) <code>sin r = sin 50° / 1.50 = 0.7660 / 1.50 = 0.5107 ⇒ r = 30.7°</code> <b>(2)</b>. <code>d = 7.5 × sin(50° − 30.7°) / cos 30.7° = 7.5 × 0.3305 / 0.8599 = 2.88 cm</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b2">
+          <div class="aq-top"><h4>2. A ray of light is incident at i = 40° on a rectangular glass block of thickness t = 8.0 cm. The refracted ray hits the opposite parallel face at a distance EF = 4.0 cm from the foot of the normal. Calculate: (a) the length of the path inside the glass, (b) the angle of refraction r and refractive index n, and (c) the lateral displacement d.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Path length <code>ON = √(8.0² + 4.0²) = √80 = 8.94 cm</code> <b>(3)</b>.<br>
+            (b) <code>sin r = 4.0 / 8.944 = 0.4472 ⇒ r = 26.6°</code> <b>(2)</b>; <code>n = sin 40° / 0.4472 = 0.6428 / 0.4472 = 1.44</code> <b>(2)</b>.<br>
+            (c) <code>d = ON sin(40° − 26.6°) = 8.944 × sin 13.4° = 8.944 × 0.2317 = 2.07 cm</code> <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b3">
+          <div class="aq-top"><h4>3. (a) Explain why a 60° triangular glass prism produces a wide angular spectrum from white light whereas a rectangular glass block does not. (b) State what happens to the red and violet rays inside and outside the rectangular glass block.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) In a rectangular block, opposite faces are parallel so the second refraction cancels the angular deviation of the first (<code>D_net = 0°</code>). In a triangular prism, the inclined faces bend rays towards the base at both surfaces, adding angular dispersion <b>(5)</b>.<br>
+            (b) Inside the rectangular block, violet refracts closer to the normal than red (<code>n_v &gt; n_r</code>, so <code>r_v &lt; r_r</code>). Outside in air, both emerge at <code>e = i</code> parallel to the incident ray, with violet laterally shifted slightly more than red (<code>d_v &gt; d_r</code>) <b>(5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 1: Snell’s Law</a>
+          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3 — Real &amp; Apparent Depth →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

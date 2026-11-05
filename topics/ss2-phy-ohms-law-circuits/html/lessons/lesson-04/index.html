@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 4 · Galvanometer Conversion: Ammeter Shunts &amp; Voltmeter Multipliers · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): Moving-Coil Galvanometer Sensitivity, Ammeter Conversion via Parallel Shunt (R_s), Voltmeter Conversion via Series Multiplier (R_m), and Ideal Meter Placement.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='20' width='44' height='24' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(168,85,247,.1) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #ffb23f 0%, #3ee6c4 35%, #a855f7 70%, #2fb344 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(168,85,247,.14), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    /* L04 bench: preset designs from the lab notebook */
+    .l4-presets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin: 0 0 14px; }
+    .l4-presets .vt-btn { padding: 8px 4px; font-size: 12.5px; line-height: 1.25; border-radius: 10px; min-height: 44px; }
+    .l4-presets .vt-btn small { display: block; font-weight: 600; font-size: 10.5px; color: var(--muted); }
+    .l4-presets .vt-btn[aria-pressed="true"] { background: var(--teal); color: #041311; }
+    .l4-presets .vt-btn[aria-pressed="true"] small { color: #0b3a31; }
+    .bench-panel p.l4-presets-k { max-width: none; font-size: 12.5px; font-weight: 600; color: var(--fg-soft); margin: 0 0 6px; }
+    .bench-panel p.l4-warn { max-width: none; margin: 10px 0 0; font-size: 13px; color: var(--amber); }
+    .bench-panel p.l4-warn:empty { display: none; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l04">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 4 of 5 · <b>Galvanometer Shunts &amp; Multipliers</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 4 of 5 · 50 minutes</span>
+        <h1 class="display reveal" data-hook>Galvanometer Conversion: <em>Ammeter Shunts &amp; Voltmeter Multipliers</em></h1>
+        <p class="question reveal">How can a delicate moving-coil galvanometer that burns out above 10 mA safely measure a 5.0 A starter current or a 15.0 V battery?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Define <strong>full-scale deflection current (I<sub>g</sub>)</strong>, <strong>coil resistance (R<sub>g</sub>)</strong>, and full-scale coil voltage <strong>V<sub>g</sub> = I<sub>g</sub>R<sub>g</sub></strong>.</span></li>
+          <li><b>02</b><span>Convert a galvanometer into an <strong>ammeter</strong> using a low-resistance <strong>parallel shunt R<sub>s</sub> = I<sub>g</sub>R<sub>g</sub> ÷ (I − I<sub>g</sub>)</strong>.</span></li>
+          <li><b>03</b><span>Convert a galvanometer into a <strong>voltmeter</strong> using a high-resistance <strong>series multiplier R<sub>m</sub> = (V ÷ I<sub>g</sub>) − R<sub>g</sub></strong>.</span></li>
+          <li><b>04</b><span>Distinguish between the <strong>added multiplier resistance (R<sub>m</sub>)</strong> and the <strong>total voltmeter resistance (R<sub>total</sub> = R<sub>g</sub> + R<sub>m</sub> = V ÷ I<sub>g</sub>)</strong>.</span></li>
+          <li><b>05</b><span>Explain why ammeters go in <strong>series (ideal R<sub>A</sub> = 0)</strong> while voltmeters go in <strong>parallel (ideal R<sub>V</sub> = ∞)</strong>.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 400 260" role="img" aria-label="Left: an ammeter made from a galvanometer with a small shunt in parallel. Right: a voltmeter made from a galvanometer with a large multiplier in series.">
+          <text x="100" y="30" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" text-anchor="middle">AMMETER</text>
+          <text x="300" y="30" fill="#c084fc" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" text-anchor="middle">VOLTMETER</text>
+          <line x1="200" y1="20" x2="200" y2="200" stroke="rgba(255,255,255,0.15)" stroke-dasharray="4 5"/>
+          <g fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round">
+            <path d="M18 90 H78 M122 90 H182"/><path d="M45 90 V150 H75 M125 150 H155 V90"/>
+            <path d="M216 90 H243 M287 90 H305 M365 90 H384"/>
+          </g>
+          <circle cx="100" cy="90" r="22" fill="#1e293b" stroke="#ffb23f" stroke-width="2.5"/>
+          <text x="100" y="95" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" text-anchor="middle">G</text>
+          <rect x="75" y="140" width="50" height="20" rx="5" fill="#0f172a" stroke="#3ee6c4" stroke-width="2.5"/>
+          <text x="100" y="178" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">R_s (small)</text>
+          <circle cx="265" cy="90" r="22" fill="#1e293b" stroke="#ffb23f" stroke-width="2.5"/>
+          <text x="265" y="95" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="15" font-weight="700" text-anchor="middle">G</text>
+          <rect x="305" y="78" width="60" height="24" rx="5" fill="#0f172a" stroke="#c084fc" stroke-width="2.5"/>
+          <text x="335" y="128" fill="#c084fc" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">R_m (large)</text>
+          <text x="100" y="205" fill="#cbd5e1" font-family="Manrope, sans-serif" font-size="13" text-anchor="middle">shunt in parallel</text>
+          <text x="300" y="205" fill="#cbd5e1" font-family="Manrope, sans-serif" font-size="13" text-anchor="middle">multiplier in series</text>
+          <text x="200" y="245" fill="#f5efe4" font-family="Manrope, sans-serif" font-size="14" text-anchor="middle">Same 10 mA coil, two different meters</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Concept sort</a></li>
+        <li><a href="#practical">3D practical</a></li>
+        <li><a href="#concepts">Shunt vs Multiplier</a></li>
+        <li><a href="#neutralise">Coil &amp; Shunt zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1–3 from memory</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards on parallel current division, parallel cell banks, efficiency, and lost volts. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. WONDER: STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The phenomenon</span>
+        <h2>Mazi Okafor’s Onitsha Market <em>Meter Rescue</em></h2>
+        <p class="intro">At Onitsha Head Bridge Market, instrument technician <strong>Mazi Okafor</strong> and student <strong>Amaka</strong> adapt a single delicate <code>20 Ω, 10 mA</code> galvanometer into both a <code>5.0 A</code> ammeter and a <code>15.0 V</code> voltmeter. Step through the 3 beats.</p>
+
+        <div class="story-wrap" id="story-stage">
+          <canvas id="story-canvas" aria-label="3D animation of Mazi Okafor and Amaka converting a 10 mA galvanometer with a parallel shunt and a series multiplier"></canvas>
+          <div class="story-overlay">
+            <span class="story-badge" data-story-badge>Bare Coil: R_g = 20 Ω · I_g = 10 mA</span>
+            <div class="story-bubbles" data-story-bubbles></div>
+          </div>
+          <div class="story-caption">
+            <div class="story-caption-text">
+              <strong data-story-title>Beat 1 · A Delicate 10 mA Galvanometer Faces a 5.0 A Starter Load!</strong>
+              <p data-story-sub>Loading scene…</p>
+            </div>
+            <div class="story-controls">
+              <button class="btn btn-ghost btn-sm" type="button" data-story-prev aria-label="Previous beat">← Prev</button>
+              <div class="story-dots" role="tablist" aria-label="Story beats">
+                <button type="button" class="on" data-beat="0" aria-label="Beat 1"></button>
+                <button type="button" data-beat="1" aria-label="Beat 2"></button>
+                <button type="button" data-beat="2" aria-label="Beat 3"></button>
+              </div>
+              <button class="btn btn-primary btn-sm" type="button" data-story-next>Next →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 1B. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1b</b>Wonder Wall · Student questions</span>
+        <h2>What are you <em>wondering</em> about ammeters &amp; voltmeters?</h2>
+        <p class="intro">Share your question on the Wonder Wall before we design meters on the 3D bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="140" placeholder="e.g. Why must an ammeter have very low resistance?" aria-label="Add your prediction or question">
+            <button class="btn btn-primary btn-sm" type="submit">Post question</button>
+          </form>
+          <div class="seed-qs" aria-label="Example questions">
+            <button type="button">Why is shunt R_s in parallel?</button>
+            <button type="button">Why is multiplier R_m in series?</button>
+            <button type="button">What is ideal meter resistance?</button>
+            <button type="button">What is the R_m vs R_total trap?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 2. INVESTIGATE: SORT ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Sort the 10 cards: <em>Coil, Ammeter Shunt, or Voltmeter Multiplier?</em></h2>
+        <p class="intro">Drag or tap each card into <strong>Galvanometer Coil (I<sub>g</sub>, R<sub>g</sub>)</strong>, <strong>Ammeter Conversion (Parallel Shunt R<sub>s</sub>)</strong>, or <strong>Voltmeter Conversion (Series Multiplier R<sub>m</sub>)</strong>.</p>
+
+        <div class="sort-board" id="kitchen-sort">
+          <div>
+            <div class="sort-tray-label">Unclassified Instrument Cards (10) · tap or drag into a bin</div>
+            <div class="sort-tray" id="sort-tray" role="region" aria-label="Items to classify"></div>
+          </div>
+
+          <div class="sort-bins">
+            <div class="bin" data-bin="shm" tabindex="0" role="region" aria-label="Galvanometer Coil bin">
+              <h4><span class="dot" style="background:var(--amber)"></span>Galvanometer Coil <small>I_g · R_g · V_g = I_g R_g</small></h4>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" tabindex="0" role="region" aria-label="Ammeter Conversion Parallel Shunt bin">
+              <h4><span class="dot" style="background:var(--teal)"></span>Ammeter Conversion <small>Parallel Shunt R_s · Meter in Series</small></h4>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" tabindex="0" role="region" aria-label="Voltmeter Conversion Series Multiplier bin">
+              <h4><span class="dot" style="background:var(--violet)"></span>Voltmeter Conversion <small>Series Multiplier R_m · Meter in Parallel</small></h4>
+              <div class="drop"></div>
+            </div>
+          </div>
+
+          <div class="sort-actions">
+            <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Reset</button>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="feedback" id="sort-feedback" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 2B. 3D PRACTICAL BENCH ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2b</b>Investigate · Activity 2 · 3D Practical</span>
+        <h2>3D Galvanometer <em>Shunt &amp; Multiplier Design Bench</em></h2>
+        <p class="intro">Toggle between <strong>Ammeter Mode (Parallel Copper Shunt R<sub>s</sub>)</strong> and <strong>Voltmeter Mode (Series Multiplier Bobbin R<sub>m</sub>)</strong>, and adjust <em>R<sub>g</sub></em>, <em>I<sub>g</sub></em>, and the full-scale range.</p>
+
+        <div class="bench" id="bench">
+          <div class="bench-stage" id="bench-stage">
+            <canvas id="bench-canvas" aria-label="3D Galvanometer Shunt and Multiplier Conversion Bench"></canvas>
+            <div class="bench-overlay-top">
+              <span class="bench-chip" id="bench-instruction">Ammeter: small R<sub>s</sub> in parallel</span>
+            </div>
+          </div>
+
+          <div class="bench-panel">
+            <p class="l4-presets-k">Load a notebook design (or set your own below)</p>
+            <div class="l4-presets" id="bench-trials" role="group" aria-label="Notebook designs">
+              <button class="vt-btn" type="button" data-trial="t1" aria-pressed="false">A1 · 5.0 A<small>20 Ω, 10 mA</small></button>
+              <button class="vt-btn" type="button" data-trial="t2" aria-pressed="false">A2 · 2.0 A<small>50 Ω, 20 mA</small></button>
+              <button class="vt-btn" type="button" data-trial="t3" aria-pressed="false">A3 · 10 A<small>9.9 Ω, 0.10 A</small></button>
+              <button class="vt-btn" type="button" data-trial="t4" aria-pressed="false">V1 · 15 V<small>20 Ω, 10 mA</small></button>
+              <button class="vt-btn" type="button" data-trial="t5" aria-pressed="false">V2 · 10 V<small>5.0 Ω, 50 mA</small></button>
+              <button class="vt-btn" type="button" data-trial="t6" aria-pressed="false">V3 · 100 V<small>25 Ω, 5.0 mA</small></button>
+            </div>
+            <div class="ctl-grid">
+              <div class="ctl">
+                <label for="ctl-mode">Instrument Conversion Mode</label>
+                <select id="ctl-mode" style="width:100%;padding:8px;border-radius:8px;background:#0f172a;color:#f8fafc;border:1px solid rgba(255,255,255,.16);font-family:var(--sans)">
+                  <option value="ammeter" selected>Ammeter: add a small shunt Rₛ in parallel</option>
+                  <option value="voltmeter">Voltmeter: add a large multiplier Rₘ in series</option>
+                </select>
+              </div>
+              <div class="ctl">
+                <label for="ctl-rg">Coil Resistance R<sub>g</sub>: <strong id="ctl-rg-val">20.0 Ω</strong></label>
+                <input type="range" id="ctl-rg" min="5.0" max="100.0" step="5.0" value="20.0">
+              </div>
+              <div class="ctl">
+                <label for="ctl-ig">Full-Scale Current I<sub>g</sub>: <strong id="ctl-ig-val">10 mA</strong></label>
+                <input type="range" id="ctl-ig" min="5" max="100" step="5" value="10">
+              </div>
+              <div class="ctl">
+                <label for="ctl-range" id="ctl-range-label">Target Ammeter Full-Scale Current I: <strong id="ctl-range-val">5.0 A</strong></label>
+                <input type="range" id="ctl-range" min="1.0" max="10.0" step="0.5" value="5.0">
+              </div>
+            </div>
+
+            <div class="readout-bar" aria-live="polite">
+              <div class="ro"><small>Coil voltage V_g (at I_g)</small><strong id="ro-vg">0.200 V (10 mA)</strong></div>
+              <div class="ro"><small>Resistor to add</small><strong id="ro-conv">R_s = 0.0401 Ω</strong></div>
+              <div class="ro"><small>Whole meter’s resistance</small><strong id="ro-rtot">0.0400 Ω</strong></div>
+              <div class="ro"><small>Share taken by added resistor</small><strong id="ro-split">99.8% in Shunt</strong></div>
+              <div class="ro"><small>How to connect the meter</small><strong id="ro-place">In SERIES with Load</strong></div>
+            </div>
+
+            <p class="l4-warn" id="bench-warn" role="status"></p>
+
+            <div class="bench-btns">
+              <button class="btn btn-primary btn-sm" type="button" id="bench-record">📝 Log conversion design</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="graph-card" id="rs-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · follows the bench</span><h4 id="rs-title">Shunt R<sub>s</sub> against ammeter range I</h4></div>
+            <span class="gc-badge wait" id="rs-badge">0 logged</span>
+          </div>
+          <div class="gc-tabs" role="group" aria-label="Choose graph">
+            <button type="button" data-gmode="ammeter" aria-pressed="true">Ammeter: R<sub>s</sub> vs I</button>
+            <button type="button" data-gmode="voltmeter" aria-pressed="false">Voltmeter: R<sub>m</sub> vs V</button>
+          </div>
+          <div id="rs-graph"></div>
+          <div class="gc-stats" id="rs-stats"></div>
+          <p class="gc-note" id="rs-note"></p>
+        </div>
+
+<div class="symbol-key" aria-label="What the symbols mean">
+          <h4>What the symbols mean on this bench</h4>
+          <dl>
+            <div><dt>G</dt><dd>galvanometer: a very sensitive current meter</dd></div>
+            <div><dt>I<sub>g</sub></dt><dd>the current that makes the galvanometer read full scale</dd></div>
+            <div><dt>R<sub>g</sub></dt><dd>resistance of the galvanometer’s coil</dd></div>
+            <div><dt>V<sub>g</sub></dt><dd>voltage across the coil at full scale (V<sub>g</sub> = I<sub>g</sub>R<sub>g</sub>)</dd></div>
+            <div><dt>R<sub>s</sub></dt><dd>shunt: a small resistor added in parallel to make an ammeter</dd></div>
+            <div><dt>I<sub>s</sub></dt><dd>current through the shunt (I − I<sub>g</sub>)</dd></div>
+            <div><dt>R<sub>m</sub></dt><dd>multiplier: a large resistor added in series to make a voltmeter</dd></div>
+            <div><dt>R<sub>total</sub></dt><dd>resistance of the whole voltmeter (R<sub>g</sub> + R<sub>m</sub>)</dd></div>
+            <div><dt>I</dt><dd>full-scale current of the new ammeter</dd></div>
+            <div><dt>V</dt><dd>full-scale voltage of the new voltmeter</dd></div>
+          </dl>
+        </div>
+
+        <div class="table-wrap" id="results-table">
+          <div class="table-head">
+            <h3>Lab Notebook · 6 Ammeter Shunt &amp; Voltmeter Multiplier Designs</h3>
+            <div class="table-actions">
+              <button class="btn btn-ghost btn-sm" type="button" id="table-fill">Fill from bench</button>
+              <button class="btn btn-primary btn-sm" type="button" id="table-check">Check my table</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="table-reset">Clear</button>
+              <span class="sort-score" id="table-score" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="lab-table">
+              <thead>
+                <tr>
+                  <th>Instrument Conversion Spec</th>
+                  <th>Required R<sub>s</sub> or R<sub>m</sub></th>
+                  <th>Coil Voltage V<sub>g</sub></th>
+                  <th>Shunt / Multiplier Share</th>
+                  <th>Key Relation</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+          <div class="feedback" id="table-feedback" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 45-MIN ACTIVE BREAK ================= -->
+      <aside class="l-sec" id="movement-break" aria-label="Active movement break" style="background:linear-gradient(135deg,rgba(62,230,196,.1),rgba(168,85,247,.08));border-color:rgba(168,85,247,.35)">
+        <span class="phase" style="--pc:var(--lime)">⚡ Active Break · 2 min</span>
+        <h2>Stretch &amp; Memorise the <em>Two-Level Placement Rule</em>!</h2>
+        <p class="intro">Stand up! Clap your hands side-by-side in <strong>parallel</strong> and say: <em>“Parallel Shunt makes an Ammeter — placed in Series!”</em> Then stretch both arms one above the other in <strong>series</strong> and say: <em>“Series Multiplier makes a Voltmeter — placed in Parallel!”</em></p>
+      </aside>
+
+      <!-- ================= 3. MAKE SENSE ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · Core concepts</span>
+        <h2>Shunt Derivation, Multiplier Derivation &amp; <em>Exam Traps</em></h2>
+        <p class="intro">Never memorise blindly — derive both formulas in 5 seconds from Ohm’s law:</p>
+
+<div class="symbol-key" aria-label="What the symbols mean">
+          <h4>What the symbols mean</h4>
+          <dl>
+            <div><dt>G</dt><dd>galvanometer: a very sensitive current meter</dd></div>
+            <div><dt>I<sub>g</sub></dt><dd>the current that makes the galvanometer read full scale</dd></div>
+            <div><dt>R<sub>g</sub></dt><dd>resistance of the galvanometer’s coil</dd></div>
+            <div><dt>V<sub>g</sub></dt><dd>voltage across the coil at full scale (V<sub>g</sub> = I<sub>g</sub>R<sub>g</sub>)</dd></div>
+            <div><dt>R<sub>s</sub></dt><dd>shunt: a small resistor added in parallel to make an ammeter</dd></div>
+            <div><dt>I<sub>s</sub></dt><dd>current through the shunt (I − I<sub>g</sub>)</dd></div>
+            <div><dt>R<sub>m</sub></dt><dd>multiplier: a large resistor added in series to make a voltmeter</dd></div>
+            <div><dt>R<sub>total</sub></dt><dd>resistance of the whole voltmeter (R<sub>g</sub> + R<sub>m</sub>)</dd></div>
+            <div><dt>I</dt><dd>full-scale current of the new ammeter</dd></div>
+            <div><dt>V</dt><dd>full-scale voltage of the new voltmeter</dd></div>
+          </dl>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--amber)">1 · The galvanometer</span>
+            <h3>Start with the sensitive coil</h3>
+            <p>A moving-coil galvanometer is a very sensitive meter. It reaches <strong>full-scale deflection</strong> with a tiny current <em>I<sub>g</sub></em> through a coil of resistance <em>R<sub>g</sub></em>. Push more current through it and the coil can burn out.</p>
+            <div class="fx"><span class="lbl">Full-scale p.d.</span>V<sub>g</sub> = I<sub>g</sub>R<sub>g</sub></div>
+            <p class="eg"><b>Example</b>I<sub>g</sub> = 10 mA and R<sub>g</sub> = 20 Ω, so V<sub>g</sub> = 0.010 × 20 = 0.20 V.</p>
+            <p class="trap"><b>Exam trap</b>Convert milliamperes to amperes before you multiply: 10 mA = 0.010 A.</p>
+          </article>
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--teal)">2 · Ammeter conversion</span>
+            <h3>Ammeter: a small shunt in parallel</h3>
+            <p>To measure a large current <em>I</em>, connect a low-resistance <strong>shunt R<sub>s</sub> in parallel</strong> with the coil. The shunt carries the extra current (I − I<sub>g</sub>) around the coil. Parallel parts share the same voltage, so:</p>
+            <div class="fx"><span class="lbl">Same p.d.</span>I<sub>g</sub>R<sub>g</sub> = (I − I<sub>g</sub>)R<sub>s</sub></div>
+            <div class="fx"><span class="lbl">Shunt</span>R<sub>s</sub> = I<sub>g</sub>R<sub>g</sub> ÷ (I − I<sub>g</sub>)</div>
+            <p class="eg"><b>Example</b>0–5 A from a 10 mA, 20 Ω coil: R<sub>s</sub> = 0.20 ÷ 4.99 = 0.0401 Ω.</p>
+            <p class="use"><b>Remember</b>The finished ammeter goes in <strong>series</strong> with the load. An ideal ammeter has resistance close to 0 Ω.</p>
+          </article>
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--violet)">3 · Voltmeter conversion</span>
+            <h3>Voltmeter: a large multiplier in series</h3>
+            <p>To measure a large voltage <em>V</em>, connect a high-resistance <strong>multiplier R<sub>m</sub> in series</strong> with the coil. The same current I<sub>g</sub> flows through both, and together they must take the full voltage V:</p>
+            <div class="fx"><span class="lbl">Same I</span>V = I<sub>g</sub>(R<sub>g</sub> + R<sub>m</sub>)</div>
+            <div class="fx"><span class="lbl">Multiplier</span>R<sub>m</sub> = (V ÷ I<sub>g</sub>) − R<sub>g</sub></div>
+            <p class="eg"><b>Example</b>0–15 V from a 10 mA, 20 Ω coil: R<sub>m</sub> = 15 ÷ 0.010 − 20 = 1500 − 20 = 1480 Ω.</p>
+            <p class="use"><b>Remember</b>The finished voltmeter goes in <strong>parallel</strong> across the component. An ideal voltmeter has very large (→ ∞) resistance.</p>
+          </article>
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--pink)">4 · Exam traps</span>
+            <h3>Three ways students lose marks</h3>
+            <ol>
+              <li><strong>Units:</strong> change mA to A first (10 mA = 0.010 A).</li>
+              <li><strong>R<sub>m</sub> or R<sub>total</sub>?</strong> The added multiplier is R<sub>m</sub> = V/I<sub>g</sub> − R<sub>g</sub>. The whole voltmeter is R<sub>total</sub> = V/I<sub>g</sub>. Read which one the question wants.</li>
+              <li><strong>Which way round:</strong> the shunt goes in parallel to <em>make</em> an ammeter, then the ammeter goes in series in the circuit. The multiplier goes in series to make a voltmeter, then the voltmeter goes in parallel.</li>
+            </ol>
+            <p class="use"><b>Memory hook</b>“<strong>A</strong>mmeter = <strong>S</strong>mall <strong>S</strong>hunt, <strong>s</strong>ide by side. <strong>V</strong>oltmeter = <strong>M</strong>ighty <strong>M</strong>ultiplier, in a line.”</p>
+          </article>
+        </div>
+
+        <div class="study-summary">
+          <h3>Quick revision: ammeter vs voltmeter</h3>
+          <p>Cover one column and test yourself before an exam.</p>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th></th><th>Ammeter</th><th>Voltmeter</th></tr></thead>
+              <tbody>
+                <tr><td>Resistor added</td><td>Shunt R<sub>s</sub> (very small)</td><td>Multiplier R<sub>m</sub> (very large)</td></tr>
+                <tr><td>Joined to the coil</td><td>In parallel</td><td>In series</td></tr>
+                <tr><td>Formula</td><td>R<sub>s</sub> = I<sub>g</sub>R<sub>g</sub> ÷ (I − I<sub>g</sub>)</td><td>R<sub>m</sub> = V ÷ I<sub>g</sub> − R<sub>g</sub></td></tr>
+                <tr><td>Extra resistor’s job</td><td>Carries the extra current around the coil</td><td>Takes the extra voltage</td></tr>
+                <tr><td>Placed in the circuit</td><td>In series with the load</td><td>In parallel across the component</td></tr>
+                <tr><td>Ideal resistance</td><td>0 Ω</td><td>∞ Ω</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="ph-explorer" style="margin-top:26px">
+          <h3>Meter conversion explorer</h3>
+          <p class="ph-sub">Tap a card to see what happens to the 10 mA, 20 Ω coil.</p>
+          <div class="ph-choices" id="ph-track" role="group" aria-label="Meter conversion examples"></div>
+          <div class="ph-detail" id="ph-detail" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. CONCEPT ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3b</b>Make sense · 3D Moving-Coil &amp; Shunt Bypass Zoom</span>
+        <h2>Inside the Moving-Coil Meter: <em>Shunt Bypass vs Multiplier Drop</em></h2>
+        <p class="intro">Watch how the teal copper shunt diverts 99.8% of current below the moving coil in an ammeter, or how the purple multiplier tower absorbs 98.7% of voltage in series for a voltmeter.</p>
+
+        <div class="zoom-box">
+          <div class="zoom-stage" id="zoom-stage">
+            <canvas id="zoom-canvas" aria-label="3D Moving-Coil Galvanometer Shunt Bypass and Multiplier Zoom"></canvas>
+            <div class="zoom-status" id="zoom-status">Parallel Shunt (R_s = 0.0401 Ω) · 99.8% of Current (4.99 A) Bypasses Coil!</div>
+          </div>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="zoom-bar" role="group" aria-label="Meter zoom modes">
+            <button class="pill on" type="button" data-zmode="shunt-bypass">🔀 Ammeter: Parallel Shunt Bypass</button>
+            <button class="pill" type="button" data-zmode="multiplier-drop">🛡️ Voltmeter: Series Multiplier Drop</button>
+            <button class="pill" type="button" data-zmode="overload">⚠️ Unprotected Coil Overload</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. APPLY: WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Step-by-step <em>WAEC, NECO &amp; JAMB calculations</em></h2>
+
+        <div class="ex-list">
+          <details class="ex-card" open>
+            <summary><span class="ex-num">01</span><span><strong>Converting a Galvanometer into a 5.0 A Ammeter</strong> (WAEC / JAMB Classic)</span><em>R_s = 0.0401 Ω</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> A moving-coil galvanometer has a coil resistance of <code>20 Ω</code> and gives full-scale deflection when a current of <code>10 mA</code> passes through it. Explain how to convert it into an ammeter reading up to <code>5.0 A</code>, and calculate the required resistance.</p>
+              <ol class="steps">
+                <li><strong>Method:</strong> Connect a low-resistance <strong>shunt (R<sub>s</sub>) in parallel</strong> with the galvanometer.</li>
+                <li><strong>Convert units:</strong> <code>I<sub>g</sub> = 10 mA = 0.010 A</code>; <code class="inl">R<sub>g</sub> = 20 Ω</code>; <code class="inl">I = 5.0 A</code></li>
+                <li><strong>Shunt current:</strong> <code>I<sub>s</sub> = I − I<sub>g</sub> = 5.0 − 0.010 = 4.99 A</code></li>
+                <li><strong>Calculate R<sub>s</sub>:</strong> <code>R<sub>s</sub> = (I<sub>g</sub> × R<sub>g</sub>) ÷ (I − I<sub>g</sub>) = (0.010 × 20) ÷ 4.99 = 0.20 ÷ 4.99 = 0.04008 Ω ≈ 0.0401 Ω</code> in parallel.</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="ex-card">
+            <summary><span class="ex-num">02</span><span><strong>Converting the Same Galvanometer into a 15.0 V Voltmeter</strong> (WAEC / NECO)</span><em>R_m = 1480 Ω</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> Using the same galvanometer (<code>R<sub>g</sub> = 20 Ω, I<sub>g</sub> = 10 mA</code>), calculate (a) the multiplier resistance required to convert it into a voltmeter reading up to <code>15.0 V</code>, and (b) the total resistance of the resulting voltmeter.</p>
+              <ol class="steps">
+                <li><strong>Method:</strong> Connect a high-resistance <strong>multiplier (R<sub>m</sub>) in series</strong> with the galvanometer.</li>
+                <li><strong>Total resistance required:</strong> <code>R<sub>total</sub> = V ÷ I<sub>g</sub> = 15.0 ÷ 0.010 = 1500 Ω</code></li>
+                <li><strong>Added series multiplier:</strong> <code>R<sub>m</sub> = R<sub>total</sub> − R<sub>g</sub> = 1500 − 20 = 1480 Ω</code></li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="ex-card">
+            <summary><span class="ex-num">03</span><span><strong>Fraction of Main Current Passing Through a Shunted Galvanometer</strong> (JAMB Speed Question)</span><em>I_g / I = 1 / 100</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> A galvanometer of resistance <code>99 Ω</code> is shunted by a <code>1.0 Ω</code> resistor. What fraction of the total main current passes through the galvanometer, and by what factor is the current range multiplied?</p>
+              <ol class="steps">
+                <li><strong>Equal parallel p.d.:</strong> <code>I<sub>g</sub> R<sub>g</sub> = (I − I<sub>g</sub>) R<sub>s</sub> &nbsp;⇒&nbsp; I<sub>g</sub> ÷ I = R<sub>s</sub> ÷ (R<sub>g</sub> + R<sub>s</sub>)</code></li>
+                <li><strong>Substitute values:</strong> <code>I<sub>g</sub> ÷ I = 1.0 ÷ (99 + 1.0) = 1 ÷ 100</code> (1% of main current passes through the coil; 99% passes through the shunt).</li>
+                <li><strong>Range multiplication factor:</strong> <code class="inl">I ÷ I<sub>g</sub> = 100</code> (the full-scale range is multiplied 100 times).</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="ex-card">
+            <summary><span class="ex-num">04</span><span><strong>Voltmeter Sensitivity &amp; 100 V Range Extension</strong> (NECO / JAMB)</span><em>R_m = 19,975 Ω</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> A moving-coil meter of resistance <code>25 Ω</code> deflects full-scale at <code>5.0 mA</code>. Find the series resistance needed to measure up to <code>100 V</code>.</p>
+              <ol class="steps">
+                <li><strong>Convert current:</strong> <code>I<sub>g</sub> = 5.0 mA = 0.005 A</code></li>
+                <li><strong>Apply multiplier formula:</strong> <code>R<sub>m</sub> = (V ÷ I<sub>g</sub>) − R<sub>g</sub> = (100 ÷ 0.005) − 25 = 20,000 − 25 = 19,975 Ω</code></li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4B. BRIDGE: MULTIPLIER TRAP ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4b</b>Apply · The WAEC Multiplier Trap</span>
+        <h2>Can you avoid the <em>R<sub>m</sub> vs R<sub>total</sub> Trap</em>?</h2>
+        <p class="intro"><strong>Challenge:</strong> A moving-coil galvanometer of coil resistance <strong>5.0 Ω</strong> gives full-scale deflection when a current of <strong>50 mA</strong> flows through it. What <strong>multiplier resistance R<sub>m</sub></strong> must be connected in series with it so that it can read up to <strong>10.0 V</strong>?</p>
+
+        <div class="vinegar-box" id="vinegar-test">
+          <div class="clock-card">
+            <div class="clock-well">
+              <svg viewBox="0 0 180 105" width="170" height="100" aria-hidden="true">
+                <rect x="14" y="18" width="152" height="68" rx="10" fill="#0f172a" stroke="rgba(255,255,255,0.2)"/>
+                <circle id="v-drop" cx="38" cy="34" r="7" fill="#a855f7" style="transition:transform .4s ease"/>
+                <rect id="v-flask-liquid" x="26" y="62" width="128" height="12" rx="6" fill="#a855f7"/>
+                <text id="v-flask-label" x="90" y="46" fill="#f8fafc" font-family="JetBrains Mono, monospace" font-size="12.5" font-weight="700" text-anchor="middle">R_g=5Ω, I_g=50mA → 10V</text>
+              </svg>
+            </div>
+            <p style="margin:6px 0 12px;font-size:.9rem;color:#cbd5e1">Pick the required <strong>added series multiplier R<sub>m</sub></strong>:</p>
+            <div class="pill-row" role="group" aria-label="Multiplier resistance options">
+              <button class="pill" type="button" data-v="200">R_m = 200 Ω</button>
+              <button class="pill" type="button" data-v="195">R_m = 195 Ω</button>
+              <button class="pill" type="button" data-v="205">R_m = 205 Ω</button>
+              <button class="pill" type="button" data-v="0.025">R_m = 0.025 Ω</button>
+            </div>
+          </div>
+          <div class="feedback" id="vinegar-result" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 5. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Assess · 12-Question Exam Checkpoint</span>
+        <h2>Test your mastery of <em>Lesson 4 (+ Spaced Retrieval)</em></h2>
+        <p class="intro">12 original WAEC/NECO/JAMB questions plus spaced retrieval from Lessons 1–3.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 5B. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5b</b>Reflect · Metacognition &amp; Competences</span>
+        <h2>Rate your confidence <em>(1 to 4)</em></h2>
+        <p class="intro">Rate each skill honestly (Transversal Competences <strong>L1, L3, L6</strong>).</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can define I_g, R_g, and V_g = I_g R_g for a galvanometer.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can calculate shunt resistance R_s = I_g R_g / (I − I_g) for an ammeter.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate series multiplier R_m = (V / I_g) − R_g for a voltmeter.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can distinguish added R_m from total voltmeter resistance R_total.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can explain why an ammeter has low resistance and a voltmeter high resistance.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+      </section>
+
+      <!-- ================= 5C. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--lime)"><b>5c</b>Assignment · Locked Marking Scheme</span>
+        <h2>Written &amp; Practical <em>Take-Home Tasks (30 Marks)</em></h2>
+        <p class="intro">Write your full working (min. 40 characters) in each box to unlock the official WAEC/NECO marking scheme.</p>
+
+        <div class="assign-list">
+          <div class="assign-card" data-assign="a1">
+            <div class="assign-head">
+              <span class="assign-mark">10 Marks</span>
+              <h3>Task 1 · Dual Instrument Conversion (Ammeter &amp; Voltmeter)</h3>
+            </div>
+            <p>A moving-coil galvanometer has a resistance of <code>50 Ω</code> and gives full-scale deflection when a potential difference of <code>1.0 V</code> is across its terminals. Calculate: (a) its full-scale deflection current <code>I<sub>g</sub></code> [2], (b) the shunt resistance needed to convert it into a <code>0–2.0 A</code> ammeter [4], and (c) the multiplier resistance needed to convert it into a <code>0–20.0 V</code> voltmeter [4].</p>
+            <textarea class="assign-input" rows="4" placeholder="Type your step-by-step working here (at least 40 characters) to unlock the marking scheme…"></textarea>
+            <div class="assign-actions">
+              <button class="btn btn-primary btn-sm" type="button" data-unlock>Unlock marking scheme</button>
+              <small class="assign-hint">Requires ≥ 40 characters of genuine working</small>
+            </div>
+            <div class="assign-solution" hidden>
+              <h4>Official Marking Scheme (10 Marks)</h4>
+              <ul>
+                <li><strong>(a) Full-scale current I<sub>g</sub> [2 marks]:</strong><br><code>I<sub>g</sub> = V<sub>g</sub> ÷ R<sub>g</sub> = 1.0 V ÷ 50 Ω = 0.020 A (20 mA)</code> [2].</li>
+                <li><strong>(b) Shunt resistance for 2.0 A ammeter [4 marks]:</strong><br><code>R<sub>s</sub> = V<sub>g</sub> ÷ (I − I<sub>g</sub>) = 1.0 ÷ (2.0 − 0.020) = 1.0 ÷ 1.98 = 0.505 Ω</code> connected in parallel [4].</li>
+                <li><strong>(c) Multiplier resistance for 20.0 V voltmeter [4 marks]:</strong><br><code>R<sub>m</sub> = (V ÷ I<sub>g</sub>) − R<sub>g</sub> = (20.0 ÷ 0.020) − 50 = 1000 − 50 = 950 Ω</code> connected in series [4].</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="assign-card" data-assign="a2">
+            <div class="assign-head">
+              <span class="assign-mark">10 Marks</span>
+              <h3>Task 2 · Circuit Placement &amp; Loading Error Explanation</h3>
+            </div>
+            <p>Explain with clear circuit reasoning: (a) why an ammeter is connected in series and must have very low resistance [5], and (b) why a voltmeter is connected in parallel and must have very high resistance [5].</p>
+            <textarea class="assign-input" rows="4" placeholder="Type your explanation of ammeter series placement and voltmeter parallel placement here…"></textarea>
+            <div class="assign-actions">
+              <button class="btn btn-primary btn-sm" type="button" data-unlock>Unlock marking scheme</button>
+              <small class="assign-hint">Requires ≥ 40 characters of genuine working</small>
+            </div>
+            <div class="assign-solution" hidden>
+              <h4>Official Marking Scheme (10 Marks)</h4>
+              <ul>
+                <li><strong>(a) Ammeter in series with low resistance [5 marks]:</strong><br>Connected in series so the entire branch current passes through it [2]. Must have very low resistance (ideal <code>0 Ω</code>) so it does not increase the total circuit resistance or reduce the current being measured [3].</li>
+                <li><strong>(b) Voltmeter in parallel with high resistance [5 marks]:</strong><br>Connected in parallel across the two points whose potential difference is required [2]. Must have very high resistance (ideal <code>∞ Ω</code>) so it draws negligible current from the circuit and does not alter the p.d. across the component [3].</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="next-lesson-cta" style="margin-top:32px;padding:24px;border-radius:var(--r-lg);background:linear-gradient(135deg,rgba(62,230,196,.14),rgba(255,178,63,.12));border:1px solid var(--line-strong);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+          <div>
+            <span class="eyebrow">Up Next · Lesson 5 of 5 (Unit Finale!)</span>
+            <h3 style="margin:4px 0">Null-Balance Precision — Metre Bridge, Potentiometer &amp; WAEC Practicals</h3>
+            <p style="margin:0;color:var(--muted)">Solve the Aba 12.0 V battery mystery once and for all using zero-current null-balance precision!</p>
+          </div>
+          <a class="btn btn-primary" href="../lesson-05/index.html">Continue to Lesson 5 →</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/apparatus-kit.js"></script>
+  <script src="../../assets/js/notation.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

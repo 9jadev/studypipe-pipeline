@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 5 · Null-Balance Precision: Metre Bridge, Potentiometer &amp; WAEC Practicals · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): Wheatstone Bridge, Metre Bridge (R1/R2 = l/(100-l)), Two-Wire Diameter Ratio (√s = d1/d2), Potentiometer (E1/E2 = l1/l2), and WAEC Paper 3 Precautions.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='20' width='44' height='24' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(47,179,68,.1) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    /* bench controls: roomy on a 360 px phone */
+    #bench .ctl label { flex-wrap: wrap; gap: 2px 8px; line-height: 1.3; }
+    #bench .readout-bar { gap: 8px; }
+    #bench .ro { padding: 8px 10px; min-width: 0; }
+    #bench .ro small { letter-spacing: .04em; line-height: 1.3; }
+    #bench .ro strong { white-space: normal; overflow-wrap: anywhere; font-size: 13.5px; }
+    #bench .ro.is-null { border-color: rgba(47,179,68,.7); background: rgba(47,179,68,.12); }
+    #bench .ro.is-null strong { color: #5ee37a; }
+    #bench .bench-btns { flex-wrap: wrap; }
+    #bench .bench-btns .btn { flex: 1 1 220px; justify-content: center; text-align: center; }
+    @media (max-width: 540px) {
+      #bench .bench-panel { padding: 14px; }
+      #bench .ro-calc { grid-column: 1 / -1; order: 5; }
+      #bench .bench-chip { font-size: 10.5px; padding: 5px 10px; border-radius: 12px; }
+    }
+    #nb-card .gc-stat span { text-transform: none; letter-spacing: .02em; font-size: 11px; }
+    @media (max-width: 540px) { #nb-card .gc-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    /* concept cards: let long formulas wrap instead of widening the card past a 360 px screen */
+    @media (max-width: 860px) { #concepts .concept-grid { grid-template-columns: minmax(0, 1fr); } }
+    #concepts .concept-card .fx { white-space: normal; overflow-wrap: anywhere; }
+    #sort-tray .sort-item { max-width: 100%; min-width: 0; }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #3ee6c4 0%, #ffb23f 35%, #2fb344 70%, #a855f7 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(47,179,68,.14), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l05">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 5 of 5 · <b>Metre Bridge, Potentiometer &amp; Practicals</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 5 of 5 (Unit Finale) · 50 minutes</span>
+        <h1 class="display reveal" data-hook>Null-Balance Precision: <em>Metre Bridge, Potentiometer &amp; WAEC Practicals</em></h1>
+        <p class="question reveal">How can we measure the exact open-circuit EMF of Chinedu’s battery without drawing even a single microampere of current?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Apply the <strong>Wheatstone bridge</strong> condition (<code>R<sub>1</sub>/R<sub>2</sub> = R<sub>3</sub>/R<sub>4</sub></code>) and <strong>Metre Bridge</strong> formula <strong>R<sub>1</sub> ÷ R<sub>2</sub> = l ÷ (100 − l)</strong>.</span></li>
+          <li><b>02</b><span>Prove and use the WAEC Paper 3 two-wire slope identity <strong>√s = d<sub>1</sub> ÷ d<sub>2</sub></strong> where <code>s = R<sub>2</sub> ÷ R<sub>1</sub></code>.</span></li>
+          <li><b>03</b><span>Explain why a <strong>potentiometer</strong> at null balance (<code>I<sub>g</sub> = 0</code>) draws zero current (<code>Ir = 0</code>) and apply <strong>E<sub>1</sub> ÷ E<sub>2</sub> = l<sub>1</sub> ÷ l<sub>2</sub></strong>.</span></li>
+          <li><b>04</b><span>Solve potentiometer circuits with a <strong>driver series resistor</strong> (<code>V<sub>AB</sub> = E<sub>drv</sub> × R<sub>w</sub> ÷ (R<sub>w</sub> + R<sub>s</sub>)</code>) and shunted cells (<code>r = R(l<sub>1</sub> − l<sub>2</sub>) ÷ l<sub>2</sub></code>).</span></li>
+          <li><b>05</b><span>Write accepted <strong>WAEC Physics Practical Paper 3 precautions</strong> in the first-person past tense.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 400 260" role="img" aria-label="Metre bridge: resistors R1 and R2 in the top gaps, galvanometer from the middle terminal to a jockey on the 100 cm wire, balanced at length l">
+          <g fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M40 190 V60 H80 M140 60 H260 M320 60 H360 V190"/>
+            <path d="M200 60 V92 M200 128 L168 182"/>
+          </g>
+          <rect x="80" y="46" width="60" height="28" rx="6" fill="#0f172a" stroke="#3ee6c4" stroke-width="2.5"/>
+          <text x="110" y="65" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">R₁</text>
+          <rect x="260" y="46" width="60" height="28" rx="6" fill="#0f172a" stroke="#ffb23f" stroke-width="2.5"/>
+          <text x="290" y="65" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">R₂</text>
+          <circle cx="200" cy="110" r="18" fill="#1e293b" stroke="#2fb344" stroke-width="2.5"/>
+          <text x="200" y="115" fill="#2fb344" font-family="JetBrains Mono, monospace" font-size="14" font-weight="700" text-anchor="middle">G</text>
+          <text x="236" y="114" fill="#2fb344" font-family="JetBrains Mono, monospace" font-size="12">I_g = 0</text>
+          <rect x="34" y="194" width="332" height="10" rx="3" fill="#78350f"/>
+          <line x1="40" y1="190" x2="360" y2="190" stroke="#3ee6c4" stroke-width="3.5"/>
+          <path d="M168 186 l-6 -10 h12 z" fill="#f8fafc"/>
+          <g stroke="#cbd5e1" stroke-width="1.5"><path d="M40 216 H166 M40 211 V221 M166 211 V221"/><path d="M170 216 H360 M170 211 V221 M360 211 V221"/></g>
+          <text x="103" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">l</text>
+          <text x="265" y="234" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">100 − l</text>
+          <text x="200" y="22" fill="#f5efe4" font-family="Manrope, sans-serif" font-size="14" text-anchor="middle">At null: R₁ ÷ R₂ = l ÷ (100 − l)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Concept sort</a></li>
+        <li><a href="#practical">3D practical</a></li>
+        <li><a href="#concepts">Bridge &amp; Potentiometer</a></li>
+        <li><a href="#neutralise">Null-point zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1–4 from memory</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards covering ammeter shunts, voltmeter multipliers, parallel cells, and wire diameter scaling. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. WONDER: STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The phenomenon</span>
+        <h2>Case Closed: Engr. Nkechi &amp; Chinedu’s <em>Null-Balance Verdict</em></h2>
+        <p class="intro">Back in Aba, <strong>Engr. Nkechi</strong> and <strong>Chinedu</strong> use a 100 cm constantan wire board and a centre-zero galvanometer to measure true EMF with zero current drawn (<code>I<sub>g</sub> = 0</code>). Step through all 3 beats.</p>
+
+        <div class="story-wrap" id="story-stage">
+          <canvas id="story-canvas" aria-label="3D animation of Chinedu and Engr. Nkechi balancing a 100 cm potentiometer and metre bridge at I_g = 0"></canvas>
+          <div class="story-overlay">
+            <span class="story-badge" data-story-badge>Null Balance Goal: I_g = 0 A · Lost Volts Ir = 0 V!</span>
+            <div class="story-bubbles" data-story-bubbles></div>
+          </div>
+          <div class="story-caption">
+            <div class="story-caption-text">
+              <strong data-story-title>Beat 1 · Why Even a Good Voltmeter Slightly Under-Reads True EMF</strong>
+              <p data-story-sub>Loading scene…</p>
+            </div>
+            <div class="story-controls">
+              <button class="btn btn-ghost btn-sm" type="button" data-story-prev aria-label="Previous beat">← Prev</button>
+              <div class="story-dots" role="tablist" aria-label="Story beats">
+                <button type="button" class="on" data-beat="0" aria-label="Beat 1"></button>
+                <button type="button" data-beat="1" aria-label="Beat 2"></button>
+                <button type="button" data-beat="2" aria-label="Beat 3"></button>
+              </div>
+              <button class="btn btn-primary btn-sm" type="button" data-story-next>Next →</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 1B. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1b</b>Wonder Wall · Student questions</span>
+        <h2>What are you <em>wondering</em> about null-balance bridges?</h2>
+        <p class="intro">Add your question to the Wonder Wall before we slide the 3D jockey on the bridge bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="140" placeholder="e.g. Why doesn't a protective resistor in series with G shift the balance point?" aria-label="Add your prediction or question">
+            <button class="btn btn-primary btn-sm" type="submit">Post question</button>
+          </form>
+          <div class="seed-qs" aria-label="Example questions">
+            <button type="button">Why is I_g = 0 at balance?</button>
+            <button type="button">Why not drag the jockey?</button>
+            <button type="button">Why balance near 50 cm?</button>
+            <button type="button">How does √s = d₁/d₂ work?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 2. INVESTIGATE: SORT ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Sort the 10 cards: <em>Metre Bridge, Potentiometer, or WAEC Precautions?</em></h2>
+        <p class="intro">Classify each card into <strong>Wheatstone &amp; Metre Bridge</strong>, <strong>Potentiometer (E<sub>1</sub>/E<sub>2</sub> = l<sub>1</sub>/l<sub>2</sub>)</strong>, or <strong>WAEC Paper 3 Precautions</strong>.</p>
+
+        <div class="sort-board" id="kitchen-sort">
+          <div>
+            <div class="sort-tray-label">Unclassified Null-Balance Cards (10) · tap or drag into a bin</div>
+            <div class="sort-tray" id="sort-tray" role="region" aria-label="Items to classify"></div>
+          </div>
+
+          <div class="sort-bins">
+            <div class="bin" data-bin="shm" tabindex="0" role="region" aria-label="Wheatstone and Metre Bridge bin">
+              <h4><span class="dot" style="background:var(--teal)"></span>Wheatstone &amp; Metre Bridge <small>R₁/R₂ = l/(100−l) · √s = d₁/d₂</small></h4>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" tabindex="0" role="region" aria-label="Potentiometer bin">
+              <h4><span class="dot" style="background:var(--lime)"></span>Potentiometer <small>E₁/E₂ = l₁/l₂ · Ir = 0 · r = R(l₁−l₂)/l₂</small></h4>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" tabindex="0" role="region" aria-label="WAEC Paper 3 Precautions bin">
+              <h4><span class="dot" style="background:var(--amber)"></span>WAEC Paper 3 Precautions <small>Tap jockey · Open key · No parallax</small></h4>
+              <div class="drop"></div>
+            </div>
+          </div>
+
+          <div class="sort-actions">
+            <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Reset</button>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="feedback" id="sort-feedback" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 2B. 3D PRACTICAL BENCH ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2b</b>Investigate · Activity 2 · 3D Practical</span>
+        <h2>3D Dual Metre Bridge &amp; <em>Potentiometer Null-Balance Bench</em></h2>
+        <p class="intro">Slide the brass jockey along the 100 cm constantan wire until the centre-zero galvanometer needle stands vertical at <strong>I<sub>g</sub> = 0.00 mA</strong>, or tap <strong>🎯 Snap Jockey to Null Point</strong>!</p>
+
+        <div class="bench" id="bench">
+          <div class="bench-stage" id="bench-stage">
+            <canvas id="bench-canvas" aria-label="3D Metre Bridge and Potentiometer Null-Balance Bench"></canvas>
+            <div class="bench-overlay-top">
+              <span class="bench-chip" id="bench-instruction">Slide the jockey (or tap Snap to Null) until the galvanometer current I_g reads zero</span>
+            </div>
+          </div>
+
+          <div class="bench-panel">
+            <div class="ctl-grid">
+              <div class="ctl">
+                <label for="ctl-mode">Apparatus Mode</label>
+                <select id="ctl-mode">
+                  <option value="metre-bridge" selected>Metre bridge · find X</option>
+                  <option value="potentiometer">Potentiometer · test cell Eₓ</option>
+                  <option value="pot-e1">Potentiometer · standard cell E₁ = 1.50 V</option>
+                  <option value="pot-e2">Potentiometer · unknown cell E₂</option>
+                  <option value="pot-open">Internal r · cell alone (find l₁)</option>
+                  <option value="pot-shunt">Internal r · cell + 4.0 Ω (find l₂)</option>
+                </select>
+              </div>
+              <div class="ctl">
+                <label for="ctl-l">Jockey position l (from end A) <strong id="ctl-l-val">40.0 cm</strong></label>
+                <input type="range" id="ctl-l" min="1" max="99" step="0.1" value="40">
+              </div>
+              <div class="ctl">
+                <label for="ctl-r2" id="ctl-r2-label">Box R₂ (X = 4.0 Ω) <strong id="ctl-r2-val">6.0 Ω</strong></label>
+                <input type="range" id="ctl-r2" min="2" max="12" step="1" value="6">
+              </div>
+            </div>
+
+            <div class="readout-bar" aria-live="polite">
+              <div class="ro"><small>Jockey length l</small><strong id="ro-l">40.0 cm</strong></div>
+              <div class="ro"><small id="ro-comp-lbl">Other side (100 − l)</small><strong id="ro-comp">60.0 cm</strong></div>
+              <div class="ro ro-ig"><small>Galvanometer current I_g</small><strong id="ro-ig">0.00 mA · NULL</strong></div>
+              <div class="ro ro-calc"><small id="ro-calc-lbl">Result X = R₂·l ÷ (100 − l)</small><strong id="ro-calc">X = 4.00 Ω</strong></div>
+              <div class="ro ro-null"><small id="ro-null-lbl">True balance point l₀</small><strong id="ro-null">l₀ = 40.0 cm</strong></div>
+            </div>
+
+            <div class="bench-btns">
+              <button class="btn btn-primary btn-sm" type="button" id="bench-snap"><span>🎯 Snap jockey to null (I_g = 0)</span></button>
+              <button class="btn btn-ghost btn-sm" type="button" id="bench-record"><span>📝 Log balance reading</span></button>
+            </div>
+          </div>
+        </div>
+
+<div class="graph-card" id="nb-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · follows the jockey</span><h4 id="nb-title">Galvanometer current against jockey position</h4></div>
+            <span class="gc-badge wait" id="nb-badge">0 logged</span>
+          </div>
+          <div class="gc-tabs" id="nb-tabs" role="group" aria-label="Choose graph">
+            <button type="button" data-tab="ig" aria-pressed="true">I_g against l</button>
+            <button type="button" data-tab="v" aria-pressed="false">p.d. along the wire</button>
+          </div>
+          <div id="nb-graph"></div>
+          <div class="gc-stats" id="nb-stats"></div>
+          <p class="gc-note" id="nb-note"></p>
+        </div>
+
+<div class="symbol-key" aria-label="What the symbols mean">
+          <h4>What the symbols mean on this bench</h4>
+          <dl>
+            <div><dt>l</dt><dd>balance length: distance from end A of the wire to the jockey (cm)</dd></div>
+            <div><dt>I<sub>g</sub></dt><dd>current through the galvanometer (zero at the balance point)</dd></div>
+            <div><dt>X or R<sub>1</sub></dt><dd>the unknown resistance</dd></div>
+            <div><dt>R<sub>2</sub></dt><dd>the known resistance set on the resistance box</dd></div>
+            <div><dt>E<sub>x</sub></dt><dd>EMF of the test cell being measured</dd></div>
+            <div><dt>E<sub>1</sub>, E<sub>2</sub></dt><dd>EMFs of two cells being compared</dd></div>
+            <div><dt>l<sub>1</sub>, l<sub>2</sub></dt><dd>their balance lengths (cm)</dd></div>
+            <div><dt>V<sub>AJ</sub></dt><dd>voltage along the wire from end A to the jockey J</dd></div>
+            <div><dt>V<sub>AB</sub></dt><dd>voltage across the whole 100 cm wire</dd></div>
+            <div><dt>R<sub>s</sub></dt><dd>resistor in series with the driver cell</dd></div>
+            <div><dt>R<sub>w</sub></dt><dd>resistance of the 100 cm wire</dd></div>
+            <div><dt>k</dt><dd>potential gradient: volts per cm of wire</dd></div>
+          </dl>
+        </div>
+
+        <div class="table-wrap" id="results-table">
+          <div class="table-head">
+            <h3>Lab Notebook · 6 Metre Bridge &amp; Potentiometer Practical Trials</h3>
+            <div class="table-actions">
+              <button class="btn btn-ghost btn-sm" type="button" id="table-fill">Fill from bench</button>
+              <button class="btn btn-primary btn-sm" type="button" id="table-check">Check my table</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="table-reset">Clear</button>
+              <span class="sort-score" id="table-score" aria-live="polite"></span>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table class="lab-table">
+              <thead>
+                <tr>
+                  <th>Experiment &amp; Balance Data</th>
+                  <th>Calculated Result</th>
+                  <th>Ratio / Slope s</th>
+                  <th>Apparatus</th>
+                  <th>Working Formula</th>
+                </tr>
+              </thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
+          <div class="feedback" id="table-feedback" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 45-MIN ACTIVE BREAK ================= -->
+      <aside class="l-sec" id="movement-break" aria-label="Active movement break" style="background:linear-gradient(135deg,rgba(47,179,68,.12),rgba(62,230,196,.08));border-color:rgba(47,179,68,.35)">
+        <span class="phase" style="--pc:var(--lime)">⚡ Active Break · 2 min</span>
+        <h2>Stretch &amp; Practice the <em>Jockey Tap</em>!</h2>
+        <p class="intro">Stand up! Lightly tap your desk three times with one finger — <em>Tap, lift, tap, lift!</em> Say aloud: <strong>“I did not drag the jockey along the resistance wire so that its cross-sectional area remained uniform!”</strong> That single sentence earns 2 full marks on WAEC Physics Paper 3!</p>
+      </aside>
+
+      <!-- ================= 3. MAKE SENSE ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · Core concepts</span>
+        <h2>Metre Bridge, Potentiometer &amp; <em>WAEC Paper 3 Deductions</em></h2>
+        <p class="intro">Every equation and practical precaution you need for top marks:</p>
+
+<div class="symbol-key" aria-label="What the symbols mean">
+          <h4>What the symbols mean</h4>
+          <dl>
+            <div><dt>l</dt><dd>balance length: distance from end A of the wire to the jockey (cm)</dd></div>
+            <div><dt>I<sub>g</sub></dt><dd>current through the galvanometer (zero at the balance point)</dd></div>
+            <div><dt>X or R<sub>1</sub></dt><dd>the unknown resistance</dd></div>
+            <div><dt>R<sub>2</sub></dt><dd>the known resistance set on the resistance box</dd></div>
+            <div><dt>E<sub>x</sub></dt><dd>EMF of the test cell being measured</dd></div>
+            <div><dt>E<sub>1</sub>, E<sub>2</sub></dt><dd>EMFs of two cells being compared</dd></div>
+            <div><dt>l<sub>1</sub>, l<sub>2</sub></dt><dd>their balance lengths (cm)</dd></div>
+            <div><dt>V<sub>AJ</sub></dt><dd>voltage along the wire from end A to the jockey J</dd></div>
+            <div><dt>V<sub>AB</sub></dt><dd>voltage across the whole 100 cm wire</dd></div>
+            <div><dt>R<sub>s</sub></dt><dd>resistor in series with the driver cell</dd></div>
+            <div><dt>R<sub>w</sub></dt><dd>resistance of the 100 cm wire</dd></div>
+            <div><dt>k</dt><dd>potential gradient: volts per cm of wire</dd></div>
+          </dl>
+        </div>
+
+        <div class="concept-grid">
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--teal)">1 · Metre bridge</span>
+            <h3>Balance two ratios</h3>
+            <p>A metre bridge is a Wheatstone bridge built from a uniform 100 cm wire. Slide the jockey until the galvanometer reads <strong>zero</strong> (the null point). The two wire lengths then have the same ratio as the two resistors.</p>
+            <div class="fx"><span class="lbl">Null point</span>R<sub>1</sub> ÷ R<sub>2</sub> = l ÷ (100 − l)</div>
+            <p class="eg"><b>Example</b>Standard R<sub>2</sub> = 6.0 Ω, balance at l = 40.0 cm: R<sub>1</sub> = 6.0 × 40/60 = 4.0 Ω.</p>
+            <p class="use"><b>Two-wire practical</b>For two wires of the same material and length, slope s = R<sub>2</sub>/R<sub>1</sub> = (d<sub>1</sub>/d<sub>2</sub>)², so √s = d<sub>1</sub> ÷ d<sub>2</sub>.</p>
+            <p class="trap"><b>Exam trap</b>Measure <em>l</em> from the end next to R<sub>1</sub>. Readings are most accurate when the null point is near the middle (about 50 cm).</p>
+          </article>
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--lime)">2 · Potentiometer</span>
+            <h3>Measure EMF while drawing zero current</h3>
+            <p>A steady current in a uniform wire makes the voltage along it proportional to length (V = kl). At the null point <strong>no current</strong> is drawn from the test cell, so there are no lost volts (Ir = 0) and you read its true EMF.</p>
+            <div class="fx"><span class="lbl">Compare cells</span>E<sub>1</sub> ÷ E<sub>2</sub> = l<sub>1</sub> ÷ l<sub>2</sub></div>
+            <div class="fx"><span class="lbl">Internal r</span>r = R(l<sub>1</sub> − l<sub>2</sub>) ÷ l<sub>2</sub></div>
+            <p class="eg"><b>Example</b>E<sub>1</sub> = 1.50 V balances at 50.0 cm and E<sub>2</sub> at 70.0 cm, so E<sub>2</sub> = 1.50 × 70/50 = 2.10 V.</p>
+            <p class="trap"><b>Exam trap</b>In the r formula, l<sub>1</sub> is the balance with the cell alone (the longer length), and l<sub>2</sub> is with resistor R connected across the cell (shorter).</p>
+          </article>
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--pink)">3 · Driver-resistor trap</span>
+            <h3>When the driver cell has a resistor in series</h3>
+            <p>If a resistor R<sub>s</sub> is in series with the potentiometer wire (resistance R<sub>w</sub>), the driver cell’s voltage is shared. First find the voltage across the whole wire, then scale it by the balance length.</p>
+            <div class="fx"><span class="lbl">Whole wire</span>V<sub>AB</sub> = E<sub>driver</sub> × R<sub>w</sub> ÷ (R<sub>w</sub> + R<sub>s</sub>)</div>
+            <div class="fx"><span class="lbl">Unknown EMF</span>E<sub>x</sub> = (l ÷ 100) × V<sub>AB</sub></div>
+            <p class="eg"><b>Example</b>E<sub>driver</sub> = 3 V, R<sub>s</sub> = 2 Ω, R<sub>w</sub> = 10 Ω, l = 50 cm: V<sub>AB</sub> = 3 × 10/12 = 2.5 V, so E<sub>x</sub> = 0.5 × 2.5 = 1.25 V.</p>
+            <p class="trap"><b>Exam trap</b>Don’t put the full 3 V across the wire. Part of it is dropped across R<sub>s</sub>.</p>
+          </article>
+          <article class="concept-card">
+            <span class="tag" style="--c:var(--amber)">4 · WAEC Paper 3 precautions</span>
+            <h3>Write them in first person, past tense</h3>
+            <ol>
+              <li><em>“I ensured tight and clean electrical connections.”</em></li>
+              <li><em>“I did not drag the jockey along the wire, to keep its cross-sectional area uniform.”</em></li>
+              <li><em>“I opened the key after each reading to prevent the wire heating up.”</em></li>
+              <li><em>“I avoided parallax error when reading the metre rule.”</em></li>
+            </ol>
+            <p class="use"><b>Why they earn marks</b>Clean contacts avoid extra resistance. A uniform wire keeps V proportional to l. A hot wire changes its resistance. No parallax means correct lengths.</p>
+          </article>
+        </div>
+
+        <div class="study-summary">
+          <h3>Quick revision: metre bridge vs potentiometer</h3>
+          <p>Cover one column and test yourself before an exam.</p>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr><th></th><th>Metre bridge</th><th>Potentiometer</th></tr></thead>
+              <tbody>
+                <tr><td>Measures</td><td>An unknown resistance</td><td>EMF, ratio of two EMFs, internal resistance</td></tr>
+                <tr><td>Balance condition</td><td>Galvanometer reads zero (I<sub>g</sub> = 0)</td><td>Galvanometer reads zero (I<sub>g</sub> = 0)</td></tr>
+                <tr><td>Key formula</td><td>R<sub>1</sub>/R<sub>2</sub> = l/(100 − l)</td><td>E<sub>1</sub>/E<sub>2</sub> = l<sub>1</sub>/l<sub>2</sub> · r = R(l<sub>1</sub> − l<sub>2</sub>)/l<sub>2</sub></td></tr>
+                <tr><td>Why it is accurate</td><td>Null method: the meter’s own resistance does not matter</td><td>No current drawn from the test cell, so no lost volts</td></tr>
+                <tr><td>Best reading</td><td>Null point near 50 cm</td><td>Long balance lengths</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="ph-explorer" style="margin-top:26px">
+          <h3>Null-balance explorer</h3>
+          <p class="ph-sub">Tap a card to see what each balance point tells you.</p>
+          <div class="ph-choices" id="ph-track" role="group" aria-label="Null-balance examples"></div>
+          <div class="ph-detail" id="ph-detail" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. CONCEPT ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3b</b>Make sense · 3D Null-Balance Potential Gradient Zoom</span>
+        <h2>Inside the Null Point: <em>Why I<sub>g</sub> = 0 Means Zero Lost Volts</em></h2>
+        <p class="intro">Compare the electron motion in the bottom test-cell branch when the jockey is at the <strong>Exact Null Point (I<sub>g</sub> = 0)</strong> versus too far left or right.</p>
+
+        <div class="zoom-box">
+          <div class="zoom-stage" id="zoom-stage">
+            <canvas id="zoom-canvas" aria-label="3D Null-Balance Potential Gradient Zoom"></canvas>
+            <div class="zoom-status" id="zoom-status">Exact Null Point (V_AJ = E_x) · Test Branch Current I_g = 0 (Static Green Charges, Ir = 0!)</div>
+          </div>
+          <div class="zoom-bar" role="group" aria-label="Null-balance zoom modes">
+            <button class="pill on" type="button" data-zmode="null-point">🎯 Exact Null Point (I_g = 0, Ir = 0)</button>
+            <button class="pill" type="button" data-zmode="left-of-null">⬅️ Jockey Too Far Left (V_AJ &lt; E_x)</button>
+            <button class="pill" type="button" data-zmode="right-of-null">➡️ Jockey Too Far Right (V_AJ &gt; E_x)</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. APPLY: WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Step-by-step <em>WAEC, NECO &amp; JAMB calculations</em></h2>
+
+        <div class="ex-list">
+          <details class="ex-card" open>
+            <summary><span class="ex-num">01</span><span><strong>Metre Bridge Unknown Resistance &amp; Parallel Shunt Change</strong> (WAEC / JAMB)</span><em>X = 8.0 Ω</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> An unknown resistor <code>X</code> is connected in the left gap of a metre bridge and a standard <code>12.0 Ω</code> resistor in the right gap. A null point is obtained at <code>l = 40.0 cm</code> from the left end. Calculate the resistance of <code>X</code>.</p>
+              <ol class="steps">
+                <li><strong>Metre bridge equation:</strong> <code>X ÷ R<sub>2</sub> = l ÷ (100 − l)</code></li>
+                <li><strong>Substitute values:</strong> <code>X ÷ 12.0 = 40.0 ÷ (100 − 40.0) = 40.0 ÷ 60.0 = 2 ÷ 3</code></li>
+                <li><strong>Solve for X:</strong> <code>X = 12.0 × (2 ÷ 3) = 8.0 Ω</code></li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="ex-card">
+            <summary><span class="ex-num">02</span><span><strong>WAEC Paper 3 Two-Wire Metre Bridge Deduction (√s = d₁/d₂)</strong> (WAEC Practical Classic)</span><em>d₁ : d₂ = 1.80 : 1</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> In a metre bridge practical comparing two nichrome wires 1 and 2 of equal length, a student plots values to obtain a slope <code>s = R<sub>2</sub> ÷ R<sub>1</sub> = 3.24</code>. Evaluate <code>√s</code> and state its physical significance.</p>
+              <ol class="steps">
+                <li><strong>Evaluate √s:</strong> <code>√s = √3.24 = 1.80</code></li>
+                <li><strong>Physical deduction:</strong> Since both wires have the same resistivity <code class="inl">ρ</code> and length <code class="inl">L</code>, <code>R = 4ρL ÷ (πd<sup>2</sup>) ∝ 1 ÷ d<sup>2</sup></code></li>
+                <li>Therefore <code>s = R<sub>2</sub> ÷ R<sub>1</sub> = (d<sub>1</sub> ÷ d<sub>2</sub>)<sup>2</sup> &nbsp;⇒&nbsp; √s = d<sub>1</sub> ÷ d<sub>2</sub> = 1.80</code> (Wire 1 has 1.80 times the diameter of Wire 2).</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="ex-card">
+            <summary><span class="ex-num">03</span><span><strong>Potentiometer Driver Circuit with Series Resistor</strong> (JAMB &amp; WAEC Favourite)</span><em>E_x = 1.25 V</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> A potentiometer wire AB of length <code>100 cm</code> and resistance <code>10.0 Ω</code> is connected in series with a driver accumulator of EMF <code>3.0 V</code> (negligible internal resistance) and a <code>2.0 Ω</code> resistor. If a test cell balances at <code>l = 50.0 cm</code> along AB, find the EMF of the test cell.</p>
+              <ol class="steps">
+                <li><strong>Step 1 — Potential difference across the entire 100 cm wire AB:</strong><br><code>V<sub>AB</sub> = E<sub>driver</sub> × [R<sub>w</sub> ÷ (R<sub>w</sub> + R<sub>s</sub>)] = 3.0 × [10.0 ÷ (10.0 + 2.0)] = 30.0 ÷ 12.0 = 2.50 V</code></li>
+                <li><strong>Step 2 — Balance p.d. at l = 50.0 cm:</strong><br><code>E<sub>x</sub> = (l ÷ 100) × V<sub>AB</sub> = (50.0 ÷ 100) × 2.50 V = 1.25 V</code></li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="ex-card">
+            <summary><span class="ex-num">04</span><span><strong>Determining Internal Resistance r of a Cell with a Potentiometer</strong> (WAEC / NECO)</span><em>r = 1.00 Ω</em></summary>
+            <div class="ex-body">
+              <p><strong>Question:</strong> On a potentiometer, a dry cell gives a balance length of <code>l<sub>1</sub> = 75.0 cm</code> on open circuit. When the cell is shunted by a <code>4.0 Ω</code> resistor, the balance length falls to <code>l<sub>2</sub> = 60.0 cm</code>. Calculate the internal resistance <code>r</code> of the cell.</p>
+              <ol class="steps">
+                <li><strong>Formula:</strong> Since <code class="inl">E ∝ l<sub>1</sub></code> and terminal p.d. <code class="inl">V ∝ l<sub>2</sub></code>, <code>r = R × [(E − V) ÷ V] = R × [(l<sub>1</sub> − l<sub>2</sub>) ÷ l<sub>2</sub>]</code></li>
+                <li><strong>Substitute values:</strong> <code>r = 4.0 × [(75.0 − 60.0) ÷ 60.0] = 4.0 × (15.0 ÷ 60.0) = 1.00 Ω</code></li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4B. BRIDGE: DRIVER VOLTAGE-DIVIDER TRAP ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4b</b>Apply · The Potentiometer Driver Trap</span>
+        <h2>Can you solve the <em>Potentiometer Driver Series-Resistor Trap</em>?</h2>
+        <p class="intro"><strong>Challenge:</strong> A potentiometer wire AB of length <strong>100 cm</strong> and resistance <strong>10 Ω</strong> is connected in series with a <strong>3.0 V</strong> driver battery and a <strong>2.0 Ω</strong> resistor. If a test cell balances at <strong>50.0 cm</strong> along AB, what is the EMF <strong>E<sub>x</sub></strong> of the test cell?</p>
+
+        <div class="vinegar-box" id="vinegar-test">
+          <div class="clock-card">
+            <div class="clock-well">
+              <svg viewBox="0 0 180 105" width="170" height="100" aria-hidden="true">
+                <rect x="14" y="18" width="152" height="68" rx="10" fill="#0f172a" stroke="rgba(255,255,255,0.2)"/>
+                <circle id="v-drop" cx="38" cy="34" r="7" fill="#3ee6c4" style="transition:transform .4s ease"/>
+                <rect id="v-flask-liquid" x="26" y="62" width="128" height="12" rx="6" fill="#3ee6c4"/>
+                <text id="v-flask-label" x="90" y="46" fill="#f8fafc" font-family="JetBrains Mono, monospace" font-size="12" font-weight="700" text-anchor="middle">3V → (2Ω + 10Ω) @ 50cm</text>
+              </svg>
+            </div>
+            <p style="margin:6px 0 12px;font-size:.9rem;color:#cbd5e1">Pick the true EMF <strong>E<sub>x</sub></strong> of the test cell balanced at <code>50.0 cm</code>:</p>
+            <div class="pill-row" role="group" aria-label="Test cell EMF options">
+              <button class="pill" type="button" data-v="1.50">E_x = 1.50 V</button>
+              <button class="pill" type="button" data-v="1.25">E_x = 1.25 V</button>
+              <button class="pill" type="button" data-v="2.50">E_x = 2.50 V</button>
+              <button class="pill" type="button" data-v="0.50">E_x = 0.50 V</button>
+            </div>
+          </div>
+          <div class="feedback" id="vinegar-result" role="status" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 5. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Assess · 12-Question Final Checkpoint</span>
+        <h2>Test your mastery of <em>Lesson 5 &amp; the Whole Unit</em></h2>
+        <p class="intro">12 original WAEC/NECO/JAMB questions plus spaced retrieval across all 5 lessons.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 5B. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5b</b>Reflect · Metacognition &amp; Competences</span>
+        <h2>Rate your confidence <em>(1 to 4)</em></h2>
+        <p class="intro">Celebrate completing all 5 lessons and rate your confidence (Transversal Competences <strong>L1–L7</strong>).</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can apply the Wheatstone &amp; metre bridge formula R₁/R₂ = l/(100 − l).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can deduce wire diameter ratios using √s = d₁/d₂ in WAEC practicals.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain why null balance (I_g = 0) draws zero current so Ir = 0.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can solve potentiometer driver circuits with a series resistor.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can write accepted first-person past-tense WAEC practical precautions.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+      </section>
+
+      <!-- ================= 5C. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--lime)"><b>5c</b>Assignment · Locked Marking Scheme</span>
+        <h2>Written &amp; Practical <em>Take-Home Tasks (30 Marks)</em></h2>
+        <p class="intro">Write your full working (min. 40 characters) in each box to unlock the official WAEC/NECO marking scheme.</p>
+
+        <div class="assign-list">
+          <div class="assign-card" data-assign="a1">
+            <div class="assign-head">
+              <span class="assign-mark">10 Marks</span>
+              <h3>Task 1 · Metre Bridge &amp; Two-Wire Diameter Ratio</h3>
+            </div>
+            <p>In a metre bridge experiment, an unknown wire coil <code>R<sub>1</sub></code> in the left gap balances against a standard <code>9.0 Ω</code> resistor in the right gap at <code>l = 40.0 cm</code>. (a) Calculate <code>R<sub>1</sub></code> [4]. (b) If a second wire <code>R<sub>2</sub></code> of the same material and length has resistance <code>13.5 Ω</code>, calculate the slope <code>s = R<sub>2</sub>/R<sub>1</sub></code> and deduce the ratio of their diameters <code>d<sub>1</sub> : d<sub>2</sub></code> [4]. (c) State two WAEC precautions [2].</p>
+            <textarea class="assign-input" rows="4" placeholder="Type your step-by-step working here (at least 40 characters) to unlock the marking scheme…"></textarea>
+            <div class="assign-actions">
+              <button class="btn btn-primary btn-sm" type="button" data-unlock>Unlock marking scheme</button>
+              <small class="assign-hint">Requires ≥ 40 characters of genuine working</small>
+            </div>
+            <div class="assign-solution" hidden>
+              <h4>Official Marking Scheme (10 Marks)</h4>
+              <ul>
+                <li><strong>(a) Value of R<sub>1</sub> [4 marks]:</strong><br><code>R<sub>1</sub> ÷ 9.0 = 40.0 ÷ (100 − 40.0) = 40 ÷ 60 = 2 ÷ 3</code> [2] → <code>R<sub>1</sub> = 6.0 Ω</code> [2].</li>
+                <li><strong>(b) Slope s and diameter ratio [4 marks]:</strong><br><code>s = R<sub>2</sub> ÷ R<sub>1</sub> = 13.5 ÷ 6.0 = 2.25</code> [2].<br>Since <code>√s = d<sub>1</sub> ÷ d<sub>2</sub></code>, <code>d<sub>1</sub> ÷ d<sub>2</sub> = √2.25 = 1.50</code> (or <code>3 : 2</code>) [2].</li>
+                <li><strong>(c) Two WAEC precautions [2 marks]:</strong><br>1. <em>I did not drag the jockey along the constantan wire.</em> [1]<br>2. <em>I ensured tight electrical connections and opened the key between readings.</em> [1]</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="assign-card" data-assign="a2">
+            <div class="assign-head">
+              <span class="assign-mark">10 Marks</span>
+              <h3>Task 2 · Potentiometer Driver Voltage Divider &amp; Internal Resistance</h3>
+            </div>
+            <p>A <code>100 cm</code> potentiometer wire of resistance <code>8.0 Ω</code> is connected in series with a <code>4.0 V</code> driver accumulator and a <code>2.0 Ω</code> series resistor. (a) Find the potential difference <code>V<sub>AB</sub></code> across the 100 cm wire [3]. (b) A dry cell balances at <code>l<sub>1</sub> = 50.0 cm</code> on open circuit; calculate its EMF [3]. (c) When shunted by a <code>3.0 Ω</code> resistor, the cell balances at <code>l<sub>2</sub> = 40.0 cm</code>; calculate the cell’s internal resistance <code>r</code> [4].</p>
+            <textarea class="assign-input" rows="4" placeholder="Type your calculation for V_AB, E, and internal resistance r here…"></textarea>
+            <div class="assign-actions">
+              <button class="btn btn-primary btn-sm" type="button" data-unlock>Unlock marking scheme</button>
+              <small class="assign-hint">Requires ≥ 40 characters of genuine working</small>
+            </div>
+            <div class="assign-solution" hidden>
+              <h4>Official Marking Scheme (10 Marks)</h4>
+              <ul>
+                <li><strong>(a) Wire p.d. V<sub>AB</sub> [3 marks]:</strong><br><code>V<sub>AB</sub> = 4.0 × [8.0 ÷ (8.0 + 2.0)] = 32.0 ÷ 10.0 = 3.20 V</code> [3].</li>
+                <li><strong>(b) Open-circuit EMF [3 marks]:</strong><br><code>E = (50.0 ÷ 100.0) × 3.20 V = 1.60 V</code> [3].</li>
+                <li><strong>(c) Internal resistance r [4 marks]:</strong><br><code>r = R × [(l<sub>1</sub> − l<sub>2</sub>) ÷ l<sub>2</sub>] = 3.0 × [(50.0 − 40.0) ÷ 40.0] = 3.0 × 0.25 = 0.75 Ω</code> [4].</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="next-lesson-cta" style="margin-top:32px;padding:24px;border-radius:var(--r-lg);background:linear-gradient(135deg,rgba(47,179,68,.16),rgba(62,230,196,.12));border:1px solid var(--line-strong);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+          <div>
+            <span class="eyebrow">🎉 Unit Complete · All 5 Lessons Mastered!</span>
+            <h3 style="margin:4px 0">Return to the Unit Welcome Hub</h3>
+            <p style="margin:0;color:var(--muted)">Review your overall unit mastery ring and explore the 3D Hero Lab anytime offline.</p>
+          </div>
+          <a class="btn btn-primary" href="../../index.html">← Back to Unit Welcome Hub</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/apparatus-kit.js"></script>
+  <script src="../../assets/js/notation.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

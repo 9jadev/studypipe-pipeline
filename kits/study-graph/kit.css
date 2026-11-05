@@ -1,0 +1,45 @@
+/* =========================================================
+   StudyGraph (assets/js/study-graph.js) — shared plot styling
+   ========================================================= */
+.sg { --sg-bg: #fffdf8; --sg-plot: #ffffff; --sg-grid: rgba(27, 24, 19, .08); --sg-axis: rgba(27, 24, 19, .55); --sg-text: #6b6253; --sg-title: #1b1813;
+  --sg-teal: #0b8f74; --sg-pink: #d6246e; --sg-amber: #c46f00; --sg-violet: #5b4bd6; --sg-sky: #1f6fc2; --sg-crimson: #c0213f; --sg-lime: #4f8a10; --sg-muted: #8a8172;
+  position: relative; width: 100%; font-family: var(--font-mono); color: var(--sg-text); }
+.sg-dark { --sg-bg: transparent; --sg-plot: rgba(255, 255, 255, .025); --sg-grid: rgba(206, 220, 255, .08); --sg-axis: rgba(206, 220, 255, .45); --sg-text: #9aa4c0; --sg-title: #e6eaf5;
+  --sg-teal: #3ee6c4; --sg-pink: #ff5c9d; --sg-amber: #ffb23f; --sg-violet: #a99cff; --sg-sky: #7cc4ff; --sg-crimson: #ff6b88; --sg-lime: #c6f36b; --sg-muted: #7d87a3; }
+.sg svg { display: block; width: 100%; height: auto; overflow: visible; -webkit-tap-highlight-color: transparent; }
+.sg .sg-plot { fill: var(--sg-plot); }
+.sg .sg-grid { stroke: var(--sg-grid); stroke-width: 1; }
+.sg .sg-axis { stroke: var(--sg-axis); stroke-width: 1.4; }
+.sg .sg-tick { fill: var(--sg-text); font-family: var(--font-mono); }
+.sg .sg-title { fill: var(--sg-title); font-family: var(--font-body); font-weight: 700; }
+.sg .sg-lab { font-family: var(--font-mono); font-weight: 600; paint-order: stroke; stroke: var(--sg-bg-solid, #fffdf8); stroke-width: 4px; stroke-linejoin: round; }
+.sg-dark .sg-lab { --sg-bg-solid: #0b1122; }
+.sg .sg-strong { font-weight: 800; }
+.sg-t-teal { --c: var(--sg-teal); } .sg-t-pink { --c: var(--sg-pink); } .sg-t-amber { --c: var(--sg-amber); } .sg-t-violet { --c: var(--sg-violet); }
+.sg-t-sky { --c: var(--sg-sky); } .sg-t-crimson { --c: var(--sg-crimson); } .sg-t-lime { --c: var(--sg-lime); } .sg-t-muted { --c: var(--sg-muted); }
+.sg .sg-lab { fill: var(--c, var(--sg-title)); }
+.sg .sg-curve, .sg .sg-join { fill: none; stroke: var(--c); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.sg .sg-join { stroke-width: 2; opacity: .7; }
+.sg .sg-fit { stroke: var(--c); stroke-width: 2.4; stroke-linecap: round; opacity: .9; }
+.sg .sg-dash { stroke-dasharray: 6 5; }
+.sg .sg-tri { fill: none; stroke: var(--c); stroke-width: 1.4; stroke-dasharray: 4 4; opacity: .9; }
+.sg .sg-guide { stroke: var(--c); stroke-width: 1.6; stroke-dasharray: 5 5; }
+.sg .sg-int { fill: var(--sg-plot, #fff); stroke: var(--c); stroke-width: 2.4; }
+.sg .sg-pt { cursor: pointer; }
+.sg .sg-pt circle:not(.sg-hit), .sg .sg-pt rect { fill: var(--c); stroke: var(--sg-bg-solid, #fffdf8); stroke-width: 2; }
+.sg-dark .sg-pt circle:not(.sg-hit), .sg-dark .sg-pt rect { stroke: #0b1122; }
+.sg .sg-hit { fill: transparent; }
+.sg .sg-new circle:not(.sg-hit), .sg .sg-new rect { animation: sg-pop .5s cubic-bezier(.34, 1.56, .64, 1) both; transform-box: fill-box; transform-origin: center; }
+@keyframes sg-pop { from { transform: scale(0); } to { transform: scale(1); } }
+.sg .sg-marker circle { fill: var(--c); }
+.sg .sg-marker .sg-halo { fill: var(--c); opacity: .22; animation: sg-pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes sg-pulse { 50% { transform: scale(1.35); opacity: .08; } }
+.sg .sg-drop { stroke: var(--c); stroke-width: 1.2; stroke-dasharray: 3 4; opacity: .75; }
+.sg-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 8px; font-size: 12px; line-height: 1.4; }
+.sg-leg { display: inline-flex; align-items: center; gap: 6px; color: var(--sg-title); font-family: var(--font-body); font-weight: 600; }
+.sg-leg i { flex: none; display: inline-block; background: var(--c); }
+.sg-leg .sg-sw-dot { width: 10px; height: 10px; border-radius: 50%; }
+.sg-leg .sg-sw-line { width: 18px; height: 3px; border-radius: 2px; }
+.sg-leg .sg-sw-line.sg-dash { background: repeating-linear-gradient(90deg, var(--c) 0 5px, transparent 5px 9px); }
+.sg-leg-v { font-family: var(--font-mono); font-weight: 700; color: var(--c); }
+@media (prefers-reduced-motion: reduce) { .sg .sg-new circle, .sg .sg-new rect, .sg .sg-marker .sg-halo { animation: none; } }

@@ -40,7 +40,8 @@ Before writing, read:
    - **Phase 3 · Make sense (`#concepts` & `#zoom` · 15 min):**
      - Definitions, `.eq` formula blocks, `.callout.big` rules, comparison tables (`.tbl`), interactive Pin/Scale Explorer (`#ph-explorer`), and **Second 3D Zoom Stage (`#zoom-stage`)** with live `.counters`.
    - **Phase 4 · Apply (`#examples`, `#bridge`, `#quiz` · 20 min):**
-     - **3–4 Worked Examples (`.example`)**, **The Bridge (`#bridge`)** two-sample/mystery test + `.callout.big#big-idea`, and **Instant-Feedback Quiz (`#quiz`)**.
+     - **3–4 Worked Examples (`.example`):** Every worked example MUST write out all intermediate calculation steps (Governing Formula → Numerical Substitution → Intermediate Trig/Power/Bracket Evaluation → Arithmetic Operation → Final Boxed Result with SI Unit) so `StudyMath` (`math-kit.js`) renders each step in LaTeX with a plain-English explainer note underneath every single line.
+     - **The Bridge (`#bridge`)** two-sample/mystery test + `.callout.big#big-idea`, and **Instant-Feedback Quiz (`#quiz`)**.
    - **Phase 5 · Reflect & Assignment (`#reflect` & `#assignment` · 10 min + 40 min home):**
      - **Self-Assessment Rubric (`1`–`4`)**, **Exit Ticket (`.aq`)**, **Blank-Page Recall (`#recall-box`)**, **Home Assignment** (Part A practical + Part B 30-mark structured questions with locked solutions), and collapsible **Teacher Notes (`#teacher-notes`)** with the 80-minute timetable (including the **5-minute active movement break** at `45–50 min`) and **Transversal Competences (`L1`–`L7`)**.
 4. Outline the **Narrator Choreography Plan** (in Nigerian English `en-NG`) for the Welcome Hub (`welcome-narration.js`) and for each lesson (`lessons/lesson-0X/narration.js`).

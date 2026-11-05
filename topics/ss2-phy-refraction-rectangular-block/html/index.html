@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Refraction of Light Through a Rectangular Glass Block — StudyPipe SS2 Physics</title>
+  <meta name="description" content="An interactive 5-lesson 3D physics unit on Snell's Law, lateral displacement, real and apparent depth, critical angle and total internal reflection, and the WAEC/NECO Paper 3 four-pin glass block practical." />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/narrator.css" />
+  <link rel="stylesheet" href="assets/css/math.css">
+</head>
+<body>
+
+  <!-- Ambient background -->
+  <div class="ambient" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-mask"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>StudyPipe</strong>
+          <small>SS2 Physics · Waves &amp; Geometrical Optics</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#mystery">The Mystery</a>
+        <a href="#journey">5 Lessons</a>
+        <a href="#explorer">Optics Explorer</a>
+        <a href="#master">What You'll Master</a>
+        <a href="#method">How We Learn</a>
+      </nav>
+      <div class="nav-pill">
+        <span class="dot"></span>
+        Offline ready · en-NG Voice
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ======================== HERO ======================== -->
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="tag">SS2 Physics</span>
+          <span class="sep">·</span>
+          <span>WAEC · NECO · JAMB</span>
+          <span class="sep">·</span>
+          <span>Paper 3 Ray-Tracing Core</span>
+        </div>
+
+        <h1 class="hero-title" data-hook>
+          Refraction Through a <span class="accent-serif">Rectangular</span>
+          <span class="accent-grad">Glass Block</span>
+        </h1>
+
+        <p class="hero-lede">
+          Why does a laser beam entering a <code>6.0 cm</code> crown-glass slab at <code>45°</code> emerge
+          strictly parallel to its original path — yet shifted sideways by <code>1.98 cm</code>? Why does an
+          optometrist’s eye chart under the same slab appear raised by <code>2.0 cm</code>? And how do you
+          decode all <strong>7 WAEC Paper 3 ray-tracing graph variants</strong>? Step into our 3D optical
+          bench to master every equation and practical skill.
+        </p>
+
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" data-tour>
+            <span>Start guided tour (en-NG)</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <a href="lessons/lesson-01/index.html" class="btn btn-ghost">
+            Begin Lesson 1 →
+          </a>
+        </div>
+
+        <dl class="hero-meta">
+          <div>
+            <dt>Scope</dt>
+            <dd>5 lessons · ~4.2 hrs</dd>
+          </div>
+          <div>
+            <dt>Practicals</dt>
+            <dd>4-Pin &amp; 7 Graph Variants</dd>
+          </div>
+          <div>
+            <dt>Interactive</dt>
+            <dd>10 3D stages + 60 MCQs</dd>
+          </div>
+          <div>
+            <dt>Aligned with</dt>
+            <dd>WAEC · NECO · JAMB</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- 3D interactive stage -->
+      <div class="hero-stage">
+        <div class="stage-frame" id="lab">
+          <div class="stage-topbar">
+            <div class="stage-dots"><span></span><span></span><span></span></div>
+            <div class="stage-title">LIVE 3D LAB · RECTANGULAR GLASS BLOCK &amp; 4-PIN RAY BENCH</div>
+            <div class="stage-hint">Drag to rotate · Tap controls below</div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="lab-canvas" aria-label="Interactive 3D rectangular glass block and four-pin ray-tracing bench"></canvas>
+
+            <div class="endpoint-toast" id="endpoint-toast" role="status" aria-live="polite" hidden>
+              <strong>Ray Trace:</strong> i = <strong>45°</strong> → r = <strong>28.1°</strong> → e = <strong>45°</strong> · Shift d = <strong>1.98 cm</strong>
+            </div>
+
+            <div class="stage-legend">
+              <span><i class="sw sw-acid"></i>Incident Ray &amp; Pins P₁, P₂</span>
+              <span><i class="sw sw-base"></i>Parallel Emergent Ray, Pins P₃, P₄ &amp; Shift d</span>
+            </div>
+          </div>
+
+          <!-- HUD controls -->
+          <div class="hud">
+            <div class="hud-readouts">
+              <div class="hud-cell">
+                <span class="hud-k">Angles (i, r, e)</span>
+                <span class="hud-v"><strong id="val-vol">i = 45° · r = 28.1° · e = 45°</strong></span>
+              </div>
+              <div class="hud-cell">
+                <span class="hud-k">Glass Slab Medium</span>
+                <span class="hud-v" id="val-ph">Crown Glass (n = 1.50) · t = 6.0 cm</span>
+              </div>
+              <div class="hud-cell">
+                <span class="hud-k">Lateral Shift &amp; Far-Face EF</span>
+                <span class="hud-v status-end" id="val-status">Lateral Shift d = 1.98 cm · EF = 3.21 cm</span>
+              </div>
+            </div>
+
+            <div class="hud-controls">
+              <button type="button" class="btn-chip btn-chip-primary" id="btn-drop">
+                🔦 Cycle Angle i (30° / 45° / 60°)
+              </button>
+              <button type="button" class="btn-chip" id="btn-stream">
+                💎 Switch Block Medium (n = 1.50 / 1.65)
+              </button>
+              <button type="button" class="btn-chip btn-chip-muted" id="btn-reset">
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee strip -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>SNELL'S LAW n = sin i / sin r</span><span>·</span>
+        <span>WAVE SPEED n = c / v = λ_air / λ_glass</span><span>·</span>
+        <span>PARALLEL EMERGENCE e = i</span><span>·</span>
+        <span>LATERAL SHIFT d = t sin(i − r) / cos r</span><span>·</span>
+        <span>APPARENT DEPTH n = R / A</span><span>·</span>
+        <span>UPWARD SHIFT d_v = R(1 − 1/n)</span><span>·</span>
+        <span>CRITICAL ANGLE sin c = 1 / n</span><span>·</span>
+        <span>SPEED &amp; CRITICAL ANGLE v = c₀ sin c</span><span>·</span>
+        <span>FAR-FACE SHIFT EF = t tan r</span><span>·</span>
+        <span>90° REFLECTED–REFRACTED n = tan i</span><span>·</span>
+        <span>SNELL'S LAW n = sin i / sin r</span><span>·</span>
+        <span>LATERAL SHIFT d = t sin(i − r) / cos r</span><span>·</span>
+      </div>
+    </div>
+
+    <!-- ======================== 01 · THE MYSTERY ======================== -->
+    <section id="mystery" class="section container">
+      <div class="section-head">
+        <span class="sec-num">01 / The Phenomenon</span>
+        <h2 class="section-title" data-hook>Start with a real Surulere &amp; Yaba optics puzzle, not a dry formula.</h2>
+        <p class="section-sub">
+          Every lesson in this unit connects to an optical investigation across Dr Kunle’s Optometry Clinic in
+          Surulere, Tunde’s Fibre-Optic Splice Hub in Yaba, and Mrs Adebayo’s SS2 Physics Lab.
+        </p>
+      </div>
+
+      <div class="mystery-card reveal">
+        <div class="mystery-narrative">
+          <span class="pill pill-amber">The Unit Mystery · Surulere &amp; Yaba, Lagos</span>
+          <h3>Why does a laser beam through a 6.0 cm glass block emerge parallel yet shifted sideways by 1.98 cm?</h3>
+          <p>
+            At <strong>Dr Kunle’s Eye &amp; Optical Calibration Clinic</strong> in Surulere, Lagos, SS2 student
+            <strong>Zainab</strong> and her classmate <strong>Kelechi</strong> watch a green calibration laser
+            strike a polished <code>6.0 cm</code> rectangular crown-glass block (<code>n = 1.50</code>) at an
+            angle of incidence <code>i = 45°</code>.
+          </p>
+          <p>
+            Inside the block, the ray bends sharply towards the normal to <code>r = 28.1°</code>. Yet when it
+            exits the opposite parallel face into air, it returns to <strong><code>e = 45°</code></strong> —
+            travelling strictly parallel to its original path, but displaced sideways by
+            <strong><code>d = 1.98 cm</code></strong>! At the same time, a printed calibration cross underneath
+            the <code>6.0 cm</code> block looks as if it is floating at a depth of <strong><code>4.0 cm</code></strong>
+            (raised by <code>2.0 cm</code>), and when technician <strong>Tunde</strong> tilts an internal laser
+            beyond <strong><code>41.8°</code></strong> inside a glass core at Yaba, the beam refuses to exit into
+            air at all — bouncing with 100% brightness as Total Internal Reflection!
+          </p>
+          <p class="mystery-question">
+            Why does slowing light from <code>3.0 × 10⁸ m s⁻¹</code> to <code>2.0 × 10⁸ m s⁻¹</code> bend its path
+            while keeping frequency constant? Why does a rectangular glass block produce lateral shift without
+            angular dispersion? How do we measure apparent depth by the no-parallax method? And how do we align
+            four optical pins (<code>P₁, P₂, P₃, P₄</code>) to conquer all 7 WAEC Paper 3 graph variants?
+          </p>
+        </div>
+
+        <aside class="case-card">
+          <div class="case-head">
+            <span>CASE FILE #OPT-05</span>
+            <span class="case-status">OPEN</span>
+          </div>
+          <dl class="case-grid">
+            <div>
+              <dt>Setting</dt>
+              <dd>Surulere Optometry Clinic, Yaba Fibre Hub &amp; SS2 Physics Lab</dd>
+            </div>
+            <div>
+              <dt>Apparatus tested</dt>
+              <dd>Rectangular glass block (<code>n = 1.50</code>), 4 optical pins, search pin, 45° prism &amp; optical fibre</dd>
+            </div>
+            <div>
+              <dt>Observed anomaly</dt>
+              <dd>At <code>i = 45°</code>, emergent angle <code>e = 45°</code> with lateral shift <code>d = 1.98 cm</code> &amp; upward depth shift <code>2.0 cm</code></dd>
+            </div>
+            <div>
+              <dt>Your mission</dt>
+              <dd>Master all 6 calculation archetypes and all 7 WAEC Paper 3 graph variants</dd>
+            </div>
+          </dl>
+          <div class="case-foot">
+            Opened in <strong>Lesson 1</strong> · Solved in <strong>Lesson 5</strong>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Exam weight strip -->
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat-num" data-count="35">30–35%</div>
+          <div class="stat-label">
+            <strong>of WAEC / NECO Paper 3 Optics marks</strong>
+            <span>Four-pin rectangular glass block ray tracing is the #1 most frequent Optics practical in WASSCE</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">7</div>
+          <div class="stat-label">
+            <strong>WAEC Paper 3 graph variants</strong>
+            <span>From <code>sin i</code> vs <code>sin r</code> and <code>LE</code> vs <code>tan r</code> to the famous <code>cos i</code> vs <code>cos r</code> curve</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3</div>
+          <div class="stat-label">
+            <strong>Exam boards covered</strong>
+            <span>WAEC WASSCE, NECO SSCE, and JAMB UTME Objectives, Theory &amp; Practicals</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 02 · THE 5-LESSON JOURNEY ======================== -->
+    <section id="journey" class="section container">
+      <div class="section-head">
+        <span class="sec-num">02 / Your Learning Journey</span>
+        <h2 class="section-title" data-hook>Five progressive lessons. Complete syllabus mastery.</h2>
+        <p class="section-sub">
+          Each lesson takes 50–55 minutes, opens with a <em>Do Now</em> spaced-retrieval warm-up, and guides
+          you through a 3D Nigerian story, an interactive 3D optical bench, a 3D concept zoom, and WAEC practice.
+        </p>
+      </div>
+
+      <div class="lessons">
+
+        <!-- Lesson 1 -->
+        <article class="lesson reveal is-live" data-lesson="1">
+          <div class="lesson-num">01</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-01/index.html">Refraction at Plane Surfaces, Wavefront Speed &amp; Snell’s Law</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Investigate why light bends when crossing a plane boundary by watching wavefronts slow down while
+              frequency <code>f</code> stays constant (<code>n = c/v = λ_air/λ_med</code>). Master Snell’s law
+              (<code>n₁ sin θ₁ = n₂ sin θ₂</code>), the glancing-angle trap (<code>i = 90° − g</code>), normal
+              incidence (<code>i = 0°</code>), and the 90° reflected–refracted shortcut (<code>n = tan i</code>).
+            </p>
+            <div class="lesson-tags">
+              <span>3D Surulere Clinic Story</span>
+              <span>3D Snell’s Law Laser Bench</span>
+              <span>3D Wavefront Pivot Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 2 -->
+        <article class="lesson reveal is-live" data-lesson="2">
+          <div class="lesson-num">02</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-02/index.html">Path Through a Rectangular Glass Block, Lateral Displacement &amp; Dispersion</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Prove why a ray entering a parallel-sided rectangular glass block emerges parallel to its original
+              path (<code>e = i</code>, net deviation <code>= 0°</code>). Derive and apply lateral displacement
+              <code>d = t sin(i − r) / cos r</code>, far-face shift <code>EF = t tan r</code>, and explain why a
+              rectangular block laterally separates red and violet rays without angular fan-out.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1</span>
+              <span>3D Lateral Shift Bench</span>
+              <span>3D Block vs Prism Dispersion Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 3 -->
+        <article class="lesson reveal is-live" data-lesson="3">
+          <div class="lesson-num">03</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-03/index.html">Real &amp; Apparent Depth, Multi-Layer Slabs &amp; The No-Parallax Method</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Discover why swimming pools and glass paperweights look shallower than they really are. Apply
+              <code>n = R/A</code>, upward vertical shift <code>d_v = R(1 − 1/n)</code>, and multi-layer summation
+              <code>A_total = Σ(t_i/n_i)</code>, conquer the “appears raised by vs appears at depth” exam trap, and
+              locate virtual images using the 3D no-parallax search pin.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L2</span>
+              <span>3D No-Parallax Search-Pin Lab</span>
+              <span>3D Virtual-Image Ray Cone Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 4 -->
+        <article class="lesson reveal is-live" data-lesson="4">
+          <div class="lesson-num">04</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-04/index.html">Critical Angle, Total Internal Reflection &amp; Optical Fibre Engineering</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Step into Tunde’s Yaba Fibre-Optic Splice Hub. Sweep a ray inside glass from <code>i &lt; c</code> to
+              <code>i = c</code> (<code>sin c = 1/n</code>) and <code>i &gt; c</code> (Total Internal Reflection),
+              connect critical angle to wave speed (<code>v = c₀ sin c</code>), and see why 45° prisms and
+              <code>n_core &gt; n_cladding</code> optical fibres achieve 100% reflection without ghost images.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L3</span>
+              <span>3D Critical Angle &amp; Fibre Bench</span>
+              <span>3D 45° Prism vs Mirror Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 5 -->
+        <article class="lesson reveal is-live" data-lesson="5">
+          <div class="lesson-num">05</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-05/index.html">WAEC/NECO Paper 3 Four-Pin Practical &amp; The 7 Graph Variants</a></h3>
+              <span class="lesson-time">55 min · Live</span>
+            </div>
+            <p>
+              Run the complete WAEC Paper 3 four-pin ray-tracing practical on a 3D drawing board. Learn why you
+              must align the <strong>bases (feet)</strong> of pins <code>P₁–P₄</code>, space pins at least
+              <code>4–5 cm</code> apart, decode all <strong>7 WAEC graph variants</strong> (including
+              <code>LE</code> vs <code>tan r</code>, <code>LN</code> vs <code>sec r</code>, and the curved
+              <code>cos i</code> vs <code>cos r</code> trap), and write full-mark past-tense precautions.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L4</span>
+              <span>3D 4-Pin Practical Workbench</span>
+              <span>3D Pin-Base &amp; Triangle Decoder Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="thread-note reveal">
+        <span class="thread-icon" aria-hidden="true">↻</span>
+        <p>
+          <strong>Built-in spaced retrieval:</strong> Every lesson opens with a <em>Do Now</em> flashcard deck
+          pulling key formulas and traps from earlier lessons so nothing is forgotten by Lesson 5.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================== 03 · INTERACTIVE OPTICS EXPLORER ======================== -->
+    <section id="explorer" class="section container">
+      <div class="section-head">
+        <span class="sec-num">03 / Interactive Sneak Preview</span>
+        <h2 class="section-title" data-hook>Explore the four signature curves of Rectangular Block Optics.</h2>
+        <p class="section-sub">
+          Tap each tab below to compare how Snell’s law, lateral displacement, apparent depth, and the WAEC
+          cosine graph behave across Lessons 1 to 5.
+        </p>
+      </div>
+
+      <div class="explorer reveal">
+        <div class="combo-tabs" role="tablist" aria-label="Optics characteristic curves" id="combo-tabs">
+          <button type="button" class="combo-tab is-active" role="tab" aria-selected="true" data-combo="ohmic">
+            Snell’s Law (sin i vs sin r)
+          </button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="filament">
+            Lateral Shift (d vs Angle i)
+          </button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="internal">
+            WAEC Trap (cos i vs cos r)
+          </button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="potentiometer">
+            Far-Face Shift (LE vs tan r)
+          </button>
+        </div>
+
+        <div class="combo-body">
+          <!-- SVG curve -->
+          <div class="combo-chart">
+            <svg viewBox="0 0 440 240" role="img" aria-label="Refraction of light graph explorer">
+              <g class="chart-grid">
+                <line x1="56" y1="30" x2="56" y2="195" />
+                <line x1="56" y1="195" x2="416" y2="195" />
+                <line x1="56" y1="112" x2="416" y2="112" stroke-dasharray="4 4" />
+              </g>
+              <rect id="combo-zone" x="56" y="45" width="360" height="145" fill="rgba(20, 184, 166, 0.10)" />
+              <path id="combo-curve" d="M 56 192 L 410 42" fill="none" stroke="url(#curveGrad)" stroke-width="3.5" stroke-linecap="round" />
+              <circle id="combo-marker" cx="233" cy="117" r="6.5" fill="#fbbf24" stroke="#0b1020" stroke-width="2.5" />
+              <defs>
+                <linearGradient id="curveGrad" x1="0" y1="0" x2="1" y2="0">
+                  <stop offset="0%" stop-color="#14b8a6" />
+                  <stop offset="50%" stop-color="#fbbf24" />
+                  <stop offset="100%" stop-color="#f43f5e" />
+                </linearGradient>
+              </defs>
+              <text x="236" y="224" text-anchor="middle" class="axis-label">Horizontal Axis (sin r, Angle i, cos r, or tan r)</text>
+              <text x="18" y="115" text-anchor="middle" transform="rotate(-90 18 115)" class="axis-label">Vertical Axis (sin i, d, cos i, or LE)</text>
+            </svg>
+          </div>
+
+          <!-- Readout -->
+          <div class="combo-info">
+            <h3 id="combo-title">Snell’s Law Linear Graph (sin i against sin r)</h3>
+            <p class="combo-example" id="combo-example">WAEC Paper 3 Variant A — Classical Four-Pin Ray-Tracing Graph</p>
+
+            <dl class="combo-dl">
+              <div>
+                <dt>Governing Equation</dt>
+                <dd id="combo-jump">sin i = n sin r · n = sin i / sin r</dd>
+              </div>
+              <div>
+                <dt>Graph Slope &amp; Intercept</dt>
+                <dd id="combo-eq">Straight line through (0, 0) · Slope = Δ(sin i) / Δ(sin r) = n</dd>
+              </div>
+              <div>
+                <dt>Key Exam Rule</dt>
+                <dd><span class="combo-pill ind-both" id="combo-ind">If sin r is plotted on vertical axis, Slope = 1 / n</span></dd>
+              </div>
+            </dl>
+
+            <p class="combo-why" id="combo-why">
+              By Snell’s second law of refraction, the ratio sin i / sin r is a constant equal to the refractive index n of the glass block. Plotting sin i on the vertical axis against sin r on the horizontal axis gives a straight line through the origin with gradient n ≈ 1.50.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 04 · WHAT YOU'LL MASTER ======================== -->
+    <section id="master" class="section container">
+      <div class="section-head">
+        <span class="sec-num">04 / Learning Outcomes</span>
+        <h2 class="section-title" data-hook>What you will master by the end of Lesson 5.</h2>
+        <p class="section-sub">
+          Every skill is practised on a 3D optical bench and tested against WAEC, NECO, and JAMB question archetypes.
+        </p>
+      </div>
+
+      <div class="outcomes reveal">
+        <div class="outcome">
+          <span class="outcome-idx">01</span>
+          <h3>Apply Snell’s Law &amp; Wave Speed</h3>
+          <p>Use <code>n = sin i / sin r = c / v = λ_air / λ_med</code>, convert glancing angles (<code>i = 90° − g</code>), and solve <code>n = tan i</code> when reflected and refracted rays are perpendicular.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">02</span>
+          <h3>Prove Parallel Emergence &amp; Lateral Shift</h3>
+          <p>Prove <code>e = i</code> (net angular deviation <code>= 0°</code>) and calculate lateral displacement <code>d = t sin(i − r) / cos r</code> and far-face shift <code>EF = t tan r</code>.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">03</span>
+          <h3>Solve Real &amp; Apparent Depth</h3>
+          <p>Apply <code>n = R / A</code>, vertical shift <code>d_v = R(1 − 1/n)</code>, and multi-layer apparent depth <code>A_total = Σ(t_i / n_i)</code>, and explain the no-parallax search-pin method.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">04</span>
+          <h3>Master Critical Angle &amp; TIR</h3>
+          <p>Use <code>sin c = 1 / n</code> and <code>v = c₀ sin c</code>, state the two mandatory conditions for Total Internal Reflection, and explain 45° prisms, optical fibres, and mirages.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">05</span>
+          <h3>Decode All 7 WAEC Graph Variants</h3>
+          <p>Extract refractive index <code>n</code> or block width <code>w</code> from <code>sin i</code> vs <code>sin r</code>, <code>LE</code> vs <code>tan r</code>, <code>LN</code> vs <code>sec r</code>, and the curved <code>cos i</code> vs <code>cos r</code> graph.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">06</span>
+          <h3>Ace WAEC Paper 3 Ray-Tracing Practicals</h3>
+          <p>Align pin bases at eye level, space pins <code>≥ 4 cm</code> apart, tabulate angles to <code>1 d.p.</code> and trig values to <code>3 d.p.</code>, and state accepted past-tense precautions.</p>
+        </div>
+      </div>
+
+      <!-- 6 Calculation Archetypes -->
+      <div class="subblock reveal" id="archetypes">
+        <div class="subblock-head">
+          <h3>The 6 calculation archetypes</h3>
+          <p>Over 95% of WAEC, NECO, and JAMB numerical problems on Refraction Through a Rectangular Glass Block follow one of these six patterns:</p>
+        </div>
+
+        <div class="archetypes">
+          <div class="arch">
+            <span class="arch-tag">Type 1 · Lesson 1</span>
+            <h4>Snell’s Law, Speed &amp; Wavelength</h4>
+            <p>Given <code>i, r</code> or glancing angle <code>g = 90° − i</code>, use <code>n = sin i / sin r = c / v = λ₁ / λ₂</code> while frequency <code>f</code> stays constant.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 2 · Lesson 1</span>
+            <h4>90° Reflected–Refracted Shortcut</h4>
+            <p>When the reflected and refracted rays are perpendicular (<code>90°</code> apart), <code>r = 90° − i</code> so <code>sin r = cos i</code> and <code>n = tan i</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 3 · Lesson 2</span>
+            <h4>Lateral Displacement &amp; Far-Face Shift</h4>
+            <p>Use <code>d = t sin(i − r) / cos r</code> for sideways shift and <code>EF = t tan r</code> (or refractometer <code>n = t / √((EF)² + t²) / sin i</code>).</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 4 · Lesson 3</span>
+            <h4>Real Depth, Apparent Depth &amp; Rise</h4>
+            <p>Use <code>n = R / A</code> and upward shift <code>d_v = R − A = R(1 − 1/n)</code>. For layered media, add <code>A_total = t₁/n₁ + t₂/n₂</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 5 · Lesson 4</span>
+            <h4>Critical Angle &amp; Wave Speed</h4>
+            <p>Use <code>sin c = 1 / n</code> (or <code>n₂ / n₁</code>) and the JAMB speed shortcut <code>v = c₀ sin c</code>; check <code>i &gt; c</code> for TIR.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 6 · Lesson 5</span>
+            <h4>WAEC Paper 3 Triangle &amp; Cosine Graphs</h4>
+            <p>Use <code>LE = w tan r</code>, <code>LN = w sec r</code>, <code>LE / LN = sin r</code>, and for <code>cos i</code> vs <code>cos r</code> compute <code>n = √((1 − x₁²) / (1 − y₁²))</code>.</p>
+          </div>
+        </div>
+
+        <div class="formula-strip">
+          <div class="formula-pill"><code>n = sin i / sin r = c / v</code><span>Snell’s law &amp; wave speed</span></div>
+          <div class="formula-pill"><code>d = t sin(i − r) / cos r</code><span>Lateral displacement</span></div>
+          <div class="formula-pill"><code>d_v = R(1 − 1/n)</code><span>Vertical apparent rise</span></div>
+          <div class="formula-pill"><code>sin c = 1 / n · v = c₀ sin c</code><span>Critical angle &amp; speed</span></div>
+        </div>
+      </div>
+
+      <!-- 3 Common Myths -->
+      <div class="subblock reveal" id="myths">
+        <div class="subblock-head">
+          <h3>Three exam traps we’ll bust</h3>
+          <p>Tap each card to flip it and see the physical truth:</p>
+        </div>
+
+        <div class="myths">
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 01</span>
+                <h4>“When monochromatic light enters a glass block, its frequency decreases along with its speed.”</h4>
+                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>
+                  <strong>Frequency <code>f</code> NEVER changes on refraction!</strong> Frequency is fixed by the source. When light enters glass of refractive index <code>n</code>, its speed <code>v = c/n</code> and wavelength <code>λ = λ₀/n</code> both decrease by the exact same factor <code>n</code>.
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 02</span>
+                <h4>“A rectangular glass block disperses white light into a wide fan of rainbow rays just like a triangular prism.”</h4>
+                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>
+                  <strong>Zero angular fan-out!</strong> Inside the block, violet bends slightly more than red (<code>n_v &gt; n_r</code>), but because the opposite faces are parallel, both colours emerge <strong>parallel to the original incident ray</strong> (shifted sideways by slightly different amounts <code>d_v &gt; d_r</code>).
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 03</span>
+                <h4>“During the WAEC 4-pin glass block practical, you should align the tops of the four optical pins.”</h4>
+                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>
+                  <strong>Always align the BASES (feet) of the pins!</strong> If a pin is slightly tilted, its top does not lie over the pinhole in the paper. Viewing the <strong>bases</strong> where the pins enter the drawing sheet eliminates tilt error.
+                </p>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 05 · HOW WE LEARN ======================== -->
+    <section id="method" class="section container">
+      <div class="section-head">
+        <span class="sec-num">05 / How Every Lesson Works</span>
+        <h2 class="section-title" data-hook>Phenomenon-first, active 3D inquiry.</h2>
+        <p class="section-sub">
+          Every lesson follows the same five-step inquiry loop so you trace and test the rays in 3D before memorising any formula.
+        </p>
+      </div>
+
+      <ol class="loop reveal">
+        <li>
+          <span class="loop-step">1 · Wonder</span>
+          <h4>Watch the 3D Lagos optics story &amp; pin your prediction</h4>
+          <p>See Zainab, Kelechi, Dr Kunle, and Tunde confront a real optical puzzle and record your initial hypothesis.</p>
+        </li>
+        <li>
+          <span class="loop-step">2 · Investigate</span>
+          <h4>Operate the 3D Virtual Optical Bench</h4>
+          <p>Adjust angles of incidence, block thicknesses, search pins, and optical pins yourself and log the readings.</p>
+        </li>
+        <li>
+          <span class="loop-step">3 · Make sense</span>
+          <h4>Zoom inside the wavefronts, ray cones, or optical fibre core</h4>
+          <p>Use the 3D Concept Zoom stage to see wavefront pivoting, parallel-face symmetry, and total internal reflection.</p>
+        </li>
+        <li>
+          <span class="loop-step">4 · Apply</span>
+          <h4>Worked examples, Bridge challenge &amp; WAEC/JAMB quiz</h4>
+          <p>Step through three graded calculations per lesson and test yourself on 12 exam-style multiple-choice questions.</p>
+        </li>
+        <li>
+          <span class="loop-step">5 · Reflect</span>
+          <h4>Rate your confidence &amp; unlock model solutions</h4>
+          <p>Rate yourself 1–4 on each goal, complete the blank-page recall, and tackle the 30-mark structured assignment.</p>
+        </li>
+      </ol>
+
+      <div class="kit reveal" id="kit">
+        <h3>What’s inside every single lesson</h3>
+        <div class="kit-grid">
+          <div><strong>↻ Spaced Do Now</strong><span>4 retrieval flashcards from earlier lessons</span></div>
+          <div><strong>🎬 3D Story Scene</strong><span>Animated Surulere Clinic &amp; Yaba Hub characters</span></div>
+          <div><strong>🔦 3D Optical Lab Bench</strong><span>Interactive Three.js glass block + results table</span></div>
+          <div><strong>🔬 3D Concept Zoom</strong><span>Wavefronts, virtual ray cones &amp; fibre TIR models</span></div>
+          <div><strong>📐 Worked Examples</strong><span>Step-by-step WAEC/NECO/JAMB solutions</span></div>
+          <div><strong>🎙 Nigerian Narrator</strong><span>Word-by-word spotlight tour (en-NG priority)</span></div>
+        </div>
+      </div>
+
+      <!-- Finale CTA -->
+      <div class="finale reveal">
+        <div class="finale-copy">
+          <span class="pill pill-teal">Ready when you are</span>
+          <h2>Let’s step into Dr Kunle’s Optometry Clinic in Surulere, Lagos.</h2>
+          <p>Start with Lesson 1 to test wavefront slowing, Snell’s law, and the 90° reflected–refracted shortcut.</p>
+        </div>
+        <div class="finale-actions">
+          <a href="lessons/lesson-01/index.html" class="btn btn-primary btn-lg">
+            Start Lesson 1: Snell’s Law &amp; Wavefront Speed →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer container">
+    <p>StudyPipe · SS2 Physics · Refraction of Light Through a Rectangular Glass Block · 100% Offline Edition</p>
+  </footer>
+
+  <!-- Custom Explorer data for Rectangular Glass Block Optics -->
+  <script>
+    window.WELCOME_COMBOS = {
+      "ohmic": {
+        title: "Snell’s Law Linear Graph (sin i against sin r)",
+        example: "WAEC Paper 3 Variant A — Classical Four-Pin Ray-Tracing Graph",
+        jump: "sin i = n sin r · n = sin i / sin r",
+        eq: "Straight line through (0, 0) · Slope = Δ(sin i) / Δ(sin r) = n",
+        ind: "If sin r is on vertical axis, Slope = 1 / n",
+        indClass: "ind-both",
+        why: "By Snell’s second law of refraction, the ratio sin i / sin r is a constant equal to the refractive index n of the glass block. Plotting sin i on the vertical axis against sin r on the horizontal axis gives a straight line through the origin with gradient n ≈ 1.50.",
+        path: "M 56 192 L 410 42",
+        markerX: 233,
+        markerY: 117,
+        zoneY: 45,
+        zoneH: 145
+      },
+      "filament": {
+        title: "Lateral Displacement vs Angle of Incidence (d vs i)",
+        example: "Sideways shift d of emergent ray through a block of thickness t = 6.0 cm",
+        jump: "d = t sin(i − r) / cos r · Emergent angle e = i",
+        eq: "Starts at d = 0 for i = 0° and rises more steeply at large i",
+        ind: "Net angular deviation = 0° (emergent ray ∥ incident ray)",
+        indClass: "ind-mo",
+        why: "At normal incidence (i = 0°), r = 0° and lateral displacement d = 0. As the angle of incidence i increases, the factor sin(i − r) / cos r grows nonlinearly, increasing the sideways shift d while keeping the emergent ray parallel to the incident ray.",
+        path: "M 56 192 Q 245 162 410 38",
+        markerX: 315,
+        markerY: 108,
+        zoneY: 40,
+        zoneH: 140
+      },
+      "internal": {
+        title: "WAEC Paper 3 Cosine Graph Trap (cos i vs cos r)",
+        example: "WAEC Variant C — Non-linear curve because sin²θ = 1 − cos²θ",
+        jump: "n = sin i / sin r = √(1 − cos²i) / √(1 − cos²r)",
+        eq: "Curved graph (NO constant slope!) · Read point (x₁, y₁) on curve",
+        ind: "Compute n = √((1 − x₁²) / (1 − y₁²))",
+        indClass: "ind-pp",
+        why: "Because Snell’s law links sines rather than cosines, plotting cos i against cos r does not produce a straight line of slope n. Instead, WAEC marking schemes require reading a point (x₁ = cos i, y₁ = cos r) on the curve and substituting into √((1 − x₁²) / (1 − y₁²)).",
+        path: "M 56 48 Q 250 75 410 185",
+        markerX: 245,
+        markerY: 96,
+        zoneY: 45,
+        zoneH: 140
+      },
+      "potentiometer": {
+        title: "Far-Face Shift Triangle Graph (LE vs tan r)",
+        example: "WAEC Variant D — Right-triangle geometry inside a block of width w",
+        jump: "tan r = LE / w ⇒ LE = w tan r · sec r = LN / w",
+        eq: "Straight line through (0, 0) · Slope = Δ(LE) / Δ(tan r) = Width w",
+        ind: "Plotting sin i vs LE/LN (= sin r) gives Slope = n!",
+        indClass: "ind-both",
+        why: "Inside the rectangular glass block of perpendicular width w = LN₀, the refracted ray LN forms a right-angled triangle with the normal, so the shift along the far face is LE = w tan r. Plotting LE against tan r gives a straight line whose slope equals the block width w!",
+        path: "M 56 192 L 410 52",
+        markerX: 295,
+        markerY: 97,
+        zoneY: 50,
+        zoneH: 142
+      }
+    };
+  </script>
+  <script src="assets/js/three.min.js"></script>
+  <script src="assets/js/welcome-lab.js"></script>
+  <script src="assets/js/welcome.js"></script>
+  <script src="assets/js/welcome-narration.js"></script>
+  <script src="assets/js/narrator.js"></script>
+  <script src="assets/js/math-kit.js"></script>
+</body>
+</html>

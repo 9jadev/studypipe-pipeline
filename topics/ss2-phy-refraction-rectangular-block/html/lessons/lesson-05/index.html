@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 5 · WAEC/NECO Paper 3 Four-Pin Practical &amp; The 7 Graph Variants · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): WAEC/NECO Paper 3 Four-Pin Ray-Tracing Practical, Pin-Base Alignment, Internal Triangle LN₀E (LE = w tan r, LN = w sec r, LE/LN = sin r), and the 7 Graph Variants.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='22' width='44' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l05">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 5 of 5 · <b>Paper 3 Practical &amp; 7 Graph Variants</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 5 of 5 · Unit Finale · 50 minutes</span>
+        <h1 class="display reveal" data-hook>WAEC/NECO Paper 3 Practical &amp; <em>The 7 Graph Variants</em></h1>
+        <p class="question reveal">Why do WAEC examiners award marks for aligning the <strong>bases (feet)</strong> of optical pins spaced at least <code>4 cm – 5 cm</code> apart rather than their tops — and how does the internal right-angled triangle <code>LN₀E</code> unlock all <strong>7 Paper 3 graph variants</strong>?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Execute the <strong>four-pin ray-tracing practical</strong> and state the mandatory WAEC precautions (aligning pin bases, spacing pins <code>≥ 4 cm</code> apart, vertical pins, sharp pencil).</span></li>
+          <li><b>02</b><span>Use the internal right-angled triangle <strong>LN<sub>0</sub>E</strong> (width <code>w = LN₀</code>) to derive <strong>LE = w tan r</strong>, <strong>LN = w sec r</strong>, and <strong>LN² = LE² + w²</strong>.</span></li>
+          <li><b>03</b><span>Determine refractive index <strong>n</strong> from linear graphs of <strong>sin i vs sin r</strong> (slope = <code>n</code>) and <strong>sin r vs sin i</strong> (slope = <code>1/n</code>), and block width <strong>w</strong> from <strong>LE vs tan r</strong> and <strong>LN vs sec r</strong>.</span></li>
+          <li><b>04</b><span>Use the ratio <strong>LE ÷ LN = sin r</strong> to interpret graphs of <strong>LE vs LN</strong> (slope = <code>sin r</code>) and <strong>sin i vs LE/LN</strong> (slope = <code>n</code>).</span></li>
+          <li><b>05</b><span>Evaluate refractive index <strong>n = √[(1 − x₁²) ÷ (1 − y₁²)]</strong> from a coordinate point <code>(x₁, y₁) = (cos i, cos r)</code> on the curved <strong>cos i vs cos r</strong> graph.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <!-- Schematic Triangle LN0E inside Rectangular Glass Block -->
+          <rect x="44" y="64" width="232" height="124" rx="10" fill="rgba(56,189,248,0.16)" stroke="#38bdf8" stroke-width="2"/>
+          <!-- Normal LN0 (w) -->
+          <line x1="120" y1="64" x2="120" y2="188" stroke="#38bdf8" stroke-width="3.2"/>
+          <!-- Back-face offset N0E = LE -->
+          <line x1="120" y1="188" x2="208" y2="188" stroke="#ffb23f" stroke-width="3.2"/>
+          <!-- Refracted path LN -->
+          <line x1="120" y1="64" x2="208" y2="188" stroke="#10b981" stroke-width="3.6"/>
+          <text x="72" y="132" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="11">w = LN₀</text>
+          <text x="136" y="208" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="11">LE = w tan r</text>
+          <text x="172" y="122" fill="#10b981" font-family="JetBrains Mono, monospace" font-size="11">LN = w sec r</text>
+          <text x="48" y="42" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="12">LE / LN = sin r · LN² = LE² + w²</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">7-Graph sort</a></li>
+        <li><a href="#practical">3D 4-Pin lab</a></li>
+        <li><a href="#concepts">The 7 graphs</a></li>
+        <li><a href="#neutralise">Triangle LN₀E zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">Unit finale</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1–4</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards covering critical angle, Total Internal Reflection, optical fibres, and lateral displacement. Answer each in your head <strong>before</strong> flipping.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>The tilted optical pin in <em>WAEC Physics Paper 3</em></h2>
+        <p class="intro">During the WAEC Physics Paper 3 mock practical at Surulere Senior High, Kelechi aligns the plastic heads at the tops of pins <code>P₃</code> and <code>P₄</code> — and his emergent ray misses by <code>4°</code>! Watch how Zainab, Dr Kunle, and Mrs Adebayo reveal the pin-base rule and the 7 graph variants.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas id="story-canvas" aria-label="Animated 3D story: Zainab, Kelechi, Dr Kunle, and Mrs Adebayo in the WAEC Paper 3 practical hall comparing tilted pin tops with aligned pin bases and internal triangle LN0E."></canvas>
+            <div class="stage-label"><i></i>3D story · WAEC Paper 3 Hall → 3D Ray-Tracing Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Kelechi’s 4° error:</strong> Kelechi sighs: <em>“My emergent ray P₃P₄ misses the parallel angle by 4°, even though I lined up the red plastic heads at the tops of pins P₃ and P₄ with P₁ and P₂!”</em></p>
+            <p><strong>Scene 2 · Pin bases vs pin tops:</strong> Zainab points to pin P₃: <em>“Because the pin tilted slightly in the softwood board, its plastic top shifted sideways off the ray — you must align the BASES (feet) where the pins pierce the paper!”</em></p>
+            <p><strong>Scene 3 · Mandatory Paper 3 precautions:</strong> Dr Kunle reminds them: <em>“Always align the pin bases (feet), space consecutive pins at least 4 cm to 5 cm apart, and keep pins strictly vertical!”</em></p>
+            <p><strong>Scene 4 · Internal triangle LN₀E:</strong> Inside a block of width <code>w = LN₀</code>, the normal <code>LN₀</code>, back-face offset <code>LE</code>, and refracted path <code>LN</code> form a right-angled triangle: <code>LE = w tan r</code>, <code>LN = w sec r</code>, and <code>LE / LN = sin r</code>.</p>
+            <p><strong>Scene 5 · The curved cos i vs cos r trap:</strong> Plotting <code>cos i</code> against <code>cos r</code> gives a curve, never a straight line — read a point <code>(x₁, y₁)</code> on the curve and compute <code>n = √[(1 − x₁²)/(1 − y₁²)]</code>.</p>
+            <p><strong>Scene 6 · 3D Four-Pin Workbench:</strong> Mrs Adebayo invites you to trace all five angles from <code>20°</code> to <code>60°</code>.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Why do WAEC examiners reward aligning the bases (feet) of optical pins and spacing them at least <code>4 cm – 5 cm</code> apart? Pin your prediction below.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that aligning the bases (feet) of optical pins is better than aligning their tops because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Why do we align pin bases (feet) instead of pin tops?</button>
+            <button type="button">Why must optical pins be spaced at least 4 cm apart?</button>
+            <button type="button">What does the slope of LE vs tan r represent?</button>
+            <button type="button">Why is cos i vs cos r a curve instead of a straight line?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>Snell’s Law Slopes, Triangle LN₀E Slopes &amp; <em>Paper 3 Precautions</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Snell’s Law &amp; sin r Slopes (n, 1/n, sin r)</strong>, <strong>Internal Triangle LN₀E (Slope = w)</strong>, and <strong>Paper 3 Precautions &amp; Cosine Curve</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Snell's law slopes bin">
+              <h4><i></i>Snell’s Law Slopes (n, 1/n, sin r)</h4>
+              <small>sin i vs sin r, sin r vs sin i, LE vs LN &amp; sin i vs LE/LN</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Internal triangle LN0E bin">
+              <h4><i></i>Triangle LN₀E (Slope = w)</h4>
+              <small>LE = w tan r, LN = w sec r &amp; LN² = LE² + w²</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Precautions and cosine curve bin">
+              <h4><i></i>Precautions &amp; cos Curve</h4>
+              <small>pin bases, ≥ 4 cm spacing, vertical pins &amp; curved cos i vs cos r</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D WAEC Paper 3 Four-Pin Workbench: <em>Measuring LE, LN &amp; LE/LN</em></h2>
+        <p class="intro">Trace rays through a rectangular glass block of width <code>w = 6.0 cm</code> (<code>n = 1.50</code>) at five angles of incidence from <code>20.0°</code> to <code>60.0°</code>. Inspect the 4 optical pins <code>P₁, P₂, P₃, P₄</code> and the internal right-angled triangle <code>LN₀E</code>!</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Compulsory WAEC Paper 3 Precautions:</strong> Always state at least two in your exam script: <strong>(1)</strong> Ensure all optical pins are pushed strictly vertical into the softwood board. <strong>(2)</strong> Space consecutive pins at least <code>4 cm – 5 cm</code> apart. <strong>(3)</strong> View and align the <strong>bases (feet)</strong> of the pins rather than their tops. <strong>(4)</strong> Use a sharp pencil to draw neat ray lines and small circles around pin-pricks.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Trace outline ABCD &amp; normal LN₀</h4><p>Place the rectangular glass block centrally on the sheet, trace its boundary with a sharp pencil, and draw the normal <code>LN₀</code> of length <code>w = 6.0 cm</code>.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Place incident pins P₁ &amp; P₂</h4><p>Draw incident lines at <code>i = 20°, 30°, 40°, 50°, 60°</code> and push pins <code>P₁</code> and <code>P₂</code> vertically into the line at least <code>4 cm – 5 cm</code> apart.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Sight bases of P₃ &amp; P₄</h4><p>Look through the opposite face of the block with one eye closed and place pins <code>P₃</code> and <code>P₄</code> so their <strong>bases (feet)</strong> lie in a straight line with the images of <code>P₁</code> and <code>P₂</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Measure r, LE &amp; LN</h4><p>Remove the block, join <code>P₃P₄</code> to meet the back face at <code>E</code>, draw the internal ray <code>LE</code> (length <code>LN</code>), and measure <code>r</code>, <code>LE = w tan r</code>, and <code>LN = w sec r</code>.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D WAEC Paper 3 four-pin ray-tracing workbench showing softwood drawing board, white sheet, rectangular glass block of width 6.0 cm, pins P1 to P4 with highlighted bases, and internal triangle LN0E."></canvas>
+            <div class="stage-label"><i></i>3D Four-Pin Ray-Tracing Bench · drag to rotate · tap trials A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Practical inspection condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">4 Pins (Bases Aligned)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Triangle LN₀E (w, LE, LN)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Tilted Pin-Top Trap</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 20.0°</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 30.0°</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 40.0°</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 50.0°</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 60.0°</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
+          </div>
+        </div>
+
+        <h3>Record your WAEC Paper 3 Composite Observations (<code>w = 6.0 cm, n = 1.50</code>)</h3>
+        <p>For each angle of incidence <strong>i (°)</strong>, select the back-face offset <strong>LE = w tan r</strong>, the internal refracted path <strong>LN = w sec r</strong>, and the ratio <strong>LE ÷ LN = sin r</strong>:</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Angle i (and r)</th>
+                <th>Back-Face Offset LE = w tan r</th>
+                <th>Refracted Path LN = w sec r</th>
+                <th>Ratio LE ÷ LN = sin r</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC Paper 3 composite table &amp; slopes <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>i (°)</th><th>r (°)</th><th>sin i</th><th>sin r = LE/LN</th><th>tan r</th><th>sec r</th><th>LE (cm)</th><th>LN (cm)</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>20.0</td><td>13.2</td><td>0.342</td><td>0.228</td><td>0.234</td><td>1.027</td><td>1.40</td><td>6.16</td></tr>
+                  <tr><td>B</td><td>30.0</td><td>19.5</td><td>0.500</td><td>0.333</td><td>0.354</td><td>1.061</td><td>2.12</td><td>6.36</td></tr>
+                  <tr><td>C</td><td>40.0</td><td>25.4</td><td>0.643</td><td>0.429</td><td>0.474</td><td>1.107</td><td>2.85</td><td>6.64</td></tr>
+                  <tr><td>D</td><td>50.0</td><td>30.7</td><td>0.766</td><td>0.511</td><td>0.594</td><td>1.163</td><td>3.56</td><td>6.98</td></tr>
+                  <tr><td>E</td><td>60.0</td><td>35.3</td><td>0.866</td><td>0.577</td><td>0.707</td><td>1.225</td><td>4.24</td><td>7.35</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">Slope(sin i vs sin r) = 1.50 = n &nbsp;·&nbsp; Slope(LE vs tan r) = 6.00 cm = w &nbsp;·&nbsp; Slope(LN vs sec r) = 6.00 cm = w</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l05-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC Paper 3 analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why must a student view and align the <strong>bases (feet)</strong> of optical pins <code>P₃</code> and <code>P₄</code> rather than their tops?</li>
+            <li>What physical quantity is represented by the slope of (a) <code>LE</code> against <code>tan r</code>, and (b) <code>LN</code> against <code>sec r</code>?</li>
+            <li>Why is a graph of <code>cos i</code> against <code>cos r</code> a curve rather than a straight line, and how do you find <code>n</code> from it?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>If a pin tilts slightly from the vertical, its top moves sideways off the true optical line of sight whereas its base (where it pierces the paper) stays on the true ray path.</li>
+                <li>Because <code>LE = w tan r</code> and <code>LN = w sec r</code>, the slope of both graphs equals the perpendicular width <strong>w</strong> of the rectangular glass block.</li>
+                <li>Because <code>sin²θ + cos²θ = 1</code>, the relation <code>√(1 − cos²i) = n √(1 − cos²r)</code> is non-linear. You read a coordinate point <code>(x₁, y₁) = (cos i, cos r)</code> on the curve and compute <code>n = √[(1 − x₁²) / (1 − y₁²)]</code>.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
+        <h2>Internal Triangle LN₀E &amp; <em>The 7 WAEC Paper 3 Graph Variants</em></h2>
+        <p class="intro">Every WAEC or NECO Paper 3 rectangular glass block graph question comes from combining Snell’s law with the internal right-angled triangle <code>LN₀E</code>.</p>
+
+        <h3 id="def-shm">1 · Internal Right-Angled Triangle LN₀E (Width w = LN₀)</h3>
+        <p>Inside a rectangular glass block of perpendicular width <strong>w = LN<sub>0</sub></strong>, the normal <code>LN₀</code> (adjacent), the offset along the back face <code>N₀E = LE</code> (opposite), and the internal refracted ray path <code>LN</code> (hypotenuse) form a right-angled triangle at <code>N₀</code>:</p>
+        <div class="eq" id="eq-shm" data-hook>tan r = LE ÷ w &nbsp;<span class="arr">⇒</span>&nbsp; LE = w tan r &nbsp;&nbsp;·&nbsp;&nbsp; cos r = w ÷ LN &nbsp;<span class="arr">⇒</span>&nbsp; LN = w sec r = w ÷ cos r</div>
+        <div class="eq" id="eq-omega">Pythagoras Check: &nbsp; LN<sup>2</sup> = LE<sup>2</sup> + w<sup>2</sup> &nbsp;&nbsp;·&nbsp;&nbsp; Ratio of Opposite to Hypotenuse: &nbsp; LE ÷ LN = sin r</div>
+
+        <h3 id="def-terms">2 · The Cosine Curve Trap (Variant C: cos i vs cos r)</h3>
+        <p>Using <code>sin i = √(1 − cos²i)</code> and <code>sin r = √(1 − cos²r)</code> in Snell’s law gives a non-linear curve. For any coordinate pair <code>(x₁, y₁) = (cos i, cos r)</code> read directly from the curve:</p>
+        <div class="eq" id="eq-vel">n = sin i ÷ sin r = √[(1 − cos<sup>2</sup>i) ÷ (1 − cos<sup>2</sup>r)] = √[(1 − x<sub>1</sub><sup>2</sup>) ÷ (1 − y<sub>1</sub><sup>2</sup>)]</div>
+        <div class="eq" id="eq-pend">Variant F (LE vs LN at fixed i): &nbsp; Slope S = sin r &nbsp;<span class="arr">⇒</span>&nbsp; n = sin i ÷ S &nbsp;&nbsp;·&nbsp;&nbsp; Variant G (sin i vs LE/LN): &nbsp; Slope S = n</div>
+
+        <aside class="l-sec" id="movement-break" style="margin:24px 0;padding:18px;border-radius:var(--r-md);background:rgba(62,230,196,.08);border:1px solid rgba(62,230,196,.3)">
+          <p style="margin:0"><strong>Active 5-Minute Movement Break (The One-Eye Pin-Base Sighting Drill):</strong> Stand up and hold two pens upright at arm’s length, one 15 cm behind the other. Tilt the back pen slightly sideways while keeping its bottom tip still. Close your left eye and line up the <strong>bottom tips</strong> — notice how the bottom tips stay aligned while the tilted top cap is way off to the side! That is why WAEC examiners always insist on aligning the <strong>bases (feet)</strong> of optical pins.</p>
+        </aside>
+
+        <h3 id="props">Master Reference Table: All 7 WAEC/NECO Paper 3 Graph Variants</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Variant</th><th>Axes (Vertical vs Horizontal)</th><th>Graph Shape</th><th>Slope / Formula</th><th>How to Find n or w</th></tr></thead>
+            <tbody>
+              <tr><td><strong>A</strong></td><td><code>sin i</code> vs <code>sin r</code></td><td>Straight line through (0, 0)</td><td><code>Slope S = Δ(sin i)/Δ(sin r)</code></td><td><code>n = S</code></td></tr>
+              <tr><td><strong>B</strong></td><td><code>sin r</code> vs <code>sin i</code></td><td>Straight line through (0, 0)</td><td><code>Slope S = Δ(sin r)/Δ(sin i) = 1/n</code></td><td><code>n = 1 ÷ S</code></td></tr>
+              <tr><td><strong>C</strong></td><td><code>cos i</code> vs <code>cos r</code></td><td><strong>Non-linear Curve</strong></td><td>Read point <code>(x₁, y₁) = (cos i, cos r)</code></td><td><code>n = √[(1 − x₁²)/(1 − y₁²)]</code></td></tr>
+              <tr><td><strong>D</strong></td><td><code>LE</code> vs <code>tan r</code></td><td>Straight line through (0, 0)</td><td><code>LE = w tan r ⇒ Slope S = w</code></td><td>Block width <code>w = S</code></td></tr>
+              <tr><td><strong>E</strong></td><td><code>LN</code> vs <code>sec r</code> (<code>1/cos r</code>)</td><td>Straight line through (0, 0)</td><td><code>LN = w sec r ⇒ Slope S = w</code></td><td>Block width <code>w = S</code></td></tr>
+              <tr><td><strong>F</strong></td><td><code>LE</code> vs <code>LN</code> (at fixed <code>i</code>)</td><td>Straight line through (0, 0)</td><td><code>LE = LN sin r ⇒ Slope S = sin r</code></td><td><code>n = sin i ÷ S</code></td></tr>
+              <tr><td><strong>G</strong></td><td><code>sin i</code> vs <code>LE ÷ LN</code></td><td>Straight line through (0, 0)</td><td><code>LE/LN = sin r ⇒ Slope S = n</code></td><td><code>n = S</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">7-Graph Variant &amp; Precaution Explorer</h3>
+        <p>Tap any pin below to review each WAEC Paper 3 graph variant and practical rule:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Variants A, B &amp; C</div><div>Variants D &amp; E (Slope = w)</div><div>Variants F, G &amp; Pins →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect the graph equation and slope meaning.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. TRIANGLE LN0E & PIN-BASE ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Triangle LN₀E, Pin-Base &amp; Curve Zoom</span>
+        <h2>Inside the block: <em>triangle LN₀E, pin bases &amp; the cosine curve</em></h2>
+        <p class="intro">Toggle between the <strong>Internal Right-Angled Triangle LN₀E</strong> (<code>w</code>, <code>LE = w tan r</code>, <code>LN = w sec r</code>), the <strong>Pin-Base vs Tilted Pin-Top comparison</strong>, and the <strong>Curved cos i vs cos r plot</strong>!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom comparing internal right-angled triangle LN0E inside the glass block, upright vs tilted optical pin base alignment, and the non-linear cos i vs cos r curve."></canvas>
+            <div class="stage-label"><i></i>3D Paper 3 Decoder · Triangle LN₀E vs Pin Bases &amp; Cosine Curve</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D decoder zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Paper 3 zoom mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Triangle LN₀E (w, LE, LN)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Pin Base vs Tilted Top</button>
+              <button type="button" data-mode="base" aria-pressed="false">Curved cos i vs cos r</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Switch to i = 50° (r = 30.7°)</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#38bdf8"></i>Width<b data-c="h">w = 6.0 cm</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Offset<b data-c="oh">LE = 2.12 cm</b></span>
+              <span class="counter"><i style="--c:#10b981"></i>Path<b data-c="na">LN = 6.36 cm</b></span>
+              <span class="counter"><i style="--c:#a855f7"></i>Ratio<b data-c="cl">LE/LN = 0.333</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Rule<b data-c="w">Slope = w</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Attempt each WAEC Paper 3 problem on paper first, then check the step-by-step working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Variants D &amp; E · Finding block width w from LE = w tan r and LN = w sec r</h4></div>
+          <div class="example-body">
+            <p class="q">In a WAEC Paper 3 practical with a rectangular glass block, a student records at i = 40° that r = 25.4°, the back-face displacement is LE = 2.85 cm, and the refracted path length inside the block is LN = 6.64 cm. Calculate the width w of the glass block from (a) LE = w tan r, (b) LN = w sec r, and (c) verify Pythagoras' theorem LN² = LE² + w².</p>
+            <ol class="steps-sol">
+              <li><strong>From LE = w tan r:</strong> <code>w = LE ÷ tan 25.4° = 2.85 ÷ 0.4748 = 6.00 cm</code>.</li>
+              <li><strong>From LN = w sec r = w ÷ cos r:</strong> <code>w = LN cos 25.4° = 6.64 × 0.9033 = 6.00 cm</code>.</li>
+              <li><strong>Pythagoras Check:</strong> <code>√(LE² + w²) = √(2.85² + 6.00²) = √(8.1225 + 36.00) = √44.1225 = 6.64 cm = LN</code>.</li>
+            </ol>
+            <div class="answer-line">(a) w = 6.00 cm &nbsp;·&nbsp; (b) w = 6.00 cm &nbsp;·&nbsp; (c) √(LE² + w²) = 6.64 cm = LN</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Variant C · Evaluating n from a point on the curved cos i vs cos r graph</h4></div>
+          <div class="example-body">
+            <p class="q">A student plots cos r (vertical axis y) against cos i (horizontal axis x) and obtains a smooth curve. The student reads a point on the curve with coordinates (x₁, y₁) = (0.60, 0.85). Calculate the refractive index n of the glass block.</p>
+            <ol class="steps-sol">
+              <li><strong>Compute sin i from x₁ = cos i = 0.60:</strong> <code>sin i = √(1 − x₁²) = √(1 − 0.60²) = √(1 − 0.36) = √0.64 = 0.800</code>.</li>
+              <li><strong>Compute sin r from y₁ = cos r = 0.85:</strong> <code>sin r = √(1 − y₁²) = √(1 − 0.85²) = √(1 − 0.7225) = √0.2775 = 0.5268</code>.</li>
+              <li><strong>Substitute into Snell's law:</strong> <code>n = sin i ÷ sin r = √[(1 − x₁²) ÷ (1 − y₁²)] = 0.800 ÷ 0.5268 = 1.52</code>.</li>
+            </ol>
+            <div class="answer-line">n = √[(1 − 0.60²) ÷ (1 − 0.85²)] = 1.52</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Variants F &amp; G · Using the ratio LE / LN = sin r</h4></div>
+          <div class="example-body">
+            <p class="q">In a rectangular glass block experiment at a fixed angle of incidence i = 30° across blocks of different widths, a student plots LE against LN and obtains a straight line of gradient S = 0.333. Determine (a) the angle of refraction r, and (b) the refractive index n of the glass.</p>
+            <ol class="steps-sol">
+              <li><strong>Identify the meaning of the slope S = LE / LN:</strong> <code>sin r = LE ÷ LN = S = 0.333 ⇒ r = sin⁻¹(0.333) = 19.5°</code>.</li>
+              <li><strong>Compute the refractive index n at i = 30°:</strong> <code>n = sin i ÷ sin r = sin 30° ÷ 0.333 = 0.500 ÷ 0.333 = 1.50</code>.</li>
+            </ol>
+            <div class="answer-line">(a) r = 19.5° &nbsp;·&nbsp; (b) n = 1.50</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Unit Finale · 8 min</span>
+        <h2>Unit Finale: <em>decode Variants F &amp; C and complete all 5 lessons!</em></h2>
+        <p class="intro">Step through the three checks below to decode Variant F (<code>LE</code> vs <code>LN</code> at fixed <code>i = 30°</code>) and Variant C (<code>cos i</code> vs <code>cos r</code> curve) and celebrate solving the Clinic Glass Block Mystery!</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Variant F &amp; C Exam Decoder <small style="color:var(--muted);font-weight:500">· Triangle LN₀E &amp; Cosine Curve</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#f59e0b,#10b981);box-shadow:0 0 18px rgba(16,185,129,.5)"></div>
+              </div>
+              <div class="vt-count"><span id="time-a">LE / LN = sin r · (x₁, y₁) = (0.60, 0.85)</span><small>WAEC Paper 3 data</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Refractive Index Result <small style="color:var(--muted);font-weight:500" id="len-b-label">· Fixed i = 30° · Slope of LE vs LN = 0.333</small></h4>
+              <div class="clock-well">
+                <div style="width:80%;height:14px;border-radius:7px;background:linear-gradient(90deg,#38bdf8,#10b981)"></div>
+              </div>
+              <div class="vt-count"><span id="time-b">sin r = ? · n = ?</span><small>run Steps 1–3 below</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Find sin r from Slope of LE vs LN</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compute n = sin 30° ÷ S</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Verify Variant C Curve &amp; Finish Unit</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset check</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">Ready to decode Variant F (LE vs LN) and Variant C (cos i vs cos r). Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 5 &amp; Unit Finale:</strong> In a WAEC Paper 3 rectangular glass block practical, always align the <strong>bases (feet)</strong> of vertical pins spaced <code>≥ 4 cm</code> apart. Inside the block of width <strong>w</strong>, the right-angled triangle <strong>LN<sub>0</sub>E</strong> gives <code>LE = w tan r</code>, <code>LN = w sec r</code>, and <code>LE/LN = sin r</code> — unlocking all 7 WAEC Paper 3 graph variants!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 5.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can perform the four-pin ray-tracing practical and explain why we align pin bases at ≥ 4 cm spacing.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can derive LE = w tan r, LN = w sec r, and LN² = LE² + w² from internal triangle LN₀E.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can find n or w from linear graphs of sin i vs sin r, sin r vs sin i, LE vs tan r, and LN vs sec r.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can use LE / LN = sin r to interpret graphs of LE vs LN and sin i vs LE / LN.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can evaluate n = √[(1 − x₁²) / (1 − y₁²)] from a point on the curved cos i vs cos r graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l05-exit">
+          <div class="aq-top"><h4>In two sentences: why do we align the bases (feet) of optical pins rather than their tops, and what do the slopes of LE vs tan r and sin i vs (LE/LN) represent?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>If a pin tilts slightly from the vertical, its top shifts off the optical line of sight whereas its base on the paper remains accurately on the true ray path <b>(1)</b>. Because <code>LE = w tan r</code> and <code>LE/LN = sin r</code>, the slope of <code>LE</code> vs <code>tan r</code> equals the block width <code>w</code> and the slope of <code>sin i</code> vs <code>LE/LN</code> equals the refractive index <code>n</code> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>WAEC Paper 3 Ray-Tracing &amp; The 7 Graph Variants</em></h2>
+        <p class="intro">Complete Part A (two-pen pin-base alignment drill) and Part B (30-mark structured WAEC Paper 3 assignment). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Practical Drill: Why Pin Bases Beat Pin Tops</h3>
+        <div class="aq" data-answer="l05-a1">
+          <div class="aq-top"><h4>Stand two pens or toothpicks in a piece of cardboard 5 cm apart, tilt one by 15° while keeping its base fixed, and sight along them with one eye closed. Explain why joining the bases gives the true line while sighting the tops introduces an angular error.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your observation and explanation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>The pencil line on the drawing sheet is drawn through the pin-prick holes at the bases of the pins. If a student aligns the top of a tilted pin with the line of sight, the base of that pin pierces the paper to one side of the true ray path, introducing a large angular error when the pin-pricks are joined.</p></div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written &amp; Practical Questions (30 marks)</h3>
+        <div class="aq" data-answer="l05-b1">
+          <div class="aq-top"><h4>1. (a) Explain why a student must align the bases (feet) of optical pins rather than their tops during a rectangular glass block experiment (4 marks). (b) State four mandatory precautions to be taken in a WAEC Paper 3 rectangular glass block ray-tracing experiment (6 marks).</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) If an optical pin tilts slightly from the vertical, its top moves sideways off the true optical line of sight whereas its base (where it pierces the paper) remains accurately on the true ray path <b>(4)</b>.<br>
+            (b) (i) Ensure all optical pins are pushed strictly vertical into the board; (ii) Space consecutive pins at least <code>4 cm – 5 cm</code> apart; (iii) View and align the bases (feet) of the pins rather than their tops; (iv) Use a sharp pencil to draw fine ray lines and small circles around pin-pricks <b>(6)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b2">
+          <div class="aq-top"><h4>2. A rectangular glass block has width w = 6.0 cm and refractive index n = 1.50. (a) For a ray incident at i = 30°, calculate r, LE = w tan r, and LN = w sec r, and verify LN² = LE² + w² (6 marks). (b) On a graph of cos i (x-axis) against cos r (y-axis), a student reads (x₁, y₁) = (0.60, 0.85); calculate n using n = √[(1 − x₁²)/(1 − y₁²)] (4 marks).</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>sin r = sin 30° / 1.50 = 0.500 / 1.50 = 0.3333 ⇒ r = 19.47°</code> <b>(2)</b>. <code>LE = 6.0 tan 19.47° = 2.12 cm</code> <b>(1.5)</b>. <code>LN = 6.0 / cos 19.47° = 6.36 cm</code> <b>(1.5)</b>. <code>√(2.12² + 6.00²) = √40.49 = 6.36 cm = LN</code> <b>(1)</b>.<br>
+            (b) <code>n = √[(1 − 0.60²) / (1 − 0.85²)] = √(0.64 / 0.2775) = √2.3063 = 1.52</code> <b>(4)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b3">
+          <div class="aq-top"><h4>3. State the graph shape, the physical meaning of the gradient S, and how to determine refractive index n or block width w for each of the following WAEC Paper 3 plots: (a) sin r vs sin i, (b) LE vs tan r, (c) LN vs sec r, (d) LE vs LN at constant i, and (e) sin i vs LE / LN.</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) … (d) … (e) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>sin r</code> vs <code>sin i</code>: linear through origin, slope <code>S = 1/n ⇒ n = 1/S</code> <b>(2)</b>.<br>
+            (b) <code>LE</code> vs <code>tan r</code>: linear through origin, slope <code>S = w</code> (block width) <b>(2)</b>.<br>
+            (c) <code>LN</code> vs <code>sec r</code>: linear through origin, slope <code>S = w</code> (block width) <b>(2)</b>.<br>
+            (d) <code>LE</code> vs <code>LN</code> at constant <code>i</code>: linear through origin, slope <code>S = sin r ⇒ n = sin i / S</code> <b>(2)</b>.<br>
+            (e) <code>sin i</code> vs <code>LE/LN</code>: since <code>LE/LN = sin r</code>, linear through origin with slope <code>S = n</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-04/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 4: Critical Angle &amp; TIR</a>
+          <a class="btn btn-tour" href="../../index.html">🎉 Back to Unit Welcome Hub (All 5 Complete!) →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

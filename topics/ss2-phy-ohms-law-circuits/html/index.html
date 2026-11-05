@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ohm's Law &amp; Current Electricity — StudyPipe SS2 Physics</title>
+  <meta name="description" content="An interactive 5-lesson 3D physics unit on Ohm's Law, resistivity, EMF and internal resistance, series/parallel networks, galvanometer conversion, metre bridge, and potentiometer practicals." />
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/narrator.css" />
+  <link rel="stylesheet" href="assets/css/math.css">
+</head>
+<body>
+
+  <!-- Ambient background -->
+  <div class="ambient" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-mask"></div>
+  </div>
+
+  <!-- Top bar -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>StudyPipe</strong>
+          <small>SS2 Physics · Current Electricity</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#mystery">The Mystery</a>
+        <a href="#journey">5 Lessons</a>
+        <a href="#explorer">Circuit Explorer</a>
+        <a href="#master">What You'll Master</a>
+        <a href="#method">How We Learn</a>
+      </nav>
+      <div class="nav-pill">
+        <span class="dot"></span>
+        Offline ready · en-NG Voice
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ======================== HERO ======================== -->
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="tag">SS2 Physics</span>
+          <span class="sep">·</span>
+          <span>WAEC · NECO · JAMB</span>
+          <span class="sep">·</span>
+          <span>Paper 3 Practical Core</span>
+        </div>
+
+        <h1 class="hero-title" data-hook>
+          Ohm’s <span class="accent-serif">Law</span> &amp; Current
+          <span class="accent-grad">Electricity</span>
+        </h1>
+
+        <p class="hero-lede">
+          Why does a newly charged <code>12.0 V</code> battery plunge to <code>8.4 V</code> the instant a
+          heavy starter load is switched on? How can a tiny <code>10 mA</code> galvanometer measure
+          <code>10 A</code> without burning out? And why does a <code>100 cm</code> potentiometer wire beat
+          every voltmeter on the bench? Step into our 3D circuit laboratory and master every equation and
+          WAEC Paper 3 practical.
+        </p>
+
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" data-tour>
+            <span>Start guided tour (en-NG)</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <a href="lessons/lesson-01/index.html" class="btn btn-ghost">
+            Begin Lesson 1 →
+          </a>
+        </div>
+
+        <dl class="hero-meta">
+          <div>
+            <dt>Scope</dt>
+            <dd>5 lessons · ~4.2 hrs</dd>
+          </div>
+          <div>
+            <dt>Practicals</dt>
+            <dd>3 WAEC Paper 3 labs</dd>
+          </div>
+          <div>
+            <dt>Interactive</dt>
+            <dd>10 3D stages + quizzes</dd>
+          </div>
+          <div>
+            <dt>Aligned with</dt>
+            <dd>WAEC · NECO · JAMB</dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- 3D interactive stage -->
+      <div class="hero-stage">
+        <div class="stage-frame" id="lab">
+          <div class="stage-topbar">
+            <div class="stage-dots"><span></span><span></span><span></span></div>
+            <div class="stage-title">LIVE 3D LAB · DC CIRCUIT &amp; INTERNAL RESISTANCE BENCH</div>
+            <div class="stage-hint">Drag to rotate · Scroll to zoom</div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="lab-canvas" aria-label="Interactive 3D DC circuit and internal resistance bench"></canvas>
+
+            <div class="endpoint-toast" id="endpoint-toast" role="status" aria-live="polite" hidden>
+              <strong>Circuit Reading:</strong> I = <strong>3.00 A</strong> · Terminal V = <strong>8.4 V</strong> · Lost Ir = <strong>3.6 V</strong>
+            </div>
+
+            <div class="stage-legend">
+              <span><i class="sw sw-acid"></i>12.0 V Cell (r = 1.2 Ω) &amp; Plug Key</span>
+              <span><i class="sw sw-base"></i>Constantan Rheostat R &amp; Meters</span>
+            </div>
+          </div>
+
+          <!-- HUD controls -->
+          <div class="hud">
+            <div class="hud-readouts">
+              <div class="hud-cell">
+                <span class="hud-k">Load R &amp; Current I</span>
+                <span class="hud-v"><strong id="val-vol">R = 2.8 Ω · I = 3.00 A</strong></span>
+              </div>
+              <div class="hud-cell">
+                <span class="hud-k">Terminal P.D. (V = E − Ir)</span>
+                <span class="hud-v" id="val-ph">V = 8.4 V (lost 3.6 V)</span>
+              </div>
+              <div class="hud-cell">
+                <span class="hud-k">Circuit Status</span>
+                <span class="hud-v status-end" id="val-status">Closed: η = 70% · v = Ir = 3.6 V</span>
+              </div>
+            </div>
+
+            <div class="hud-controls">
+              <button type="button" class="btn-chip btn-chip-primary" id="btn-drop">
+                🔑 Toggle Plug Key (Open / Closed)
+              </button>
+              <button type="button" class="btn-chip" id="btn-stream">
+                🎚 Change Load R (2.8 / 4.8 / 10.8 Ω)
+              </button>
+              <button type="button" class="btn-chip btn-chip-muted" id="btn-reset">
+                ↺ Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee strip -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>OHM'S LAW V = IR</span><span>·</span>
+        <span>RESISTIVITY R = ρL/A</span><span>·</span>
+        <span>COMPLETE CIRCUIT E = I(R + r)</span><span>·</span>
+        <span>LOST VOLTS v = Ir</span><span>·</span>
+        <span>PARALLEL CELLS E_eq = E, r_eq = r/n</span><span>·</span>
+        <span>EFFICIENCY η = R/(R + r) × 100%</span><span>·</span>
+        <span>AMMETER SHUNT R_s = I_g R_g/(I − I_g)</span><span>·</span>
+        <span>VOLTMETER MULTIPLIER R_m = (V/I_g) − R_g</span><span>·</span>
+        <span>METRE BRIDGE R₁/R₂ = l/(100 − l)</span><span>·</span>
+        <span>POTENTIOMETER E₁/E₂ = l₁/l₂</span><span>·</span>
+        <span>OHM'S LAW V = IR</span><span>·</span>
+        <span>RESISTIVITY R = ρL/A</span><span>·</span>
+        <span>COMPLETE CIRCUIT E = I(R + r)</span><span>·</span>
+        <span>LOST VOLTS v = Ir</span><span>·</span>
+      </div>
+    </div>
+
+    <!-- ======================== 01 · THE MYSTERY ======================== -->
+    <section id="mystery" class="section container">
+      <div class="section-head">
+        <span class="sec-num">01 / The Phenomenon</span>
+        <h2 class="section-title" data-hook>Start with a real Aba workshop puzzle, not a dry formula.</h2>
+        <p class="section-sub">
+          Every lesson in this unit connects to an electrical investigation at Chinedu’s Auto-Electric &amp;
+          Tailoring Workshop on Ngwa Road, Aba.
+        </p>
+      </div>
+
+      <div class="mystery-card reveal">
+        <div class="mystery-narrative">
+          <span class="pill pill-amber">The Unit Mystery · Ngwa Road, Aba</span>
+          <h3>Why does Chinedu’s 12.0 V battery plunge to 8.4 V the moment the load is switched on?</h3>
+          <p>
+            At Chinedu’s workshop in Aba, apprentice <strong>Kelechi</strong> tests a newly charged
+            <code>12.0 V</code> lead-acid accumulator with a digital voltmeter while the main switch is open:
+            it reads a steady <strong>12.0 V</strong>.
+          </p>
+          <p>
+            Yet the instant he closes the brass changeover switch to drive a <code>2.8 Ω</code> starter motor
+            load, the workshop ceiling lamp dims and the voltmeter across the battery terminals drops sharply
+            to <strong>8.4 V</strong>! Even more puzzling: when his supervisor <strong>Engr. Nkechi</strong>
+            tests the exact same battery on a <strong>100 cm constantan potentiometer board</strong>, the
+            null-balance point reports the full <strong>12.0 V</strong> without losing a single tenth of a volt.
+          </p>
+          <p class="mystery-question">
+            Where do the missing <code>3.6 V</code> disappear to when current flows? Why do parallel cells
+            keep one cell’s voltage while cutting internal resistance? How do we size a shunt or multiplier
+            for a <code>10 mA</code> galvanometer? And why does a potentiometer at null balance (<code>I_g = 0</code>)
+            eliminate internal-resistance error completely?
+          </p>
+        </div>
+
+        <aside class="case-card">
+          <div class="case-head">
+            <span>CASE FILE #ELEC-05</span>
+            <span class="case-status">OPEN</span>
+          </div>
+          <dl class="case-grid">
+            <div>
+              <dt>Setting</dt>
+              <dd>Chinedu’s Workshop (Aba), Surulere Solar Bench &amp; SS2 Physics Lab</dd>
+            </div>
+            <div>
+              <dt>Apparatus tested</dt>
+              <dd>Constantan wires, <code>12.0 V</code> accumulator, galvanometer, metre bridge &amp; potentiometer</dd>
+            </div>
+            <div>
+              <dt>Observed anomaly</dt>
+              <dd>Open-circuit <code>12.0 V</code> drops to <code>8.4 V</code> at <code>I = 3.0 A</code> under <code>2.8 Ω</code> load</dd>
+            </div>
+            <div>
+              <dt>Your mission</dt>
+              <dd>Master all 6 calculation archetypes and 3 WAEC Paper 3 practicals to solve the case</dd>
+            </div>
+          </dl>
+          <div class="case-foot">
+            Opened in <strong>Lesson 1</strong> · Solved in <strong>Lesson 5</strong>
+          </div>
+        </aside>
+      </div>
+
+      <!-- Exam weight strip -->
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat-num" data-count="35">30–35%</div>
+          <div class="stat-label">
+            <strong>of WAEC / NECO Paper 3 marks</strong>
+            <span>Metre bridge, potentiometer, or Ohm’s law V–I graph appears in almost every Practical Physics paper</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">6</div>
+          <div class="stat-label">
+            <strong>High-yield calculation types</strong>
+            <span>Resistivity, internal resistance, parallel cells, efficiency, shunts/multipliers &amp; bridge balance</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3</div>
+          <div class="stat-label">
+            <strong>Exam boards covered</strong>
+            <span>WAEC WASSCE, NECO SSCE, and JAMB UTME Objectives, Theory &amp; Practicals</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 02 · THE 5-LESSON JOURNEY ======================== -->
+    <section id="journey" class="section container">
+      <div class="section-head">
+        <span class="sec-num">02 / Your Learning Journey</span>
+        <h2 class="section-title" data-hook>Five progressive lessons. Complete syllabus mastery.</h2>
+        <p class="section-sub">
+          Each lesson takes 50–55 minutes, opens with a <em>Do Now</em> spaced-retrieval warm-up, and guides
+          you through a 3D Nigerian story, an interactive 3D lab bench, a 3D concept zoom, and WAEC practice.
+        </p>
+      </div>
+
+      <div class="lessons">
+
+        <!-- Lesson 1 -->
+        <article class="lesson reveal is-live" data-lesson="1">
+          <div class="lesson-num">01</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-01/index.html">Ohm’s Law, Metallic Conduction &amp; Wire Resistivity</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Investigate why current is proportional to potential difference (<code>V = IR</code>) at constant
+              temperature, why heating a tungsten filament increases its resistance through lattice vibrations,
+              how length and diameter control resistance (<code>R = 4ρL / πd²</code>), and how to run the WAEC
+              Paper 3 <code>V–I</code> graph practical.
+            </p>
+            <div class="lesson-tags">
+              <span>3D Aba Cable Story</span>
+              <span>3D Resistivity &amp; V–I Bench</span>
+              <span>3D Atomic Lattice Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 2 -->
+        <article class="lesson reveal is-live" data-lesson="2">
+          <div class="lesson-num">02</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-02/index.html">EMF, Terminal P.D., Lost Volts &amp; Internal Resistance</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Uncover why Chinedu’s <code>12.0 V</code> battery drops to <code>8.4 V</code> under load using the
+              complete circuit law <code>E = I(R + r)</code> and <code>V = E − Ir</code>. Master the exam-favourite
+              “two readings, same cell” equation <code>I₁(R₁ + r) = I₂(R₂ + r)</code> and interpret the intercept
+              and negative slope of a <code>V–I</code> cell graph.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1</span>
+              <span>3D Lost Volts &amp; V–I Lab</span>
+              <span>3D Electrolyte Drag Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 3 -->
+        <article class="lesson reveal is-live" data-lesson="3">
+          <div class="lesson-num">03</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-03/index.html">Series &amp; Parallel Networks, Cell Arrays, Power &amp; Efficiency</a></h3>
+              <span class="lesson-time">55 min · Live</span>
+            </div>
+            <p>
+              Collapse combined series-parallel resistor networks, apply the current divider rule, and conquer
+              the #1 JAMB/WAEC cell trap: why <code>n</code> identical cells in parallel keep <strong>one cell’s
+              EMF (<code>E</code>)</strong> while dividing internal resistance to <code>r/n</code>. Calculate
+              electrical power <code>P = IV = I²R</code> and cell efficiency <code>η = R/(R + r) × 100%</code>.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L2</span>
+              <span>3D Network &amp; Cell Array Builder</span>
+              <span>3D Current Divider Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 4 -->
+        <article class="lesson reveal is-live" data-lesson="4">
+          <div class="lesson-num">04</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-04/index.html">Galvanometer Conversion — Ammeter Shunts &amp; Voltmeter Multipliers</a></h3>
+              <span class="lesson-time">50 min · Live</span>
+            </div>
+            <p>
+              Step into Mazi Okafor’s instrument bench at Onitsha Market. Convert a delicate moving-coil
+              galvanometer (<code>I_g, R_g</code>) into a heavy-duty ammeter using a low-resistance parallel
+              <strong>shunt</strong> (<code>R_s = I_g R_g / (I − I_g)</code>) or a high-voltage voltmeter using a
+              series <strong>multiplier</strong> (<code>R_m = (V / I_g) − R_g</code>).
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L3</span>
+              <span>3D Shunt &amp; Multiplier Bench</span>
+              <span>3D Moving-Coil Bypass Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Lesson 5 -->
+        <article class="lesson reveal is-live" data-lesson="5">
+          <div class="lesson-num">05</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-05/index.html">Null-Balance Precision — Metre Bridge, Potentiometer &amp; WAEC Practicals</a></h3>
+              <span class="lesson-time">55 min · Live</span>
+            </div>
+            <p>
+              Slide the brass jockey along a <code>100 cm</code> constantan wire to find the exact null-balance
+              point (<code>I_g = 0</code>). Master the Wheatstone metre bridge (<code>R₁/R₂ = l/(100 − l)</code>),
+              the two-wire diameter-ratio practical (<code>√s = d₁/d₂</code>), potentiometer cell comparisons
+              (<code>E₁/E₂ = l₁/l₂</code>), driver series-resistor voltage drops, and past-tense WAEC precautions.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L4</span>
+              <span>3D Metre Bridge &amp; Potentiometer Lab</span>
+              <span>WAEC Paper 3 Precautions</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+
+      <div class="thread-note reveal">
+        <span class="thread-icon" aria-hidden="true">↻</span>
+        <p>
+          <strong>Built-in spaced retrieval:</strong> Every lesson opens with a <em>Do Now</em> flashcard deck
+          pulling key formulas and traps from earlier lessons so nothing is forgotten by Lesson 5.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================== 03 · INTERACTIVE CIRCUIT EXPLORER ======================== -->
+    <section id="explorer" class="section container">
+      <div class="section-head">
+        <span class="sec-num">03 / Interactive Sneak Preview</span>
+        <h2 class="section-title" data-hook>Explore the four signature curves of Current Electricity.</h2>
+        <p class="section-sub">
+          Tap each tab below to compare how voltage, current, efficiency, and null balance behave across the
+          apparatus you will use in Lessons 1 to 5.
+        </p>
+      </div>
+
+      <div class="explorer reveal">
+        <div class="combo-tabs" role="tablist" aria-label="Circuit characteristic curves" id="combo-tabs">
+          <button type="button" class="combo-tab is-active" role="tab" aria-selected="true" data-combo="ohmic">
+            Ohmic Wire (V = IR)
+          </button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="filament">
+            Filament Lamp (Non-Ohmic)
+          </button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="internal">
+            Terminal P.D. (V = E − Ir)
+          </button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="potentiometer">
+            Potentiometer Null (E ∝ l)
+          </button>
+        </div>
+
+        <div class="combo-body">
+          <!-- SVG curve -->
+          <div class="combo-chart">
+            <div id="combo-graph"></div>
+            <label class="combo-slide">
+              <span id="combo-slide-label">Slide along the graph</span>
+              <input type="range" id="combo-slider" min="0" max="1000" value="500" aria-describedby="combo-read" />
+            </label>
+            <div class="combo-read" id="combo-read" aria-live="polite"></div>
+          </div>
+
+          <!-- Readout -->
+          <div class="combo-info">
+            <h3 id="combo-title">Ohmic Metallic Conductor (Constantan Wire)</h3>
+            <p class="combo-example" id="combo-example">WAEC Paper 3 Ohm’s Law Practical at constant temperature</p>
+
+            <dl class="combo-dl">
+              <div>
+                <dt>Governing Equation</dt>
+                <dd id="combo-jump">V = IR · R = 4ρL / (πd²)</dd>
+              </div>
+              <div>
+                <dt>Graph Slope &amp; Intercept</dt>
+                <dd id="combo-eq">Straight line through (0, 0) · Slope = ΔV / ΔI = R</dd>
+              </div>
+              <div>
+                <dt>Key Exam Rule</dt>
+                <dd><span class="combo-pill ind-both" id="combo-ind">Remove key between readings to keep T constant</span></dd>
+              </div>
+            </dl>
+
+            <p class="combo-why" id="combo-why">
+              At constant temperature, the resistance R of a constantan wire stays constant, so potential difference V is strictly proportional to current I. The gradient of V (vertical) against I (horizontal) gives R directly in ohms (Ω).
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 04 · WHAT YOU'LL MASTER ======================== -->
+    <section id="master" class="section container">
+      <div class="section-head">
+        <span class="sec-num">04 / Learning Outcomes</span>
+        <h2 class="section-title" data-hook>What you will master by the end of Lesson 5.</h2>
+        <p class="section-sub">
+          Every skill is practised on a 3D circuit bench and tested against WAEC, NECO, and JAMB question archetypes.
+        </p>
+      </div>
+
+      <div class="outcomes reveal">
+        <div class="outcome">
+          <span class="outcome-idx">01</span>
+          <h3>Verify Ohm’s Law &amp; Resistivity</h3>
+          <p>Use <code>V = IR</code> and <code>R = ρL/A = 4ρL/(πd²)</code> to compute wire resistance, resistivity, and diameter scaling ratios.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">02</span>
+          <h3>Solve EMF, Lost Volts &amp; Internal r</h3>
+          <p>Apply <code>E = I(R + r)</code>, <code>V = E − Ir</code>, and the two-readings equation <code>I₁(R₁ + r) = I₂(R₂ + r)</code>.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">03</span>
+          <h3>Analyse Resistor &amp; Cell Networks</h3>
+          <p>Find equivalent resistance, branch currents, parallel cell arrays (<code>E_eq = E, r_eq = r/n</code>), power, and cell efficiency.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">04</span>
+          <h3>Convert Galvanometers</h3>
+          <p>Calculate parallel ammeter shunt resistance <code>R_s = I_g R_g/(I − I_g)</code> and series voltmeter multiplier <code>R_m = (V/I_g) − R_g</code>.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">05</span>
+          <h3>Solve Metre Bridge &amp; Potentiometer</h3>
+          <p>Use <code>R₁/R₂ = l/(100 − l)</code>, <code>E₁/E₂ = l₁/l₂</code>, and driver voltage-divider rules when a resistor is in series with the slide wire.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">06</span>
+          <h3>Ace WAEC Paper 3 Electricity Practicals</h3>
+          <p>Tabulate readings to correct decimal places, interpret graph slopes (<code>s = (d₁/d₂)²</code>, <code>−r</code>, <code>R</code>), and state accepted past-tense precautions.</p>
+        </div>
+      </div>
+
+      <!-- 6 Calculation Archetypes -->
+      <div class="subblock reveal" id="archetypes">
+        <div class="subblock-head">
+          <h3>The 6 calculation archetypes</h3>
+          <p>Over 90% of WAEC, NECO, and JAMB numerical problems in Current Electricity follow one of these six patterns:</p>
+        </div>
+
+        <div class="archetypes">
+          <div class="arch">
+            <span class="arch-tag">Type 1 · Lesson 1</span>
+            <h4>Resistivity &amp; Diameter Ratios</h4>
+            <p>Given length <code>L</code> and diameter <code>d</code>, use <code>R = 4ρL/(πd²)</code> or ratio <code>R₁/R₂ = (L₁/L₂)(d₂/d₁)²</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 2 · Lesson 2</span>
+            <h4>Two Readings, Same Cell</h4>
+            <p>When load <code>R₁</code> draws <code>I₁</code> and load <code>R₂</code> draws <code>I₂</code>, equate <code>I₁(R₁ + r) = I₂(R₂ + r)</code> to find <code>r</code> and <code>E</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 3 · Lesson 3</span>
+            <h4>Parallel Cells &amp; Networks</h4>
+            <p>For <code>n</code> identical parallel cells, use <code>E_eq = E</code> and <code>r_eq = r/n</code>, then <code>I = E_eq/(R + r_eq)</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 4 · Lesson 3</span>
+            <h4>Power &amp; Cell Efficiency</h4>
+            <p>Use <code>P = I²R = V²/R</code> and cell efficiency <code>η = [R / (R + r)] × 100% = (V / E) × 100%</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 5 · Lesson 4</span>
+            <h4>Shunt &amp; Multiplier Sizing</h4>
+            <p>Parallel ammeter shunt <code>R_s = I_g R_g / (I − I_g)</code>; series voltmeter multiplier <code>R_m = (V / I_g) − R_g</code>.</p>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 6 · Lesson 5</span>
+            <h4>Metre Bridge &amp; Potentiometer</h4>
+            <p>Bridge: <code>R_L/R_R = l/(100 − l)</code>. Potentiometer: <code>E₁/E₂ = l₁/l₂</code> and <code>r = R(l₁ − l₂)/l₂</code>.</p>
+          </div>
+        </div>
+
+        <div class="formula-strip">
+          <div class="formula-pill"><code>E = I(R + r)</code><span>Complete circuit law</span></div>
+          <div class="formula-pill"><code>η = R / (R + r) × 100%</code><span>Cell efficiency</span></div>
+          <div class="formula-pill"><code>I_g R_g = (I − I_g)R_s</code><span>Parallel ammeter shunt</span></div>
+          <div class="formula-pill"><code>R₁ / R₂ = l / (100 − l)</code><span>Metre bridge balance</span></div>
+        </div>
+      </div>
+
+      <!-- 3 Common Myths -->
+      <div class="subblock reveal" id="myths">
+        <div class="subblock-head">
+          <h3>Three exam traps we’ll bust</h3>
+          <p>Tap each card to flip it and see the physical truth:</p>
+        </div>
+
+        <div class="myths">
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 01</span>
+                <h4>“Connecting four 1.5 V cells in parallel gives a combined EMF of 6.0 V.”</h4>
+                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>
+                  <strong>Parallel cells do NOT add voltage!</strong> Four identical <code>1.5 V</code> cells in parallel have a combined EMF of <strong><code>1.5 V</code></strong> (same as one single cell), while their combined internal resistance drops to <strong><code>r / 4</code></strong>.
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 02</span>
+                <h4>“A voltmeter connected across a cell always reads its exact EMF.”</h4>
+                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>
+                  <strong>A voltmeter draws a small current!</strong> Because <code>I &gt; 0</code>, some voltage <code>Ir</code> is lost inside the cell, so a voltmeter reads <code>V = E − Ir &lt; E</code>. A <strong>potentiometer at null balance (<code>I_g = 0</code>)</strong> draws zero current and measures exact EMF.
+                </p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 03</span>
+                <h4>“To convert a galvanometer into an ammeter, connect a large resistor in series.”</h4>
+                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>
+                  <strong>That makes a voltmeter!</strong> An ammeter must have very low resistance, so you connect a tiny <strong>shunt resistor <code>R_s</code> in parallel</strong> with the galvanometer coil so most current bypasses the delicate movement.
+                </p>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 05 · HOW WE LEARN ======================== -->
+    <section id="method" class="section container">
+      <div class="section-head">
+        <span class="sec-num">05 / How Every Lesson Works</span>
+        <h2 class="section-title" data-hook>Phenomenon-first, active 3D inquiry.</h2>
+        <p class="section-sub">
+          Every lesson follows the same five-step inquiry loop so you see and test the circuit before memorising any formula.
+        </p>
+      </div>
+
+      <ol class="loop reveal">
+        <li>
+          <span class="loop-step">1 · Wonder</span>
+          <h4>Watch the 3D Nigerian workshop story &amp; pin your prediction</h4>
+          <p>See Kelechi, Chinedu, and Engr. Nkechi confront a real circuit puzzle and record your initial hypothesis.</p>
+        </li>
+        <li>
+          <span class="loop-step">2 · Investigate</span>
+          <h4>Operate the 3D Virtual Circuit Bench</h4>
+          <p>Adjust wire lengths, diameters, load resistors, shunts, and jockey positions yourself and log the readings.</p>
+        </li>
+        <li>
+          <span class="loop-step">3 · Make sense</span>
+          <h4>Zoom inside the conductor, electrolyte, or moving coil</h4>
+          <p>Use the 3D Concept Zoom stage to see lattice collisions, internal lost volts, and null-balance gradients.</p>
+        </li>
+        <li>
+          <span class="loop-step">4 · Apply</span>
+          <h4>Worked examples, Bridge challenge &amp; WAEC/JAMB quiz</h4>
+          <p>Step through three graded calculations per lesson and test yourself on exam-style multiple-choice questions.</p>
+        </li>
+        <li>
+          <span class="loop-step">5 · Reflect</span>
+          <h4>Rate your confidence &amp; unlock model solutions</h4>
+          <p>Rate yourself 1–4 on each goal, complete the blank-page recall, and tackle the 30-mark structured assignment.</p>
+        </li>
+      </ol>
+
+      <div class="kit reveal" id="kit">
+        <h3>What’s inside every single lesson</h3>
+        <div class="kit-grid">
+          <div><strong>↻ Spaced Do Now</strong><span>4 retrieval flashcards from earlier lessons</span></div>
+          <div><strong>🎬 3D Story Scene</strong><span>Animated Nigerian workshop characters &amp; rigs</span></div>
+          <div><strong>🧪 3D Virtual Circuit Lab</strong><span>Interactive Three.js bench + results table</span></div>
+          <div><strong>🔬 3D Concept Zoom</strong><span>Atomic lattice, electrolyte &amp; coil models</span></div>
+          <div><strong>📐 Worked Examples</strong><span>Step-by-step WAEC/NECO/JAMB solutions</span></div>
+          <div><strong>🎙 Nigerian Narrator</strong><span>Word-by-word spotlight tour (en-NG priority)</span></div>
+        </div>
+      </div>
+
+      <!-- Finale CTA -->
+      <div class="finale reveal">
+        <div class="finale-copy">
+          <span class="pill pill-teal">Ready when you are</span>
+          <h2>Let’s step into Chinedu’s workshop on Ngwa Road, Aba.</h2>
+          <p>Start with Lesson 1 to test Ohm’s law, wire resistivity, and the WAEC Paper 3 V–I graph practical.</p>
+        </div>
+        <div class="finale-actions">
+          <a href="lessons/lesson-01/index.html" class="btn btn-primary btn-lg">
+            Start Lesson 1: Ohm’s Law &amp; Resistivity →
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer container">
+    <p>StudyPipe · SS2 Physics · Ohm’s Law &amp; Current Electricity · 100% Offline Edition</p>
+  </footer>
+
+  <!-- Custom Explorer data for Current Electricity -->
+  <script>
+    window.WELCOME_COMBOS = {
+      "ohmic": {
+        title: "Ohmic Metallic Conductor (Constantan Wire)",
+        example: "WAEC Paper 3 Ohm’s Law Practical at constant temperature",
+        jump: "V = IR · R = 4ρL / (πd²)",
+        eq: "Straight line through (0, 0) · Slope = ΔV / ΔI = R",
+        ind: "Remove key between readings to keep T constant",
+        indClass: "ind-both",
+        why: "At constant temperature, the resistance R of a constantan wire stays constant, so potential difference V is strictly proportional to current I. The gradient of V (vertical) against I (horizontal) gives R directly in ohms (Ω).",
+        path: "M 56 192 L 410 42",
+        markerX: 233,
+        markerY: 117,
+        zoneY: 45,
+        zoneH: 145
+      },
+      "filament": {
+        title: "Non-Ohmic Tungsten Filament Lamp",
+        example: "Torch or car headlamp bulb as current and temperature rise",
+        jump: "T rises → Lattice vibrations increase → R increases",
+        eq: "V against I curves upwards (steepening gradient)",
+        ind: "Disobeys Ohm’s law at high current",
+        indClass: "ind-mo",
+        why: "As current increases, the tungsten filament heats up to over 2000 °C. Vigorous vibrations of the metal ions cause more frequent electron collisions, so resistance R increases with current.",
+        path: "M 56 192 Q 245 170 410 38",
+        markerX: 315,
+        markerY: 112,
+        zoneY: 40,
+        zoneH: 140
+      },
+      "internal": {
+        title: "Cell Terminal P.D. vs Current (V = E − Ir)",
+        example: "Chinedu’s 12.0 V battery under increasing starter current I",
+        jump: "V = −r I + E · Lost volts v = Ir",
+        eq: "Vertical intercept = E · Gradient = −r",
+        ind: "At I = 0 (open circuit), V = E",
+        indClass: "ind-pp",
+        why: "Every extra ampere drawn from a cell increases the internal voltage drop Ir across the electrolyte. Plotting terminal p.d. V against current I yields a downward straight line starting at E on the vertical axis with slope −r.",
+        path: "M 56 45 L 410 185",
+        markerX: 233,
+        markerY: 115,
+        zoneY: 45,
+        zoneH: 140
+      },
+      "potentiometer": {
+        title: "Potentiometer Null Balance (E ∝ l)",
+        example: "100 cm uniform slide wire with centre-zero galvanometer at I_g = 0",
+        jump: "E₁ / E₂ = l₁ / l₂ · r = R(l₁ − l₂) / l₂",
+        eq: "Potential gradient k = V_AB / 100 (V cm⁻¹)",
+        ind: "Zero current drawn at balance → Zero lost volts!",
+        indClass: "ind-both",
+        why: "Along a uniform 100 cm wire carrying steady driver current, potential drop is directly proportional to length l. At the null point where the galvanometer reads zero, no current flows through the test cell's internal resistance r, revealing its exact EMF!",
+        path: "M 56 192 L 410 52",
+        markerX: 295,
+        markerY: 97,
+        zoneY: 50,
+        zoneH: 142
+      }
+    };
+  </script>
+  <script src="assets/js/three.min.js"></script>
+  <script src="assets/js/welcome-lab.js"></script>
+  <script src="assets/js/study-graph.js"></script>
+  <script src="assets/js/welcome.js"></script>
+  <script src="assets/js/welcome-narration.js"></script>
+  <script src="assets/js/narrator.js"></script>
+  <script src="assets/js/math-kit.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "id": "study-graph",
+  "version": 1,
+  "title": "Live SVG graph plotter for lab readings (ticks, units, best-fit, slope triangle, intercepts, theory curves, live marker)",
+  "type": "interactive-2d",
+  "needs3d": false,
+  "subjects": ["Physics", "Chemistry", "Mathematics"],
+  "concepts": ["graph plotting", "gradient", "intercept", "line of best fit", "V–I graph", "theory curve"],
+  "params": {
+    "theme": { "type": "string", "default": "paper", "doc": "paper (light page) | dark (inside a .stage)" },
+    "x": { "type": "object", "doc": "{ label, unit, min, max, step?, decimals? }" },
+    "y": { "type": "object", "doc": "{ label, unit, min, max, step?, decimals? }" },
+    "series": { "type": "array", "doc": "[{ id, name, tone, points:[[x,y]], fit:'line'|'origin', extend, join, fn, fnRange, dashed, slope:{dx,dy,name,unit,abs}, yIntercept, xIntercept, note, shape:'square' }]" },
+    "guides": { "type": "array", "doc": "[{ axis:'x'|'y', value, tone, label }]" },
+    "marker": { "type": "object", "doc": "{ x, y, label, tone, labelPos:'below' }" }
+  },
+  "events": { "point": "{ x, y, series } when a plotted point is tapped" },
+  "files": { "script": "kit.js (exposes window.StudyGraph + StudyPipeKits['study-graph'])", "style": "kit.css (also inlined in the lesson shell's style.css)" },
+  "used_in": ["ss2-phy-ohms-law-circuits"]
+}

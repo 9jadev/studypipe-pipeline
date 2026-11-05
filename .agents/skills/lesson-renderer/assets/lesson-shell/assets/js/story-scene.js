@@ -273,7 +273,7 @@
   // createStory({ root, canvas, bubble, beats, onBeat })
   // =========================================================
   function createStory(o) {
-    var stage = SceneKit.createStage({ root: o.root, canvas: o.canvas, fov: 38, target: new THREE.Vector3(0, 1.2, 0), noOrbit: true, distance: 8, onFrame: frame });
+    var stage = SceneKit.createStage({ root: o.root, canvas: o.canvas, fov: 38, target: new THREE.Vector3(0, 1.2, 0), noOrbit: true, distance: 8, autoFit: false, zoomUi: false, portraitPitch: 0, onFrame: frame });
     if (!stage) return null;
     var scene = stage.scene, world = stage.rig;
     stage.renderer.toneMappingExposure = 0.82;

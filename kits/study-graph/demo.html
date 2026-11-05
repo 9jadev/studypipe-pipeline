@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: study-graph</title>
+<link rel="stylesheet" href="kit.css">
+<style>:root{--font-body:system-ui,sans-serif;--font-mono:ui-monospace,monospace}html,body{margin:0;background:#f5efe4}.wrap{max-width:520px;margin:16px auto;padding:0 16px}</style>
+</head><body>
+<div class="wrap"><div id="host"></div></div>
+<script src="kit.js"></script>
+<script>
+  window.StudyPipeKits["study-graph"].mount(document.getElementById("host"), {
+    x: { label: "Current I", unit: "A", min: 0, max: 3.5, step: 0.5 },
+    y: { label: "Terminal p.d. V", unit: "V", min: 0, max: 13, step: 2 },
+    series: [{ id: "cell", name: "12.0 V cell", tone: "teal", points: [[1, 10.8], [1.5, 10.2], [2, 9.6], [2.5, 9.0], [3, 8.4]],
+               fit: "line", extend: true, yIntercept: "E", slope: { dx: "ΔI", dy: "ΔV", name: "r = |gradient|", unit: "Ω", abs: true } }],
+    guides: [{ axis: "y", value: 12, tone: "pink", label: "E = 12.0 V" }]
+  }, { emit: function (n, d) { console.log("event", n, JSON.stringify(d)); } });
+</script>
+</body></html>

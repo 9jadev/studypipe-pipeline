@@ -1,5 +1,5 @@
 # QA report: topics/ss2-phy-simple-harmonic-motion
-date: 2026-11-03 16:19
+date: 2026-11-05 11:19
 verdict: PASS
 lessons checked: 5
 sections checked: 60
@@ -20,6 +20,7 @@ sections checked: 60
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-04-sort.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-06-concepts.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-07-neutralise.png
+- topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-08-examples.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-09-bridge.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-10-quiz.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-01-99-narrator-spotlight.png
@@ -28,6 +29,7 @@ sections checked: 60
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-04-sort.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-06-concepts.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-07-neutralise.png
+- topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-08-examples.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-09-bridge.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-10-quiz.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-02-99-narrator-spotlight.png
@@ -36,6 +38,7 @@ sections checked: 60
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-04-sort.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-06-concepts.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-07-neutralise.png
+- topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-08-examples.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-09-bridge.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-10-quiz.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-03-99-narrator-spotlight.png
@@ -44,6 +47,7 @@ sections checked: 60
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-04-sort.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-06-concepts.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-07-neutralise.png
+- topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-08-examples.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-09-bridge.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-10-quiz.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-04-99-narrator-spotlight.png
@@ -52,6 +56,7 @@ sections checked: 60
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-04-sort.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-06-concepts.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-07-neutralise.png
+- topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-08-examples.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-09-bridge.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-10-quiz.png
 - topics/ss2-phy-simple-harmonic-motion/qa/lesson-05-99-narrator-spotlight.png

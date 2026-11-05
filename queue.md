@@ -10,6 +10,6 @@ Create each topic first with `bash scripts/new-topic.sh <slug>` and add its sour
 - [x] ss2-phy-simple-harmonic-motion   (SHM, includes simple pendulum / determining g)
 - [ ] ss2-phy-refraction-glass-block
 - [ ] ss2-phy-ohms-law-circuits
-- [ ] ss1-bio-cell-structure
+- [x] ss1-bio-plant-animal-cell-structure
 - [ ] ss2-bio-heart-circulation
 - [ ] ss2-math-circle-theorems

@@ -24,7 +24,7 @@ Goal: write a complete, exam-rigorous assessment suite that tests every learning
   - `q`: question stem (may use `<strong>`, `<sub>`, `<sup>`)
   - `o`: array of 4 concise options
   - `a`: 0-based index of the correct option (`0`–`3`)
-  - `e`: clear 1–3 sentence explanation of *why* the correct answer is right and why the main distractor is wrong
+  - `e`: clear explanation of *why* the correct answer is right and why the main distractor is wrong. For every calculation question, include the full equation chain (`LHS = Formula = Substitution = Intermediate = Final Unit`) so `StudyMath` (`math-kit.js`) renders a step-by-step LaTeX calculation card with an explainer note underneath each step.
   - `src`: exam style tag (`"WAEC-style"`, `"NECO-style"`, `"JAMB-style"`, `"WAEC Practical"`)
 
 ### Part 2: Home Investigation & 30-Mark Written Assignment

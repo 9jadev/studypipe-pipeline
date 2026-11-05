@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 5 · WAEC Paper 3 Practical: Wet-Mount Microscopy &amp; Biological Drawing Clinic · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS1): Wet-Mount Slide Preparation (Onion & Cheek Cells), Cytological Stains, Field-of-View Calibration (D₂ = D₁·M₁/M₂), WAEC Drawing Rules, and Light vs Electron Microscopy.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23ffb23f'/%3E%3Cstop offset='1' stop-color='%233ee6c4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='18' width='44' height='28' rx='6' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(255,178,63,.18), rgba(62,230,196,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #ffb23f 0%, #38bdf8 25%, #3ee6c4 50%, #22c55e 75%, #a855f7 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l05">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 5 of 5 · <b>WAEC Paper 3 Microscopy &amp; Drawing Clinic</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Biology · Lesson 5 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>WAEC Paper 3 Practical: <em>Wet-Mount Microscopy &amp; Biological Drawing Clinic</em></h1>
+        <p class="question reveal">How do we prepare a bubble-free stained wet-mount slide of onion or cheek cells, calibrate the microscope’s field of view in micrometres, and score 10 / 10 on a WAEC Paper 3 biological drawing?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Describe the step-by-step protocol for preparing temporary wet mounts of <strong><em>Allium cepa</em> (onion epidermis in iodine)</strong> and <strong>human cheek cells (in methylene blue)</strong>, including lowering the coverslip at a <strong>45° angle</strong> with a mounting needle.</span></li>
+          <li><b>02</b><span>Explain the specific role of biological stains: <strong>iodine solution, methylene blue, acetocarmine/orcein, Sudan III, and eosin/phloroglucinol</strong>.</span></li>
+          <li><b>03</b><span>Calculate high-power <strong>field-of-view diameter D<sub>2</sub> = D<sub>1</sub> × (M<sub>1</sub> ÷ M<sub>2</sub>)</strong>, mean cell length <strong>A = D<sub>FOV</sub> ÷ N<sub>cells</sub></strong>, and drawing magnification <strong>M = I ÷ A</strong>.</span></li>
+          <li><b>04</b><span>Apply the official <strong>WAEC Biology Paper 3 Drawing Rubric</strong> (<code>Clarity of Lines CL, Size Sz, Neatness of Labels NL, Title, Magnification</code>) and avoid penalised faults (shading, feathery lines, arrowheads, crossed guidelines).</span></li>
+          <li><b>05</b><span>Contrast the <strong>Compound Light Microscope</strong> with the <strong>Transmission &amp; Scanning Electron Microscopes (TEM / SEM)</strong> across magnification, resolution, lenses, vacuum, and specimen state.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <!-- WAEC Biological Drawing Diagram with Ruled Horizontal Guidelines (No Arrowheads!) -->
+          <rect x="28" y="42" width="144" height="120" rx="6" fill="none" stroke="#f5efe4" stroke-width="2.2"/>
+          <rect x="33" y="47" width="134" height="110" rx="4" fill="rgba(255,178,63,0.08)" stroke="#f5efe4" stroke-width="1.4"/>
+          <rect x="48" y="62" width="96" height="80" rx="10" fill="none" stroke="#3ee6c4" stroke-width="1.4"/>
+          <circle cx="154" cy="102" r="10" fill="none" stroke="#ffb23f" stroke-width="2"/>
+          <circle cx="154" cy="102" r="3" fill="#ffb23f"/>
+
+          <!-- Ruled horizontal label lines (no arrowheads!) -->
+          <line x1="172" y1="54" x2="218" y2="54" stroke="#3ee6c4" stroke-width="1.5"/>
+          <text x="222" y="58" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="10">Cellulose cell wall</text>
+
+          <line x1="164" y1="102" x2="218" y2="102" stroke="#3ee6c4" stroke-width="1.5"/>
+          <text x="222" y="106" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="10">Nucleus (stained)</text>
+
+          <line x1="144" y1="132" x2="218" y2="132" stroke="#3ee6c4" stroke-width="1.5"/>
+          <text x="222" y="136" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="10">Central sap vacuole</text>
+
+          <text x="160" y="196" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Drawing of Onion Epidermal Cell (×1200)</text>
+          <text x="160" y="224" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">D₂ = D₁ × (M₁ ÷ M₂) &nbsp;·&nbsp; A = D_FOV ÷ N</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Staining &amp; rules sort</a></li>
+        <li><a href="#practical">3D wet-mount bench</a></li>
+        <li><a href="#concepts">Stains, FOV &amp; rubric</a></li>
+        <li><a href="#neutralise">3D drawing &amp; EM zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">Drawing clinic</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Spaced Retrieval · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1–4</em></h2>
+        <p class="intro">Four quick retrieval cards on total microscope magnification, plant vs animal cell boundaries, plasmolysis, and percentage mass change.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>Tunde’s Mock Practical Mystery: <em>Air Bubbles, Stains &amp; WAEC Drawing Marks</em></h2>
+        <p class="intro">Why did Tunde’s first onion wet-mount show giant black rings, and why did his artistic shaded drawing lose half its marks in the WAEC Paper 3 mock practical?</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Tunde, Mama Titi, and Dr. Kunle preparing a bubble-free 45-degree wet-mount slide and auditing a WAEC Paper 3 biological drawing."></canvas>
+            <div class="stage-label"><i></i>3D story · Wet-Mount Technique &amp; WAEC Drawing Clinic</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Mock Practical Trouble:</strong> Tunde shows Mama Titi his mock practical sheet: <em>“When I mounted an onion peel yesterday, all I saw were giant black circles, and my drawing scored only 3 out of 10!”</em></p>
+            <p><strong>Scene 2 · Alhaji Musa’s Fine-Art habit:</strong> <em>“Didn't you shade the nucleus dark with your pencil and put arrowheads on the label lines?”</em></p>
+            <p><strong>Scene 3 · Mama Titi’s WAEC Warning:</strong> <em>“Those black circles were air bubbles trapped because you dropped the coverslip flat! And in WAEC Biology, shading and arrowheads on guidelines are strictly penalised!”</em></p>
+            <p><strong>Scene 4 · 45° Coverslip &amp; Specific Stains:</strong> Lower the coverslip at a <code>45°</code> angle with a mounting needle; stain onion epidermis with <strong>iodine solution</strong> and human cheek cells with <strong>methylene blue</strong>.</p>
+            <p><strong>Scene 5 · Field-of-View Calibration:</strong> Switching from <code>×100</code> to <code>×400</code> shrinks the field-of-view diameter four times from <code>1800 µm</code> to <code>450 µm</code>; dividing by <code>6 cells</code> gives actual cell length <code>A = 75 µm</code>.</p>
+            <p><strong>Scene 6 · Yaba Practical Clinic:</strong> Dr. Kunle guides us through the 3D Wet-Mount Bench and upgrades Tunde’s biological drawing to <code>10/10</code>.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">What makes a perfect wet-mount slide and a full-mark WAEC Paper 3 biological drawing? Pin your question or prediction below.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="To avoid trapping air bubbles under a coverslip, I should…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Why do air bubbles look like dark-rimmed circles?</button>
+            <button type="button">Why are arrowheads forbidden on WAEC label lines?</button>
+            <button type="button">How does field-of-view diameter change from ×100 to ×400?</button>
+            <button type="button">Why can't an electron microscope view living cells?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
+        <h2>Cytological Stains, WAEC Drawing Rules &amp; <em>Penalised Faults Sort</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Wet-Mount &amp; Staining Protocol</strong>, <strong>Mandatory WAEC Drawing Rules</strong>, and <strong>Disallowed WAEC Faults</strong> (that lose marks).</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Wet-Mount and Staining Protocol bin">
+              <h4><i></i>Wet-Mount &amp; Stains</h4>
+              <small>iodine · methylene blue · 45° coverslip</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#22c55e" tabindex="0" role="button" aria-label="Mandatory WAEC Drawing Rules bin">
+              <h4><i></i>WAEC Drawing Rules</h4>
+              <small>sharp HB · double wall · ruled lines · ×Mag</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#f43f5e" tabindex="0" role="button" aria-label="Disallowed WAEC Faults bin">
+              <h4><i></i>Disallowed WAEC Faults</h4>
+              <small>shading · feathery lines · arrowheads · bubbles</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Wet-Mount &amp; Field-of-View Calibration Bench · 15 min</span>
+        <h2>3D Wet-Mount Slide Bench: <em>45° Coverslip &amp; Field-of-View Cell Sizing</em></h2>
+        <p class="intro">Watch the 3D wet-mount preparation on the left (specimen peel, stain dropper, and <code>45°</code> coverslip lowering) and the calibrated microscope field of view on the right. Tap Trials A–E (<code>×40 to ×600</code>) to measure <strong>Field-of-View Diameter D<sub>FOV</sub> (µm)</strong>, count how many cells fit end-to-end across the diameter (<strong>N<sub>cells</sub></strong>), and verify actual cell length <strong>A = D<sub>FOV</sub> ÷ N<sub>cells</sub> = 75 µm</strong>!</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>WAEC Paper 3 Wet-Mount Precautions:</strong> (1) Peel a <strong>single-cell-thick translucent inner epidermis</strong> so light passes clearly through without overlapping cell layers. (2) Keep the peel flat in a drop of water/stain so it does not fold over on itself. (3) <strong>Lower the coverslip slowly at a 45° angle using a mounting needle</strong> to expel air bubbles. (4) <strong>Blot excess stain</strong> around the coverslip edges with filter paper before placing the slide on the microscope stage.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Strip monolayer &amp; mount flat</h4><p>Use forceps to peel the translucent inner epidermis from a fleshy onion scale leaf and lay it flat in a drop of water.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Add stain &amp; lower coverslip at 45°</h4><p>Add a drop of iodine solution (or methylene blue for cheek cells) and lower the coverslip at <code>45°</code> with a mounting needle.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Calibrate FOV: D₂ = D₁ × (M₁ ÷ M₂)</h4><p>At <code>×100</code>, field diameter is <code>1.8 mm = 1800 µm</code>. At <code>×400</code>, diameter shrinks 4× to <code>450 µm</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Compute A = D<sub>FOV</sub> ÷ N<sub>cells</sub></h4><p>Divide the field diameter <code>D_FOV</code> by the number of cells <code>N</code> spanning the diameter to get mean cell length <code>A</code>.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Wet-Mount Slide Preparation Bench showing glass slide, iodine dropper, 45-degree coverslip lowering, and calibrated microscope field of view."></canvas>
+            <div class="stage-label"><i></i>3D Wet-Mount &amp; FOV Bench · drag to rotate · tap magnifications A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D wet-mount bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Slide preparation condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Onion + Iodine (45° Slip · A = 75 µm)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Cheek + Methylene Blue (A = 45 µm)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Dropped Flat (Air Bubble Artefact!)</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · ×40 (D = 4500 µm)</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · ×100 (D = 1800 µm)</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · ×200 (D = 900 µm)</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · ×400 (D = 450 µm)</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · ×600 (D = 300 µm)</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 FOV calibrations</span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="vi-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots as you switch lenses</span><h4>Field-of-View Diameter D (µm) against Total Magnification M (×)</h4></div>
+            <span class="gc-badge wait" id="vi-badge">0 points</span>
+          </div>
+          <div id="vi-graph"></div>
+          <div class="gc-stats" id="vi-stats"></div>
+          <p class="gc-note" id="vi-note"></p>
+        </div>
+
+        <h3>Record your Field-of-View Calibration &amp; Cell Size readings</h3>
+        <p>As you test Trials A–E on the 3D bench, select the matching <strong>Field-of-View Diameter D (µm)</strong>, <strong>Number of Onion Cells N Across Diameter</strong>, and calculated <strong>Mean Cell Length A = D ÷ N (µm)</strong> below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Total Mag. M</th>
+                <th>FOV Diameter D (µm)</th>
+                <th>Cells Across Diameter N</th>
+                <th>Mean Cell Length A = D ÷ N (µm)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC table &amp; Field-of-View calculation <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>Total Mag. M</th><th>FOV Diameter D (µm)</th><th>Onion Cells Across N</th><th>Mean Length A = D ÷ N (µm)</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>×40</td><td>4500</td><td>60.0</td><td>75.0 µm</td></tr>
+                  <tr><td>B</td><td>×100</td><td>1800</td><td>24.0</td><td>75.0 µm</td></tr>
+                  <tr><td>C</td><td>×200</td><td>900</td><td>12.0</td><td>75.0 µm</td></tr>
+                  <tr><td>D</td><td>×400</td><td>450</td><td>6.0</td><td>75.0 µm</td></tr>
+                  <tr><td>E</td><td>×600</td><td>300</td><td>4.0</td><td>75.0 µm</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Field-of-View Diameter at ×400 and Mean Cell Length A:</strong></p>
+            <div class="eq light">D_400 = 1800 × (100 ÷ 400) = 450 µm &nbsp;&nbsp;⇒&nbsp;&nbsp; A = 450 ÷ 6 = 75.0 µm</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l05-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC Paper 3 practical questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why does the number of onion cells visible across the diameter drop from <code>24 cells</code> at <code>×100</code> down to <code>6 cells</code> at <code>×400</code>?</li>
+            <li>How can a student immediately tell the difference between a true cell nucleus and a trapped air bubble under the microscope?</li>
+            <li>State two reasons why a biological specimen is stained before viewing under a light microscope.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Increasing magnification 4 times (<code>×100 → ×400</code>) zooms in on a 4-times narrower diameter of the slide (<code>1800 µm → 450 µm</code>), so only one-quarter as many cells fit across the diameter (<code>24 ÷ 4 = 6 cells</code>).</li>
+                <li>An <strong>air bubble</strong> is perfectly circular with a thick, dark black refractive rim and an empty bright centre, whereas a <strong>stained nucleus</strong> is oval/spherical with granular chromatin, a nucleolus, and a specific stain colour (yellow-brown in iodine or dark blue in methylene blue).</li>
+                <li>1. Most cell structures (cytoplasm, nucleus, tonoplast) are nearly transparent; staining <strong>increases optical contrast</strong> so they become clearly visible.<br>2. Differential stains <strong>chemically identify specific cell components</strong> (e.g., iodine turns starch grains blue-black; acetocarmine stains chromosomes red).</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Wet-Mount Staining, WAEC Drawing Rubric &amp; <em>Light vs Electron Microscopes</em></h2>
+        <p class="intro">Everything you need to score full marks in WAEC/NECO Biology Paper 3 Practical and JAMB microscopy questions.</p>
+
+        <h3 id="def-shm">1 · Cytological Stains &amp; Their Specific Targets</h3>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Stain / Reagent</th><th>Target Specimen / Structure</th><th>Colour Produced &amp; Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Iodine Solution ($\text{I}_2/\text{KI}$)</strong></td><td>Onion epidermis, yam/potato cells, <em>Spirogyra</em></td><td>Stains <strong>starch grains</strong> (amyloplasts/pyrenoids) <strong>blue-black</strong>; stains <strong>nucleus and cellulose cell wall</strong> <strong>yellowish-brown / amber</strong>.</td></tr>
+              <tr><td><strong>Methylene Blue</strong></td><td>Human cheek epithelial cells, blood smears, yeast</td><td>Basic dye that stains the acidic <strong>nucleus (DNA/RNA) dark blue</strong> and cytoplasm pale blue.</td></tr>
+              <tr><td><strong>Acetocarmine / Aceto-orcein</strong></td><td>Onion root-tip squash, <em>Tradescantia</em> anthers</td><td>Stains <strong>chromosomes and chromatin</strong> deep <strong>crimson / purplish-red</strong> for mitosis and meiosis studies.</td></tr>
+              <tr><td><strong>Phloroglucinol + Conc. HCl (or Safranin)</strong></td><td>Transverse sections of dicot/monocot stems &amp; roots</td><td>Stains <strong>lignified xylem cell walls</strong> and sclerenchyma bright <strong>red / magenta</strong>.</td></tr>
+              <tr><td><strong>Eosin Solution</strong></td><td>Plant shoots (transpiration stream) &amp; cytoplasm</td><td>Acidic dye that stains <strong>cytoplasm and cellulose pink/red</strong> and traces water transport up xylem vessels.</td></tr>
+              <tr><td><strong>Sudan III (or Osmic Acid)</strong></td><td>Oil-storage cells (elaioplasts, groundnut/castor seed)</td><td>Stains <strong>lipid / fat droplets</strong> bright <strong>red</strong> (black with osmic acid).</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="def-terms">2 · Official WAEC Paper 3 Biological Drawing Rubric</h3>
+        <p>When WAEC or NECO examiners mark a biological drawing (typically <code>8–12 marks</code>), they award marks strictly under five headings:</p>
+        <ol>
+          <li><strong>Clarity of Lines (CL — 2 marks):</strong> Use a <strong>sharp HB or 2H pencil</strong>. All outlines must be <strong>thin, single, sharp, continuous, and completely joined</strong>. Never sketch with feathery, broken, or overlapping lines. Draw a <strong>double line</strong> to show the thickness of a plant cell wall; draw a <strong>single line</strong> for an animal plasma membrane or tonoplast. <strong>Never shade, paint, or cross-hatch</strong> (use sparse stippling dots only where granular cytoplasm is required).</li>
+          <li><strong>Size of Drawing (Sz — 1 mark):</strong> The drawing must be reasonably large — normally <strong>at least 6 cm to 10 cm long</strong> (occupying about one-third to half of the answer space) so internal structures are never cramped.</li>
+          <li><strong>Accuracy &amp; Proportionality (1–2 marks):</strong> Draw what you actually observe (e.g., brick/hexagonal shape and peripheral nucleus for onion epidermis; irregular shape and central nucleus for cheek cell). Never draw stylized textbook cartoons or trapped air bubbles.</li>
+          <li><strong>Neatness of Labels / Guidelines (NL — 2–4 marks):</strong>
+            <ul>
+              <li>Rule all label lines with a <strong>straight ruler</strong> (never freehand).</li>
+              <li>Make label lines <strong>horizontal and parallel</strong> wherever possible.</li>
+              <li><strong>Never cross</strong> two label lines.</li>
+              <li><strong>Never put arrowheads</strong> at the end of label lines — the line must simply touch the exact structure being named.</li>
+              <li>Write labels horizontally in neat print at the end of the guideline (never write on top of the guideline).</li>
+            </ul>
+          </li>
+          <li><strong>Title &amp; Linear Magnification (2 marks):</strong> Write a clear, underlined title below the drawing (e.g., <em><u>Drawing of a Stained Onion Epidermal Cell as Seen Under High Power</u></em>) followed by the calculated linear magnification (e.g., <strong>×800</strong> or <strong>×1200</strong>).</li>
+        </ol>
+
+        <h3>3 · Field-of-View Calibration &amp; Drawing Magnification Equations</h3>
+        <div class="eq" id="eq-shm" data-hook>D_2 = D_1 × (M_1 ÷ M_2) = 1800 × (100 ÷ 400) = 1800 × 0.25 = 450 µm</div>
+        <div class="eq" id="eq-omega">A = D_FOV ÷ N_cells = 450 ÷ 6 = 75 µm</div>
+        <div class="eq" id="eq-vel">M_drawing = I ÷ A = (90 × 1000) ÷ 75 = 90000 ÷ 75 = 1200×</div>
+
+        <div class="callout big reveal" id="all-alkalis">
+          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up and perform the <strong>WAEC Paper 3 Drawing Check</strong> in the air! (1) Trace one large, smooth, continuous rectangle in the air with one finger (Sharp HB single continuous line — no feathery strokes!). (2) Trace a second parallel rectangle right around it (Double line for the plant cellulose cell wall!). (3) Draw three straight horizontal lines out to the right with your ruler hand — and hold up your palm to say <em>“No arrowheads, no shading!”</em></p>
+        </div>
+
+        <h3 id="props">4 · Compound Light Microscope vs Electron Microscope (TEM &amp; SEM)</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Compound Light Microscope</th><th>Electron Microscope (TEM / SEM)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Illuminating Radiation</strong></td><td>Beam of <strong>visible light</strong> ($\lambda \approx 400–700\text{ nm}$)</td><td>Beam of high-speed <strong>electrons</strong> ($\lambda &lt; 0.005\text{ nm}$)</td></tr>
+              <tr><td><strong>Focusing Lenses</strong></td><td><strong>Optical glass lenses</strong> (condenser, objective, eyepiece)</td><td><strong>Electromagnetic lenses</strong> (magnetic coils)</td></tr>
+              <tr><td><strong>Maximum Useful Magnification</strong></td><td>Low: <strong>×1,000 to ×1,500</strong></td><td>Very high: <strong>×250,000 to ×500,000+</strong></td></tr>
+              <tr><td><strong>Resolving Power (Resolution Limit)</strong></td><td>Low resolution (~<strong>200 nm</strong> or $0.2\text{ }\mu\text{m}$)</td><td>~1,000× finer resolution (~<strong>0.2 nm</strong>)</td></tr>
+              <tr><td><strong>Condition of Specimen</strong></td><td>Can examine <strong>both living and dead specimens</strong> (e.g., swimming <em>Paramecium</em>, cytoplasmic streaming)</td><td>Can examine <strong>only dead, dehydrated specimens</strong> because the chamber must be kept under a <strong>high vacuum</strong></td></tr>
+              <tr><td><strong>Staining &amp; Image Colour</strong></td><td>Coloured biological dyes (iodine, methylene blue); produces <strong>natural or stained colour images</strong> seen directly by the eye</td><td>Heavy-metal salts (lead, uranium, osmium tetroxide); produces <strong>black-and-white (monochrome) images</strong> on a fluorescent screen or digital detector</td></tr>
+              <tr><td><strong>What Can Be Seen?</strong></td><td>Cell wall, plasma membrane, cytoplasm, nucleus, nucleolus, large vacuoles, chloroplasts, large mitochondria</td><td>All of the above PLUS <strong>ultrastructure</strong>: <code>70S/80S</code> ribosomes, ER, Golgi, lysosomes, cristae, thylakoid grana, nuclear pores, and <strong>viruses</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Wet-Mount, Staining, FOV &amp; Microscopy Explorer</h3>
+        <p>Tap any pin from 1 to 5 below to review wet-mount technique, stains, FOV math, WAEC drawing rules, and electron microscopy:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Wet-Mount Prep (45° &amp; Stains)</div><div>FOV Math &amp; WAEC Rubric</div><div>Electron Microscopy (0.2 nm) →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect WAEC practical rules and microscopy comparisons.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. 3D DRAWING & EM ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Specimen &amp; EM Resolution Stage</span>
+        <h2>3D Practical Stage: <em>Onion Wet Mount (Double Wall) vs Cheek Smear (Single Line) vs TEM Ultrastructure</em></h2>
+        <p class="intro">Switch between the <strong>Iodine-stained Onion Epidermal Cell</strong> (double-line cellulose wall, peripheral nucleus, central vacuole), the <strong>Methylene-Blue Cheek Cell</strong> (single-line membrane, central nucleus), and the <strong>Transmission Electron Microscope Ultrastructure</strong> view!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D comparison of an iodine-stained onion epidermal cell, a methylene-blue human cheek cell, and a transmission electron microscope ultrastructure model."></canvas>
+            <div class="stage-label"><i></i>3D Wet-Mount &amp; EM Stage · drag to rotate</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D stage couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Microscopy view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Onion + Iodine (Double Wall)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Cheek + Meth. Blue (Single Line)</button>
+              <button type="button" data-mode="base" aria-pressed="false">TEM Ultrastructure (0.2 nm)</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Verify WAEC Drawing Rubric (10/10)</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset stage</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#3ee6c4"></i>Max Mag<b data-c="h">×1,500</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Resolution<b data-c="oh">200 nm</b></span>
+              <span class="counter"><i style="--c:#7cc4ff"></i>Stain<b data-c="na">Iodine</b></span>
+              <span class="counter"><i style="--c:#22c55e"></i>State<b data-c="cl">Living/Wet</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>Outline<b data-c="w">Double Line</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Every calculation is expanded step by step in LaTeX with a plain-English explainer note underneath.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Complete Field-of-View Calibration, Mean Cell Size &amp; Drawing Magnification</h4></div>
+          <div class="example-body">
+            <p class="q">Using a transparent millimetre ruler at low power (×100), a student measures the circular field-of-view diameter of her microscope as D₁ = 1.8 mm. She then switches to high power (×400) and counts 6 onion epidermal cells fitting end-to-end across the diameter. Finally, she draws one onion cell measuring 90 mm in length. Calculate: (a) the low-power field diameter in µm, (b) the high-power (×400) field diameter D₂ in µm, (c) the mean actual length A of one onion cell in µm, and (d) the linear magnification M of her biological drawing.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Convert low-power field diameter D₁ from mm to µm:</strong> <code>D_1 = 1.8 × 1000 = 1800 µm</code>.</li>
+              <li><strong>Part (b) — High-power (×400) field-of-view diameter D₂:</strong> <code>D_2 = 1800 × (100 ÷ 400) = 1800 × 0.25 = 450 µm</code>.</li>
+              <li><strong>Part (c) — Mean actual length A of one onion cell:</strong> <code>A = D_2 ÷ N_cells = 450 ÷ 6 = 75 µm</code>.</li>
+              <li><strong>Part (d) Step 1 — Convert drawing length I from mm to µm:</strong> <code>I = 90 × 1000 = 90000 µm</code>.</li>
+              <li><strong>Part (d) Step 2 — Calculate linear magnification M of the drawing:</strong> <code>M = I ÷ A = 90000 ÷ 75 = 1200×</code>.</li>
+            </ol>
+            <div class="answer-line">(a) D₁ = 1800 µm &nbsp;·&nbsp; (b) D₂ = 450 µm &nbsp;·&nbsp; (c) A = 75 µm &nbsp;·&nbsp; (d) Drawing Mag. = ×1200</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Estimating Human Cheek Cell Diameter from Field of View</h4></div>
+          <div class="example-body">
+            <p class="q">Across the same ×400 field of view (D₂ = 450 µm), a student observes that 10 human cheek epithelial cells would fit end-to-end across the diameter. She makes a biological drawing of one cheek cell measuring 63 mm across. Calculate: (a) the actual diameter A of one cheek cell in µm, and (b) the magnification of her drawing.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Actual diameter A of one cheek cell:</strong> <code>A = 450 ÷ 10 = 45 µm</code>.</li>
+              <li><strong>Part (b) Step 1 — Convert drawing width I from mm to µm:</strong> <code>I = 63 × 1000 = 63000 µm</code>.</li>
+              <li><strong>Part (b) Step 2 — Calculate drawing magnification M:</strong> <code>M = 63000 ÷ 45 = 1400×</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Cheek cell diameter A = 45 µm &nbsp;·&nbsp; (b) Drawing Magnification = ×1400</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Comparing Light Microscope vs Electron Microscope Resolution Factor</h4></div>
+          <div class="example-body">
+            <p class="q">A school compound light microscope has a resolution limit of d_light = 200 nm, whereas a transmission electron microscope has a resolution limit of d_TEM = 0.2 nm. How many times finer is the resolving power of the transmission electron microscope compared with the light microscope?</p>
+            <ol class="steps-sol">
+              <li><strong>Divide the light resolution limit by the TEM resolution limit:</strong> <code>Factor = d_light ÷ d_TEM = 200 ÷ 0.2 = 1000</code>.</li>
+            </ol>
+            <div class="answer-line">The TEM has a 1000 times finer resolving power than the light microscope</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>WAEC Paper 3 Drawing Clinic: <em>upgrade Tunde’s drawing from 3/10 to 10/10!</em></h2>
+        <p class="intro">Audit Tunde’s mock drawing of a <code>75 µm</code> onion epidermal cell (drawn <code>90 mm</code> long) and apply the WAEC Paper 3 marking scheme across Steps 1, 2, and 3.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>WAEC Chief Examiner Standard <small style="color:var(--muted);font-weight:500">· CL + Sz + NL + Title + Mag</small></h4>
+              <div class="clock-well">
+                <div style="width:82px;height:52px;border-radius:4px;border:3px double #3ee6c4;background:rgba(62,230,196,.12);display:flex;align-items:center;justify-content:center;font-size:11px;color:#ccfbf1">Double Wall</div>
+              </div>
+              <div class="vt-count"><span id="time-a">Sharp HB · Ruled Lines · ×1200</span><small>zero shading, zero arrows</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Tunde's Practical Script <small style="color:var(--muted);font-weight:500" id="len-b-label">· Shaded nucleus, feathery lines, arrows</small></h4>
+              <div class="clock-well">
+                <div style="width:82px;height:52px;border-radius:4px;border:2px dashed #f43f5e;background:rgba(244,63,94,.18);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fecdd3">Audit Script</div>
+              </div>
+              <div class="vt-count"><span id="time-b">Score: 3 / 10 (Penalised!)</span><small>click Step 1 to fix</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Fix Outlines: Sharp HB + Double Wall + No Shading</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Fix Labels: Ruled Horizontal Lines, No Arrows</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Add Title &amp; Magnification (90,000 ÷ 75 = ×1200)</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset audit</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">Audit Tunde's draft drawing (90 mm long for a 75 µm onion cell) and upgrade it to 10/10. Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 5 (and the Complete Unit):</strong> From Robert Hooke’s 1665 cork chambers to modern <code>0.2 nm</code> electron microscopy, cell biology links invisible ultrastructure to everyday life — explaining why <em>ugu</em> leaves stand turgid in fresh water, why salted fish resists decay, why hospitals use <code>0.9%</code> saline, and how a <code>45°</code> coverslip, specific stains, and clean unshaded HB pencil lines earn full marks in WAEC Paper 3!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 5.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can describe how to prepare bubble-free stained wet mounts of onion epidermis and cheek cells.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can match iodine, methylene blue, acetocarmine, Sudan III, and phloroglucinol to the structures they stain.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate field-of-view diameter D₂ = D₁(M₁/M₂), mean cell length A = D/N, and drawing magnification M = I/A.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can apply all 5 WAEC Paper 3 biological drawing rules and avoid shading, feathery lines, and arrowheads.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can contrast a compound light microscope with an electron microscope across 6 features.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l05-exit">
+          <div class="aq-top"><h4>In two sentences: why is the coverslip lowered at a 45° angle with a mounting needle during wet-mount preparation, and what four errors must you never make on a WAEC Paper 3 biological drawing?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Lowering the coverslip gently at a 45° angle allows the stain/water front to push air out sideways so no dark-rimmed air bubbles are trapped over the cells <b>(1)</b>. On a WAEC biological drawing, you must never shade/colour, never use feathery/broken outline strokes, never cross label lines, and never put arrowheads on label lines <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>WAEC Paper 3 Wet-Mount &amp; Biological Drawing</em></h2>
+        <p class="intro">Complete Part A (8–10 cm biological drawing practice) and Part B (30-mark structured WAEC practical paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · WAEC Paper 3 Drawing Practice on Unlined Paper</h3>
+        <div class="aq" data-answer="l05-a1">
+          <div class="aq-top"><h4>Using a sharp HB pencil and a ruler on plain white paper, make a large labelled biological drawing (8 cm to 10 cm long) of two adjacent stained onion epidermal cells. Measure your drawing length I in mm, assume actual cell length A = 75 µm, calculate the magnification M = I ÷ A, and write the title and magnification below your drawing. List the 5 checklist points you verified.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Record your drawing length I (mm), magnification calculation, and 5 checklist items verified…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <p>For a drawing length <code>I = 90 mm = 90000 µm</code> and actual cell length <code>A = 75 µm</code>: <code>M = 90000 ÷ 75 = ×1200</code>.<br>
+              <strong>5 Checklist Points Verified:</strong> (1) Sharp HB single continuous lines with no shading. (2) Double line drawn for the cellulose cell wall and plasmodesmata pits shown. (3) Drawing size is <code>9.0 cm</code> (between 8 and 10 cm). (4) Horizontal ruler-drawn label lines without arrowheads touching <em>Cellulose cell wall, Plasma membrane, Cytoplasm, Nucleus, Tonoplast, Central sap vacuole</em>. (5) Title and magnification (<code>×1200</code>) written neatly below.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l05-b1">
+          <div class="aq-top"><h4>1. (a) Describe step by step how you would prepare a temporary stained wet mount of onion epidermal cells for examination under a compound microscope [6 marks]. (b) State four precautions you would take during the preparation and viewing of the slide [4 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) 1. Place a clean glass microscope slide on the bench and put a drop of water in the centre <b>(1)</b>. 2. Cut a fleshy scale leaf from an onion bulb and use forceps to peel off a thin, translucent strip of the inner epidermis <b>(1)</b>. 3. Spread the epidermal peel flat in the drop of water using a mounting needle <b>(1)</b>. 4. Add one drop of iodine solution to stain the cells <b>(1)</b>. 5. Hold a clean glass coverslip at a 45° angle with its edge touching the drop and lower it gently using a mounting needle <b>(1)</b>. 6. Blot any excess stain around the coverslip edges with filter paper and clip the slide onto the microscope stage, starting with the low-power (×4 or ×10) objective lens <b>(1)</b>.<br>
+            (b) <strong>Precautions (past tense):</strong> 1. <em>“I lowered the coverslip gently at an angle of 45° using a mounting needle to avoid trapping air bubbles.”</em> <b>(1)</b> 2. <em>“I ensured the epidermal strip was spread flat and not folded on the slide.”</em> <b>(1)</b> 3. <em>“I blotted excess iodine stain around the coverslip with filter paper to keep the stage and lenses clean.”</em> <b>(1)</b> 4. <em>“I used only the fine adjustment knob when focusing under the high-power objective lens.”</em> <b>(1)</b></p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b2">
+          <div class="aq-top"><h4>2. (a) State five rules that must be obeyed to earn full marks in a WAEC Biology Paper 3 diagram [5 marks]. (b) Tabulate five differences between a compound light microscope and a transmission electron microscope [5 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) 1. Draw sharp, thin, single, continuous outlines with a sharp HB/2H pencil (no feathery lines) <b>(1)</b>. 2. Do not shade, paint, or cross-hatch any part of the drawing <b>(1)</b>. 3. Make the drawing large (at least 6–10 cm long) and proportional <b>(1)</b>. 4. Rule horizontal, uncrossed label lines with a ruler and never put arrowheads on them <b>(1)</b>. 5. Write a clear title and the linear magnification (e.g., ×800) below the drawing <b>(1)</b>.<br>
+            (b) 1. <strong>Radiation source:</strong> Visible light vs Electron beam <b>(1)</b>. 2. <strong>Lenses:</strong> Glass optical lenses vs Electromagnetic lenses <b>(1)</b>. 3. <strong>Resolving power:</strong> Low (~200 nm) vs Very high (~0.2 nm) <b>(1)</b>. 4. <strong>Maximum magnification:</strong> ~×1,500 vs ~×500,000 <b>(1)</b>. 5. <strong>Specimen state:</strong> Living or dead specimens in air/water vs Only dead dehydrated specimens in a vacuum <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b3">
+          <div class="aq-top"><h4>3. At ×100 magnification, the diameter of the circular field of view of a microscope is 2.0 mm. (a) Convert this diameter to micrometres (µm) [2 marks]. (b) Calculate the diameter of the field of view when the student switches to ×400 magnification [3 marks]. (c) At ×400 magnification, 8 epidermal cells fit end-to-end across the diameter. Calculate the actual length A of one cell in µm [2 marks]. (d) If the student draws one cell measuring 75 mm in length, calculate the magnification of her drawing [3 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) … (d) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Low-power field diameter in µm: <code>D_1 = 2.0 × 1000 = 2000 µm</code> <b>(2)</b>.<br>
+            (b) High-power (×400) field diameter: <code>D_2 = 2000 × (100 ÷ 400) = 2000 × 0.25 = 500 µm</code> <b>(3)</b>.<br>
+            (c) Mean actual length of one cell: <code>A = 500 ÷ 8 = 62.5 µm</code> <b>(2)</b>.<br>
+            (d) Convert drawing length to µm: <code>I = 75 × 1000 = 75000 µm</code> <b>(1)</b>. Drawing magnification: <code>M = 75000 ÷ 62.5 = 1200×</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-04/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 4: Osmosis, Turgor &amp; Haemolysis</a>
+          <a class="btn btn-tour" href="../../index.html">Back to Unit Welcome Hub (All 5 Lessons Complete!) →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/cell-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

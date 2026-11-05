@@ -26,13 +26,18 @@ topics/<slug>/html/
 │   │   ├── fonts.css
 │   │   ├── style.css                 # Unit Welcome Hub & shared editorial tokens
 │   │   ├── lesson.css                # 5-phase lesson layout & inquiry widgets
-│   │   └── narrator.css              # Spotlight, pointer cue, sparkles, dock UI
+│   │   ├── narrator.css              # Spotlight, pointer cue, sparkles, dock UI
+│   │   └── math.css                  # Offline LaTeX typesetting & step-by-step calculation cards
 │   └── js/
 │       ├── three.min.js              # three.js r160 + OrbitControls
-│       ├── scene-kit.js              # Shared 3D studio lighting, procedural textures, label pills
+│       ├── scene-kit.js              # Shared 3D studio lighting, procedural textures, label pills, auto-framing,
+│       │                             #   phone canvas sizing, pinch/zoom + recentre buttons
+│       ├── study-graph.js            # Shared live SVG graph plotter (window.StudyGraph): ticks, units, best-fit,
+│       │                             #   slope triangle, intercepts, theory curves, live marker
 │       ├── story-scene.js            # Shared 3D Nigerian character & story stage builder
 │       ├── lesson-kit.js             # Shared inquiry widgets (Do Now, Wonder Wall, Quiz, Rubric, Locked Solutions)
 │       ├── narrator.js               # Nigerian English (en-NG priority) spotlight narrator engine
+│       ├── math-kit.js               # Offline LaTeX renderer & atomic step-by-step calculation explainer (window.StudyMath)
 │       ├── welcome.js                # Welcome Hub tabs, scroll-reveal, myth flip cards
 │       ├── welcome-lab.js            # Welcome Hub Hero 3D Lab (window.StudyLab)
 │       ├── welcome-narration.js      # Welcome Hub guided tour script (window.NARRATION)
@@ -55,7 +60,7 @@ topics/<slug>/html/
 ## Procedure
 1. Verify that `topics/<slug>/04-review.md` has `verdict: PASS`.
 2. Copy the shared design system & engine into `topics/<slug>/html/assets/`:
-   - Copy `.agents/skills/lesson-renderer/assets/lesson-shell/assets/` → `topics/<slug>/html/assets/` (`fonts/`, `css/`, `js/scene-kit.js`, `js/lesson-kit.js`, `js/story-scene.js`, `js/narrator.js`, `js/welcome.js`).
+   - Copy `.agents/skills/lesson-renderer/assets/lesson-shell/assets/` → `topics/<slug>/html/assets/` (`fonts/`, `css/`, `js/scene-kit.js`, `js/study-graph.js`, `js/lesson-kit.js`, `js/story-scene.js`, `js/narrator.js`, `js/welcome.js`).
    - Copy `kits/_vendor/three-bundle.min.js` → `topics/<slug>/html/assets/js/three.min.js`.
 3. Build the **Unit Welcome Hub (`topics/<slug>/html/index.html`)** + `assets/js/welcome-lab.js` + `assets/js/welcome-narration.js`:
    - Top `.nav` with unit brand, anchor links (`#mystery`, `#journey`, `#explorer`, `#master`, `#method`), and `Offline ready` pill.
@@ -70,5 +75,15 @@ topics/<slug>/html/
    - Exposes `window.RETRIEVAL_BANK = { l01: { title, donow, quiz, recall }, l02: { ... }, ... }` so every lesson can pull *Do Now* retrieval questions from prerequisites (`from: 0`) and earlier lessons (`from: 1`, `from: 2`, etc.).
 5. Build **every individual lesson (`topics/<slug>/html/lessons/lesson-01/` … `lesson-0N/`)**:
    - Each lesson folder contains `index.html`, `data.js`, `story.js`, `bench.js`, `zoom.js`, `lesson.js`, and `narration.js`.
-   - Inside `lessons/lesson-0X/index.html`, reference shared assets via `../../assets/css/*.css` and `../../assets/js/*.js` (`three.min.js`, `scene-kit.js`, `story-scene.js`, `lesson-kit.js`, `retrieval-bank.js`, `narrator.js`), and link the top nav & footer prev/next buttons to `../../index.html` and sibling lessons (`../lesson-0Y/index.html`).
-6. Run `node scripts/qa.mjs topics/<slug>` to verify the Unit Welcome Hub and all `lessons/lesson-0X/index.html` pages pass offline, font, 3D canvas, and narrator checks.
+   - Inside `lessons/lesson-0X/index.html`, reference shared assets via `../../assets/css/*.css` (`fonts.css`, `style.css`, `lesson.css`, `narrator.css`, `math.css`) and `../../assets/js/*.js` (`three.min.js`, `scene-kit.js`, `story-scene.js`, `lesson-kit.js`, `retrieval-bank.js`, `narrator.js`, `math-kit.js`), and link the top nav & footer prev/next buttons to `../../index.html` and sibling lessons (`../lesson-0Y/index.html`).
+   - Run `node scripts/apply-math.mjs topics/<slug>` to ensure `math.css` and `math-kit.js` (`window.StudyMath`) are installed and linked across the Welcome Hub and all lessons so every formula, worked example, quiz explanation, Do Now answer, and assignment solution renders in LaTeX with all calculation steps expanded and an explainer note underneath every line.
+6. Run `node scripts/qa.mjs topics/<slug>` to verify the Unit Welcome Hub and all `lessons/lesson-0X/index.html` pages pass offline, font, 3D canvas, StudyMath LaTeX step-by-step calculation, and narrator checks.
+
+## Labs must plot what they measure (graphs + phone readability)
+- Every 3D practical bench that produces readings gets a **live graph card** (`.graph-card`) under it, built with `assets/js/study-graph.js` in a per-lesson `graph.js` that listens to CustomEvents dispatched by `bench.js`. Plot the graph WAEC actually asks for (V–I with gradient = R; V–I for a cell with intercept E and gradient −r; P/η against load R; I_g against jockey position, etc.), with ticks, units, best-fit line and a slope triangle, plus a dynamic note explaining the takeaway. Reference: `topics/ss2-phy-ohms-law-circuits/html/lessons/lesson-01/graph.js`.
+- Bench readings must be **computed from a physics model** (`reading()`), never copied text, so every mode/condition button changes the numbers it physically should.
+- On phones, in-scene 3D HUD text is unreadable: show live values in an HTML `.bench-readout` under the canvas and hide the floating HUD sprite below 560 px.
+- Keep 3D label strings short (≈ 20 characters); long labels collide at 360 px.
+- Never `text-transform: uppercase` anything that contains physics symbols (l ≠ L, r ≠ R, η ≠ H).
+- Story stages pass `autoFit: false, zoomUi: false, portraitPitch: 0` to `SceneKit.createStage`; lab stages use the default auto-framing.
+

@@ -1,0 +1,662 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 4 · The Cell &amp; Its Environment: Diffusion, Osmosis, Turgor &amp; Haemolysis · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS1): Diffusion, Osmosis, Hypotonic/Isotonic/Hypertonic Solutions, Turgidity, Plasmolysis, Haemolysis, Crenation, and Active Transport.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2338bdf8'/%3E%3Cstop offset='1' stop-color='%2322c55e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(56,189,248,.18), rgba(244,63,94,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #38bdf8 0%, #3ee6c4 25%, #22c55e 50%, #ffb23f 75%, #f43f5e 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l04">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 4 of 5 · <b>Osmosis, Turgor, Plasmolysis &amp; Haemolysis</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Biology · Lesson 4 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>The Cell &amp; Its Environment: <em>Osmosis, Turgor, Plasmolysis &amp; Haemolysis</em></h1>
+        <p class="question reveal">Why does pure water make a wilted ugu leaf stand up crisp and firm, yet cause a human red blood cell to swell and burst — while strong salt brine shrivels both?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Define and compare <strong>diffusion, osmosis, active transport, endocytosis (phagocytosis &amp; pinocytosis), and exocytosis</strong> across energy requirement, direction, and membrane need.</span></li>
+          <li><b>02</b><span>Explain how <strong>hypotonic, isotonic, and hypertonic solutions</strong> affect plant cells (<strong>turgidity, flaccidity, plasmolysis, deplasmolysis</strong>) and animal cells (<strong>haemolysis/lysis vs crenation</strong>).</span></li>
+          <li><b>03</b><span>Run the <strong>WAEC Yam-Strip Osmometry Practical</strong>, calculate percentage mass change <strong>%Δm = ((m<sub>f</sub> − m<sub>i</sub>) ÷ m<sub>i</sub>) × 100%</strong>, and determine the <strong>isotonic concentration</strong> from the zero-intercept of the graph.</span></li>
+          <li><b>04</b><span>Apply plant water-relation equations (<strong>SP = OP − TP</strong> and <strong>Ψ<sub>w</sub> = Ψ<sub>s</sub> + Ψ<sub>p</sub></strong>) and explain why <strong>boiling a yam tuber</strong> stops osmosis.</span></li>
+          <li><b>05</b><span>Explain everyday Nigerian applications of osmosis and active transport: reviving wilted vegetables, salting fish/meat for preservation, hospital <code>0.9%</code> saline IV drips, and root nitrate absorption.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <rect x="18" y="34" width="88" height="156" rx="10" fill="rgba(56,189,248,0.14)" stroke="#38bdf8" stroke-width="2"/>
+          <text x="62" y="54" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">HYPOTONIC</text>
+          <rect x="34" y="68" width="56" height="46" rx="8" fill="rgba(34,197,94,0.35)" stroke="#22c55e" stroke-width="2.2"/>
+          <text x="62" y="95" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Turgid</text>
+          <circle cx="62" cy="148" r="18" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4 3"/>
+          <text x="62" y="180" fill="#fda4af" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">Haemolysis!</text>
+
+          <rect x="116" y="34" width="88" height="156" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="2"/>
+          <text x="160" y="54" fill="#22c55e" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">ISOTONIC</text>
+          <rect x="134" y="70" width="52" height="42" rx="6" fill="rgba(34,197,94,0.2)" stroke="#22c55e" stroke-width="2"/>
+          <text x="160" y="95" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">0% Δm</text>
+          <ellipse cx="160" cy="148" rx="18" ry="10" fill="#e11d48"/>
+          <text x="160" y="180" fill="#bbf7d0" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">Normal Disc</text>
+
+          <rect x="214" y="34" width="88" height="156" rx="10" fill="rgba(244,63,94,0.12)" stroke="#f43f5e" stroke-width="2"/>
+          <text x="258" y="54" fill="#f43f5e" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">HYPERTONIC</text>
+          <rect x="232" y="70" width="52" height="42" rx="4" fill="none" stroke="#22c55e" stroke-width="2"/>
+          <circle cx="258" cy="91" r="11" fill="rgba(255,178,63,0.45)" stroke="#ffb23f" stroke-width="1.5"/>
+          <ellipse cx="258" cy="148" rx="12" ry="7" fill="#be123c" stroke="#fda4af" stroke-width="1.5" stroke-dasharray="2 2"/>
+          <text x="258" y="180" fill="#fde68a" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">Plasmolysis/Cren.</text>
+
+          <text x="160" y="226" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="11.5" text-anchor="middle">%Δm = ((m_f − m_i) ÷ m_i) × 100%</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Transport sort</a></li>
+        <li><a href="#practical">3D osmosis bench</a></li>
+        <li><a href="#concepts">Osmosis &amp; tonicity</a></li>
+        <li><a href="#neutralise">3D bilayer zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Spaced Retrieval · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1–3</em></h2>
+        <p class="intro">Four quick retrieval questions on the selectively permeable plasma membrane vs freely permeable cellulose wall, the tonoplast, <em>Euglena</em>, and percentage change calculation.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>Resolving the Mile 12 Mystery: <em>Crisp Ugu, Salted Fish &amp; Hospital Saline</em></h2>
+        <p class="intro">At Mile 12 Market, fresh water revives Mama Titi’s wilted <em>ugu</em> leaves and makes raw yam strips crisp and heavy, while salt brine shrivels fish — and in Yaba Hospital, nurses must use <code>0.9%</code> saline to prevent fatal haemolysis.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Mama Titi and Tunde at Mile 12 Market comparing turgid plant cells in fresh water with red blood cells undergoing haemolysis, then Dr. Kunle at the Yaba Osmosis Lab."></canvas>
+            <div class="stage-label"><i></i>3D story · Turgor, Plasmolysis &amp; Haemolysis</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Mile 12 Market:</strong> Tunde watches Mama Titi splash cool water on wilted <em>ugu</em> leaves: <em>“Mama Titi! The wilted leaves stood up crisp and firm in 20 minutes, while the salted Tilapia fish shrivelled up!”</em></p>
+            <p><strong>Scene 2 · Alhaji Musa’s hospital question:</strong> <em>“If pure water makes wilted ugu leaves firm and healthy, why would pure water burst human red blood cells if injected in a hospital IV drip?”</em></p>
+            <p><strong>Scene 3 · Mama Titi’s answer:</strong> <em>“Because plant cells have a rigid cellulose cell wall! When water enters the ugu vacuole by endosmosis, the cellulose wall pushes back with wall pressure so the cell becomes turgid without bursting!”</em></p>
+            <p><strong>Scene 4 · Haemolysis vs 0.9% Normal Saline:</strong> Animal red blood cells lack a cell wall, so in pure water they swell and burst (<strong>haemolysis</strong>). Hospital IV drips use isotonic <code>0.9% NaCl</code> so net water flow is zero.</p>
+            <p><strong>Scene 5 · Salted Fish &amp; Boiled Yam:</strong> Strong salt brine draws water out of spoilage bacteria by <strong>exosmosis (plasmolysis)</strong>. Meanwhile, boiling a yam tuber kills its plasma membranes and stops osmosis.</p>
+            <p><strong>Scene 6 · Yaba Osmosis Lab:</strong> Dr. Kunle sets up five sucrose solutions (<code>0.00 M</code> to <code>0.70 M</code>) to measure yam-strip mass changes and find the isotonic concentration.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">How do plant cells and red blood cells behave in pure water, isotonic saline, and strong salt brine? Pin your prediction before we test it on the 3D osmosis bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that in 0.70 M sucrose solution, a raw yam strip will lose mass because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Why do red blood cells burst in distilled water while plant cells do not?</button>
+            <button type="button">What is the difference between plasmolysis and crenation?</button>
+            <button type="button">Why does boiling a yam tuber prevent osmosis?</button>
+            <button type="button">How do we find the isotonic concentration from a %Δm graph?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
+        <h2>Simple Diffusion, Osmosis &amp; <em>Active Transport Sort</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Simple Diffusion</strong>, <strong>Osmosis &amp; Tonicity Responses</strong>, and <strong>Active / Bulk Transport</strong> (requiring mitochondrial ATP).</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#38bdf8" tabindex="0" role="button" aria-label="Simple Diffusion bin">
+              <h4><i></i>Simple Diffusion</h4>
+              <small>passive gas/solute spread · no ATP</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#22c55e" tabindex="0" role="button" aria-label="Osmosis and Tonicity bin">
+              <h4><i></i>Osmosis &amp; Tonicity</h4>
+              <small>turgor · plasmolysis · haemolysis · crenation</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Active and Bulk Transport bin">
+              <h4><i></i>Active / Bulk Transport</h4>
+              <small>low → high · requires ATP &amp; O₂ · endocytosis</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Osmosis, Plasmolysis &amp; Haemolysis Chamber · 15 min</span>
+        <h2>WAEC Osmometry Practical: <em>Yam Strip %Δm, Plant Plasmolysis &amp; RBC Haemolysis</em></h2>
+        <p class="intro">Five uniform fresh yam cylinders (each of initial mass <strong>m<sub>i</sub> = 2.50 g</strong>), along with a 3D plant cell and a 3D mammalian red blood cell, are immersed for 45 minutes in sucrose baths ranging from <code>0.00 M</code> (distilled water) to <code>0.70 M</code>. Tap Trials A–E to watch the 3D cells respond and plot <strong>%Δm</strong> against molarity <strong>M</strong>!</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>WAEC Paper 3 Osmosis Precautions:</strong> (1) Cut all yam or potato strips from the <strong>same healthy tuber</strong> using a cork borer so initial sap osmolarity and surface area are identical. (2) <strong>Blot each strip gently with filter paper</strong> before weighing to remove surface liquid without squeezing out vacuolar sap. (3) Include a <strong>boiled yam control</strong> to prove that living, selectively permeable membranes are required for osmosis.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Weigh initial mass m<sub>i</sub> = 2.50 g</h4><p>Trim five uniform yam cylinders to equal length and weigh each to 2 decimal places (<code>2.50 g</code>).</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Immerse in 0.00–0.70 M baths</h4><p>Submerge one strip in each sucrose concentration for 45 minutes alongside plant epidermal and RBC samples.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Blot dry &amp; weigh final mass m<sub>f</sub></h4><p>Gently blot surface moisture with tissue paper and record final mass <code>m_f</code> and <code>%Δm = ((m_f − m_i)/m_i) × 100%</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Read isotonic zero-intercept</h4><p>Locate where the graph crosses <code>%Δm = 0.0%</code> (at <code>0.30 M</code>) to find the osmotic concentration of the cell sap.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Osmosis, Plasmolysis and Haemolysis Chamber showing a plant cell and a mammalian red blood cell responding to hypotonic, isotonic, and hypertonic solutions."></canvas>
+            <div class="stage-label"><i></i>3D Osmosis &amp; Tonicity Chamber · drag to rotate · tap baths A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D osmosis chamber couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Tissue condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Fresh Living Yam (Isotonic 0.30 M)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Halophyte Tissue (Isotonic 0.50 M)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Boiled Yam Control (Dead Membrane!)</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Bath A · 0.00 M (H₂O)</button>
+              <button class="vt-btn" type="button" data-trial="1">Bath B · 0.15 M</button>
+              <button class="vt-btn" type="button" data-trial="2">Bath C · 0.30 M (Iso)</button>
+              <button class="vt-btn" type="button" data-trial="3">Bath D · 0.50 M</button>
+              <button class="vt-btn" type="button" data-trial="4">Bath E · 0.70 M (Brine)</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 sucrose baths</span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="vi-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots as you test baths A–E</span><h4>Percentage Mass Change %Δm (%) against Sucrose Molarity M (mol dm⁻³)</h4></div>
+            <span class="gc-badge wait" id="vi-badge">0 points</span>
+          </div>
+          <div id="vi-graph"></div>
+          <div class="gc-stats" id="vi-stats"></div>
+          <p class="gc-note" id="vi-note"></p>
+        </div>
+
+        <h3>Record your WAEC Yam-Strip Osmosis readings (m<sub>i</sub> = 2.50 g)</h3>
+        <p>As you test Baths A–E on the 3D bench, select the matching <strong>Final Mass m<sub>f</sub> (g)</strong>, <strong>Percentage Mass Change %Δm (%)</strong>, and <strong>Plant Cell State</strong> below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Bath</th>
+                <th>Sucrose Molarity M</th>
+                <th>Final Mass m<sub>f</sub> (g)</th>
+                <th>Mass Change %Δm (%)</th>
+                <th>Plant Cell State</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC table &amp; %Δm calculation <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Bath</th><th>Molarity M</th><th>Initial m<sub>i</sub> (g)</th><th>Final m<sub>f</sub> (g)</th><th>%Δm (%)</th><th>Plant Cell State</th><th>RBC State</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>0.00 M</td><td>2.50</td><td>2.95</td><td>+18.0%</td><td>Turgid (Endosmosis)</td><td>Haemolysed (Burst)</td></tr>
+                  <tr><td>B</td><td>0.15 M</td><td>2.50</td><td>2.73</td><td>+9.2%</td><td>Turgid (Endosmosis)</td><td>Swollen</td></tr>
+                  <tr><td>C</td><td>0.30 M</td><td>2.50</td><td>2.50</td><td>0.0%</td><td>Isotonic (No Net Flow)</td><td>Normal Biconcave Disc</td></tr>
+                  <tr><td>D</td><td>0.50 M</td><td>2.50</td><td>2.25</td><td>−10.0%</td><td>Plasmolysed (Exosmosis)</td><td>Crenated (Notched)</td></tr>
+                  <tr><td>E</td><td>0.70 M</td><td>2.50</td><td>2.05</td><td>−18.0%</td><td>Plasmolysed (Exosmosis)</td><td>Severely Crenated</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Percentage Mass Change in Bath A (0.00 M Distilled Water):</strong></p>
+            <div class="eq light">%Δm = ((2.95 − 2.50) ÷ 2.50) × 100 = (0.45 ÷ 2.50) × 100 = +18.0%</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l04-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC osmometry analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why do investigators calculate <strong>percentage change in mass (<code>%Δm</code>)</strong> rather than just raw change in mass (<code>Δm</code> in grams) when comparing tissue strips?</li>
+            <li>What is the physical texture of the yam strip after 45 minutes in Bath A (<code>0.00 M</code>) compared with Bath E (<code>0.70 M</code>), and why?</li>
+            <li>Why did switching to the <strong>Boiled Yam Control</strong> produce <code>0.0%</code> osmotic mass movement across the selective barrier?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Percentage change in mass normalises for slight differences in initial mass (<code>m_i</code>) between cylinders, allowing fair comparison across all baths.</li>
+                <li>In Bath A (<code>0.00 M</code>), the yam strip is <strong>hard, stiff, and turgid</strong> because water entered the vacuoles by endosmosis; in Bath E (<code>0.70 M</code>), the strip is <strong>soft, limp, and flaccid</strong> because water left the vacuoles by exosmosis (plasmolysis).</li>
+                <li>Boiling kills the cells and denatures the proteins and phospholipid bilayers of the plasma membrane and tonoplast, destroying selective permeability.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Diffusion, Osmosis, Tonicity &amp; <em>Active Transport</em></h2>
+        <p class="intro">Master the definitions, equations, and plant vs animal tonicity tables tested in WAEC, NECO, and JAMB Biology.</p>
+
+        <h3 id="def-shm">1 · Comparing Diffusion, Osmosis &amp; Active Transport</h3>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Simple Diffusion</th><th>Osmosis</th><th>Active Transport</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Definition</strong></td><td>Net movement of solute, gas, or liquid particles from a region of <strong>higher concentration to lower concentration</strong> down a concentration gradient due to random kinetic energy.</td><td>Net movement of <strong>water (solvent) molecules</strong> from a dilute solution (<strong>higher water potential, $\Psi_w$</strong>) to a more concentrated solution (<strong>lower $\Psi_w$</strong>) across a <strong>selectively permeable membrane</strong>.</td><td>Movement of ions or molecules from a region of <strong>lower concentration to higher concentration</strong> (<strong>against</strong> a concentration gradient) across a living membrane using <strong>ATP</strong>.</td></tr>
+              <tr><td><strong>Selectively Permeable Membrane Required?</strong></td><td><strong>No</strong> (occurs in air, liquids, or across permeable/selective membranes).</td><td><strong>Yes — mandatory</strong> (plasma membrane, tonoplast, Visking tubing, or living yam/pawpaw tissue).</td><td><strong>Yes — mandatory</strong> (living plasma membrane or tonoplast containing specific <strong>carrier protein pumps</strong>).</td></tr>
+              <tr><td><strong>Metabolic Energy (ATP) Required?</strong></td><td><strong>No</strong> (passive physical process driven by kinetic energy).</td><td><strong>No</strong> (passive water movement down water-potential gradient).</td><td><strong>Yes — requires ATP</strong> from aerobic respiration in mitochondria (halted by <strong>cyanide, $\text{O}_2$ deprivation, or boiling</strong>).</td></tr>
+              <tr><td><strong>Factors Increasing Rate</strong></td><td>Higher temperature, steeper concentration gradient, larger surface area ($\frac{SA}{V}$), shorter diffusion distance, smaller molecular mass (<strong>Graham’s law: $r \propto 1/\sqrt{M_r}$</strong>).</td><td>Greater water-potential difference ($\Delta \Psi_w$), higher temperature, larger membrane surface area, more aquaporin channels.</td><td>Abundant oxygen supply, high glucose/ATP availability, optimal temperature for respiratory enzymes, high density of mitochondria and carrier proteins.</td></tr>
+              <tr><td><strong>Biological Examples</strong></td><td>$\text{O}_2 / \text{CO}_2$ exchange in lungs, gills, and leaf stomata; diffusion of digested food in villi; translocation odors/pollination scents.</td><td>Water absorption by root hairs; cell-to-cell water movement across the root cortex; water reabsorption in kidney nephron tubules; opening/closing of guard cells.</td><td>Uptake of $\text{NO}_3^-$, $\text{K}^+$, and $\text{PO}_4^{3-}$ by root hair cells from dilute soil water; $\text{Na}^+/\text{K}^+$ pump in nerve axons; complete glucose absorption in ileum villi; selective reabsorption in kidney proximal tubules.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="def-terms">2 · Bulk Transport: Endocytosis &amp; Exocytosis</h3>
+        <ul>
+          <li><strong>Endocytosis:</strong> Active intake of large particles or droplets by infolding of the plasma membrane to pinch off an intracellular vesicle (requires ATP):
+            <ul>
+              <li><strong>Phagocytosis (“Cell Eating”):</strong> Extension of pseudopodia to engulf solid particles such as bacteria or cellular debris into a <strong>food vacuole / phagosome</strong> (e.g., <em>Amoeba</em> feeding; mammalian <strong>neutrophils and macrophages</strong> engulfing pathogens).</li>
+              <li><strong>Pinocytosis (“Cell Drinking”):</strong> Infolding of the plasma membrane to take in tiny droplets of extracellular fluid and dissolved solutes.</li>
+            </ul>
+          </li>
+          <li><strong>Exocytosis:</strong> Fusion of intracellular secretory or waste vesicles with the plasma membrane to expel contents outside the cell (e.g., secretion of digestive enzymes, hormones like insulin, neurotransmitters, and expulsion of undigested residue in <em>Amoeba</em>/<em>Paramecium</em>).</li>
+        </ul>
+
+        <h3>3 · Plant &amp; Animal Cell Responses to Hypotonic, Isotonic &amp; Hypertonic Solutions</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>External Solution</th><th>Effect on Plant Cell (Has Rigid Cellulose Wall)</th><th>Effect on Animal Cell / RBC (No Cell Wall)</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>1. Hypotonic Solution</strong><br><small>(Dilute / Distilled Water; higher $\Psi_w$ than cytoplasm)</small></td>
+                <td><strong>Endosmosis → Turgidity:</strong> Water enters the central sap vacuole by osmosis; the vacuole swells and pushes the cytoplasm against the cellulose wall (<strong>turgor pressure, TP</strong>). The inelastic wall pushes back with equal and opposite <strong>wall pressure (WP)</strong>, preventing bursting. At full turgor, $\text{TP} = \text{OP}$ and net water entry stops ($\text{SP} = 0$).<br><em>Importance:</em> Mechanical support in herbaceous stems, holding leaves flat to sunlight, opening stomata (turgid guard cells), root growth penetration.</td>
+                <td><strong>Endosmosis → Haemolysis (Lysis):</strong> Water enters rapidly by osmosis. Because animal cells <strong>lack a rigid cellulose cell wall</strong>, the plasma membrane stretches beyond its elastic limit and <strong>bursts</strong>, releasing haemoglobin into the solution (forming a clear red solution in red blood cells = <strong>haemolysis</strong>).<br><em>Adaptation in freshwater protists:</em> <em>Amoeba</em> and <em>Paramecium</em> use <strong>contractile vacuoles</strong> to pump out excess water continuously.</td>
+              </tr>
+              <tr>
+                <td><strong>2. Isotonic Solution</strong><br><small>(Equal $\Psi_w$; e.g., $0.30\text{ M}$ sucrose for yam; $0.9\%\text{ NaCl}$ for human blood)</small></td>
+                <td><strong>Dynamic Equilibrium → Incipient Flaccidity:</strong> Water molecules enter and leave at equal rates ($\Delta m = 0\%$). Turgor pressure drops to zero ($\text{TP} = 0$), so the cell is soft (<strong>flaccid</strong>) but not plasmolysed.</td>
+                <td><strong>Dynamic Equilibrium → Normal Shape:</strong> Water enters and leaves at equal rates. Red blood cells retain their normal <strong>biconcave disc shape</strong>. (Basis of hospital <code>0.9%</code> normal saline IV drips and Ringer’s solution).</td>
+              </tr>
+              <tr>
+                <td><strong>3. Hypertonic Solution</strong><br><small>(Concentrated Brine/Syrup; lower $\Psi_w$ than cytoplasm)</small></td>
+                <td><strong>Exosmosis → Plasmolysis:</strong> Water leaves the sap vacuole by osmosis; the vacuole shrinks and the <strong>protoplasm (plasma membrane + cytoplasm) pulls away from the cell wall</strong>, leaving the space between wall and membrane filled with the external hypertonic solution. Causes <strong>wilting</strong>. (Reversible by <strong>deplasmolysis</strong> if transferred promptly to pure water).<br><em>Applications:</em> Salting fish/meat and sugaring jam/fruits to plasmolyse spoilage bacteria; salting weeds.</td>
+                <td><strong>Exosmosis → Crenation:</strong> Water leaves the cytoplasm by osmosis; the red blood cell shrinks, shrivels, and develops a notched, spiked surface (<strong>crenation</strong>). Note: Animal cells undergo <em>crenation</em>, never <em>plasmolysis</em> (because they have no cell wall to pull away from!).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4 · Osmometry, Water Potential &amp; Diffusion Equations</h3>
+        <div class="eq" id="eq-shm" data-hook>%Δm = ((m_f − m_i) ÷ m_i) × 100 = ((2.95 − 2.50) ÷ 2.50) × 100 = +18.0%</div>
+        <div class="eq" id="eq-omega">SP = OP − TP &nbsp;&nbsp;⇒&nbsp;&nbsp; At full turgor (OP = 12 atm, TP = 12 atm): &nbsp; SP = 12 − 12 = 0 atm</div>
+        <div class="eq" id="eq-vel">Graham's Law of Diffusion: &nbsp; r_1 ÷ r_2 = √(M_2 ÷ M_1) = √(64 ÷ 4) = √16 = 4</div>
+
+        <div class="callout big reveal" id="all-alkalis">
+          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up and act out the <strong>3 Tonicity States</strong>! (1) <strong>Hypotonic Plant Cell (Turgid):</strong> Puff out your cheeks and hold your arms in a firm box — strong and upright! (2) <strong>Hypertonic Plant Cell (Plasmolysed):</strong> Exhale and curl your shoulders inward away from your outer jacket (protoplasm pulling away from the cell wall!). (3) <strong>Active Transport Pump:</strong> March energetically in place while lifting imaginary ions overhead using mitochondrial ATP!</p>
+        </div>
+
+        <h3 id="ph-h">Tonicity &amp; Water Potential Spectrum Explorer (0.00 M to 0.70 M)</h3>
+        <p>Tap any pin below to compare plant cell and red blood cell behaviour across the tonicity spectrum:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Hypotonic (Turgid / Haemolysis)</div><div>Isotonic (0% Δm / 0.9% NaCl)</div><div>Hypertonic (Plasmolysis / Crenation) →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect water potential, plant turgor/plasmolysis, and RBC haemolysis/crenation.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. 3D BILAYER ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Phospholipid Bilayer Zoom</span>
+        <h2>Across the membrane: <em>Aquaporin Osmosis vs ATP Active Transport Pump</em></h2>
+        <p class="intro">Zoom into the <strong>7.5 nm phospholipid bilayer</strong> in 3D! Compare passive water movement through the blue <strong>aquaporin channel</strong> (<code>High → Low Ψ_w, 0 ATP</code>) with uphill ion pumping by the amber <strong>active-transport carrier protein</strong> powered by golden <strong>ATP</strong> molecules!</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D Phospholipid Bilayer showing hydrophilic heads, hydrophobic tails, a blue aquaporin water channel, and an amber ATP-driven active transport carrier pump."></canvas>
+            <div class="stage-label"><i></i>3D Phospholipid Bilayer Zoom · Aquaporin vs ATP Carrier Pump</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D membrane zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Membrane transport mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Osmosis (Aquaporin · 0 ATP)</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Active Transport (ATP Pump)</button>
+              <button type="button" data-mode="base" aria-pressed="false">Cyanide / Hypoxia Block</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Double Gradient &amp; Temp</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset membrane</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#38bdf8"></i>Direction<b data-c="h">High → Low</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Energy<b data-c="oh">0 ATP</b></span>
+              <span class="counter"><i style="--c:#3ee6c4"></i>Protein<b data-c="na">Aquaporin</b></span>
+              <span class="counter"><i style="--c:#22c55e"></i>Status<b data-c="cl">Active</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Barrier<b data-c="w">Selective</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Every calculation is expanded step by step in LaTeX with a plain-English explainer note underneath.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Yam Cylinder Percentage Mass Gain in Water &amp; Loss in Hypertonic Sucrose</h4></div>
+          <div class="example-body">
+            <p class="q">Two uniform yam cylinders X and Y each have an initial mass of 2.50 g. Cylinder X is placed in distilled water (0.00 M) and its final mass after 45 minutes is 2.95 g. Cylinder Y is placed in 0.70 M sucrose solution and its final mass is 2.05 g. Calculate the percentage change in mass (%Δm) for: (a) Cylinder X, and (b) Cylinder Y.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) Step 1 — Calculate mass change Δm for Cylinder X in distilled water:</strong> <code>Δm_X = 2.95 − 2.50 = 0.45 g</code>.</li>
+              <li><strong>Part (a) Step 2 — Calculate percentage mass change %Δm for Cylinder X:</strong> <code>%Δm_X = (0.45 ÷ 2.50) × 100 = 0.18 × 100 = +18.0%</code>.</li>
+              <li><strong>Part (b) Step 1 — Calculate mass change Δm for Cylinder Y in 0.70 M sucrose:</strong> <code>Δm_Y = 2.05 − 2.50 = −0.45 g</code>.</li>
+              <li><strong>Part (b) Step 2 — Calculate percentage mass change %Δm for Cylinder Y:</strong> <code>%Δm_Y = (−0.45 ÷ 2.50) × 100 = −0.18 × 100 = −18.0%</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Cylinder X = +18.0% (Endosmosis / Turgid) &nbsp;·&nbsp; (b) Cylinder Y = −18.0% (Exosmosis / Plasmolysed)</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Plant Cell Suction Pressure (SP = OP − TP) &amp; Water Potential (Ψ_w = Ψ_s + Ψ_p)</h4></div>
+          <div class="example-body">
+            <p class="q">A partially turgid leaf mesophyll cell has an osmotic pressure (OP) of 14 atm and a turgor pressure (TP) of 9 atm. (a) Calculate its suction pressure (SP) when placed in pure water. (b) What does its suction pressure become when the cell reaches full turgidity (TP = 14 atm)? (c) Express the partially turgid cell's water potential Ψ_w in kPa given solute potential Ψ_s = −1400 kPa and pressure potential Ψ_p = +900 kPa.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Suction pressure SP of partially turgid cell:</strong> <code>SP = OP − TP = 14 − 9 = 5 atm</code>.</li>
+              <li><strong>Part (b) — Suction pressure SP at full turgidity (TP = OP = 14 atm):</strong> <code>SP_full = 14 − 14 = 0 atm</code>.</li>
+              <li><strong>Part (c) — Water potential Ψ_w in kilopascals:</strong> <code>Ψ_w = Ψ_s + Ψ_p = −1400 + 900 = −500 kPa</code>.</li>
+            </ol>
+            <div class="answer-line">(a) SP = 5 atm &nbsp;·&nbsp; (b) SP at full turgor = 0 atm &nbsp;·&nbsp; (c) Ψ<sub>w</sub> = −500 kPa</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Graham’s Law of Relative Diffusion Rates for Two Gases</h4></div>
+          <div class="example-body">
+            <p class="q">Compare the rate of diffusion of oxygen gas (O₂, relative molecular mass M₁ = 32) with a heavier organic vapour of relative molecular mass M₂ = 128 at the same temperature and pressure.</p>
+            <ol class="steps-sol">
+              <li><strong>Step 1 — Divide the heavier molecular mass M₂ by the lighter molecular mass M₁:</strong> <code>Ratio_M = M_2 ÷ M_1 = 128 ÷ 32 = 4</code>.</li>
+              <li><strong>Step 2 — Take the square root to find the diffusion rate ratio r₁ ÷ r₂:</strong> <code>r_1 ÷ r_2 = √4 = 2</code>.</li>
+            </ol>
+            <div class="answer-line">Oxygen (M₁ = 32) diffuses 2 times faster than the vapour (M₂ = 128)</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Unit Mystery Finale: <em>solve Mama Titi’s Ugu Leaf, Salted Fish &amp; Hospital Saline Puzzle!</em></h2>
+        <p class="intro">Complete Steps 1, 2, and 3 to unite plant turgidity, bacterial plasmolysis in salted fish, and red blood cell haemolysis prevention in hospital IV drips.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Plant Cell · Has Rigid Cellulose Wall <small style="color:var(--muted);font-weight:500">· Wall Pressure resists bursting</small></h4>
+              <div class="clock-well">
+                <div style="width:78px;height:52px;border-radius:8px;border:3px solid #22c55e;background:rgba(34,197,94,.28);display:flex;align-items:center;justify-content:center;font-size:11px;color:#dcfce7">Turgid Box</div>
+              </div>
+              <div class="vt-count"><span id="time-a">H₂O → Turgid · Brine → Plasmolysed</span><small>never bursts in pure water</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Mile 12 &amp; Hospital Cases <small style="color:var(--muted);font-weight:500" id="len-b-label">· Wilted Ugu, Salted Fish &amp; Blood RBC</small></h4>
+              <div class="clock-well">
+                <div style="width:74px;height:44px;border-radius:50%;border:2px solid #f43f5e;background:rgba(244,63,94,.25);display:flex;align-items:center;justify-content:center;font-size:11px;color:#ffe4e6">No Wall</div>
+              </div>
+              <div class="vt-count"><span id="time-b">Test Hypotonic, Hypertonic &amp; Isotonic</span><small>click Step 1 below</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Revive Wilted Ugu in Fresh Water (Hypotonic)</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Salt Tilapia Fish (Hypertonic Plasmolysis)</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Protect Patient RBCs with 0.9% Isotonic Saline</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset cases</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">Resolve the 3-part Mile 12 &amp; Hospital tonicity mystery. Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 4:</strong> Living cells exchange matter with their environment by <strong>passive diffusion</strong>, <strong>passive osmosis across a selectively permeable membrane</strong>, and <strong>ATP-driven active transport</strong>. Because plant cells possess an inelastic <strong>cellulose cell wall</strong>, hypotonic water makes them <strong>turgid</strong> (supporting leaves and stems) whereas animal red blood cells burst by <strong>haemolysis</strong>; conversely, hypertonic brine causes <strong>plasmolysis</strong> in plant and bacterial cells and <strong>crenation</strong> in red blood cells!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 4.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can define and compare diffusion, osmosis, and active transport across energy, direction, and membrane need.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain turgidity, plasmolysis, deplasmolysis, haemolysis, and crenation in plant and animal cells.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate %Δm = ((m_f − m_i)/m_i) × 100% and read the isotonic concentration from an osmometry graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain why boiling a yam tuber destroys its ability to act as an osmometer.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can explain why salt preserves fish and why hospital IV drips must use 0.9% isotonic saline.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l04-exit">
+          <div class="aq-top"><h4>In two sentences: why does a red blood cell burst in distilled water while an onion epidermal cell becomes turgid without bursting, and why does boiling a yam tuber stop osmosis?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>A red blood cell lacks a cell wall so water entering by endosmosis stretches and ruptures its thin plasma membrane (haemolysis), whereas an onion cell has a rigid, inelastic cellulose cell wall that exerts opposing wall pressure to prevent bursting <b>(1)</b>. Boiling kills the yam cells and denatures their plasma membranes and tonoplasts, destroying selective permeability <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Diffusion, Osmosis, Tonicity &amp; Active Transport</em></h2>
+        <p class="intro">Complete Part A (home yam/potato strip osmosis test) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home Kitchen Osmosis Experiment</h3>
+        <div class="aq" data-answer="l04-a1">
+          <div class="aq-top"><h4>Cut two identical 50 mm strips of raw yam, Irish potato, or unripe pawpaw. Place Strip A in plain tap water and Strip B in water mixed with 3 tablespoons of table salt for 30 minutes. Measure their lengths and bend each strip gently with your fingers. Explain your observations using endosmosis, exosmosis, turgidity, and plasmolysis.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your measurements and explanation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <p><strong>Strip A (Tap Water — Hypotonic):</strong> Increases slightly in length (e.g., <code>50 mm → 53 mm</code>) and feels hard, stiff, and unbending because water entered the cell vacuoles by <strong>endosmosis</strong>, making the cells <strong>fully turgid</strong>.<br>
+              <strong>Strip B (Strong Salt Solution — Hypertonic):</strong> Decreases in length (e.g., <code>50 mm → 46 mm</code>) and feels soft, limp, and flexible (flaccid) because water left the cell vacuoles by <strong>exosmosis</strong>, causing <strong>plasmolysis</strong>.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l04-b1">
+          <div class="aq-top"><h4>1. (a) Define (i) Osmosis (ii) Plasmolysis (iii) Haemolysis (iv) Active transport [4 marks]. (b) Tabulate three differences between osmosis and active transport [3 marks]. (c) Explain why a freshwater weed (Elodea) dies when transplanted into a marine salt-water lagoon [3 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) (i) <strong>Osmosis:</strong> Net movement of water molecules from a dilute solution (higher water potential) to a concentrated solution (lower water potential) across a selectively permeable membrane <b>(1)</b>. (ii) <strong>Plasmolysis:</strong> Shrinkage of the vacuole and pulling away of the protoplasm from the cell wall in a plant cell placed in a hypertonic solution <b>(1)</b>. (iii) <strong>Haemolysis:</strong> Swelling and bursting of red blood cells in a hypotonic solution, releasing haemoglobin <b>(1)</b>. (iv) <strong>Active transport:</strong> Movement of ions/molecules against a concentration gradient across a living membrane using energy from ATP <b>(1)</b>.<br>
+            (b) 1. Osmosis moves water down a water-potential gradient; active transport moves solutes/ions against a concentration gradient <b>(1)</b>. 2. Osmosis is passive (0 ATP); active transport requires metabolic energy (ATP) <b>(1)</b>. 3. Osmosis is unaffected by cyanide/anoxia; active transport is stopped by cyanide or lack of oxygen <b>(1)</b>.<br>
+            (c) Seawater in the lagoon is strongly <strong>hypertonic</strong> to the cell sap of freshwater <em>Elodea</em> <b>(1)</b>. Water leaves the <em>Elodea</em> cells rapidly by <strong>exosmosis</strong> <b>(1)</b>, causing irreversible <strong>plasmolysis</strong>, dehydration of the protoplasm, and death of the plant <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b2">
+          <div class="aq-top"><h4>2. Describe a laboratory experiment using a fresh yam tuber and a boiled yam tuber to demonstrate osmosis in living tissue. Your account must include: (a) Aim and Apparatus (b) Method (Control and Experimental setups) (c) Observation after 2 hours (d) Conclusion [10 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) Aim… (b) Method… (c) Observation… (d) Conclusion…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <strong>Aim:</strong> To demonstrate osmosis using living yam tissue. <strong>Apparatus:</strong> Peeler, knife, one fresh raw yam tuber, one boiled yam tuber, concentrated sucrose solution, distilled water, two petri dishes/beakers, pins <b>(2)</b>.<br>
+            (b) <strong>Method:</strong> Peel the bottom of both the raw yam (Setup A) and boiled yam (Setup B) so they stand flat, and scoop out a deep central cavity in each. Pour concentrated sucrose solution half-way into each cavity and mark the initial liquid level with a pin. Stand both yam cups in petri dishes containing distilled water and leave for 2 hours <b>(4)</b>.<br>
+            (c) <strong>Observation:</strong> In Setup A (raw living yam), the sugar level inside the cavity <strong>rises significantly above the pin</strong> while the water level in the petri dish falls. In Setup B (boiled yam control), the liquid level inside the cavity <strong>does not rise</strong> <b>(2)</b>.<br>
+            (d) <strong>Conclusion:</strong> Water moved by <strong>osmosis</strong> from the hypotonic distilled water across the living selectively permeable cells of the raw yam into the hypertonic sucrose solution; boiling killed the cells in Setup B and destroyed selective permeability <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b3">
+          <div class="aq-top"><h4>3. (a) A potato cylinder of initial mass 4.00 g is immersed in 0.60 M salt solution for 1 hour and its final mass is 3.40 g. Calculate the change in mass and percentage change in mass [4 marks]. (b) State two reasons why salt is used to preserve fresh fish in Nigeria [3 marks]. (c) Explain why oxygen is required by plant roots for the absorption of nitrate ions from soil water [3 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Change in mass: <code>Δm = 3.40 − 4.00 = −0.60 g</code> <b>(2)</b>.<br>
+            Percentage change in mass: <code>%Δm = (−0.60 ÷ 4.00) × 100 = −0.15 × 100 = −15.0%</code> <b>(2)</b>.<br>
+            (b) Salt forms a strongly hypertonic solution on the fish surface <b>(1)</b>, drawing water out of the fish tissues and out of spoilage bacteria/fungi by exosmosis <b>(1)</b>, which plasmolyses the microbes and prevents decay <b>(1)</b>.<br>
+            (c) Nitrate ions are absorbed against a concentration gradient by <strong>active transport</strong> <b>(1)</b>. Oxygen is required by root hair mitochondria for <strong>aerobic respiration</strong> <b>(1)</b> to generate the <strong>ATP</strong> needed by membrane carrier pumps <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 3: Forms of Cells &amp; Organisation</a>
+          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5 — WAEC Paper 3 Microscopy &amp; Drawing Clinic →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/cell-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

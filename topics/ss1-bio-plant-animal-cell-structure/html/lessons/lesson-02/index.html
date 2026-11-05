@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 2 · Inside the Eukaryotic Cell: Organelles &amp; Plant vs Animal Cells · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS1): Eukaryotic Organelles (Nucleus, Mitochondria, Chloroplasts, ER, Golgi, Lysosomes, Vacuole) and Plant vs Animal Cell Comparison.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%2322c55e'/%3E%3Cstop offset='1' stop-color='%233ee6c4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(34,197,94,.18), rgba(244,63,94,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #a855f7 0%, #38bdf8 25%, #3ee6c4 50%, #ffb23f 75%, #22c55e 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+</head>
+<body class="lesson-page" data-lesson="l02">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 2 of 5 · <b>Organelles &amp; Plant vs Animal Cells</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Biology · Lesson 2 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Inside the Eukaryotic Cell: <em>Organelles &amp; Plant vs Animal Cells</em></h1>
+        <p class="question reveal">Why does a green ugu leaf stand firm and manufacture its own sugar in sunlight, while a catfish muscle cell is soft, flexible, and must consume food?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Describe the structure and function of all major eukaryotic components: <strong>cell wall, plasma membrane, cytoplasm, nucleus, mitochondria, plastids (chloroplasts, chromoplasts, leucoplasts), Rough &amp; Smooth ER, Golgi apparatus, ribosomes, lysosomes, centrioles, and sap vacuole</strong>.</span></li>
+          <li><b>02</b><span>Explain how the folded inner <strong>cristae of mitochondria</strong> and stacked <strong>thylakoid grana of chloroplasts</strong> adapt each organelle for energy conversion, and why both are <strong>semi-autonomous</strong> (own circular DNA + <code>70S</code> ribosomes).</span></li>
+          <li><b>03</b><span>Trace the endomembrane <strong>protein secretory pathway</strong> (<code>Nucleus → Rough ER → Transport Vesicle → Golgi Apparatus → Secretory Vesicle → Plasma Membrane</code>).</span></li>
+          <li><b>04</b><span>Calculate and compare <strong>aerobic mitochondrial ATP yield (38 ATP/glucose)</strong> against <strong>anaerobic cytoplasmic glycolysis (2 ATP/glucose)</strong> and vacuolar volume percentage.</span></li>
+          <li><b>05</b><span>Contrast <strong>plant cells</strong> and <strong>animal cells</strong> across 10 structural and biochemical features (including starch vs glycogen storage).</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <rect x="20" y="34" width="130" height="172" rx="12" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="2.2"/>
+          <text x="85" y="56" fill="#22c55e" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">PLANT CELL</text>
+          <rect x="42" y="72" width="86" height="62" rx="8" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="1.6"/>
+          <text x="85" y="106" fill="#e0f2fe" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Sap Vacuole</text>
+          <ellipse cx="62" cy="154" rx="14" ry="8" fill="#16a34a"/>
+          <circle cx="110" cy="154" r="11" fill="#7c3aed"/>
+          <text x="85" y="190" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Wall · Chloroplast · Starch</text>
+
+          <rect x="170" y="34" width="130" height="172" rx="40" fill="rgba(244,63,94,0.12)" stroke="#f43f5e" stroke-width="2.2"/>
+          <text x="235" y="56" fill="#f43f5e" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">ANIMAL CELL</text>
+          <circle cx="235" cy="112" r="20" fill="#7c3aed" stroke="#c4b5fd" stroke-width="1.8"/>
+          <ellipse cx="198" cy="146" rx="12" ry="7" fill="#ea580c"/>
+          <ellipse cx="270" cy="146" rx="12" ry="7" fill="#ea580c"/>
+          <text x="235" y="190" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Centrioles · Lysosome · Glycogen</text>
+          <text x="160" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">Both have Mitochondria (38 ATP / Glc)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Organelle sort</a></li>
+        <li><a href="#practical">3D cell dissector</a></li>
+        <li><a href="#concepts">Organelle guide</a></li>
+        <li><a href="#neutralise">Cristae &amp; grana zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Spaced Retrieval · 5 min</span>
+        <h2>Before we start: <em>retrieve Lesson 1 (Cell Theory &amp; Prokaryotes)</em></h2>
+        <p class="intro">Four quick retrieval questions from Lesson 1 on Hooke’s cork observation, Virchow’s cell principle, drawing magnification in micrometres, and 70S vs 80S ribosomes.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>Ugu Leaf vs Catfish Fillet at <em>Mile 12 Market, Lagos</em></h2>
+        <p class="intro">Why can a fluted pumpkin (<em>Telfairia occidentalis</em>) leaf stand crisp and manufacture sugar from sunlight, while a catfish muscle cell is soft and heterotrophic — yet both burn glucose inside mitochondria?</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Tunde and Mama Titi comparing a green ugu leaf plant cell with a catfish animal cell, then Dr. Kunle at the Yaba Lab."></canvas>
+            <div class="stage-label"><i></i>3D story · Plant vs Animal Organelles</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Mile 12 Market:</strong> Tunde compares a stiff green ugu leaf with a soft catfish fillet: <em>“Mama Titi! Why does a green leaf stand firm and make its own sugar in sunlight, while a fish cell is soft and must eat food?”</em></p>
+            <p><strong>Scene 2 · Alhaji Musa’s trap:</strong> <em>“Don't plant cells have chloroplasts for energy while animal cells have mitochondria instead?”</em></p>
+            <p><strong>Scene 3 · Mama Titi’s correction:</strong> <em>“Never fall for that trap! Green plant cells have BOTH chloroplasts AND mitochondria — chloroplasts make glucose in sunlight, and mitochondria respire that glucose into ATP 24 hours a day!”</em></p>
+            <p><strong>Scene 4 · Wall &amp; Vacuole vs Flexible Membrane:</strong> The plant cell’s rigid cellulose wall and large central sap vacuole create turgor stiffness, while the animal cell has only a flexible plasma membrane, centrioles, and lysosomes.</p>
+            <p><strong>Scene 5 · The Secretory Assembly Line:</strong> Inside both cells, the nucleus sends mRNA to 80S ribosomes on the Rough ER, which ships proteins to the Golgi body for packaging.</p>
+            <p><strong>Scene 6 · Yaba Cytology Lab:</strong> Dr. Kunle compares 3D plant and animal cells and measures how mitochondrial cristae surface area controls ATP production across five tissues.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Which organelles belong only to plants, which belong to animals, and which are shared by both? Pin your prediction before we sort and dissect.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that plant cells have both chloroplasts and mitochondria because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Do plant cells have mitochondria as well as chloroplasts?</button>
+            <button type="button">Why are mitochondrial inner membranes folded into cristae?</button>
+            <button type="button">Why do plants store starch while animals store glycogen?</button>
+            <button type="button">What happens if lysosomes burst inside an animal cell?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
+        <h2>Plant-Only, Shared Eukaryotic &amp; <em>Animal-Typical Organelle Sort</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Plant-Only Structures</strong>, <strong>Shared Eukaryotic Organelles</strong> (present in both plants and animals), and <strong>Animal-Typical Structures</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#22c55e" tabindex="0" role="button" aria-label="Plant-Only Structures bin">
+              <h4><i></i>Plant-Only Structures</h4>
+              <small>cellulose wall · chloroplast · sap vacuole · starch</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Shared Eukaryotic Organelles bin">
+              <h4><i></i>Shared Eukaryotic Organelles</h4>
+              <small>nucleus · mitochondria · ER · Golgi · 80S</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#f43f5e" tabindex="0" role="button" aria-label="Animal-Typical Structures bin">
+              <h4><i></i>Animal-Typical Structures</h4>
+              <small>centrioles · lysosomes · glycogen · flexible</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Dissector &amp; Energetics Bench · 15 min</span>
+        <h2>3D Plant &amp; Animal Cell Dissector: <em>Cristae Surface Area vs ATP Output</em></h2>
+        <p class="intro">Rotate the 3D <strong>Plant Cell</strong> (left) and <strong>Animal Cell</strong> (right) on the bench. Then test five specialised cell types (<code>Adipose, Cheek Epithelium, Leaf Palisade, Liver Hepatocyte, Flight Muscle</code>) to see how total mitochondrial cristae surface area <strong>C (µm²)</strong> determines cellular <strong>ATP Output Rate</strong>.</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Key Cytology Principle:</strong> Structure matches function! Metabolically active cells — such as <strong>flight muscle fibres, cardiac muscle cells, liver hepatocytes, sperm midpieces, and kidney proximal convoluted tubule cells</strong> — are packed with thousands of mitochondria whose deeply folded <strong>cristae</strong> maximise ATP synthesis.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Inspect Plant Cell (Left)</h4><p>Note the outer hexagonal cellulose wall, large central sap vacuole, tonoplast, green chloroplasts, and peripheral nucleus.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Inspect Animal Cell (Right)</h4><p>Note the flexible plasma membrane, central nucleus, paired centrioles, lysosomes, and abundant mitochondria.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Test Tissues A–E</h4><p>Tap Trials A–E to measure mitochondrial cristae surface area <code>C (µm²)</code> and ATP production rate across five tissues.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Compare Aerobic vs Hypoxic</h4><p>Switch conditions to see how dense cristae folding boosts ATP slope while oxygen deprivation stalls oxidative phosphorylation.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Plant and Animal Cell Organelle Dissector showing cellulose wall, sap vacuole, chloroplasts, nucleus, ER, Golgi, centrioles, lysosomes, and mitochondria."></canvas>
+            <div class="stage-label"><i></i>3D Plant &amp; Animal Cell Bench · drag to rotate · tap tissue trials A–E</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D organelle bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Mitochondrial condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Normal Aerobic (k = 0.45)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Dense Cristae Folding (1.5× k)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Hypoxic / Cyanide Block</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · Adipose (100 µm²)</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · Cheek (200 µm²)</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · Palisade (300 µm²)</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · Liver (400 µm²)</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · Muscle (500 µm²)</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 tissue trials</span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="vi-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots as you test tissues</span><h4>ATP Output Rate against Mitochondrial Cristae Surface Area C (µm²)</h4></div>
+            <span class="gc-badge wait" id="vi-badge">0 points</span>
+          </div>
+          <div id="vi-graph"></div>
+          <div class="gc-stats" id="vi-stats"></div>
+          <p class="gc-note" id="vi-note"></p>
+        </div>
+
+        <h3>Record your Tissue Cristae &amp; ATP readings</h3>
+        <p>As you test Trials A–E on the 3D bench, select the matching <strong>Tissue Type</strong>, <strong>ATP Output Rate</strong>, and calculated <strong>Ratio (ATP ÷ C)</strong> below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Cristae Area C (µm²)</th>
+                <th>Cell / Tissue Type</th>
+                <th>ATP Output Rate (units)</th>
+                <th>Ratio k = ATP ÷ C</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC table &amp; Cristae Energetics slope <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>Cristae Area C (µm²)</th><th>Tissue Type</th><th>ATP Output Rate</th><th>Ratio k = ATP ÷ C</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>100</td><td>Adipose (Fat)</td><td>45.0</td><td>0.45</td></tr>
+                  <tr><td>B</td><td>200</td><td>Cheek Epithelium</td><td>90.0</td><td>0.45</td></tr>
+                  <tr><td>C</td><td>300</td><td>Leaf Palisade</td><td>135.0</td><td>0.45</td></tr>
+                  <tr><td>D</td><td>400</td><td>Liver Hepatocyte</td><td>180.0</td><td>0.45</td></tr>
+                  <tr><td>E</td><td>500</td><td>Flight Muscle</td><td>225.0</td><td>0.45</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Slope of ATP Output Rate against Cristae Surface Area C:</strong></p>
+            <div class="eq light">k = ΔATP ÷ ΔC = (225.0 − 45.0) ÷ (500 − 100) = 180.0 ÷ 400 = 0.45 units/µm²</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l02-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC organelle analysis questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why does a flight muscle cell or sperm midpiece contain far more mitochondrial cristae area than an adipose (fat storage) cell?</li>
+            <li>Why is the nucleus pushed to the periphery (edge) in a mature plant palisade cell, whereas it sits near the centre of a cheek cell?</li>
+            <li>What happens to a cell’s ATP output if oxygen is removed or respiratory poison (cyanide) blocks the cristae electron transport chain?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Muscle contraction and flagellar swimming require rapid, continuous ATP hydrolysis; dense cristae provide a large surface area of ATP synthase enzymes to meet this high energy demand.</li>
+                <li>In a mature plant cell, the large permanent central sap vacuole expands up to 80% of cell volume, pushing the cytoplasm, nucleus, and chloroplasts into a thin peripheral layer against the cell wall.</li>
+                <li>Oxidative phosphorylation on the cristae stops, so ATP yield collapses from <code>38 ATP</code> per glucose down to only <code>2 ATP</code> per glucose from cytoplasmic glycolysis.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Complete Guide to Eukaryotic Organelles &amp; <em>Plant vs Animal Cells</em></h2>
+        <p class="intro">Master the structure, membranes, and exact WAEC/JAMB functions of every component inside plant and animal cells.</p>
+
+        <h3 id="def-shm">1 · Boundaries, Cytoplasm &amp; The Nucleus</h3>
+        <ul>
+          <li><strong>Cell Wall (Plants, Fungi, Bacteria — absent in Animals):</strong> In plants, a rigid, non-living outer layer composed of <strong>cellulose microfibrils</strong> cemented by pectin and hemicellulose (middle lamella). It is <strong>freely permeable</strong>, provides mechanical support, gives fixed polygonal shape, and prevents osmotic bursting. Cytoplasmic bridges called <strong>plasmodesmata</strong> pass through pits to link adjacent cells.</li>
+          <li><strong>Plasma (Cell Surface) Membrane:</strong> Living, thin (~7.5 nm), flexible <strong>phospholipid bilayer with embedded proteins</strong> and cholesterol (Fluid-Mosaic Model). It is <strong>selectively (differentially) permeable</strong>, regulating the entry and exit of ions, water, nutrients, and wastes.</li>
+          <li><strong>Cytoplasm (Cytosol):</strong> Translucent, aqueous colloidal jelly (70–90% water, proteins, salts, glucose, amino acids) where metabolic reactions such as <strong>glycolysis</strong> occur and organelles are suspended.</li>
+          <li><strong>Nucleus (“Control Centre”):</strong> Bounded by a perforated <strong>double nuclear envelope</strong> (nuclear pores regulate mRNA and ribosome traffic). Contains <strong>nucleoplasm</strong>, <strong>chromatin</strong> (linear DNA wrapped around <strong>histone proteins</strong>, condensing into chromosomes during division), and a dense non-membranous <strong>nucleolus</strong> that synthesises <strong>ribosomal RNA (rRNA)</strong> and assembles ribosomal subunits.</li>
+        </ul>
+
+        <h3 id="def-terms">2 · Semi-Autonomous Energy Organelles: Mitochondria &amp; Plastids</h3>
+        <ul>
+          <li><strong>Mitochondrion (“Powerhouse of the Cell”):</strong> Rod-shaped or spherical double-membrane organelle (<code>0.5–2 µm</code> wide). The outer membrane is smooth; the <strong>inner membrane is folded into shelf-like cristae</strong> studded with stalked <strong>ATP synthase ($F_0F_1$) particles</strong> and electron-transport chains. The inner fluid <strong>matrix</strong> contains Krebs cycle enzymes, <strong>circular naked DNA</strong>, and <strong>70S ribosomes</strong>. Site of aerobic respiration (<code>36–38 ATP</code> per glucose).</li>
+          <li><strong>Plastids (Plant &amp; Algal Cells Only):</strong>
+            <ul>
+              <li><strong>Chloroplasts:</strong> Green double-membrane plastids containing <strong>chlorophyll</strong>. Coin-like <strong>thylakoids</strong> stack into <strong>grana</strong> (connected by intergranal lamellae) where the <strong>light-dependent stage</strong> (photolysis of water + photophosphorylation) occurs. The colourless fluid <strong>stroma</strong> contains <strong>RuBisCO</strong> for the <strong>Calvin cycle (dark stage)</strong>, starch grains, circular DNA, and <strong>70S ribosomes</strong>.</li>
+              <li><strong>Chromoplasts:</strong> Pigmented plastids containing red, orange, or yellow <strong>carotenoids</strong> (carotene, xanthophyll) in flower petals, ripe tomato fruits, and carrot roots to attract pollinators and seed dispersers.</li>
+              <li><strong>Leucoplasts:</strong> Colourless storage plastids in roots, tubers, and seeds — including <strong>amyloplasts</strong> (store starch in yam/cassava tubers), <strong>elaioplasts</strong> (store lipids/oils), and <strong>aleuroplasts / proteinoplasts</strong> (store proteins).</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3>3 · Endomembrane System, Ribosomes, Lysosomes, Centrioles &amp; Vacuoles</h3>
+        <ul>
+          <li><strong>Rough Endoplasmic Reticulum (RER):</strong> Flattened membrane sacs (cisternae) continuous with the outer nuclear membrane and studded with <strong>80S ribosomes</strong>. Synthesises, folds, and transports secretory and membrane proteins.</li>
+          <li><strong>Smooth Endoplasmic Reticulum (SER):</strong> Tubular membranes lacking ribosomes. Synthesises <strong>lipids, phospholipids, and steroid hormones</strong> (testosterone, oestrogen), detoxifies drugs and poisons in liver hepatocytes, and stores $\text{Ca}^{2+}$ ions in muscle cells (sarcoplasmic reticulum).</li>
+          <li><strong>Golgi Apparatus (Dictyosomes in Plants):</strong> Stack of curved membrane cisternae with a receiving <strong>cis face</strong> and shipping <strong>trans face</strong>. Modifies proteins (glycosylation into glycoproteins), packages <strong>secretory vesicles</strong>, forms <strong>lysosomes</strong>, synthesises cell-wall polysaccharides (pectin/hemicellulose), and forms the <strong>acrosome</strong> of spermatozoa.</li>
+          <li><strong>Ribosomes (Non-Membrane-Bound):</strong> Tiny ribonucleoprotein particles (rRNA + protein; <code>80S</code> in eukaryotic cytoplasm, <code>70S</code> in prokaryotes, mitochondria, and chloroplasts). Site of <strong>translation (polypeptide synthesis)</strong>.</li>
+          <li><strong>Lysosomes (“Suicide Bags”):</strong> Single-membrane vesicles budded from the Golgi containing ~50 <strong>acidic hydrolytic enzymes</strong> (proteases, lipases, nucleases at $\text{pH} \approx 4.8$). Digest engulfed bacteria (phagocytosis), recycle worn-out organelles (<strong>autophagy</strong>), and self-digest damaged or developmental cells (<strong>autolysis</strong>, e.g., tadpole tail regression during metamorphosis).</li>
+          <li><strong>Centrosome &amp; Centrioles (Animal Cells &amp; Lower Plants):</strong> Pair of perpendicular hollow cylinders made of <strong>9 triplets of microtubules ($9+0$ arrangement)</strong>. Organise the <strong>spindle fibres</strong> that pull chromosomes apart during mitosis and meiosis, and form the <strong>basal bodies</strong> of cilia and flagella ($9+2$ arrangement).</li>
+          <li><strong>Vacuoles:</strong> In mature plant cells, a <strong>large permanent central sap vacuole</strong> bounded by a selectively permeable single membrane called the <strong>tonoplast</strong> stores water, sugars, amino acids, mineral salts, organic wastes, and <strong>anthocyanin</strong> pigments, while generating <strong>turgor pressure</strong>. Animal cells have only small, temporary vacuoles (food or pinocytic vacuoles); freshwater protists have <strong>contractile vacuoles</strong> for osmoregulation.</li>
+        </ul>
+
+        <h3>4 · Cellular Bioenergetics &amp; Vacuolar Volume Equations</h3>
+        <div class="eq" id="eq-shm" data-hook>R_ATP = ATP_aerobic ÷ ATP_anaerobic = 38 ÷ 2 = 19</div>
+        <div class="eq" id="eq-omega">ΔATP = N_glucose × (38 − 2) = 15 × 36 = 540 ATP</div>
+        <div class="eq" id="eq-vel">%V_vacuole = (V_vacuole ÷ V_cell) × 100 = (160000 ÷ 200000) × 100 = 80%</div>
+
+        <div class="callout big reveal" id="all-alkalis">
+          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up and act out the <strong>Protein Secretory Relay</strong>! Step 1: Touch your forehead (Nucleus writes the mRNA recipe). Step 2: Roll your forearms together (80S Ribosomes on the Rough ER assemble the protein). Step 3: Wrap an imaginary gift box with both hands (Golgi apparatus tags and packages the vesicle). Step 4: Stretch both arms outward (Exocytosis at the plasma membrane)!</p>
+        </div>
+
+        <h3 id="props">5 · Master Comparison: Plant Cell vs Animal Cell</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Plant Cell (e.g., Palisade / Onion Cell)</th><th>Animal Cell (e.g., Cheek / Liver Cell)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1. Outer Cell Wall</strong></td><td><strong>Present</strong> — rigid, non-living <strong>cellulose</strong> cell wall outside the plasma membrane</td><td><strong>Absent</strong> — bounded only by the flexible plasma membrane</td></tr>
+              <tr><td><strong>2. Shape</strong></td><td><strong>Definite, fixed, angular/polygonal</strong> shape maintained by the rigid wall</td><td><strong>Irregular, flexible, changeable</strong> shape</td></tr>
+              <tr><td><strong>3. Plastids (Chloroplasts)</strong></td><td><strong>Present</strong> in photosynthetic and storage tissues (chloroplasts, chromoplasts, leucoplasts)</td><td><strong>Absent</strong> in all animal cells</td></tr>
+              <tr><td><strong>4. Vacuole</strong></td><td>One <strong>large, permanent central sap vacuole</strong> bounded by a <strong>tonoplast</strong> (up to 80% of volume)</td><td>Small, <strong>temporary, scattered vacuoles</strong> (food or contractile vacuoles) if present</td></tr>
+              <tr><td><strong>5. Position of Cytoplasm &amp; Nucleus</strong></td><td>Pushed into a <strong>thin peripheral layer</strong> against the cell wall by the central vacuole</td><td>Cytoplasm fills the whole cell; <strong>nucleus is usually central</strong></td></tr>
+              <tr><td><strong>6. Carbohydrate Food Reserve</strong></td><td>Stored as insoluble <strong>starch grains</strong></td><td>Stored as cytoplasmic <strong>glycogen granules</strong></td></tr>
+              <tr><td><strong>7. Centrioles &amp; Centrosome</strong></td><td><strong>Absent</strong> in higher flowering plants (spindle forms without centrioles)</td><td><strong>Present</strong> ($9+0$ microtubule triplets) above the nucleus</td></tr>
+              <tr><td><strong>8. Lysosomes</strong></td><td>Rare / role performed by the central lytic vacuole</td><td><strong>Present</strong> and abundant in phagocytic and liver cells</td></tr>
+              <tr><td><strong>9. Plasmodesmata</strong></td><td><strong>Present</strong> — cytoplasmic bridges connecting adjacent cells through cell walls</td><td><strong>Absent</strong> (connected instead by tight junctions, desmosomes, gap junctions)</td></tr>
+              <tr><td><strong>10. Response in Pure Water</strong></td><td>Becomes <strong>fully turgid</strong>; cellulose wall exerts wall pressure and <strong>prevents bursting</strong></td><td>Swells and <strong>bursts (lysis / haemolysis)</strong> due to lack of a cell wall</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Endomembrane Secretory Pathway &amp; Energy Organelle Explorer</h3>
+        <p>Tap any pin from 1 to 5 below to trace how organelles cooperate inside the eukaryotic cell:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Genetic Control (Nucleus)</div><div>Endomembrane Factory (ER → Golgi)</div><div>Energy Organelles (Mito/Chloro) →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect organelle ultrastructure and biochemical role.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. 3D ORGANELLE ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Semi-Autonomous Organelle Zoom</span>
+        <h2>Inside the powerhouses: <em>3D Mitochondrion (Cristae) vs Chloroplast (Grana)</em></h2>
+        <p class="intro">Inspect our 3D cut-away models of the <strong>mitochondrion</strong> (red/amber outer membrane, folded inner cristae, matrix, 70S ribosomes) and the <strong>chloroplast</strong> (green double envelope, stacked thylakoid grana, intergranal lamellae, stroma).</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D cut-away models of a mitochondrion showing folded cristae and matrix, and a chloroplast showing stacked thylakoid grana and stroma."></canvas>
+            <div class="stage-label"><i></i>3D Mitochondrion &amp; Chloroplast Cut-Away · drag to rotate</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D organelle zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Organelle view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Both Organelles</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Mitochondrion (Cristae)</button>
+              <button type="button" data-mode="base" aria-pressed="false">Chloroplast (Grana)</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Boost Sunlight &amp; O₂ Supply</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#f43f5e"></i>Yield<b data-c="h">36 ATP</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Ribosomes<b data-c="oh">70S</b></span>
+              <span class="counter"><i style="--c:#7cc4ff"></i>DNA<b data-c="na">Circular</b></span>
+              <span class="counter"><i style="--c:#3ee6c4"></i>Envelope<b data-c="cl">2 membranes</b></span>
+              <span class="counter"><i style="--c:#22c55e"></i>Folds<b data-c="w">Both</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Every calculation is expanded step by step in LaTeX with a plain-English explainer note underneath.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Aerobic Mitochondrial ATP Yield vs Anaerobic Cytoplasmic Glycolysis</h4></div>
+          <div class="example-body">
+            <p class="q">An active flight muscle cell oxidises 15 molecules of glucose completely inside its mitochondria (yielding 38 ATP per glucose molecule). Calculate: (a) the total ATP produced aerobically, (b) the ATP that would be produced if the 15 glucose molecules underwent anaerobic glycolysis in the cytoplasm (2 ATP per glucose), and (c) the net additional ATP gained due to the presence of mitochondria.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Total aerobic ATP produced inside mitochondria:</strong> <code>ATP_aerobic = 15 × 38 = 570 ATP</code>.</li>
+              <li><strong>Part (b) — Total anaerobic ATP from cytoplasmic glycolysis alone:</strong> <code>ATP_anaerobic = 15 × 2 = 30 ATP</code>.</li>
+              <li><strong>Part (c) — Net additional ATP gained from mitochondrial cristae:</strong> <code>ΔATP = 570 − 30 = 540 ATP</code>.</li>
+            </ol>
+            <div class="answer-line">(a) 570 ATP &nbsp;·&nbsp; (b) 30 ATP &nbsp;·&nbsp; (c) Net gain = 540 ATP</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Calculating Central Sap Vacuole Volume Percentage in a Mature Plant Cell</h4></div>
+          <div class="example-body">
+            <p class="q">A mature palisade mesophyll cell has a total internal volume of 200000 µm³. Its central sap vacuole occupies 160000 µm³ while the nucleus occupies 10000 µm³. Calculate the percentage of the cell's volume occupied by: (a) the central sap vacuole, and (b) the remaining cytoplasm and organelles.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Percentage volume occupied by the central sap vacuole:</strong> <code>%V_vacuole = (160000 ÷ 200000) × 100 = 0.80 × 100 = 80%</code>.</li>
+              <li><strong>Part (b) Step 1 — Volume of remaining cytoplasm and organelles (excluding vacuole and nucleus):</strong> <code>V_cyto = 200000 − 160000 − 10000 = 30000 µm³</code>.</li>
+              <li><strong>Part (b) Step 2 — Percentage volume of remaining cytoplasm and organelles:</strong> <code>%V_cyto = (30000 ÷ 200000) × 100 = 0.15 × 100 = 15%</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Sap Vacuole = 80% &nbsp;·&nbsp; (b) Remaining Cytoplasm &amp; Organelles = 15%</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Actual Chloroplast Diameter from Electron Photomicrograph</h4></div>
+          <div class="example-body">
+            <p class="q">In a transmission electron micrograph of a palisade cell taken at ×12000 magnification, a chloroplast measures 60 mm in length. Calculate the actual length A of the chloroplast in micrometres (µm).</p>
+            <ol class="steps-sol">
+              <li><strong>Step 1 — Convert image length I from millimetres to micrometres:</strong> <code>I = 60 × 1000 = 60000 µm</code>.</li>
+              <li><strong>Step 2 — Divide image length I by magnification M to find actual chloroplast length A:</strong> <code>A = I ÷ M = 60000 ÷ 12000 = 5.0 µm</code>.</li>
+            </ol>
+            <div class="answer-line">Actual length of chloroplast A = 5.0 µm</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to Mile 12 Market: <em>solve the Ugu Leaf vs Catfish mystery!</em></h2>
+        <p class="intro">Walk through Steps 1, 2, and 3 to connect organelle ultrastructure to the real-world properties of Mama Titi’s fluted pumpkin leaf and catfish muscle.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Specimen A · Catfish Muscle Cell <small style="color:var(--muted);font-weight:500">· Flexible membrane, Centrioles, Glycogen</small></h4>
+              <div class="clock-well">
+                <div style="width:72px;height:48px;border-radius:50%;border:2px solid #f43f5e;background:rgba(244,63,94,.2);display:flex;align-items:center;justify-content:center;font-size:11px;color:#fecdd3">No Wall</div>
+              </div>
+              <div class="vt-count"><span id="time-a">Dense Mitochondria · Glycogen</span><small>heterotrophic animal cell</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Specimen B · Ugu Leaf Palisade Cell <small style="color:var(--muted);font-weight:500" id="len-b-label">· Unclassified eukaryotic specimen</small></h4>
+              <div class="clock-well">
+                <div style="width:82px;height:52px;border-radius:6px;border:3px solid #22c55e;background:rgba(34,197,94,.22);display:flex;align-items:center;justify-content:center;font-size:11px;color:#bbf7d0">Wall + Vacuole</div>
+              </div>
+              <div class="vt-count"><span id="time-b">Inspect wall, plastids &amp; storage</span><small>autotrophic plant cell</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Inspect Cellulose Wall &amp; Tonoplast Vacuole</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Test Chloroplast Grana + Mitochondrial Cristae</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Compare Starch vs Glycogen &amp; ATP Yield</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset comparison</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">Compare Specimen A (Catfish Muscle Cell) with Specimen B (Ugu Leaf Palisade Cell). Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 2:</strong> Every eukaryotic cell is a compartmentalised factory where the <strong>nucleus, Rough ER, and Golgi apparatus</strong> coordinate protein synthesis and export, and <strong>mitochondria</strong> generate <code>38 ATP</code> per glucose on folded <strong>cristae</strong>. Plant cells add a <strong>rigid cellulose cell wall</strong>, a <strong>large central sap vacuole (tonoplast)</strong>, and <strong>chloroplasts</strong> (storing <strong>starch</strong>), while animal cells remain flexible with <strong>centrioles, lysosomes</strong>, and <strong>glycogen</strong> granules!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 2.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can state the structure and function of all 12 eukaryotic organelles.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain why mitochondria and chloroplasts are semi-autonomous and how cristae and grana increase surface area.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can trace the protein secretory pathway from the nucleus and Rough ER to the Golgi apparatus and plasma membrane.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can distinguish chloroplasts, chromoplasts, and leucoplasts (amyloplasts) in plant tissues.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can contrast plant cells and animal cells across 10 structural and biochemical features.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l02-exit">
+          <div class="aq-top"><h4>In two sentences: why is it wrong to say “plant cells have chloroplasts instead of mitochondria”, and why are mitochondria and chloroplasts called semi-autonomous?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Green plant cells possess <strong>both</strong> chloroplasts (to synthesise glucose using sunlight) and mitochondria (to respire glucose into ATP day and night) <b>(1)</b>. Both organelles are called semi-autonomous because they contain their own circular DNA and 70S ribosomes, enabling them to synthesise some of their own proteins and divide by binary fission <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Eukaryotic Organelles &amp; Plant vs Animal Cells</em></h2>
+        <p class="intro">Complete Part A (kitchen plastid survey) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Kitchen Plastid &amp; Storage Survey</h3>
+        <div class="aq" data-answer="l02-a1">
+          <div class="aq-top"><h4>Inspect three plant items at home: (1) a green ugu or spinach leaf, (2) a ripe red tomato or yellow pepper, and (3) a white slice of yam or cassava tuber. Identify the dominant plastid type (chloroplast, chromoplast, or leucoplast/amyloplast) in each item and state its biological function.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your observations and plastid identifications…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <p>1. <strong>Green ugu leaf:</strong> Rich in <strong>chloroplasts</strong> containing green chlorophyll for photosynthesis.<br>
+              2. <strong>Ripe red tomato / pepper:</strong> Rich in <strong>chromoplasts</strong> containing red/orange carotenoid pigments to attract animals for seed dispersal.<br>
+              3. <strong>White yam / cassava tuber:</strong> Rich in colourless <strong>leucoplasts (amyloplasts)</strong> that synthesise and store insoluble starch grains.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l02-b1">
+          <div class="aq-top"><h4>1. (a) Tabulate eight structural or biochemical differences between a typical green plant cell and a typical animal cell [8 marks]. (b) State two organelles that are bounded by a double membrane and contain 70S ribosomes [2 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) 1. <strong>Cell wall:</strong> Cellulose wall present in plant vs absent in animal <b>(1)</b>. 2. <strong>Shape:</strong> Fixed angular shape vs irregular flexible shape <b>(1)</b>. 3. <strong>Chloroplasts/Plastids:</strong> Present vs absent <b>(1)</b>. 4. <strong>Vacuole:</strong> Large permanent central sap vacuole with tonoplast vs small temporary vacuoles <b>(1)</b>. 5. <strong>Carbohydrate storage:</strong> Starch grains vs glycogen granules <b>(1)</b>. 6. <strong>Centrioles:</strong> Absent in higher plants vs present in animals <b>(1)</b>. 7. <strong>Nucleus position:</strong> Peripheral vs central <b>(1)</b>. 8. <strong>Plasmodesmata:</strong> Present vs absent <b>(1)</b>.<br>
+            (b) <strong>Mitochondrion</strong> <b>(1)</b> and <strong>Chloroplast</strong> <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b2">
+          <div class="aq-top"><h4>2. (a) State the specific site and function of each of the following: (i) Cristae (ii) Grana (iii) Nucleolus (iv) Tonoplast (v) Lysosome [5 marks]. (b) Trace in correct order the pathway taken by a newly synthesised digestive enzyme from the Rough ER until it is secreted outside the cell [5 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) (i) <strong>Cristae:</strong> Foldings of the inner mitochondrial membrane; provide large surface area for electron transport and ATP synthesis <b>(1)</b>. (ii) <strong>Grana:</strong> Stacks of thylakoids in the chloroplast; trap light energy for the light-dependent stage of photosynthesis <b>(1)</b>. (iii) <strong>Nucleolus:</strong> Inside the nucleus; synthesises rRNA and assembles ribosome subunits <b>(1)</b>. (iv) <strong>Tonoplast:</strong> Single selectively permeable membrane bounding the plant sap vacuole; regulates ion and water movement into the vacuole <b>(1)</b>. (v) <strong>Lysosome:</strong> Animal cytoplasm; contains acidic hydrolytic enzymes for intracellular digestion, autophagy, and autolysis <b>(1)</b>.<br>
+            (b) 1. Polypeptide is synthesised by <strong>80S ribosomes</strong> on the <strong>Rough ER</strong> and folds in the ER lumen <b>(1)</b>. 2. Pinches off inside a <strong>transport vesicle</strong> <b>(1)</b>. 3. Fuses with the <em>cis</em> face of the <strong>Golgi apparatus</strong> where it is chemically modified (glycosylated) and sorted <b>(1)</b>. 4. Buds off from the <em>trans</em> face inside a <strong>secretory vesicle</strong> <b>(1)</b>. 5. Secretory vesicle fuses with the <strong>plasma membrane</strong> and releases the enzyme by <strong>exocytosis</strong> <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b3">
+          <div class="aq-top"><h4>3. (a) A liver hepatocyte oxidises 25 molecules of glucose aerobically (38 ATP per glucose), while a yeast cell ferments 25 molecules of glucose anaerobically (2 ATP per glucose). Calculate the ATP produced by each cell and the difference in ATP yield [6 marks]. (b) A plant cell has a total volume of 250000 µm³, of which the central vacuole occupies 195000 µm³. Calculate the percentage of the cell volume occupied by the vacuole [4 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Liver cell aerobic yield: <code>ATP_aerobic = 25 × 38 = 950 ATP</code> <b>(2)</b>.<br>
+            Yeast cell anaerobic yield: <code>ATP_anaerobic = 25 × 2 = 50 ATP</code> <b>(2)</b>.<br>
+            Difference in ATP yield: <code>ΔATP = 950 − 50 = 900 ATP</code> <b>(2)</b>.<br>
+            (b) Vacuole volume percentage: <code>%V = (195000 ÷ 250000) × 100 = 0.78 × 100 = 78%</code> <b>(4)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 1: Discovery &amp; Prokaryotes</a>
+          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3 — Forms of Living Cells &amp; Organisation →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/cell-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

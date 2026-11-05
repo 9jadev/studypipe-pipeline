@@ -11,7 +11,7 @@ description: Tests a rendered multi-lesson unit offline in a phone-sized browser
    - Zero console errors or uncaught page errors across the Welcome Hub and all lessons
    - Zero network requests (100% offline; local `.woff2` fonts and assets only)
    - Welcome Hub (`html/index.html`) renders its 3D Hero Lab (`#lab-canvas`), Lesson Journey links (`lessons/lesson-0X/index.html`), Interactive Explorer tabs, Myth cards, and Welcome Narrator tour (`StudyNarrator`)
-   - Every lesson (`html/lessons/lesson-0X/index.html`) mounts `StudyNarrator` (`.narr-dock`), `window.NARRATION.script`, word spans (`.w`), spotlight (`.narr-spot`), `LessonKit` interactive quiz cards in `#quiz-list`, `.l-sec` sections, and 3D `SceneKit` / `StoryStage` canvases without collapsing or overflowing horizontally at `360×740`.
+   - Every lesson (`html/lessons/lesson-0X/index.html`) mounts `StudyNarrator` (`.narr-dock`), `window.NARRATION.script`, word spans (`.w`), spotlight (`.narr-spot`), `window.StudyMath` offline LaTeX rendering (`.sp-math[data-latex]`) and step-by-step calculation explainer notes (`.m-step-note`, `.m-eq-note`), `LessonKit` interactive quiz cards in `#quiz-list`, `.l-sec` sections, and 3D `SceneKit` / `StoryStage` canvases without collapsing or overflowing horizontally at `360×740`.
 2. **Look at key screenshots yourself** and append a `## Visual review` section to `05-qa-report.md`:
    - Editorial typography (`Fraunces` serif headings, `Manrope` body, `JetBrains Mono` readouts) aligned cleanly
    - Dark-ink Welcome Hub & 3D stages contrast sharply with warm-paper lesson reading sections
