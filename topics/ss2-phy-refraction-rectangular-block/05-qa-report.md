@@ -1,6 +1,7 @@
 # QA report: topics/ss2-phy-refraction-rectangular-block
-date: 2026-11-05 11:34
+date: 2026-11-05 20:09
 verdict: PASS
+theme: editorial-ink
 lessons checked: 5
 sections checked: 65
 

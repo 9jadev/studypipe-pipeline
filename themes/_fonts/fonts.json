@@ -1,0 +1,141 @@
+{
+  "fraunces": {
+    "family": "Fraunces",
+    "category": "display-serif",
+    "personality": "Soft, wonky editorial serif with optical sizing; warm & literary",
+    "files": [
+      "fraunces-latin-full-normal.woff2",
+      "fraunces-latin-full-italic.woff2"
+    ],
+    "kb": 264
+  },
+  "manrope": {
+    "family": "Manrope",
+    "category": "sans",
+    "personality": "Modern geometric-grotesk body text; clean, slightly technical",
+    "files": [
+      "manrope-latin-wght-normal.woff2"
+    ],
+    "kb": 24
+  },
+  "jetbrains-mono": {
+    "family": "JetBrains Mono",
+    "category": "mono",
+    "personality": "Developer mono with tall x-height; crisp readouts",
+    "files": [
+      "jetbrains-mono-latin-400-normal.woff2",
+      "jetbrains-mono-latin-500-normal.woff2"
+    ],
+    "kb": 42
+  },
+  "lora": {
+    "family": "Lora",
+    "category": "serif",
+    "personality": "Calligraphic book serif; calm, textbook-like, great for long reading",
+    "files": [
+      "lora-latin-wght-normal.woff2",
+      "lora-latin-wght-italic.woff2"
+    ],
+    "kb": 77
+  },
+  "source-serif-4": {
+    "family": "Source Serif 4",
+    "category": "serif",
+    "personality": "Sober, highly legible academic serif; exam-paper seriousness",
+    "files": [
+      "source-serif-4-latin-wght-normal.woff2",
+      "source-serif-4-latin-wght-italic.woff2"
+    ],
+    "kb": 100
+  },
+  "dm-serif-display": {
+    "family": "DM Serif Display",
+    "category": "display-serif",
+    "personality": "High-contrast poster serif for big headlines only (single weight)",
+    "files": [
+      "dm-serif-display-latin-400-normal.woff2",
+      "dm-serif-display-latin-400-italic.woff2"
+    ],
+    "kb": 48
+  },
+  "inter": {
+    "family": "Inter",
+    "category": "sans",
+    "personality": "Neutral UI sans; maximally plain and readable on small screens",
+    "files": [
+      "inter-latin-wght-normal.woff2",
+      "inter-latin-wght-italic.woff2"
+    ],
+    "kb": 98
+  },
+  "space-grotesk": {
+    "family": "Space Grotesk",
+    "category": "sans",
+    "personality": "Quirky techy grotesk; science-lab / futuristic headings",
+    "files": [
+      "space-grotesk-latin-wght-normal.woff2"
+    ],
+    "kb": 22
+  },
+  "plus-jakarta-sans": {
+    "family": "Plus Jakarta Sans",
+    "category": "sans",
+    "personality": "Friendly modern sans with open shapes; polished app feel",
+    "files": [
+      "plus-jakarta-sans-latin-wght-normal.woff2",
+      "plus-jakarta-sans-latin-wght-italic.woff2"
+    ],
+    "kb": 56
+  },
+  "nunito": {
+    "family": "Nunito",
+    "category": "rounded-sans",
+    "personality": "Rounded terminals; soft, friendly, junior-secondary feel",
+    "files": [
+      "nunito-latin-wght-normal.woff2",
+      "nunito-latin-wght-italic.woff2"
+    ],
+    "kb": 79
+  },
+  "baloo-2": {
+    "family": "Baloo 2",
+    "category": "rounded-display",
+    "personality": "Chunky, playful rounded display; fun headings for JSS",
+    "files": [
+      "baloo-2-latin-wght-normal.woff2"
+    ],
+    "kb": 32
+  },
+  "atkinson-hyperlegible": {
+    "family": "Atkinson Hyperlegible",
+    "category": "sans",
+    "personality": "Designed for low-vision readers; unmistakable letterforms (Il1, 0O)",
+    "files": [
+      "atkinson-hyperlegible-latin-400-normal.woff2",
+      "atkinson-hyperlegible-latin-700-normal.woff2",
+      "atkinson-hyperlegible-latin-400-italic.woff2"
+    ],
+    "kb": 52
+  },
+  "ibm-plex-mono": {
+    "family": "IBM Plex Mono",
+    "category": "mono",
+    "personality": "Engineered, slightly humanist mono; formal technical readouts",
+    "files": [
+      "ibm-plex-mono-latin-400-normal.woff2",
+      "ibm-plex-mono-latin-500-normal.woff2",
+      "ibm-plex-mono-latin-600-normal.woff2"
+    ],
+    "kb": 44
+  },
+  "space-mono": {
+    "family": "Space Mono",
+    "category": "mono",
+    "personality": "Retro geometric mono; bold, characterful labels",
+    "files": [
+      "space-mono-latin-400-normal.woff2",
+      "space-mono-latin-700-normal.woff2"
+    ],
+    "kb": 32
+  }
+}

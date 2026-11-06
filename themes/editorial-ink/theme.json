@@ -1,0 +1,9 @@
+{
+  "id": "editorial-ink",
+  "name": "Editorial Ink",
+  "description": "Dark ink studio hub with glowing accents; warm textbook-paper lessons. Magazine-like and premium.",
+  "audience": "SS1–SS3",
+  "mood": ["editorial", "premium", "calm"],
+  "fonts": { "display": "fraunces", "body": "manrope", "mono": "jetbrains-mono", "math": "fraunces" },
+  "themeColor": "#060912"
+}

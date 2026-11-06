@@ -1,0 +1,9 @@
+/* Manrope — SIL Open Font License 1.1 (see OFL.txt). Bundled offline. */
+@font-face {
+  font-family: "Manrope";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("../fonts/manrope-latin-wght-normal.woff2") format("woff2-variations"),
+       url("../fonts/manrope-latin-wght-normal.woff2") format("woff2");
+}

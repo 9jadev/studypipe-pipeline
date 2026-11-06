@@ -1,6 +1,7 @@
 # ss2-phy-simple-harmonic-motion
 
 state: AWAITING-REVIEW
+theme: editorial-ink
 
 | step | state | updated | note |
 |---|---|---|---|

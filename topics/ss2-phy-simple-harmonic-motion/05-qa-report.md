@@ -1,6 +1,7 @@
 # QA report: topics/ss2-phy-simple-harmonic-motion
-date: 2026-11-05 11:19
+date: 2026-11-05 20:14
 verdict: PASS
+theme: editorial-ink
 lessons checked: 5
 sections checked: 60
 

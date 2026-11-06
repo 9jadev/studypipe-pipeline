@@ -32,7 +32,7 @@
     var c = document.createElement("canvas");
     var fs = opts.size || 56;
     var g = c.getContext("2d");
-    g.font = (opts.weight || 700) + " " + fs + "px " + (opts.font || "Manrope, sans-serif");
+    g.font = (opts.weight || 700) + " " + fs + "px " + (opts.font || (getComputedStyle(document.documentElement).getPropertyValue("--font-label").trim() || "Manrope, sans-serif"));
     var w = Math.ceil(g.measureText(text).width) + fs;
     c.width = Math.max(64, w); c.height = Math.round(fs * 1.7);
     g = c.getContext("2d");
@@ -43,7 +43,7 @@
       g.moveTo(r, 0); g.lineTo(c.width - r, 0); g.arc(c.width - r, r, r, -Math.PI / 2, Math.PI / 2);
       g.lineTo(r, c.height); g.arc(r, r, r, Math.PI / 2, Math.PI * 1.5); g.fill();
     }
-    g.font = (opts.weight || 700) + " " + fs + "px " + (opts.font || "Manrope, sans-serif");
+    g.font = (opts.weight || 700) + " " + fs + "px " + (opts.font || (getComputedStyle(document.documentElement).getPropertyValue("--font-label").trim() || "Manrope, sans-serif"));
     g.fillStyle = opts.color || "#ffffff";
     g.textAlign = "center"; g.textBaseline = "middle";
     g.fillText(text, c.width / 2, c.height / 2 + 2);

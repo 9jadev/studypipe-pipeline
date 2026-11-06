@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyPipe Themes</title>
+<style>
+:root{--bg:#f4f2ee;--fg:#1b1813;--mut:#6b6253;--card:#fff;--line:#e2ddd3}
+@media (prefers-color-scheme:dark){:root{--bg:#0e1015;--fg:#eceef3;--mut:#9aa1b2;--card:#171a22;--line:#272b36}}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;padding:28px 16px 60px}
+main{max-width:1200px;margin:0 auto}h1{margin:0 0 4px;font-size:28px}.sub{color:var(--mut);margin:0 0 28px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:24px}
+.card header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.card h2{margin:0;font-size:21px}.card h2 em{font-style:normal;font-size:12px;background:#1b7f5f;color:#fff;border-radius:99px;padding:2px 9px;vertical-align:middle}
+.card p{margin:8px 0 0;color:var(--mut)}code{font:13px ui-monospace,Menlo,monospace}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.meta span{font-size:13px;border:1px solid var(--line);border-radius:99px;padding:3px 10px}.meta b{color:var(--mut);font-weight:600;margin-right:4px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px}.shots img{width:100%;border-radius:10px;border:1px solid var(--line);display:block}
+.use{font-size:14px}
+</style></head><body><main>
+<h1>StudyPipe themes</h1>
+<p class="sub">Phone previews (360×740) of the same lesson in each theme. Pick one per topic; design new ones with the <code>theme-designer</code> skill.</p>
+<section class="card">
+  <header><h2>Editorial Ink <em>default</em></h2><code>editorial-ink</code></header>
+  <p>Dark ink studio hub with glowing accents; warm textbook-paper lessons. Magazine-like and premium.</p>
+  <div class="meta"><span><b>display</b> Fraunces</span><span><b>body</b> Manrope</span><span><b>mono</b> JetBrains Mono</span><span><b>math</b> Fraunces</span><span><b>fonts</b> 330 KB</span><span><b>for</b> SS1–SS3</span></div>
+  <div class="shots"><img loading="lazy" src="editorial-ink/preview/phone-hub.png" alt="Editorial Ink — phone-hub"><img loading="lazy" src="editorial-ink/preview/phone-lesson-hero.png" alt="Editorial Ink — phone-lesson-hero"><img loading="lazy" src="editorial-ink/preview/phone-lesson-paper.png" alt="Editorial Ink — phone-lesson-paper"><img loading="lazy" src="editorial-ink/preview/phone-lesson-quiz.png" alt="Editorial Ink — phone-lesson-quiz"></div>
+  <p class="use">Use it: <code>node scripts/apply-theme.mjs topics/&lt;slug&gt; editorial-ink</code></p>
+</section>
+<section class="card">
+  <header><h2>Exam Hall </h2><code>exam-classic</code></header>
+  <p>Sober navy and clean white paper with a red-pen accent. Bookish serif headings and a hyperlegible body face. Built for focused SS3 / WAEC revision.</p>
+  <div class="meta"><span><b>display</b> Source Serif 4</span><span><b>body</b> Atkinson Hyperlegible</span><span><b>mono</b> IBM Plex Mono</span><span><b>math</b> Source Serif 4</span><span><b>fonts</b> 196 KB</span><span><b>for</b> SS2–SS3, exam revision</span></div>
+  <div class="shots"><img loading="lazy" src="exam-classic/preview/phone-hub.png" alt="Exam Hall — phone-hub"><img loading="lazy" src="exam-classic/preview/phone-lesson-hero.png" alt="Exam Hall — phone-lesson-hero"><img loading="lazy" src="exam-classic/preview/phone-lesson-paper.png" alt="Exam Hall — phone-lesson-paper"><img loading="lazy" src="exam-classic/preview/phone-lesson-quiz.png" alt="Exam Hall — phone-lesson-quiz"></div>
+  <p class="use">Use it: <code>node scripts/apply-theme.mjs topics/&lt;slug&gt; exam-classic</code></p>
+</section>
+<section class="card">
+  <header><h2>Green Lab </h2><code>green-lab</code></header>
+  <p>Deep Nigerian-green lab console, electric lime highlights and a cool mint-white paper. Techy grotesk headings. Energetic and modern, a natural fit for physics and chemistry.</p>
+  <div class="meta"><span><b>display</b> Space Grotesk</span><span><b>body</b> Plus Jakarta Sans</span><span><b>mono</b> Space Mono</span><span><b>math</b> Source Serif 4</span><span><b>fonts</b> 210 KB</span><span><b>for</b> SS1–SS3, sciences</span></div>
+  <div class="shots"><img loading="lazy" src="green-lab/preview/phone-hub.png" alt="Green Lab — phone-hub"><img loading="lazy" src="green-lab/preview/phone-lesson-hero.png" alt="Green Lab — phone-lesson-hero"><img loading="lazy" src="green-lab/preview/phone-lesson-paper.png" alt="Green Lab — phone-lesson-paper"><img loading="lazy" src="green-lab/preview/phone-lesson-quiz.png" alt="Green Lab — phone-lesson-quiz"></div>
+  <p class="use">Use it: <code>node scripts/apply-theme.mjs topics/&lt;slug&gt; green-lab</code></p>
+</section>
+<section class="card">
+  <header><h2>Junior Play </h2><code>junior-play</code></header>
+  <p>Friendly indigo night sky with sunny-cream pages, chunky rounded headings, big soft corners and bright candy accents. Made for JSS learners.</p>
+  <div class="meta"><span><b>display</b> Baloo 2</span><span><b>body</b> Nunito</span><span><b>mono</b> JetBrains Mono</span><span><b>math</b> Lora</span><span><b>fonts</b> 230 KB</span><span><b>for</b> JSS1–JSS3</span></div>
+  <div class="shots"><img loading="lazy" src="junior-play/preview/phone-hub.png" alt="Junior Play — phone-hub"><img loading="lazy" src="junior-play/preview/phone-lesson-hero.png" alt="Junior Play — phone-lesson-hero"><img loading="lazy" src="junior-play/preview/phone-lesson-paper.png" alt="Junior Play — phone-lesson-paper"><img loading="lazy" src="junior-play/preview/phone-lesson-quiz.png" alt="Junior Play — phone-lesson-quiz"></div>
+  <p class="use">Use it: <code>node scripts/apply-theme.mjs topics/&lt;slug&gt; junior-play</code></p>
+</section>
+</main></body></html>

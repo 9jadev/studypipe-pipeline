@@ -1,6 +1,7 @@
 # QA report: topics/ss1-bio-plant-animal-cell-structure
-date: 2026-11-05 14:54
+date: 2026-11-05 19:58
 verdict: PASS
+theme: editorial-ink
 lessons checked: 5
 sections checked: 60
 

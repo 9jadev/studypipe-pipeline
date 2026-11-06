@@ -1,0 +1,9 @@
+{
+  "id": "exam-classic",
+  "name": "Exam Hall",
+  "description": "Sober navy and clean white paper with a red-pen accent. Bookish serif headings and a hyperlegible body face. Built for focused SS3 / WAEC revision.",
+  "audience": "SS2–SS3, exam revision",
+  "mood": ["serious", "clear", "academic"],
+  "fonts": { "display": "source-serif-4", "body": "atkinson-hyperlegible", "mono": "ibm-plex-mono", "math": "source-serif-4" },
+  "themeColor": "#0b1530"
+}

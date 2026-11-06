@@ -1,0 +1,15 @@
+/* DM Serif Display — SIL Open Font License 1.1 (see OFL.txt). Bundled offline. */
+@font-face {
+  font-family: "DM Serif Display";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../fonts/dm-serif-display-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "DM Serif Display";
+  font-style: italic;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../fonts/dm-serif-display-latin-400-italic.woff2") format("woff2");
+}

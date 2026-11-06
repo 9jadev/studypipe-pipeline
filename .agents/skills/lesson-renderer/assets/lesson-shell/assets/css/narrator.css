@@ -4,7 +4,7 @@
 
 /* ---------- Spotlight ---------- */
 .narr-spot {
-  position: fixed; z-index: 70; pointer-events: none; border-radius: 22px;
+  position: fixed; z-index: 70; pointer-events: none; border-radius: calc(22px * var(--corner, 1));
   box-shadow: 0 0 0 200vmax rgba(4, 6, 14, 0.62);
   opacity: 0; transition: opacity .5s var(--ease), border-radius .4s;
 }
@@ -18,7 +18,7 @@
 }
 .narr-spot::after {
   content: ""; position: absolute; inset: -10px; border-radius: inherit;
-  box-shadow: 0 0 34px 4px rgba(255, 178, 63, 0.35), inset 0 0 30px rgba(255, 178, 63, 0.12);
+  box-shadow: 0 0 34px 4px rgba(var(--amber-rgb), 0.35), inset 0 0 30px rgba(var(--amber-rgb), 0.12);
   animation: narr-breathe 2.4s ease-in-out infinite;
 }
 .narr-spot.dimless { box-shadow: none; }
@@ -29,8 +29,8 @@
 /* cue tag with pointer */
 .narr-cue {
   position: fixed; z-index: 72; pointer-events: none; display: flex; align-items: center; gap: 8px;
-  background: var(--amber); color: #1b1206; font-weight: 800; font-size: 13px; letter-spacing: .02em;
-  padding: 7px 12px 7px 10px; border-radius: 999px; box-shadow: 0 10px 30px -8px rgba(255, 178, 63, .7);
+  background: var(--amber); color: var(--on-amber); font-weight: 800; font-size: 13px; letter-spacing: .02em;
+  padding: 7px 12px 7px 10px; border-radius: 999px; box-shadow: 0 10px 30px -8px rgba(var(--amber-rgb), .7);
   opacity: 0; transform: translateY(6px); transition: opacity .4s var(--ease), transform .4s var(--ease);
   white-space: nowrap;
 }
@@ -71,9 +71,9 @@
 
 /* ---------- Hero tour button ---------- */
 .btn-tour {
-  background: rgba(255, 178, 63, 0.1); color: var(--amber); box-shadow: inset 0 0 0 1px rgba(255, 178, 63, 0.45);
+  background: rgba(var(--amber-rgb), 0.1); color: var(--amber); box-shadow: inset 0 0 0 1px rgba(var(--amber-rgb), 0.45);
 }
-.btn-tour:hover { box-shadow: inset 0 0 0 1px var(--amber), 0 10px 30px -12px rgba(255, 178, 63, .6); }
+.btn-tour:hover { box-shadow: inset 0 0 0 1px var(--amber), 0 10px 30px -12px rgba(var(--amber-rgb), .6); }
 .btn-tour .wave { display: inline-flex; gap: 2px; align-items: center; height: 14px; }
 .btn-tour .wave i { width: 3px; border-radius: 2px; background: currentColor; animation: eq 1s ease-in-out infinite; }
 .btn-tour .wave i:nth-child(1) { height: 6px; animation-delay: -.2s; }
@@ -103,12 +103,12 @@
 .narr-avatar {
   position: relative; width: 44px; height: 44px; border-radius: 50%; flex: none;
   background: radial-gradient(circle at 35% 30%, #ffd9a0, var(--amber) 35%, var(--pink) 80%);
-  box-shadow: 0 0 0 3px rgba(255, 178, 63, 0.18), 0 0 26px rgba(255, 61, 139, .45);
+  box-shadow: 0 0 0 3px rgba(var(--amber-rgb), 0.18), 0 0 26px rgba(var(--pink-rgb), .45);
   display: grid; place-items: center;
 }
 .narr-avatar svg { width: 22px; height: 22px; }
 .narr-avatar::before, .narr-avatar::after {
-  content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(255, 178, 63, .55); opacity: 0;
+  content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid rgba(var(--amber-rgb), .55); opacity: 0;
 }
 .speaking .narr-avatar::before { animation: ring 1.6s ease-out infinite; }
 .speaking .narr-avatar::after { animation: ring 1.6s ease-out .8s infinite; }
@@ -117,7 +117,7 @@
 
 .narr-panel {
   background: rgba(12, 17, 33, 0.9); -webkit-backdrop-filter: blur(18px) saturate(140%); backdrop-filter: blur(18px) saturate(140%);
-  border-radius: 22px; box-shadow: inset 0 0 0 1px var(--line-strong), 0 30px 70px -20px rgba(0, 0, 0, .85);
+  border-radius: calc(22px * var(--corner, 1)); box-shadow: inset 0 0 0 1px var(--line-strong), 0 30px 70px -20px rgba(0, 0, 0, .85);
   padding: 14px 14px 12px; animation: panel-in .5s var(--ease);
 }
 @keyframes panel-in { from { opacity: 0; transform: translateY(16px) scale(.98); } }
@@ -134,9 +134,9 @@
   max-height: 6em; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; scroll-behavior: smooth;
 }
 .narr-caption::-webkit-scrollbar { display: none; }
-.narr-caption .w { transition: color .15s, background .15s; border-radius: 4px; }
+.narr-caption .w { transition: color .15s, background .15s; border-radius: calc(4px * var(--corner, 1)); }
 .narr-caption .w.said { color: var(--fg); }
-.narr-caption .w.now { color: #1b1206; background: var(--amber); box-shadow: 0 0 0 2px var(--amber); }
+.narr-caption .w.now { color: var(--on-amber); background: var(--amber); box-shadow: 0 0 0 2px var(--amber); }
 .narr-wait {
   margin-top: 8px; display: none; align-items: center; gap: 8px; font-size: 13px; color: var(--teal); font-weight: 700;
 }
@@ -145,22 +145,22 @@
 
 .narr-controls { display: flex; align-items: center; gap: 6px; margin-top: 12px; }
 .narr-btn {
-  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; border: 0; cursor: pointer;
+  display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: calc(12px * var(--corner, 1)); border: 0; cursor: pointer;
   background: rgba(255, 255, 255, 0.06); color: var(--fg); transition: background .2s, transform .15s;
 }
 .narr-btn:hover { background: rgba(255, 255, 255, 0.12); }
 .narr-btn:active { transform: scale(.95); }
 .narr-btn svg { width: 18px; height: 18px; }
 .narr-btn.primary { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--pink), var(--amber)); color: #fff; }
-.narr-btn.pulse-next { box-shadow: 0 0 0 0 rgba(62, 230, 196, .6); animation: btn-pulse 1.4s infinite; background: rgba(62, 230, 196, .18); color: var(--teal); }
-@keyframes btn-pulse { 70% { box-shadow: 0 0 0 12px rgba(62, 230, 196, 0); } 100% { box-shadow: 0 0 0 0 rgba(62, 230, 196, 0); } }
+.narr-btn.pulse-next { box-shadow: 0 0 0 0 rgba(var(--teal-rgb), .6); animation: btn-pulse 1.4s infinite; background: rgba(var(--teal-rgb), .18); color: var(--teal); }
+@keyframes btn-pulse { 70% { box-shadow: 0 0 0 12px rgba(var(--teal-rgb), 0); } 100% { box-shadow: 0 0 0 0 rgba(var(--teal-rgb), 0); } }
 .narr-spacer { flex: 1; }
 .narr-speed {
-  height: 34px; border-radius: 10px; border: 0; padding: 0 10px; cursor: pointer; font-family: var(--font-mono); font-size: 12px;
+  height: 34px; border-radius: calc(10px * var(--corner, 1)); border: 0; padding: 0 10px; cursor: pointer; font-family: var(--font-mono); font-size: 12px;
   background: rgba(255, 255, 255, 0.06); color: var(--fg-soft);
 }
 .narr-win { display: flex; gap: 4px; flex: none; }
-.narr-close { width: 34px; height: 34px; border-radius: 10px; flex: none; }
+.narr-close { width: 34px; height: 34px; border-radius: calc(10px * var(--corner, 1)); flex: none; }
 .narr-grip { display: none; }
 
 /* ---------- Minimised bar (keeps playing) ---------- */
@@ -193,13 +193,13 @@
 .narr-mini .txt b { font-size: 13.5px; font-weight: 700; }
 .narr-mini .txt small { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
 .narr-dock.waiting .narr-mini .txt small { color: var(--teal); font-weight: 700; }
-.narr-dock.waiting .narr-mini { box-shadow: inset 0 0 0 1px rgba(62, 230, 196, .55), 0 20px 50px -18px rgba(0, 0, 0, .8); }
+.narr-dock.waiting .narr-mini { box-shadow: inset 0 0 0 1px rgba(var(--teal-rgb), .55), 0 20px 50px -18px rgba(0, 0, 0, .8); }
 .narr-mini .narr-btn { width: 40px; height: 40px; border-radius: 50%; }
 .narr-mini .narr-btn.primary { width: 42px; height: 42px; }
 
 .narr-track { display: flex; gap: 4px; margin-top: 12px; }
 .narr-track button {
-  flex: 1; height: 6px; border: 0; padding: 0; border-radius: 3px; cursor: pointer; background: rgba(255, 255, 255, 0.1);
+  flex: 1; height: 6px; border: 0; padding: 0; border-radius: calc(3px * var(--corner, 1)); cursor: pointer; background: rgba(255, 255, 255, 0.1);
   position: relative; overflow: hidden;
 }
 .narr-track button::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--pink), var(--amber)); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); transition: transform .4s var(--ease); }
@@ -209,7 +209,7 @@
 .narr-settings { display: none; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
 .narr-settings.on { display: flex; }
 .narr-settings select {
-  max-width: 100%; height: 34px; border-radius: 10px; border: 0; padding: 0 10px; background: rgba(255, 255, 255, 0.06); color: var(--fg); font: inherit; font-size: 13px;
+  max-width: 100%; height: 34px; border-radius: calc(10px * var(--corner, 1)); border: 0; padding: 0 10px; background: rgba(255, 255, 255, 0.06); color: var(--fg); font: inherit; font-size: 13px;
 }
 .narr-settings select option { background: var(--ink-800); }
 .narr-note { font-size: 12px; color: var(--muted); }

@@ -1,0 +1,9 @@
+{
+  "id": "junior-play",
+  "name": "Junior Play",
+  "description": "Friendly indigo night sky with sunny-cream pages, chunky rounded headings, big soft corners and bright candy accents. Made for JSS learners.",
+  "audience": "JSS1–JSS3",
+  "mood": ["playful", "warm", "friendly"],
+  "fonts": { "display": "baloo-2", "body": "nunito", "mono": "jetbrains-mono", "math": "lora" },
+  "themeColor": "#160d30"
+}

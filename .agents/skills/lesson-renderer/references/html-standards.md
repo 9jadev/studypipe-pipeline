@@ -4,7 +4,7 @@
 Units and lessons run from local files (`file://`) inside an Android WebView on low-end phones with no internet connection:
 - **No ES modules** (`<script type="module">` fails on `file://`). Every script is a classic `<script src="...">`.
 - **No `fetch()` or `XMLHttpRequest`**. All data lives in classic JS scripts (`retrieval-bank.js`, `data.js`, `narration.js`, `welcome-narration.js`).
-- **No CDN links or external web fonts**. All fonts (`Fraunces`, `Manrope`, `JetBrains Mono`) are loaded locally from `assets/fonts/*.woff2` via `assets/css/fonts.css`.
+- **No CDN links or external web fonts**. The theme's fonts are loaded locally from `assets/fonts/*.woff2` via `assets/css/fonts.css`, both installed by `scripts/apply-theme.mjs` from `themes/_fonts/`.
 - **Nigerian English (`en-NG`) Voice Priority:** `assets/js/narrator.js` ranks Nigerian English (`en-NG` / `en_NG` / `Abeo` / `Ezinne`) at `#1` priority (`+500`) and defaults `u.lang = "en-NG"`.
 
 ## 2. Multi-Lesson Folder Layout Produced in `topics/<slug>/html/`
@@ -12,15 +12,10 @@ Units and lessons run from local files (`file://`) inside an Android WebView on 
 topics/<slug>/html/
   index.html                      ← Unit Welcome Hub (3D Hero Lab, Mystery, Lesson Journey, Explorer, Archetypes, Myths, Method)
   assets/
-    fonts/
-      fraunces-latin-full-normal.woff2
-      fraunces-latin-full-italic.woff2
-      manrope-latin-wght-normal.woff2
-      jetbrains-mono-latin-400-normal.woff2
-      jetbrains-mono-latin-500-normal.woff2
-      OFL.txt
+    fonts/                        ← the theme's .woff2 files + OFL-<font>.txt (from themes/_fonts)
     css/
-      fonts.css                   ← local @font-face rules
+      fonts.css                   ← generated @font-face rules for the theme's fonts
+      theme.css                   ← the topic's theme (tokens + overrides); linked LAST on every page
       style.css                   ← Unit Welcome Hub & shared editorial design tokens, typography, buttons, hero
       lesson.css                  ← sticky .l-rail, .l-sec paper & dark cards, tables, .stage, .quiz, .aq
       narrator.css                ← StudyNarrator dock, word highlight (.w.said/.w.now), .narr-spot, .narr-cue, sparkles
@@ -50,6 +45,12 @@ topics/<slug>/html/
 ```
 
 ## 3. Typography & Visual Rhythm Rules
+
+Fonts and colours come from the topic's theme (`themes/<id>/theme.css`, see `themes/README.md`). Always style
+with tokens (`--font-display`, `--font-body`, `--font-mono`, `--font-math`, `--ink-*`, `--paper-*`, `--crimson`,
+`--amber`, `--ok`, …), never with literal colours or font names. The values below describe the default theme
+(`editorial-ink`); the *roles* hold for every theme.
+
 - **Display headings (`h1`, `h2`, `h3`):** `var(--font-display)` (`Fraunces`), optical sizing enabled, italic `<em>` phrases highlighted in crimson (on paper sections) or amber (on dark sections).
 - **Body copy:** `var(--font-body)` (`Manrope`), `16.5px`, line-height `1.7`, aligned cleanly within `76ch` max width.
 - **Monospace / Readouts / Equations / Badges:** `var(--font-mono)` (`JetBrains Mono`), `font-variant-numeric: tabular-nums` so numbers never jitter during live 3D timing.

@@ -1,0 +1,15 @@
+/* Space Mono — SIL Open Font License 1.1 (see OFL.txt). Bundled offline. */
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../fonts/space-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("../fonts/space-mono-latin-700-normal.woff2") format("woff2");
+}

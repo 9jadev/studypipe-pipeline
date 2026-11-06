@@ -41,7 +41,31 @@ To review, open `topics/<slug>/html/index.html` in Chrome (use DevTools phone vi
 **Giving feedback:** send screenshots and notes ("the label covers the burette tap"). The agent fixes them,
 re-runs QA and packaging, and adds any general lesson to the right skill's rules.
 
-## 3. Batch / overnight
+## 3. Templates (themes)
+
+Every unit uses one **theme**: fonts, colours and corner shape. The lesson structure is the same in every theme.
+Open `themes/gallery.html` to compare them on a real lesson.
+
+| Theme | Feel |
+|---|---|
+| `editorial-ink` (default) | Dark ink hub, warm paper, Fraunces/Manrope: magazine-like |
+| `exam-classic` | Navy + white paper, red-pen accent, Source Serif/Atkinson Hyperlegible: WAEC revision |
+| `green-lab` | Deep green console, lime highlights, Space Grotesk: bold science lab |
+| `junior-play` | Indigo + sunny cream, Baloo 2/Nunito, bubbly corners: JSS |
+
+```bash
+node scripts/apply-theme.mjs --list                                # list themes
+node scripts/apply-theme.mjs topics/<slug> green-lab               # switch a topic's theme
+bash scripts/new-topic.sh <slug> junior-play                       # pick it at creation
+node scripts/theme-preview.mjs --all                               # refresh previews + gallery
+```
+In `queue.md`: `- [ ] ss1-bio-cell-structure theme: junior-play`.
+
+**New theme:** tell the agent *"design a new template"*. The `theme-designer` skill asks about audience, mood,
+colours, fonts and shape, builds `themes/<id>/`, checks contrast, screenshots it on a real lesson and iterates
+with you. Details: `themes/README.md`.
+
+## 4. Batch / overnight
 
 List topics in `queue.md`, then either tell the agent *"run the queue in batch mode"* or run it headless:
 ```bash
@@ -50,7 +74,7 @@ bash scripts/run-batch.sh
 Results: `[x]` = done and awaiting review, `[!]` = needs you. See `run-log.md` and each topic's `status.md`.
 See `docs/SERVER.md` for running batches on a VPS while your Mac is off.
 
-## 4. What's inside
+## 5. What's inside
 
 | Path | Purpose |
 |---|---|
@@ -61,17 +85,19 @@ See `docs/SERVER.md` for running batches on a VPS while your Mac is off.
 | `.agents/skills/assessment-builder` | 3 · original exam-style questions with explanations |
 | `.agents/skills/content-reviewer` | 4 · strict accuracy/coverage/standards review, PASS/FIX |
 | `.agents/skills/lesson-renderer` | 5 · markdown → offline HTML (lesson shell in `assets/`) |
+| `.agents/skills/theme-designer` | designs/edits visual themes with you; lists and switches them |
 | `.agents/skills/kit-builder` | 6 · new reusable 3D/SVG kits (contract in `references/`) |
 | `.agents/skills/html-qa` | 7 · phone-sized offline test + visual review |
 | `.agents/skills/packager` | 8 · zip + manifest for the app |
 | `.agents/skills/localiser` | later: adapt lessons for Ghana or French-speaking Africa |
+| `themes/` | Visual templates + offline font library (`_fonts/`), `catalog.md`, `gallery.html` |
 | `kits/` | Kit library + `catalog.md`; `pendulum` is the reference kit |
 | `kits/_vendor/three-bundle.min.js` | three.js r160 + OrbitControls as one offline script |
 | `topics/_example-simple-pendulum` | Tiny example of rendered output |
 | `scripts/` | new-topic, QA (Playwright), package, manifest, batch runner |
 | `docs/` | Server guide and the 8-topic demo pack list |
 
-## 5. Making it yours
+## 6. Making it yours
 
 The skills are plain markdown, so edit them as you go. Tighten rules whenever you see the same mistake twice.
 Your existing `sci-sim-3d` and `edu-svg-illustrator` skills can be merged into `kit-builder`

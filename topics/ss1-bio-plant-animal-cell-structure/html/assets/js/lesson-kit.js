@@ -190,7 +190,7 @@
     var form = wrap.querySelector(".wall-form");
     var input = form.querySelector("input");
     var notes = Store.get(key, []);
-    var COLORS = ["#ffe58a", "#ffc7d9", "#bff0e1", "#cfe3ff", "#ffd8b0"];
+    var COLORS = (getComputedStyle(document.documentElement).getPropertyValue("--wall-notes").trim() || "#ffe58a,#ffc7d9,#bff0e1,#cfe3ff,#ffd8b0").split(",").map(function (s) { return s.trim(); });
     function render() {
       list.innerHTML = "";
       notes.forEach(function (t, i) {

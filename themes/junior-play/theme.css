@@ -1,0 +1,69 @@
+/* =========================================================
+   StudyPipe theme · Junior Play
+   Indigo night, sunny cream paper, rounded type, bubbly corners.
+   ========================================================= */
+:root {
+  --font-display: "Baloo 2", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --font-math: "Lora", Georgia, "Times New Roman", serif;
+  --font-label: "Nunito", sans-serif;
+
+  --ink-950: #160d30;  --ink-950-rgb: 22, 13, 48;
+  --ink-900: #1c1240;  --ink-900-rgb: 28, 18, 64;
+  --ink-850: #22174b;
+  --ink-800: #2a1d58;
+  --ink-700: #382873;
+  --ink-600: #4c3a95;
+  --line: rgba(225, 210, 255, 0.11);
+  --line-strong: rgba(225, 210, 255, 0.22);
+  --fg: #f7f3ff;
+  --fg-soft: #dcd2f7;
+  --muted: #a99cd0;
+  --on-ink-soft: #e4dcf7;
+
+  --paper: #fff7e6;    --paper-rgb: 255, 247, 230;
+  --paper-2: #fcebc6;
+  --paper-card: #fffdf7;
+  --paper-ink: #251836; --paper-ink-rgb: 37, 24, 54;
+  --paper-text: #43375a;
+  --paper-muted: #6c6186;
+  --paper-faint: #a69dbb;
+  --paper-line: rgba(37, 24, 54, 0.12);
+
+  --crimson: #e8386f;  --crimson-rgb: 232, 56, 111;
+  --amber: #ffc531;    --amber-rgb: 255, 197, 49;
+  --on-amber: #2a1a00;
+  --pink: #ff5fb0;     --pink-rgb: 255, 95, 176;
+  --pink-soft: #ff9fd0;
+  --orange: #ff8a2a;
+  --teal: #2fd8b6;     --teal-rgb: 47, 216, 182;
+  --sky: #5ebcff;      --sky-rgb: 94, 188, 255;
+  --lime: #a6ec3b;
+  --violet: #a283ff;   --violet-rgb: 162, 131, 255;
+
+  --ok: #11966a;       --ok-rgb: 17, 150, 106;
+  --ok-deep: #0c7753;
+  --ok-tint: #e2f7ee;
+  --ok-tint-2: #effbf5;
+  --bad-tint: #fff0f4;
+  --bad-tint-2: #ffe9ee;
+  --warn: #c97800;     --warn-rgb: 201, 120, 0;
+  --info: #3a63e8;     --info-rgb: 58, 99, 232;
+  --wall-notes: #ffe066, #ffb8d9, #a8f0d8, #b9dcff, #ffd0a1;
+
+  --corner: 1.45;
+  --radius-sm: 14px;
+  --radius: 24px;
+  --radius-lg: 34px;
+  --shadow-lg: 0 30px 70px -28px rgba(22, 13, 48, 0.6);
+  --ease: cubic-bezier(0.34, 1.4, 0.64, 1);   /* a little bounce */
+}
+
+/* Baloo 2 is tall and chunky: open the leading, no faux italic, emphasis by colour instead. */
+.display, .h2, .l-sec h2, .l-hero h1 { font-weight: 700; letter-spacing: -0.012em; }
+.display { line-height: 1.04; }
+.h2, .l-sec h2 { line-height: 1.08; }
+.display em, .h2 em, .l-sec h2 em, .l-hero .question { font-style: normal; }
+.display em, .h2 em { color: var(--amber); }
+body { font-size: 17.5px; font-weight: 500; }

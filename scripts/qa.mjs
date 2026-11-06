@@ -28,6 +28,7 @@ fs.mkdirSync(outDir, { recursive: true });
 
 const issues = [];   // { level: "BLOCKING"|"WARN", where, msg }
 const add = (level, where, msg) => issues.push({ level, where, msg });
+let themeId = "n/a";
 
 const browser = await chromium.launch({ args: ["--use-gl=swiftshader", "--enable-webgl", "--ignore-gpu-blocklist"] });
 const context = await browser.newContext({
@@ -167,6 +168,19 @@ if (isTopic) {
       hasNarrator: Boolean(window.StudyNarrator && document.querySelector(".narr-dock")),
       hasNarrationScript: Boolean(window.NARRATION && Array.isArray(window.NARRATION.script) && window.NARRATION.script.length >= 4)
     }));
+    // Theme fonts must actually load from assets/fonts (a typo in fonts.css silently falls back to system fonts).
+    const fontCheck = await page.evaluate(async () => {
+      const cs = getComputedStyle(document.documentElement);
+      const out = [];
+      for (const v of ["--font-display", "--font-body", "--font-mono"]) {
+        const fam = cs.getPropertyValue(v).split(",")[0].trim().replace(/^["']|["']$/g, "");
+        // Force-load: resolves [] when no @font-face matches; faces end "error" when the .woff2 is missing.
+        const faces = fam ? await document.fonts.load(`16px "${fam}"`).catch(() => []) : [];
+        out.push({ v, fam, ok: faces.length > 0 && faces.every((f) => f.status === "loaded") });
+      }
+      return out;
+    });
+    for (const f of fontCheck) if (!f.ok) add("BLOCKING", "theme", `${f.v} font "${f.fam || "(unset)"}" did not load — re-run node scripts/apply-theme.mjs ${arg}`);
     if (!welcomeCheck.hasHeroLab) add("BLOCKING", "welcome", "Welcome Hub 3D Hero Lab (window.StudyLab / #lab-canvas) missing");
     if (welcomeCheck.lessonCards < 2) add("BLOCKING", "welcome", `Welcome Hub #journey has only ${welcomeCheck.lessonCards} lesson cards`);
     if (welcomeCheck.comboTabs < 2) add("BLOCKING", "welcome", "Welcome Hub #explorer tabs missing");
@@ -228,6 +242,21 @@ if (isTopic) {
     }
   }
 
+  // Theme wiring: theme.css installed and linked last on every page (see themes/README.md).
+  const unitDir = path.dirname(htmlFile);
+  if (!fs.existsSync(path.join(unitDir, "assets", "css", "theme.css"))) {
+    add("BLOCKING", "theme", `assets/css/theme.css missing — run node scripts/apply-theme.mjs ${arg}`);
+  } else {
+    const pages = [htmlFile, ...(fs.existsSync(path.join(unitDir, "lessons")) ? fs.readdirSync(path.join(unitDir, "lessons")).map((d) => path.join(unitDir, "lessons", d, "index.html")).filter((p) => fs.existsSync(p)) : [])];
+    for (const p of pages) {
+      const links = [...fs.readFileSync(p, "utf8").matchAll(/<link[^>]+rel="stylesheet"[^>]*href="([^"]+)"/gi)].map((m) => m[1]);
+      if (!links.some((h) => h.endsWith("assets/css/theme.css"))) add("BLOCKING", "theme", `${path.relative(unitDir, p)} does not link assets/css/theme.css`);
+      else if (!links[links.length - 1].endsWith("assets/css/theme.css")) add("WARN", "theme", `${path.relative(unitDir, p)}: theme.css is not the last stylesheet, so later CSS can override the theme`);
+    }
+    const themeLine = fs.readFileSync(path.join(unitDir, "assets", "css", "theme.css"), "utf8").match(/theme: ([a-z0-9-]+)/);
+    if (themeLine) themeId = themeLine[1];
+  }
+
   const size = dirSize(path.dirname(htmlFile));
   if (size > 10 * 1024 * 1024) add("WARN", "package", `unit folder is ${(size / 1048576).toFixed(1)} MB (target < 10 MB incl. three.js & fonts)`);
 } else {
@@ -254,6 +283,7 @@ const report = [
   `# QA report: ${arg}`,
   `date: ${new Date().toISOString().slice(0, 16).replace("T", " ")}`,
   `verdict: ${blocking.length ? "FAIL" : "PASS"}`,
+  `theme: ${themeId}`,
   `lessons checked: ${lessonsChecked || 1}`,
   `sections checked: ${sectionCount || "n/a"}`,
   "",

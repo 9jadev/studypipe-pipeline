@@ -1,0 +1,658 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 4 · Blood Vessels, Capillary Exchange, the Lymphatic System &amp; Cardiovascular Disorders · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): Arteries vs Veins vs Capillaries, Starling Ultrafiltration &amp; Reabsorption (NFP = P_c − π_c), Tissue Fluid, Lymphatic System, Elephantiasis, Kwashiorkor Oedema, and Cardiovascular Disorders.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fb7185'/%3E%3Cstop offset='1' stop-color='%2322c55e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(251,113,133,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #e11d48 0%, #fb7185 25%, #fbbf24 50%, #38bdf8 75%, #22c55e 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l04">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 4 of 5 · <b>Blood Vessels, Capillaries &amp; Lymph</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 4 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Blood Vessels, <em>Capillary Exchange</em>, the Lymphatic System &amp; Disorders</h1>
+        <p class="question reveal">How does blood climb a full metre uphill from your ankles at near-zero pressure — and how does fluid leave capillaries to nourish every cell without losing a single red blood cell?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Compare the structure and function of <strong>arteries, veins, and capillaries</strong> (wall layers <em>tunica intima, media, externa</em>; lumen diameter; pressure; valves; pulse).</span></li>
+          <li><b>02</b><span>Explain using the continuity equation (<strong>A<sub>1</sub>v<sub>1</sub> = A<sub>2</sub>v<sub>2</sub></strong>) why blood flows slowest in capillary beds (~0.03 cm/s) and how <strong>one-cell-thick squamous endothelium</strong> adapts capillaries for exchange.</span></li>
+          <li><b>03</b><span>Calculate <strong>Starling Net Filtration Pressure (NFP = P<sub>c</sub> − π<sub>c</sub>)</strong> to explain <strong>ultrafiltration (+10 mmHg)</strong> at the arterial end and <strong>osmotic reabsorption (−10 mmHg)</strong> at the venous end.</span></li>
+          <li><b>04</b><span>Compare the composition of <strong>whole blood, tissue fluid, and lymph</strong>, and state the three core functions of the <strong>lymphatic system</strong> (fluid return to subclavian veins, fat absorption via lacteals, and lymphocyte defence in lymph nodes).</span></li>
+          <li><b>05</b><span>Explain the causes and prevention of <strong>oedema</strong> (<strong>elephantiasis / filariasis</strong> and <strong>kwashiorkor</strong>), <strong>atherosclerosis</strong>, <strong>coronary thrombosis</strong>, <strong>hypertension</strong>, <strong>stroke</strong>, and <strong>varicose veins</strong>.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <circle cx="64" cy="98" r="34" fill="rgba(225,29,72,0.18)" stroke="#e11d48" stroke-width="11"/>
+          <text x="64" y="102" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">ARTERY</text>
+          <text x="64" y="152" fill="#fb7185" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Thick Wall · Narrow</text>
+
+          <circle cx="164" cy="98" r="36" fill="rgba(37,99,235,0.18)" stroke="#38bdf8" stroke-width="4"/>
+          <path d="M 142 98 Q 164 82 186 98" fill="none" stroke="#bae6fd" stroke-width="2.5"/>
+          <text x="164" y="114" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">VEIN + VALVE</text>
+          <text x="164" y="152" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Thin Wall · Wide</text>
+
+          <circle cx="262" cy="98" r="22" fill="rgba(34,197,94,0.16)" stroke="#22c55e" stroke-width="2" stroke-dasharray="4 2"/>
+          <text x="262" y="102" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="8.5" text-anchor="middle">1-CELL</text>
+          <text x="262" y="152" fill="#22c55e" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Capillary &amp; Lymph</text>
+
+          <text x="160" y="196" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">Arterial: 35 − 25 = +10 mmHg · Venous: 15 − 25 = −10 mmHg</text>
+          <text x="160" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">NFP = P_c − π_c &nbsp;·&nbsp; A₁v₁ = A₂v₂</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Vessels &amp; lymph sort</a></li>
+        <li><a href="#practical">3D capillary bench</a></li>
+        <li><a href="#concepts">Vessels, fluid &amp; lymph</a></li>
+        <li><a href="#neutralise">3D vessel zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 2 &amp; 3</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards on “Lub-Dub” valve sounds, the SAN and AVN delay, pulse pressure, and coronary circulation. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>At the LUTH Vascular Clinic: <em>Uphill Veins, Tissue Fluid &amp; Oedema</em></h2>
+        <p class="intro">Tunde, Amaka, Nurse Chidinma, and Dr Bamidele investigate how venous blood climbs uphill from the ankles, how capillaries form tissue fluid by ultrafiltration, and why lymphatic blockage causes elephantiasis.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Tunde, Amaka, Nurse Chidinma, and Dr Bamidele at LUTH examining arteries, veins, capillary ultrafiltration, and lymphatic drainage."></canvas>
+            <div class="stage-label"><i></i>3D story · LUTH Vascular Clinic → Capillary Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Ankle Vein Puzzle:</strong> Tunde asks how blood in his ankle veins (at less than 10 mmHg) climbs a full metre uphill against gravity back to his right atrium.</p>
+            <p><strong>Scene 2 · Artery vs Vein Cross-Sections:</strong> Amaka notes that arteries have thick muscular/elastic walls and a narrow lumen, whereas veins have thin walls, a wide lumen, and internal semilunar pocket valves.</p>
+            <p><strong>Scene 3 · Skeletal Muscle Pump &amp; Pocket Valves:</strong> Nurse Chidinma explains that contracting calf muscles squeeze thin-walled veins to push blood upward, and pocket valves snap shut when the muscle relaxes so blood cannot fall back.</p>
+            <p><strong>Scene 4 · Arterial-End Ultrafiltration (+10 mmHg):</strong> At the arterial end of a capillary, hydrostatic pressure <code>P_c = 35 mmHg</code> exceeds inward plasma protein osmotic pull <code>π_c = 25 mmHg</code> by <code>+10 mmHg</code>, forcing water, glucose, amino acids, and O<sub>2</sub> out as <strong>tissue fluid</strong> (leaving RBCs, platelets, and albumin inside).</p>
+            <p><strong>Scene 5 · Venous Reabsorption (−10 mmHg) &amp; Lymphatics:</strong> At the venous end, <code>P_c = 15 mmHg</code> so <code>NFP = −10 mmHg</code> reabsorbs 85% of fluid, while 15% drains into blind-ended lymphatic vessels. Blocking lymphatics with filarial worms causes <strong>elephantiasis</strong>!</p>
+            <p><strong>Scene 6 · 3D Starling Capillary Bench:</strong> Dr Bamidele invites the students to measure <code>P_c</code> and <code>NFP</code> from 0% to 100% along the capillary bed.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Why are red blood cells and large plasma proteins absent from normal tissue fluid, and why does protein deficiency (kwashiorkor) cause swollen feet and abdomen? Pin your prediction below.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that veins have pocket valves whereas arteries do not because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">How do skeletal muscles and pocket valves move venous blood uphill?</button>
+            <button type="button">Why does blood flow slowest in capillaries (~0.03 cm/s)?</button>
+            <button type="button">Why are RBCs and albumin absent from tissue fluid?</button>
+            <button type="button">How do filarial worms and kwashiorkor cause oedema?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
+        <h2>Arteries, Capillaries &amp; <em>Veins / Lymphatics Sort</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Arteries &amp; Arterioles</strong>, <strong>Capillaries &amp; Tissue Fluid</strong>, and <strong>Veins &amp; Lymphatic System</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#fb7185" tabindex="0" role="button" aria-label="Arteries and Arterioles bin">
+              <h4><i></i>Arteries &amp; Arterioles</h4>
+              <small>thick media · narrow lumen · high P</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#fbbf24" tabindex="0" role="button" aria-label="Capillaries and Tissue Fluid bin">
+              <h4><i></i>Capillaries &amp; Tissue Fluid</h4>
+              <small>1-cell wall · slow v · ultrafiltration</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#22c55e" tabindex="0" role="button" aria-label="Veins and Lymphatic System bin">
+              <h4><i></i>Veins &amp; Lymphatics</h4>
+              <small>wide lumen · pocket valves · lymph</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D Starling Capillary &amp; Vessel Bench: <em>Measuring NFP = P<sub>c</sub> − π<sub>c</sub></em></h2>
+        <p class="intro">Step along five positions of a systemic capillary bed (<code>0%, 25%, 50%, 75%, 100%</code> from arterial to venous end). Measure outward <strong>Hydrostatic Pressure P<sub>c</sub> (35.0 → 15.0 mmHg)</strong> against inward <strong>Colloid Osmotic Pressure π<sub>c</sub> (25.0 mmHg)</strong> to plot <strong>Net Filtration Pressure NFP = P<sub>c</sub> − π<sub>c</sub></strong>.</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Haemodynamic Continuity Principle ($A_1 v_1 = A_2 v_2$):</strong> Students often think blood flows fast in capillaries because each capillary is narrow (<code>8 µm</code>). In reality, the aorta (<code>A_1 = 4.5 cm²</code>) branches into billions of parallel capillaries whose <strong>combined total cross-sectional area ($A_2 \approx 4,500\text{ cm}^2$) is 1,000× larger</strong>! Therefore velocity drops 1,000-fold from <code>35 cm/s</code> to <code>0.035 cm/s</code>, giving red blood cells 1–2 full seconds to exchange gases and nutrients.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Test arterial end (0%)</h4><p>At 0% (arteriole entrance), <code>P_c = 35.0 mmHg</code> exceeds <code>π_c = 25.0 mmHg</code>, giving <code>NFP = +10.0 mmHg</code> (ultrafiltration outward).</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Locate midpoint (50%)</h4><p>At 50% along the capillary, <code>P_c = 25.0 mmHg</code> equals <code>π_c = 25.0 mmHg</code>, so <code>NFP = 0.0 mmHg</code> (dynamic equilibrium).</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Test venous end (100%)</h4><p>At 100% (venule exit), <code>P_c = 15.0 mmHg</code> is less than <code>π_c = 25.0 mmHg</code>, giving <code>NFP = −10.0 mmHg</code> (osmotic reabsorption inward).</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Test Kwashiorkor (π<sub>c</sub> = 15)</h4><p>Switch to the Kwashiorkor condition to see why low plasma albumin prevents venous reabsorption and causes oedema.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Capillary Bed and Lymphatic Drainage bench alongside Artery, Vein, and Capillary cross-sections."></canvas>
+            <div class="stage-label"><i></i>Capillary bed &amp; vessel bench</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D Capillary Bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Plasma protein condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Normal Plasma (π_c = 25 mmHg)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Kwashiorkor (π_c = 15 mmHg)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Venous Congestion</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 0% (Arterial)</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 25%</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 50% (Mid)</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 75%</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 100% (Venous)</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 capillary positions</span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="vi-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots along capillary length</span><h4>Net Filtration Pressure NFP = P<sub>c</sub> − π<sub>c</sub> (mmHg) against Position (%)</h4></div>
+            <span class="gc-badge wait" id="vi-badge">0 points</span>
+          </div>
+          <div id="vi-graph"></div>
+          <div class="gc-stats" id="vi-stats"></div>
+          <p class="gc-note" id="vi-note"></p>
+        </div>
+
+        <h3>Record your Starling Capillary Filtration readings</h3>
+        <p>As you test Trials A–E on the 3D Capillary Bench, select the matching <strong>Hydrostatic Pressure P<sub>c</sub> (mmHg)</strong>, <strong>Colloid Osmotic Pressure π<sub>c</sub> (mmHg)</strong>, and <strong>Net Filtration Pressure NFP = P<sub>c</sub> − π<sub>c</sub> (mmHg)</strong> below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Capillary Position (%)</th>
+                <th>Hydrostatic P<sub>c</sub> (mmHg)</th>
+                <th>Osmotic π<sub>c</sub> (mmHg)</th>
+                <th>Net Filtration NFP = P<sub>c</sub> − π<sub>c</sub> (mmHg)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC table &amp; Starling pressure gradient <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>Position (%)</th><th>Hydrostatic P<sub>c</sub> (mmHg)</th><th>Osmotic π<sub>c</sub> (mmHg)</th><th>NFP = P<sub>c</sub> − π<sub>c</sub> (mmHg)</th></tr></thead>
+                <tbody>
+                  <tr><td>A (Arterial end)</td><td>0%</td><td>35.0</td><td>25.0</td><td>+10.0 (Ultrafiltration out)</td></tr>
+                  <tr><td>B</td><td>25%</td><td>30.0</td><td>25.0</td><td>+5.0 (Ultrafiltration out)</td></tr>
+                  <tr><td>C (Midpoint)</td><td>50%</td><td>25.0</td><td>25.0</td><td>0.0 (Equilibrium)</td></tr>
+                  <tr><td>D</td><td>75%</td><td>20.0</td><td>25.0</td><td>−5.0 (Reabsorption in)</td></tr>
+                  <tr><td>E (Venous end)</td><td>100%</td><td>15.0</td><td>25.0</td><td>−10.0 (Reabsorption in)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Arterial Ultrafiltration vs Venous Reabsorption:</strong></p>
+            <div class="eq light">NFP_art = 35.0 − 25.0 = +10.0 mmHg &nbsp;·&nbsp; NFP_ven = 15.0 − 25.0 = −10.0 mmHg</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l04-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC blood vessel &amp; tissue fluid questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why do plasma proteins (such as albumin) remain at a constant osmotic pressure of <code>25 mmHg</code> along the entire capillary length?</li>
+            <li>How can you distinguish a transverse microscope slide of an <strong>artery</strong> from a <strong>vein</strong> in WAEC Paper 3?</li>
+            <li>What happens if a soldier stands completely still at attention in hot sun for two hours without contracting his calf muscles?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Large plasma proteins are too big to pass through normal capillary endothelial pores, so they stay trapped inside the blood plasma from the arterial end to the venous end.</li>
+                <li>The <strong>artery</strong> has a thick muscular/elastic wall (<em>tunica media</em>) and a round, narrow lumen; the <strong>vein</strong> has a thin wall and a wide, often oval or partially collapsed lumen.</li>
+                <li>Without the <strong>skeletal muscle pump</strong> squeezing leg veins, venous blood pools in the lower legs, venous return to the heart drops, cardiac output to the brain falls, and the soldier may faint (syncope).</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Arteries vs Veins vs Capillaries, <em>Tissue Fluid</em>, Lymph &amp; Disorders</h2>
+        <p class="intro">Let’s master the WAEC comparison tables for blood vessels, the Starling mechanism of tissue fluid formation, the lymphatic system, and cardiovascular disorders.</p>
+
+        <h3 id="def-shm">1 · Arteries, Veins &amp; Capillaries Compared (WAEC Classic Table)</h3>
+        <p>The walls of arteries and veins consist of three concentric coats (tunics): (1) an outer fibrous <strong>tunica externa (adventitia)</strong> of tough collagen that prevents bursting, (2) a middle <strong>tunica media</strong> of smooth muscle and elastic fibres, and (3) an inner <strong>tunica intima (interna)</strong> of smooth squamous <strong>endothelium</strong>. Capillaries consist <strong>only of the one-cell-thick endothelium</strong>.</p>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Arteries</th><th>Veins</th><th>Capillaries</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Direction of Blood Flow</strong></td><td>Carry blood <strong>away from the heart</strong> to organs</td><td>Carry blood <strong>towards the heart</strong> from organs</td><td>Link <strong>arterioles to venules</strong> inside tissues</td></tr>
+              <tr><td><strong>Wall Thickness &amp; Composition</strong></td><td><strong>Thick, muscular, and elastic wall</strong> (thick <em>tunica media</em>)</td><td><strong>Thin, less muscular, and less elastic wall</strong></td><td><strong>One cell thick</strong> (single layer of squamous endothelial cells; no muscle or elastic coat)</td></tr>
+              <tr><td><strong>Size of Lumen (Bore)</strong></td><td><strong>Relatively narrow</strong> circular lumen</td><td><strong>Wide</strong> lumen (collapses when empty)</td><td><strong>Microscopic (~8 µm)</strong> — RBCs pass in <strong>single file</strong></td></tr>
+              <tr><td><strong>Blood Pressure &amp; Speed</strong></td><td><strong>High pressure (120/80 mmHg)</strong>; rapid, spurting flow</td><td><strong>Very low pressure (2–10 mmHg)</strong>; slow, smooth non-pulsatile flow</td><td><strong>Falling pressure (35 → 15 mmHg)</strong>; slowest velocity (~0.03 cm/s)</td></tr>
+              <tr><td><strong>Presence of Pulse</strong></td><td><strong>Pulse is present</strong> (rhythmic expansion &amp; elastic recoil)</td><td><strong>No pulse</strong></td><td><strong>No pulse</strong> (damped out)</td></tr>
+              <tr><td><strong>Internal Valves</strong></td><td><strong>Absent</strong> along length (only semilunar valves at base of aorta &amp; pulmonary artery)</td><td><strong>Present</strong> — pocket <strong>semilunar valves</strong> at intervals prevent backflow</td><td><strong>Absent</strong></td></tr>
+              <tr><td><strong>Oxygen Status of Blood</strong></td><td><strong>Oxygenated</strong> in all arteries <strong>EXCEPT the pulmonary artery</strong></td><td><strong>Deoxygenated</strong> in all veins <strong>EXCEPT the pulmonary veins</strong></td><td>Changes from <strong>oxygenated (arterial end) to deoxygenated (venous end)</strong></td></tr>
+              <tr><td><strong>Permeability &amp; Exchange</strong></td><td><strong>Impermeable</strong> — no exchange with tissues</td><td><strong>Impermeable</strong> — no exchange with tissues</td><td><strong>Permeable</strong> — site of exchange of $\text{O}_2$, $\text{CO}_2$, glucose, amino acids, and urea</td></tr>
+              <tr><td><strong>Location in Body</strong></td><td>Usually seated <strong>deep within skeletal muscles</strong></td><td>Often <strong>superficial</strong> (just beneath the skin) as well as deep</td><td>Form dense microscopic networks (<strong>capillary beds</strong>) inside every organ</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="def-terms">2 · Formation of Tissue Fluid (Ultrafiltration) &amp; Comparison of Blood, Tissue Fluid, and Lymph</h3>
+        <p>Blood inside capillaries never touches body cells directly. Instead, exchange takes place through an intermediate bathing medium called <strong>tissue fluid (interstitial fluid)</strong> formed by <strong>Starling’s forces</strong>:</p>
+        <ul>
+          <li><strong>At the Arterial End of a Capillary ($P_c = 35\text{ mmHg}$, $\pi_c = 25\text{ mmHg}$):</strong> Outward blood <strong>hydrostatic pressure ($35\text{ mmHg}$)</strong> exceeds the inward <strong>colloid osmotic pressure ($25\text{ mmHg}$)</strong> of plasma proteins by $\text{NFP} = +10\text{ mmHg}$. This positive pressure forces water, dissolved oxygen, glucose, amino acids, fatty acids, vitamins, mineral salts, and hormones out through tiny endothelial pores by <strong>ultrafiltration</strong> to form <strong>tissue fluid</strong>. <strong>Red blood cells, platelets, and large plasma proteins (albumin, fibrinogen) are too large to pass through and remain in the blood.</strong></li>
+          <li><strong>At the Venous End of a Capillary ($P_c = 15\text{ mmHg}$, $\pi_c = 25\text{ mmHg}$):</strong> Resistance along the capillary drops hydrostatic pressure to $15\text{ mmHg}$ while plasma protein osmotic pull remains $25\text{ mmHg}$ ($\text{NFP} = -10\text{ mmHg}$). Therefore, <strong>~85% of the tissue fluid</strong> (carrying metabolic wastes such as $\text{CO}_2$ and urea) is drawn back into the venule by osmosis.</li>
+          <li><strong>Drainage into the Lymphatic System (~15%):</strong> The remaining ~15% of tissue fluid (~3.0 L/day) enters blind-ended <strong>lymphatic capillaries</strong> as <strong>lymph</strong>, flows through <strong>lymph nodes</strong> (which filter bacteria and produce <strong>lymphocytes/antibodies</strong>) and valved lymphatic vessels (propelled by skeletal muscle contractions), and empties back into the blood at the <strong>left and right subclavian veins</strong> via the <strong>thoracic duct</strong> and right lymphatic duct. In the small intestine villi, specialised lymph vessels called <strong>lacteals</strong> absorb fatty acids and glycerol as milky chyle.</li>
+        </ul>
+
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Component / Property</th><th>Whole Blood</th><th>Tissue Fluid (Interstitial Fluid)</th><th>Lymph</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Location</strong></td><td>Inside heart, arteries, capillaries &amp; veins</td><td>In microscopic spaces directly bathing tissue cells</td><td>Inside lymphatic capillaries, nodes &amp; ducts</td></tr>
+              <tr><td><strong>Red Blood Cells (Erythrocytes)</strong></td><td><strong>Present</strong> (~5 million/mm³; gives red colour)</td><td><strong>Absent</strong> (colourless fluid)</td><td><strong>Absent</strong> (colourless or milky after a fatty meal)</td></tr>
+              <tr><td><strong>Platelets (Thrombocytes)</strong></td><td><strong>Present</strong></td><td><strong>Absent</strong></td><td><strong>Absent</strong></td></tr>
+              <tr><td><strong>Large Plasma Proteins (Albumin, Fibrinogen)</strong></td><td><strong>Abundant (~7–8%)</strong></td><td><strong>Very trace / Absent</strong></td><td><strong>Low concentration</strong> (returns leaked proteins to blood)</td></tr>
+              <tr><td><strong>White Blood Cells (Leucocytes)</strong></td><td>Phagocytes + Lymphocytes present</td><td>Occasional wandering phagocytes</td><td><strong>Rich in Lymphocytes</strong> (produced in lymph nodes)</td></tr>
+              <tr><td><strong>Glucose, Amino Acids, Water &amp; Salts</strong></td><td>Present</td><td>Present (delivers nutrients to cells)</td><td>Present (high emulsified fats/lipids in intestinal lacteals)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3 · Governing Equations: Starling Filtration, Continuity &amp; Lymph Balance</h3>
+        <div class="eq" id="eq-shm" data-hook>NFP = P_c − π_c &nbsp;⇒&nbsp; Arterial: 35 − 25 = +10 mmHg &nbsp;·&nbsp; Venous: 15 − 25 = −10 mmHg</div>
+        <div class="eq" id="eq-omega">A_1 × v_1 = A_2 × v_2 &nbsp;⇒&nbsp; v_2 = (4.5 × 35) ÷ 4500 = 0.035 cm/s</div>
+        <div class="eq" id="eq-vel">V_lymph = V_filtered − V_reabsorbed = 20.0 − 17.0 = 3.0 L/day</div>
+
+        <div class="callout big reveal" id="all-alkalis">
+          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up and rise onto your tiptoes 10 times! Feel your calf muscles (<em>gastrocnemius</em>) tighten and relax — you have just activated your <strong>skeletal muscle venous pump</strong>, squeezing deoxygenated blood past your lower-leg <strong>semilunar pocket valves</strong> all the way up to your right atrium!</p>
+        </div>
+
+        <h3 id="props">4 · Cardiovascular &amp; Lymphatic Disorders</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Disorder</th><th>Cause &amp; Pathophysiology</th><th>Consequence &amp; Prevention</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Oedema (Dropsy) &amp; Elephantiasis</strong></td><td>Accumulation of excess tissue fluid in intercellular spaces due to: (1) blockage of lymphatic vessels by parasitic filarial worms (<strong><em>Wuchereria bancrofti</em></strong>, transmitted by female <em>Culex / Anopheles</em> mosquitoes → <strong>elephantiasis</strong>), (2) severe protein deficiency (<strong>kwashiorkor</strong>, which lowers $\pi_c$), or (3) right-sided heart failure / high venous pressure.</td><td>Massive swelling of legs/scrotum or abdomen. Prevented by mosquito control/nets, ivermectin/albendazole therapy, and adequate dietary protein.</td></tr>
+              <tr><td><strong>Atherosclerosis &amp; Arteriosclerosis</strong></td><td>Deposition of <strong>cholesterol and fatty plaques (atheroma)</strong> beneath the endothelium of arteries (atherosclerosis), followed by fibrous scarring and calcium hardening of arterial walls (arteriosclerosis).</td><td>Narrows arterial lumen, raises blood pressure, and triggers blood clots. Prevented by low-saturated-fat diet, regular aerobic exercise, and not smoking.</td></tr>
+              <tr><td><strong>Coronary Thrombosis (Myocardial Infarction / Heart Attack)</strong></td><td>Formation of a blood clot (<strong>thrombus</strong>) inside a narrowed <strong>coronary artery</strong>, cutting off oxygen and glucose to a region of cardiac muscle.</td><td>Death of affected myocardium, severe chest pain (angina), or cardiac arrest.</td></tr>
+              <tr><td><strong>Hypertension (High Blood Pressure)</strong></td><td>Persistent resting arterial blood pressure above <strong>140/90 mmHg</strong> caused by loss of arterial elasticity, narrowing of arterioles, high salt intake, obesity, stress, or kidney disease.</td><td>Forces left ventricle to overwork (hypertrophy) and risks rupturing brain or kidney vessels.</td></tr>
+              <tr><td><strong>Stroke (Cerebrovascular Accident)</strong></td><td>Blockage (ischaemic thrombosis/embolism) or rupture (haemorrhage) of a cerebral artery supplying the brain.</td><td>Starves brain neurones of oxygen, causing paralysis (hemiplegia) or speech loss.</td></tr>
+              <tr><td><strong>Varicose Veins</strong></td><td>Weakening or incompetence of the <strong>semilunar pocket valves</strong> in superficial leg veins (often from prolonged standing or pregnancy).</td><td>Blood pools backward, making superficial veins swollen, twisted, and painful.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Systemic Vascular Tree &amp; Capillary Exchange Explorer</h3>
+        <p>Tap any pin below to trace pressure, velocity, wall structure, and Starling filtration from the aorta to the subclavian lymph return:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← High-Pressure Arteries</div><div>Capillary Bed (+10 → −10 mmHg)</div><div>Low-Pressure Veins &amp; Lymph →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect vessel wall layers, flow velocity, and Starling pressure.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. 3D VESSEL ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Blood Vessels &amp; Starling Capillary Bed Zoom</span>
+        <h2>Inside the vessels: <em>Artery vs Vein vs Capillary &amp; Lymphatic Drainage</em></h2>
+        <p class="intro">Rotate the 3D vascular models below! Compare the <strong>three-layered artery and valved vein</strong> with the <strong>one-cell-thick capillary bed and blind-ended green lymphatic vessel</strong>, and toggle filarial worm blockage to see how elephantiasis develops.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D comparison of artery, vein with pocket valve, and one-cell capillary alongside a Starling capillary-lymphatic exchange bed."></canvas>
+            <div class="stage-label"><i></i>Vessel walls &amp; lymph drainage</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D vessel comparison stage couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Vessel view mode">
+              <button type="button" data-mode="mix" aria-pressed="true">Vessels + Capillary Bed</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Artery vs Vein vs Capillary</button>
+              <button type="button" data-mode="base" aria-pressed="false">Starling Bed &amp; Lymph</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Simulate Filarial Blockage (Elephantiasis)</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#3ee6c4"></i>Structure<b data-c="h">3 Tunics</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Arterial<b data-c="oh">+10 mmHg</b></span>
+              <span class="counter"><i style="--c:#7cc4ff"></i>Venous<b data-c="na">−10 mmHg</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>Lymph<b data-c="cl">3.0 L/day</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>Status<b data-c="w">Normal</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Every calculation is broken down one atomic mathematical step at a time with a plain-English explainer note underneath.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Starling Net Filtration Pressure (NFP) at Arterial &amp; Venous Ends</h4></div>
+          <div class="example-body">
+            <p class="q">In a human skeletal muscle capillary bed, blood hydrostatic pressure is P<sub>c,art</sub> = 36 mmHg at the arterial end and drops to P<sub>c,ven</sub> = 16 mmHg at the venous end, while plasma protein colloid osmotic pressure remains constant at π<sub>c</sub> = 25 mmHg. Calculate: (a) the Net Filtration Pressure (NFP) at the arterial end, and (b) the Net Filtration Pressure (NFP) at the venous end, stating the direction of fluid movement at each end.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Subtract π<sub>c</sub> (25 mmHg) from arterial P<sub>c</sub> (36 mmHg):</strong> <code>NFP_art = 36 − 25 = 11 mmHg</code>.</li>
+              <li><strong>Part (b) — Subtract π<sub>c</sub> (25 mmHg) from venous P<sub>c</sub> (16 mmHg):</strong> <code>NFP_ven = 16 − 25 = -9 mmHg</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Arterial NFP = +11 mmHg (Ultrafiltration outward) &nbsp;·&nbsp; (b) Venous NFP = −9 mmHg (Osmotic reabsorption inward)</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Capillary Flow Velocity from the Continuity Equation (A₁v₁ = A₂v₂)</h4></div>
+          <div class="example-body">
+            <p class="q">Blood leaves the left ventricle through the aorta of cross-sectional area A<sub>1</sub> = 4.5 cm² at a mean velocity of v<sub>1</sub> = 35 cm/s. When the systemic arteries branch into the systemic capillary beds, the combined total cross-sectional area of all open capillaries is A<sub>2</sub> = 4,500 cm². Calculate: (a) the volume flow rate Q = A<sub>1</sub> × v<sub>1</sub> in cm³/s, and (b) the velocity of blood flow v<sub>2</sub> inside the capillaries in cm/s.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Multiply aortic area A<sub>1</sub> by aortic velocity v<sub>1</sub>:</strong> <code>Q = 4.5 × 35 = 157.5 cm^3/s</code>.</li>
+              <li><strong>Part (b) — Divide volume flow rate Q by total capillary area A<sub>2</sub>:</strong> <code>v_2 = 157.5 ÷ 4500 = 0.035 cm/s</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Volume Flow Rate Q = 157.5 cm³/s &nbsp;·&nbsp; (b) Capillary Blood Velocity v₂ = 0.035 cm/s (1,000× slower!)</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Daily Tissue Fluid Ultrafiltration, Venous Reabsorption &amp; Lymphatic Return</h4></div>
+          <div class="example-body">
+            <p class="q">Across all systemic capillaries in an adult human, a total volume of V<sub>filt</sub> = 20.0 L of tissue fluid is formed by ultrafiltration every 24 hours. If 85% of this fluid is reabsorbed directly into the venules by osmosis, calculate: (a) the volume of fluid reabsorbed into the venules per day, and (b) the volume of lymph returned to the subclavian veins per day by the lymphatic system.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Multiply total filtered volume (20.0 L) by 0.85 (85%):</strong> <code>V_reabs = 20.0 × 0.85 = 17.0 L/day</code>.</li>
+              <li><strong>Part (b) — Subtract reabsorbed volume from total filtered volume:</strong> <code>V_lymph = 20.0 − 17.0 = 3.0 L/day</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Venous Reabsorption = 17.0 L/day &nbsp;·&nbsp; (b) Daily Lymphatic Return = 3.0 L/day</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to LUTH Vascular Clinic: <em>balance the 20.0 L/day capillary &amp; lymph fluid budget!</em></h2>
+        <p class="intro">Run Steps 1, 2, and 3 to verify how Starling pressures and the lymphatic ducts keep human tissues free of oedema.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Artery vs Vein vs Capillary <small style="color:var(--muted);font-weight:500">· A₁v₁ = A₂v₂</small></h4>
+              <div class="clock-well">
+                <div style="padding:8px 14px;border-radius:10px;border:2px solid #fb7185;background:rgba(225,29,72,.18);font-weight:700;color:#fecdd3">v: 35 → 0.035 cm/s</div>
+              </div>
+              <div class="vt-count"><span id="time-a">1,000× larger capillary area slows flow</span><small>1-cell endothelium for diffusion</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Starling &amp; Lymphatic Balance <small style="color:var(--muted);font-weight:500" id="len-b-label">· P_c: 35 → 15 mmHg · π_c = 25 mmHg</small></h4>
+              <div class="clock-well">
+                <div style="padding:8px 14px;border-radius:10px;border:2px solid #22c55e;background:rgba(34,197,94,.18);font-weight:700;color:#bbf7d0">+10 OUT · −10 IN · Lymph</div>
+              </div>
+              <div class="vt-count"><span id="time-b">20.0 L/day filtered across capillaries</span><small>run Steps 1–3 below!</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Arterial Ultrafiltration (35 − 25 = +10)</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Venous Reabsorption (85% of 20.0 L)</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Subclavian Lymph Return (15%)</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset fluid balance</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">Given P_c = 35 mmHg (arterial), 15 mmHg (venous), and π_c = 25 mmHg with 20.0 L/day filtration, start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 4:</strong> Thick elastic <strong>arteries</strong> deliver high-pressure blood to <strong>one-cell-thick capillaries</strong> where huge total cross-sectional area slows blood to $0.035\text{ cm/s}$. Outward hydrostatic pressure ($+10\text{ mmHg}$) filters <strong>tissue fluid</strong> (without RBCs, platelets, or albumin) at the arterial end, inward osmotic pull ($-10\text{ mmHg}$) reabsorbs 85% at the venous end, and valved <strong>veins</strong> and <strong>lymphatic vessels</strong> return blood and the remaining 15% lymph uphill to the heart!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 4.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can construct a comparison table contrasting arteries, veins, and capillaries across 7 features.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain why blood flows slowest in capillary beds using A₁v₁ = A₂v₂ and how capillaries are adapted for diffusion.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate Starling Net Filtration Pressure (NFP = P_c − π_c) at the arterial and venous ends of a capillary.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can distinguish blood, tissue fluid, and lymph and state three functions of the lymphatic system.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can explain the causes of elephantiasis, kwashiorkor oedema, atherosclerosis, coronary thrombosis, and varicose veins.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l04-exit">
+          <div class="aq-top"><h4>In two sentences: state three components of whole blood that are absent from normal tissue fluid, and state the three main functions of the mammalian lymphatic system.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Normal tissue fluid lacks red blood cells (erythrocytes), platelets (thrombocytes), and large plasma proteins such as albumin and fibrinogen because they are too large to pass through capillary endothelial pores <b>(1)</b>. The lymphatic system (1) drains excess tissue fluid and leaked proteins back to the subclavian veins, (2) absorbs fatty acids and glycerol via intestinal lacteals, and (3) defends the body against infection by filtering bacteria and producing lymphocytes in lymph nodes <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Blood Vessels, Capillary Exchange &amp; The Lymphatic System</em></h2>
+        <p class="intro">Complete Part A (transverse blood vessel drawing exercise) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Transverse Section Drawings of an Artery, a Vein, and a Capillary</h3>
+        <div class="aq" data-answer="l04-a1">
+          <div class="aq-top"><h4>In your practical notebook, draw side-by-side labelled transverse sections of a muscular artery, a vein, and a capillary. If the actual outer diameter of the artery is 4.0 mm and your drawing diameter is 6.0 cm, calculate the linear magnification M of your drawing and list the three wall layers (tunics) labelled.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Magnification calculation and 3 tunics…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <p>Convert drawing diameter to mm: <code>I = 6.0 × 10 = 60.0 mm</code>.<br>
+              Linear magnification: <code>M = 60.0 ÷ 4.0 = ×15</code>.<br>
+              Three layers from outside inward: 1. <em>Tunica externa (adventitia)</em> — collagen fibres, 2. <em>Tunica media</em> — thick smooth muscle and elastic fibres, 3. <em>Tunica intima</em> — single-cell squamous endothelium surrounding a narrow lumen.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l04-b1">
+          <div class="aq-top"><h4>1. (a) Construct a table comparing an artery, a vein, and a capillary under six structural or functional headings [6 marks]. (b) Explain two mechanisms that assist the return of low-pressure venous blood from the lower legs to the right atrium against gravity [4 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) 1. <strong>Direction:</strong> Away from heart vs Towards heart vs Links arteriole to venule <b>(1)</b>. 2. <strong>Wall:</strong> Thick muscular/elastic vs Thin, less elastic vs One endothelial cell thick <b>(1)</b>. 3. <strong>Lumen:</strong> Narrow vs Wide vs Microscopic (8 µm) <b>(1)</b>. 4. <strong>Valves:</strong> Absent vs Pocket semilunar valves present vs Absent <b>(1)</b>. 5. <strong>Pressure &amp; Pulse:</strong> High &amp; pulsatile vs Low &amp; non-pulsatile vs Falling &amp; non-pulsatile <b>(1)</b>. 6. <strong>Permeability:</strong> Impermeable vs Impermeable vs Permeable for exchange <b>(1)</b>.<br>
+            (b) 1. <strong>Skeletal muscle pump &amp; pocket valves:</strong> Contracting leg muscles compress thin-walled veins to squeeze blood upward, while semilunar pocket valves prevent backflow when muscles relax <b>(2)</b>. 2. <strong>Respiratory thoracic pump:</strong> During inspiration, thoracic pressure drops and abdominal pressure rises, sucking venous blood upward through the inferior vena cava into the right atrium <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b2">
+          <div class="aq-top"><h4>2. (a) Explain how tissue fluid is formed at the arterial end of a capillary bed and reabsorbed at the venous end [5 marks]. (b) State two differences in composition between whole blood and tissue fluid [2 marks]. (c) State three functions of the mammalian lymphatic system [3 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) At the arterial end of a capillary, blood hydrostatic pressure (<code>35 mmHg</code>) exceeds the inward colloid osmotic pressure of plasma proteins (<code>25 mmHg</code>) by <code>+10 mmHg</code>, forcing water, glucose, amino acids, salts, and O<sub>2</sub> out through endothelial pores by <strong>ultrafiltration</strong> to form tissue fluid <b>(2.5)</b>. At the venous end, hydrostatic pressure has dropped to <code>15 mmHg</code> while plasma protein osmotic pull remains <code>25 mmHg</code> (<code>−10 mmHg</code>), drawing ~85% of the fluid (with CO<sub>2</sub> and urea) back into the blood by <strong>osmosis</strong> <b>(2.5)</b>.<br>
+            (b) Whole blood contains <strong>red blood cells, platelets, and high concentrations of large plasma proteins (albumin, fibrinogen)</strong>, whereas tissue fluid lacks all three <b>(2)</b>.<br>
+            (c) 1. Drains the remaining ~15% excess tissue fluid and leaked proteins back into the subclavian veins to prevent oedema <b>(1)</b>. 2. Absorbs fatty acids and glycerol via lacteals in the intestinal villi <b>(1)</b>. 3. Filters bacteria and produces lymphocytes/antibodies inside lymph nodes <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b3">
+          <div class="aq-top"><h4>3. (a) Explain the physiological cause of oedema in (i) a patient infected with <em>Wuchereria bancrofti</em> (elephantiasis) and (ii) a child with severe kwashiorkor [4 marks]. (b) At the arterial end of a capillary, P<sub>c</sub> = 38 mmHg and π<sub>c</sub> = 26 mmHg; at the venous end, P<sub>c</sub> = 16 mmHg and π<sub>c</sub> = 26 mmHg. Calculate the Net Filtration Pressure at both ends [3 marks]. (c) If 24.0 L/day of fluid filters out of capillaries and 85% is reabsorbed into venules, calculate the daily volume of lymph formed [3 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) (i) <strong>Elephantiasis:</strong> Adult filarial worms (<em>Wuchereria bancrofti</em>) block lymphatic vessels/nodes so the 15% excess tissue fluid cannot drain back to the blood <b>(2)</b>. (ii) <strong>Kwashiorkor:</strong> Severe dietary protein deficiency reduces liver synthesis of plasma albumin, lowering plasma colloid osmotic pressure (<code>π_c</code>) so water is not reabsorbed at the venous end of capillaries <b>(2)</b>.<br>
+            (b) Arterial end: <code>NFP_art = 38 − 26 = 12 mmHg</code> (+12 mmHg outward) <b>(1.5)</b>. Venous end: <code>NFP_ven = 16 − 26 = -10 mmHg</code> (−10 mmHg inward) <b>(1.5)</b>.<br>
+            (c) Reabsorbed volume: <code>V_reabs = 24.0 × 0.85 = 20.4 L/day</code> <b>(1.5)</b>. Lymph volume: <code>V_lymph = 24.0 − 20.4 = 3.6 L/day</code> <b>(1.5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 3: Cardiac Cycle &amp; Blood Pressure</a>
+          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5 — Blood Cells, Clotting, ABO Groups &amp; Paper 3 Clinic →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

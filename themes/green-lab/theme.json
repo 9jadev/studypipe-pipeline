@@ -1,0 +1,9 @@
+{
+  "id": "green-lab",
+  "name": "Green Lab",
+  "description": "Deep Nigerian-green lab console, electric lime highlights and a cool mint-white paper. Techy grotesk headings. Energetic and modern, a natural fit for physics and chemistry.",
+  "audience": "SS1–SS3, sciences",
+  "mood": ["bold", "techy", "energetic"],
+  "fonts": { "display": "space-grotesk", "body": "plus-jakarta-sans", "mono": "space-mono", "math": "source-serif-4" },
+  "themeColor": "#04140f"
+}

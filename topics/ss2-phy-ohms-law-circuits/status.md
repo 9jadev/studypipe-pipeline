@@ -1,5 +1,6 @@
 # ss2-phy-ohms-law-circuits
 state: DONE
+theme: editorial-ink
 
 | step | state | updated | note |
 |---|---|---|---|

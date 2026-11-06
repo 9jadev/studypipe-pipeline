@@ -1,0 +1,69 @@
+/* =========================================================
+   StudyPipe theme · Green Lab
+   Forest-green console, lime + aqua highlights, crisp corners.
+   ========================================================= */
+:root {
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, Consolas, monospace;
+  --font-math: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-label: "Plus Jakarta Sans", sans-serif;
+
+  --ink-950: #04140f;  --ink-950-rgb: 4, 20, 15;
+  --ink-900: #071c15;  --ink-900-rgb: 7, 28, 21;
+  --ink-850: #0a241b;
+  --ink-800: #0e2d22;
+  --ink-700: #163f30;
+  --ink-600: #215843;
+  --line: rgba(180, 255, 220, 0.10);
+  --line-strong: rgba(180, 255, 220, 0.20);
+  --fg: #ecfbf3;
+  --fg-soft: #c1e4d3;
+  --muted: #83ab9a;
+  --on-ink-soft: #cfe6da;
+
+  --paper: #f1f6f1;    --paper-rgb: 241, 246, 241;
+  --paper-2: #e1ebe2;
+  --paper-card: #ffffff;
+  --paper-ink: #0e1b15; --paper-ink-rgb: 14, 27, 21;
+  --paper-text: #2a3932;
+  --paper-muted: #566960;
+  --paper-faint: #93a69c;
+  --paper-line: rgba(14, 27, 21, 0.12);
+
+  --crimson: #e04a3c;  --crimson-rgb: 224, 74, 60;
+  --amber: #d8f13a;    --amber-rgb: 216, 241, 58;      /* electric lime replaces amber as the highlight */
+  --on-amber: #142000;
+  --pink: #ff5fa2;     --pink-rgb: 255, 95, 162;
+  --pink-soft: #ff9cc6;
+  --orange: #ff8a3d;
+  --teal: #2ee5a0;     --teal-rgb: 46, 229, 160;
+  --sky: #5fd0ff;      --sky-rgb: 95, 208, 255;
+  --lime: #b6ff3b;
+  --violet: #9f8cff;   --violet-rgb: 159, 140, 255;
+
+  --ok: #0d8f55;       --ok-rgb: 13, 143, 85;
+  --ok-deep: #0a7044;
+  --ok-tint: #e3f5ea;
+  --ok-tint-2: #eff9f2;
+  --bad-tint: #fff2f0;
+  --bad-tint-2: #ffece8;
+  --warn: #b57c00;     --warn-rgb: 181, 124, 0;
+  --info: #1f6fd6;     --info-rgb: 31, 111, 214;
+  --wall-notes: #eaff8f, #c8f7e3, #c9ecff, #ffd9ea, #fff0b3;
+
+  --corner: 0.6;
+  --radius-sm: 8px;
+  --radius: 12px;
+  --radius-lg: 18px;
+  --shadow-lg: 0 28px 70px -30px rgba(0, 0, 0, 0.7);
+  --ease: cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+/* Grotesk headings: heavier, tighter, and no faux-italic (Space Grotesk has no italic). */
+.display, .h2, .l-sec h2, .l-hero h1 { font-weight: 700; letter-spacing: -0.035em; }
+.display { line-height: 1.0; }
+.display em, .h2 em, .l-sec h2 em, .l-hero .question { font-style: normal; }
+.display em, .h2 em { color: var(--amber); }
+.l-sec h2 em { color: var(--ok); }
+body { font-weight: 450; }

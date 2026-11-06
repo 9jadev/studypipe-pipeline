@@ -1,5 +1,6 @@
 # ss1-bio-plant-animal-cell-structure
 state: AWAITING-REVIEW
+theme: editorial-ink
 
 | step | state | updated | note |
 |---|---|---|---|

@@ -1,0 +1,15 @@
+/* JetBrains Mono — SIL Open Font License 1.1 (see OFL.txt). Bundled offline. */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../fonts/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url("../fonts/jetbrains-mono-latin-500-normal.woff2") format("woff2");
+}

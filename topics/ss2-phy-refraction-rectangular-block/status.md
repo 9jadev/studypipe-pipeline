@@ -1,3 +1,4 @@
+theme: editorial-ink
 # Status: ss2-phy-refraction-rectangular-block
 
 - **subject:** Physics

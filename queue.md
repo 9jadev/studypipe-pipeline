@@ -3,6 +3,7 @@
 Batch runs process every `- [ ]` line top to bottom.
 `[x]` = packaged, awaiting your review · `[!]` = needs you (see the topic's status.md)
 Create each topic first with `bash scripts/new-topic.sh <slug>` and add its sources.
+Optional per topic: append `theme: <id>` (see `themes/catalog.md`), e.g. `- [ ] ss1-bio-x theme: junior-play`.
 
 ## Demo pack (8 priority topics)
 - [ ] ss2-chem-acid-base-titration
@@ -11,5 +12,5 @@ Create each topic first with `bash scripts/new-topic.sh <slug>` and add its sour
 - [ ] ss2-phy-refraction-glass-block
 - [ ] ss2-phy-ohms-law-circuits
 - [x] ss1-bio-plant-animal-cell-structure
-- [ ] ss2-bio-heart-circulation
+- [x] ss2-bio-heart-circulation
 - [ ] ss2-math-circle-theorems

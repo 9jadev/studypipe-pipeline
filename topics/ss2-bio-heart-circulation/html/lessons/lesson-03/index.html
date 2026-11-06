@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 3 · Working of the Heart — Cardiac Cycle, Pacemaker, Heart Sounds &amp; Blood Pressure · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): Myogenic Heartbeat, Sinoatrial Node (SAN), Atrioventricular Node (AVN), Bundle of His, Purkinje Fibres, Cardiac Cycle (Systole &amp; Diastole), Lub-Dub Heart Sounds, Pulse, and Blood Pressure (120/80 mmHg).">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fbbf24'/%3E%3Cstop offset='1' stop-color='%23fb7185'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .pend-hero-art {
+      position: relative; height: 280px; border-radius: var(--r-lg);
+      background: radial-gradient(circle at 50% 25%, rgba(251,191,36,.18), rgba(251,113,133,.08) 55%, transparent 75%),
+                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
+      border: 1px solid var(--line-strong);
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
+    .pos-track {
+      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
+      background: linear-gradient(90deg, #fbbf24 0%, #f59e0b 25%, #e11d48 50%, #fb7185 75%, #3ee6c4 100%);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    }
+    .clock-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
+      padding: 18px; text-align: center; position: relative;
+    }
+    .clock-well {
+      height: 115px; border-radius: 12px; margin: 12px auto;
+      background: radial-gradient(circle at 50% 50%, rgba(251,191,36,.12), rgba(6,9,18,.9));
+      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l03">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
+      <span class="l-crumb">Lesson 3 of 5 · <b>Cardiac Cycle, Pacemaker &amp; Blood Pressure</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 3 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Working of the Heart: <em>Cardiac Cycle, Pacemaker</em>, Heart Sounds &amp; Blood Pressure</h1>
+        <p class="question reveal">What sparks 100,000 rhythmic heartbeats every single day without needing a nerve signal from your brain — and which exact valves slam shut to make the “Lub-Dub” sound in a stethoscope?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Explain why mammalian cardiac muscle is <strong>myogenic</strong> and trace the electrical impulse from the <strong>Sinoatrial Node (SAN / pacemaker)</strong> in the right atrium to the <strong>Atrioventricular Node (AVN)</strong>, <strong>Bundle of His</strong>, and <strong>Purkinje fibres</strong>.</span></li>
+          <li><b>02</b><span>Describe the three phases of the <strong>0.80 s cardiac cycle</strong> at 75 bpm: <strong>Atrial Systole (0.10 s)</strong>, <strong>Ventricular Systole (0.30 s)</strong>, and <strong>General Diastole (0.40 s)</strong>, stating the state of the AV and semilunar valves in each phase.</span></li>
+          <li><b>03</b><span>Distinguish the cause of the first heart sound (<strong>“LUB”</strong> — closure of bicuspid and tricuspid AV valves) from the second heart sound (<strong>“DUB”</strong> — closure of aortic and pulmonary semilunar valves).</span></li>
+          <li><b>04</b><span>Define <strong>arterial pulse</strong> and <strong>blood pressure (120/80 mmHg)</strong> measured with a <strong>sphygmomanometer</strong>, and explain how the <strong>medulla oblongata</strong>, <strong>sympathetic nerves / adrenaline</strong>, and the <strong>parasympathetic vagus nerve (acetylcholine)</strong> regulate heart rate.</span></li>
+          <li><b>05</b><span>Calculate <strong>cardiac cycle duration (T = 60 ÷ HR)</strong>, <strong>cardiac output (CO = HR × SV)</strong>, <strong>pulse pressure (PP = P<sub>sys</sub> − P<sub>dia</sub>)</strong>, and <strong>mean arterial pressure (MAP)</strong>.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="pend-hero-art reveal" aria-hidden="true">
+        <svg class="pend-hero-svg" viewBox="0 0 320 260">
+          <rect x="20" y="34" width="280" height="172" rx="14" fill="rgba(15,23,42,0.85)" stroke="#fbbf24" stroke-width="2"/>
+          <text x="160" y="56" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">SAN → ATRIA (P) → AVN → HIS/PURKINJE (QRS)</text>
+          <path d="M 36 135 L 70 135 Q 82 112 94 135 L 116 135 L 124 148 L 136 74 L 148 162 L 158 135 L 185 135 Q 205 108 225 135 L 284 135" fill="none" stroke="#3ee6c4" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="136" cy="74" r="4.5" fill="#fb7185"/>
+          <text x="136" y="66" fill="#fb7185" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">'LUB' (AV Close)</text>
+          <circle cx="225" cy="135" r="4.5" fill="#38bdf8"/>
+          <text x="235" y="156" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">'DUB' (SL Close)</text>
+          <text x="160" y="192" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">0.10 s Atrial + 0.30 s Ventricular + 0.40 s Diastole = 0.80 s</text>
+          <text x="160" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">BP = 120 / 80 mmHg &nbsp;·&nbsp; PP = 40 mmHg</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Cycle &amp; sounds sort</a></li>
+        <li><a href="#practical">3D pacemaker bench</a></li>
+        <li><a href="#concepts">SAN, cycle &amp; BP</a></li>
+        <li><a href="#neutralise">3D conduction zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1 &amp; 2</em></h2>
+        <p class="intro">Four spaced-retrieval flashcards from Lessons 1 and 2 on ventricular wall thickness, the pulmonary vessel exception, chordae tendineae, and vertebrate chambers. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>At the LUTH ECG &amp; Stethoscope Bay: <em>Myogenic Spark &amp; “Lub-Dub”</em></h2>
+        <p class="intro">Tunde listens to his chest with a stethoscope while Nurse Chidinma and Dr Bamidele record his 12-lead ECG and brachial blood pressure (<code>120/80 mmHg</code>).</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Tunde, Amaka, Nurse Chidinma, and Dr Bamidele at LUTH investigating the SAN pacemaker, Lub-Dub valve sounds, and 120/80 mmHg blood pressure."></canvas>
+            <div class="stage-label"><i></i>3D story · LUTH ECG &amp; BP Clinic → Pacemaker Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Stethoscope Check:</strong> Tunde hears <em>“LUB-DUB… LUB-DUB”</em> every 0.80 second and asks what makes those two distinct sounds.</p>
+            <p><strong>Scene 2 · Donor Heart Puzzle:</strong> Amaka asks why an isolated heart continues beating in warm oxygenated Ringer’s solution even when all external nerves are severed.</p>
+            <p><strong>Scene 3 · Myogenic Pacemaker (SAN):</strong> Nurse Chidinma explains that cardiac muscle is <strong>myogenic</strong> — the <strong>Sinoatrial Node (SAN)</strong> in the upper right atrium initiates every beat: <code>SAN → Atria → AVN (0.10 s delay) → Bundle of His → Purkinje fibres</code>.</p>
+            <p><strong>Scene 4 · “LUB” vs “DUB”:</strong> <strong>“LUB”</strong> is the simultaneous closure of the <strong>bicuspid and tricuspid (AV) valves</strong> at the start of ventricular systole; <strong>“DUB”</strong> is the closure of the <strong>aortic and pulmonary semilunar valves</strong> at the start of ventricular diastole.</p>
+            <p><strong>Scene 5 · Sphygmomanometer (120/80 mmHg):</strong> Peak systolic pressure is <code>120 mmHg</code>, diastolic pressure is <code>80 mmHg</code>, and pulse pressure is <code>120 − 80 = 40 mmHg</code>.</p>
+            <p><strong>Scene 6 · 3D Pacemaker Bench:</strong> Dr Bamidele invites the students to step heart rate from 60 to 150 bpm and plot Cardiac Output <code>CO = HR × SV</code>.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Why must the AVN delay the electrical impulse by 0.10 s before passing it to the ventricles? Pin your prediction before we test on the 3D bench.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict that the 'Lub' and 'Dub' heart sounds are caused by…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">What does it mean that the heart is myogenic?</button>
+            <button type="button">Which valves close to make 'LUB' vs 'DUB'?</button>
+            <button type="button">Why does the AVN delay the impulse by 0.10 s?</button>
+            <button type="button">What do 120 and 80 mean in 120/80 mmHg?</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
+        <h2>Cardiac Cycle Phases, <em>Pacemaker &amp; Heart Sounds Sort</em></h2>
+        <p class="intro">Sort all 12 cards into <strong>Atrial Systole &amp; SAN (0.10 s)</strong>, <strong>Ventricular Systole &amp; “LUB” (0.30 s)</strong>, and <strong>General Diastole &amp; “DUB” (0.40 s)</strong>.</p>
+
+        <div class="sort" id="kitchen-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="shm" style="--bc:#fbbf24" tabindex="0" role="button" aria-label="Atrial Systole and SAN bin">
+              <h4><i></i>Atrial Systole &amp; SAN (0.10 s)</h4>
+              <small>SAN fires · AV open · AVN delay</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="periodic" style="--bc:#fb7185" tabindex="0" role="button" aria-label="Ventricular Systole and LUB bin">
+              <h4><i></i>Ventricular Systole &amp; “LUB” (0.30 s)</h4>
+              <small>Purkinje · AV close ('LUB') · 120 mmHg</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="non" style="--bc:#38bdf8" tabindex="0" role="button" aria-label="General Diastole and DUB bin">
+              <h4><i></i>General Diastole &amp; “DUB” (0.40 s)</h4>
+              <small>SL close ('DUB') · 80 mmHg · vagus</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
+        <h2>3D Pacemaker &amp; Haemodynamics Bench: <em>Cycle Time T = 60 ÷ HR &amp; CO = HR × SV</em></h2>
+        <p class="intro">Step heart rate across five trials (<code>HR = 60, 75, 100, 120, 150 bpm</code>) at constant stroke volume <code>SV = 75 mL (0.075 L)</code>. Watch the golden electrical impulse travel from the <strong>SAN</strong> to the <strong>Purkinje fibres</strong> and plot <strong>Cardiac Output CO (L/min)</strong> against <strong>Heart Rate HR (bpm)</strong>.</p>
+
+        <div class="callout warn" id="safety-box">
+          <p><strong>Clinical Sphygmomanometer &amp; Auscultation Protocol:</strong> Always wrap the inflatable sphygmomanometer cuff snugly around the bare upper arm over the <strong>brachial artery</strong> at the level of the heart. Inflate above expected systolic pressure until radial pulse disappears, then deflate slowly while listening with a stethoscope in the antecubital fossa: the first tapping sound (Korotkoff Phase I) marks <strong>Systolic Pressure (~120 mmHg)</strong> and sound disappearance (Phase V) marks <strong>Diastolic Pressure (~80 mmHg)</strong>.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method" id="m1"><b>STEP 01</b><h4>Trace SAN firing</h4><p>Locate the golden Sinoatrial Node (SAN) in the upper right atrial wall initiating the pacemaker wave.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Step HR from 60 to 150 bpm</h4><p>Tap Trials A to E and observe how cycle duration <code>T = 60 ÷ HR</code> shortens from <code>1.00 s</code> down to <code>0.40 s</code>.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Plot CO against HR</h4><p>Verify that at constant stroke volume <code>SV = 0.075 L</code>, the graph of <code>CO</code> against <code>HR</code> is a straight line of slope <code>SV</code>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Test adrenaline surge</h4><p>Switch to the Adrenaline condition (<code>SV = 110 mL</code>) to see how sympathetic stimulation steepens the slope.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D beating heart with golden SAN-AVN-His-Purkinje conduction pathway and animated valve."></canvas>
+            <div class="stage-label"><i></i>Pacemaker &amp; heart-rate bench</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D Pacemaker Bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Autonomic condition" id="bench-cond">
+              <button type="button" data-cond="std" aria-pressed="true">Normal SV (75 mL = 0.075 L)</button>
+              <button type="button" data-cond="heavy" aria-pressed="false">Adrenaline Surge (SV = 110 mL)</button>
+              <button type="button" data-cond="wide" aria-pressed="false">Impaired Filling (AVN Drift)</button>
+            </div>
+            <div class="vt-actions" id="bench-trials">
+              <button class="vt-btn" type="button" data-trial="0">Trial A · 60 bpm</button>
+              <button class="vt-btn" type="button" data-trial="1">Trial B · 75 bpm</button>
+              <button class="vt-btn" type="button" data-trial="2">Trial C · 100 bpm</button>
+              <button class="vt-btn" type="button" data-trial="3">Trial D · 120 bpm</button>
+              <button class="vt-btn" type="button" data-trial="4">Trial E · 150 bpm</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 heart rates</span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="vi-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots as you step heart rate</span><h4>Cardiac Output CO (L/min) against Heart Rate HR (bpm)</h4></div>
+            <span class="gc-badge wait" id="vi-badge">0 points</span>
+          </div>
+          <div id="vi-graph"></div>
+          <div class="gc-stats" id="vi-stats"></div>
+          <p class="gc-note" id="vi-note"></p>
+        </div>
+
+        <h3>Record your Cardiac Cycle &amp; Cardiac Output readings</h3>
+        <p>As you test Trials A–E on the 3D Pacemaker Bench, select the matching <strong>Cycle Duration T = 60 ÷ HR (s)</strong>, <strong>Stroke Volume SV (mL)</strong>, and <strong>Cardiac Output CO (L/min)</strong> below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr>
+                <th>Trial</th>
+                <th>Heart Rate HR (bpm)</th>
+                <th>Cycle Duration T = 60 ÷ HR (s)</th>
+                <th>Stroke Volume SV (mL)</th>
+                <th>Cardiac Output CO = HR × SV (L/min)</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="sort-bar">
+          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
+          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC table &amp; CO–HR slope calculation <small>open after recording yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Trial</th><th>Heart Rate HR (bpm)</th><th>Cycle Time T (s)</th><th>Stroke Volume SV (mL)</th><th>Cardiac Output CO (L/min)</th></tr></thead>
+                <tbody>
+                  <tr><td>A</td><td>60</td><td>1.00</td><td>75</td><td>4.50</td></tr>
+                  <tr><td>B</td><td>75</td><td>0.80</td><td>75</td><td>5.63</td></tr>
+                  <tr><td>C</td><td>100</td><td>0.60</td><td>75</td><td>7.50</td></tr>
+                  <tr><td>D</td><td>120</td><td>0.50</td><td>75</td><td>9.00</td></tr>
+                  <tr><td>E</td><td>150</td><td>0.40</td><td>75</td><td>11.25</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Slope of Cardiac Output CO (L/min) against Heart Rate HR (bpm):</strong></p>
+            <div class="eq light">SV = ΔCO ÷ ΔHR = (11.25 − 4.50) ÷ (150 − 60) = 6.75 ÷ 90 = 0.075 L/beat = 75 mL/beat</div>
+          </div>
+        </details>
+
+        <h3>Practical Analysis Questions</h3>
+        <div class="aq" data-answer="l03-prac-q">
+          <div class="aq-top"><h4>Answer these three WAEC cardiac physiology questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>What detects a rise in blood <code>CO₂</code> concentration (drop in blood pH) during exercise, and which part of the brain responds to speed up the heart?</li>
+            <li>What is a <strong>heart murmur</strong>, and what structural defect causes it?</li>
+            <li>Why does cardiac muscle never suffer from muscle cramp or fatigue the way skeletal leg muscle does during a 400 m sprint?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li><strong>Chemoreceptors</strong> in the carotid bodies, aortic arch, and medulla detect the rise in <code>CO₂ / H⁺</code> and signal the <strong>cardiovascular centre in the medulla oblongata</strong>, which sends sympathetic impulses to the SAN to increase heart rate.</li>
+                <li>A <strong>heart murmur</strong> is an abnormal swishing or hissing sound heard between “Lub” and “Dub” caused by turbulent backflow (regurgitation) through a leaky, damaged valve or narrowing (stenosis) of a valve opening.</li>
+                <li>Cardiac muscle has an exceptionally rich blood supply (coronary capillaries), abundant mitochondria (~40% of cell volume), myoglobin, and a long refractory period (~0.25 s) that guarantees relaxation (diastole) between every contraction.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Myogenic Conduction, The 0.80 s Cardiac Cycle, <em>“Lub-Dub”</em> &amp; Blood Pressure</h2>
+        <p class="intro">Let’s master the complete electrical, mechanical, acoustic, and pressure events of the mammalian heartbeat for WAEC, NECO, and JAMB Biology.</p>
+
+        <h3 id="def-shm">1 · Myogenic Contraction &amp; The Electrical Conduction System</h3>
+        <p>Mammalian cardiac muscle is <strong>myogenic</strong> — its rhythmic contraction originates spontaneously within the muscle tissue itself without requiring an external motor nerve impulse from the brain. If a frog or mammalian heart is removed from the body and placed in warm, oxygenated <strong>Ringer’s solution</strong>, it continues to beat rhythmically on its own!</p>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Step</th><th>Conduction Structure</th><th>Anatomical Location</th><th>Physiological Role in the Heartbeat</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1</strong></td><td><strong>Sinoatrial Node (SAN) — The Natural Pacemaker</strong></td><td>Upper wall of the <strong>right atrium</strong> near the opening of the superior vena cava</td><td>Spontaneously depolarises (~72–75 times/min at rest) to initiate a wave of electrical excitation that spreads across both left and right atria, causing <strong>atrial systole</strong>.</td></tr>
+              <tr><td><strong>2</strong></td><td><strong>Atrioventricular Node (AVN)</strong></td><td>Lower part of the <strong>interatrial septum</strong> at the junction of atria and ventricles</td><td>Receives the wave from the SAN and introduces a crucial <strong>~0.10 s delay</strong> so the atria finish contracting and emptying into the ventricles before ventricular contraction begins.</td></tr>
+              <tr><td><strong>3</strong></td><td><strong>Bundle of His</strong> (Atrioventricular Bundle)</td><td>Runs down the muscular <strong>interventricular septum</strong> (dividing into left and right bundle branches)</td><td>Conducts the electrical impulse rapidly from the AVN down the septum to the bottom tip (<strong>apex</strong>) of the heart.</td></tr>
+              <tr><td><strong>4</strong></td><td><strong>Purkinje Fibres</strong> (Purkyne Tissue)</td><td>Fine conducting fibres branching upward throughout the walls of both ventricles</td><td>Spread excitation rapidly from the <strong>apex upward</strong> so both ventricles contract simultaneously from the bottom up, squeezing blood cleanly into the aorta and pulmonary artery.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="def-terms">2 · The Three Phases of the Cardiac Cycle (T = 0.80 s at 75 bpm)</h3>
+        <p>One complete heartbeat (<strong>cardiac cycle</strong>) consists of contraction (<strong>systole</strong>) and relaxation (<strong>diastole</strong>). At a resting heart rate of <code>75 beats/min</code>, one cycle lasts <code>T = 60 ÷ 75 = 0.80 second</code>:</p>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Phase of Cardiac Cycle</th><th>Duration (at 75 bpm)</th><th>Atria &amp; Ventricles</th><th>Tricuspid &amp; Bicuspid (AV) Valves</th><th>Aortic &amp; Pulmonary Semilunar Valves</th><th>Heart Sound &amp; Blood Flow</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1 · Atrial Systole</strong> (Ventricular Diastole)</td><td><strong>0.10 s</strong></td><td>Atria <strong>contract</strong>; Ventricles are <strong>relaxed</strong></td><td><strong>OPEN</strong></td><td><strong>CLOSED</strong></td><td>Atria squeeze the final ~20–30% of blood through open AV valves to top up the ventricles (reaching EDV ≈ 120 mL).</td></tr>
+              <tr><td><strong>2 · Ventricular Systole</strong> (Atrial Diastole)</td><td><strong>0.30 s</strong></td><td>Atria <strong>relax</strong>; Ventricles <strong>contract powerfully</strong> from apex upward</td><td><strong>SNAP SHUT</strong> (held taut by chordae tendineae)</td><td><strong>FORCED OPEN</strong></td><td><strong>First sound “LUB” (S1)</strong> as AV valves slam shut; blood is ejected at high pressure into the aorta (<code>120 mmHg</code>) and pulmonary artery (<code>25 mmHg</code>).</td></tr>
+              <tr><td><strong>3 · General (Joint) Diastole</strong></td><td><strong>0.40 s</strong></td><td>Both Atria and Ventricles are <strong>relaxed</strong></td><td><strong>OPEN</strong> (after ventricular pressure drops below atrial pressure)</td><td><strong>SNAP SHUT</strong> at start of phase</td><td><strong>Second sound “DUB” (S2)</strong> as arterial back-pressure snaps semilunar valves shut; blood flows passively from venae cavae and pulmonary veins into atria and ventricles.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>3 · Governing Equations: Cycle Time, Cardiac Output, Pulse Pressure &amp; MAP</h3>
+        <div class="eq" id="eq-shm" data-hook>T = 60 ÷ HR = 60 ÷ 75 = 0.80 s = 0.10 s + 0.30 s + 0.40 s</div>
+        <div class="eq" id="eq-omega">PP = P_sys − P_dia = 120 − 80 = 40 mmHg</div>
+        <div class="eq" id="eq-vel">MAP = P_dia + (PP ÷ 3) = 80 + (40 ÷ 3) = 93.3 mmHg</div>
+
+        <div class="callout big reveal" id="all-alkalis">
+          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up! Tap your left palm softly with two fingers while saying <strong>“Atria squeeze (0.1 s)”</strong>, clap both hands loudly while saying <strong>“LUB — AV valves shut, Ventricles pump (0.3 s)!”</strong>, and snap your fingers sharply while saying <strong>“DUB — Semilunar valves shut, Heart rests (0.4 s)!”</strong> Repeat three times to lock the <code>0.1 s + 0.3 s + 0.4 s = 0.8 s</code> rhythm into muscle memory!</p>
+        </div>
+
+        <h3 id="props">4 · Heart Sounds (“Lub-Dub”), Arterial Pulse, Blood Pressure &amp; Nervous/Hormonal Control</h3>
+        <ul>
+          <li><strong>First Heart Sound (“LUB” / S1):</strong> Lower-pitched, louder, and slightly longer sound caused by the simultaneous <strong>closure of the bicuspid and tricuspid (AV) valves</strong> and vibration of the chordae tendineae at the onset of <strong>ventricular systole</strong>.</li>
+          <li><strong>Second Heart Sound (“DUB” / S2):</strong> Higher-pitched, sharper, and shorter sound caused by the simultaneous <strong>closure of the aortic and pulmonary semilunar valves</strong> at the onset of <strong>ventricular diastole</strong>.</li>
+          <li><strong>Arterial Pulse:</strong> The rhythmic wave of expansion and elastic recoil that travels along arterial walls following each left ventricular systole. It is easily felt where an artery runs close to the skin over a bone — such as the <strong>radial artery</strong> at the wrist, the <strong>carotid artery</strong> in the neck, or the <strong>temporal artery</strong> at the temple. Pulse rate equals heart rate (<code>70–75 bpm</code> in a resting adult; higher in infants and children).</li>
+          <li><strong>Blood Pressure (120/80 mmHg):</strong> The hydrostatic lateral force exerted by circulating blood against the walls of the main arteries, measured over the <strong>brachial artery</strong> using a <strong>sphygmomanometer</strong> and stethoscope. <strong>Systolic pressure (~120 mmHg)</strong> occurs during ventricular contraction; <strong>diastolic pressure (~80 mmHg)</strong> occurs during ventricular relaxation (maintained by elastic recoil of the aorta). Persistent blood pressure above <code>140/90 mmHg</code> at rest is <strong>hypertension</strong>.</li>
+          <li><strong>Nervous &amp; Hormonal Modulation (Cardiovascular Centre in the Medulla Oblongata):</strong> Although the SAN is myogenic, the <strong>medulla oblongata</strong> adjusts heart rate to match metabolic demand:
+            <ul>
+              <li><strong>Accelerator (Sympathetic) Nerve &amp; Adrenaline:</strong> High blood $\text{CO}_2$ (low pH during exercise), low blood pressure, fear, or excitement stimulates the sympathetic cardiac nerve (releasing <strong>noradrenaline</strong>) and the adrenal medulla (secreting <strong>adrenaline</strong>), which speed up the SAN and increase stroke volume.</li>
+              <li><strong>Inhibitory (Parasympathetic Vagus) Nerve:</strong> High blood pressure detected by baroreceptors in the carotid sinus and aortic arch stimulates the <strong>vagus nerve</strong> (Cranial Nerve X), which releases <strong>acetylcholine</strong> onto the SAN to <strong>slow down</strong> the heart rate during rest.</li>
+            </ul>
+          </li>
+        </ul>
+
+        <h3 id="ph-h">0.80-Second Cardiac Cycle &amp; Conduction Timeline Explorer</h3>
+        <p>Tap any pin below to step through the electrical, valve, and pressure events of a single 0.80 s heartbeat:</p>
+        <div class="ph-explorer" id="ph-explorer">
+          <div class="pos-track" id="ph-track"></div>
+          <div class="ph-nums" id="ph-nums"></div>
+          <div class="ph-zones"><div>← Atrial Systole (0.10 s)</div><div>Ventricular Systole &amp; 'LUB' (0.30 s)</div><div>General Diastole &amp; 'DUB' (0.40 s) →</div></div>
+          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect SAN/AVN conduction, valve positions, heart sounds, and pressure.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. 3D CONDUCTION ZOOM ================= -->
+      <section class="l-sec" id="neutralise">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D SAN–AVN–Purkinje Conduction &amp; Valve Sound Zoom</span>
+        <h2>Inside the beat: <em>SAN → AVN → Bundle of His → Purkinje Fibres &amp; “Lub-Dub”</em></h2>
+        <p class="intro">Rotate the 3D conduction stage below! Compare <strong>Atrial Systole (0.10 s — SAN fires, AV open)</strong>, <strong>Ventricular Systole (0.30 s — Purkinje wave, AV snap shut = “LUB”, 120 mmHg ejection)</strong>, and <strong>General Diastole (0.40 s — Semilunar snap shut = “DUB”, 80 mmHg recoil)</strong>.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D view of the myogenic conduction system (SAN, AVN, Bundle of His, Purkinje fibres) and heart valve sounds with live duration and pressure bars."></canvas>
+            <div class="stage-label"><i></i>Conduction &amp; cardiac cycle</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D conduction stage couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Cardiac cycle phase">
+              <button type="button" data-mode="mix" aria-pressed="true">Full 0.80 s Cycle</button>
+              <button type="button" data-mode="acid" aria-pressed="false">Atrial Systole (0.10 s · SAN)</button>
+              <button type="button" data-mode="base" aria-pressed="false">Ventricular Systole (0.30 s · 'LUB')</button>
+            </div>
+            <button class="vt-btn zobo" type="button" id="zoom-add">Inspect General Diastole (0.40 s · 'DUB')</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:#3ee6c4"></i>Phase<b data-c="h">0.80 s</b></span>
+              <span class="counter"><i style="--c:#ffb23f"></i>Event<b data-c="oh">SAN → AVN</b></span>
+              <span class="counter"><i style="--c:#7cc4ff"></i>AV Valves<b data-c="na">Open</b></span>
+              <span class="counter"><i style="--c:#f43f5e"></i>SL Valves<b data-c="cl">Closed</b></span>
+              <span class="counter"><i style="--c:#c6f36b"></i>BP<b data-c="w">120/80 mmHg</b></span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Every calculation is broken down one atomic mathematical step at a time with a plain-English explainer note underneath.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Cardiac Cycle Duration &amp; Diastolic Rest Time per Minute</h4></div>
+          <div class="example-body">
+            <p class="q">A resting student has a heart rate of HR = 75 beats/min. In each cardiac cycle, atrial systole lasts 0.10 s and ventricular systole lasts 0.30 s, while the remaining time is general diastole. Calculate: (a) the total duration T of one cardiac cycle in seconds, (b) the duration of general diastole in each cycle, and (c) the total number of seconds in every minute (60 s) that all four chambers spend resting in general diastole.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Divide 60 seconds by heart rate HR = 75 bpm:</strong> <code>T = 60 ÷ 75 = 0.80 s</code>.</li>
+              <li><strong>Part (b) — Subtract atrial (0.10 s) and ventricular (0.30 s) systole from total cycle T:</strong> <code>t_dia = 0.80 − 0.40 = 0.40 s</code>.</li>
+              <li><strong>Part (c) — Multiply general diastole per beat (0.40 s) by 75 beats/min:</strong> <code>T_rest = 0.40 × 75 = 30.0 s</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Cycle Duration T = 0.80 s &nbsp;·&nbsp; (b) General Diastole = 0.40 s/beat &nbsp;·&nbsp; (c) 30.0 seconds of rest every minute!</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Pulse Pressure (PP) &amp; Mean Arterial Pressure (MAP)</h4></div>
+          <div class="example-body">
+            <p class="q">Using a sphygmomanometer at the LUTH clinic, Dr Bamidele records a patient’s brachial blood pressure as 135/90 mmHg. Calculate: (a) the patient’s pulse pressure PP, and (b) the patient’s mean arterial pressure MAP using MAP = P<sub>dia</sub> + (PP ÷ 3).</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Subtract diastolic pressure (90 mmHg) from systolic pressure (135 mmHg):</strong> <code>PP = 135 − 90 = 45 mmHg</code>.</li>
+              <li><strong>Part (b) Step 1 — Divide pulse pressure PP by 3:</strong> <code>ΔP = 45 ÷ 3 = 15 mmHg</code>.</li>
+              <li><strong>Part (b) Step 2 — Add ΔP to diastolic pressure P<sub>dia</sub>:</strong> <code>MAP = 90 + 15 = 105 mmHg</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Pulse Pressure PP = 45 mmHg &nbsp;·&nbsp; (b) Mean Arterial Pressure MAP = 105 mmHg</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Finding Stroke Volume (SV) from Cardiac Output &amp; Cycle Duration</h4></div>
+          <div class="example-body">
+            <p class="q">During moderate exercise, an athlete’s cardiac cycle duration shortens to T = 0.50 s and her cardiac output is measured as CO = 10.8 L/min (10,800 mL/min). Calculate: (a) her heart rate HR in beats/min, and (b) her stroke volume SV in mL/beat.</p>
+            <ol class="steps-sol">
+              <li><strong>Part (a) — Divide 60 seconds by cycle duration T = 0.50 s:</strong> <code>HR = 60 ÷ 0.50 = 120 bpm</code>.</li>
+              <li><strong>Part (b) — Divide cardiac output (10,800 mL/min) by heart rate (120 bpm):</strong> <code>SV = 10800 ÷ 120 = 90 mL/beat</code>.</li>
+            </ol>
+            <div class="answer-line">(a) Heart Rate HR = 120 beats/min &nbsp;·&nbsp; (b) Stroke Volume SV = 90 mL/beat</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
+        <h2>Back to LUTH ECG Bay: <em>complete Tunde’s 75 bpm &amp; 120/80 mmHg vitals chart!</em></h2>
+        <p class="intro">Run Steps 1, 2, and 3 to calculate Tunde’s cardiac cycle duration <code>T</code>, pulse pressure <code>PP</code>, and mean arterial pressure <code>MAP</code>.</p>
+
+        <div class="vt" id="vinegar-test">
+          <div class="vt-cups">
+            <div class="clock-card" id="vt-a">
+              <h4>Stethoscope &amp; ECG Monitor <small style="color:var(--muted);font-weight:500">· SAN Myogenic Pacemaker</small></h4>
+              <div class="clock-well">
+                <div style="padding:8px 14px;border-radius:10px;border:2px solid #fbbf24;background:rgba(251,191,36,.18);font-weight:700;color:#fde68a">LUB (AV) · DUB (SL)</div>
+              </div>
+              <div class="vt-count"><span id="time-a">SAN → AVN (0.1s) → His → Purkinje</span><small>myogenic conduction wave</small></div>
+            </div>
+            <div class="clock-card" id="vt-b">
+              <h4>Sphygmomanometer Cuff <small style="color:var(--muted);font-weight:500" id="len-b-label">· HR = 75 bpm · BP = 120/80 mmHg</small></h4>
+              <div class="clock-well">
+                <div style="padding:8px 14px;border-radius:10px;border:2px solid #3ee6c4;background:rgba(62,230,196,.18);font-weight:700;color:#99f6e4">120 / 80 mmHg</div>
+              </div>
+              <div class="vt-count"><span id="time-b">Compute T, PP &amp; MAP</span><small>run Steps 1–3 below!</small></div>
+            </div>
+          </div>
+          <div class="vt-actions">
+            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Compute Cycle Time T (60 ÷ 75 bpm)</button>
+            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compute Pulse Pressure (120 − 80)</button>
+            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Compute Mean Arterial Pressure MAP</button>
+            <button class="vt-btn" type="button" id="vt-reset">Reset vitals</button>
+          </div>
+          <p class="vt-status" id="vt-status" aria-live="polite">Tunde's resting vitals are HR = 75 bpm and BP = 120/80 mmHg. Start with Step 1.</p>
+          <div class="vt-verdict" id="vt-verdict"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 3:</strong> The mammalian heart is <strong>myogenic</strong> — its beat starts in the <strong>Sinoatrial Node (SAN)</strong> in the right atrium, pauses ~0.10 s at the <strong>AVN</strong> so the atria finish emptying, and sweeps upward from the apex via the <strong>Bundle of His and Purkinje fibres</strong>. Each 0.80 s cycle produces <strong>“LUB”</strong> when the AV valves slam shut at ventricular systole (<code>120 mmHg</code>) and <strong>“DUB”</strong> when the semilunar valves slam shut at ventricular diastole (<code>80 mmHg</code>)!</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 3.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can explain why cardiac muscle is myogenic and trace the impulse from SAN → AVN → Bundle of His → Purkinje fibres.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can describe atrial systole (0.10 s), ventricular systole (0.30 s), and general diastole (0.40 s) and state which valves are open or closed.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can state the exact valve closures that produce the first ('LUB') and second ('DUB') heart sounds.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain arterial pulse, 120/80 mmHg blood pressure, and how sympathetic/adrenaline vs vagus nerve signals regulate heart rate.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can calculate T = 60 ÷ HR, CO = HR × SV, pulse pressure PP, and mean arterial pressure MAP.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l03-exit">
+          <div class="aq-top"><h4>In two sentences: state which exact valves close to produce the “LUB” sound and the “DUB” sound, and explain why the AVN delays the pacemaker impulse by ~0.10 second.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>“LUB” is caused by the simultaneous closure of the bicuspid and tricuspid (AV) valves at the start of ventricular systole, whereas “DUB” is caused by the closure of the aortic and pulmonary semilunar valves at the start of ventricular diastole <b>(1)</b>. The AVN delays the impulse by ~0.10 s so that the atria finish contracting and emptying completely into the ventricles before ventricular contraction begins <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
+        <h2>Assignment: <em>Cardiac Cycle, Myogenic Pacemaker &amp; Blood Pressure</em></h2>
+        <p class="intro">Complete Part A (pulse recovery curve investigation) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Post-Exercise Pulse Recovery &amp; Cycle Time Investigation</h3>
+        <div class="aq" data-answer="l03-a1">
+          <div class="aq-top"><h4>Record your radial wrist pulse at rest, immediately after 1 minute of brisk stepping/jumping jacks, and at 1, 2, and 3 minutes of seated recovery. Calculate the cardiac cycle duration T = 60 ÷ HR (in seconds) at rest and immediately after exercise, and state which nerve slows your heart rate back down during recovery.</h4><span class="marks">Practical task</span></div>
+          <textarea class="l-textarea" placeholder="Your pulse recovery data and T = 60/HR calculations…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <p>At rest (HR = 72 bpm): <code>T_rest = 60 ÷ 72 = 0.83 s</code>.<br>
+              Immediately post-exercise (HR = 144 bpm): <code>T_ex = 60 ÷ 144 = 0.42 s</code>.<br>
+              During recovery, the <strong>parasympathetic vagus nerve</strong> releases <strong>acetylcholine</strong> onto the SAN to return the heart rate to baseline.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <div class="aq" data-answer="l03-b1">
+          <div class="aq-top"><h4>1. (a) Explain the term “myogenic” as applied to the mammalian heart [2 marks]. (b) Describe in sequence how a heartbeat is initiated and conducted through the heart muscle [5 marks]. (c) Explain how the medulla oblongata increases heart rate during vigorous exercise [3 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <strong>Myogenic</strong> means the rhythmic contraction originates spontaneously within the cardiac muscle itself (at the SAN) without requiring external motor nerve stimulation <b>(2)</b>.<br>
+            (b) 1. The <strong>Sinoatrial Node (SAN)</strong> in the upper right atrial wall generates an electrical impulse <b>(1)</b>. 2. The wave spreads across both atria, causing <strong>atrial systole</strong> <b>(1)</b>. 3. The <strong>Atrioventricular Node (AVN)</strong> delays the impulse by ~0.10 s so the atria finish emptying <b>(1)</b>. 4. The impulse travels down the interventricular septum via the <strong>Bundle of His</strong> to the apex <b>(1)</b>. 5. <strong>Purkinje fibres</strong> conduct the wave upward through the ventricular walls, causing simultaneous ventricular systole from the apex upward <b>(1)</b>.<br>
+            (c) High blood <code>CO₂</code> (low pH) is detected by chemoreceptors in the carotid/aortic bodies and medulla <b>(1)</b>; the cardiovascular centre in the <strong>medulla oblongata</strong> sends impulses via the <strong>sympathetic accelerator nerve</strong> (and adrenal medulla releases <strong>adrenaline</strong>) to stimulate the SAN, increasing heart rate and stroke volume <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b2">
+          <div class="aq-top"><h4>2. (a) Describe the events that occur during (i) Atrial Systole, (ii) Ventricular Systole, and (iii) General Diastole, stating the position of the atrioventricular and semilunar valves in each phase [6 marks]. (b) Account for the production of the “Lub” and “Dub” sounds of the heart [4 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) (i) <strong>Atrial Systole (0.10 s):</strong> Both atria contract while ventricles relax; tricuspid and bicuspid (AV) valves are <strong>open</strong> and semilunar valves are <strong>closed</strong> <b>(2)</b>. (ii) <strong>Ventricular Systole (0.30 s):</strong> Both ventricles contract while atria relax; AV valves <strong>snap shut</strong> and semilunar valves are <strong>forced open</strong> to eject blood into the aorta and pulmonary artery <b>(2)</b>. (iii) <strong>General Diastole (0.40 s):</strong> Both atria and ventricles relax; semilunar valves <strong>snap shut</strong> and AV valves open as chambers refill passively <b>(2)</b>.<br>
+            (b) <strong>“LUB” (first sound):</strong> Produced by the simultaneous closure of the bicuspid and tricuspid (AV) valves at the start of ventricular systole <b>(2)</b>. <strong>“DUB” (second sound):</strong> Produced by the simultaneous closure of the aortic and pulmonary semilunar valves at the start of ventricular diastole <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b3">
+          <div class="aq-top"><h4>3. (a) Distinguish between systolic blood pressure and diastolic blood pressure, naming the instrument used to measure them in humans [3 marks]. (b) A patient has a blood pressure of 144/90 mmHg and a heart rate of 80 beats/min with a stroke volume of 75 mL. Calculate: (i) the cardiac cycle duration T in seconds, (ii) the cardiac output in L/min, (iii) the pulse pressure PP, and (iv) the mean arterial pressure MAP [7 marks].</h4><span class="marks">10 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <strong>Systolic pressure</strong> is the peak arterial pressure during left ventricular contraction (~120 mmHg), whereas <strong>diastolic pressure</strong> is the minimum arterial pressure during ventricular relaxation (~80 mmHg) <b>(2)</b>. Measured with a <strong>sphygmomanometer</strong> <b>(1)</b>.<br>
+            (b) (i) Cycle duration: <code>T = 60 ÷ 80 = 0.75 s</code> <b>(1.5)</b>. (ii) Cardiac output: <code>CO = 80 × 75 = 6000 mL/min = 6.00 L/min</code> <b>(2)</b>. (iii) Pulse pressure: <code>PP = 144 − 90 = 54 mmHg</code> <b>(1.5)</b>. (iv) Mean arterial pressure: <code>MAP = 90 + (54 ÷ 3) = 90 + 18 = 108 mmHg</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-02/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 2: Mammalian Heart Structure</a>
+          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4 — Blood Vessels, Capillary Exchange &amp; Lymph →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>
