@@ -1,238 +1,241 @@
-/* Lesson 02 · 3D 4-Chamber Mammalian Heart Cut-Away Dissector Bench — Inspects wall thickness w (mm), peak systolic pressure P (mmHg), and right vs left circulation pathways */
+/* Lesson 02 · 3D goat-heart dissection bench (window.StudyScenes.bench)
+   Wraps DissectionBench (assets/js/dissection-bench.js) on a SceneKit stage. Every number comes from the kit's model. */
 (function () {
   "use strict";
   var root = document.getElementById("bench-stage");
   var canvas = document.getElementById("bench-canvas");
-  if (!root || !canvas || !window.L02 || typeof THREE === "undefined") return;
+  var D = window.L02;
+  if (!root || !canvas || !D || typeof THREE === "undefined" || !window.DissectionBench) return;
 
-  var DATA = window.L02;
-  var toastEl = document.getElementById("bench-toast");
-  var hint = document.getElementById("bench-hint");
-  var toastT;
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var toastEl = document.getElementById("bench-toast"), toastT;
   function toast(m) {
     if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
   }
 
-  var state = {
-    cond: "std", // "std" = Normal healthy heart (P = 8w), "heavy" = Athletic hypertrophy (P = 10w), "wide" = Valve prolapse regurgitation
-    trialIdx: 2,
-    timed: {}
+  var kit = DissectionBench.create({ length_cm: 8 });
+  var P = kit.parts;
+  var HK = window.HeartKit;
+  var COND = {
+    fresh: { slantCut: false, papillaryIncluded: false, shrunken: false },
+    slant: { slantCut: true, papillaryIncluded: false, shrunken: false },
+    papilla: { slantCut: false, papillaryIncluded: true, shrunken: false },
+    shrunk: { slantCut: false, papillaryIncluded: false, shrunken: true }
+  };
+  var COND_NOTE = {
+    fresh: "Fresh specimen, clean cut.",
+    slant: "Slanting cut: every wall reads too high.",
+    papilla: "Ruler placed through a papillary muscle: the ventricle walls read too high.",
+    shrunk: "Stored in a fridge for days: the heart has shrunk, so walls read too low."
+  };
+  var PARTS_TOUR = [
+    ["septum", "Septum: the muscle partition between the two halves."],
+    ["tricuspid", "Tricuspid valve: three flaps, between the right atrium and right ventricle."],
+    ["bicuspid", "Bicuspid (mitral) valve: two flaps, between the left atrium and left ventricle."],
+    ["chordae", "Chordae tendineae: cords holding the valve flaps."],
+    ["papillary", "Papillary muscles: they anchor the cords to the ventricle wall."],
+    ["semilunar", "Semilunar pockets at the exit of the aorta."]
+  ];
+  var state = { cond: "fresh", cutDone: false, tour: 0, seen: {}, rotate: false, labels: false, hl: null };
+
+  var stage = window.SceneKit && SceneKit.createStage({
+    root: root, canvas: canvas, fov: 36,
+    target: new THREE.Vector3(0.5, 0, -0.5), pitch: 0.96, yaw: 0, distance: 30, fitWidth: 24,
+    minYaw: -0.9, maxYaw: 0.9, onFrame: frame
+  });
+  var highlighter = null;
+  if (stage) {
+    stage.renderer.localClippingEnabled = true;
+    DissectionBench.enableClipping(stage.renderer);
+    stage.rig.add(kit);
+    DissectionBench.lights(stage.scene);
+    highlighter = HK && HK.makeHighlighter ? HK.makeHighlighter(stage.rig) : null;
+    stage.start();
+  }
+  var lastT = 0;
+  function frame(dt, t) {
+    kit.update(dt, t);
+    if (highlighter) highlighter.update(dt, t);
+    if (state.rotate && stage) { stage.yaw = Math.sin(t * 0.7) * 0.7; }
+    lastT = t;
+  }
+
+  // ---------- DOM ----------
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var readoutEl = $("#bench-readout"), hint = $("#bench-hint");
+  var cutBtn = $("#bench-cut"), partsBtn = $("#bench-parts"), rotBtn = $("#bench-rotate"), labBtn = $("#bench-labels"), resetBtn = $("#bench-reset");
+  var measBtns = Array.prototype.slice.call(document.querySelectorAll("#bench-measure [data-region]"));
+  var tbody = $("#results-table tbody"), ratioLine = $("#ratio-line");
+  var cards = ["m1", "m2", "m3", "m4"].map(function (id) { return document.getElementById(id); });
+
+  function cardState(done, now) {
+    cards.forEach(function (c, i) {
+      if (!c) return;
+      c.classList.toggle("done", i < done);
+      c.classList.toggle("now", i === now);
+    });
+  }
+  function fmt(v) { return v == null ? "—" : v.toFixed(1); }
+  function buildTable() {
+    if (!tbody) return;
+    tbody.innerHTML = "";
+    D.order.forEach(function (k) {
+      var tr = document.createElement("tr");
+      tr.setAttribute("data-region", k);
+      tr.innerHTML = "<td><strong>" + D.names[k] + '</strong></td><td class="empty" data-c="r1">—</td><td class="empty" data-c="r2">—</td><td class="empty" data-c="mean">—</td><td class="empty" data-c="pump">—</td>';
+      tbody.appendChild(tr);
+    });
+  }
+  function paintTable(flash) {
+    var r = kit.reading();
+    r.table.forEach(function (row) {
+      var tr = tbody && tbody.querySelector('tr[data-region="' + row.region + '"]'); if (!tr) return;
+      var vals = { r1: fmt(row.r1), r2: fmt(row.r2), mean: fmt(row.mean), pump: row.mean != null ? row.pumpsTo : "—" };
+      Object.keys(vals).forEach(function (c) {
+        var td = tr.querySelector('[data-c="' + c + '"]');
+        td.textContent = vals[c]; td.classList.toggle("empty", vals[c] === "—");
+      });
+      tr.classList.toggle("fresh", flash === row.region);
+    });
+    var lv = r.table.filter(function (x) { return x.region === "lv"; })[0], rv = r.table.filter(function (x) { return x.region === "rv"; })[0];
+    if (ratioLine) ratioLine.textContent = lv.mean != null && rv.mean != null
+      ? "LV : RV = " + lv.mean.toFixed(1) + " ÷ " + rv.mean.toFixed(1) + " = " + (lv.mean / rv.mean).toFixed(1)
+      : "LV : RV = measure both ventricles twice to find out";
+    var done = r.table.filter(function (x) { return x.mean != null; }).length;
+    if (hint) hint.innerHTML = state.cutDone ? "Walls measured: <b>" + done + " of 5</b>" : "Cut the heart open first";
+    r.table.forEach(function (row) {
+      var b = measBtns.filter(function (x) { return x.getAttribute("data-region") === row.region; })[0];
+      if (b) b.classList.toggle("zobo", row.mean != null);
+    });
+    return r;
+  }
+  function paintReadout(res) {
+    if (!readoutEl) return;
+    var r = kit.reading();
+    if (!res) {
+      readoutEl.innerHTML = '<div><span>Cut</span><b>' + Math.round(r.cut * 100) + '%</b></div><div><span>Length</span><b>' + r.length_cm.toFixed(1) + ' cm</b></div><div><span>Specimen</span><b>' + (state.cond === "fresh" ? "fresh" : state.cond) + '</b></div>';
+      return;
+    }
+    readoutEl.innerHTML =
+      '<div><span>Region</span><b>' + D.names[res.region].replace(/ \(.*\)/, "") + '</b></div>' +
+      '<div class="hot"><span>Reading ' + res.trial + ' / mm</span><b>' + res.value.toFixed(1) + '</b></div>' +
+      '<div><span>Mean / mm</span><b>' + (res.mean != null ? res.mean.toFixed(1) : "…") + '</b></div>' +
+      '<div><span>Pumps to</span><b style="font-size:.78em">' + (res.mean != null ? res.pumpsTo : "measure again") + '</b></div>';
+  }
+
+  // ---------- kit events ----------
+  function onCut() {
+    state.cutDone = true;
+    measBtns.forEach(function (b) { b.disabled = false; });
+    partsBtn.disabled = false; cutBtn.disabled = true;
+    cardState(2, 2);
+    toast("The heart is open. Show the parts, then measure each wall twice.");
+    paintTable(); paintReadout();
+    emit("l2:cut", {});
+  }
+  kit.onEvent = function (name, detail) {
+    if (name === "cut") onCut();
+    else if (name === "measure") {
+      var r = paintTable(detail.region); paintReadout(detail);
+      cardState(3, 3);
+      emit("l2:bench", r);
+    } else if (name === "region-done") {
+      toast(D.names[detail.region] + ": mean " + detail.mean.toFixed(1) + " mm, pumps to " + detail.pumpsTo + ".");
+    } else if (name === "bench-done") {
+      cardState(4, -1);
+      toast("All five walls measured. LV : RV = " + kit.reading().ratioLVRV.toFixed(1) + ".");
+      emit("l2:bench-done", kit.reading());
+    } else if (name === "blocked") toast("Cut the heart open first.");
   };
 
-  function reading(idx, cond) {
-    var w = DATA.trials[idx].L; // 1.5, 2.0, 5.0, 10.0, 15.0 mm
-    var P = cond === "heavy" ? 10 * w : cond === "wide" ? 8 * w * (1 - 0.025 * w) : 8 * w;
-    var ratio = w / 5.0;
-    return { I: w, V: P, R: ratio };
+  // ---------- controls ----------
+  function doCut() {
+    if (state.cutDone) return;
+    cardState(1, 1);
+    if (stage) { kit.cut(1); toast("The scalpel is cutting from apex to base…"); }
+    else { kit.setState({ cut: 1 }); onCut(); }
+  }
+  function measure(region) {
+    var res = kit.measure(region);
+    if (res) setHighlight(region);
+    return res;
+  }
+  function setHighlight(name) {
+    state.hl = name || null;
+    if (highlighter) highlighter.set(name && P[name] ? P[name] : null);
+  }
+  function tourNext(name) {
+    var i = state.tour % PARTS_TOUR.length;
+    if (name) for (var k = 0; k < PARTS_TOUR.length; k++) if (PARTS_TOUR[k][0] === name) i = k;
+    var it = PARTS_TOUR[i]; state.tour = i + 1; state.seen[it[0]] = true;
+    setHighlight(it[0]); toast(it[1]);
+    if (Object.keys(state.seen).length >= PARTS_TOUR.length) cardState(3, 3);
+  }
+  function setCond(c) {
+    if (!COND[c]) return;
+    state.cond = c;
+    kit.setState({ errors: COND[c] });
+    Array.prototype.forEach.call(document.querySelectorAll("#bench-cond button"), function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-cond") === c)); });
+    buildTable(); paintTable(); paintReadout();
+    toast(COND_NOTE[c]);
+    emit("l2:bench-reset", { cond: c });
+  }
+  function reset() {
+    kit.reset(); kit.setState({ errors: COND.fresh });
+    state.cond = "fresh"; state.cutDone = false; state.tour = 0; state.seen = {}; setHighlight(null);
+    Array.prototype.forEach.call(document.querySelectorAll("#bench-cond button"), function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-cond") === "fresh")); });
+    measBtns.forEach(function (b) { b.disabled = true; b.classList.remove("zobo"); });
+    partsBtn.disabled = true; cutBtn.disabled = false;
+    cardState(0, 0); buildTable(); paintTable(); paintReadout();
+    emit("l2:bench-reset", {});
   }
 
-  var readoutEl = document.getElementById("bench-readout");
-  function paintReadout(rd, tr) {
-    if (!readoutEl) return;
-    readoutEl.innerHTML =
-      '<div><span>Chamber</span><b>' + tr.t + '</b></div>' +
-      '<div><span>Wall w</span><b>' + tr.L.toFixed(1) + ' mm</b></div>' +
-      '<div><span>Peak P</span><b>' + rd.V.toFixed(1) + ' mmHg</b></div>' +
-      '<div class="' + (state.cond === "wide" ? "hot" : "") + '"><span>w ÷ w_RV</span><b>' + rd.R.toFixed(2) + '×</b></div>';
+  cutBtn.addEventListener("click", doCut);
+  partsBtn.addEventListener("click", function () { tourNext(); });
+  rotBtn.addEventListener("click", function () { state.rotate = !state.rotate; rotBtn.setAttribute("aria-pressed", String(state.rotate)); if (!state.rotate && stage) stage.yaw = 0; });
+  labBtn.addEventListener("click", function () { state.labels = !state.labels; labBtn.setAttribute("aria-pressed", String(state.labels)); kit.setState({ labels: state.labels }); });
+  resetBtn.addEventListener("click", reset);
+  measBtns.forEach(function (b) { b.addEventListener("click", function () { measure(b.getAttribute("data-region")); }); });
+  Array.prototype.forEach.call(document.querySelectorAll("#bench-cond button"), function (b) {
+    b.addEventListener("click", function () { setCond(b.getAttribute("data-cond")); });
+  });
+
+  // tap a wall in the 3D section to measure it
+  if (stage) {
+    var down = null;
+    canvas.addEventListener("pointerdown", function (e) { down = { x: e.clientX, y: e.clientY }; });
+    canvas.addEventListener("pointerup", function (e) {
+      if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6 || !state.cutDone) { down = null; return; }
+      down = null;
+      var map = [["ra", P.raWall], ["la", P.laWall], ["rv", P.rvWall], ["lv", P.lvWall], ["septum", P.septum], ["ra", P.ra], ["la", P.la], ["rv", P.rv], ["lv", P.lv]].filter(function (x) { return x[1]; });
+      var hit = stage.pick(e, map.map(function (x) { return x[1]; }));
+      if (!hit) return;
+      for (var i = 0; i < map.length; i++) {
+        var o = hit.object; while (o) { if (o === map[i][1]) { measure(map[i][0]); return; } o = o.parent; }
+      }
+    });
   }
 
-  var highlightPart = null;
+  // ---------- scene API for the narrator, the explorer and the tests ----------
   var api = {
-    setCond: setCond,
-    test: test,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; },
-    state: function () { return { cond: state.cond, timedCount: Object.keys(state.timed).length }; }
+    cut: doCut, measure: measure, reset: reset, setCond: setCond, tour: tourNext,
+    showCut: function () { kit.setState({ cut: 1 }); if (!state.cutDone) onCut(); },
+    setMode: function (m) { if (m === "cut" || m === "dissect") doCut(); else if (m === "specimen") reset(); },
+    highlight: function (p) { setHighlight(p || null); },
+    rect: function (p) {
+      if (!stage) return null;
+      var o = P[p] || P[D.partFor[p]];
+      if (p === "bench" || !o) o = kit;
+      return stage.rectOf(o, 14);
+    },
+    reading: function () { return kit.reading(); },
+    kit: kit, stage: stage
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.bench = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.65, 0),
-    pitch: 0.14,
-    portraitPitch: 0.06,
-    yaw: 0.08,
-    fitWidth: 4.8,
-    minHeight: 340,
-    distance: 4.8,
-    minYaw: -0.85,
-    maxYaw: 0.85,
-    onFrame: frame
-  });
-
-  var clampGroup, rulerGroup, fiducialGroup, bobGroup, heartApi, valveApi, bobGlow;
-
-  if (stage) build();
-  wireButtons();
-  paintHint();
-  applyTrialGeometry();
-
-  function build() {
-    var scene = stage.rig;
-
-    var bench = new THREE.Mesh(
-      new THREE.BoxGeometry(6.2, 0.22, 3.4),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.72 })
-    );
-    bench.position.y = -0.11;
-    scene.add(bench);
-
-    clampGroup = new THREE.Group();
-    clampGroup.position.set(-0.95, 0.84, 0.05);
-    scene.add(clampGroup);
-
-    if (window.HeartKit) {
-      heartApi = HeartKit.heart({ bpm: 72, mode: "both", scale: 1.02, labels: true });
-      clampGroup.add(heartApi.group);
-      var hTag = HeartKit.label("Heart cut open front to back", { bg: "rgba(225,29,72,0.92)", h: 0.15 });
-      hTag.position.set(0, 1.62, 0);
-      clampGroup.add(hTag);
-
-      var parts = heartApi.parts || {};
-      rulerGroup = parts.rv || clampGroup;
-      fiducialGroup = parts.lv || clampGroup;
-    } else {
-      rulerGroup = clampGroup;
-      fiducialGroup = clampGroup;
-    }
-
-    bobGroup = new THREE.Group();
-    bobGroup.position.set(1.3, 0.62, 0.0);
-    scene.add(bobGroup);
-
-    if (window.HeartKit) {
-      valveApi = HeartKit.valve({ open: 0.5, scale: 0.88, cusps: 2 });
-      bobGroup.add(valveApi.group);
-      var vTag = HeartKit.label("Bicuspid valve (in step with the heart)", { bg: "rgba(13,156,126,0.92)", h: 0.13 });
-      vTag.position.set(0, 0.98, 0);
-      bobGroup.add(vTag);
-    }
-
-    var hit = new THREE.Mesh(new THREE.BoxGeometry(1.6, 1.6, 0.8), new THREE.MeshBasicMaterial({ visible: false }));
-    bobGroup.add(hit);
-    bobGroup.userData.hit = hit;
-
-    bobGlow = SceneKit.glowSprite("rgba(62,230,196,0.92)", 0.95);
-    bobGlow.material.opacity = 0;
-    bobGlow.position.set(1.3, 0.62, 0.1);
-    scene.add(bobGlow);
-
-    canvas.addEventListener("click", function (e) {
-      var hitObj = stage.pick(e, [bobGroup.userData.hit]);
-      if (hitObj) test(state.trialIdx);
-    });
-
-    api.rect = function (part) {
-      if (part === "bob") return stage.rectOf(bobGroup, 14);
-      if (part === "clamp") return stage.rectOf(clampGroup, 12);
-      if (part === "fiducial") return stage.rectOf(fiducialGroup, 12);
-      if (part === "ruler") return stage.rectOf(rulerGroup, 10);
-      return stage.rectOf(bobGroup, 12);
-    };
-
-    stage.start();
-  }
-
-  function applyTrialGeometry() {
-    var tr = DATA.trials[state.trialIdx];
-    var rd = reading(state.trialIdx, state.cond);
-    paintReadout(rd, tr);
-    if (heartApi && heartApi.userData && heartApi.userData.setState) {
-      // A RA · B LA · C RV · D septum · E LV — the measured part glows; walls get mm callouts
-      heartApi.userData.setState({ mode: state.trialIdx >= 2 ? "sys" : "both", bpm: state.cond === "heavy" ? 52 : 72 });
-      if (heartApi.highlightChamber) heartApi.highlightChamber([0, 1, 2, -1, 3][state.trialIdx]);
-      var parts = heartApi.parts || {};
-      var focus = [parts.ra, parts.la, parts.rvWall, parts.septum, parts.lvWall][state.trialIdx];
-      rulerGroup = focus || clampGroup;
-    }
-  }
-
-  function setCond(cond) {
-    if (!cond) return;
-    state.cond = cond;
-    document.dispatchEvent(new CustomEvent("l1:bench-cond", { detail: { cond: cond } }));
-    root.querySelectorAll("#bench-cond [data-cond]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-cond") === cond ? "true" : "false");
-    });
-    applyTrialGeometry();
-    var msg = cond === "heavy"
-      ? "Athlete heart: stronger muscle gives about 10 mmHg per mm of wall, and the resting beat slows to about 52 bpm."
-      : cond === "wide"
-        ? "Leaky valve (torn chordae tendineae): watch the valve flaps fail to seal during systole, so blood leaks back into the atrium."
-        : "Normal heart (bench model P = 8 × w): the 15 mm left ventricle wall gives about 120 mmHg. The glowing part is the one you are measuring.";
-    toast(msg);
-  }
-
-  function test(idx) {
-    if (idx < 0 || idx >= DATA.trials.length) return;
-    state.trialIdx = idx;
-    applyTrialGeometry();
-    state.timed[idx] = true;
-    var tr = DATA.trials[idx];
-    var rd = reading(idx, state.cond);
-    toast("Trial " + tr.label + " (" + tr.t + ", w = " + tr.L + " mm): Peak Pressure P = " + rd.V.toFixed(1) + " mmHg · Wall Ratio w/w_RV = " + rd.R.toFixed(2) + "×");
-    paintHint();
-
-    var n = Object.keys(state.timed).length;
-    document.dispatchEvent(new CustomEvent("l1:bench", { detail: { trial: idx, count: n, cond: state.cond, I: rd.I, V: rd.V, R: rd.R } }));
-    if (n >= 4) {
-      document.dispatchEvent(new CustomEvent("l1:bench-done", { detail: { count: n } }));
-    }
-  }
-
-  function reset() {
-    state.timed = {};
-    state.trialIdx = 2;
-    state.cond = "std";
-    root.querySelectorAll("#bench-cond [data-cond]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-cond") === "std" ? "true" : "false");
-    });
-    applyTrialGeometry();
-    paintHint();
-    document.dispatchEvent(new CustomEvent("l1:bench-reset"));
-    toast("Heart Dissector reset. Tap Trials A–E to measure chamber wall thickness and peak pressure.");
-  }
-
-  function paintHint() {
-    var n = Object.keys(state.timed).length;
-    if (hint) hint.innerHTML = "Recorded <b>" + n + " of 5</b> chamber walls";
-    root.querySelectorAll("#bench-trials [data-trial]").forEach(function (b) {
-      var k = +b.getAttribute("data-trial");
-      b.setAttribute("aria-pressed", state.timed[k] ? "true" : "false");
-    });
-  }
-
-  function wireButtons() {
-    root.querySelectorAll("#bench-cond [data-cond]").forEach(function (b) {
-      b.addEventListener("click", function () { setCond(b.getAttribute("data-cond")); });
-    });
-    root.querySelectorAll("#bench-trials [data-trial]").forEach(function (b) {
-      b.addEventListener("click", function () { test(+b.getAttribute("data-trial")); });
-    });
-    var r = document.getElementById("bench-reset");
-    if (r) r.addEventListener("click", reset);
-  }
-
-  function frame(dt, t) {
-    if (!bobGroup) return;
-    if (heartApi && heartApi.tick) heartApi.tick(dt, t);
-    if (valveApi && valveApi.tick) {
-      // valve copies the beating heart; a regurgitating valve never seals during systole
-      var av = heartApi && heartApi.userData.beat ? heartApi.userData.beat.avOpen : 0.5 + 0.5 * Math.sin(t * 4.5);
-      if (state.cond === "wide") av = Math.max(av, 0.32);
-      valveApi.userData.setState({ open: av });
-      valveApi.tick(dt, t);
-    }
-    var pulse = 0.45 + 0.25 * Math.sin(t * 5);
-    var showGlow = highlightPart === "bob";
-    bobGlow.material.opacity += ((showGlow ? pulse : 0) - bobGlow.material.opacity) * Math.min(1, dt * 8);
-  }
+  buildTable(); paintTable(); paintReadout(); cardState(0, 0);
+  setInterval(function () { if (!state.cutDone) paintReadout(); }, 400);
 })();

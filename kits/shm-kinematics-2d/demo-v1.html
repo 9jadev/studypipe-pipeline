@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: shm-kinematics-2d</title>
+<style>html,body{margin:0;height:100%;background:#0e1620}#host{width:100vw;height:100vh}</style>
+</head><body>
+<div id="host"></div>
+<script src="kit.js"></script>
+<script>
+  window.StudyPipeKits["shm-kinematics-2d"].mount(document.getElementById("host"), { mode: "circle" }, { emit: function (n, d) { console.log("event", n, JSON.stringify(d)); } });
+</script>
+</body></html>

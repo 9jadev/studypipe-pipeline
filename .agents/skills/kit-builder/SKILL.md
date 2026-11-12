@@ -102,3 +102,24 @@ Every kit must satisfy two integration layers:
 2. Register every named sub-part from `kit.parts` with `stage.addPart(id, mesh, Label)` so `StudyNarrator` can spotlight (`target: 'bench:cathode'`), pulse (`highlight`), and point at individual 3D parts during the teacher's voiceover.
 3. Expose `onAction(actionName, payload)` so `narration.js` can trigger live visual state changes (e.g., `'switch-mode'`, `'toggle-current'`, `'reverse-polarity'`, `'slice-organ'`) mid-sentence and emit `StudyNarrator.notifyAction(id)` when the student interacts during `"Your turn!"` waits.
 4. Update `kits/catalog.md` whenever a new kit is created or its version is bumped.
+
+---
+
+## 4. Interactive 2D Planar Kits with Paper.js (`paper-core.min.js`)
+
+When building kits for **Mathematics (plane geometry, Euclidean proofs, triangle drawing and construction, circle theorems, coordinate geometry, angles, vectors)** or planar physics/optics:
+- **Do NOT build a 3D Three.js mesh for planar surfaces.**
+- Build an **`interactive-2d` Paper.js kit** in `kits/<kit-id>/` using `window.paper` (offline `kits/_vendor/paper-core.min.js`).
+- **Kit Architecture:**
+  1. HTML `<canvas>` element mounted on `#bench-stage` or `#zoom-stage`.
+  2. Setup with `paper.setup(canvas)`.
+  3. Create responsive, high-precision vector items (`new paper.Path()`, `new paper.Point()`, `new paper.PointText()`).
+  4. Use Paper.js geometry math:
+     - Drag-and-drop handles/vertices (`item.onMouseDrag = function(event) { ... }`).
+     - Dynamic angle arcs and degree measurements.
+     - Triangle constraints (Pythagoras, Sine/Cosine rule, congruent triangle snaps).
+     - Circle tangent and secant calculations.
+  5. Expose canonical kit API:
+     - `window.<Name>Kit = { create(opts), setState(state), reading(), reset() }`.
+  6. Pass the **Unlabeled Recognition Test**: Clean lines, readable mathematical notation, vertex labels ($A, B, C$), arc angle degrees, and tick marks for equal sides.
+  7. **100% Offline:** Paper.js is bundled offline in `kits/_vendor/paper-core.min.js` and copied to `html/assets/js/paper-core.min.js`. Never load from CDN.

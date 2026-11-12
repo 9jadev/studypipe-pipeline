@@ -1,5 +1,5 @@
 /* =========================================================
-   StudyPipe · CellKit — parametric 3D cell-biology builders
+   StudyPipe · CellKit v2 — parametric 3D cell-biology builders (HeartKit v2 fidelity for cells, scope, mitochondrion)
    Classic script (no modules), fully offline, needs window.THREE + window.SceneKit.
 
    Every builder returns a THREE.Group with:
@@ -12,7 +12,7 @@
      CellKit.animalCell(o)    cheek / liver cell (swell → haemolysis, shrink → crenation)
      CellKit.rbc(o)           biconcave red blood cell (haemolysis / crenation)
      CellKit.bacterium(o)     prokaryote: nucleoid, plasmids, 70S ribosomes, wall, capsule, flagellum
-     CellKit.microscope(o)    compound light microscope (eyepiece, nosepiece, objectives, stage, knobs, lamp)
+     CellKit.microscope(o)    compound light microscope: C-arm, horseshoe foot, engraved objectives, aperture stage, iris, plane/concave mirror (o.mirror) or lamp
      CellKit.protist(type,o)  amoeba | paramecium | euglena | chlamydomonas | volvox | spirogyra | hydra
      CellKit.cube(L,o)        SA/V scaling cube with live label
      CellKit.slide(o)         glass slide + drop + coverslip (angle) + air bubbles
@@ -30,7 +30,7 @@
 
   function std(color, rough, extra) {
     var m = new THREE.MeshStandardMaterial({ color: color, roughness: rough == null ? 0.45 : rough, metalness: 0.02 });
-    if (extra) for (var k in extra) m[k] = extra[k];
+    if (extra) for (var k in extra) { if (m[k] && m[k].isColor) m[k].set(extra[k]); else m[k] = extra[k]; }
     return m;
   }
   function glass(color, opacity) {
@@ -63,69 +63,209 @@
 
   function rnd(seed) { var s = seed || 1; return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
 
-  /* ---------- small organelle meshes ---------- */
+  /* ---------- v2 helpers ---------- */
+  function canvasTex(w, h, draw, srgb) {
+    var c = document.createElement("canvas"); c.width = w; c.height = h;
+    draw(c.getContext("2d"), w, h);
+    var t = new THREE.CanvasTexture(c);
+    if (srgb !== false && THREE.SRGBColorSpace && "colorSpace" in t) t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 2;
+    return t;
+  }
+  function rrPath(P, w, h, r) {
+    var x = -w / 2, y = -h / 2;
+    r = Math.min(r, w / 2 - 1e-3, h / 2 - 1e-3);
+    P.moveTo(x + r, y); P.lineTo(x + w - r, y); P.quadraticCurveTo(x + w, y, x + w, y + r);
+    P.lineTo(x + w, y + h - r); P.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    P.lineTo(x + r, y + h); P.quadraticCurveTo(x, y + h, x, y + h - r);
+    P.lineTo(x, y + r); P.quadraticCurveTo(x, y, x + r, y);
+    return P;
+  }
+  function rrShape(w, h, r) { return rrPath(new THREE.Shape(), w, h, r); }
+  function fibrilTex() {
+    var t = canvasTex(128, 128, function (c, w, h) {
+      c.fillStyle = "#808080"; c.fillRect(0, 0, w, h);
+      var R = rnd(5); c.strokeStyle = "rgba(255,255,255,0.4)"; c.lineWidth = 1.3;
+      for (var i = 0; i < 90; i++) {
+        var x = R() * w, y = R() * h, a = R() * 0.5 + (i % 2 ? 0.8 : -0.35), l = 18 + R() * 26;
+        c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * l, y + Math.sin(a) * l); c.stroke();
+      }
+    }, false);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1.3, 1.3);
+    return t;
+  }
+  function knurlTex() {
+    var t = canvasTex(256, 32, function (c, w, h) {
+      c.fillStyle = "#777"; c.fillRect(0, 0, w, h);
+      for (var i = 0; i < 48; i++) { c.fillStyle = i % 2 ? "#fff" : "#222"; c.fillRect(i * w / 48, 0, w / 96, h); }
+    }, false);
+    t.wrapS = THREE.RepeatWrapping;
+    return t;
+  }
+  function bandTex(text, sub, bg, fg) {
+    return canvasTex(256, 64, function (c, w, h) {
+      c.fillStyle = bg; c.fillRect(0, 0, w, h);
+      c.fillStyle = fg; c.textAlign = "center"; c.textBaseline = "middle";
+      c.font = "bold 34px sans-serif"; c.fillText(text, w * 0.25, h * 0.52);
+      c.fillText(text, w * 0.75, h * 0.52);
+      if (sub) { c.font = "bold 14px sans-serif"; c.fillText(sub, w * 0.5, h * 0.86); }
+    });
+  }
+
+  /* ---------- small organelle meshes (v2) ---------- */
+  // Mitochondrion: outer membrane + inner membrane (lathe, optionally cut away) + cristae folds (extruded plates)
+  var _mitoCache = {};
+  function mitoGeo(cut, seg) {
+    var key = (cut ? 1 : 0) + ":" + seg;
+    if (_mitoCache[key]) return _mitoCache[key];
+    var N = 26, pOut = [], pIn = [], i;
+    function prof(Hh, Rr) {
+      var pts = [];
+      for (i = 0; i <= N; i++) {
+        var y = Math.sin((i / N - 0.5) * Math.PI);
+        pts.push(new THREE.Vector2(Math.max(0.002, Rr * Math.pow(Math.max(0, 1 - Math.pow(Math.abs(y), 3)), 1 / 3)), y * Hh));
+      }
+      return pts;
+    }
+    var H = 1.2, R = 0.5, Hi = 1.08, Ri = 0.4;
+    pOut = prof(H, R); pIn = prof(Hi, Ri);
+    var ch = cut ? 0.95 : 0;
+    var set = {
+      outer: new THREE.LatheGeometry(pOut, seg, ch, Math.PI * 2 - 2 * ch),
+      inner: new THREE.LatheGeometry(pIn, seg, ch, Math.PI * 2 - 2 * ch),
+      Hi: Hi, Ri: Ri, crista: []
+    };
+    // crista plate: wall arc on one side + wavy inner edge, extruded thin (shape y -> world -z after rotateX)
+    [1, -1].forEach(function (side) {
+      var s = new THREE.Shape(), a0 = -0.45, a1 = 1.2, k, a, steps = 28;
+      function P(rad, ang) { var cx = Math.cos(ang) * rad, cy = Math.sin(ang) * rad; return side > 0 ? [cx, cy] : [-cx, cy]; }
+      var p = P(Ri * 0.97, a0); s.moveTo(p[0], p[1]);
+      for (k = 1; k <= steps; k++) { a = a0 + (a1 - a0) * k / steps; p = P(Ri * 0.97, a); s.lineTo(p[0], p[1]); }
+      for (k = steps; k >= 0; k--) { a = a0 + (a1 - a0) * k / steps; p = P(Ri * (0.38 + 0.07 * Math.sin(8 * a + 1)), a); s.lineTo(p[0], p[1]); }
+      var g = new THREE.ExtrudeGeometry(s, { depth: 0.045, bevelEnabled: false, curveSegments: 4 });
+      g.translate(0, 0, -0.0225);
+      g.rotateX(-Math.PI / 2);
+      set.crista.push(g);
+    });
+    _mitoCache[key] = set;
+    return set;
+  }
+  function mitoBuild(o) {
+    var set = mitoGeo(o.cut, o.seg || 28);
+    var g = new THREE.Group(), body = new THREE.Group(), i;
+    var outerMat = glass(o.color || 0xff6b4a, o.cut ? 0.2 : 0.26);
+    var innerMat = glass(0xfca5a5, o.cut ? 0.34 : 0.3);
+    var outer = new THREE.Mesh(set.outer, outerMat);
+    var inner = new THREE.Mesh(set.inner, innerMat);
+    var cr = new THREE.Group(), cm = std(0xf97316, 0.5, { emissive: 0xf97316, emissiveIntensity: 0.3 });
+    var n = o.n || 8;
+    for (i = 0; i < n; i++) {
+      var y = -0.86 + 1.72 * i / (n - 1);
+      var k = Math.pow(Math.max(0.05, 1 - Math.pow(Math.abs(y / set.Hi), 3)), 1 / 3);
+      var m = new THREE.Mesh(set.crista[i % 2], cm);
+      m.position.y = y; m.scale.set(k, 1, k);
+      cr.add(m);
+    }
+    body.add(outer, inner, cr);
+    body.rotation.z = -Math.PI / 2;      // lathe axis y -> world x
+    g.add(body);
+    g.userData.parts = { outer: outer, inner: inner, cristae: cr };
+    g.userData.body = body;
+    return g;
+  }
   function mitochondrionMesh(len, color) {
-    var g = new THREE.Group();
-    var body = new THREE.Mesh(new THREE.CapsuleGeometry(len * 0.28, len * 0.7, 6, 12), glowMat(color || 0xff6b4a, 0.28));
-    body.rotation.z = Math.PI / 2;
-    g.add(body);
-    // cristae hint: thin rings
-    var rm = std(0xffd0c2, 0.5);
-    for (var i = -2; i <= 2; i++) {
-      var r = new THREE.Mesh(new THREE.TorusGeometry(len * 0.2, len * 0.025, 6, 16), rm);
-      r.rotation.y = Math.PI / 2; r.position.x = i * len * 0.16;
-      g.add(r);
-    }
+    var g = mitoBuild({ cut: false, seg: 14, n: 5, color: color });
+    g.scale.setScalar(len * 0.525);
     return g;
   }
+
+  // Chloroplast: double-membrane lens, grana stacks of thylakoid discs (instanced), stroma lamellae, starch grain
+  var _chl = null;
   function chloroplastMesh(size) {
-    var g = new THREE.Group();
-    var body = new THREE.Mesh(new THREE.SphereGeometry(size, 16, 12), glowMat(0x2fb344, 0.32));
-    body.scale.set(1.5, 0.6, 1);
-    g.add(body);
-    var gm = std(0x145c22, 0.4);
-    for (var i = -1; i <= 1; i++) {
-      var stack = new THREE.Mesh(new THREE.CylinderGeometry(size * 0.28, size * 0.28, size * 0.5, 12), gm);
-      stack.position.set(i * size * 0.6, 0, 0);
-      g.add(stack);
+    if (!_chl) {
+      var disc = new THREE.CylinderGeometry(1, 1, 1, 14);
+      var lam = new THREE.CylinderGeometry(1, 1, 1, 6); lam.rotateZ(Math.PI / 2);
+      _chl = {
+        shell: new THREE.SphereGeometry(1, 18, 12), disc: disc, lam: lam,
+        outer: glass(0x4ade80, 0.2), innerM: glass(0xa7f3b0, 0.22),
+        thy: glowMat(0x14532d, 0.28), lamM: glowMat(0x22c55e, 0.3), starch: std(0xfef9c3, 0.6)
+      };
     }
+    var g = new THREE.Group(), d = new THREE.Object3D(), i, j;
+    var o1 = new THREE.Mesh(_chl.shell, _chl.outer); o1.scale.set(1.5, 0.62, 1.0);
+    var o2 = new THREE.Mesh(_chl.shell, _chl.innerM); o2.scale.set(1.4, 0.55, 0.92);
+    var xs = [-0.62, 0, 0.62], zs = [0.1, -0.12, 0.08], nd = 5;
+    var gr = new THREE.InstancedMesh(_chl.disc, _chl.thy, xs.length * nd);
+    for (i = 0; i < xs.length; i++) for (j = 0; j < nd; j++) {
+      d.position.set(xs[i], (j - (nd - 1) / 2) * 0.1, zs[i]);
+      d.scale.set(0.22, 0.066, 0.22); d.updateMatrix(); gr.setMatrixAt(i * nd + j, d.matrix);
+    }
+    var la = new THREE.InstancedMesh(_chl.lam, _chl.lamM, 4);
+    var lp = [[-0.31, 0.02, 0.1, 0.4], [0.31, -0.03, -0.02, 0.4], [-0.31, -0.06, -0.01, 0.4], [0.31, 0.05, 0.0, 0.4]];
+    for (i = 0; i < 4; i++) { d.position.set(lp[i][0], lp[i][1], lp[i][2]); d.scale.set(0.46, 0.022, 0.022); d.updateMatrix(); la.setMatrixAt(i, d.matrix); }
+    gr.frustumCulled = false; la.frustumCulled = false;
+    var st = new THREE.Mesh(_chl.shell, _chl.starch); st.scale.set(0.16, 0.1, 0.12); st.position.set(0.95, -0.12, 0.35);
+    g.add(o1, o2, gr, la, st);
+    g.scale.setScalar(size);
+    g.userData.parts = { envelope: o1, grana: gr, lamellae: la, starch: st };
     return g;
   }
+
+  // Golgi: stack of curved extruded cisternae (cis -> trans) with budding vesicles
+  var _golgiMat = null;
   function golgiMesh(r) {
-    var g = new THREE.Group();
-    var m = glowMat(0xffc94a, 0.3);
-    for (var i = 0; i < 4; i++) {
-      var arc = new THREE.Mesh(new THREE.TorusGeometry(r - i * r * 0.12, r * 0.05, 6, 24, Math.PI * 0.9), m);
-      arc.position.y = i * r * 0.16;
-      arc.rotation.x = Math.PI / 2;
-      arc.rotation.z = Math.PI * 0.05;
-      g.add(arc);
+    var g = new THREE.Group(), n = 5, i;
+    var m = _golgiMat || (_golgiMat = glowMat(0xffc94a, 0.3));
+    var Ro = r * 1.15, t = r * 0.1, gap = r * 0.2, cy = -r * 0.62;
+    for (i = 0; i < n; i++) {
+      var A = 2.05 - i * 0.14, a0 = Math.PI / 2 - A / 2, a1 = Math.PI / 2 + A / 2;
+      var s = new THREE.Shape();
+      s.absarc(0, cy, Ro, a0, a1, false);
+      s.absarc(0, cy, Ro - t * (1 + 0.15 * i), a1, a0, true);
+      var geo = new THREE.ExtrudeGeometry(s, { depth: r * 0.8, bevelEnabled: true, bevelThickness: t * 0.3, bevelSize: t * 0.3, bevelSegments: 2, curveSegments: 14 });
+      geo.translate(0, 0, -r * 0.4);
+      var mesh = new THREE.Mesh(geo, m);
+      mesh.position.y = i * gap - (n - 1) * gap / 2;
+      g.add(mesh);
     }
-    for (var v = 0; v < 3; v++) {
-      var ves = new THREE.Mesh(new THREE.SphereGeometry(r * 0.09, 10, 8), m);
-      ves.position.set(r * (0.9 + v * 0.18), r * 0.2 * v, r * 0.2);
-      g.add(ves);
+    var vg = new THREE.SphereGeometry(r * 0.075, 8, 6);
+    [[1, 0.92, 0], [0.88, 0.2, 0.15], [-0.95, -0.95, 0.1], [1.06, -0.3, -0.2], [-0.78, 0.4, -0.1]].forEach(function (p) {
+      var v = new THREE.Mesh(vg, m); v.position.set(p[0] * r * 0.95, p[1] * r * 0.5, p[2] * r); g.add(v);
+    });
+    return g;
+  }
+
+  // Endoplasmic reticulum: folded cisternal sheets wrapped round the nucleus (+ ribosomes on rough faces)
+  function erSheet(r, h, a0, da, amp, phase, rough, mat) {
+    var geo = new THREE.PlaneGeometry(1, 1, 24, 7), p = geo.attributes.position, i;
+    var rib = [];
+    for (i = 0; i < p.count; i++) {
+      var u = p.getX(i) + 0.5, v = p.getY(i) + 0.5, th = a0 + u * da;
+      var rad = r * (1 + amp * Math.sin(u * Math.PI * 6 + phase) * (0.55 + 0.45 * Math.sin(v * Math.PI * 2 + phase * 1.7)));
+      var yy = (v - 0.5) * h + 0.1 * h * Math.sin(u * 9 + phase);
+      p.setXYZ(i, Math.cos(th) * rad, yy, -Math.sin(th) * rad);
+      if (rough && i % 2 === 0) { var rr = rad + r * 0.03; rib.push(Math.cos(th) * rr, yy, -Math.sin(th) * rr); }
+    }
+    geo.computeVertexNormals();
+    var g = new THREE.Group();
+    g.add(new THREE.Mesh(geo, mat));
+    if (rough) {
+      var pg = new THREE.BufferGeometry(); pg.setAttribute("position", new THREE.Float32BufferAttribute(rib, 3));
+      g.add(new THREE.Points(pg, new THREE.PointsMaterial({ color: 0x1e3a8a, size: r * 0.1 })));
     }
     return g;
   }
   function erMesh(r, rough) {
     var g = new THREE.Group();
-    var m = glowMat(0x7cc4ff, 0.22);
-    for (var i = 0; i < 4; i++) {
-      var arc = new THREE.Mesh(new THREE.TorusGeometry(r + i * r * 0.18, r * 0.045, 6, 28, Math.PI * 1.1), m);
-      arc.rotation.x = Math.PI / 2;
-      arc.rotation.z = Math.PI * 0.55;
-      arc.position.y = (i % 2) * r * 0.06;
-      g.add(arc);
-    }
-    if (rough) {
-      var pts = [], R = rnd(7);
-      for (var k = 0; k < 90; k++) {
-        var a = Math.PI * 0.55 + R() * Math.PI * 1.1, rr = r + Math.floor(R() * 4) * r * 0.18;
-        pts.push(Math.cos(a) * rr, (R() - 0.5) * r * 0.12, -Math.sin(a) * rr);
+    var m = new THREE.MeshStandardMaterial({ color: 0x7cc4ff, emissive: 0x3b82f6, emissiveIntensity: 0.2, roughness: 0.5, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false });
+    for (var i = 0; i < 3; i++) g.add(erSheet(r * (1 + i * 0.2), r * 1.1, Math.PI * (0.5 + i * 0.07), Math.PI * (1.15 - i * 0.12), 0.09, i * 1.9, rough, m));
+    if (!rough) {
+      var R = rnd(4);
+      for (var k = 0; k < 3; k++) {
+        var pts = [];
+        for (var q = 0; q < 6; q++) pts.push(new THREE.Vector3((R() - 0.5) * r * 2.2, (R() - 0.5) * r, (R() - 0.5) * r * 2.2));
+        g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 24, r * 0.04, 5), m));
       }
-      var geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
-      g.add(new THREE.Points(geo, new THREE.PointsMaterial({ color: 0x1e3a8a, size: r * 0.09 })));
     }
     return g;
   }
@@ -135,60 +275,132 @@
     var geo = new THREE.BufferGeometry(); geo.setAttribute("position", new THREE.Float32BufferAttribute(pts, 3));
     return new THREE.Points(geo, new THREE.PointsMaterial({ color: color || 0x334155, size: 0.025 }));
   }
+
+  // Nucleus: double envelope with instanced nuclear pores, chromatin strands, nucleolus
+  var _pore = null;
   function nucleusMesh(r) {
-    var g = new THREE.Group();
-    var env = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 18), glass(0x9b6bff, 0.55));
-    g.add(env);
-    var nl = new THREE.Mesh(new THREE.SphereGeometry(r * 0.38, 16, 12), glowMat(0x5b21b6, 0.4));
-    nl.position.set(r * 0.25, r * 0.1, 0.05);
+    var g = new THREE.Group(), i;
+    var env = new THREE.Mesh(new THREE.SphereGeometry(r, 26, 18), glass(0x9b6bff, 0.4));
+    var env2 = new THREE.Mesh(new THREE.SphereGeometry(r * 0.92, 22, 16), glass(0xc4b5fd, 0.28));
+    g.add(env, env2);
+    if (!_pore) _pore = { geo: new THREE.TorusGeometry(1, 0.3, 6, 10), mat: std(0x4c1d95, 0.5) };
+    var np = r > 0.12 ? 46 : 16, pores = new THREE.InstancedMesh(_pore.geo, _pore.mat, np), d = new THREE.Object3D();
+    for (i = 0; i < np; i++) {
+      var y = 1 - (i + 0.5) * 2 / np, rad = Math.sqrt(1 - y * y), th = i * 2.399963;
+      var nx = Math.cos(th) * rad, nz = Math.sin(th) * rad;
+      d.position.set(nx * r * 0.96, y * r * 0.96, nz * r * 0.96);
+      d.lookAt(nx * r * 2, y * r * 2, nz * r * 2);
+      d.scale.setScalar(r * 0.06); d.updateMatrix(); pores.setMatrixAt(i, d.matrix);
+    }
+    pores.frustumCulled = false;
+    g.add(pores);
+    var R = rnd(13), cm = glowMat(0x6d28d9, 0.3);
+    for (var k = 0; k < 3; k++) {
+      var pts = [];
+      for (i = 0; i < 6; i++) pts.push(new THREE.Vector3((R() - 0.5) * r * 1.0, (R() - 0.5) * r * 1.0, (R() - 0.5) * r * 1.0));
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, r * 0.022, 4), cm));
+    }
+    var nl = new THREE.Mesh(new THREE.SphereGeometry(r * 0.34, 16, 12), glowMat(0x5b21b6, 0.4));
+    nl.position.set(r * 0.25, r * 0.1, r * 0.1);
     g.add(nl);
-    g.userData.nucleolus = nl;
+    g.userData.nucleolus = nl; g.userData.envelope = env; g.userData.pores = pores;
     return g;
   }
 
-  /* ---------- PLANT CELL ---------- */
+  /* ---------- PLANT CELL (v2) ---------- */
+  function gammaFn(z) {   // Lanczos, for superellipsoid volume
+    var g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    z -= 1; var x = c[0];
+    for (var i = 1; i < g + 2; i++) x += c[i] / (z + i);
+    var t = z + g + 0.5;
+    return Math.sqrt(2 * Math.PI) * Math.pow(t, z + 0.5) * Math.exp(-t) * x;
+  }
+  function superVol(n) { return 8 * Math.pow(gammaFn(1 + 1 / n), 3) / gammaFn(1 + 3 / n); }   // unit superellipsoid volume
+
   function plantCell(o) {
     o = o || {};
     var W = o.w || 2.4, H = o.h || 1.4, D = o.d || 1.2;
-    var g = new THREE.Group();
-    var parts = {};
+    var front = o.cutaway === false;                       // true plant cells are closed boxes; default shows the cut-away face
+    var T = Math.min(W, H, D) * 0.085;                      // total wall thickness
+    var t1 = T * 0.5, tl = T * 0.12, cr = Math.min(W, H) * 0.12;
+    var g = new THREE.Group(), parts = {}, i;
 
-    // cellulose wall: translucent box + bold green edges (double line look)
-    var wallGeo = new THREE.BoxGeometry(W, H, D);
-    var wall = new THREE.Mesh(wallGeo, glass(0x3f9a3a, o.onion ? 0.12 : 0.16));
-    g.add(wall);
-    var edges = new THREE.LineSegments(new THREE.EdgesGeometry(wallGeo), new THREE.LineBasicMaterial({ color: 0x86efac }));
-    g.add(edges);
-    var inner = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(W * 0.96, H * 0.94, D * 0.94)), new THREE.LineBasicMaterial({ color: 0x22c55e }));
-    g.add(inner);
-    parts.cellWall = wall;
-
-    // protoplast group (shrinks on plasmolysis)
-    var proto = new THREE.Group(); g.add(proto);
-    var memGeo = new THREE.BoxGeometry(W * 0.94, H * 0.92, D * 0.92, 6, 6, 6);
-    // round the membrane box corners a little
-    var pos = memGeo.attributes.position, v = new THREE.Vector3();
-    for (var i = 0; i < pos.count; i++) {
-      v.fromBufferAttribute(pos, i);
-      var nx = v.x / (W * 0.47), ny = v.y / (H * 0.46), nz = v.z / (D * 0.46);
-      var k = 1 - 0.08 * (Math.abs(nx * ny) + Math.abs(ny * nz) + Math.abs(nx * nz));
-      pos.setXYZ(i, v.x * k, v.y * k, v.z * k);
+    /* --- cellulose wall: primary + middle lamella + secondary layers, extruded rounded frames with a cut-away rim --- */
+    var wall = new THREE.Group(), fib = fibrilTex();
+    function frame(wo, ho, wi, hi, rOut, rIn, mat, edgeCol) {
+      var s = rrShape(wo, ho, rOut); s.holes.push(rrPath(new THREE.Path(), wi, hi, rIn));
+      var geo = new THREE.ExtrudeGeometry(s, { depth: D, bevelEnabled: false, curveSegments: 6 });
+      geo.translate(0, 0, -D / 2);
+      var m = new THREE.Mesh(geo, mat);
+      var e = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 25), new THREE.LineBasicMaterial({ color: edgeCol }));
+      var gg = new THREE.Group(); gg.add(m, e); return gg;
     }
-    memGeo.computeVertexNormals();
+    function wmat(color, op) { var m = glass(color, op); m.bumpMap = fib; m.bumpScale = 1.2; return m; }
+    var primary = frame(W, H, W - 2 * t1, H - 2 * t1, cr, cr - t1, wmat(0x3f9a3a, 0.2), 0x86efac);
+    var lamella = frame(W - 2 * t1, H - 2 * t1, W - 2 * (t1 + tl), H - 2 * (t1 + tl), cr - t1, cr - t1 - tl, glass(0xd9a441, 0.55), 0xfde68a);
+    var secondary = frame(W - 2 * (t1 + tl), H - 2 * (t1 + tl), W - 2 * T, H - 2 * T, cr - t1 - tl, Math.max(0.02, cr - T), wmat(0x22c55e, 0.3), 0x16a34a);
+    wall.add(primary, lamella, secondary);
+    function plate(z) {
+      var geo = new THREE.ExtrudeGeometry(rrShape(W, H, cr), { depth: T, bevelEnabled: false, curveSegments: 6 });
+      geo.translate(0, 0, z);
+      return new THREE.Mesh(geo, wmat(0x3f9a3a, 0.22));
+    }
+    var back = plate(-D / 2); wall.add(back);
+    if (front) wall.add(plate(D / 2 - T));
+    g.add(wall);
+    parts.cellWall = wall; parts.middleLamella = lamella; parts.cutFace = primary;
+
+    /* plasmodesmata: dark channels through the wall (back plate and side walls) */
+    var pd = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, 1, 1, 8), std(0x4a3b1e, 0.6), 17), dm = new THREE.Object3D(), pn = 0;
+    function addPd(x, y, z, ax) {
+      dm.position.set(x, y, z); dm.rotation.set(ax === "z" ? Math.PI / 2 : 0, 0, ax === "x" ? Math.PI / 2 : 0);
+      dm.scale.set(T * 0.16, T * 1.02, T * 0.16); dm.updateMatrix(); pd.setMatrixAt(pn++, dm.matrix);
+    }
+    for (i = 0; i < 9; i++) addPd(((i % 3) - 1) * W * 0.28, (Math.floor(i / 3) - 1) * H * 0.26, -D / 2 + T / 2, "z");
+    for (i = 0; i < 3; i++) { addPd(W / 2 - T / 2, (i - 1) * H * 0.26, (i - 1) * D * 0.12 - D * 0.05, "x"); addPd(-W / 2 + T / 2, (i - 1) * H * 0.26 + H * 0.06, -(i - 1) * D * 0.12 - D * 0.05, "x"); }
+    for (i = 0; i < 2; i++) addPd(((i * 2) - 1) * W * 0.2, H / 2 - T / 2, -D * 0.05, "y");
+    pd.count = pn; pd.frustumCulled = false; wall.add(pd);
+    parts.plasmodesmata = pd;
+
+    /* interior box (cytoplasm lives here) */
+    var iw = W - 2 * T, ih = H - 2 * T, id = D - T - (front ? T : 0), zc = (front ? 0 : T / 2);
+    var ax = iw / 2, ay = ih / 2, az = id / 2;
+
+    /* --- protoplast: plasma membrane as a live superellipsoid (corners peel first on plasmolysis) --- */
+    var proto = new THREE.Group(); proto.position.z = zc; g.add(proto);
+    var memGeo = new THREE.SphereGeometry(1, 40, 26), mp = memGeo.attributes.position, dirs = new Float32Array(mp.array.length);
+    dirs.set(mp.array);
     var membrane = new THREE.Mesh(memGeo, glass(0xfff1c7, 0.22));
-    proto.add(membrane);
-    parts.membrane = membrane;
-    parts.cytoplasm = membrane;
+    g.add(membrane); membrane.position.z = zc;
+    parts.membrane = membrane; parts.cytoplasm = membrane;
+    var v = new THREE.Vector3();
+    function shapeMembrane(sx, sy, sz, n) {
+      for (var q = 0; q < mp.count; q++) {
+        var dx = dirs[q * 3], dy = dirs[q * 3 + 1], dz = dirs[q * 3 + 2];
+        var s = Math.pow(Math.pow(Math.abs(dx / sx), n) + Math.pow(Math.abs(dy / sy), n) + Math.pow(Math.abs(dz / sz), n), -1 / n);
+        mp.setXYZ(q, dx * s, dy * s, dz * s);
+      }
+      mp.needsUpdate = true; memGeo.computeVertexNormals();
+    }
+    // Hechtian strands (membrane threads that stay stuck to the wall)
+    var hd = [[1, 0.35, 0.15], [-1, -0.3, 0.2], [1, -0.4, -0.3], [-1, 0.4, -0.2], [0.2, 1, 0.3], [-0.3, 1, -0.2], [0.25, -1, 0.2], [-0.2, -1, -0.3]].map(function (a) { return new THREE.Vector3(a[0], a[1], a[2]).normalize(); });
+    var hpos = new Float32Array(hd.length * 6);
+    var hgeo = new THREE.BufferGeometry(); hgeo.setAttribute("position", new THREE.BufferAttribute(hpos, 3));
+    var hech = new THREE.LineSegments(hgeo, new THREE.LineBasicMaterial({ color: 0xfde68a, transparent: true, opacity: 0 }));
+    hech.frustumCulled = false; hech.position.z = zc; g.add(hech); parts.hechtian = hech;
 
-    var vac = new THREE.Mesh(new THREE.SphereGeometry(1, 28, 20), glass(0x60a5fa, 0.38));
-    vac.scale.set(W * 0.34, H * 0.3, D * 0.3);
-    vac.position.x = -W * 0.04;
-    proto.add(vac);
-    parts.vacuole = vac; parts.tonoplast = vac;
+    /* vacuole: sap + tonoplast (a distinct membrane shell) */
+    var vac = new THREE.Group();
+    var sap = new THREE.Mesh(new THREE.SphereGeometry(1, 28, 20), glass(0x60a5fa, 0.34));
+    var tono = new THREE.Mesh(new THREE.SphereGeometry(1.045, 28, 20), new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.3, transparent: true, opacity: 0.2, side: THREE.DoubleSide, depthWrite: false, bumpMap: fib, bumpScale: 0.8 }));
+    vac.add(sap, tono); vac.position.x = -iw * 0.04; proto.add(vac);
+    parts.vacuole = vac; parts.tonoplast = tono; parts.sap = sap;
 
-    var nuc = nucleusMesh(Math.min(H, D) * 0.17);
-    nuc.position.set(W * 0.36, -H * 0.18, D * 0.18);
-    proto.add(nuc);
+    /* organelles (sizes fixed, positions follow the shrinking protoplast) */
+    var orgs = [];
+    function place(obj, fx, fy, fz) { obj.userData.p0 = new THREE.Vector3(fx * iw, fy * ih, fz * id); proto.add(obj); orgs.push(obj); return obj; }
+    var mn = Math.min(ih, id);
+    var nuc = place(nucleusMesh(mn * 0.17), 0.36, -0.18, 0.18);
     parts.nucleus = nuc; parts.nucleolus = nuc.userData.nucleolus;
 
     var chl = new THREE.Group(); proto.add(chl);
@@ -196,64 +408,85 @@
     if (!o.onion) {
       var n = o.chloroplasts || 12;
       for (var c = 0; c < n; c++) {
-        var cp = chloroplastMesh(Math.min(H, D) * 0.075);
-        var a = (c / n) * TAU;
-        cp.position.set(Math.cos(a) * W * 0.42, Math.sin(a) * H * 0.38, (c % 2 ? 1 : -1) * D * 0.36);
-        cp.rotation.set(c * 0.7, c * 1.3, a);
-        cp.userData.a = a;
+        var cp = chloroplastMesh(mn * 0.08), a = (c / n) * TAU;
+        cp.rotation.set(0, c * 1.3, a); cp.userData.a = a; cp.userData.zs = (c % 2 ? 1 : -1) * 0.36;
         chl.add(cp); chlList.push(cp);
       }
     }
     parts.chloroplast = chl;
 
     var mito = new THREE.Group(); proto.add(mito);
-    [[-0.4, 0.36, 0.3], [0.1, -0.38, -0.34], [0.38, 0.32, -0.32], [-0.36, -0.34, 0.34]].forEach(function (p, i) {
-      var m = mitochondrionMesh(Math.min(H, D) * 0.14);
-      m.position.set(p[0] * W, p[1] * H, p[2] * D);
-      m.rotation.set(i, i * 0.6, i * 1.1);
-      mito.add(m);
+    [[-0.4, 0.36, 0.3], [0.1, -0.38, -0.34], [0.38, 0.32, -0.32], [-0.36, -0.34, 0.34]].forEach(function (p, k) {
+      var m = mitochondrionMesh(mn * 0.15);
+      m.userData.p0 = new THREE.Vector3(p[0] * iw, p[1] * ih, p[2] * id);
+      m.rotation.set(k, k * 0.6, k * 1.1);
+      mito.add(m); orgs.push(m);
     });
     parts.mitochondrion = mito;
 
-    var er = erMesh(Math.min(H, D) * 0.18, true);
-    er.position.copy(nuc.position); er.position.x -= 0.02;
-    proto.add(er);
+    var er = erMesh(mn * 0.2, true);
+    er.userData.p0 = nuc.userData.p0.clone(); er.userData.p0.x -= 0.02; proto.add(er); orgs.push(er);
     parts.er = er;
-
-    var golgi = golgiMesh(Math.min(H, D) * 0.12);
-    golgi.position.set(W * 0.2, H * 0.28, -D * 0.2);
-    proto.add(golgi);
+    var golgi = place(golgiMesh(mn * 0.13), 0.2, 0.28, -0.2);
     parts.golgi = golgi;
-
-    var rib = ribosomeCloud(140, W * 0.86, H * 0.8, D * 0.8, 11);
+    var rib = ribosomeCloud(140, iw * 0.9, ih * 0.84, id * 0.84, 11);
     proto.add(rib);
     parts.ribosome = rib;
 
-    var state = { tonicity: o.tonicity == null ? 1 : o.tonicity, cur: o.tonicity == null ? 1 : o.tonicity };
+    var state = { tonicity: o.tonicity == null ? 1 : o.tonicity, cur: o.tonicity == null ? 1 : o.tonicity, last: 9 };
+    var info = { sOrg: 1, frac: 1 };
     function apply(t) {
-      // t: +1 turgid, 0 flaccid/incipient, -1 fully plasmolysed
-      var s = t >= 0 ? 0.985 + 0.015 * t : 0.985 + 0.385 * t; // protoplast scale
-      proto.scale.set(s, Math.max(0.55, s + 0.04 * Math.min(0, t)), s);
-      var vs = t >= 0 ? 1 + 0.18 * t : 1 + 0.55 * t;
-      vac.scale.set(W * 0.34 * vs, H * 0.3 * vs, D * 0.3 * vs);
+      // t: +1 turgid (membrane pressed on the wall), 0 flaccid, -1 plasmolysed
+      var s = t >= 0 ? 0.94 + 0.056 * t : 0.94 + 0.3 * t;
+      var nExp = t >= 0 ? 5 + t : Math.max(2, 5 + 3.2 * t);
+      var sy = t >= 0 ? s : Math.max(0.62, s + 0.04 * t);
+      var sx = ax * s, sY = ay * sy, sz = az * s;
+      if (Math.abs(t - state.last) > 0.0004) {
+        shapeMembrane(sx, sY, sz, nExp);
+        state.last = t;
+        // Hechtian strands appear once the membrane has pulled away
+        var open = Math.max(0, Math.min(1, -t * 2.2));
+        hech.material.opacity = open * 0.8;
+        for (var q = 0; q < hd.length; q++) {
+          var d = hd[q];
+          var sm = Math.pow(Math.pow(Math.abs(d.x / sx), nExp) + Math.pow(Math.abs(d.y / sY), nExp) + Math.pow(Math.abs(d.z / sz), nExp), -1 / nExp);
+          var sw = 1 / Math.max(Math.abs(d.x) / ax, Math.abs(d.y) / ay, Math.abs(d.z) / az);
+          hpos.set([d.x * sm, d.y * sm, d.z * sm, d.x * sw, d.y * sw, d.z * sw], q * 6);
+        }
+        hgeo.attributes.position.needsUpdate = true;
+        info.frac = superVol(nExp) * sx * sY * sz / (8 * ax * ay * az);
+      }
+      var so = t >= 0 ? 1 : Math.max(0.5, 1 + 0.5 * t);
+      info.sOrg = so;
+      for (var k = 0; k < orgs.length; k++) { var ob = orgs[k]; ob.position.copy(ob.userData.p0).multiplyScalar(so); }
+      rib.scale.setScalar(so);
+      var vs = t >= 0 ? 1 + 0.12 * t : 1 + 0.5 * t;
+      vac.scale.set(iw * 0.34 * vs, ih * 0.3 * vs, id * 0.3 * vs);
       wall.scale.set(1 + 0.012 * Math.max(0, t), 1 + 0.012 * Math.max(0, t), 1);
       membrane.material.opacity = 0.22 + (t < 0 ? 0.12 * -t : 0);
     }
-    apply(state.cur);
+    function stream() {
+      var so = info.sOrg;
+      for (var k = 0; k < chlList.length; k++) {
+        var cp = chlList[k], a = cp.userData.a;
+        cp.position.set(Math.cos(a) * iw * 0.42 * so, Math.sin(a) * ih * 0.38 * so, cp.userData.zs * id * so);
+      }
+    }
+    apply(state.cur); stream();
 
     g.userData.parts = parts;
     g.userData.proto = proto;
     g.userData.setState = function (st) { if (st && st.tonicity != null) state.tonicity = st.tonicity; };
     g.setTonicity = function (ton01) { state.tonicity = (ton01 - 0.5) * 2; };
+    g.userData.reading = function () {
+      var t = state.cur;
+      return { tonicity: +t.toFixed(2), state: t > 0.6 ? "turgid" : t > -0.12 ? "flaccid" : "plasmolysed", protoplastFraction: +info.frac.toFixed(2) };
+    };
     g.userData.update = function (dt, t) {
       state.cur += (state.tonicity - state.cur) * Math.min(1, dt * 1.6);
       apply(state.cur);
-      // cytoplasmic streaming (cyclosis): chloroplasts glide round the edge
-      for (var i = 0; i < chlList.length; i++) {
-        var cp = chlList[i]; cp.userData.a += dt * 0.12;
-        var a = cp.userData.a;
-        cp.position.x = Math.cos(a) * W * 0.42; cp.position.y = Math.sin(a) * H * 0.38;
-      }
+      for (var k = 0; k < chlList.length; k++) chlList[k].userData.a += dt * 0.12;   // cytoplasmic streaming
+      stream();
       nuc.userData.nucleolus.material.emissiveIntensity = 0.35 + 0.1 * Math.sin(t * 2);
     };
     return attachCompat(g, o);
@@ -449,53 +682,225 @@
     return attachCompat(g, o);
   }
 
-  /* ---------- COMPOUND LIGHT MICROSCOPE ---------- */
+  /* ---------- COMPOUND LIGHT MICROSCOPE (v2) ---------- */
   function microscope(o) {
     o = o || {};
-    var g = new THREE.Group(), parts = {};
-    var black = std(0x1f2937, 0.35, { metalness: 0.35 });
-    var cream = std(0xf5efe4, 0.4, { metalness: 0.15 });
-    var chrome = std(0xcbd5e1, 0.18, { metalness: 0.9 });
-    var base = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.12, 0.8), cream); base.position.y = 0.06; g.add(base);
-    var lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 0.06, 20), glowMat(0xfff7c2, 0.9)); lamp.position.set(0.05, 0.15, 0); g.add(lamp); parts.lamp = lamp;
-    var arm = new THREE.Mesh(new THREE.BoxGeometry(0.16, 1.2, 0.22), cream); arm.position.set(-0.38, 0.72, 0); arm.rotation.z = -0.12; g.add(arm); parts.arm = arm;
-    var stage = new THREE.Mesh(new THREE.BoxGeometry(0.62, 0.05, 0.56), black); stage.position.set(0.05, 0.62, 0); g.add(stage); parts.stage = stage;
-    var clip1 = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.012, 0.2), chrome); clip1.position.set(-0.12, 0.65, 0.12); g.add(clip1);
-    var clip2 = clip1.clone(); clip2.position.x = 0.22; g.add(clip2);
-    var sl = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.012, 0.14), glass(0xe0f2fe, 0.55)); sl.position.set(0.05, 0.652, 0); g.add(sl); parts.slide = sl;
-    var spec = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.006, 0.1), glowMat(0xfbbf24, 0.4)); spec.position.set(0.05, 0.661, 0); g.add(spec); parts.specimen = spec;
-    var tube = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.62, 24), cream); tube.position.set(0.0, 1.27, 0); tube.rotation.z = -0.12; g.add(tube); parts.tube = tube;
-    var eye = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.06, 0.2, 20), black); eye.position.set(-0.06, 1.66, 0); eye.rotation.z = -0.12; g.add(eye); parts.eyepiece = eye;
-    var nose = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.1, 0.08, 24), chrome); nose.position.set(0.06, 0.95, 0); g.add(nose); parts.nosepiece = nose; parts.turret = nose;
-    var objs = new THREE.Group(); objs.position.copy(nose.position); g.add(objs);
-    var objList = [];
-    [[0.18, 0x22c55e, "×4"], [0.24, 0xfbbf24, "×10"], [0.3, 0x3b82f6, "×40"]].forEach(function (d, i) {
-      var holder = new THREE.Group();
-      var ob = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.04, d[0], 16), chrome);
-      ob.position.y = -d[0] / 2 - 0.03;
-      var band = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.02, 16), glowMat(d[1], 0.6));
-      band.position.y = -0.06;
-      holder.add(ob, band);
-      holder.rotation.z = 0.32; // tilted out
-      var wrap = new THREE.Group(); wrap.add(holder); wrap.rotation.y = i * TAU / 3;
-      objs.add(wrap); objList.push(wrap);
+    var useMirror = !!o.mirror;
+    var eyeM = o.eyepiece || 10, FN = o.fieldNumber || 16;
+    var g = new THREE.Group(), parts = {}, i;
+    var X0 = 0.05, STAGE_TOP = 0.665, BETA = 0.32, RHO = 0.085;
+    var enamel = std(0xe9e2d2, 0.38, { metalness: 0.2 });
+    var black = std(0x1b2230, 0.35, { metalness: 0.4 });
+    var chrome = std(0xdbe3ee, 0.22, { metalness: 0.55, emissive: 0x222b38, side: THREE.DoubleSide });
+    var rubber = std(0x0f131b, 0.8);
+    function lathe(pts, seg, mat) { return new THREE.Mesh(new THREE.LatheGeometry(pts.map(function (p) { return new THREE.Vector2(p[0], p[1]); }), seg || 24), mat); }
+
+    /* --- foot: horseshoe (mirror model) or solid base with built-in lamp --- */
+    var fs;
+    if (useMirror) {
+      fs = new THREE.Shape();
+      fs.moveTo(0.55, -0.2); fs.lineTo(-0.1, -0.2); fs.absarc(-0.1, 0, 0.2, -Math.PI / 2, -Math.PI * 1.5, true);
+      fs.lineTo(0.55, 0.2); fs.lineTo(0.55, 0.24); fs.quadraticCurveTo(0.55, 0.4, 0.39, 0.4);
+      fs.lineTo(-0.39, 0.4); fs.quadraticCurveTo(-0.55, 0.4, -0.55, 0.24); fs.lineTo(-0.55, -0.24);
+      fs.quadraticCurveTo(-0.55, -0.4, -0.39, -0.4); fs.lineTo(0.39, -0.4); fs.quadraticCurveTo(0.55, -0.4, 0.55, -0.24); fs.lineTo(0.55, -0.2);
+    } else fs = rrShape(1.1, 0.78, 0.22);
+    var footGeo = new THREE.ExtrudeGeometry(fs, { depth: 0.06, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 2, curveSegments: 10 });
+    footGeo.rotateX(-Math.PI / 2); footGeo.translate(0, 0.02, 0);
+    var foot = new THREE.Mesh(footGeo, enamel); g.add(foot); parts.foot = foot; parts.base = foot;
+    [[-0.45, -0.3], [-0.45, 0.3], [0.42, -0.3], [0.42, 0.3]].forEach(function (p) {
+      var ft = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.045, 0.02, 12), rubber); ft.position.set(p[0], 0.01, p[1]); g.add(ft);
     });
-    parts.objective = objs;
-    var coarse = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.05, 24), black); coarse.rotation.x = Math.PI / 2; coarse.position.set(-0.38, 0.75, 0.15); g.add(coarse); parts.coarse = coarse;
-    var fine = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.05, 20), chrome); fine.rotation.x = Math.PI / 2; fine.position.set(-0.38, 0.75, 0.2); g.add(fine); parts.fine = fine;
-    parts.knob = coarse;
-    var beam = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.45, 12, 1, true), new THREE.MeshBasicMaterial({ color: 0xfff7c2, transparent: true, opacity: 0.22, depthWrite: false, blending: THREE.AdditiveBlending }));
-    beam.position.set(0.05, 0.4, 0); g.add(beam); parts.beam = beam;
-    var curObj = 1, target = 0;
-    function selectObjective(i) { curObj = i; target = -(i % 3) * TAU / 3; objs.rotation.y = target; }
+
+    /* --- C-shaped arm: offset ribbon along a curve, bevel-extruded --- */
+    var curve = new THREE.CatmullRomCurve3([[-0.43, 0.06], [-0.47, 0.4], [-0.47, 0.82], [-0.39, 1.16], [-0.2, 1.37], [0.05, 1.44]].map(function (p) { return new THREE.Vector3(p[0], p[1], 0); }));
+    var as = new THREE.Shape(), Lp = [], Rp = [], N = 44;
+    for (i = 0; i <= N; i++) {
+      var tt = i / N, pt = curve.getPoint(tt), tg = curve.getTangent(tt), hw = 0.115 - 0.05 * Math.sin(Math.PI * Math.min(1, tt * 1.1)) + 0.012 * tt;
+      Lp.push([pt.x - tg.y * hw, pt.y + tg.x * hw]); Rp.push([pt.x + tg.y * hw, pt.y - tg.x * hw]);
+    }
+    as.moveTo(Lp[0][0], Lp[0][1]);
+    for (i = 1; i <= N; i++) as.lineTo(Lp[i][0], Lp[i][1]);
+    for (i = N; i >= 0; i--) as.lineTo(Rp[i][0], Rp[i][1]);
+    var armGeo = new THREE.ExtrudeGeometry(as, { depth: 0.14, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 3, curveSegments: 6 });
+    armGeo.translate(0, 0, -0.07);
+    var arm = new THREE.Mesh(armGeo, enamel); g.add(arm); parts.arm = arm;
+    var head = lathe([[0, 1.36], [0.1, 1.36], [0.105, 1.4], [0.09, 1.46], [0, 1.46]], 22, enamel); head.position.x = X0; g.add(head);
+
+    /* --- optical axis: body tube, inclined eyepiece tube, eyepiece with engraved collar --- */
+    var tube = lathe([[0, 1.04], [0.072, 1.04], [0.082, 1.07], [0.082, 1.34], [0.074, 1.37], [0, 1.37]], 22, enamel);
+    tube.position.x = X0; g.add(tube); parts.tube = tube;
+    var epG = new THREE.Group(); epG.position.set(X0, 1.44, 0); epG.rotation.z = -0.28; g.add(epG);
+    var etube = lathe([[0, 0], [0.07, 0], [0.07, 0.15], [0.058, 0.17], [0, 0.17]], 20, enamel);
+    var eye = new THREE.Group();
+    eye.add(lathe([[0, 0.16], [0.054, 0.16], [0.054, 0.3], [0.046, 0.318], [0, 0.318]], 20, black));
+    var ering = lathe([[0.055, 0.17], [0.062, 0.17], [0.062, 0.19], [0.055, 0.19]], 20, chrome); eye.add(ering);
+    var eband = new THREE.Mesh(new THREE.CylinderGeometry(0.0555, 0.0555, 0.05, 24, 1, true), new THREE.MeshStandardMaterial({ map: bandTex("×" + eyeM, "", "#111827", "#f8fafc"), roughness: 0.5, side: THREE.DoubleSide }));
+    eband.position.y = 0.235; eye.add(eband);
+    var cup = new THREE.Mesh(new THREE.TorusGeometry(0.045, 0.011, 8, 18), rubber); cup.rotation.x = Math.PI / 2; cup.position.y = 0.318; eye.add(cup);
+    var lens = new THREE.Mesh(new THREE.CircleGeometry(0.038, 18), new THREE.MeshStandardMaterial({ color: 0x93c5fd, emissive: 0x60a5fa, emissiveIntensity: 0.35, roughness: 0.05, transparent: true, opacity: 0.8 }));
+    lens.rotation.x = -Math.PI / 2; lens.position.y = 0.321; eye.add(lens);
+    epG.add(etube, eye); parts.eyepiece = eye; parts.eyeLens = lens; parts.eyeTube = etube;
+
+    /* --- revolving nosepiece with three engraved, colour-banded objectives --- */
+    var nose = new THREE.Group(); nose.rotation.z = -BETA; g.add(nose);
+    var turret = lathe([[0, -0.05], [0.12, -0.05], [0.145, -0.02], [0.13, 0.04], [0.09, 0.05], [0, 0.05]], 28, chrome);
+    var spin = new THREE.Group(); spin.add(turret);
+    var defs = [
+      { L: 0.2, col: "#dc2626", txt: "×4", na: "0.10", hex: 0xdc2626 },
+      { L: 0.235, col: "#eab308", txt: "×10", na: "0.25", hex: 0xeab308 },
+      { L: 0.27, col: "#2563eb", txt: "×40", na: "0.65", hex: 0x2563eb }
+    ];
+    var bumpK = knurlTex();
+    defs.forEach(function (d, k) {
+      var L = d.L, ob = new THREE.Group();
+      ob.add(lathe([[0, -L], [0.013, -L], [0.016, -L + 0.012], [0.024, -L + 0.045], [0.034, -0.12], [0.036, -0.06], [0.046, -0.058], [0.046, 0], [0, 0]], 20, chrome));
+      var bm = new THREE.MeshStandardMaterial({ map: bandTex(d.txt, d.na, d.col, k === 1 ? "#111827" : "#ffffff"), emissive: d.hex, emissiveIntensity: 0.12, roughness: 0.5, side: THREE.DoubleSide });
+      var band = new THREE.Mesh(new THREE.CylinderGeometry(0.0475, 0.0475, 0.038, 28, 1, true), bm); band.position.y = -0.02; ob.add(band);
+      var kn = new THREE.Mesh(new THREE.CylinderGeometry(0.0485, 0.0485, 0.022, 28, 1, true), new THREE.MeshStandardMaterial({ color: 0x9aa7b8, bumpMap: bumpK, bumpScale: 1.2, roughness: 0.4, metalness: 0.5, side: THREE.DoubleSide })); kn.position.y = -0.052; ob.add(kn);
+      var tip = new THREE.Mesh(new THREE.SphereGeometry(0.011, 8, 6), glowMat(0xbfdbfe, 0.5)); tip.position.y = -L; ob.add(tip);
+      var holder = new THREE.Group(); holder.position.set(RHO, -0.035, 0); holder.rotation.z = BETA; holder.add(ob);
+      var wrap = new THREE.Group(); wrap.rotation.y = k * TAU / 3; wrap.add(holder);
+      spin.add(wrap);
+    });
+    nose.add(spin);
+    var off = new THREE.Vector3(RHO, -0.035, 0).applyAxisAngle(new THREE.Vector3(0, 0, 1), -BETA);
+    nose.position.set(X0 - off.x, 0.705 + defs[2].L - off.y, 0);
+    parts.nosepiece = turret; parts.turret = turret; parts.objective = spin;
+
+    /* --- stage: extruded plate with a real aperture, slide, spring clips (moves with focus) --- */
+    var stageG = new THREE.Group(); g.add(stageG);
+    var ss = rrShape(0.66, 0.56, 0.06); ss.holes.push(new THREE.Path().absarc(0, 0, 0.075, 0, TAU, true));
+    var sGeo = new THREE.ExtrudeGeometry(ss, { depth: 0.03, bevelEnabled: true, bevelThickness: 0.01, bevelSize: 0.01, bevelSegments: 2, curveSegments: 18 });
+    sGeo.rotateX(-Math.PI / 2);
+    var stage = new THREE.Mesh(sGeo, black); stage.position.set(X0, STAGE_TOP - 0.04, 0); stageG.add(stage); parts.stage = stage;
+    var bracket = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.07, 0.16), enamel); bracket.position.set(-0.36, STAGE_TOP - 0.06, 0); stageG.add(bracket);
+    var sl = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.013, 0.15), glass(0xe0f2fe, 0.5)); sl.position.set(X0, STAGE_TOP + 0.0065, 0); stageG.add(sl); parts.slide = sl;
+    var lab = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.0142, 0.15), std(0xf8fafc, 0.8)); lab.position.set(X0 - 0.18, STAGE_TOP + 0.0071, 0); stageG.add(lab);
+    var cov = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.004, 0.1), glass(0xffffff, 0.35)); cov.position.set(X0, STAGE_TOP + 0.0155, 0); stageG.add(cov);
+    var spec = new THREE.Mesh(new THREE.CylinderGeometry(0.036, 0.036, 0.004, 20), glowMat(0xfbbf24, 0.45)); spec.position.set(X0, STAGE_TOP + 0.0145, 0); stageG.add(spec); parts.specimen = spec;
+    var clips = new THREE.Group();
+    [[-1, 1], [1, -1]].forEach(function (c) {
+      var cx = X0 + c[0] * 0.265, cz = c[1] * 0.14;
+      var pts = [[cx, STAGE_TOP, cz], [cx, STAGE_TOP + 0.05, cz], [cx - c[0] * 0.03, STAGE_TOP + 0.05, cz - c[1] * 0.03], [cx - c[0] * 0.05, STAGE_TOP + 0.03, c[1] * 0.07], [cx - c[0] * 0.05, STAGE_TOP + 0.016, c[1] * 0.07]].map(function (p) { return new THREE.Vector3(p[0], p[1], p[2]); });
+      clips.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 20, 0.0075, 6), chrome));
+    });
+    stageG.add(clips); parts.clips = clips;
+
+    /* --- condenser + iris diaphragm --- */
+    var cond = lathe([[0, 0.5], [0.07, 0.5], [0.078, 0.53], [0.078, 0.6], [0.06, 0.625], [0, 0.625]], 24, chrome);
+    cond.position.x = X0; g.add(cond); parts.condenser = cond;
+    var iris = new THREE.Group(); iris.position.set(X0, 0.495, 0); g.add(iris);
+    var ring = new THREE.Mesh(new THREE.TorusGeometry(0.08, 0.011, 8, 28), black); ring.rotation.x = Math.PI / 2; iris.add(ring);
+    var leafG = new THREE.BoxGeometry(0.075, 0.003, 0.035), leafM = std(0x0b0f17, 0.5), leaves = [];
+    for (i = 0; i < 7; i++) { var lf = new THREE.Mesh(leafG, leafM); iris.add(lf); leaves.push(lf); }
+    var lever = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, 0.12, 8), chrome); lever.rotation.x = Math.PI / 2; lever.position.set(0, 0, 0.14); iris.add(lever);
+    var irisV = o.iris == null ? 0.7 : o.iris;
+    function setIris(v) {
+      irisV = Math.max(0, Math.min(1, v));
+      var ri = 0.012 + irisV * 0.05;
+      for (var q = 0; q < 7; q++) {
+        var a = q / 7 * TAU, rr = ri + 0.032;
+        leaves[q].position.set(Math.cos(a) * rr, 0, Math.sin(a) * rr);
+        leaves[q].rotation.y = -a + 0.5 * (1 - irisV);
+      }
+      lever.position.x = -0.04 + 0.08 * irisV;
+    }
+    setIris(irisV);
+    parts.iris = iris;
+
+    /* --- illumination: mirror on a swivel fork, or built-in lamp --- */
+    var mirrorAng = o.mirrorAngle_deg == null ? 45 : o.mirrorAngle_deg, mirrorMode = o.mirrorFace === "concave" ? "concave" : "plane", flipT = mirrorMode === "concave" ? 1 : 0, flipC = flipT;
+    var lamp, mirror = null, tilt = null, flip = null;
+    var beamMat = new THREE.MeshBasicMaterial({ color: 0xfff7c2, transparent: true, opacity: 0.2, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide });
+    var MY = 0.27;
+    if (useMirror) {
+      var stem = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, 0.4, 10), chrome); stem.rotation.z = Math.PI / 2; stem.position.set(-0.22, MY, 0); g.add(stem);
+      var fork = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3([[X0 - 0.03, MY, 0.12], [X0 + 0.0, MY - 0.12, 0.1], [X0 + 0.02, MY - 0.14, 0], [X0 + 0.0, MY - 0.12, -0.1], [X0 - 0.03, MY, -0.12]].map(function (p) { return new THREE.Vector3(p[0], p[1], p[2]); })), 24, 0.011, 6), chrome);
+      g.add(fork);
+      mirror = new THREE.Group(); mirror.position.set(X0, MY, 0); g.add(mirror);
+      tilt = new THREE.Group(); mirror.add(tilt);
+      flip = new THREE.Group(); tilt.add(flip);
+      flip.add(new THREE.Mesh(new THREE.CylinderGeometry(0.095, 0.095, 0.02, 30), black));
+      var planeF = new THREE.Mesh(new THREE.CircleGeometry(0.086, 30), std(0xeef2f7, 0.04, { metalness: 0.9, emissive: 0x3b4a5e, side: THREE.DoubleSide }));
+      planeF.rotation.x = -Math.PI / 2; planeF.position.y = 0.0105; flip.add(planeF);
+      var Rs = (0.086 * 0.086 + 0.012 * 0.012) / (2 * 0.012);
+      var capG = new THREE.SphereGeometry(Rs, 28, 6, 0, TAU, 0, Math.asin(0.086 / Rs));
+      capG.translate(0, -Rs + 0.0015, 0);
+      var conc = new THREE.Mesh(capG, std(0xdfe6ef, 0.04, { metalness: 0.9, emissive: 0x3b4a5e, side: THREE.DoubleSide }));
+      flip.add(conc);
+      parts.mirror = mirror; parts.planeFace = planeF; parts.concaveFace = conc;
+      lamp = new THREE.Mesh(new THREE.SphereGeometry(0.06, 16, 12), glowMat(0xfff7c2, 0.95)); lamp.position.set(1.05, MY, 0); g.add(lamp);
+      var ray = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 1.05 - X0, 16, 1, true), beamMat); ray.rotation.z = Math.PI / 2; ray.position.set((1.05 + X0) / 2, MY, 0); g.add(ray);
+    } else {
+      lamp = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.1, 0.018, 24), glowMat(0xfff7c2, 0.9)); lamp.position.set(X0, 0.118, 0); g.add(lamp);
+      var lring = new THREE.Mesh(new THREE.TorusGeometry(0.105, 0.012, 8, 28), chrome); lring.rotation.x = Math.PI / 2; lring.position.set(X0, 0.118, 0); g.add(lring);
+    }
+    parts.lamp = lamp;
+
+    /* --- light path: illumination cone + the path up the tube to the eye --- */
+    var lightPath = new THREE.Group(); g.add(lightPath);
+    var y0 = useMirror ? MY + 0.02 : 0.13;
+    var beam = new THREE.Mesh(new THREE.CylinderGeometry(0.03, useMirror ? 0.06 : 0.09, (STAGE_TOP + 0.02) - y0, 20, 1, true), beamMat);
+    beam.position.set(X0, (y0 + STAGE_TOP + 0.02) / 2, 0); lightPath.add(beam);
+    var upCurve = new THREE.CatmullRomCurve3([[X0, STAGE_TOP + 0.02], [X0, 1.40], [X0 + Math.sin(0.28) * 0.31, 1.44 + Math.cos(0.28) * 0.31]].map(function (p) { return new THREE.Vector3(p[0], p[1], 0); }), false, "catmullrom", 0.05);
+    var up = new THREE.Mesh(new THREE.TubeGeometry(upCurve, 30, 0.009, 6), new THREE.MeshBasicMaterial({ color: 0xfff7c2, transparent: true, opacity: 0.35, depthWrite: false, blending: THREE.AdditiveBlending }));
+    lightPath.add(up);
+    parts.beam = beam; parts.lightPath = lightPath;
+
+    /* --- focus knobs: knurled coarse + fine pairs on both sides of the arm --- */
+    function knob(r, w, mat) {
+      var pts = [[0, -w / 2], [r - 0.012, -w / 2], [r, -w / 2 + 0.012], [r, w / 2 - 0.012], [r - 0.012, w / 2], [0, w / 2]];
+      var m = lathe(pts, 36, mat); m.geometry.rotateX(Math.PI / 2); return m;
+    }
+    var kmat = function (c) { return new THREE.MeshStandardMaterial({ color: c, roughness: 0.55, metalness: 0.3, bumpMap: bumpK, bumpScale: 1.6 }); };
+    var coarse = new THREE.Group(), fine = new THREE.Group();
+    coarse.position.set(-0.47, 0.64, 0); fine.position.set(-0.47, 0.64, 0);
+    var shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.52, 14), chrome); shaft.rotation.x = Math.PI / 2; shaft.position.set(-0.47, 0.64, 0); g.add(shaft);
+    [-1, 1].forEach(function (s) {
+      var c = knob(0.115, 0.07, kmat(0x2b3445)); c.position.set(0, 0, s * 0.155); coarse.add(c);
+      var f = knob(0.07, 0.055, kmat(0xcbd5e1)); f.position.set(0, 0, s * 0.225); fine.add(f);
+    });
+    g.add(coarse, fine); parts.coarse = coarse; parts.fine = fine; parts.knob = coarse;
+
+    /* --- state --- */
+    var curObj = 1, target = 0, focusT = o.focus == null ? 0.5 : o.focus, focusC = focusT;
+    var mags = [4, 10, 40];
+    function selectObjective(k) { curObj = Math.max(0, Math.min(2, k | 0)); target = -curObj * TAU / 3; spin.rotation.y = target; }
     selectObjective(o.objective == null ? 1 : o.objective);
+    function lightOn() { return !useMirror || Math.abs(mirrorAng - 45) < 9; }
     g.userData.parts = parts;
     g.userData.selectObjective = selectObjective;
     g.setObjective = selectObjective;
-    g.userData.update = function (dt, t) {
-      objs.rotation.y += (target - objs.rotation.y) * Math.min(1, dt * 4);
-      beam.material.opacity = 0.18 + 0.06 * Math.sin(t * 3);
+    g.userData.setState = function (st) {
+      if (!st) return;
+      if (st.objective != null) selectObjective(st.objective);
+      if (st.focus != null) focusT = Math.max(0, Math.min(1, st.focus));
+      if (st.iris != null) setIris(st.iris);
+      if (st.mirror === "plane" || st.mirror === "concave") { mirrorMode = st.mirror; flipT = st.mirror === "concave" ? 1 : 0; }
+      if (st.mirrorAngle_deg != null) mirrorAng = st.mirrorAngle_deg;
     };
+    g.userData.reading = function () {
+      var M = mags[curObj] * eyeM;
+      return { objective: curObj, M_obj: mags[curObj], eyepiece: eyeM, M: M, field_mm: +(FN / mags[curObj]).toFixed(2), iris: +irisV.toFixed(2), mirror: useMirror ? mirrorMode : null, lit: lightOn(), focus: +focusT.toFixed(2) };
+    };
+    var nrm = new THREE.Vector3(), up0 = new THREE.Vector3(0, 1, 0);
+    g.userData.update = function (dt, t) {
+      spin.rotation.y += (target - spin.rotation.y) * Math.min(1, dt * 4);
+      focusC += (focusT - focusC) * Math.min(1, dt * 5);
+      stageG.position.y = (0.5 - focusC) * 0.04;
+      coarse.rotation.z = focusC * 14; fine.rotation.z = focusC * 56;
+      var on = lightOn();
+      beamMat.opacity = on ? 0.11 + 0.04 * Math.sin(t * 3) : 0.0;
+      up.material.opacity = on ? 0.32 : 0.0;
+      if (useMirror) {
+        flipC += (flipT - flipC) * Math.min(1, dt * 6);
+        // normal points up and toward the light; 45 degrees sends horizontal light straight up the tube
+        nrm.set(Math.cos(mirrorAng * Math.PI / 180), Math.sin(mirrorAng * Math.PI / 180), 0);
+        tilt.quaternion.setFromUnitVectors(up0, nrm);
+        flip.rotation.z = flipC * Math.PI;
+      }
+    };
+    g.userData.update(0, 0);
     return attachCompat(g, o);
   }
 
@@ -668,22 +1073,17 @@
   /* ---------- ULTRASTRUCTURE CUT-AWAYS ---------- */
   function mitochondrion(o) {
     o = o || {};
-    var g = new THREE.Group(), parts = {};
-    var outer = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 1.4, 10, 32, ), glass(0xff6b4a, 0.22));
-    outer.rotation.z = Math.PI / 2; g.add(outer); parts.outer = outer;
-    var matrix = new THREE.Mesh(new THREE.CapsuleGeometry(0.42, 1.3, 10, 28), glass(0xfca5a5, 0.32));
-    matrix.rotation.z = Math.PI / 2; g.add(matrix); parts.matrix = matrix;
-    var cr = new THREE.Group(); var cm = glowMat(0xf97316, 0.35);
-    for (var i = 0; i < 9; i++) {
-      var fold = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.62, 0.7), cm);
-      fold.position.x = -0.8 + i * 0.2; fold.position.y = (i % 2 ? 0.14 : -0.14);
-      cr.add(fold);
-    }
-    g.add(cr); parts.cristae = cr;
+    var g = mitoBuild({ cut: o.cut !== false, seg: 36, n: 8, color: 0xff6b4a }), parts = g.userData.parts, body = g.userData.body;
+    var P = { outer: parts.outer, matrix: parts.inner, innerMembrane: parts.inner, cristae: parts.cristae };
+    // mtDNA loop + matrix granules (inside the inner membrane, in body frame: axis = lathe y)
+    var dna = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.012, 6, 20), glowMat(0x7c3aed, 0.5));
+    dna.position.set(0.1, 0.1, -0.05); dna.rotation.x = 0.6; body.add(dna);
+    var gr = ribosomeCloud(40, 0.5, 2.0, 0.5, 8, 0xbe123c); gr.material.size = 0.03; body.add(gr);
+    P.mtDNA = dna; P.granules = gr;
     var atp = new THREE.Group(); var am = glowMat(0xfde047, 0.9);
     for (var k = 0; k < 24; k++) { var s = new THREE.Mesh(new THREE.SphereGeometry(0.03, 8, 6), am); s.userData.ph = k / 24; atp.add(s); }
-    g.add(atp); parts.atp = atp;
-    g.userData.parts = parts;
+    g.add(atp); P.atp = atp;
+    g.userData.parts = P;
     g.userData.update = function (dt, t) {
       atp.children.forEach(function (s, k) { var ph = (s.userData.ph + t * 0.15) % 1; s.position.set(-1.1 + ph * 2.2, Math.sin(ph * 20 + k) * 0.32, Math.cos(ph * 15 + k) * 0.32); s.scale.setScalar(0.6 + 0.4 * Math.sin(t * 4 + k)); });
     };
@@ -771,6 +1171,7 @@
     g.tick = g.userData.update || function () {};
     g.update = g.userData.update || function () {};
     if (g.userData.setState) g.setState = g.userData.setState;
+    if (g.userData.reading) g.reading = g.userData.reading;
     return g;
   }
 
@@ -798,6 +1199,6 @@
     plantCell: plantCell, animalCell: animalCell, rbc: rbc, bacterium: bacterium, microscope: microscope,
     protist: protist, cube: cube, slide: slide, mitochondrion: mitochondrion, chloroplast: chloroplast, bilayer: bilayer,
     mitochondrionMesh: mitochondrionMesh, chloroplastMesh: chloroplastMesh, nucleusMesh: nucleusMesh,
-    makeHighlighter: makeHighlighter, version: 1
+    canvasTex: canvasTex, makeHighlighter: makeHighlighter, version: 2
   };
 })();

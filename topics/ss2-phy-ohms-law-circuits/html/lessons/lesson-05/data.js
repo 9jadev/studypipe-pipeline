@@ -1,146 +1,159 @@
-/* Lesson 05 · Null-Balance Precision: Metre Bridge, Potentiometer & WAEC Practicals — pure data (offline, no fetch) */
-window.L01 = {
-  items: [
-    { id: "c1", name: "Wheatstone Balance: R₁ ÷ R₂ = R₃ ÷ R₄ (I_g = 0)", emo: "⚖️", group: "shm", fact: "When opposite arms of a four-resistor bridge have equal ratios, both junction nodes sit at identical potential and zero current flows through G." },
-    { id: "c2", name: "Metre Bridge Equation: R₁ ÷ R₂ = l ÷ (100 − l)", emo: "📏", group: "shm", fact: "On a uniform 100 cm constantan wire, resistance is proportional to length, so R₁/R₂ equals l / (100 − l)." },
-    { id: "c3", name: "WAEC Two-Wire Diameter Ratio: √s = d₁ ÷ d₂", emo: "🔬", group: "shm", fact: "When two wires of the same material and length are compared in a metre bridge, slope s = R₂/R₁ = (d₁/d₂)², so √s = d₁/d₂." },
-    { id: "c4", name: "Best Accuracy Near the Midpoint (l ≈ 40–60 cm)", emo: "🎯", group: "shm", fact: "Choosing standard resistance R₂ close to R₁ keeps the balance point near 50 cm, minimising percentage end-error." },
-    { id: "c5", name: "Potentiometer EMF Ratio: E₁ ÷ E₂ = l₁ ÷ l₂", emo: "🔋", group: "periodic", fact: "Along a uniform wire carrying steady driver current, potential drop is V = kl, so two cells balance at lengths proportional to their EMFs." },
-    { id: "c6", name: "Zero Current Drawn from Test Cell at Null Point (Ir = 0)", emo: "🥇", group: "periodic", fact: "At balance (I_g = 0), no current leaves the test cell, so lost volts Ir = 0 and the potentiometer measures true open-circuit EMF!" },
-    { id: "c7", name: "Potentiometer Cell Internal Resistance: r = R(l₁ − l₂) ÷ l₂", emo: "🧪", group: "periodic", fact: "If a cell balances at l₁ on open circuit and at l₂ when shunted by load R, then E/V = l₁/l₂ and r = R(l₁ − l₂)/l₂." },
-    { id: "c8", name: "Driver Series Resistor Voltage Divider: V_AB = E_drv × R_w ÷ (R_w + R_s)", emo: "⚠️", group: "periodic", fact: "When a series resistor R_s is in the driver circuit, find V_AB across the 100 cm wire first before scaling by l / 100!" },
-    { id: "c9", name: "I Did Not Drag the Jockey Along the Constantan Wire", emo: "✍️", group: "non", fact: "Dragging the jockey scrapes the wire, alters its cross-sectional area A, and destroys the uniform potential gradient!" },
-    { id: "c10", name: "I Avoided Parallax Error & Opened the Key Between Readings", emo: "👁️", group: "non", fact: "WAEC Paper 3 requires past-tense first-person precautions: reading the metre rule vertically and opening the key so the wire stays cool." }
-  ],
+/* Lesson 05 · Null Methods — Metre Bridge, Potentiometer & WAEC Practicals.
+   window.L05 holds the sort cards, the length explorer pins and the mystery-verdict bridge.
+   window.LESSON_QUIZ = the 12 MCQs of 03-questions.md § Lesson 05 Part 1 (keys unchanged).
+   Every bench/zoom number comes from the kits' models, not from this file. */
+(function () {
+  "use strict";
 
-  trials: [
-    { id: "t1", name: "Metre Bridge Unknown Coil X (Standard R₂ = 6.0 Ω)", L: "l = 40.0 cm", m: "100−l = 60.0 cm", A: "I_g = 0", t: "4.00 Ω", T: "0.667", T2: "Metre Bridge", g: "X = 6 × (40/60)", col: "#3ee6c4" },
-    { id: "t2", name: "Metre Bridge Unknown Coil Y (Standard R₂ = 10.0 Ω)", L: "l = 60.0 cm", m: "100−l = 40.0 cm", A: "I_g = 0", t: "15.0 Ω", T: "1.500", T2: "Metre Bridge", g: "Y = 10 × (60/40)", col: "#ffb23f" },
-    { id: "t3", name: "WAEC Two-Wire Diameter Ratio (Slope s = R₂/R₁ = 3.24)", L: "Wire 1 & 2", m: "s = 3.24", A: "I_g = 0", t: "1.80", T: "3.240", T2: "Metre Bridge", g: "√s = d₁/d₂ = 1.8", col: "#a855f7" },
-    { id: "t4", name: "Potentiometer EMF Comparison (E₁ = 1.50 V at l₁ = 50.0 cm)", L: "l₂ = 70.0 cm", m: "k = 0.03 V/cm", A: "I_g = 0", t: "2.10 V", T: "1.400", T2: "Potentiometer", g: "E₂ = 1.5 × (70/50)", col: "#2fb344" },
-    { id: "t5", name: "Potentiometer Driver Trap (E_d=3V, R_s=2Ω, R_w=10Ω, l=50cm)", L: "V_AB = 2.50 V", m: "l = 50.0 cm", A: "I_g = 0", t: "1.25 V", T: "0.500", T2: "Potentiometer", g: "E_x = 2.50 × 0.50", col: "#f43f5e" },
-    { id: "t6", name: "Potentiometer Internal Resistance r (l₁=75 cm, l₂=60 cm, R=4 Ω)", L: "l₁=75, l₂=60", m: "Load R = 4.0 Ω", A: "I_g = 0", t: "1.00 Ω", T: "1.250", T2: "Potentiometer", g: "r = 4×(75−60)/60", col: "#38bdf8" }
-  ],
-  tOptions: ["4.00 Ω", "15.0 Ω", "1.80", "2.10 V", "1.25 V", "1.00 Ω"],
-  TOptions: ["0.667", "1.500", "3.240", "1.400", "0.500", "1.250"],
-  T2Options: ["Metre Bridge", "Potentiometer"],
+  window.L05 = {
+    // ---- 2A sort: metre bridge / potentiometer / both ----
+    bins: {
+      "metre-bridge": "Metre bridge",
+      "potentiometer": "Potentiometer",
+      "both": "True of both"
+    },
+    items: [
+      { id: "balance",   bin: "metre-bridge",  name: "Balances when R/S = l/(100 − l)", why: "The two gap resistances match the ratio of the two wire lengths." },
+      { id: "compareR",  bin: "metre-bridge",  name: "Compares two resistances", why: "A standard in one gap finds the unknown in the other." },
+      { id: "slope",     bin: "metre-bridge",  name: "Slope of R₂ against R₁ gives the diameter ratio squared", why: "For equal wires of one material, R ∝ 1/d², so √slope = d₁/d₂." },
+      { id: "vkl",       bin: "potentiometer", name: "p.d. along a uniform wire grows with length", why: "A steady current makes V = kl: the potentiometer principle." },
+      { id: "compareE",  bin: "potentiometer", name: "Compares two EMFs by their balance lengths", why: "E₁/E₂ = l₁/l₂, because each cell balances where V = kl equals its EMF." },
+      { id: "nocurrent", bin: "potentiometer", name: "Draws no current from the test cell at balance", why: "At the null point I = 0 through the test cell, so no lost volts." },
+      { id: "internal",  bin: "potentiometer", name: "Finds a cell's internal resistance from two lengths", why: "r = R(l₁ − l₂)/l₂ from the open and loaded balance lengths." },
+      { id: "jockey",    bin: "both",          name: "Uses a centre-zero galvanometer and a jockey", why: "Both are null methods: you slide the jockey for a zero reading." },
+      { id: "tight",     bin: "both",          name: "Needs tight, clean joints and no wire heating", why: "Loose contacts and a warming wire spoil the length ratio in either method." },
+      { id: "jockeyoff", bin: "potentiometer", name: "Reads the galvanometer with the jockey lifted first", why: "The potentiometer practical checks the swing direction before balancing." }
+    ],
 
-  pins: [
-    { x: -1.5, name: "Metre Bridge Left Balance (l = 40 cm)", num: "R₁/R₂ = 2/3", cat: "shm", col: "#3ee6c4", desc: "When the jockey balances at l = 40.0 cm (so 100 − l = 60.0 cm), the left-gap resistor R₁ is 40/60 = 2/3 of the right-gap resistor R₂." },
-    { x: -0.5, name: "Metre Bridge Midpoint (l = 50 cm)", num: "R₁ = R₂", cat: "shm", col: "#ffb23f", desc: "At l = 50.0 cm, both wire segments are equal (50 cm : 50 cm), so R₁ = R₂ and percentage measurement error is minimised." },
-    { x: 0.5, name: "Potentiometer True EMF (I_g = 0)", num: "Ir = 0 V!", cat: "periodic", col: "#2fb344", desc: "At null balance, zero current leaves the test cell (I_g = 0), so there are zero lost volts (Ir = 0) and we read the exact open-circuit EMF!" },
-    { x: 1.5, name: "Potentiometer Shunted Cell (l₂ < l₁)", num: "r = R(l₁−l₂)/l₂", cat: "periodic", col: "#a855f7", desc: "Closing a shunt resistor R across the test cell drops its balance length from l₁ (for E) to l₂ (for V), revealing internal resistance r!" }
-  ]
-};
+    // ---- length explorer (#pos-explorer): V = kl on the school wire (k = 0.0200 V cm⁻¹) ----
+    k: 0.0200,
+    pins: [20, 40, 60, 75, 80, 100],
 
-window.LESSON_QUIZ = [
-  {
-    q: "In a metre bridge experiment, an unknown resistor X is in the left gap and a standard 12 Ω resistor is in the right gap. If the balance point is found at l = 40.0 cm from the left end, what is the resistance of X?",
-    o: ["18.0 Ω", "8.0 Ω", "4.8 Ω", "7.2 Ω"],
-    a: 1,
-    e: "X / R₂ = l / (100 − l) → X / 12 = 40.0 / (100 − 40.0) = 40 / 60 = 2 / 3 → X = 12 × (2/3) = 8.0 Ω.",
-    src: "WAEC 2018"
-  },
-  {
-    q: "Why is a potentiometer preferred to a moving-coil voltmeter when measuring the accurate electromotive force (EMF) of a cell?",
-    o: [
-      "A potentiometer is smaller and cheaper than a voltmeter",
-      "At the balance point, the potentiometer draws zero current from the cell, so no volts are lost across the cell's internal resistance",
-      "A potentiometer draws maximum current from the cell",
-      "A potentiometer decreases the EMF of the cell"
-    ],
-    a: 1,
-    e: "At null balance (I_g = 0), zero current flows through the test cell, so lost volts Ir = 0 and the true open-circuit EMF E is measured.",
-    src: "WAEC 2020"
-  },
-  {
-    q: "On a potentiometer, a standard cell of EMF 1.50 V balances at a length of 60.0 cm. If another cell balances at 84.0 cm on the same wire, what is the EMF of the second cell?",
-    o: ["1.07 V", "2.10 V", "1.80 V", "2.40 V"],
-    a: 1,
-    e: "E₂ / E₁ = l₂ / l₁ → E₂ = 1.50 × (84.0 / 60.0) = 1.50 × 1.40 = 2.10 V.",
-    src: "JAMB 2017"
-  },
-  {
-    q: "A potentiometer wire AB of length 100 cm and resistance 10 Ω is connected in series with a driver accumulator of EMF 3.0 V (negligible internal resistance) and a 2.0 Ω series resistor. If a test cell balances at 50.0 cm along AB, what is the EMF of the test cell?",
-    o: ["1.50 V", "1.25 V", "2.50 V", "1.00 V"],
-    a: 1,
-    e: "First find V_AB across the 10 Ω wire: V_AB = 3.0 × [10 / (10 + 2)] = 30 / 12 = 2.50 V. At l = 50 cm, E_x = (50 / 100) × 2.50 V = 1.25 V.",
-    src: "JAMB 2021"
-  },
-  {
-    q: "A cell balances at l₁ = 75.0 cm on a potentiometer when on open circuit. When a 4.0 Ω resistor is connected across the cell terminals, the balance length drops to l₂ = 60.0 cm. What is the internal resistance r of the cell?",
-    o: ["0.80 Ω", "1.00 Ω", "1.25 Ω", "5.00 Ω"],
-    a: 1,
-    e: "r = R × [(l₁ − l₂) / l₂] = 4.0 × [(75.0 − 60.0) / 60.0] = 4.0 × (15 / 60) = 1.00 Ω.",
-    src: "WAEC 2022"
-  },
-  {
-    q: "In a WAEC metre bridge practical comparing two resistance wires 1 and 2 of the same material and equal length, the slope of the graph of l₂ against l₁ is found to be s = R₂ / R₁ = 2.25. What is the ratio of their diameters (d₁ : d₂)?",
-    o: ["2.25 : 1", "1.50 : 1", "1 : 1.50", "5.06 : 1"],
-    a: 1,
-    e: "Since R ∝ 1/d², s = R₂ / R₁ = (d₁ / d₂)². Therefore √s = d₁ / d₂ = √2.25 = 1.50 (ratio 1.50 : 1).",
-    src: "WAEC Practical Paper 3"
-  },
-  {
-    q: "Which of the following is an accepted WAEC Practical precaution when using a metre bridge or potentiometer?",
-    o: [
-      "Drag the jockey firmly along the wire to clean the constantan surface",
-      "I did not drag the jockey along the resistance wire so that its cross-sectional area remained uniform",
-      "Keep the key closed throughout the experiment to keep the wire hot",
-      "I will ensure tight connections next time"
-    ],
-    a: 1,
-    e: "WAEC requires past-tense active precautions: tapping (not dragging) the jockey preserves uniform cross-sectional area A along the wire.",
-    src: "WAEC Paper 3 Marking Scheme"
-  },
-  {
-    q: "In a balanced Wheatstone bridge with four arms P, Q, R, and S in cyclic order, if P = 4 Ω, Q = 6 Ω, and R = 8 Ω, what value of S balances the bridge?",
-    o: ["10 Ω", "12 Ω", "5.33 Ω", "16 Ω"],
-    a: 1,
-    e: "At balance, P / Q = R / S → 4 / 6 = 8 / S → S = (6 × 8) / 4 = 12 Ω.",
-    src: "NECO 2017"
-  },
-  {
-    q: "Why should the balance length l in a metre bridge experiment ideally lie near the middle of the wire (between 40 cm and 60 cm)?",
-    o: [
-      "To maximise the current through the galvanometer",
-      "To minimise percentage errors due to end-resistances at the brass strips",
-      "To make the wire heat up faster",
-      "Because Ohm's law only holds at 50 cm"
-    ],
-    a: 1,
-    e: "Balancing near 50 cm makes both l and (100 − l) reasonably large and symmetric, minimising the impact of contact/end resistances.",
-    src: "WAEC 2016"
-  },
-  {
-    q: "If the driver battery of a potentiometer has a LOWER EMF than the test cell being measured, what will be observed?",
-    o: [
-      "The balance point will be at 50.0 cm",
-      "No balance point will be found anywhere along the 100 cm wire, and the galvanometer will deflect in one direction only",
-      "The galvanometer needle will stay at zero everywhere",
-      "The balance point will double"
-    ],
-    a: 1,
-    e: "To achieve a null point, the maximum p.d. V_AB across the potentiometer wire must exceed the EMF of the test cell.",
-    src: "JAMB 2019"
-  },
-  {
-    q: "If a 10 Ω resistor is connected in series with the centre-zero galvanometer in a metre bridge to protect it from large off-balance currents, how does this affect the balance length l?",
-    o: [
-      "It shifts the balance point by 10 cm to the right",
-      "It leaves the balance point unchanged because at balance I_g = 0",
-      "It halves the balance length",
-      "It doubles the balance length"
-    ],
-    a: 1,
-    e: "At the null point, current through the galvanometer branch is zero (I_g = 0), so any protective resistor in series with G drops 0 V and does not shift the balance length!",
-    src: "WAEC 2023"
-  },
-  {
-    q: "Along a uniform 100 cm potentiometer wire across which a steady potential difference of 2.0 V is maintained, what is the potential gradient k?",
-    o: ["0.020 V cm⁻¹", "50 V cm⁻¹", "2.0 V cm⁻¹", "0.20 V cm⁻¹"],
-    a: 0,
-    e: "Potential gradient k = V_AB / L = 2.0 V / 100 cm = 0.020 V cm⁻¹ (or 2.0 V m⁻¹).",
-    src: "NECO 2021"
-  }
-];
+    // ---- mystery verdict bridge (#bridge) ----
+    bridge: [
+      {
+        q: "At the null point, how much current flows from Emeka's battery?",
+        o: ["Zero — the galvanometer reads nothing", "The full starter current, 3.0 A", "A small leakage current"],
+        a: 0,
+        why: "At balance the galvanometer reads zero, so no current is drawn from the battery."
+      },
+      {
+        q: "So the balance length of 80.0 cm measures the battery's true…",
+        o: ["terminal p.d. under load", "electromotive force (EMF)", "internal resistance"],
+        a: 1,
+        why: "With I = 0 there are no lost volts, so V = E: the balance gives the EMF, 0.150 × 80.0 = 12.0 V."
+      },
+      {
+        q: "The fault in Emeka's battery is that its…",
+        o: ["EMF has fallen to 8.4 V", "internal resistance has risen", "connecting cables are broken"],
+        a: 1,
+        why: "The EMF is unchanged at 12.0 V; a risen internal resistance drops 3.6 V under the 3.0 A starter load."
+      }
+    ]
+  };
+
+  window.LESSON_QUIZ = [
+    {
+      q: "Engr. Nkechi tells Chinedu that her slide-wire potentiometer works on one simple principle. Which statement gives that principle?",
+      o: [
+        "The p.d. across a wire is the same whatever length of it you choose.",
+        "With a steady current in a uniform wire, the p.d. between two points on it is directly proportional to the length of wire between them.",
+        "The current in a uniform wire grows in direct proportion to its length.",
+        "The resistance of a wire grows in direct proportion to its cross-sectional area."
+      ],
+      a: 1,
+      e: "A steady current along an even wire drops the same p.d. in every centimetre, so V = kl, where k is the potential gradient in V cm⁻¹. A forgets that p.d. builds up with length. C is wrong because the current is the same at every point of a single wire; it is the p.d. that grows with length. D turns R = ρL/A upside down: resistance falls as the area grows."
+    },
+    {
+      q: "Chinedu connects a 6.3 Ω standard resistor across the left gap of a metre bridge and an unknown coil across the right gap. The galvanometer reads zero when the jockey is 70.0 cm from the left end. What is the resistance of the coil?",
+      o: ["14.7 Ω", "9.0 Ω", "4.4 Ω", "2.7 Ω"],
+      a: 3,
+      e: "At balance the left resistance ÷ the right resistance = l/(100 − l), so 6.3/R = 70.0/30.0 and R = 6.3 × 30.0/70.0 = 2.7 Ω. A inverts the length ratio. B uses 100/l instead of (100 − l)/l. C uses l/100 (6.3 × 70.0/100 = 4.4 Ω)."
+    },
+    {
+      q: "On Nkechi's potentiometer a standard cell of EMF 1.08 V balances at 54.0 cm. A dry cell from Emeka's torch balances at 72.5 cm on the same wire with the same driver current. What is the EMF of the dry cell?",
+      o: ["1.45 V", "0.80 V", "0.37 V", "1.34 V"],
+      a: 0,
+      e: "E₁/E₂ = l₁/l₂, so E = 1.08 × 72.5/54.0 = 1.45 V. The dry cell needs a longer length, so its EMF is larger than 1.08 V. B inverts the ratio. C uses only the length difference. D stops at 72.5/54.0 and forgets to multiply by 1.08 V."
+    },
+    {
+      q: "Under the starter, Chinedu's voltmeter showed only 8.4 V across Emeka's battery, yet on the potentiometer the battery balanced at its full 12.0 V. Why does the potentiometer give the true EMF?",
+      o: [
+        "Its slide wire is longer than a voltmeter's coil, so it is more sensitive.",
+        "The driver cell adds its own EMF to the battery, making up the missing volts.",
+        "At the null point no current passes through the battery, so there is no Ir drop inside it and its terminal p.d. equals its EMF.",
+        "It has a lower resistance than a voltmeter, so it draws a larger current and reads more fully."
+      ],
+      a: 2,
+      e: "At balance the galvanometer reads zero, so no current flows through the test battery. With I = 0 the lost volts Ir are zero, and V = E − Ir becomes V = E. A confuses sensitivity with the real reason (zero current). B is wrong: at balance the driver's p.d. opposes the battery, it is not added. D is backwards: drawing more current would make the lost volts bigger and the reading smaller."
+    },
+    {
+      q: "A cell balances at 84.0 cm on a potentiometer on open circuit. When a 4.0 Ω resistor is connected across it, the balance length falls to 70.0 cm. What is the internal resistance of the cell?",
+      o: ["0.80 Ω", "0.67 Ω", "20 Ω", "0.20 Ω"],
+      a: 0,
+      e: "r = R(l₁ − l₂)/l₂ = 4.0 × (84.0 − 70.0)/70.0 = 4.0 × 14.0/70.0 = 0.80 Ω. B divides by l₁ instead of l₂. C turns the fraction upside down. D forgets to multiply by R (14.0/70.0 = 0.20, with no ohms)."
+    },
+    {
+      q: "A 100 cm potentiometer wire of resistance 4.0 Ω is in series with a 3.0 V driver accumulator (negligible internal resistance) and an 11.0 Ω resistor. At what length does a 0.060 V thermocouple balance?",
+      o: ["2.0 cm", "5.5 cm", "7.5 cm", "2.7 cm"],
+      a: 2,
+      e: "The 3.0 V is shared: I = 3.0/(4.0 + 11.0) = 0.20 A; V_wire = 0.20 × 4.0 = 0.80 V; k = 0.80/100 = 0.0080 V cm⁻¹; l = 0.060/0.0080 = 7.5 cm. A is the trap of putting the whole 3.0 V across the wire. B leaves out the wire's 4.0 Ω. D uses the p.d. across the 11.0 Ω resistor instead of the wire."
+    },
+    {
+      q: "In a Wheatstone bridge, P and Q are in series on one side, R and S in series on the other, and the galvanometer links the P–Q junction to the R–S junction. Which statement describes the balanced bridge?",
+      o: [
+        "P + Q = R + S, and the galvanometer reads zero.",
+        "P/Q = S/R, and the galvanometer reads zero.",
+        "P/Q = R/S, and the galvanometer current is at its largest.",
+        "P/Q = R/S, and no current flows through the galvanometer."
+      ],
+      a: 3,
+      e: "The bridge balances when each side divides the supply in the same ratio, P/Q = R/S, so the two junctions sit at the same potential and the galvanometer carries no current. A adds the resistances instead of taking ratios. B pairs them the wrong way round. C has the right ratio but mistakes the null point for maximum current."
+    },
+    {
+      q: "In a metre-bridge practical, equal lengths of two wires A and B of the same material were tested in turn. A plot of R_B (vertical) against R_A was a straight line through the origin, of slope 2.25. What is d_A/d_B, the diameter of A ÷ the diameter of B?",
+      o: ["2.25", "1.5", "0.67", "5.1"],
+      a: 1,
+      e: "For equal lengths of one material, R ∝ 1/d², so R_B/R_A = d_A²/d_B². The slope is R_B/R_A, so d_A/d_B = √2.25 = 1.5: wire A is the thicker one. A forgets the square root. C gives the ratio upside down. D squares the slope instead of rooting it."
+    },
+    {
+      q: "While comparing cells on a potentiometer, Chinedu found the standard cell's balance length first. Later the driver accumulator ran down a little, but he still used his first potential gradient to work out the EMF of a cell balanced at the end. How was that EMF affected?",
+      o: [
+        "Too low, because a weaker driver made the balance length shorter.",
+        "Unaffected, because no current is drawn from the test cell at balance.",
+        "Too low, because the test cell supplied current through the galvanometer.",
+        "Too high, because the smaller potential gradient pushed the balance point to a longer length."
+      ],
+      a: 3,
+      e: "A weaker driver lowers k (V per cm), so the test cell needs more wire to balance; using the old larger k with the longer length makes E = kl come out too high. A has the direction wrong: a smaller k lengthens the balance length. B is true of the test cell but ignores that the wire's calibration itself changed. C is wrong because at balance the test cell supplies no current."
+    },
+    {
+      q: "Which precaution for the potentiometer practical is written in a form a WAEC examiner would credit?",
+      o: [
+        "The jockey was pressed gently at each point on the wire and was not slid along it.",
+        "I will make sure that all the connections are tight.",
+        "I was careful when taking all my readings.",
+        "The pendulum bob was given only a small angle of swing."
+      ],
+      a: 0,
+      e: "A precaution must say what was actually done, in the past tense, and belong to this experiment; tapping the jockey stops it scraping and thinning the wire, which would spoil the uniform resistance per centimetre. B is in the future tense. C is too vague to show a real step. D belongs to a pendulum experiment."
+    },
+    {
+      q: "A metre bridge with a 3.0 Ω resistor in each gap balances at 50.0 cm. Chinedu replaces the right-gap resistor with a 6.0 Ω coil, keeping 3.0 Ω on the left. Where is the new balance point, from the left end?",
+      o: ["66.7 cm", "33.3 cm", "25.0 cm", "50.0 cm"],
+      a: 1,
+      e: "3.0/6.0 = l/(100 − l), so 2l = 100 − l, 3l = 100 and l = 33.3 cm. The smaller resistor is on the left, so the left share of the wire is the shorter one. A swaps the gaps. C simply halves the old length. D assumes a bridge always balances at the middle."
+    },
+    {
+      q: "The potentiometer balances Emeka's battery at an EMF of 12.0 V. Under the 2.8 Ω starter, its terminal p.d. was 8.4 V. Tobe still says the battery is dead. What is the correct verdict?",
+      o: [
+        "The EMF has fallen to 8.4 V, so the battery should be thrown away.",
+        "The internal resistance is 8.4/3.0 = 2.8 Ω, so the plates are completely worn out.",
+        "The EMF is still 12.0 V; the internal resistance has risen to (12.0 − 8.4)/3.0 = 1.2 Ω, so the battery needs servicing, not dumping.",
+        "The missing 3.6 V are lost in the connecting cables, so the battery's internal resistance is zero."
+      ],
+      a: 2,
+      e: "I = V/R = 8.4/2.8 = 3.0 A; lost volts = 12.0 − 8.4 = 3.6 V, so r = 3.6/3.0 = 1.2 Ω (the same as r = R(E − V)/V = 2.8 × 3.6/8.4). The chemistry (EMF) is fine; only r has risen. A is Tobe's error of reading the loaded p.d. as the EMF. B divides the terminal p.d. by the current, giving the starter's resistance. D blames the wires, but the volts are lost across r."
+    }
+  ];
+})();

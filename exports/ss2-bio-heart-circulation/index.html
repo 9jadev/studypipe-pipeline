@@ -1,0 +1,716 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>The Human Heart and Blood Circulation — StudyPipe SS2 Biology</title>
+  <meta name="description" content="A seven-lesson interactive 3D biology unit on the heart and blood circulation: why big bodies need blood, the heart up close, the double circuit, the beating heart, vessels and tissue fluid, blood and clotting, and blood groups." />
+  <meta name="theme-color" content="#060912">
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/hub.css" />
+  <link rel="stylesheet" href="assets/css/narrator.css" />
+  <link rel="stylesheet" href="assets/css/math.css" />
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+
+  <div class="ambient" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-mask"></div>
+  </div>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>StudyPipe</strong>
+          <small>SS2 Biology · Heart and Blood</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#mystery">The Mystery</a>
+        <a href="#journey">7 Lessons</a>
+        <a href="#explorer">Explorer</a>
+        <a href="#master">What You'll Master</a>
+        <a href="#method">How We Learn</a>
+      </nav>
+      <div class="nav-pill">
+        <span class="dot"></span>
+        Offline ready · en-NG Voice
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ======================== HERO ======================== -->
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="tag">SS2 Biology</span>
+          <span class="sep">·</span>
+          <span>WAEC · NECO · JAMB</span>
+          <span class="sep">·</span>
+          <span>Paper 3 Practical</span>
+        </div>
+
+        <h1 class="hero-title" data-hook>
+          The Heart and <span class="accent-serif">the Rivers</span>
+          <span class="accent-grad">Inside You</span>
+        </h1>
+
+        <p class="hero-lede">
+          On health day at Oja Oba market in Ibadan, Dr Aisha’s whiteboard fills with three puzzles: a footballer’s
+          racing pulse, a pepper seller’s swollen ankles and an injured okada rider who needs the right blood fast.
+          Open the pump, follow the blood, and solve all three the way a WAEC examiner wants it written.
+        </p>
+
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" data-tour>
+            <span>Start guided tour (en-NG)</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <a href="lessons/lesson-01/index.html" class="btn btn-ghost">Begin Lesson 1 →</a>
+        </div>
+
+        <dl class="hero-meta">
+          <div><dt>Scope</dt><dd>7 lessons · ~9 h 20 min</dd></div>
+          <div><dt>Interactive</dt><dd>7 3D labs + 7 3D zooms</dd></div>
+          <div><dt>Practice</dt><dd>84 quiz questions + 7 × 30-mark papers</dd></div>
+          <div><dt>Practical</dt><dd>Goat-heart dissection clinic</dd></div>
+        </dl>
+      </div>
+
+      <!-- 3D Hero Lab (window.StudyLab, heart-circulation kit) -->
+      <div class="hero-stage">
+        <div class="stage-frame" id="lab">
+          <div class="stage-topbar">
+            <div class="stage-dots"><span></span><span></span><span></span></div>
+            <div class="stage-title">LIVE 3D LAB · HEART, CIRCUITS &amp; PACEMAKER</div>
+            <div class="stage-hint">Drag to turn · Tap a part</div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="lab-canvas" aria-label="Interactive 3D model of a beating four-chamber heart cut open, a comparison of open, single and double circulation, and the pacemaker wave"></canvas>
+            <div class="lab-nogl" id="lab-fallback" hidden>
+              <p>This phone cannot draw the 3D lab, but every lesson still works. Use the buttons below to read the results.</p>
+            </div>
+            <div class="endpoint-toast" id="endpoint-toast" role="status" aria-live="polite"></div>
+            <div class="stage-legend" id="lab-legend">
+              <span><i class="sw sw-blue"></i>Oxygen-poor blood</span>
+              <span><i class="sw sw-red"></i>Oxygen-rich blood</span>
+            </div>
+          </div>
+
+          <div class="hud">
+            <div class="lab-modes" role="tablist" aria-label="Lab mode">
+              <button type="button" class="btn-chip" role="tab" data-mode="heart" aria-selected="true">Heart</button>
+              <button type="button" class="btn-chip" role="tab" data-mode="circuit" aria-selected="false">Circuits</button>
+              <button type="button" class="btn-chip" role="tab" data-mode="pace" aria-selected="false">Pacemaker</button>
+            </div>
+
+            <div class="hud-readouts" id="lab-readouts">
+              <div class="hud-cell"><span class="hud-k" id="hud-k1">Mode</span><span class="hud-v" id="hud-v1">Section with blood flow</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k2">Selected part</span><span class="hud-v" id="hud-v2">Tap a part</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k3">Receives from → sends to</span><span class="hud-v" id="hud-v3">—</span></div>
+            </div>
+
+            <div class="lab-ctrl" id="ctrl-heart" data-for="heart">
+              <button type="button" class="btn-chip" data-pick="lv">Left ventricle</button>
+              <button type="button" class="btn-chip" data-pick="septum">Septum</button>
+              <button type="button" class="btn-chip" data-pick="tricuspid">Tricuspid valve</button>
+              <button type="button" class="btn-chip" data-pick="aorta">Aorta</button>
+            </div>
+            <div class="lab-ctrl" id="ctrl-circuit" data-for="circuit" hidden>
+              <button type="button" class="btn-chip" data-circ="double" aria-pressed="true">Human (double)</button>
+              <button type="button" class="btn-chip" data-circ="single" aria-pressed="false">Tilapia (single)</button>
+              <button type="button" class="btn-chip" data-circ="open" aria-pressed="false">Cockroach (open)</button>
+            </div>
+            <div class="lab-ctrl" id="ctrl-pace" data-for="pace" hidden>
+              <label class="lab-slide"><span>Heart rate</span>
+                <input type="range" id="lab-bpm" min="60" max="180" step="1" value="72" aria-label="Heart rate in beats per minute" />
+                <output id="lab-bpm-out">72 bpm</output>
+              </label>
+            </div>
+
+            <p class="lab-info" id="lab-info" aria-live="polite">
+              Tap a chamber, valve or vessel (or a button) to see what it receives and where it sends blood.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee: 12 key terms -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>SA : V = 6/L</span><span>·</span>
+        <span>DOUBLE CIRCULATION</span><span>·</span>
+        <span>TRICUSPID ON THE RIGHT</span><span>·</span>
+        <span>BICUSPID (MITRAL)</span><span>·</span>
+        <span>CHORDAE TENDINEAE</span><span>·</span>
+        <span>SAN PACEMAKER</span><span>·</span>
+        <span>LUB = AV VALVES</span><span>·</span>
+        <span>DUB = SEMILUNAR VALVES</span><span>·</span>
+        <span>120/80 mmHg</span><span>·</span>
+        <span>NFP = Pc − πc</span><span>·</span>
+        <span>FIBRINOGEN → FIBRIN</span><span>·</span>
+        <span>O GIVES, AB RECEIVES</span><span>·</span>
+        <span>SA : V = 6/L</span><span>·</span>
+        <span>DOUBLE CIRCULATION</span><span>·</span>
+        <span>TRICUSPID ON THE RIGHT</span><span>·</span>
+        <span>BICUSPID (MITRAL)</span><span>·</span>
+        <span>CHORDAE TENDINEAE</span><span>·</span>
+        <span>SAN PACEMAKER</span><span>·</span>
+      </div>
+    </div>
+
+    <!-- ======================== 01 · THE MYSTERY ======================== -->
+    <section id="mystery" class="section container">
+      <div class="section-head">
+        <span class="sec-num">01 / The Phenomenon</span>
+        <h2 class="section-title" data-hook>A racing pulse, a swollen ankle and a bag of blood share one pump.</h2>
+        <p class="section-sub">
+          Every lesson in this unit closes one piece of the same case file, from the screening tent at Oja Oba market
+          to Dr Aisha’s teaching laboratory.
+        </p>
+      </div>
+
+      <div class="mystery-card reveal">
+        <div class="mystery-narrative">
+          <span class="pill pill-amber">The Unit Mystery · Oja Oba Market, Ibadan</span>
+          <h3>Health Saturday at Oja Oba</h3>
+          <p>
+            <strong>Dr Aisha</strong> has set up a free screening tent at Oja Oba market. <strong>Chidi</strong>’s pulse
+            jumps from 68 to 132 beats a minute after a sprint through the stalls, then settles. <strong>Mama Bisi</strong>,
+            the pepper seller, keeps a thumb dent in her swollen ankles, and her cuff reads 160/100.
+          </p>
+          <p>
+            Then an <strong>okada rider</strong> from the Oyo road arrives bleeding. His card says group B, Rh negative, and
+            the cool box holds six bags: O+, O−, A−, B+, B− and AB−. <strong>Baba Sule</strong> the butcher has an answer
+            for everything, and most of his answers are wrong. “Take the AB, it has both letters!” he shouts.
+          </p>
+          <p class="mystery-question">
+            Why does a sprint speed up the heart, why do ankles swell by evening, and which bags are a safe first choice
+            for the rider?
+          </p>
+          <ul class="clues">
+            <li><b>Clue 1</b>The pulse returned to normal in five minutes.</li>
+            <li><b>Clue 2</b>The swelling is worst in the evening, after standing all day.</li>
+            <li><b>Clue 3</b>The rider’s card says Rh negative.</li>
+            <li><b>Clue 4</b>Only two of the six bags are a safe first choice.</li>
+            <li><b>Clue 5</b>Baba Sule’s goat heart has one wall far thicker than the other.</li>
+          </ul>
+        </div>
+
+        <aside class="case-card">
+          <div class="case-head">
+            <span>CASE FILE #HEART-01</span>
+            <span class="case-status">OPEN</span>
+          </div>
+          <dl class="case-grid">
+            <div><dt>Settings</dt><dd>The health-day tent at Oja Oba market, Ibadan · Dr Aisha’s teaching laboratory (UCH)</dd></div>
+            <div><dt>Evidence</dt><dd>Pulse 68 → 132 → 68 · pitting oedema and 160/100 · a B Rh− rider and six bags</dd></div>
+            <div><dt>Suspect claims</dt><dd>“Stop drinking water!” · “Take the AB, it suits everybody!” (Baba Sule)</dd></div>
+            <div><dt>Your mission</dt><dd>Open the heart, trace the blood, measure the pulse, find where tissue fluid goes, then type the blood</dd></div>
+          </dl>
+          <div class="case-foot">Opened in <strong>Lesson 1</strong> · Pulse solved in <strong>Lesson 4</strong> · Ankles in <strong>Lesson 5</strong> · Closed in <strong>Lesson 7</strong></div>
+        </aside>
+      </div>
+
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat-num">Regularly</div>
+          <div class="stat-label">
+            <strong>in WAEC and NECO theory</strong>
+            <span>The heart diagram and the course of blood keep coming back in objectives and essay questions</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">Paper 3</div>
+          <div class="stat-label">
+            <strong>Specimens, charts and slides</strong>
+            <span>Heart specimens, vessel charts and blood-cell slides are recurring practical items</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">JAMB</div>
+          <div class="stat-label">
+            <strong>The Transport topic</strong>
+            <span>Quick-recall items on heart parts, vessels and blood groups</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 02 · THE 7-LESSON JOURNEY ======================== -->
+    <section id="journey" class="section container">
+      <div class="section-head">
+        <span class="sec-num">02 / Your Learning Journey</span>
+        <h2 class="section-title" data-hook>Seven lessons, one case, from an agar cube to a transfusion.</h2>
+        <p class="section-sub">
+          Each lesson takes about 80 minutes with a movement break, opens with a <em>Do Now</em> warm-up, and walks you
+          through a 3D story, a 3D practical bench, a 3D zoom, worked examples and a WAEC-style quiz.
+        </p>
+      </div>
+
+      <div class="lessons">
+        <article class="lesson reveal is-live" data-lesson="1">
+          <div class="lesson-num">01</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-01/index.html">Why Big Bodies Need a Transport System: Open, Closed, Single and Double Circulation</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Drop agar cubes into acid to see why <code>SA : V = 6/L</code> shrinks as bodies grow, then compare open,
+              single and double circulation and see why an <em>Amoeba</em> needs no heart but Chidi does.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now: JSS science</span>
+              <span>3D Agar-Cube Bench</span>
+              <span>3D Open · Single · Double Circuits</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="2">
+          <div class="lesson-num">02</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-02/index.html">The Heart Up Close: Chambers, Walls, Valves and the Goat-Heart Dissection</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Cut open a goat heart in 3D, measure every wall, name the valves and chordae, and find out why the left
+              ventricle is about three times as thick as the right.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1</span>
+              <span>3D Goat-Heart Dissection</span>
+              <span>3D Valve and Chordae Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="3">
+          <div class="lesson-num">03</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-03/index.html">The Double Circuit: Tracing Blood Around the Body</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Trace the 13-step path of blood, tell the pulmonary loop from the systemic loop, and follow a drip from the
+              arm to the brain, past the one organ Baba Sule forgot.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L2</span>
+              <span>3D Route Tracer</span>
+              <span>3D Portal and Coronary Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="4">
+          <div class="lesson-num">04</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-04/index.html">The Beating Heart: Cardiac Cycle, Heart Sounds, Pacemaker, Pulse and Blood Pressure</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Take Chidi’s pulse before and after exercise, plot his recovery curve, and follow the pacemaker wave and the
+              valves that make the “lub” and the “dub”.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L3</span>
+              <span>3D Pulse Bench</span>
+              <span>3D Pacemaker and Valve Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="5">
+          <div class="lesson-num">05</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-05/index.html">Arteries, Veins, Capillaries, Tissue Fluid and Lymph</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Compare the three vessels, slide a probe along a capillary to find where fluid leaves and returns, and
+              solve Mama Bisi’s swollen ankles with <code>NFP = Pc − πc</code>.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L2–L4</span>
+              <span>3D Vessel and Capillary Benches</span>
+              <span>3D Tissue Fluid and Lymph Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="6">
+          <div class="lesson-num">06</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-06/index.html">Blood: Plasma, Cells and Clotting</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Read a stained blood smear, count red cells on a haemocytometer, and watch fibrin weave the clot that closed
+              the rider’s wound.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L3–L5</span>
+              <span>3D Smear and Haemocytometer</span>
+              <span>3D Clotting Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="7">
+          <div class="lesson-num">07</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-07/index.html">Blood Groups, Rhesus, Transfusion and Disorders: Closing the Case</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Type the rider’s blood on a 3D tile, pick the safe bags from the cool box, understand Rhesus, and close the
+              whole Oja Oba case file.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1, L4–L6</span>
+              <span>3D Typing Tile</span>
+              <span>3D Agglutination and Rhesus Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="thread-note reveal">
+        <span class="thread-icon" aria-hidden="true">↻</span>
+        <p>
+          <strong>Built-in spaced retrieval:</strong> every lesson opens with a <em>Do Now</em> warm-up that pulls key ideas
+          from earlier lessons, and each lesson closes one piece of the Oja Oba case file.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================== 03 · EXPLORER ======================== -->
+    <section id="explorer" class="section container">
+      <div class="section-head">
+        <span class="sec-num">03 / Interactive Sneak Preview</span>
+        <h2 class="section-title" data-hook>Four graphs that explain the whole unit.</h2>
+        <p class="section-sub">
+          Tap a tab, then slide along the graph. You will meet every one of these again, with your own data, in Lessons 1, 4 and 5.
+        </p>
+      </div>
+
+      <div class="explorer reveal">
+        <div class="combo-tabs" role="tablist" aria-label="Circulation graphs" id="combo-tabs">
+          <button type="button" class="combo-tab is-active" role="tab" aria-selected="true" data-combo="sav">Surface area : volume</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="pulse">Pulse recovery</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="pressure">Pressure round the circuit</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="capillary">Capillary filtration</button>
+        </div>
+
+        <div class="combo-body">
+          <div class="combo-chart">
+            <svg id="combo-svg" viewBox="0 0 440 270" role="img" aria-labelledby="combo-title">
+              <g id="combo-grid"></g>
+              <rect id="combo-zone" x="0" y="0" width="0" height="0"></rect>
+              <g id="combo-extra"></g>
+              <path id="combo-curve" d="M 0 0"></path>
+              <g id="combo-points"></g>
+              <line id="combo-dropx" class="cx-drop" x1="0" y1="0" x2="0" y2="0"></line>
+              <line id="combo-dropy" class="cx-drop" x1="0" y1="0" x2="0" y2="0"></line>
+              <circle id="combo-marker" cx="0" cy="0" r="7"></circle>
+            </svg>
+            <label class="combo-slide">
+              <span id="combo-slide-label">Slide along the graph</span>
+              <input type="range" id="combo-slider" min="0" max="1000" value="100" aria-describedby="combo-read" />
+            </label>
+            <div class="combo-read" id="combo-read" aria-live="polite"></div>
+          </div>
+
+          <div class="combo-info">
+            <h3 id="combo-title">Surface area : volume of a cube</h3>
+            <p class="combo-example" id="combo-example">Cubes from 1 mm up to 30 mm, as on the Lesson 1 cube bench</p>
+            <dl class="combo-dl">
+              <div><dt>The rule</dt><dd id="combo-jump">SA : V = 6L² ÷ L³ = 6/L</dd></div>
+              <div><dt>Shape of the graph</dt><dd id="combo-eq">Falls steeply, then levels off</dd></div>
+              <div><dt>Exam point</dt><dd><span class="combo-pill ind-both" id="combo-ind">Double the side, halve the ratio</span></dd></div>
+            </dl>
+            <p class="combo-why" id="combo-why">
+              A tiny Amoeba has a huge surface for its volume, so diffusion alone can feed it. A body the size of Chidi has far
+              too little surface for its volume, so it needs a heart and blood to carry materials to every cell.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 04 · WHAT YOU'LL MASTER ======================== -->
+    <section id="master" class="section container">
+      <div class="section-head">
+        <span class="sec-num">04 / Learning Outcomes</span>
+        <h2 class="section-title" data-hook>What you will master by the end of Lesson 7.</h2>
+        <p class="section-sub">
+          Every skill is practised on a 3D bench and tested with WAEC, NECO and JAMB-style questions.
+        </p>
+      </div>
+
+      <div class="outcomes reveal">
+        <div class="outcome">
+          <span class="outcome-idx">01</span>
+          <h3>Explain why we need blood</h3>
+          <p>Give four reasons big, active animals cannot rely on diffusion, using <code>SA : V = 6/L</code>, and compare open, single and double circulation.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">02</span>
+          <h3>Dissect and draw the heart</h3>
+          <p>Name chambers, valves, chordae and great vessels, measure wall thickness, and draw a labelled section to WAEC rules.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">03</span>
+          <h3>Trace any route</h3>
+          <p>Follow blood through the 13-step double circuit, the hepatic portal system and the coronary circulation, always via the lungs.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">04</span>
+          <h3>Read the heartbeat</h3>
+          <p>Describe the cardiac cycle, lub and dub, the SAN to Purkinje chain, and measure pulse, heart rate and cardiac output.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">05</span>
+          <h3>Compare the three vessels</h3>
+          <p>Match wall, lumen, valves, pressure and speed to the job of each vessel, in a table with both columns filled.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">06</span>
+          <h3>Follow the fluid out and back</h3>
+          <p>Explain tissue fluid, lymph and oedema using <code>NFP = Pc − πc</code>, and why blood crawls through capillaries.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">07</span>
+          <h3>Know blood and clotting</h3>
+          <p>State plasma and cell contents, red cell adaptations, the clotting chain, and count red cells on a haemocytometer.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">08</span>
+          <h3>Match blood safely</h3>
+          <p>Predict safe donors from antigens and antibodies, explain Rhesus, and link common circulatory disorders to a cause and a prevention.</p>
+        </div>
+      </div>
+
+      <div class="subblock reveal" id="archetypes">
+        <div class="subblock-head">
+          <h3>The 6 calculation archetypes</h3>
+          <p>Almost every number question on the heart and blood in WAEC, NECO and JAMB is one of these six. Each step has a note under it.</p>
+        </div>
+
+        <div class="archetypes">
+          <div class="arch">
+            <span class="arch-tag">Type 1 · Lesson 1</span>
+            <h4>Surface area : volume of a cube</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\frac{\text{SA}}{V} = \frac{6L^{2}}{L^{3}} = \frac{6}{L}">SA ÷ V = 6L² ÷ L³ = 6/L</span><span class="note">A cube has 6 square faces of area L²; its volume is L³.</span></li>
+              <li><span class="tex" data-tex="\frac{6}{20\text{ mm}} = 0.30\text{ mm}^{-1}">6 ÷ 20 mm = 0.30 mm⁻¹</span><span class="note">Double the side and the ratio halves: big bodies have little surface for their size.</span></li>
+            </ol>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 2 · Lesson 4</span>
+            <h4>Heart rate and cycle time</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="18 \times \frac{60}{15} = 72\text{ bpm}">18 × 60 ÷ 15 = 72 bpm</span><span class="note">18 beats counted in 15 s: scale up to a full minute (60 s).</span></li>
+              <li><span class="tex" data-tex="T = \frac{60}{72} = 0.83\text{ s}">T = 60 ÷ 72 = 0.83 s</span><span class="note">Cycle time is the number of seconds in a minute divided by the heart rate.</span></li>
+            </ol>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 3 · Lesson 4</span>
+            <h4>Cardiac output</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="68 \times 70\text{ cm}^{3} = 4760\text{ cm}^{3}\text{ min}^{-1}">68 × 70 cm³ = 4760 cm³ min⁻¹</span><span class="note">Heart rate times stroke volume (the blood pushed out by one beat).</span></li>
+              <li><span class="tex" data-tex="4760 \div 1000 = 4.76\text{ dm}^{3}\text{ min}^{-1}">4760 ÷ 1000 = 4.76 dm³ min⁻¹</span><span class="note">1 dm³ is 1000 cm³, so divide by 1000 to change the unit.</span></li>
+            </ol>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 4 · Lesson 5</span>
+            <h4>Net filtration pressure</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\text{NFP} = P_c - \pi_c">NFP = Pc − πc</span><span class="note">Blood pressure pushes fluid out; the plasma proteins pull it in.</span></li>
+              <li><span class="tex" data-tex="36 - 25 = +11\text{ mmHg (out)}">36 − 25 = +11 mmHg (out)</span><span class="note">Arterial end: positive, so fluid leaves the capillary.</span></li>
+              <li><span class="tex" data-tex="16 - 25 = -9\text{ mmHg (in)}">16 − 25 = −9 mmHg (in)</span><span class="note">Venous end: negative, so fluid returns to the blood.</span></li>
+            </ol>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 5 · Lesson 5</span>
+            <h4>Blood speed from flow and area</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="Q = 2.4 \times 35 = 84\text{ cm}^{3}\text{ s}^{-1}">Q = 2.4 × 35 = 84 cm³ s⁻¹</span><span class="note">Aorta: cross-section 2.4 cm² times speed 35 cm s⁻¹ gives the flow.</span></li>
+              <li><span class="tex" data-tex="v = \frac{84}{2400} = 0.035\text{ cm s}^{-1}">v = 84 ÷ 2400 = 0.035 cm s⁻¹</span><span class="note">The same flow through 2400 cm² of capillaries moves far more slowly.</span></li>
+            </ol>
+          </div>
+          <div class="arch">
+            <span class="arch-tag">Type 6 · Lesson 6</span>
+            <h4>Red cell count</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\frac{480}{0.020\text{ mm}^{3}} = 24\,000\text{ mm}^{-3}">480 ÷ 0.020 mm³ = 24 000 mm⁻³</span><span class="note">480 cells in 5 squares that hold 0.020 mm³ in all (diluted blood).</span></li>
+              <li><span class="tex" data-tex="24\,000 \times 200 = 4.8 \times 10^{6}\text{ mm}^{-3}">24 000 × 200 = 4.8 × 10⁶ mm⁻³</span><span class="note">Multiply by the dilution factor to get the count for undiluted blood.</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="formula-strip">
+          <div class="formula-pill"><code>SA : V = 6/L</code><span>Why big bodies need blood</span></div>
+          <div class="formula-pill"><code>T = 60 ÷ heart rate</code><span>Cycle time</span></div>
+          <div class="formula-pill"><code>NFP = Pc − πc</code><span>Tissue fluid</span></div>
+          <div class="formula-pill"><code>Q = A × v</code><span>Blood speed</span></div>
+        </div>
+      </div>
+
+      <div class="subblock reveal" id="myths">
+        <div class="subblock-head">
+          <h3>Three myths we will bust</h3>
+          <p>Tap each card to flip it and see the biology:</p>
+        </div>
+
+        <div class="myths">
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 01</span>
+                <h4>“Arteries carry oxygenated blood and veins carry deoxygenated blood.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>Direction decides, not oxygen. <strong>Arteries leave the heart; veins return to it.</strong> The pulmonary artery carries oxygen-poor blood and the pulmonary veins carry oxygen-rich blood.</p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 02</span>
+                <h4>“On a heart diagram, the left ventricle is on your left.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>The drawing faces you, so the <strong>patient’s left side is on your right</strong>. The thick-walled left ventricle sits on the right-hand side of the page.</p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 03</span>
+                <h4>“AB is the universal donor.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p><strong>O gives, AB receives.</strong> Group O has no A or B antigen, so it can give to all four groups. Group AB has no antibodies, so it can receive from all four.</p>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 05 · HOW WE LEARN ======================== -->
+    <section id="method" class="section container">
+      <div class="section-head">
+        <span class="sec-num">05 / How Every Lesson Works</span>
+        <h2 class="section-title" data-hook>See it first, then explain it.</h2>
+        <p class="section-sub">
+          After a short Do Now warm-up, every lesson follows the same five-step inquiry loop, with a movement break
+          at 45 minutes, so you test an idea before you memorise it.
+        </p>
+      </div>
+
+      <ol class="loop reveal">
+        <li>
+          <span class="loop-step">1 · Wonder</span>
+          <h4>Watch the 3D story and pin your prediction</h4>
+          <p>Dr Aisha, Chidi, Mama Bisi, Baba Sule and the okada rider meet a real puzzle. Post your guess on the Wonder Wall.</p>
+        </li>
+        <li>
+          <span class="loop-step">2 · Investigate</span>
+          <h4>Work the 3D practical bench</h4>
+          <p>Cut cubes, dissect a heart, count a pulse, probe a capillary or type blood yourself, and record the results.</p>
+        </li>
+        <li>
+          <span class="loop-step">3 · Make sense</span>
+          <h4>Zoom in and build the rules</h4>
+          <p>See valves, vessels, cells and clots up close, then build the tables and rules from what you saw.</p>
+        </li>
+        <li>
+          <span class="loop-step">4 · Apply</span>
+          <h4>Worked examples, the Bridge and a quiz</h4>
+          <p>Step-by-step calculations, a case-solving challenge and 12 exam-style questions every lesson.</p>
+        </li>
+        <li>
+          <span class="loop-step">5 · Reflect</span>
+          <h4>Rate yourself and unlock solutions</h4>
+          <p>Rate each goal 1–4, do the blank-page recall, then try the 30-mark paper before opening the model answers.</p>
+        </li>
+      </ol>
+
+      <div class="kit reveal" id="kit">
+        <h3>What’s inside every lesson</h3>
+        <div class="kit-grid">
+          <div><strong>↻ Spaced Do Now</strong><span>4 warm-up cards from earlier lessons</span></div>
+          <div><strong>3D Story Scene</strong><span>The market tent and the teaching lab, with the five characters</span></div>
+          <div><strong>3D Practical Bench</strong><span>Cubes, goat heart, route tracer, pulse, vessels, blood smear or typing tile</span></div>
+          <div><strong>3D Concept Zoom</strong><span>Valves, pacemaker, capillary, clot or agglutination up close</span></div>
+          <div><strong>Worked Examples</strong><span>Every step written out with a note under each line</span></div>
+          <div><strong>Nigerian Narrator</strong><span>A spoken, spotlighted tour in Nigerian English</span></div>
+        </div>
+      </div>
+
+      <div class="finale reveal">
+        <div class="finale-copy">
+          <span class="pill pill-teal">Ready when you are</span>
+          <h2>Let’s find out why Chidi’s heart raced.</h2>
+          <p>Start with Lesson 1: drop agar cubes into acid and discover why a big body needs a pump.</p>
+        </div>
+        <div class="finale-actions">
+          <a href="lessons/lesson-01/index.html" class="btn btn-primary btn-lg">Start Lesson 1: Why Big Bodies Need Blood →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer container">
+    <p>StudyPipe · SS2 Biology · The Human Heart and Blood Circulation · 100% Offline Edition</p>
+  </footer>
+
+  <script src="assets/js/three.min.js"></script>
+  <script src="assets/js/scene-kit.js"></script>
+  <script src="assets/js/heart-kit.js"></script>
+  <script src="assets/js/welcome-lab.js"></script>
+  <script src="assets/js/welcome-explorer.js"></script>
+  <script src="assets/js/welcome.js"></script>
+  <script src="assets/js/welcome-narration.js"></script>
+  <script src="assets/js/narrator.js"></script>
+  <script src="assets/js/math-kit.js"></script>
+</body>
+</html>

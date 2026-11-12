@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyCode Kit Demo</title>
+  <link rel="stylesheet" href="code.css">
+  <style>
+    body {
+      background-color: #0b0f19;
+      color: #f1f5f9;
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 1.5rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 1.4rem;
+      color: #38bdf8;
+      margin-bottom: 0.5rem;
+    }
+    p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>StudyCode · Interactive Code Snippet & Tracer Kit</h1>
+  <p>Offline, accessible syntax highlighting with step-by-step execution tracer and line explainer notes for Nigerian Computer Studies lessons.</p>
+
+  <div id="snippet-container-1"></div>
+  <div id="snippet-container-2"></div>
+
+  <script src="code-kit.js"></script>
+  <script>
+    // Demo 1: Python NEPA Prepaid Meter Bill Calculator with Step Tracer
+    var pythonCode = 
+`def calculate_bill(units):
+    rate = 68.0  # Naira per kWh
+    fixed_charge = 1500.0
+    total = (units * rate) + fixed_charge
+    return total
+
+used_units = 120
+final_bill = calculate_bill(used_units)
+print("Total NEPA Bill: N" + str(final_bill))`;
+
+    var card1 = window.StudyCode.createCard({
+      title: "nepa_bill_calculator.py",
+      language: "python",
+      code: pythonCode,
+      notes: {
+        1: "Defines the bill calculation function taking electricity units as input.",
+        2: "Assigns the tariff rate of ₦68.00 per kilowatt-hour.",
+        3: "Adds the mandatory monthly fixed service charge of ₦1,500.00.",
+        4: "Calculates the total cost by multiplying units by rate and adding the fixed charge.",
+        5: "Returns the computed amount back to the caller.",
+        7: "Simulates a household consuming 120 kWh during the month.",
+        8: "Invokes the calculate_bill function with 120 units.",
+        9: "Displays the formatted bill on the terminal screen."
+      },
+      traceSteps: [
+        { line: 7, vars: { "used_units": 120 }, note: "Program starts: sets used_units to 120" },
+        { line: 8, vars: { "used_units": 120, "final_bill": "calling function..." }, note: "Calls calculate_bill(120)" },
+        { line: 1, vars: { "units": 120 }, note: "Enters function with parameter units = 120" },
+        { line: 2, vars: { "units": 120, "rate": "68.0" }, note: "Sets tariff rate = ₦68.00" },
+        { line: 3, vars: { "units": 120, "rate": "68.0", "fixed_charge": "1500.0" }, note: "Sets fixed charge = ₦1,500.00" },
+        { line: 4, vars: { "units": 120, "total": "₦9,660.0" }, note: "(120 * 68) + 1500 = 8160 + 1500 = 9660.0" },
+        { line: 5, vars: { "return": "9660.0" }, note: "Returns 9660.0 to caller" },
+        { line: 8, vars: { "final_bill": "9660.0" }, note: "Assigns returned value to final_bill" },
+        { line: 9, vars: { "final_bill": "9660.0", "stdout": "Printed to screen" }, note: "Outputs final result" }
+      ],
+      output: [
+        ">>> python nepa_bill_calculator.py",
+        "Total NEPA Bill: N9660.0"
+      ]
+    });
+
+    var container1 = document.getElementById("snippet-container-1");
+    container1.innerHTML = card1.html;
+    window.StudyCode.bindCard(container1.firstElementChild, card1.rawCode, card1.traceSteps);
+
+    // Demo 2: BASIC Algorithm from WAEC syllabus
+    var basicCode =
+`10 REM Calculate Area of a Rectangle
+20 CLS
+30 INPUT "Enter length in cm: ", L
+40 INPUT "Enter breadth in cm: ", B
+50 LET AREA = L * B
+60 PRINT "Area of the rectangle is "; AREA; " cm2"
+70 END`;
+
+    var card2 = window.StudyCode.createCard({
+      title: "RECTANGLE.BAS",
+      language: "basic",
+      code: basicCode,
+      notes: {
+        10: "Remark statement explaining program objective.",
+        20: "Clears the display monitor screen.",
+        30: "Prompts student to enter length from the keyboard.",
+        40: "Prompts student to enter breadth from the keyboard.",
+        50: "Multiplies length by breadth and assigns result to AREA.",
+        60: "Outputs the calculated area with unit annotation.",
+        70: "Terminates program execution."
+      },
+      output: [
+        "Enter length in cm: 15",
+        "Enter breadth in cm: 8",
+        "Area of the rectangle is 120 cm2"
+      ]
+    });
+
+    var container2 = document.getElementById("snippet-container-2");
+    container2.innerHTML = card2.html;
+    window.StudyCode.bindCard(container2.firstElementChild, card2.rawCode);
+  </script>
+</body>
+</html>

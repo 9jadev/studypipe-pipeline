@@ -1,337 +1,202 @@
-/* Lesson 04 · 3D Galvanometer Shunt & Multiplier Conversion Bench
-   Real apparatus: moving-coil galvanometer (printed mA dial), manganin ammeter shunt on brass
-   terminal blocks, wire-wound multiplier coil on a ceramic bobbin, PVC leads to the circuit
-   and charge dots showing how the current divides (shunt) or stays the same (multiplier). */
+/* Lesson 04 · 3D galvanometer-conversion bench (window.StudyScenes.bench)
+   DcCircuitBench "galvanometer" mode on one SceneKit stage. Nkechi's coil is fixed at
+   I_g = 15 mA, R_g = 18.0 Ω. Every number comes from the kit's model (reading()); nothing is typed. */
 (function () {
   "use strict";
   var root = document.getElementById("bench-stage");
   var canvas = document.getElementById("bench-canvas");
-  if (!root || !canvas || typeof THREE === "undefined" || !window.Apparatus) return;
-  var A = window.Apparatus;
+  var D = window.L04;
+  if (!root || !canvas || !D || typeof THREE === "undefined") return;
 
-  var state = {
-    mode: "ammeter", // "ammeter" or "voltmeter"
-    Rg: 20.0,
-    Ig_mA: 10.0,
-    targetI: 5.0,
-    targetV: 15.0,
-    Vg: 0.20,
-    Rs: 0.0401,
-    Rm: 1480.0,
-    Rtot: 1500.0,
-    bypassPct: 99.8,
-    valid: true,
-    trial: null
-  };
-
-  // The six lab-notebook designs (same numbers as L01.trials in data.js)
-  var PRESETS = {
-    t1: { mode: "ammeter", Rg: 20, Ig_mA: 10, targetI: 5.0 },
-    t2: { mode: "ammeter", Rg: 50, Ig_mA: 20, targetI: 2.0 },
-    t3: { mode: "ammeter", Rg: 9.9, Ig_mA: 100, targetI: 10.0 },
-    t4: { mode: "voltmeter", Rg: 20, Ig_mA: 10, targetV: 15.0 },
-    t5: { mode: "voltmeter", Rg: 5.0, Ig_mA: 50, targetV: 10.0 },
-    t6: { mode: "voltmeter", Rg: 25, Ig_mA: 5, targetV: 100 }
-  };
-
-  // number formatter: values >= 100 to the nearest unit (19975 -> "19 975"), smaller ones to n s.f.
-  // keeping trailing zeros (0.04008 -> "0.0401", 0.1 -> "0.100")
-  function sig(v, n) {
-    if (!isFinite(v)) return "–";
-    if (Math.abs(v) >= 100) {
-      var r = Math.round(v).toString();
-      return Math.abs(v) >= 10000 ? r.replace(/\B(?=(\d{3})+(?!\d))/g, "\u2009") : r;
-    }
-    var q = +v.toPrecision(n);   // 99.99 → 1.0e+2 otherwise
-    return Math.abs(q) >= 100 ? String(Math.round(q)) : v.toPrecision(n);
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var toastEl = $("#bench-toast"), toastT;
+  function toast(m) {
+    if (!toastEl) return;
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
   }
-  function fmtRange(mode, v) { return mode === "ammeter" ? v.toFixed(1) + " A" : (v < 100 ? v.toFixed(1) : v.toFixed(0)) + " V"; }
-  function fmtA(I) { return I < 1 ? (I * 1000).toFixed(0) + " mA" : sig(I, 3) + " A"; }
+  var sf3 = (window.DcCircuitBench && DcCircuitBench.model && DcCircuitBench.model.sf3) || D.sf3;
 
-  var galvGroup, shuntGroup, multGroup, wires, flows = [];
-  var tagG, tagS, tagM, tagIn, tagOut;
+  var small = window.innerWidth < 560;
+  var state = { conv: "ammeter", target: 3.0, built: {} };
 
+  // ---------- kit + stage ----------
+  var kit = null;
+  if (window.DcCircuitBench) {
+    kit = DcCircuitBench.create({
+      mode: "galvanometer", labels: !small,
+      onEvent: onKitEvent
+    });
+    kit.setState({ Ig: D.IG, Rg: D.RG, conv: "ammeter", rangeA: 3.0, rangeV: 40, test: 0.8 });
+  }
+
+  var stage = window.SceneKit && SceneKit.createStage({
+    root: root, canvas: canvas, fov: 38, target: new THREE.Vector3(0, 0.2, 0.1),
+    pitch: 0.42, yaw: 0.15, distance: 8.5, minHeight: 330, maxHeight: 460, onFrame: frame
+  });
+  if (stage && kit) { stage.rig.add(kit); stage.start(); }
+  function frame(dt, t) { if (kit) kit.update(dt, t); }
+
+  // ---------- DOM ----------
+  var readoutEl = $("#bench-readout"), hintEl = $("#bench-hint");
+  var convBtns = Array.prototype.slice.call(document.querySelectorAll("#bench-conv [data-conv]"));
+  var targetWrap = $("#bench-targets"), buildBtn = $("#bench-build"), resetBtn = $("#bench-reset"), labBtn = $("#bench-labels");
+  var tbody = $("#results-table tbody"), tallyLine = $("#build-line");
+  var cards = ["m1", "m2", "m3", "m4"].map(function (id) { return document.getElementById(id); });
+  if (labBtn) labBtn.setAttribute("aria-pressed", String(!small));
+
+  var TARGETS = {
+    ammeter: [{ v: 1.0, t: "1.0 A" }, { v: 2.0, t: "2.0 A" }, { v: 3.0, t: "3.0 A" }, { v: 5.0, t: "5.0 A" }],
+    voltmeter: [{ v: 5.0, t: "5.0 V" }, { v: 10.0, t: "10 V" }, { v: 40.0, t: "40 V" }, { v: 150.0, t: "150 V" }]
+  };
+
+  function cardState(done, now) {
+    cards.forEach(function (c, i) { if (!c) return; c.classList.toggle("done", i < done); c.classList.toggle("now", i === now); });
+  }
+  function buildCount() { return Object.keys(state.built).length; }
+
+  function buildTargets() {
+    if (!targetWrap) return;
+    targetWrap.innerHTML = "";
+    TARGETS[state.conv].forEach(function (o) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "gv-btn"; b.setAttribute("data-t", String(o.v));
+      b.textContent = o.t;
+      b.setAttribute("aria-pressed", String(o.v === state.target));
+      b.addEventListener("click", function () { setTarget(o.v); });
+      targetWrap.appendChild(b);
+    });
+  }
+
+  function reading() { return kit ? kit.reading() : null; }
+
+  function paintReadout() {
+    if (!readoutEl) return;
+    var r = reading();
+    var amm = state.conv === "ammeter";
+    var add = r ? (amm ? r.R_s : r.R_m) : (amm ? D.shunt(state.target) : D.mult(state.target));
+    var meter = r ? (amm ? r.R_meter : r.R_total) : (amm ? D.rmeterA(state.target) : D.rtotalV(state.target));
+    var share;
+    if (amm) {
+      var Ishunt = r ? r.I_shunt : state.target - D.IG;
+      var pct = r && r.fraction_coil != null ? (1 - r.fraction_coil) * 100 : (state.target - D.IG) / state.target * 100;
+      share = sf3(Ishunt) + " A (" + pct.toFixed(1) + "%)";
+    } else {
+      share = (D.IG * 1000).toFixed(0) + " mA coil";
+    }
+    readoutEl.innerHTML =
+      '<div><span>Making</span><b class="sm">' + (amm ? state.target.toFixed(1) + " A ammeter" : (state.target < 100 ? state.target.toFixed(0) : state.target) + " V voltmeter") + '</b></div>' +
+      '<div class="hot"><span>Add ' + (amm ? "shunt R_s" : "multiplier R_m") + '</span><b class="sm">' + sf3(add) + ' Ω</b></div>' +
+      '<div><span>Whole meter R</span><b class="sm">' + sf3(meter) + ' Ω</b></div>' +
+      '<div><span>' + (amm ? "Through shunt" : "Coil current") + '</span><b class="sm">' + share + '</b></div>';
+  }
+
+  // ---------- results table ----------
+  function rowLabel(conv, range) { return (conv === "ammeter" ? range.toFixed(1) + " A ammeter" : (range < 100 ? range.toFixed(0) : range) + " V voltmeter"); }
+  function addRow(row) {
+    if (!tbody) return;
+    var amm = row.conv === "ammeter";
+    var key = row.conv;
+    var add = (amm ? "R_s " : "R_m ") + sf3(amm ? row.R_s : row.R_m) + " Ω";
+    var meter = sf3(row.R_meter) + " Ω";
+    var existing = tbody.querySelector('tr[data-k="' + key + '"]');
+    var html = '<td data-label="Conversion"><strong>' + rowLabel(row.conv, row.range) + '</strong></td>' +
+      '<td data-label="Coil">15 mA · 18 Ω</td>' +
+      '<td data-label="Add">' + add + '</td>' +
+      '<td data-label="Whole meter R">' + meter + '</td>';
+    if (existing) { existing.innerHTML = html; existing.classList.add("fresh"); }
+    else {
+      var tr = document.createElement("tr");
+      tr.setAttribute("data-k", key); tr.className = "fresh"; tr.innerHTML = html;
+      tr.addEventListener("click", function () { tr.classList.toggle("open"); });
+      tbody.appendChild(tr);
+    }
+    Array.prototype.forEach.call(tbody.children, function (x) { x.classList.toggle("fresh", x.getAttribute("data-k") === key); });
+    if (tallyLine) tallyLine.textContent = "Conversions built: " + buildCount() + " of 2 (one ammeter and one voltmeter)";
+  }
+
+  // ---------- kit events ----------
+  function onKitEvent(name, d) {
+    if (name === "reading") { paintReadout(); emit("l4:bench", reading()); }
+    else if (name === "built") {
+      var r = reading();
+      var row = { conv: r.conv, range: r.conv === "ammeter" ? state.target : state.target, R_s: r.R_s, R_m: r.R_m, R_meter: r.conv === "ammeter" ? r.R_meter : r.R_total };
+      state.built[r.conv] = true;
+      addRow(row);
+      cardState(r.conv === "ammeter" ? 3 : 4, r.conv === "ammeter" ? 2 : -1);
+      toast(r.conv === "ammeter" ? "Ammeter built: a tiny shunt diverts most of the current." : "Voltmeter built: a big multiplier drops the extra voltage.");
+    } else if (name === "done") { emit("l4:bench-done", { count: buildCount() }); }
+  }
+
+  // ---------- controls ----------
+  function setConv(c) {
+    if (c !== "ammeter" && c !== "voltmeter") return;
+    state.conv = c;
+    state.target = c === "ammeter" ? 3.0 : 40.0;
+    convBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-conv") === c)); });
+    if (kit) kit.setState({ conv: c, rangeA: 3.0, rangeV: 40, test: 0.8 });
+    buildTargets(); paintReadout();
+    cardState(1, c === "ammeter" ? 1 : 2);
+    if (hintEl) hintEl.textContent = c === "ammeter" ? "Pick a current range, then Build & test." : "Pick a voltage range, then Build & test.";
+  }
+  function setTarget(v) {
+    state.target = v;
+    if (kit) kit.setState(state.conv === "ammeter" ? { rangeA: v, test: 0.8 * v } : { rangeV: v, test: 0.8 * v });
+    Array.prototype.forEach.call(targetWrap ? targetWrap.children : [], function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-t") === v)); });
+    paintReadout();
+  }
+  function build() {
+    if (kit) kit.build(); else { state.built[state.conv] = true; addRow({ conv: state.conv, range: state.target, R_s: D.shunt(state.target), R_m: D.mult(state.target), R_meter: state.conv === "ammeter" ? D.rmeterA(state.target) : D.rtotalV(state.target) }); if (buildCount() >= 2) emit("l4:bench-done", {}); }
+  }
+  function resetAll() {
+    if (kit) kit.reset();
+    state.built = {};
+    if (tbody) tbody.innerHTML = "";
+    setConv("ammeter");
+    if (tallyLine) tallyLine.textContent = "Conversions built: 0 of 2 (one ammeter and one voltmeter)";
+    cardState(0, 0);
+    emit("l4:bench-reset", {});
+  }
+
+  convBtns.forEach(function (b) { b.addEventListener("click", function () { setConv(b.getAttribute("data-conv")); }); });
+  if (buildBtn) buildBtn.addEventListener("click", build);
+  if (resetBtn) resetBtn.addEventListener("click", resetAll);
+  if (labBtn) labBtn.addEventListener("click", function () {
+    var on = labBtn.getAttribute("aria-pressed") !== "true";
+    labBtn.setAttribute("aria-pressed", String(on)); if (kit) kit.setState({ labels: on });
+  });
+
+  // tap a part → name it
+  if (stage && kit) {
+    var ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), down = null;
+    canvas.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+    canvas.addEventListener("pointerup", function (e) {
+      if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 6) { down = null; return; }
+      down = null;
+      var rc = canvas.getBoundingClientRect();
+      ndc.set(((e.clientX - rc.left) / rc.width) * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
+      ray.setFromCamera(ndc, stage.camera);
+      var id = kit.pickPart(ray);
+      if (id) { kit.highlight(id); toast(id.replace(/([A-Z])/g, " $1").toLowerCase()); setTimeout(function () { kit.highlight(null); }, 1200); }
+    });
+  }
+
+  // ---------- scene API for narrator / tests ----------
   var api = {
-    rect: function (part) {
-      if (!stage) return null;
-      var obj = part === "bob" ? galvGroup : (part === "ruler" ? (state.mode === "ammeter" ? shuntGroup : multGroup) : null);
-      return obj ? stage.rectOf(obj) : null;
+    setMode: function (m) { if (m === "ammeter" || m === "voltmeter") setConv(m); },
+    setConv: setConv, setTarget: setTarget, build: build, reset: resetAll,
+    highlight: function (p) { if (!kit) return; kit.highlight(p || null); },
+    rect: function (p) {
+      if (!stage || !kit) return null;
+      var o = (kit.parts && p && kit.parts[p]) || kit;
+      return stage.rectOf(o, 14);
     },
-    highlight: function () {},
-    state: function () { return state; },
-    setConfig: function (opts) { setConfig(opts); },
-    loadTrial: function (id) { if (PRESETS[id]) setConfig(PRESETS[id]); }
+    reading: reading, kit: kit, stage: stage, state: state
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.bench = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.35, 0.1),
-    pitch: 0.42,
-    yaw: 0.0,
-    fitWidth: 4.8,
-    distance: 5.0,
-    minYaw: -0.8,
-    maxYaw: 0.8,
-    onFrame: frame
-  });
-
-  if (stage) { build(); stage.start(); }
-
-  function build() {
-    var scene = stage.rig;
-    scene.add(A.benchTop(6.2, 3.6));
-
-    galvGroup = A.meter({ unit: "G", majors: [0, 2, 4, 6, 8, 10], minor: 5, sub: "full scale I_g = 10 mA", label: "GALVANOMETER", size: 1.45 });
-    galvGroup.position.set(-0.35, 0, -0.75);
-    scene.add(galvGroup);
-
-    shuntGroup = A.shunt();
-    shuntGroup.position.set(-0.35, 0, 0.7);
-    shuntGroup.scale.setScalar(1.4);
-    scene.add(shuntGroup);
-
-    multGroup = A.multiplierCoil();
-    multGroup.position.set(1.45, 0, 0.25);
-    multGroup.rotation.y = -0.35;
-    scene.add(multGroup);
-
-    wires = A.wireSet(scene);
-
-    tagG = A.tag("G · 20 Ω, 10 mA", { h: 0.12, border: "rgba(255,178,63,.7)" });
-    tagG.position.set(-0.35, 1.3, -0.2);
-    tagS = A.tag("Shunt R_s (parallel)", { h: 0.11, border: "rgba(62,230,196,.7)" });
-    tagS.position.set(-0.35, 0.12, 1.32);
-    tagM = A.tag("Multiplier R_m (series)", { h: 0.11, border: "rgba(192,132,252,.7)" });
-    tagM.position.set(1.45, 0.62, 0.25);
-    tagIn = A.tag("from circuit", { h: 0.1 });
-    tagOut = A.tag("to circuit", { h: 0.1 });
-    tagIn.position.set(-2.05, 0.25, 1.3);
-    tagOut.position.set(1.95, 0.25, 1.3);
-    scene.add(tagG, tagS, tagM, tagIn, tagOut);
-  }
-
-  function rewire() {
-    if (!wires) return;
-    wires.clear();
-    flows = [];
-    var P = A.worldPort, V = THREE.Vector3;
-    var leftEnd = new V(-2.3, 0.03, 1.15), rightEnd = new V(2.3, 0.03, 1.15);
-    function add(a, b, color, speed, opt) {
-      var w = wires.add(A.wire(a, b, Object.assign({ color: color }, opt || {})));
-      flows.push({ dots: wires.add(A.flow(w.userData.curve, { color: 0x7cf7d4 })), speed: speed });
-      return w;
-    }
-    function plug(at, color) {   // banana plug at the loose end of a lead
-      var p = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.09, 16), A.std(color, 0.4));
-      p.rotation.z = Math.PI / 2; p.position.copy(at).add(new V(0, 0.03, 0));
-      wires.add(p);
-    }
-    galvGroup.updateWorldMatrix(true, true);
-    if (state.mode === "ammeter") {
-      shuntGroup.updateWorldMatrix(true, true);
-      // the galvanometer and shunt are joined side by side (in parallel)
-      add(P(galvGroup, "neg"), P(shuntGroup, "a"), 0x1d1d22, 0.18, { lift: 0.18 });
-      add(P(shuntGroup, "b"), P(galvGroup, "pos"), 0xc0392b, 0.18, { lift: 0.18 });
-      var body = shuntGroup.userData.bodyPath.map(function (p) { return p.clone().applyMatrix4(shuntGroup.matrixWorld); });
-      flows.push({ dots: wires.add(A.flow(body, { color: 0x3ee6c4, spacing: 0.08 })), speed: 1.4 });
-      add(leftEnd, P(shuntGroup, "a"), 0x1d1d22, 1.5, { lift: 0.2 });
-      add(P(shuntGroup, "b"), rightEnd, 0xc0392b, 1.5, { lift: 0.2 });
-    } else {
-      multGroup.updateWorldMatrix(true, true);
-      // the galvanometer and multiplier are joined end to end (in series)
-      add(P(galvGroup, "pos"), P(multGroup, "a"), 0xc0392b, 0.25, { lift: 0.22 });
-      var mb = multGroup.userData.bodyPath.map(function (p) { return p.clone().applyMatrix4(multGroup.matrixWorld); });
-      flows.push({ dots: wires.add(A.flow(mb, { color: 0xc084fc, spacing: 0.12 })), speed: 0.25 });
-      add(P(multGroup, "b"), rightEnd, 0xc0392b, 0.25, { lift: 0.2 });
-      add(leftEnd, P(galvGroup, "neg"), 0x1d1d22, 0.25, { lift: 0.25 });
-    }
-    plug(leftEnd, 0x1d1d22);
-    plug(rightEnd, 0xc0392b);
-  }
-
-  function computePhysics() {
-    var Ig = state.Ig_mA / 1000.0;
-    state.Vg = Ig * state.Rg;
-    var amm = state.mode === "ammeter";
-
-    if (amm) {
-      var I = state.targetI;
-      var Is = I - Ig;
-      state.valid = Is > 0;
-      state.Rs = state.valid ? (Ig * state.Rg) / Is : NaN;               // I_g R_g = (I − I_g) R_s
-      state.Rtot = state.valid ? (state.Rg * state.Rs) / (state.Rg + state.Rs) : NaN; // R_g ∥ R_s
-      state.bypassPct = state.valid ? (Is / I) * 100.0 : NaN;              // share of I through the shunt
-    } else {
-      var V = state.targetV;
-      state.valid = V > state.Vg;
-      state.Rtot = V / Ig;                                                 // whole voltmeter = V / I_g
-      state.Rm = state.valid ? state.Rtot - state.Rg : NaN;                // R_m = V/I_g − R_g
-      state.bypassPct = state.valid ? ((V - state.Vg) / V) * 100.0 : NaN;  // share of V across R_m
-    }
-    state.trial = matchTrial();
-
-    if (stage && galvGroup) {
-      shuntGroup.visible = amm;
-      multGroup.visible = !amm;
-      tagS.visible = amm;
-      tagM.visible = !amm;
-      // A converted meter keeps the same coil but gets a new printed scale: full deflection now
-      // means the design range (I or V), still with exactly I_g in the coil.
-      var range = amm ? state.targetI : state.targetV;
-      var majors = [];
-      for (var k = 0; k <= 5; k++) majors.push(+(range * k / 5).toPrecision(3));
-      galvGroup.userData.redraw({
-        unit: state.valid ? (amm ? "A" : "V") : "G",
-        majors: state.valid ? majors : [0, 0.2, 0.4, 0.6, 0.8, 1],
-        sub: "coil I_g = " + state.Ig_mA.toFixed(0) + " mA"
-      });
-      galvGroup.userData.setFraction(state.valid ? 1 : 1.1);   // design gives exactly full scale; an impossible design pins past it
-      tagG.userData.setText("G · " + state.Rg.toFixed(1) + " Ω, " + state.Ig_mA.toFixed(0) + " mA");
-      if (amm) {
-        tagS.userData.setText(state.valid ? "R_s = " + sig(state.Rs, 3) + " Ω" : "R_s: impossible");
-        tagIn.userData.setText(fmtRange("ammeter", state.targetI) + " in");
-        tagOut.userData.setText(fmtRange("ammeter", state.targetI) + " out");
-      } else {
-        tagM.userData.setText(state.valid ? "R_m = " + sig(state.Rm, 3) + " Ω" : "R_m: impossible");
-        tagIn.userData.setText("− lead");
-        tagOut.userData.setText("+ lead");
-      }
-      rewire();
-    }
-
-    var chip = document.getElementById("bench-instruction");
-    if (chip) chip.innerHTML = amm ? "Ammeter: small R<sub>s</sub> in parallel" : "Voltmeter: large R<sub>m</sub> in series";
-
-    var elVg = document.getElementById("ro-vg");
-    var elConv = document.getElementById("ro-conv");
-    var elRtot = document.getElementById("ro-rtot");
-    var elSplit = document.getElementById("ro-split");
-    var elPlace = document.getElementById("ro-place");
-    var warn = document.getElementById("bench-warn");
-
-    if (elVg) elVg.textContent = sig(state.Vg, 3) + " V";
-    if (amm) {
-      if (elConv) elConv.textContent = state.valid ? "R_s = " + sig(state.Rs, 3) + " Ω" : "–";
-      if (elRtot) elRtot.textContent = state.valid ? sig(state.Rtot, 3) + " Ω" : "–";
-      if (elSplit) elSplit.textContent = state.valid ? state.bypassPct.toFixed(1) + "% of I" : "–";
-      if (elPlace) elPlace.textContent = "In SERIES with load";
-      if (warn) warn.textContent = state.valid ? "" : "Range I must be bigger than I_g = " + fmtA(Ig) + ".";
-    } else {
-      if (elConv) elConv.textContent = state.valid ? "R_m = " + sig(state.Rm, 3) + " Ω" : "–";
-      if (elRtot) elRtot.textContent = state.valid ? sig(state.Rtot, 3) + " Ω" : "–";
-      if (elSplit) elSplit.textContent = state.valid ? state.bypassPct.toFixed(1) + "% of V" : "–";
-      if (elPlace) elPlace.textContent = "In PARALLEL across load";
-      if (warn) warn.textContent = state.valid ? "" : "No multiplier possible: range V must be bigger than V_g = I_g R_g = " + sig(state.Vg, 3) + " V. Raise V or use a smaller I_g or R_g.";
-    }
-    if (rgVal) rgVal.textContent = state.Rg.toFixed(1) + " Ω";
-    if (igVal) igVal.textContent = state.Ig_mA.toFixed(0) + " mA";
-    if (presetBtns) presetBtns.forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-trial") === state.trial ? "true" : "false"); });
-
-    document.dispatchEvent(new CustomEvent("l4:bench", { detail: snapshot() }));
-  }
-
-  function matchTrial() {
-    for (var id in PRESETS) {
-      var p = PRESETS[id];
-      if (p.mode !== state.mode || Math.abs(p.Rg - state.Rg) > 1e-9 || Math.abs(p.Ig_mA - state.Ig_mA) > 1e-9) continue;
-      if (p.mode === "ammeter" ? Math.abs(p.targetI - state.targetI) < 1e-9 : Math.abs(p.targetV - state.targetV) < 1e-9) return id;
-    }
-    return null;
-  }
-
-  function snapshot() {
-    return {
-      mode: state.mode, Rg: state.Rg, Ig: state.Ig_mA / 1000, Vg: state.Vg,
-      range: state.mode === "ammeter" ? state.targetI : state.targetV,
-      Rs: state.Rs, Rm: state.Rm, Rtot: state.Rtot, share: state.bypassPct, valid: state.valid, trial: state.trial
-    };
-  }
-
-  function frame(dt) {
-    if (galvGroup) galvGroup.userData.update(dt);
-    for (var i = 0; i < flows.length; i++) flows[i].dots.userData.update(dt, flows[i].speed);
-  }
-
-  var modeSel = document.getElementById("ctl-mode");
-  var rgSlider = document.getElementById("ctl-rg");
-  var igSlider = document.getElementById("ctl-ig");
-  var rangeSlider = document.getElementById("ctl-range");
-  var rgVal = document.getElementById("ctl-rg-val");
-  var igVal = document.getElementById("ctl-ig-val");
-  var rangeLabel = document.getElementById("ctl-range-label");
-  var btnRecord = document.getElementById("bench-record");
-  var presetBtns = Array.prototype.slice.call(document.querySelectorAll("#bench-trials [data-trial]"));
-
-  // set the range slider's limits for the current mode (ammeter 1–10 A, voltmeter 5–100 V)
-  function syncRangeSlider() {
-    if (!rangeSlider) return;
-    if (state.mode === "ammeter") {
-      rangeSlider.min = "1.0"; rangeSlider.max = "10.0"; rangeSlider.step = "0.5";
-      rangeSlider.value = String(state.targetI);
-    } else {
-      rangeSlider.min = "5.0"; rangeSlider.max = "100.0"; rangeSlider.step = "5.0";
-      rangeSlider.value = String(state.targetV);
-    }
-  }
-  function syncRangeLabel() {
-    if (!rangeLabel) return;
-    if (state.mode === "ammeter") rangeLabel.innerHTML = 'New ammeter range I: <strong id="ctl-range-val">' + fmtRange("ammeter", state.targetI) + "</strong>";
-    else rangeLabel.innerHTML = 'New voltmeter range V: <strong id="ctl-range-val">' + fmtRange("voltmeter", state.targetV) + "</strong>";
-  }
-
-  function setConfig(opts) {
-    if (!opts) return;
-    var modeChanged = false;
-    if (opts.mode && opts.mode !== state.mode) { state.mode = opts.mode; modeChanged = true; }
-    if (typeof opts.Rg === "number") state.Rg = opts.Rg;
-    if (typeof opts.Ig_mA === "number") state.Ig_mA = opts.Ig_mA;
-    if (typeof opts.targetI === "number") state.targetI = opts.targetI;
-    if (typeof opts.targetV === "number") state.targetV = opts.targetV;
-    if (modeSel) modeSel.value = state.mode;
-    if (rgSlider) rgSlider.value = String(state.Rg);
-    if (igSlider) igSlider.value = String(state.Ig_mA);
-    syncRangeSlider();
-    syncRangeLabel();
-    computePhysics();
-    if (modeChanged) document.dispatchEvent(new CustomEvent("bench:mode", { detail: state }));
-  }
-
-  if (modeSel) modeSel.addEventListener("change", function () { setConfig({ mode: modeSel.value }); });
-  if (rgSlider) rgSlider.addEventListener("input", function () { state.Rg = parseFloat(rgSlider.value); computePhysics(); });
-  if (igSlider) igSlider.addEventListener("input", function () { state.Ig_mA = parseFloat(igSlider.value); computePhysics(); });
-  if (rangeSlider) {
-    rangeSlider.addEventListener("input", function () {
-      var v = parseFloat(rangeSlider.value);
-      if (state.mode === "ammeter") state.targetI = v;
-      else state.targetV = v;
-      syncRangeLabel();
-      computePhysics();
-    });
-  }
-  presetBtns.forEach(function (b) {
-    b.addEventListener("click", function () { api.loadTrial(b.getAttribute("data-trial")); });
-  });
-  if (btnRecord) {
-    btnRecord.addEventListener("click", function () {
-      var toast = window.LessonKit && window.LessonKit.toast;
-      if (!state.valid) {
-        if (toast) toast(state.mode === "ammeter" ? "Not a working design: range I must exceed I_g." : "Not a working design: range V must exceed V_g = I_g R_g.");
-        return;
-      }
-      document.dispatchEvent(new CustomEvent("bench:record", { detail: state }));
-      document.dispatchEvent(new CustomEvent("l4:bench-record", { detail: snapshot() }));
-      if (toast) {
-        if (state.mode === "ammeter") toast("Logged ammeter: R_s = " + sig(state.Rs, 3) + " Ω (" + state.bypassPct.toFixed(1) + "% of I through the shunt)");
-        else toast("Logged voltmeter: R_m = " + sig(state.Rm, 3) + " Ω (whole meter " + sig(state.Rtot, 3) + " Ω)");
-      }
-    });
-  }
-
-  syncRangeSlider();
-  syncRangeLabel();
-  computePhysics();
+  buildTargets(); paintReadout(); cardState(1, 1);
+  setInterval(paintReadout, 400);
 })();

@@ -1,0 +1,442 @@
+/* =========================================================
+   StudyPipe · StudyMath (math.css)
+   Offline LaTeX Mathematical Typesetting & Step-by-Step
+   Calculation Explainer Cards (Phone-first 360×740 safe)
+   ========================================================= */
+
+/* ---------- 1. Core LaTeX Math Typography ---------- */
+.sp-math {
+  font-family: var(--font-math);
+  font-variant-numeric: lining-nums;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.14em;
+  vertical-align: middle;
+}
+
+.sp-math-display {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 0.22em;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 4px 2px;
+  font-size: 1.08rem;
+  box-sizing: border-box;
+}
+
+.sp-var {
+  font-family: var(--font-math);
+  font-style: italic;
+  font-weight: 500;
+  padding: 0 0.03em;
+}
+
+.sp-num-lit {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 600;
+}
+
+.sp-fn {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 700;
+  margin-right: 0.08em;
+}
+
+.sp-op {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 600;
+  padding: 0 0.16em;
+  color: var(--teal, var(--teal));
+}
+
+.eq.light .sp-op,
+.m-step-eq.light .sp-op,
+.qexp .sp-op,
+.dn-a .sp-op,
+.reveal-body .sp-op {
+  color: var(--ok);
+}
+
+.sp-text {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.92em;
+  padding: 0 0.12em;
+}
+
+.sp-unit {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.88em;
+  margin-left: 0.18em;
+  opacity: 0.92;
+}
+
+/* Stacked Fractions: \frac{num}{den} */
+.sp-frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+  text-align: center;
+  margin: 0.12em 0.22em;
+  font-size: 0.94em;
+  line-height: 1.15;
+}
+
+.sp-frac > .sp-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.06em 0.34em 0.14em;
+  border-bottom: 1.6px solid currentColor;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+.sp-frac > .sp-den {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.14em 0.34em 0.06em;
+  width: 100%;
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* Square Roots & N-th Roots: \sqrt{...} */
+.sp-sqrt {
+  display: inline-flex;
+  align-items: stretch;
+  vertical-align: middle;
+  margin: 0.08em 0.14em;
+}
+
+.sp-sqrt > .sp-rad {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.18em;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  padding-right: 0.03em;
+  user-select: none;
+}
+
+.sp-sqrt > .sp-radicand {
+  display: inline-flex;
+  align-items: center;
+  border-top: 1.6px solid currentColor;
+  padding: 0.1em 0.24em 0.04em 0.14em;
+}
+
+/* Superscripts & Subscripts */
+.sp-sup {
+  font-size: 0.74em;
+  line-height: 0;
+  position: relative;
+  top: -0.48em;
+  margin-left: 0.03em;
+  font-style: normal;
+}
+
+.sp-sub {
+  font-size: 0.74em;
+  line-height: 0;
+  position: relative;
+  bottom: -0.26em;
+  margin-left: 0.03em;
+  font-style: normal;
+}
+
+.sp-supsub {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: middle;
+  font-size: 0.72em;
+  line-height: 1.05;
+  margin-left: 0.04em;
+  text-align: left;
+}
+
+/* Boxed Final Answer: \boxed{...} */
+.sp-boxed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.14em;
+  padding: 0.18em 0.52em;
+  border-radius: calc(7px * var(--corner, 1));
+  border: 1.8px solid #10b981;
+  background: rgba(16, 185, 129, 0.13);
+  color: inherit;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.14);
+}
+
+/* ---------- 2. Step-by-Step Calculation & Explainer Cards ---------- */
+.m-calc-wrap {
+  margin: 10px 0 12px;
+  border-radius: calc(12px * var(--corner, 1));
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  background: rgba(255, 255, 255, 0.72);
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Dark container adaptation (e.g. inside dark cards or Welcome Hub) */
+.stage .m-calc-wrap,
+.eq-card .m-calc-wrap,
+.vt .m-calc-wrap,
+.bridge-card .m-calc-wrap {
+  background: rgba(var(--ink-900-rgb), 0.78);
+  border-color: rgba(255, 255, 255, 0.14);
+  color: var(--paper);
+}
+
+.m-calc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 7px 12px;
+  background: rgba(var(--ok-rgb), 0.09);
+  border-bottom: 1px solid rgba(var(--ok-rgb), 0.18);
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #0b6e58;
+  letter-spacing: 0.02em;
+}
+
+.stage .m-calc-head,
+.eq-card .m-calc-head,
+.vt .m-calc-head {
+  background: rgba(var(--teal-rgb), 0.12);
+  color: var(--teal);
+}
+
+.m-tex-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: rgba(var(--ok-rgb), 0.14);
+  color: #0b6e58;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.m-step-list {
+  display: flex;
+  flex-direction: column;
+  divide-y: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.m-step {
+  padding: 10px 13px;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.m-step:last-child {
+  border-bottom: none;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.m-step-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.m-step-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 0.71rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ok);
+}
+
+.m-step-num b {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: var(--ok);
+  color: #ffffff;
+  font-size: 0.67rem;
+}
+
+.m-step-tag {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+  background: rgba(15, 23, 42, 0.06);
+  padding: 1px 8px;
+  border-radius: 999px;
+}
+
+.m-step-eq {
+  padding: 8px 11px;
+  border-radius: calc(8px * var(--corner, 1));
+  background: rgba(15, 23, 42, 0.04);
+  border-left: 3px solid var(--ok);
+  color: #0f172a;
+  font-size: 1.03rem;
+  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.stage .m-step-eq,
+.eq-card .m-step-eq,
+.vt .m-step-eq {
+  background: rgba(255, 255, 255, 0.06);
+  color: #f8fafc;
+  border-left-color: var(--teal);
+}
+
+.m-step-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-size: 0.84rem;
+  line-height: 1.48;
+  color: #334155;
+  padding: 4px 8px 2px 6px;
+  background: rgba(245, 158, 11, 0.07);
+  border-radius: calc(6px * var(--corner, 1));
+  border-left: 2.5px solid #f59e0b;
+}
+
+.stage .m-step-note,
+.eq-card .m-step-note,
+.vt .m-step-note {
+  color: #cbd5e1;
+  background: rgba(245, 158, 11, 0.12);
+}
+
+.m-step-note-icon {
+  font-style: normal;
+  font-size: 0.86rem;
+  line-height: 1.3;
+  flex-shrink: 0;
+}
+
+/* ---------- 3. Explainer Note Underneath Concept Formula Banners (.eq) ---------- */
+.eq-latex-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 100%;
+  white-space: normal;
+  box-sizing: border-box;
+}
+
+.m-eq-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 9px 12px;
+  border-radius: calc(8px * var(--corner, 1));
+  background: rgba(var(--teal-rgb), 0.12);
+  border-left: 3px solid var(--teal);
+  font-family: var(--font-body);
+  font-size: 0.83rem;
+  font-weight: 500;
+  line-height: 1.48;
+  color: #f1f5f9;
+  text-align: left;
+  white-space: normal !important;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.m-eq-note strong {
+  color: var(--teal) !important;
+  font-weight: 700;
+}
+
+.eq.light .m-eq-note {
+  background: rgba(var(--ok-rgb), 0.09);
+  border-left-color: var(--ok);
+  color: #1e293b;
+}
+
+.eq.light .m-eq-note strong {
+  color: #0b6e58 !important;
+}
+
+/* Worked example steps-sol reset when upgraded to LaTeX step cards */
+ol.steps-sol > li.m-upgraded-li {
+  list-style: none !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  margin-bottom: 16px;
+}
+
+ol.steps-sol > li.m-upgraded-li::before,
+.steps-sol > li.m-upgraded-li::before {
+  content: none !important;
+  display: none !important;
+}
+
+ol.steps-sol:has(> li.m-upgraded-li) {
+  padding-left: 0;
+  list-style: none;
+}
+
+.m-subgoal-title {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.m-subgoal-title::before {
+  content: "▸";
+  color: var(--ok);
+  font-size: 1rem;
+}

@@ -73,6 +73,7 @@
         '<div class="narr-body">' +
           '<div class="narr-chapter"><span class="title">Welcome</span><span class="count"></span></div>' +
           '<p class="narr-caption" aria-live="polite"></p>' +
+          '<p class="narr-novoice" hidden>No voice on this device, so the narrator shows captions only. Open the gear for voice settings.</p>' +
           '<div class="narr-wait"><i></i><span class="wait-text">Your turn!</span></div>' +
         '</div>' +
         '<div class="narr-win">' +
@@ -181,12 +182,19 @@
       ? (hasNG ? "Nigerian English (en-NG) voice active · offline voices marked." : "Nigerian English (en-NG) prioritised · install en-NG in device TTS settings for local accent.")
       : "No voice found on this device. Captions will play on their own.";
   }
+  function showNoVoice(on) {
+    var n = dock.querySelector(".narr-novoice");
+    if (n) n.hidden = !on;
+  }
   if (speechOK) {
     loadVoices();
-    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
-    else synth.onvoiceschanged = loadVoices;
+    showNoVoice(!voices.length);
+    var onVoices = function () { loadVoices(); showNoVoice(!voices.length); };
+    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", onVoices);
+    else synth.onvoiceschanged = onVoices;
   } else {
     el.note.textContent = "This browser can't speak aloud. Captions will play on their own.";
+    showNoVoice(true);
   }
   el.voice.addEventListener("change", function () {
     voice = voices.filter(function (v) { return v.name === el.voice.value; })[0] || voice;
@@ -356,7 +364,8 @@
       // small delay after cancel() — some engines drop an utterance spoken immediately after it
       later(function () {
         if (token !== state.token) return;
-        var u = new SpeechSynthesisUtterance(step.say);
+        var sp = speakMap(step.say);
+        var u = new SpeechSynthesisUtterance(sp.text);
         if (voice) { u.voice = voice; u.lang = voice.lang || "en-NG"; } else { u.lang = "en-NG"; }
         u.rate = rate; u.pitch = 1.02; u.volume = 1;
         var gotBoundary = false;
@@ -369,7 +378,7 @@
           if (token !== state.token) return;
           if (e.name && e.name !== "word") return;
           gotBoundary = true; stopWordTimer();
-          highlightAt(e.charIndex);
+          highlightAt(sp.map ? (sp.map[e.charIndex] != null ? sp.map[e.charIndex] : e.charIndex) : e.charIndex);
         };
         u.onend = done;
         u.onerror = function (e) {
@@ -487,6 +496,23 @@
     }
     if (last < text.length) el.caption.appendChild(document.createTextNode(text.slice(last)));
   }
+  // read subscript shorthand aloud the way a teacher would: "I_g" → "I g", "r_eq" → "r equivalent",
+  // "I_main" → "I main", "V_AJ" → "V A J". map[] points each spoken character back to the caption text.
+  function speakMap(s) {
+    if (!s || s.indexOf("_") < 0) return { text: s, map: null };
+    var RE = /([A-Za-zηρΔ])_(\{([^}]+)\}|[A-Za-z0-9]+)/g, out = "", map = [], last = 0, m, i;
+    while ((m = RE.exec(s))) {
+      for (i = last; i <= m.index; i++) { map.push(i); out += s[i]; }
+      var k = m[3] || m[2];
+      var w = " " + (k === "eq" ? "equivalent" : (/^[a-z]{3,}$/.test(k) ? k : k.split("").join(" "))) + " ";
+      for (i = 0; i < w.length; i++) map.push(m.index + 1);
+      out += w;
+      last = m.index + m[0].length;
+    }
+    for (i = last; i < s.length; i++) { map.push(i); out += s[i]; }
+    return { text: out, map: map };
+  }
+
   function highlightAt(ci) {
     for (var i = 0; i < words.length; i++) {
       var w = words[i];
@@ -600,7 +626,8 @@
       if (s.phase !== "run") window.StudyLab.reset();
       later(function () { window.StudyLab.openTapFor(2600); }, 700);
     } else if (kind === "combo") {
-      var tab = document.querySelector('.combo[data-combo="' + arg + '"]');
+      var key = parts.slice(1).join(":");
+      var tab = document.querySelector('.combo-tab[data-combo="' + key + '"], .combo[data-combo="' + key + '"]');
       if (tab) tab.click();
     } else if (kind === "flip") {
       document.querySelectorAll(".myth").forEach(function (m, i) {
@@ -777,6 +804,8 @@
   window.StudyNarrator = {
     start: function () { setMini(false); go(0, 0, true); },
     goTo: function (ch, st) { setMini(false); go(ch, st || 0, true); },
+    pause: function () { stopSpeech(); setPlaying(false); },
+    isPlaying: function () { return !!state.playing; },
     close: close, minimize: minimize, expand: expand, burst: burst
   };
 })();

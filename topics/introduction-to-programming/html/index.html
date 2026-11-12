@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en-NG">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Introduction to Computer Programming: The Ikogosi Smart Grid Detective — StudyPipe SS1 Computer Studies</title>
+  <meta name="description" content="A six-lesson interactive 3D computer studies unit on programming foundations: languages and translators, variables and data types, boolean logic and branching, counter and conditional loops, zero-based arrays, modular functions and scope, and WAEC dry-run trace tables." />
+  <meta name="theme-color" content="#04140f">
+  <link rel="stylesheet" href="assets/css/fonts.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/hub.css" />
+  <link rel="stylesheet" href="assets/css/narrator.css" />
+  <link rel="stylesheet" href="assets/css/math.css" />
+  <link rel="stylesheet" href="./assets/css/code.css" />
+  <link rel="stylesheet" href="assets/css/theme.css">
+</head>
+<body>
+
+  <div class="ambient" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="grid-mask"></div>
+  </div>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="#top" class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <strong>StudyPipe</strong>
+          <small>SS1 Computer Studies · Programming</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Page sections">
+        <a href="#mystery">The Mystery</a>
+        <a href="#journey">6 Lessons</a>
+        <a href="#explorer">Explorer</a>
+        <a href="#master">What You'll Master</a>
+        <a href="#method">How We Learn</a>
+      </nav>
+      <div class="nav-pill">
+        <span class="dot"></span>
+        Offline ready · en-NG Voice
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+
+    <!-- ======================== HERO ======================== -->
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow">
+          <span class="tag">SS1 Computer Studies</span>
+          <span class="sep">·</span>
+          <span>WAEC · NECO · JAMB</span>
+          <span class="sep">·</span>
+          <span>Algorithms &amp; Programming</span>
+        </div>
+
+        <h1 class="hero-title" data-hook>
+          Computer Programming: <span class="accent-serif">The Ikogosi</span>
+          <span class="accent-grad">Smart Grid Detective</span>
+        </h1>
+
+        <p class="hero-lede">
+          When an evening storm hits Ikogosi, the community solar microgrid locks down, the health clinic cooler flashes
+          <code>Error 0x7E</code>, and household smart meters deduct credits backwards. The hardware is fine—the failure is
+          pure code. Trace machine instructions from silicon voltages to high-level Python, master variables, conditionals,
+          loops, arrays, and functions, and repair the software before the power cuts out.
+        </p>
+
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary" data-tour>
+            <span>Start guided tour (en-NG)</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          </button>
+          <a href="lessons/lesson-01/index.html" class="btn btn-ghost">Begin Lesson 1 →</a>
+        </div>
+
+        <dl class="hero-meta">
+          <div><dt>Scope</dt><dd>6 lessons · ~8 h</dd></div>
+          <div><dt>Interactive</dt><dd>6 3D labs + 6 3D zooms</dd></div>
+          <div><dt>Practice</dt><dd>72 quiz questions + 6 × 30-mark papers</dd></div>
+          <div><dt>Practical</dt><dd>Flowcharts, pseudocode &amp; dry-run traces</dd></div>
+        </dl>
+      </div>
+
+      <!-- 3D Hero Lab (window.StudyLab, welcome-lab.js) -->
+      <div class="hero-stage">
+        <div class="stage-frame" id="lab">
+          <div class="stage-topbar">
+            <div class="stage-dots"><span></span><span></span><span></span></div>
+            <div class="stage-title">LIVE 3D LAB · IKOGOSI MICROCONTROLLER &amp; 8-SLOT RAM BUS</div>
+            <div class="stage-hint">Drag to turn · Tap a part</div>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="lab-canvas" aria-label="Interactive 3D microcontroller architecture: CPU package with Control Unit, ALU, Instruction Decoder, clock crystal, glowing data bus traces, and an 8-slot physical RAM array (0x00 to 0x07)"></canvas>
+            <div class="lab-nogl" id="lab-fallback" hidden>
+              <p>This phone cannot draw the 3D lab, but every reading still works. Use the buttons below.</p>
+            </div>
+            <div class="endpoint-toast" id="endpoint-toast" role="status" aria-live="polite"></div>
+            <div class="stage-legend" id="lab-legend">
+              <span><i class="sw sw-bus"></i>Bus data packet</span>
+              <span><i class="sw sw-alu"></i>Active ALU / RAM slot</span>
+            </div>
+          </div>
+
+          <div class="hud">
+            <div class="lab-modes" role="tablist" aria-label="Lab mode">
+              <button type="button" class="btn-chip" role="tab" data-mode="high-level" aria-selected="true">High-level</button>
+              <button type="button" class="btn-chip" role="tab" data-mode="assembly-machine" aria-selected="false">Assembly &amp; binary</button>
+              <button type="button" class="btn-chip" role="tab" data-mode="memory-slots" aria-selected="false">Memory slots</button>
+            </div>
+
+            <div class="hud-readouts" id="lab-readouts">
+              <div class="hud-cell"><span class="hud-k" id="hud-k1">PC / Stmt</span><span class="hud-v" id="hud-v1">energy = units * 68.0</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k2">Accumulator</span><span class="hud-v" id="hud-v2">8160.0 (float)</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k3">Memory Bus</span><span class="hud-v" id="hud-v3">0x01 → 0x02</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k4">Clock / State</span><span class="hud-v" id="hud-v4">4 cycles · OK</span></div>
+            </div>
+
+            <div class="lab-ctrl" id="ctrl-high-level" data-for="high-level">
+              <div class="lab-presets" role="group" aria-label="High-level statement">
+                <button type="button" class="btn-chip" data-stmt="0" aria-pressed="true">energy = units * 68.0</button>
+                <button type="button" class="btn-chip" data-stmt="1" aria-pressed="false">total = "150" + 20</button>
+                <button type="button" class="btn-chip" data-stmt="2" aria-pressed="false">total = int("150") + 20</button>
+              </div>
+              <button type="button" class="btn-chip lab-act" id="lab-parse">Parse &amp; execute</button>
+            </div>
+
+            <div class="lab-ctrl" id="ctrl-assembly-machine" data-for="assembly-machine" hidden>
+              <label class="lab-slide"><span>Cycle</span>
+                <input type="range" id="lab-cycle" min="0" max="3" step="1" value="0" aria-label="Instruction clock cycle 0 to 3" />
+                <output id="lab-cycle-out">Cycle 1/4</output>
+              </label>
+              <button type="button" class="btn-chip lab-act" id="lab-step">Step cycle ▶</button>
+            </div>
+
+            <div class="lab-ctrl" id="ctrl-memory-slots" data-for="memory-slots" hidden>
+              <label class="lab-slide"><span>RAM slot</span>
+                <input type="range" id="lab-slot" min="0" max="7" step="1" value="0" aria-label="RAM slot index 0 to 7" />
+                <output id="lab-slot-out">0x00 [0]</output>
+              </label>
+              <button type="button" class="btn-chip lab-act" id="lab-alloc">Inspect slot</button>
+            </div>
+
+            <p class="lab-info" id="lab-info" aria-live="polite">
+              Pick a statement and tap <b>Parse &amp; execute</b>: compare valid math against the <code>"150" + 20</code> string trap.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee: 12 key terms -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Program</span><span>·</span>
+        <span>Machine Code</span><span>·</span>
+        <span>High-Level Language</span><span>·</span>
+        <span>Compiler vs Interpreter</span><span>·</span>
+        <span>Variable &amp; Constant</span><span>·</span>
+        <span>Data Types</span><span>·</span>
+        <span>Boolean Logic</span><span>·</span>
+        <span>Conditional Branching (IF)</span><span>·</span>
+        <span>Iteration (FOR/WHILE)</span><span>·</span>
+        <span>Array Indexing (0..N−1)</span><span>·</span>
+        <span>Function &amp; Scope</span><span>·</span>
+        <span>Dry-Run Trace Table</span><span>·</span>
+        <span>Program</span><span>·</span>
+        <span>Machine Code</span><span>·</span>
+        <span>High-Level Language</span><span>·</span>
+        <span>Compiler vs Interpreter</span><span>·</span>
+        <span>Variable &amp; Constant</span><span>·</span>
+        <span>Data Types</span><span>·</span>
+        <span>Boolean Logic</span><span>·</span>
+        <span>Conditional Branching (IF)</span><span>·</span>
+        <span>Iteration (FOR/WHILE)</span><span>·</span>
+        <span>Array Indexing (0..N−1)</span><span>·</span>
+        <span>Function &amp; Scope</span><span>·</span>
+        <span>Dry-Run Trace Table</span><span>·</span>
+      </div>
+    </div>
+
+    <!-- ======================== 01 · THE MYSTERY ======================== -->
+    <section id="mystery" class="section container">
+      <div class="section-head">
+        <span class="sec-num">01 / The Phenomenon</span>
+        <h2 class="section-title" data-hook>A community solar microgrid with sound hardware—brought down by four bugs.</h2>
+        <p class="section-sub">
+          Every lesson in this unit fixes one software failure in the Ikogosi microgrid controller, from data type crashes
+          to the final hexadecimal reboot.
+        </p>
+      </div>
+
+      <div class="mystery-card reveal">
+        <div class="mystery-narrative">
+          <span class="pill pill-amber">The Unit Mystery · Ikogosi, Ekiti State</span>
+          <h3>The Ikogosi Smart Solar Microgrid Shutdown</h3>
+          <p>
+            In <strong>Ikogosi, Ekiti State</strong>, an automated community solar microgrid distributes power to the cottage
+            hospital, the cold-chain vaccine store, and 250 households. At 18:00 during an evening rainstorm, the backup
+            diesel generator fails to start despite batteries dropping below 15%, the vaccine refrigerator locks in an error
+            loop (<code>Error 0x7E: Array Index Out of Range</code>), and the billing terminal charges ₦15,020 instead of
+            ₦170 for a 20-unit top-up.
+          </p>
+          <p>
+            <strong>Chief Babatunde</strong> fears the expensive inverter bank is fried and wants to dismantle it.
+            <strong>Amina</strong> and <strong>Tari</strong> hook up their maintenance laptop to <strong>Engr. Idris</strong>’s
+            diagnostic port and discover the hardware is undamaged—every fault lies inside the control software.
+          </p>
+          <p class="mystery-question">
+            How do high-level code instructions become machine voltage pulses, and how can systematic debugging save the microgrid?
+          </p>
+          <ul class="clues">
+            <li><b>Clue 1 · Data Types</b>Sensor reading <code>"150"</code> was stored as text, so <code>"150" + 20</code> joined into <code>"15020"</code> instead of <code>170</code>.</li>
+            <li><b>Clue 2 · Boolean Logic</b>The generator relay checked <code>battery &lt; 20 and grid_online</code> instead of <code>battery &lt; 20 and not grid_online</code>.</li>
+            <li><b>Clue 3 · Runaway Loop</b>A <code>while</code> loop monitoring solar irradiance omitted the counter increment, freezing microcontroller memory.</li>
+            <li><b>Clue 4 · Array Bounds</b>The battery scanner looped from index <code>0</code> to <code>8</code> on an 8-cell rack whose valid indices are <code>0..7</code>.</li>
+          </ul>
+          <p class="realism">
+            <b>Realism note:</b> modern solar microgrids, hybrid inverters, and telecom base stations across Nigeria run
+            embedded microcontrollers programmed in C/C++ or MicroPython using these exact sequential, conditional, loop,
+            array, and modular function structures.
+          </p>
+        </div>
+
+        <aside class="case-card">
+          <div class="case-head">
+            <span>CASE FILE #IKOGOSI-0x7E</span>
+            <span class="case-status">OPEN</span>
+          </div>
+          <dl class="case-grid">
+            <div><dt>Setting</dt><dd>Ikogosi Microgrid Control Station &amp; School Computer Lab, Ekiti State</dd></div>
+            <div><dt>Evidence</dt><dd><code>"15020"</code> billing bug · Silent backup generator · Frozen CPU fan · <code>IndexError</code> on cell 8</dd></div>
+            <div><dt>Suspect claim</dt><dd>“The lightning storm fried the central processor—disconnect the inverters!” (Chief Babatunde)</dd></div>
+            <div><dt>Your mission</dt><dd>Fix the data types, invert the boolean gate, bound the loop, align 0-based array indices, modularise billing, and decode <code>0x7E</code></dd></div>
+          </dl>
+          <div class="case-foot">Opened in <strong>Lesson 1</strong> · Gate fixed in <strong>Lesson 2</strong> · Loop &amp; Array cured in <strong>Lessons 3–4</strong> · Rebooted in <strong>Lesson 6</strong></div>
+        </aside>
+      </div>
+
+      <div class="stats reveal">
+        <div class="stat">
+          <div class="stat-num">Up to 35%</div>
+          <div class="stat-label">
+            <strong>WAEC &amp; NECO Papers 1 and 2</strong>
+            <span>Programming languages, translators, flowcharts, and algorithms carry major weight</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">Paper 3</div>
+          <div class="stat-label">
+            <strong>Flowcharts, pseudocode &amp; dry runs</strong>
+            <span>Tracing variable states step-by-step and spotting bugs recur every year</span>
+          </div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">JAMB</div>
+          <div class="stat-label">
+            <strong>10–12 questions annually</strong>
+            <span>Data types, operator precedence, loop outputs, 0-based array indexing, and hex/binary</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 02 · THE 6-LESSON JOURNEY ======================== -->
+    <section id="journey" class="section container">
+      <div class="section-head">
+        <span class="sec-num">02 / Your Learning Journey</span>
+        <h2 class="section-title" data-hook>Six lessons, one microgrid, from binary voltages to clean modular code.</h2>
+        <p class="section-sub">
+          Each lesson takes about 80 minutes with a movement break, opens with a <em>Do Now</em> warm-up, and walks you
+          through a 3D story, an interactive 3D bench, a 3D concept zoom, worked code traces, and a WAEC-style quiz.
+        </p>
+      </div>
+
+      <div class="lessons">
+        <article class="lesson reveal is-live" data-lesson="1">
+          <div class="lesson-num">01</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-01/index.html">From Logic to Code — Programming Languages, Translators &amp; Memory Variables</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Compare machine, assembly, and high-level languages, see how compilers and interpreters work, allocate typed
+              variables in RAM, and cure Amina’s <code>"150" + 20</code> sensor crash.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now: Binary &amp; RAM</span>
+              <span>3D Memory Allocation Bench</span>
+              <span>3D Translation Pipeline Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="2">
+          <div class="lesson-num">02</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-02/index.html">Making Decisions — Conditional Logic, Boolean Operators &amp; Branching</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Build boolean truth tables for <code>AND</code>, <code>OR</code>, and <code>NOT</code>, trace
+              <code>IF-ELIF-ELSE</code> flowcharts, and rewire the backup generator trigger so clinic power never drops.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1</span>
+              <span>3D Logic Gate Switchboard</span>
+              <span>3D Decision Tree Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="3">
+          <div class="lesson-num">03</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-03/index.html">The Power of Repetition — Counter &amp; Conditional Loops</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Step through counted <code>FOR</code> loops and conditional <code>WHILE</code> loops, build a running
+              accumulator sum, and stop the runaway loop freezing the Ikogosi controller.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L2</span>
+              <span>3D Mechanical Loop Stepper</span>
+              <span>3D Loop Jump Tracer Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="4">
+          <div class="lesson-num">04</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-04/index.html">Organising Data — Arrays, Collections &amp; Indexing</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Store multi-sensor readings in contiguous memory lockers, master zero-based index math
+              (<code>0..N−1</code>), and eliminate the <code>IndexError</code> crashing Dr. Folake’s vaccine cooler.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L3</span>
+              <span>3D Array Locker Rack</span>
+              <span>3D Memory Offset Inspector</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="5">
+          <div class="lesson-num">05</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-05/index.html">Modular Architecture — Functions, Scope &amp; Reusability</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Package repetitive billing formulas into reusable functions with parameters and <code>return</code> values,
+              and see why local stack variables cannot leak into global memory.
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L4</span>
+              <span>3D Function Factory Machine</span>
+              <span>3D Scope Boundary Zoom</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="lesson reveal is-live" data-lesson="6">
+          <div class="lesson-num">06</div>
+          <div class="lesson-body">
+            <div class="lesson-top">
+              <h3><a href="lessons/lesson-06/index.html">Silicon Roots &amp; Exam Clinic — Binary, Hexadecimal, Dry-Run Traces &amp; System Recovery</a></h3>
+              <span class="lesson-time">80 min · Live</span>
+            </div>
+            <p>
+              Decode hexadecimal status byte <code>0x7E</code> into binary register flags, complete full WAEC multi-column
+              dry-run trace tables, and execute the master reboot to restore light to Ikogosi!
+            </p>
+            <div class="lesson-tags">
+              <span>Do Now from L1–L5</span>
+              <span>3D System Recovery Console</span>
+              <span>3D Silicon Architecture Bridge</span>
+              <span>Start lesson →</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="thread-note reveal">
+        <span class="thread-icon" aria-hidden="true">↻</span>
+        <p>
+          <strong>Built-in spaced retrieval:</strong> every lesson’s <em>Do Now</em> pulls key ideas from earlier lessons,
+          so the mystery and the computer science build together until the microgrid reboots in Lesson 6.
+        </p>
+      </div>
+    </section>
+
+    <!-- ======================== 03 · EXPLORER ======================== -->
+    <section id="explorer" class="section container">
+      <div class="section-head">
+        <span class="sec-num">03 / Interactive Sneak Preview</span>
+        <h2 class="section-title" data-hook>Four visual models that explain the whole unit.</h2>
+        <p class="section-sub">
+          Tap a tab, then slide along the model to inspect how code translates, allocates memory, branches, and indexes arrays.
+        </p>
+      </div>
+
+      <div class="explorer reveal">
+        <div class="combo-tabs" role="tablist" aria-label="Programming concept visualizers" id="combo-tabs">
+          <button type="button" class="combo-tab is-active" role="tab" aria-selected="true" data-combo="hierarchy">Language Ladder</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="variables">Variable Memory</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="control">Control Flow</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="arrays">Array 0..N−1</button>
+        </div>
+
+        <div class="combo-body">
+          <div class="combo-chart">
+            <svg id="combo-svg" viewBox="0 0 440 260" role="img" aria-labelledby="combo-title">
+              <g id="combo-grid"></g>
+              <rect id="combo-zone" x="0" y="0" width="0" height="0"></rect>
+              <g id="combo-extra"></g>
+              <path id="combo-curve2" d="M 0 0"></path>
+              <path id="combo-curve" d="M 0 0"></path>
+              <g id="combo-points"></g>
+              <line id="combo-dropx" class="cx-drop" x1="0" y1="0" x2="0" y2="0"></line>
+              <line id="combo-dropy" class="cx-drop" x1="0" y1="0" x2="0" y2="0"></line>
+              <circle id="combo-marker2" cx="0" cy="0" r="6"></circle>
+              <circle id="combo-marker" cx="0" cy="0" r="7"></circle>
+            </svg>
+            <label class="combo-slide">
+              <span id="combo-slide-label">Slide: step through the model</span>
+              <input type="range" id="combo-slider" min="0" max="1000" value="250" aria-describedby="combo-read" />
+            </label>
+            <div class="combo-read" id="combo-read" aria-live="polite"></div>
+          </div>
+
+          <div class="combo-info">
+            <h3 id="combo-title">Language Abstraction Ladder</h3>
+            <p class="combo-example" id="combo-example">Lesson 1: High-Level Python → Assembly Mnemonics → 8-bit Binary Machine Code</p>
+            <dl class="combo-dl">
+              <div><dt>Core rule</dt><dd id="combo-jump">Hardware only executes binary (0 and 1); translators bridge the gap</dd></div>
+              <div><dt>How it works</dt><dd id="combo-eq">Compiler: whole program at once. Interpreter: line by line at runtime</dd></div>
+              <div><dt>Exam point</dt><dd><span class="combo-pill ind-both" id="combo-ind">Machine code needs no translator; assembly uses an assembler</span></dd></div>
+            </dl>
+            <p class="combo-why" id="combo-why">
+              Humans think in formulas like energy = units * 68.0, whereas the CPU ALU only switches transistors on (1) and off (0). A compiler or interpreter parses high-level tokens and emits exact machine instructions.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 04 · WHAT YOU'LL MASTER ======================== -->
+    <section id="master" class="section container">
+      <div class="section-head">
+        <span class="sec-num">04 / Learning Outcomes</span>
+        <h2 class="section-title" data-hook>What you will master by the end of Lesson 6.</h2>
+        <p class="section-sub">
+          Every skill is practised on a 3D bench, traced line by line, and tested with WAEC, NECO, and JAMB-style questions.
+        </p>
+      </div>
+
+      <div class="outcomes reveal">
+        <div class="outcome">
+          <span class="outcome-idx">01</span>
+          <h3>Classify languages</h3>
+          <p>Define program and algorithm, and distinguish machine code, assembly language, and high-level languages.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">02</span>
+          <h3>Compare translators</h3>
+          <p>Contrast assemblers, compilers (whole-program object code), and interpreters (line-by-line runtime execution).</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">03</span>
+          <h3>Type &amp; cast variables</h3>
+          <p>Declare valid identifiers across <code>int</code>, <code>float</code>, <code>str</code>, and <code>bool</code>, and evaluate expressions with operator precedence.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">04</span>
+          <h3>Branch with logic</h3>
+          <p>Build truth tables for <code>AND</code>, <code>OR</code>, and <code>NOT</code>, and trace <code>IF-ELIF-ELSE</code> decision diamonds.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">05</span>
+          <h3>Control iteration</h3>
+          <p>Write counted <code>FOR</code> loops and conditional <code>WHILE</code> loops with accumulators and guaranteed termination.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">06</span>
+          <h3>Index 0-based arrays</h3>
+          <p>Create and traverse 1D arrays using <code>0..N−1</code> offsets without triggering <code>IndexOutOfBounds</code> errors.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">07</span>
+          <h3>Design modular functions</h3>
+          <p>Pass parameters, return calculated outputs, and separate local stack variables from global scope.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">08</span>
+          <h3>Ace dry-run traces</h3>
+          <p>Convert binary and hexadecimal (<code>0x7E</code>) and construct multi-column WAEC dry-run trace tables.</p>
+        </div>
+      </div>
+
+      <div class="subblock reveal" id="archetypes">
+        <div class="subblock-head">
+          <h3>The 6 calculation archetypes</h3>
+          <p>Almost every numerical and trace question in WAEC, NECO, and JAMB programming falls into one of these six patterns. Each step has a plain-English note underneath.</p>
+        </div>
+
+        <div class="archetypes">
+          <div class="arch">
+            <span class="arch-tag">Type 1 · Lesson 1</span>
+            <h4>Operator precedence, floor division &amp; modulus</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="R = 12 + 8 \times 2 - \frac{6}{2} = 12 + 16 - 3 = 25">R = 12 + 8 × 2 − 6 ÷ 2 = 12 + 16 − 3 = 25</span><span class="note">Multiplication and division execute before addition and subtraction.</span></li>
+              <li><span class="tex" data-tex="19 \mathbin{//} 4 = 4,\quad 19 \bmod 4 = 3">19 // 4 = 4,  19 % 4 = 3</span><span class="note">Integer floor division // drops the decimal; modulus % keeps the remainder (19 = 4 × 4 + 3).</span></li>
+            </ol>
+          </div>
+
+          <div class="arch">
+            <span class="arch-tag">Type 2 · Lesson 1</span>
+            <h4>Data type casting &amp; VAT billing</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\text{total} = \text{int}(\text{``150''}) + 20 = 150 + 20 = 170\text{ kWh}">total = int("150") + 20 = 150 + 20 = 170 kWh</span><span class="note">Casting "150" with int() converts text digits into a whole number before adding.</span></li>
+              <li><span class="tex" data-tex="\text{bill} = 85 \times 68 \times 1.075 = 5780 \times 1.075 = \text{N}6213.50">bill = 85 × 68 × 1.075 = 5780 × 1.075 = ₦6213.50</span><span class="note">85 units at ₦68 per kWh gives ₦5,780; multiplying by 1.075 adds the 7.5% VAT.</span></li>
+            </ol>
+          </div>
+
+          <div class="arch">
+            <span class="arch-tag">Type 3 · Lesson 2</span>
+            <h4>Compound boolean truth evaluation</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="P = (18 < 20) = \text{True},\quad Q = \neg(\text{False}) = \text{True}">P = (18 &lt; 20) = True,  Q = NOT(False) = True</span><span class="note">Battery is 18% (&lt; 20 is True) and grid_online is False, so NOT grid_online is True.</span></li>
+              <li><span class="tex" data-tex="\text{start\_gen} = P \land Q = \text{True} \land \text{True} = \text{True}">start_gen = P AND Q = True AND True = True</span><span class="note">An AND gate outputs True only when both input conditions are True simultaneously.</span></li>
+            </ol>
+          </div>
+
+          <div class="arch">
+            <span class="arch-tag">Type 4 · Lesson 3</span>
+            <h4>Loop counter &amp; accumulator sum</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\text{range}(1, 6) \rightarrow i \in \{1, 2, 3, 4, 5\}">range(1, 6) → i in {1, 2, 3, 4, 5}</span><span class="note">In Python, range(start, stop) includes start (1) and stops strictly before stop (6).</span></li>
+              <li><span class="tex" data-tex="\text{sum} = \sum_{i=1}^{5} i = 1 + 2 + 3 + 4 + 5 = 15">sum = 1 + 2 + 3 + 4 + 5 = 15</span><span class="note">The accumulator starts at 0 and adds each counter value i on every pass.</span></li>
+            </ol>
+          </div>
+
+          <div class="arch">
+            <span class="arch-tag">Type 5 · Lesson 4</span>
+            <h4>Zero-based array index &amp; memory offset</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="i_{\max} = N - 1 = 8 - 1 = 7">i_max = N − 1 = 8 − 1 = 7</span><span class="note">An 8-element array spans indices 0 to 7; index 8 is out of bounds.</span></li>
+              <li><span class="tex" data-tex="\text{Addr}(i) = \text{Base} + i \times S = 1000 + 3 \times 4 = 1012">Addr(i) = Base + i × S = 1000 + 3 × 4 = 1012</span><span class="note">With 4-byte elements starting at address 1000, index 3 lives at byte 1012.</span></li>
+            </ol>
+          </div>
+
+          <div class="arch">
+            <span class="arch-tag">Type 6 · Lessons 5 &amp; 6</span>
+            <h4>Function return, hex &amp; binary decoding</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="F = \frac{9}{5}C + 32 = 1.8(37.0) + 32 = 98.6^\circ\text{F}">F = (9/5)C + 32 = 1.8(37.0) + 32 = 98.6 °F</span><span class="note">The function computes F in local scope and returns 98.6 to the caller.</span></li>
+              <li><span class="tex" data-tex="\text{0x7E} = (7 \times 16) + 14 = 126_{10} = 01111110_2">0x7E = (7 × 16) + 14 = 126₁₀ = 01111110₂</span><span class="note">Hex 7 is 0111₂ and hex E (14) is 1110₂, forming the 8-bit register byte 01111110₂.</span></li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="formula-strip">
+          <div class="formula-pill"><code>a // b, a % b</code><span>Floor &amp; modulus</span></div>
+          <div class="formula-pill"><code>i_max = N − 1</code><span>0-based bounds</span></div>
+          <div class="formula-pill"><code>Addr = Base + i×S</code><span>Memory offset</span></div>
+          <div class="formula-pill"><code>0x7E = 01111110₂</code><span>Hex to binary</span></div>
+        </div>
+      </div>
+
+      <div class="subblock reveal" id="myths">
+        <div class="subblock-head">
+          <h3>Three myths we will bust</h3>
+          <p>Tap each card to flip it and see the computer science reality:</p>
+        </div>
+
+        <div class="myths">
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 01</span>
+                <h4>“Computers understand English commands directly if you type them clearly.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>Hardware only executes <strong>binary machine code (0 and 1 voltage states)</strong>. Every high-level statement must be translated by a <strong>compiler</strong> or <strong>interpreter</strong>.</p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 02</span>
+                <h4>“An array of size 8 has its last element at index 8.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>In <strong>zero-based indexing</strong>, an 8-element array spans indices <strong>0 to 7</strong>. Accessing index 8 triggers an <code>IndexError: list index out of range</code> crash.</p>
+              </div>
+            </div>
+          </button>
+
+          <button type="button" class="myth-card" aria-expanded="false">
+            <div class="myth-inner">
+              <div class="myth-face myth-front">
+                <span class="myth-badge">MYTH 03</span>
+                <h4>“A variable created inside a function can be read anywhere in the program.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
+              </div>
+              <div class="myth-face myth-back">
+                <span class="myth-badge myth-badge-true">TRUTH</span>
+                <p>Variables created inside a function have <strong>local scope</strong>. They exist only while that function runs and are destroyed when it returns.</p>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================== 05 · HOW WE LEARN ======================== -->
+    <section id="method" class="section container">
+      <div class="section-head">
+        <span class="sec-num">05 / How Every Lesson Works</span>
+        <h2 class="section-title" data-hook>Inspect the bug, test it on the bench, then formalise the rule.</h2>
+        <p class="section-sub">
+          After a short Do Now warm-up, every lesson follows the same five-step inquiry loop, with a movement break
+          at 45 minutes, so you experience how code runs before you memorise definitions.
+        </p>
+      </div>
+
+      <ol class="loop reveal">
+        <li>
+          <span class="loop-step">1 · Wonder</span>
+          <h4>Watch the 3D story and pin your prediction</h4>
+          <p>Amina, Tari, Chief Babatunde, Dr. Folake, and Engr. Idris face a live bug at the Ikogosi station. Post your hypothesis on the Wonder Wall.</p>
+        </li>
+        <li>
+          <span class="loop-step">2 · Investigate</span>
+          <h4>Work the 3D programming bench</h4>
+          <p>Allocate RAM slots, wire boolean logic gates, step a mechanical loop gear, dial an array rack, or run the WAEC trace console.</p>
+        </li>
+        <li>
+          <span class="loop-step">3 · Make sense</span>
+          <h4>Zoom in and build the rules</h4>
+          <p>See the translation pipeline, decision trees, backward loop jumps, byte offsets, and stack frames up close.</p>
+        </li>
+        <li>
+          <span class="loop-step">4 · Apply</span>
+          <h4>Worked examples, the Bridge and a quiz</h4>
+          <p>Step-by-step code traces and calculations, a microgrid patching challenge, and 12 exam-style questions every lesson.</p>
+        </li>
+        <li>
+          <span class="loop-step">5 · Reflect</span>
+          <h4>Rate yourself and unlock solutions</h4>
+          <p>Rate each objective 1–4, complete the blank-page recall, then attempt the 30-mark paper before unlocking model answers.</p>
+        </li>
+      </ol>
+
+      <div class="kit reveal" id="kit">
+        <h3>What’s inside every lesson</h3>
+        <div class="kit-grid">
+          <div><strong>↻ Spaced Do Now</strong><span>4 warm-up flashcards retrieving earlier lessons</span></div>
+          <div><strong>3D Story Scene</strong><span>Ikogosi Microgrid Control Station &amp; Computer Lab with 5 characters</span></div>
+          <div><strong>3D Practical Bench</strong><span>Live RAM, logic gates, loop steppers, array lockers &amp; trace consoles</span></div>
+          <div><strong>3D Concept Zoom</strong><span>Compilers, flowcharts, loop pointers, byte offsets &amp; stack frames</span></div>
+          <div><strong>Code &amp; Math Traces</strong><span>Offline syntax-highlighted code with line-by-line execution notes</span></div>
+          <div><strong>Nigerian Narrator</strong><span>A spoken, spotlighted tour in Nigerian English (en-NG)</span></div>
+        </div>
+      </div>
+
+      <div class="finale reveal">
+        <div class="finale-copy">
+          <span class="pill pill-teal">Ready when you are</span>
+          <h2>Let’s bring the Ikogosi Microgrid back online.</h2>
+          <p>Start with Lesson 1: inspect how code becomes binary voltage pulses and fix the <code>"150" + 20</code> sensor crash.</p>
+        </div>
+        <div class="finale-actions">
+          <a href="lessons/lesson-01/index.html" class="btn btn-primary btn-lg">Start Lesson 1: From Logic to Code →</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer container">
+    <p>StudyPipe · SS1 Computer Studies · Introduction to Computer Programming · 100% Offline Edition</p>
+  </footer>
+
+  <script src="assets/js/three.min.js"></script>
+  <script src="assets/js/paper-core.min.js"></script>
+  <script src="assets/js/scene-kit.js"></script>
+  <script src="assets/js/welcome-lab.js"></script>
+  <script src="assets/js/welcome-explorer.js"></script>
+  <script src="assets/js/welcome.js"></script>
+  <script src="assets/js/welcome-narration.js"></script>
+  <script src="assets/js/narrator.js"></script>
+  <script src="assets/js/math-kit.js"></script>
+  <script src="./assets/js/code-kit.js"></script>
+</body>
+</html>

@@ -54,6 +54,7 @@ topic is created (`bash scripts/new-topic.sh <slug> <theme-id>`) or on its `queu
 | Feedback | `--ok`, `--ok-deep`, `--ok-tint`, `--ok-tint-2`, `--bad-tint`, `--bad-tint-2`, `--warn`, `--info`, `--wall-notes` | `--ok` stays green-ish and `--crimson` red-ish: students read them as right/wrong. |
 | RGB triplets | `--ink-950-rgb`, `--ink-900-rgb`, `--paper-rgb`, `--paper-ink-rgb`, `--crimson-rgb`, `--amber-rgb`, `--pink-rgb`, `--teal-rgb`, `--sky-rgb`, `--violet-rgb`, `--ok-rgb`, `--warn-rgb`, `--info-rgb` | `"r, g, b"` of the matching hex; used for translucent glows/tints. Checked automatically. |
 | Shape | `--corner` (multiplies every small radius: 0.4 crisp … 1.5 bubbly), `--radius-sm`, `--radius`, `--radius-lg`, `--shadow-lg`, `--ease` | |
+| Explainer videos | `--video-world` (`unit` = painted from these tokens, or `safari`, `vegetation`, `fiesta`, `classic`), `--video-motion` (`pop` bouncy, `wipe` calm), `--video-mascot` (`on`/`off`) | Read at runtime by every video in the unit, so a theme switch restyles videos without a rebuild. The videos also use this theme's fonts. |
 
 Contrast floors enforced by `check-theme.mjs`: `--fg` on ink ≥ 7, body text on paper cards ≥ 4.5,
 `--on-amber` on amber ≥ 4.5, white on `--ok`/`--crimson`/`--info` ≥ 3, and more (see the script).

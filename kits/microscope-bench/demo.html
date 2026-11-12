@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en-NG"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: microscope-bench</title>
+<style>
+  :root { --bg:#0e1620; --card:#16202d; --ink:#e8eef6; --mute:#9fb0c4; --acc:#ffd166; --line:#2a3a4e; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 8px 10px 20px; }
+  h1 { font-size: 15px; margin: 6px 0; }
+  .stage { position: relative; width: 100%; height: 380px; background: radial-gradient(120% 90% at 50% 20%, #223249, #0e1620); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; touch-action: pan-y; }
+  .stage canvas { width: 100%; height: 100%; display: block; }
+  .stage-zoom { position: absolute; right: 8px; bottom: 8px; display: flex; gap: 4px; }
+  .stage-zoom button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line); background: #1d2a3b; color: var(--ink); font-size: 18px; }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; align-items: center; }
+  .row b { font-size: 11px; color: var(--mute); text-transform: none; min-width: 58px; }
+  button.b { min-height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--card); color: var(--ink); font: inherit; }
+  button.b[aria-pressed="true"] { background: var(--acc); color: #1b1d22; border-color: var(--acc); font-weight: 700; }
+  .bench-readout { display: grid; grid-template-columns: 150px 1fr; gap: 10px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px; align-items: center; }
+  #eyeview { width: 150px; height: 150px; border-radius: 50%; background: #000; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  td { padding: 2px 4px; border-bottom: 1px solid var(--line); }
+  td:first-child { color: var(--mute); }
+  td:last-child { font-family: ui-monospace, Menlo, Consolas, monospace; text-align: right; }
+  .toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); background: #7a1f2b; color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 13px; opacity: 0; transition: opacity .25s; pointer-events: none; max-width: 90vw; }
+  .toast.show { opacity: 1; }
+  @media (max-width: 420px) { .bench-readout { grid-template-columns: 1fr; justify-items: center; } }
+</style></head><body>
+<div class="wrap">
+  <h1>microscope-bench demo &middot; tap a part on the 3D scope</h1>
+  <div class="stage" id="stage"><canvas id="cv"></canvas></div>
+  <div class="row"><b>Objective</b>
+    <button class="b" data-obj="0" aria-pressed="true">&times;4</button><button class="b" data-obj="1" aria-pressed="false">&times;10</button><button class="b" data-obj="2" aria-pressed="false">&times;40</button></div>
+  <div class="row"><b>Slide</b>
+    <button class="b" data-slide="cork" aria-pressed="false">Cork</button><button class="b" data-slide="onion" aria-pressed="true">Onion</button><button class="b" data-slide="blood" aria-pressed="false">Blood</button></div>
+  <div class="row"><b>Light</b>
+    <button class="b" data-mirror="plane" aria-pressed="true">Plane</button><button class="b" data-mirror="concave" aria-pressed="false">Concave</button>
+    <button class="b" id="irisM">Iris &minus;</button><button class="b" id="irisP">Iris +</button></div>
+  <div class="row"><b>Focus</b>
+    <button class="b" id="cUp">Coarse +</button><button class="b" id="cDn">Coarse &minus;</button>
+    <button class="b" id="fUp">Fine +</button><button class="b" id="fDn">Fine &minus;</button><button class="b" id="auto">Auto-focus</button></div>
+  <div class="row"><b>Other</b>
+    <button class="b" id="measure">Measure</button><button class="b" id="ep">Eyepiece &times;15</button><button class="b" id="lab" aria-pressed="false">Labels</button><button class="b" id="blur">Blur it</button></div>
+  <div class="bench-readout" id="bench-readout">
+    <canvas id="eyeview" width="300" height="300"></canvas>
+    <table id="tbl"></table>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="microscope-bench.js"></script>
+<script>
+(function () {
+  var toast = document.getElementById("toast"), tt = null;
+  function say(t) { toast.textContent = t; toast.classList.add("show"); clearTimeout(tt); tt = setTimeout(function () { toast.classList.remove("show"); }, 2200); }
+  var stage = SceneKit.createStage({ root: document.getElementById("stage"), canvas: document.getElementById("cv"), fov: 34, distance: 9, yaw: 0.45, pitch: 0.12, adaptiveHeight: false });
+  if (!stage) { document.body.insertAdjacentHTML("beforeend", "<p>WebGL unavailable</p>"); return; }
+  var scope = MicroscopeBench.create({ objective: 0, slide: "onion", mirror: "plane", labels: false });
+  stage.rig.add(scope); scope.setCamera(stage.camera);
+  window.scope = scope; window.stage = stage;
+  stage.onFrame = null;
+  var eye = document.getElementById("eyeview").getContext("2d");
+  var last = performance.now();
+  (function loop() {
+    var now = performance.now(), dt = Math.min(0.05, (now - last) / 1000); last = now;
+    scope.update(dt, now / 1000);
+    eye.clearRect(0, 0, 300, 300); eye.drawImage(scope.viewCanvas, 0, 0, 300, 300);
+    requestAnimationFrame(loop);
+  })();
+  stage.start();
+  function pressed(sel, attr, val) { document.querySelectorAll(sel).forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute(attr) === String(val))); }); }
+  function show() {
+    var r = scope.reading(), rows = [
+      ["Total magnification", "×" + r.M], ["Field diameter", (r.field_mm < 1 ? r.field_mm.toFixed(2) : r.field_mm.toFixed(1)) + " mm"],
+      ["Cells across", r.cells], ["Cell width", r.width_mm + " mm = " + r.width_um + " µm"], ["Image", r.focused ? "sharp" : "blurred (" + r.blur + " px)"],
+      ["Brightness", r.brightness], ["Slide", r.slideName]];
+    document.getElementById("tbl").innerHTML = rows.map(function (x) { return "<tr><td>" + x[0] + "</td><td>" + x[1] + "</td></tr>"; }).join("");
+  }
+  ["objective", "slide", "mirror", "iris", "focus", "measure"].forEach(function (n) { scope.on(n, show); });
+  scope.on("coarse-locked", function (d) { say(d.message); });
+  scope.on("measure", function (r) { console.log("event measure", JSON.stringify(r)); });
+  document.querySelectorAll("[data-obj]").forEach(function (b) { b.onclick = function () { scope.setObjective(+b.dataset.obj); pressed("[data-obj]", "data-obj", b.dataset.obj); }; });
+  document.querySelectorAll("[data-slide]").forEach(function (b) { b.onclick = function () { scope.setSlide(b.dataset.slide); pressed("[data-slide]", "data-slide", b.dataset.slide); }; });
+  document.querySelectorAll("[data-mirror]").forEach(function (b) { b.onclick = function () { scope.setMirror(b.dataset.mirror); pressed("[data-mirror]", "data-mirror", b.dataset.mirror); }; });
+  document.getElementById("irisM").onclick = function () { scope.setIris(scope.state.iris - 0.2); };
+  document.getElementById("irisP").onclick = function () { scope.setIris(scope.state.iris + 0.2); };
+  document.getElementById("cUp").onclick = function () { scope.coarse(1); };
+  document.getElementById("cDn").onclick = function () { scope.coarse(-1); };
+  document.getElementById("fUp").onclick = function () { scope.fine(1); };
+  document.getElementById("fDn").onclick = function () { scope.fine(-1); };
+  document.getElementById("auto").onclick = function () { scope.autoFocus(); };
+  document.getElementById("measure").onclick = function () { scope.measure(); say("Measured: " + scope.reading().cells + " cells across, " + scope.reading().width_um + " µm each"); };
+  document.getElementById("blur").onclick = function () { scope.setState({ focus: 0.3 }); };
+  var ep = document.getElementById("ep");
+  ep.onclick = function () { var n = scope.state.eyepiece === 10 ? 15 : 10; scope.setEyepiece(n); ep.innerHTML = "Eyepiece &times;" + (n === 10 ? 15 : 10); show(); };
+  var lab = document.getElementById("lab");
+  lab.onclick = function () { var on = lab.getAttribute("aria-pressed") !== "true"; lab.setAttribute("aria-pressed", String(on)); scope.setLabels(on); };
+  // tap on the 3D scope: pick the part and do its default action
+  var cv = document.getElementById("cv"), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = { x: e.clientX, y: e.clientY, t: performance.now() }; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 7 || performance.now() - down.t > 400) return;
+    var hit = stage.pick(e, scope.pickables); if (!hit) return;
+    var part = scope.partOf(hit.object); if (!part) return;
+    scope.highlight(part, true); setTimeout(function () { scope.highlight(null); }, 900);
+    scope.tap(part);
+    pressed("[data-obj]", "data-obj", scope.state.objective); pressed("[data-slide]", "data-slide", scope.state.slide); pressed("[data-mirror]", "data-mirror", scope.state.mirror);
+  });
+  show();
+})();
+</script>
+</body></html>

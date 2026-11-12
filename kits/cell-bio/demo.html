@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: cell-bio v2</title>
+<style>
+  html,body{margin:0;height:100%;background:#0e1620;color:#e6edf6;font:14px/1.3 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;height:100%}
+  #host{position:relative;flex:1;min-height:300px}
+  canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #read{padding:6px 12px;font:12px/1.3 ui-monospace,monospace;min-height:34px;background:#0a1018}
+  .bar{display:flex;flex-wrap:wrap;gap:6px;padding:6px 8px;background:#121c28}
+  button{background:#1e2f45;color:#e6edf6;border:1px solid #33506f;border-radius:8px;padding:8px 10px;font-size:13px;min-height:36px}
+  button.on{background:#2f6fb0}
+</style>
+</head><body>
+<div id="wrap">
+  <div id="host"><canvas id="c"></canvas></div>
+  <div id="read">cell-bio v2</div>
+  <div class="bar" id="views"></div>
+  <div class="bar" id="ctl"></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="cell-kit.js"></script>
+<script>
+(function () {
+  var stage = SceneKit.createStage({ root: document.getElementById("host"), canvas: document.getElementById("c"), fov: 34, target: new THREE.Vector3(0, 0.9, 0), distance: 6 });
+  if (!stage) { document.getElementById("read").textContent = "WebGL unavailable"; return; }
+  var root = new THREE.Group(); stage.rig.add(root);
+  var views = {}, ticking = [], cur = null;
+  function add(name, obj, tick) { obj.visible = false; root.add(obj); views[name] = { obj: obj, tick: tick }; }
+
+  var plant = CellKit.plantCell({ w: 2.4, h: 1.5, d: 1.3, chloroplasts: 12 });
+  plant.position.y = 0.8; plant.rotation.set(0.25, 0.45, 0); add("Plant", plant, plant);
+  var animal = CellKit.animalCell({ r: 1.0, seed: 9 });
+  animal.position.y = 0.8; animal.rotation.set(0.2, -0.3, 0); add("Animal", animal, animal);
+  var scope = CellKit.microscope({ objective: 1 });
+  scope.scale.setScalar(1.25); scope.position.y = 0; scope.rotation.y = -0.55; add("Scope", scope, scope);
+  var scopeM = CellKit.microscope({ objective: 1, mirror: true });
+  scopeM.scale.setScalar(1.1); scopeM.position.set(-0.3, 0, 0); scopeM.rotation.y = -0.6; add("Mirror", scopeM, scopeM);
+  var mito = CellKit.mitochondrion({});
+  mito.scale.setScalar(1.15); mito.position.y = 0.8; mito.rotation.set(0.15, 0.25, 0); add("Mito", mito, mito);
+
+  var bar = document.getElementById("views"), ctl = document.getElementById("ctl"), read = document.getElementById("read");
+  var ctlDefs = {
+    Plant: [["Turgid", { tonicity: 1 }], ["Flaccid", { tonicity: 0 }], ["Plasmolysed", { tonicity: -1 }]],
+    Animal: [["Isotonic", { tonicity: 0 }], ["Swell", { tonicity: 0.6 }], ["Shrink", { tonicity: -1 }]],
+    Scope: [["x4", { objective: 0 }], ["x10", { objective: 1 }], ["x40", { objective: 2 }], ["Focus", { focus: 0.1 }], ["Iris", { iris: 0.1 }]],
+    Mirror: [["x4", { objective: 0 }], ["x10", { objective: 1 }], ["x40", { objective: 2 }], ["Concave", { mirror: "concave" }], ["Plane", { mirror: "plane" }], ["Mis-aimed", { mirrorAngle_deg: 20 }], ["45 deg", { mirrorAngle_deg: 45 }]],
+    Mito: []
+  };
+  function show(name) {
+    cur = name;
+    Object.keys(views).forEach(function (k) { views[k].obj.visible = k === name; });
+    [].forEach.call(bar.children, function (b) { b.classList.toggle("on", b.textContent === name); });
+    ctl.innerHTML = "";
+    ctlDefs[name].forEach(function (d) {
+      var b = document.createElement("button"); b.textContent = d[0];
+      b.onclick = function () { views[name].obj.userData.setState(d[1]); };
+      ctl.appendChild(b);
+    });
+    stage.refit && stage.refit();
+  }
+  Object.keys(views).forEach(function (k) {
+    var b = document.createElement("button"); b.textContent = k; b.onclick = function () { show(k); }; bar.appendChild(b);
+  });
+  stage.onFrame = null;
+  var last = 0;
+  (function loop(ts) {
+    var t = ts / 1000, dt = Math.min(0.05, t - last); last = t;
+    if (cur) {
+      var u = views[cur].obj.userData;
+      u.update && u.update(dt, t);
+      if (u.reading) read.textContent = JSON.stringify(u.reading());
+      else read.textContent = "cell-bio v2 · " + cur;
+    }
+    requestAnimationFrame(loop);
+  })(0);
+  window.__demo = { show: show, views: views, stage: stage };
+  show("Plant"); stage.start();
+})();
+</script>
+</body></html>

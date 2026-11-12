@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>PlaneGeometryKit Demo (Paper.js 2D)</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #111827;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-dim: #9ca3af;
+      --primary: #6366f1;
+      --accent: #06b6d4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .wrap {
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 { font-size: 15px; font-weight: 700; color: #fff; }
+    .badge {
+      font-size: 10px;
+      font-family: monospace;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(6, 182, 212, 0.15);
+      color: var(--accent);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+    #stage {
+      width: 100%;
+      height: 340px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .hud-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      text-align: center;
+    }
+    .hud-val {
+      font-family: monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+    }
+    .hud-lbl {
+      font-size: 10px;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+    button {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    button.active {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.2);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Plane Geometry: Interactive Triangles</h1>
+      <span class="badge">Paper.js 2D Vector</span>
+    </header>
+
+    <div id="stage"></div>
+
+    <div class="hud">
+      <div class="hud-box">
+        <span id="read-angles" class="hud-val">--</span>
+        <span class="hud-lbl">Angles (A, B, C)</span>
+      </div>
+      <div class="hud-box">
+        <span id="read-sides" class="hud-val">--</span>
+        <span class="hud-lbl">Side Lengths</span>
+      </div>
+      <div class="hud-box">
+        <span id="read-area" class="hud-val">--</span>
+        <span class="hud-lbl">Computed Area</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="btn-tri" class="active" onclick="switchMode('triangle')">Triangle &amp; Angles</button>
+      <button id="btn-pyth" onclick="switchMode('pythagoras')">Pythagoras Theorem</button>
+      <button onclick="resetVertices()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Offline vendor scripts: Paper.js -->
+  <script src="../_vendor/paper-core.min.js"></script>
+  <script src="plane-geom-kit.js"></script>
+
+  <script>
+    var readAngles = document.getElementById('read-angles');
+    var readSides = document.getElementById('read-sides');
+    var readArea = document.getElementById('read-area');
+
+    function updateHud(r) {
+      readAngles.textContent = r.angleA + '°, ' + r.angleB + '°, ' + r.angleC + '°';
+      readSides.textContent = r.sideC + ', ' + r.sideA + ', ' + r.sideB;
+      readArea.textContent = r.area;
+    }
+
+    var geom = PlaneGeometryKit.create({
+      container: 'stage',
+      mode: 'triangle',
+      A: [70, 260],
+      B: [320, 260],
+      C: [195, 75],
+      onChange: updateHud
+    });
+
+    updateHud(geom.reading());
+
+    function switchMode(m) {
+      document.getElementById('btn-tri').classList.toggle('active', m === 'triangle');
+      document.getElementById('btn-pyth').classList.toggle('active', m === 'pythagoras');
+      geom.setState({ mode: m });
+    }
+
+    function resetVertices() {
+      geom.setState({
+        A: [70, 260],
+        B: [320, 260],
+        C: [195, 75]
+      });
+      updateHud(geom.reading());
+    }
+  </script>
+</body>
+</html>

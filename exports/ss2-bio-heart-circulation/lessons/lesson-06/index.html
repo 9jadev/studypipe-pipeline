@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 6 · Blood: Plasma, Cells and Clotting · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): the make-up of blood, red cells, white cells and platelets, how blood clots, and the haemocytometer red cell count.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 56C12 40 6 28 6 20a13 13 0 0 1 26-4 13 13 0 0 1 26 4c0 8-6 20-26 36z' fill='%23c8264a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .hero-art {
+      position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
+    }
+    .hero-art svg { width: 100%; height: auto; max-width: 330px; }
+    .bl-drop { fill: rgba(var(--crimson-rgb), .22); stroke: var(--crimson); stroke-width: 2.5; }
+    .bl-rbc { fill: rgba(var(--crimson-rgb), .55); stroke: var(--crimson); stroke-width: 1.5; }
+    .bl-rbc-in { fill: none; stroke: var(--fg-soft); stroke-width: 1; opacity: .55; }
+    .bl-wbc { fill: rgba(var(--violet-rgb), .5); stroke: var(--violet); stroke-width: 2; }
+    .bl-plt { fill: var(--amber); }
+    .bl-fib { fill: none; stroke: var(--fg); stroke-width: 1.4; opacity: .7; }
+    .hs-t { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+    .hs-m { fill: var(--amber); font-family: var(--font-mono); font-size: 10.5px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    .bench-mode { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .bench-mode .blab { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+    .vt-btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    .bench-readout .hot b { color: var(--amber); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td.empty { color: var(--paper-faint); }
+    #results-table tr.fresh td { background: rgba(var(--amber-rgb), .12); }
+    #results-table tr.calc td { font-weight: 600; }
+    #blood-sort .bins { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .micro-card { margin-top: 16px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; display: grid; grid-template-columns: minmax(0, 190px) 1fr; gap: 14px; align-items: center; }
+    .micro-card svg { width: 100%; height: auto; display: block; }
+    .micro-card .mc-cell { fill: rgba(var(--crimson-rgb), .5); stroke: var(--crimson); stroke-width: 2; }
+    .micro-card .mc-dim { stroke: var(--paper-ink); stroke-width: 2; }
+    .micro-card .mc-t { fill: var(--paper-ink); font-family: var(--font-mono); font-size: 11px; }
+    .micro-card p { margin: 0 0 8px; font-size: 14.5px; }
+    .micro-out { font-family: var(--font-mono); font-size: 13px; color: var(--paper-muted); min-height: 20px; }
+    .micro-out b { color: var(--crimson); }
+    .bottle { display: flex; gap: 6px; align-items: stretch; margin-top: 16px; }
+    .bottle-glass { position: relative; width: 74px; min-height: 190px; border-radius: 12px 12px 22px 22px; border: 2px solid rgba(var(--paper-ink-rgb), .35); overflow: hidden; background: var(--paper-card); display: flex; flex-direction: column; }
+    .bottle-glass i { display: block; width: 100%; flex: 0 0 auto; }
+    .bottle-glass i.pl { background: rgba(var(--amber-rgb), .55); }
+    .bottle-glass i.ce { background: var(--crimson); }
+    .bottle-glass i.on { outline: 3px solid var(--paper-ink); outline-offset: -3px; }
+    .bottle-key { display: grid; gap: 8px; align-content: center; font-family: var(--font-mono); font-size: 12.5px; color: var(--paper-muted); }
+    .bottle-key b { color: var(--paper-ink); }
+    .pos-track { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 48px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 120px; }
+    .pos-info b { color: var(--crimson); }
+    .zoom-steps { display: flex; flex-wrap: wrap; gap: 8px; }
+    .zoom-note { font-size: 14.5px; margin: 0; padding: 10px 14px; color: var(--fg-soft); min-height: 44px; }
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+    @media (max-width: 560px) {
+      #blood-sort .bins { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .micro-card { grid-template-columns: 1fr; }
+      .pos-track { gap: 4px; }
+      .pos-pin { font-size: 12px; }
+      .stage-bar .seg button { padding: 8px 10px; font-size: 12.5px; }
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l06">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 7 Lessons</a>
+      <span class="l-crumb">Lesson 6 of 7 · <b>Blood</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 6 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Blood: Plasma, <em>Cells and Clotting</em></h1>
+        <p class="question reveal">The rider's cut finally stopped oozing. What sealed it, and what did he lose?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>State the <strong>composition of blood</strong> and the contents of plasma; distinguish <strong>plasma from serum</strong>.</span></li>
+          <li><b>02</b><span><strong>Compare</strong> red cells, white cells and platelets (shape, nucleus, number, origin, life span, function).</span></li>
+          <li><b>03</b><span>Explain how <strong>red cells are adapted</strong> for carrying oxygen, and name <strong>two kinds of white cell</strong>.</span></li>
+          <li><b>04</b><span>Describe the <strong>clotting sequence</strong> and explain why blood does not clot inside healthy vessels.</span></li>
+          <li><b>05</b><span>Calculate a <strong>red cell count</strong> from a haemocytometer and a cell's <strong>actual size</strong> from a micrograph.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Share results</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 290" role="img">
+          <path class="bl-drop" d="M165 24C120 92 76 140 76 190a89 89 0 0 0 178 0c0-50-44-98-89-166z"/>
+          <g class="bl-rbc"><ellipse cx="130" cy="176" rx="19" ry="19"/><ellipse cx="176" cy="156" rx="19" ry="19"/><ellipse cx="204" cy="206" rx="19" ry="19"/><ellipse cx="118" cy="226" rx="19" ry="19"/><ellipse cx="160" cy="230" rx="19" ry="19"/></g>
+          <g class="bl-rbc-in"><circle cx="130" cy="176" r="7"/><circle cx="176" cy="156" r="7"/><circle cx="204" cy="206" r="7"/><circle cx="118" cy="226" r="7"/><circle cx="160" cy="230" r="7"/></g>
+          <path class="bl-wbc" d="M148 200c0-12 10-20 22-20 14 0 24 8 24 20s-10 22-24 22c-12 0-22-8-22-22z" transform="translate(-6 -6) scale(.8) translate(30 44)"/>
+          <g class="bl-plt"><circle cx="150" cy="134" r="3.5"/><circle cx="160" cy="140" r="3"/><circle cx="108" cy="198" r="3"/><circle cx="224" cy="178" r="3.5"/><circle cx="214" cy="236" r="3"/></g>
+          <path class="bl-fib" d="M96 150L236 220M104 246L228 152M120 130L222 250"/>
+          <text class="hs-t" x="32" y="42">plasma 55%</text>
+          <text class="hs-m" x="214" y="34">cells 45%</text>
+          <text class="hs-m" x="26" y="283">fibrin net seals the cut</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Which part?</a></li>
+        <li><a href="#practical">Smear &amp; count</a></li>
+        <li><a href="#concepts">Plasma, cells &amp; clots</a></li>
+        <li><a href="#zoom">Clot zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 3, 4 and 5</em></h2>
+        <p class="intro">Four quick cards on the circuit, the heart sounds and the vessels. Answer each one in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The rider's gash at <em>Oja Oba</em></h2>
+        <p class="intro">At the health-day tent, Dr Aisha presses a pad on the okada rider's cut. Nobody has stitched it, yet the bleeding stops. What closed it?</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Dr Aisha presses a pad on the okada rider's gash at the Oja Oba tent; Chidi asks what closed it; Baba Sule says blood dries in the air; in the UCH lab Dr Aisha puts a drop of blood under the microscope."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba tent → UCH lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · The tent:</strong> Dr Aisha presses a pad on the rider's gash. After some minutes the bleeding slows to a seep, then stops.</p>
+            <p><strong>Scene 2 · The question:</strong> Chidi: <em>“Nobody stitched it yet. What closed it?”</em></p>
+            <p><strong>Scene 3 · Baba Sule's idea:</strong> <em>“Blood dries in the air like palm oil. Rub some salt in.”</em></p>
+            <p><strong>Scene 4 · The lab:</strong> Dr Aisha places a drop of blood under the microscope: discs, a few large cells with odd nuclei, tiny specks. <em>“Each of these did a job at that wound.”</em></p>
+            <p><strong>Scene 5 · The invitation:</strong> To the smear and haemocytometer bench, to look and to count.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">What do you think turns runny blood into a solid plug? Pin your idea before we look.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think the blood sets because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">The air dries it (Ijeoma)</button>
+            <button type="button">Something in the blood makes threads? (Danjuma)</button>
+            <button type="button">White cells fight the germs (Bisola)</button>
+            <button type="button">Salt seals it (Baba Sule)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Which part of the <em>blood</em>?</h2>
+        <p class="intro">Sort all 12 cards into <strong>plasma</strong>, <strong>red cells</strong>, <strong>white cells</strong> or <strong>platelets</strong>. Tap a card, then tap a bin (or drag it).</p>
+
+        <div class="sort" id="blood-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="plasma" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Plasma bin">
+              <h4><i></i>Plasma</h4><small>the liquid</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="rbc" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Red cells bin">
+              <h4><i></i>Red cells</h4><small>erythrocytes</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="wbc" style="--bc:var(--violet)" tabindex="0" role="button" aria-label="White cells bin">
+              <h4><i></i>White cells</h4><small>leucocytes</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="platelets" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Platelets bin">
+              <h4><i></i>Platelets</h4><small>thrombocytes</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The smear and the haemocytometer: <em>look, then count</em></h2>
+        <p class="intro">Dr Aisha's bench holds a stained blood smear, a haemocytometer and a 1 in 200 dilution of blood. Look at the smear, measure a red cell on a micrograph, then count red cells in <strong>five squares</strong> and work out the count in a whole cubic millimetre.</p>
+
+        <div class="callout safety" id="safety-box">
+          <p><strong>Safety:</strong> only prepared, stained smears are used in class. Never prick a finger or share a lancet, and wash your hands after handling the glassware.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>STEP 01</b><h4>Examine the smear at ×100, then ×400</h4><p>Look at the prepared, stained smear. Find a red cell, a phagocyte (lobed nucleus), a lymphocyte (one round nucleus) and the platelets. Tap each <em>Find</em> button.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Measure a red cell on a micrograph</h4><p>Read the cell's width on the micrograph, then divide by the magnification. Press <em>Work out the real size</em>.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Fill the chamber, wait 2 minutes, count 5 squares</h4><p>Fill the haemocytometer from the edge of the cover slip with blood diluted 1 in 200, wait 2 minutes for the cells to settle, then count the red cells in 5 medium squares (0.2 mm × 0.2 mm, 0.1 mm deep).</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Calculate the count per mm³</h4><p>Total the cells, find the volume counted, then the count per mm³ of the diluted blood, then undo the dilution. The table does the sums from your counts.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D blood bench: a stained smear seen at x100 or x400, a haemocytometer with a ruled grid and cover slip, a dilution tube and pipette, and a 3D reference smear with red cells, a phagocyte, a lymphocyte and platelets."></canvas>
+            <div class="stage-label"><i></i>3D blood bench · drag to rotate</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the buttons and the results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="bench-mode">
+              <span class="blab">SMEAR</span>
+              <div class="seg" role="group" aria-label="Magnification" id="bench-mag">
+                <button type="button" data-view="100" aria-pressed="false">×100</button>
+                <button type="button" data-view="400" aria-pressed="true">×400</button>
+              </div>
+              <button class="vt-btn" type="button" data-find="rbc">Find red cell</button>
+              <button class="vt-btn" type="button" data-find="phagocyte">Find phagocyte</button>
+              <button class="vt-btn" type="button" data-find="lymphocyte">Find lymphocyte</button>
+              <button class="vt-btn" type="button" data-find="platelet">Find platelets</button>
+            </div>
+          </div>
+          <div class="stage-bar">
+            <div class="bench-mode">
+              <span class="blab">COUNT</span>
+              <button class="vt-btn zobo" type="button" id="bench-fill">Fill and wait 2 min</button>
+              <button class="vt-btn" type="button" id="bench-next" disabled>Next square</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Fill the chamber first</span>
+          </div>
+          <div class="stage-bar">
+            <div class="bench-mode">
+              <span class="blab">PREVIEW</span>
+              <button class="vt-btn" type="button" id="bench-clot" aria-pressed="false">Clot on the smear</button>
+              <button class="vt-btn" type="button" id="bench-sickle" aria-pressed="false">Sickle cells (Lesson 7)</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="micro-card" id="micro-card">
+          <svg viewBox="0 0 190 120" role="img" aria-label="A micrograph of one red cell, 15 millimetres across on the page, magnification times 2000">
+            <rect x="2" y="2" width="186" height="116" rx="10" fill="none" stroke="var(--paper-line)"/>
+            <ellipse class="mc-cell" cx="95" cy="52" rx="42" ry="42"/>
+            <ellipse cx="95" cy="52" rx="14" ry="14" fill="none" stroke="var(--paper-muted)" stroke-width="1.4"/>
+            <line class="mc-dim" x1="53" y1="106" x2="137" y2="106"/><line class="mc-dim" x1="53" y1="100" x2="53" y2="112"/><line class="mc-dim" x1="137" y1="100" x2="137" y2="112"/>
+            <text class="mc-t" x="95" y="97" text-anchor="middle">15 mm on the page</text>
+          </svg>
+          <div>
+            <p><strong>Micrograph, ×2000.</strong> The red cell measures 15 mm across on the page. What is its real diameter?</p>
+            <button class="vt-btn zobo" type="button" id="micro-go">Work out the real size</button>
+            <div class="micro-out" id="micro-out" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Record your counts</h3>
+        <p>The table fills as you count each square. The four calculation rows work themselves out once all five squares are done.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr><th>Square</th><th>Red cells counted</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="count-line">Count all five squares to find the undiluted count.</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected results <small>open after you count</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Square</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                <tbody><tr><td>Red cells counted</td><td>98</td><td>92</td><td>101</td><td>95</td><td>94</td></tr></tbody>
+              </table>
+            </div>
+            <div class="eq light">Total 480 · volume counted 0.020 mm³ · 24 000 per mm³ diluted · 4.8 × 10⁶ per mm³ undiluted</div>
+          </div>
+        </details>
+
+        <h3>Precautions and sources of error</h3>
+        <div class="callout tip">
+          <p><strong>Precautions (past tense):</strong> the chamber was filled from the edge of the cover slip in one smooth flow, without air bubbles · the cells were left to settle for 2 minutes before counting · cells touching the top and left lines were counted, but those touching the bottom and right lines were not · the count was repeated with a second filling and the mean taken.</p>
+        </div>
+        <div class="callout info">
+          <p><strong>Sources of error (with direction):</strong> counting cells on all four boundary lines counted some twice, so the count was <strong>too high</strong> · an air bubble or overfilled chamber changed the depth from 0.1 mm; a deeper layer held more cells, so the count was <strong>too high</strong> (a bubble taking up space made it <strong>too low</strong>) · too much diluting fluid drawn into the pipette made the blood weaker than 1 in 200, so the count was <strong>too low</strong> · counting before the cells settled missed cells that were out of focus, so the count was <strong>too low</strong>.</p>
+        </div>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l06-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why are red cells so much more numerous than white cells?</li>
+            <li>Why does a mature red cell lack a nucleus?</li>
+            <li>How can you tell a phagocyte from a lymphocyte?</li>
+            <li>Why was the blood diluted?</li>
+            <li>Why must cells on two of the four boundary lines be left out?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Red cells carry oxygen to every cell all the time, so many are needed (about 5 million per mm³); white cells only defend, and about 7000 to 8000 per mm³ is enough.</li>
+                <li>Losing the nucleus leaves more room for haemoglobin, so each cell can carry more oxygen.</li>
+                <li>A phagocyte has a lobed (or bean-shaped) nucleus and grainy cytoplasm and swallows bacteria; a lymphocyte has one large round nucleus filling most of the cell and makes antibodies.</li>
+                <li>Undiluted blood has far too many cells to count; they would overlap. Diluting 1 in 200 spreads them out so they can be counted, and the sum then undoes the dilution.</li>
+                <li>A cell on a shared line belongs to two squares. Counting the top and left lines but not the bottom and right lines makes sure every cell is counted exactly once.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Plasma, cells and the <em>clotting chain</em></h2>
+        <p class="intro">Now we connect what you saw on the bench to the names and jobs WAEC, NECO and JAMB expect.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>What Sealed the Rider's Cut?</b><span class="lv-time">8 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: What Sealed the Rider's Cut?" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up and make a fist: that is a heart. Tap your wrist and find your pulse. Now picture a stream of red discs rushing past, billions of them, each one carrying oxygen. Walk on the spot for one minute and feel the beat quicken. Wiggle your fingers for the platelets, then press your thumb gently over your other palm for one slow count of ten, as Dr Aisha did on the rider's cut. Shake out your hands and sit down.</p>
+        </div>
+
+        <h3 id="def-comp">1 · What blood is made of</h3>
+        <div class="callout big reveal" id="composition" data-hook>
+          <p><strong>Composition:</strong> blood is a liquid connective tissue. About <strong>55%</strong> is <strong>plasma</strong> and about <strong>45%</strong> is cells; an adult carries roughly 5 to 6 dm³. Plasma is a straw-coloured liquid, about nine-tenths water, carrying dissolved food (amino acids, glucose, glycerol, fatty acids), salts, hormones, urea, most of the carbon dioxide (as hydrogencarbonate), plasma proteins (albumin, fibrinogen, prothrombin, antibodies) and heat. <strong>Serum</strong> is what remains when fibrinogen and the other clotting proteins have been removed.</p>
+        </div>
+
+        <h3 id="def-cells">2 · The three kinds of cell</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Red cells (erythrocytes)</th><th>White cells (leucocytes)</th><th>Platelets (thrombocytes)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Shape and nucleus</strong></td><td>Biconcave disc; no nucleus in mammals</td><td>No fixed shape; nucleus present</td><td>Small cell fragments; no nucleus</td></tr>
+              <tr><td><strong>Number per mm³</strong></td><td>About 5 million</td><td>About 7000 to 8000</td><td>About 250 000</td></tr>
+              <tr><td><strong>Made in</strong></td><td>Red bone marrow</td><td>Bone marrow; lymphocytes also in lymph nodes, spleen and thymus</td><td>Red bone marrow</td></tr>
+              <tr><td><strong>Life span</strong></td><td>About 120 days, then broken down in the liver and spleen</td><td>Days to years</td><td>About 7 to 10 days</td></tr>
+              <tr><td><strong>Function</strong></td><td>Carry oxygen as oxyhaemoglobin, and some carbon dioxide</td><td>Defence</td><td>Clotting</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout tip reveal" id="rbc-adapt">
+          <p><strong>Red cell adaptations:</strong> the dimpled disc shape gives a large surface for oxygen to enter and leave · the missing nucleus frees space for extra haemoglobin · the cells are small and bendy enough to squeeze through capillaries in single file · they carry the enzyme carbonic anhydrase, which speeds carbon dioxide carriage. A shortage of red cells or of haemoglobin is called <strong>anaemia</strong>; lack of iron is a frequent cause.</p>
+        </div>
+
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>White cell</th><th>Nucleus</th><th>Job</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Phagocytes</strong> (neutrophils, monocytes)</td><td>Lobed or bean-shaped</td><td>Swallow and digest bacteria</td></tr>
+              <tr><td><strong>Lymphocytes</strong></td><td>One large round nucleus filling most of the cell</td><td>Make antibodies: antitoxins, agglutinins, lysins</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="def-clot">3 · How blood clots</h3>
+        <div class="eq" id="eq-clot">thromboplastin released <span class="arr">→</span> prothrombin → thrombin <span class="arr">→</span> fibrinogen → fibrin <span class="arr">→</span> fibrin net traps red cells = clot &nbsp;&nbsp;<span class="st">calcium ions and vitamin K help</span></div>
+        <p>Injured tissue and platelets release <strong>thromboplastin</strong> (thrombokinase). Helped by vitamin K and calcium ions, it turns inactive <strong>prothrombin</strong> into active <strong>thrombin</strong>. Thrombin changes dissolved <strong>fibrinogen</strong> into solid <strong>fibrin</strong> threads. The fibrin net snares red cells, and the tangle becomes a clot that later dries into a scab. Clotting stops blood loss and keeps germs out.</p>
+        <div class="callout info reveal" id="why-liquid">
+          <p><strong>Why blood stays liquid inside healthy vessels:</strong> the lining is smooth, so no thromboplastin is released, and the anticoagulant <strong>heparin</strong> is present. In <strong>haemophilia</strong>, an inherited sex-linked condition, clotting fails.</p>
+        </div>
+
+        <h3 id="def-func">4 · Functions of blood</h3>
+        <p><strong>Transport</strong> (gases, food, hormones, urea, heat) · <strong>protection</strong> against germs (engulfing them, antibodies) · <strong>sealing wounds</strong> by clotting · <strong>spreading heat</strong> to keep body temperature steady · helping keep the <strong>pH and water content</strong> steady.</p>
+
+        <h3>Blood in a bottle: tap a pin</h3>
+        <p>A 5.0 dm³ "blood bottle". Tap a pin to see its share, its count and its life span, and watch the same cell light up on the 3D smear above.</p>
+        <div id="pos-explorer">
+          <div class="bottle" aria-hidden="true">
+            <div class="bottle-glass" id="bottle-glass"><i class="pl" data-seg="plasma"></i><i class="ce" data-seg="cells"></i></div>
+            <div class="bottle-key" id="bottle-key"></div>
+          </div>
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to inspect it.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. CLOT ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the gash: <em>how the clot forms</em></h2>
+        <p class="intro">Step through the four stages at the cut edge: platelets gather, the chain fires and a fibrin net weaves across and traps red cells. Then switch on <strong>sodium citrate</strong>, which removes calcium, and see the threads fail.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom: a blood smear field with red cells, a phagocyte, a lymphocyte and platelets. When a clot forms, platelets gather and fibrin threads weave across and trap red cells. With citrate, the threads fail to form."></canvas>
+            <div class="stage-label"><i></i>3D zoom · drag to rotate</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="stage-bar">
+            <div class="zoom-steps" id="zoom-steps" role="group" aria-label="Clotting stages">
+              <button class="vt-btn" type="button" data-step="0" aria-pressed="true">1 Cut</button>
+              <button class="vt-btn" type="button" data-step="1" aria-pressed="false">2 Platelets gather</button>
+              <button class="vt-btn" type="button" data-step="2" aria-pressed="false">3 Chain fires</button>
+              <button class="vt-btn" type="button" data-step="3" aria-pressed="false">4 Fibrin net</button>
+            </div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" id="zoom-citrate" aria-pressed="false">Add sodium citrate (no calcium)</button>
+            <button class="vt-btn" type="button" id="zoom-sickle" aria-pressed="false">Sickle cells</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:var(--amber)"></i>Platelets<b data-c="plt">scattered</b></span>
+              <span class="counter"><i style="--c:var(--crimson)"></i>Fibrin<b data-c="fib">none</b></span>
+            </div>
+          </div>
+          <p class="zoom-note" id="zoom-note" aria-live="polite">Stage 1: blood leaks from the cut. Nothing has started yet.</p>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each problem on paper first, then check the working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Haemocytometer count</h4></div>
+          <div class="example-body">
+            <p class="q">480 red cells were counted in 5 squares, each 0.2 mm × 0.2 mm × 0.1 mm deep, from blood diluted 1 in 200. Find the count per mm³ of whole blood.</p>
+            <ol class="steps-sol">
+              <li><strong>One square's volume:</strong> <code>0.2 × 0.2 × 0.1 = 0.004 mm³</code>.</li>
+              <li><strong>Five squares:</strong> <code>5 × 0.004 = 0.020 mm³</code>.</li>
+              <li><strong>Diluted count:</strong> <code>480 ÷ 0.020 = 24 000 cells mm⁻³</code>.</li>
+              <li><strong>Undo the dilution:</strong> <code>24 000 × 200 = 4 800 000 = 4.8 × 10⁶ cells mm⁻³</code>.</li>
+            </ol>
+            <div class="answer-line">4.8 million per mm³, within the normal range of about 5 million.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Real size of a red cell</h4></div>
+          <div class="example-body">
+            <p class="q">On a micrograph at ×2000, a red cell measures 15 mm across. Find its real diameter in µm.</p>
+            <ol class="steps-sol">
+              <li><strong>Actual size:</strong> <code>actual = image ÷ M = 15 mm ÷ 2000</code>.</li>
+              <li><strong>Divide:</strong> <code>15 ÷ 2000 = 0.0075 mm</code>.</li>
+              <li><strong>Convert to µm:</strong> <code>0.0075 × 1000 = 7.5 µm</code>.</li>
+            </ol>
+            <div class="answer-line">Real diameter = 7.5 µm</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Red cells in the whole body</h4></div>
+          <div class="example-body">
+            <p class="q">With 5.0 × 10⁶ red cells per mm³ and 5.0 dm³ of blood, how many red cells are there?</p>
+            <ol class="steps-sol">
+              <li><strong>Convert the volume:</strong> <code>1 dm³ = 10⁶ mm³, so 5.0 dm³ = 5.0 × 10⁶ mm³</code>.</li>
+              <li><strong>Multiply:</strong> <code>(5.0 × 10⁶) × (5.0 × 10⁶)</code>.</li>
+              <li><strong>Result:</strong> <code>25 × 10¹² = 2.5 × 10¹³</code>.</li>
+            </ol>
+            <div class="answer-line">About 2.5 × 10¹³ red cells</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>Model answer: how blood clots</h4></div>
+          <div class="example-body">
+            <p class="q">Explain how blood clots at a cut.</p>
+            <ol class="steps-sol">
+              <li><strong>Start:</strong> thromboplastin is released by platelets and damaged tissue.</li>
+              <li><strong>Thrombin:</strong> with calcium ions and vitamin K, it converts prothrombin to thrombin.</li>
+              <li><strong>Fibrin:</strong> thrombin changes dissolved fibrinogen into solid fibrin threads.</li>
+              <li><strong>Clot:</strong> the fibrin net snares red cells, giving a clot.</li>
+            </ol>
+            <div class="answer-line">thromboplastin → thrombin → fibrin → net traps cells</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the tent: <em>what sealed the rider's gash?</em></h2>
+        <p class="intro">Play the clot zoom on the rider's gash, then answer the three questions below.</p>
+
+        <div class="bridge-card" id="bridge-card">
+          <h4>The rider's gash</h4>
+          <div class="vt-actions"><button class="vt-btn" type="button" id="bridge-play">▶ Play the clot zoom</button></div>
+          <div class="bridge-q" data-q="seal"><p>1 · What sealed the cut?</p><div class="opts"><button type="button" data-v="fibrin">A fibrin net trapping cells</button><button type="button" data-v="air">Drying in the air</button><button type="button" data-v="salt">The salt</button></div></div>
+          <div class="bridge-q" data-q="protein"><p>2 · Which dissolved protein became the solid threads?</p><div class="opts"><button type="button" data-v="fibrinogen">Fibrinogen</button><button type="button" data-v="prothrombin">Prothrombin</button><button type="button" data-v="albumin">Albumin</button></div></div>
+          <div class="bridge-q" data-q="lost"><p>3 · He had lost about 1.5 dm³ of his 5.0 dm³. What percentage is that?</p><div class="opts"><button type="button" data-v="30">30%</button><button type="button" data-v="3">3%</button><button type="button" data-v="75">75%</button></div></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
+          </div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 6:</strong> blood is plasma plus three kinds of cell, and a chain of plasma proteins turns it solid where it must stop flowing.</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 5 come at the end.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 6.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can state the make-up of blood and plasma.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can compare the three cell types.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain four red cell adaptations.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can describe the four clotting steps.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can calculate a haemocytometer count and a real cell size.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>Name the soluble protein that becomes fibrin, and the mineral ion needed for clotting.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><strong>Fibrinogen</strong> <b>(1)</b>; <strong>calcium</strong> ions <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 06. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home investigation: counting what you cannot count, and catching what you cannot hold</h3>
+        <div class="aq" data-answer="l06-a1">
+          <div class="aq-top"><h4>Model a sample count and a fibrin net. No blood is used.</h4></div>
+          <p><strong>You need:</strong> a flat tray or large plate, a ruler, a pencil and a sheet of paper big enough to cover the tray, a cupful of small grains (millet, beniseed or uncooked rice), an empty plastic water bottle, scissors (adult help), sewing thread or cotton strands, a cup of water, a handful of beans soaked for an hour, and a bowl.</p>
+          <p><strong>Safety:</strong> an adult cuts the bottle; the cut edge is sharp. Do not eat any grains or beans you have used. Mop up spilled water at once so nobody slips.</p>
+          <ol class="sub">
+            <li><strong>The count.</strong> Rule the paper into equal squares (for example 2 cm × 2 cm). Count how many squares cover the paper. Put it on the tray.</li>
+            <li>Scatter the grains as evenly as you can over the whole sheet.</li>
+            <li>Pick five squares spread across the sheet (not side by side). Count the grains in each, following one rule: count grains on the top and left lines, but not those on the bottom and right lines.</li>
+            <li>Find the mean per square and multiply by the total number of squares to estimate all the grains. If you have time, count every grain to check your estimate.</li>
+            <li><strong>The clot model.</strong> Cut the top third off the bottle and turn it upside down over the bowl as a funnel. Tie or tape 6 to 8 thread strands across the mouth in a criss-cross net.</li>
+            <li>Pour the water and soaked beans together into the funnel. Record what passes through and what stays.</li>
+            <li>Write four sentences linking the beans, the water and the threads to red cells, plasma and fibrin.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Square</th><th>Grains counted</th></tr></thead><tbody>
+                <tr><td>1</td><td>12</td></tr><tr><td>2</td><td>9</td></tr><tr><td>3</td><td>14</td></tr><tr><td>4</td><td>11</td></tr><tr><td>5</td><td>10</td></tr>
+                <tr><td><strong>Total (5 squares)</strong></td><td><strong>56</strong></td></tr>
+                <tr><td>Mean per square</td><td>11.2</td></tr>
+                <tr><td>Squares on sheet (30 cm × 20 cm, 2 cm squares)</td><td>150</td></tr>
+                <tr><td><strong>Estimated grains on sheet</strong></td><td><strong>11.2 × 150 = 1680</strong></td></tr>
+              </tbody></table></div>
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Clot model</th><th>Observation</th><th>Meaning</th></tr></thead><tbody>
+                <tr><td>Water</td><td>Ran through the thread net into the bowl</td><td>Plasma (serum) can still seep from a clot</td></tr>
+                <tr><td>Beans</td><td>Caught on the criss-cross threads</td><td>Red cells trapped in the fibrin net</td></tr>
+                <tr><td>No threads (repeat without the net)</td><td>Beans and water both fell through</td><td>Without fibrin there is no clot</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows: the estimate uses the mean of several spread-out squares, not one square, because the grains are never perfectly even; the line rule stops grains on shared lines being counted twice (ignoring it makes the estimate too high); the estimate is compared honestly with a full count if one was made; the bean model is linked correctly (threads = fibrin, beans = red cells, water = plasma or serum); and one limit of the model is stated, for example that real fibrin forms by a chemical chain (thromboplastin → thrombin → fibrin) and is not put in place by hand, or that real cells are far too small and numerous to count without a microscope.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l06-b1">
+          <div class="aq-top"><h4>1. Plasma and serum</h4><span class="marks">3 marks</span></div>
+          <p>(a) State what plasma is. (1 mark) (b) State what serum is. (1 mark) (c) Give <strong>one</strong> difference between plasma and serum. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Plasma is the pale yellow liquid part of blood, mostly water, in which the blood cells float and many substances are carried dissolved (1). (b) Serum is the liquid left over after blood has clotted (1). (c) Plasma still contains fibrinogen and the other clotting proteins; serum does not, so serum cannot clot (1). Equivalent wordings that keep the key ideas are credited.</p>
+            <p><small><strong>Mark scheme note:</strong> For (c) "serum has no fibrinogen" earns the mark only if it is set against plasma, which has it. Do not credit "serum has no cells" as the difference: plasma has no cells either.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b2">
+          <div class="aq-top"><h4>2. Red cells and white cells</h4><span class="marks">4 marks</span></div>
+          <p>In a matched table, state <strong>four</strong> differences between a red blood cell and a white blood cell.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Feature</th><th>Red blood cell</th><th>White blood cell</th></tr></thead><tbody><tr><td>Nucleus</td><td>Absent (in mammals)</td><td>Present (1)</td></tr><tr><td>Shape</td><td>Fixed biconcave disc</td><td>No fixed shape; can change shape (1)</td></tr><tr><td>Count in each mm³</td><td>Roughly 5 million</td><td>Roughly 7000–8000 (1)</td></tr><tr><td>Function</td><td>Carries oxygen (as oxyhaemoglobin)</td><td>Defends the body against germs (1)</td></tr></tbody></table></div>
+<p>Accept also: haemoglobin present | absent; life span about 120 days | a few days to years; formed in red bone marrow | formed in bone marrow, though lymphocytes are also produced in the spleen, thymus and lymph nodes. Any four rows, 1 mark each.</p>
+            <p><small><strong>Mark scheme note:</strong> One mark per row only when both columns are filled for the same feature. "Red cells are red, white cells are white" scores zero. Do not credit "red cells carry blood".</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b3">
+          <div class="aq-top"><h4>3. Red cell adaptations and white cell types</h4><span class="marks">5 marks</span></div>
+          <p>(a) State <strong>three</strong> ways in which a red blood cell is adapted to carrying oxygen. (3 marks) (b) Name <strong>two</strong> kinds of white blood cell and give the job of each. (2 marks)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any three: its biconcave (dimpled disc) shape provides a big surface across which oxygen can move in and out (1); it has no nucleus, leaving more room for haemoglobin (1); it is packed with haemoglobin, which combines loosely with oxygen (1); it is small and flexible enough to squeeze through narrow capillaries (1). (b) Phagocyte: engulfs and digests bacteria (1). Lymphocyte: makes antibodies (1).</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) each adaptation must be linked to how it helps; a bare "biconcave" with no reason earns no mark. Carbonic anhydrase helps carbon dioxide carriage, not oxygen, so it is not credited here. In (b) the name and the job must match: "lymphocyte engulfs bacteria" scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b4">
+          <div class="aq-top"><h4>4. How blood clots</h4><span class="marks">4 marks</span></div>
+          <p>The rider's gash stopped bleeding before anyone stitched it. Explain how blood clots at a wound.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Damaged tissue and platelets at the wound release thromboplastin (thrombokinase) (1). With the help of calcium ions and vitamin K, thromboplastin changes inactive prothrombin into active thrombin (1). Thrombin turns soluble fibrinogen into insoluble fibrin threads (1). The fibrin threads form a net that traps red cells, making a clot that seals the wound and later dries into a scab (1).</p>
+            <p><small><strong>Mark scheme note:</strong> The steps must be in the right order and with the right pairs; "prothrombin becomes fibrin" scores zero for that step. Writing "the blood dries in the air" earns nothing. Calcium ions must be named for the second mark; "minerals" alone is not enough.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b5">
+          <div class="aq-top"><h4>5. Why blood stays liquid in healthy vessels</h4><span class="marks">2 marks</span></div>
+          <p>Give <strong>two</strong> reasons why blood does not normally clot inside healthy blood vessels.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>The inner lining of healthy vessels is smooth, so platelets are not broken and no thromboplastin is released (1). Blood contains an anticoagulant, heparin, which prevents clotting (1).</p>
+            <p><small><strong>Mark scheme note:</strong> "Blood is always moving" alone is not credited. Do not accept "there is no fibrinogen in vessels": fibrinogen is always present in plasma.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b6">
+          <div class="aq-top"><h4>6. Haemocytometer count</h4><span class="marks">5 marks</span></div>
+          <p>In the UCH lab, a sample was diluted 1 in 200. Red cells counted in 5 haemocytometer squares were 88, 97, 90, 93 and 92. Each square is 0.2 mm × 0.2 mm and the chamber is 0.1 mm deep. (a) Calculate the number of red cells per mm³ of undiluted blood. Show your working. (4 marks) (b) Compare your answer with the typical adult value. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Volume of one square = 0.2 × 0.2 × 0.1 = 0.004 mm³ (1). Total counted = 88 + 97 + 90 + 93 + 92 = 460 cells in 5 × 0.004 = 0.020 mm³ (1). Cells per mm³ of diluted blood = 460 ÷ 0.020 = 23 000 (1). Cells per mm³ of whole blood = 23 000 × 200 = 4 600 000 = 4.6 × 10⁶ (1). (b) This is close to, and a little below, the typical value of about 5 million per mm³ (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark is for a separate step: the volume of one square, the total volume of five squares (with the total count), the diluted count, and undoing the dilution. Candidates who divide by 200 (getting about 115) lose the last mark of (a). A final answer without a unit ("per mm³") loses the last mark of (a).</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b7">
+          <div class="aq-top"><h4>7. Practical: precautions and errors</h4><span class="marks">4 marks</span></div>
+          <p>(a) State <strong>two</strong> precautions that were taken when filling and counting the haemocytometer. (2 marks) (b) For <strong>two</strong> sources of error, state whether each made the count too high or too low, and why. (2 marks)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any two, in the past tense: the chamber was filled from the edge of the cover slip in one smooth flow so that no air bubbles were trapped (1); the cells were left to settle for 2 minutes before counting (1); cells touching the top and left lines were counted but those on the bottom and right lines were not (1); the count was repeated with a second filling and the mean was taken (1). (b) Any two: counting cells on all four boundary lines counted some cells twice, so the count was too high (1); drawing too much diluting fluid into the pipette made the blood weaker than 1 in 200, so the count was too low (1); counting before the cells had settled missed cells that were out of focus, so the count was too low (1); an overfilled chamber was deeper than 0.1 mm and held more cells, so the count was too high (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Precautions written as instructions ("fill the chamber slowly") lose the mark: they must be in the past tense. In (b), an error earns its mark only with both a direction and a reason; "human error" or "the count was wrong" scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b8">
+          <div class="aq-top"><h4>8. Cell size and the rider's blood loss</h4><span class="marks">3 marks</span></div>
+          <p>(a) On a micrograph at ×3000, a red cell measures 21 mm across. Calculate its actual diameter in micrometres. (2 marks) (b) The rider's wound has sealed. Explain why he still needs a blood transfusion. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Actual size = image size ÷ magnification = 21 mm ÷ 3000 = 0.007 mm (1). 0.007 mm × 1000 = 7.0 µm (1). (b) The clot only stops further loss; it does not replace the red cells (and plasma) he has already lost, so his blood can no longer carry enough oxygen to his tissues (1).</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) the second mark is for the conversion to µm; "0.007 µm" scores only the first mark. In (b) "because the clot is weak" or "because of germs" scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-05/index.html" style="color:var(--paper-ink)">← Lesson 5</a>
+          <a class="btn btn-tour" href="../lesson-07/index.html">Next: Lesson 7, blood groups and the final case →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/blood-count-bench.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
+</body>
+</html>

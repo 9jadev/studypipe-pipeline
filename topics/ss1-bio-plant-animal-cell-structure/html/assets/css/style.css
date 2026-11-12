@@ -1,45 +1,71 @@
 /* =========================================================
-   StudyPipe · Acid–Base Titration — shared design system
+   StudyPipe · shared design system (themed via assets/css/theme.css)
    ========================================================= */
 :root {
-  --ink-950: #060912;
-  --ink-900: #0a0f1d;
+  /* Fallback tokens (= Editorial Ink). The installed theme (assets/css/theme.css, loaded last) overrides these. */
+  /* ---- Fonts (files come from themes/_fonts via theme.json) ---- */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --font-math: "Fraunces", Georgia, Cambria, "Times New Roman", serif;
+  --font-label: Manrope, sans-serif;            /* 3D canvas label pills */
+
+  /* ---- Dark "ink" surfaces: hub, lesson hero, lab panels (keep dark: white text sits on them) ---- */
+  --ink-950: #060912;  --ink-950-rgb: 6, 9, 18;
+  --ink-900: #0a0f1d;  --ink-900-rgb: 10, 15, 29;
   --ink-850: #0e1426;
   --ink-800: #121a30;
   --ink-700: #1b2543;
   --ink-600: #2a3660;
   --line: rgba(206, 220, 255, 0.09);
   --line-strong: rgba(206, 220, 255, 0.18);
-
   --fg: #eef1f8;
   --fg-soft: #c9d0e3;
   --muted: #8e98b4;
+  --on-ink-soft: #ded5c4;
 
-  --paper: #f5efe4;
+  /* ---- Light "paper" surfaces: lesson reading sections (keep light: dark text sits on them) ---- */
+  --paper: #f5efe4;    --paper-rgb: 245, 239, 228;
   --paper-2: #ece3d3;
-  --paper-ink: #1b1813;
+  --paper-card: #fffaf2;
+  --paper-ink: #1b1813; --paper-ink-rgb: 27, 24, 19;
+  --paper-text: #3d362c;
   --paper-muted: #6b6253;
+  --paper-faint: #a79e8e;
   --paper-line: rgba(27, 24, 19, 0.12);
 
-  --pink: #ff3d8b;      /* phenolphthalein */
+  /* ---- Accents ---- */
+  --crimson: #d22e56;  --crimson-rgb: 210, 46, 86;   /* headline em, errors, phase colour */
+  --amber: #ffb23f;    --amber-rgb: 255, 178, 63;    /* eyebrows, focus ring, active step */
+  --on-amber: #1b1206;
+  --pink: #ff3d8b;     --pink-rgb: 255, 61, 139;
   --pink-soft: #ff8cbc;
-  --amber: #ffb23f;     /* methyl orange */
   --orange: #ff7a2f;
-  --teal: #3ee6c4;      /* OH- / base */
-  --sky: #7cc4ff;       /* H3O+ / acid glow */
-  --crimson: #d22e56;   /* zobo */
+  --teal: #3ee6c4;     --teal-rgb: 62, 230, 196;
+  --sky: #7cc4ff;      --sky-rgb: 124, 196, 255;
   --lime: #c6f36b;
-  --violet: #9b8cff;
+  --violet: #9b8cff;   --violet-rgb: 155, 140, 255;
 
-  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
-  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  /* ---- Feedback ---- */
+  --ok: #0d9c7e;       --ok-rgb: 13, 156, 126;
+  --ok-deep: #0b7d65;
+  --ok-tint: #e7f7f1;
+  --ok-tint-2: #f1faf6;
+  --bad-tint: #fff4f4;
+  --bad-tint-2: #fff1ec;
+  --warn: #d98a00;     --warn-rgb: 217, 138, 0;
+  --info: #3b6cf6;     --info-rgb: 59, 108, 246;
+  --wall-notes: #ffe58a, #ffc7d9, #bff0e1, #cfe3ff, #ffd8b0;
 
+  /* ---- Shape & motion ---- */
+  --corner: 1;          /* multiplies every small radius: 0.4 = crisp, 1 = default, 1.5 = bubbly */
   --radius-sm: 10px;
   --radius: 18px;
   --radius-lg: 28px;
   --shadow-lg: 0 30px 80px -30px rgba(0, 0, 0, 0.65);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---- Layout (not themed) ---- */
   --gutter: clamp(16px, 4vw, 48px);
   --maxw: 1240px;
 }
@@ -363,6 +389,8 @@ sup { top: -0.48em; }
   display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .06em;
   padding: 5px 11px; border-radius: 999px; background: rgba(var(--paper-ink-rgb), 0.06); color: var(--paper-ink); white-space: nowrap;
 }
+/* Hero eyebrow chip sits on dark ink: the default .tag is paper-coloured (dark text) and would be invisible. */
+.eyebrow .tag { background: rgba(var(--amber-rgb), 0.14); color: var(--amber); box-shadow: inset 0 0 0 1px rgba(var(--amber-rgb), 0.35); }
 .tag i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 .tag.concept i { background: var(--info); }
 .tag.practical i { background: var(--crimson); }
@@ -754,8 +782,8 @@ sup { top: -0.48em; }
   border-radius: 999px;
 }
 .stage-legend .sw { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; }
-.stage-legend .sw-animal, .stage-legend .sw-acid { background: var(--amber); }
-.stage-legend .sw-plant, .stage-legend .sw-base { background: var(--teal); }
+.stage-legend .sw-acid { background: var(--amber); }
+.stage-legend .sw-base { background: var(--teal); }
 
 .stage-frame .hud {
   position: relative;
@@ -1577,41 +1605,4 @@ sup { top: -0.48em; }
   .hud-cell { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 8px 10px; }
   .hud-k { flex: 0 0 auto; max-width: 45%; }
   .hud-v { margin-top: 0; text-align: right; }
-}
-
-/* ==========================================================
-   Welcome Hub upgrades (2026-11-05)
-   ========================================================== */
-.brand-mark svg { display: block; width: 34px; height: 34px; }
-.eyebrow .tag { background: rgba(var(--amber-rgb), 0.14); color: var(--amber); box-shadow: inset 0 0 0 1px rgba(var(--amber-rgb), 0.35); }
-.pill {
-  display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-mono); font-size: 11.5px;
-  letter-spacing: .08em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px; line-height: 1.35;
-}
-.pill-amber { color: var(--amber); background: rgba(var(--amber-rgb), 0.12); box-shadow: inset 0 0 0 1px rgba(var(--amber-rgb), 0.4); }
-.pill-teal { color: var(--teal); background: rgba(var(--teal-rgb), 0.1); box-shadow: inset 0 0 0 1px rgba(var(--teal-rgb), 0.4); }
-.mystery-narrative .pill { margin-bottom: 14px; }
-sub { font-size: 0.72em; line-height: 0; vertical-align: -0.25em; }
-.combo-tab:focus-visible, .myth-card:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
-
-/* lesson progress badges (read from LessonKit storage) */
-.lesson-time.is-started { color: var(--amber); background: rgba(var(--amber-rgb), 0.12); box-shadow: inset 0 0 0 1px rgba(var(--amber-rgb), 0.4); }
-.lesson-time.is-done { color: var(--lime, #a3e635); background: rgba(163, 230, 53, 0.12); box-shadow: inset 0 0 0 1px rgba(163, 230, 53, 0.4); }
-
-/* only one "guided tour" control at a time: hide the floating pill while the hero button is on screen */
-body.hero-tour-visible .narr-dock:not(.open) { opacity: 0; pointer-events: none; transform: translateY(12px); }
-.narr-dock { transition: opacity .25s, transform .25s; }
-
-@media (max-width: 640px) {
-  /* phone hero: title + short lede, then the 3D lab, then buttons and meta */
-  .hero.container { display: flex; flex-direction: column; align-items: stretch; }
-  .hero-copy { display: contents; }
-  .hero-copy .eyebrow { order: 1; }
-  .hero-copy .hero-title { order: 2; }
-  .hero-copy .hero-lede { order: 3; }
-  .hero-stage { order: 4; }
-  .hero-copy .hero-actions { order: 5; margin-bottom: 0; }
-  .hero-copy .hero-meta { order: 6; margin-top: 8px; }
-  /* room so the floating narrator never covers the last lines of content */
-  body { padding-bottom: 88px; }
 }

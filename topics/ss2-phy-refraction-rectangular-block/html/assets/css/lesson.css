@@ -469,6 +469,14 @@ details.locked > summary { opacity: .55; cursor: not-allowed; }
   .qopts { grid-template-columns: 1fr; }
   .rate { grid-template-columns: 1fr; }
   .vt-cups { grid-template-columns: 1fr 1fr; gap: 10px; }
+  /* Phones: two cards side by side leave ~100px for a 28px mono readout, so a line like
+     "R = 0.50 Ω · I = 4.00 A" wrapped to five lines. Stack them and scale the readout. */
+  @media (max-width: 560px) {
+    .vt-cups { grid-template-columns: 1fr; gap: 10px; }
+    .vt-count { font-size: 20px; margin-top: 8px; }
+    .vt-count small { font-size: 11.5px; }
+  }
+
   .vt-glass { width: 90px; height: 120px; }
   .l-next { grid-template-columns: 1fr; }
   .stage-hint { margin-left: 0; width: 100%; }

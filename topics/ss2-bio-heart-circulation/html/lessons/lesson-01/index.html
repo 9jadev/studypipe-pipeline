@@ -3,40 +3,125 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 1 · Need for Transport — Open vs Closed &amp; Single vs Double Circulation · StudyPipe</title>
-  <meta name="description" content="StudyPipe Biology (SS2): Surface-Area-to-Volume Ratio (SA/V = 6/L), Open vs Closed Circulatory Systems, Cockroach Haemolymph, and Single vs Double Vertebrate Circulation.">
+  <title>Lesson 1 · Why Big Bodies Need a Transport System · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): why large, active animals need a transport system, SA : V with the agar-cube acid bench, and open, closed, single and double circulation.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fb7185'/%3E%3Cstop offset='1' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d22e56'/%3E%3Cpath d='M32 50C14 38 12 26 20 20c5-4 10-1 12 4 2-5 7-8 12-4 8 6 6 18-12 30z' fill='%23fffaf2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(251,113,133,.18), rgba(56,189,248,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+    /* Lesson 01 only: tokens, never literal colours or font names */
+    .tt-line { font-family: var(--font-mono); font-size: 12px; line-height: 1.6; color: var(--on-ink-soft); margin: 14px 0 0; }
+    .tt-line b { color: var(--amber); font-weight: 600; }
+    .l01-art { position: relative; border-radius: var(--radius-lg); border: 1px solid var(--line-strong); background: radial-gradient(circle at 50% 20%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900); box-shadow: var(--shadow-lg); padding: 14px; display: flex; align-items: center; justify-content: center; }
+    .l01-art svg { width: 100%; max-width: 330px; height: auto; display: block; }
+    .l01-art .t { font-family: var(--font-mono); font-size: 11px; fill: var(--fg-soft); }
+    .l01-art .t b { fill: var(--fg); }
+    #sort .bins { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #sort .bin { min-height: 130px; padding: 12px; }
+    #sort .sort-item { font-size: 13.5px; }
+    .prac-note { margin: 10px 0 0; font-size: 14px; color: var(--paper-muted); }
+    /* compact method cards: number badge + heading + one short line */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; }
+    @media (min-width: 641px) { #method-cards div.method { padding: 10px 14px; } }
+    /* compact agar-cube bench controls (phone first) */
+    .bench-ctl { display: grid; gap: 6px; width: 100%; padding: 8px 12px; }
+    .bench-ctl .seg { display: grid; width: 100%; gap: 4px; padding: 3px; }
+    .bench-ctl .seg button { padding: 6px 4px; font-size: 12.5px; min-height: 34px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #cube-pick { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    #bench-tech { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .bench-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+    .bench-steps .vt-btn { padding: 6px 6px; font-size: 12.5px; min-height: 38px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bench-status { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; margin: 0; width: 100%; }
+    .bench-ctl .stage-hint { margin-left: 0; font-size: 11.5px; line-height: 1.4; }
+    .bench-clock { font-family: var(--font-mono); font-size: 11px; line-height: 1.4; color: var(--fg-soft); }
+    .bench-clock b { color: var(--amber); }
+    .tbl select { max-width: 100%; font: inherit; font-family: var(--font-mono); font-size: 13px; padding: 6px 8px; border-radius: calc(8px * var(--corner, 1)); border: 1px solid var(--paper-line); background: var(--paper-card); color: var(--paper-ink); }
+    .tbl td.ok { background: rgba(var(--ok-rgb), .14); }
+    .tbl td.no { background: rgba(var(--crimson-rgb), .12); }
+    .tbl td.pend { color: var(--paper-faint); }
+    .l01-materials { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+    .l01-materials li { font-size: 14px; padding: 6px 12px; border-radius: 999px; background: var(--paper-card); border: 1px solid var(--paper-line); }
+    .l01-materials li b { font-family: var(--font-mono); font-size: 11px; color: var(--crimson); margin-right: 6px; }
+    .l01-parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; }
+    .l01-parts div { background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: calc(14px * var(--corner, 1)); padding: 12px 14px; font-size: 14px; }
+    .l01-parts b { display: block; font-family: var(--font-display); font-size: 1.05rem; color: var(--crimson); }
+    @media (max-width: 560px) { .l01-parts { grid-template-columns: 1fr; } }
+    .l01-track { position: relative; height: 22px; border-radius: 999px; margin: 46px 10px 8px; background: linear-gradient(90deg, rgba(var(--ok-rgb), .85), rgba(var(--warn-rgb), .8) 55%, rgba(var(--crimson-rgb), .85)); box-shadow: inset 0 2px 5px rgba(var(--ink-950-rgb), .35); }
+    .l01-pin { position: absolute; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--fg); box-shadow: 0 0 0 3px rgba(var(--ink-950-rgb), .35); transition: transform .2s; }
+    .l01-pin:hover, .l01-pin.on { transform: scale(1.35); box-shadow: 0 0 0 3px var(--amber); }
+    .l01-pin span { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); pointer-events: none; }
+    .l01-pin.up span { bottom: 52px; }
+    .l01-pin span::after { content: ""; position: absolute; left: 50%; top: 100%; width: 1px; height: 7px; background: var(--line-strong); }
+    .l01-pin.up span::after { height: 29px; }
+    .l01-ends { display: flex; justify-content: space-between; gap: 10px; margin: 4px 4px 0; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+    #bench-readout { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 10px 8px 0; }
+    #bench-readout div { padding: 6px 4px; }
+    #bench-readout span { font-size: 8px; letter-spacing: -.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-readout b { font-size: 13px; }
+    /* compact circuit-zoom bar (phone first) */
+    #zoom-stage .stage-bar { padding: 10px 12px; gap: 8px; }
+    #zoom-seg { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: 4px; padding: 3px; }
+    #zoom-seg button { padding: 8px 4px; font-size: 12px; min-height: 38px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #zoom-next { width: 100%; min-height: 40px; padding: 8px 6px; font-size: 12.5px; }
+    #zoom-counters { width: 100%; gap: 5px; }
+    #zoom-counters .counter { flex: 1 1 auto; font-size: 11px; padding: 5px 8px; white-space: nowrap; }
+    @media (min-width: 641px) {
+      .bench-ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 16px; }
+      .bench-ctl .seg { display: inline-flex; width: auto; padding: 4px; }
+      .bench-ctl .seg button { padding: 8px 12px; font-size: 13px; }
+      .bench-steps { display: flex; flex-wrap: wrap; gap: 8px; }
+      .bench-steps .vt-btn { padding: 10px 14px; font-size: 13.5px; }
+      .bench-status { width: auto; margin-left: auto; gap: 4px 14px; }
+      .bench-clock { font-size: 12.5px; }
+      #zoom-stage .stage-bar { padding: 14px 16px; gap: 10px; }
+      #zoom-seg { display: inline-flex; width: auto; padding: 4px; }
+      #zoom-seg button { padding: 8px 12px; font-size: 13px; }
+      #zoom-next { width: auto; padding: 10px 14px; font-size: 13.5px; }
+      #zoom-counters { width: auto; margin-left: auto; gap: 8px; }
+      #zoom-counters .counter { flex: 0 0 auto; font-size: 12px; padding: 6px 11px; }
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #ff3d8b 0%, #ffb23f 25%, #38bdf8 50%, #3ee6c4 75%, #22c55e 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    /* compact results table on phones: one tight card per cube instead of seven stacked lines */
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; min-width: 0; }
+      #results-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+      #results-table tr { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 8px; row-gap: 4px; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table tbody tr:last-child { border-bottom: 0; }
+      #results-table td { display: block; padding: 0; border: 0; font-size: 13px; min-height: 0; }
+      #results-table td::before { content: attr(data-label); display: block; flex: none; font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0; color: var(--paper-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+      #results-table td:first-child { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 6px; font-size: 15px; padding-bottom: 2px; }
+      #results-table td:first-child::before { margin: 0; font-size: 10.5px; }
+      #results-table td > select { width: 100%; min-height: 40px; font-size: 13px; padding: 6px 6px; }
+      #results-table td.ok, #results-table td.no { border-radius: calc(8px * var(--corner, 1)); padding: 2px 4px; margin: 0 -4px; }
     }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(251,113,133,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .l01-cube { display: flex; align-items: flex-end; justify-content: center; gap: 12px; min-height: 110px; margin-top: 16px; }
+    .l01-cube .cb { position: relative; border: 2px solid var(--fg-soft); border-radius: 3px; background: rgba(var(--ink-950-rgb), .25); display: grid; place-items: center; }
+    .l01-cube .cb i { display: block; background: rgba(var(--crimson-rgb), .85); border-radius: 2px; }
+    .l01-cube small { font-family: var(--font-mono); font-size: 11px; color: var(--muted); align-self: center; max-width: 150px; line-height: 1.4; }
+    .l01-bridge { margin-top: 20px; display: grid; gap: 14px; }
+    .l01-bq { background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 16px 18px; }
+    .l01-bq h4 { margin: 0 0 10px; font-size: 15.5px; line-height: 1.5; }
+    .l01-bq .opts { display: grid; gap: 8px; }
+    .l01-bq .opts button { text-align: left; border: 1.5px solid var(--paper-line); background: var(--paper); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); padding: 10px 14px; font: inherit; font-size: 14.5px; line-height: 1.45; cursor: pointer; }
+    .l01-bq .opts button:disabled { cursor: default; }
+    .l01-bq .opts button.correct { border-color: var(--ok); background: rgba(var(--ok-rgb), .12); }
+    .l01-bq .opts button.incorrect { border-color: var(--crimson); background: rgba(var(--crimson-rgb), .1); }
+    .l01-bq .why { display: none; margin: 10px 0 0; font-size: 14px; color: var(--paper-text); }
+    .l01-bq .why.on { display: block; }
+    .l01-verdict { display: none; padding: 16px 18px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .1); border-left: 4px solid var(--ok); font-size: 15.5px; }
+    .l01-verdict.on { display: block; }
+    .aq-q p { margin: 6px 0 0; font-size: 15px; }
+    .aq-q ol { margin: 8px 0 0; padding-left: 22px; }
+    .l01-pager { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--paper-line); flex-wrap: wrap; }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
   <link rel="stylesheet" href="../../assets/css/theme.css">
@@ -47,8 +132,8 @@
 
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
-      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 1 of 5 · <b>Need for Transport &amp; Circulatory Systems</b></span>
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> The unit hub</a>
+      <span class="l-crumb">Lesson 1 of 7 · <b>Why big bodies need a heart</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -57,15 +142,15 @@
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Biology · Lesson 1 of 5 · 80 minutes</span>
-        <h1 class="display reveal" data-hook>Need for Transport: <em>Open vs Closed</em> &amp; Single vs Double Circulation</h1>
-        <p class="question reveal">Why can a microscopic pond <em>Amoeba</em> breathe by simple diffusion, a cockroach survive with colourless haemolymph, and a human sprinter require a high-pressure four-chambered double pump?</p>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 1 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Why big bodies need a <em>transport system</em></h1>
+        <p class="question reveal">An <i>Amoeba</i> has no heart, so why does Chidi need one?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Calculate the <strong>surface-area-to-volume ratio (SA/V = 6 ÷ L)</strong> of cubic organisms and explain why large multicellular animals cannot rely on simple diffusion alone.</span></li>
-          <li><b>02</b><span>List the materials transported in animals (oxygen, CO<sub>2</sub>, digested food, urea, hormones, antibodies, heat) and identify the media of transport (<strong>cytoplasm, haemolymph, blood, tissue fluid, lymph</strong>).</span></li>
-          <li><b>03</b><span>Contrast <strong>open circulation</strong> (arthropods: cockroach 13-chambered dorsal heart, ostia, haemocoel; tracheae carry O<sub>2</sub>) with <strong>closed circulation</strong> (earthworm, vertebrates).</span></li>
-          <li><b>04</b><span>Compare <strong>single circulation</strong> in bony fish (2 chambers: 1 atrium, 1 ventricle) with <strong>incomplete double circulation</strong> in amphibians/lizards (3 chambers) and <strong>complete double circulation</strong> in birds, mammals, and <strong>crocodiles</strong> (4 chambers).</span></li>
-          <li><b>05</b><span>Calculate <strong>cardiac output (CO = HR × SV)</strong> and full-body blood circulation time (<strong>t = V<sub>blood</sub> ÷ CO</strong>).</span></li>
+          <li><b>01</b><span>Give <strong>four reasons</strong> why a large, active animal cannot depend on diffusion alone.</span></li>
+          <li><b>02</b><span>List the materials carried by blood and name the three parts of a mammalian transport system: <strong>pump, channels, medium</strong>.</span></li>
+          <li><b>03</b><span>Calculate <strong>SA : V</strong> for cubes, converting between mm, cm and m, and relate it to diffusion.</span></li>
+          <li><b>04</b><span>Compare <strong>open and closed</strong> circulation, and <strong>single and double</strong> circulation, with named animals.</span></li>
+          <li><b>05</b><span>Give <strong>two benefits</strong> of double circulation.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -74,27 +159,27 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <p class="tt-line reveal" id="timetable"><b>0–5</b> Do Now · <b>5–15</b> Wonder · <b>15–40</b> Investigate (25 min) · <b>40–45</b> tidy-up and share results · <b>45–50</b> movement break · <b>50–65</b> Make Sense · <b>65–80</b> Apply and Reflect</p>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
 
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <rect x="20" y="34" width="128" height="172" rx="14" fill="rgba(56,189,248,0.12)" stroke="#38bdf8" stroke-width="2"/>
-          <text x="84" y="58" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">SINGLE (FISH · 2 CH)</text>
-          <ellipse cx="84" cy="118" rx="38" ry="28" fill="none" stroke="#38bdf8" stroke-width="2.5"/>
-          <circle cx="84" cy="146" r="9" fill="#2563eb"/>
-          <text x="84" y="176" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">1 Pass · Low Pressure</text>
-
-          <rect x="172" y="34" width="128" height="172" rx="14" fill="rgba(251,113,133,0.12)" stroke="#fb7185" stroke-width="2"/>
-          <text x="236" y="58" fill="#fb7185" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">DOUBLE (MAMMAL · 4 CH)</text>
-          <ellipse cx="236" cy="98" rx="28" ry="16" fill="none" stroke="#38bdf8" stroke-width="2.2"/>
-          <ellipse cx="236" cy="138" rx="34" ry="20" fill="none" stroke="#fb7185" stroke-width="2.4"/>
-          <circle cx="236" cy="118" r="10" fill="#e11d48"/>
-          <text x="236" y="176" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">2 Passes · 120 mmHg</text>
-          <text x="160" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12.5" text-anchor="middle">SA / V = 6 ÷ L &nbsp;·&nbsp; CO = HR × SV</text>
+      <div class="l01-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 250" role="img">
+          <!-- Amoeba: tiny, all surface -->
+          <path d="M44 74c8-18 34-22 48-8 12 12 6 32-12 38-16 6-40 4-44-12-2-8 2-14 8-18z" style="fill:rgba(var(--teal-rgb),.35);stroke:var(--teal);stroke-width:2"/>
+          <circle cx="68" cy="84" r="7" style="fill:var(--teal)"/>
+          <text class="t" x="68" y="130" text-anchor="middle"><tspan class="t">Amoeba: diffusion is enough</tspan></text>
+          <!-- Big body: acid-cube cut-away -->
+          <rect x="162" y="30" width="140" height="140" rx="6" style="fill:var(--ink-800);stroke:var(--fg-soft);stroke-width:2"/>
+          <rect x="190" y="58" width="84" height="84" rx="4" style="fill:rgba(var(--crimson-rgb),.8)"/>
+          <path d="M162 30h28v28h-28zM274 30h28v28h-28z" style="fill:none"/>
+          <text class="t" x="232" y="105" text-anchor="middle" style="fill:var(--fg)">still pink</text>
+          <text class="t" x="232" y="190" text-anchor="middle">30 mm cube: acid reached only 3.0 mm in</text>
+          <path d="M40 220h250" style="stroke:var(--line-strong);stroke-width:1.5;stroke-dasharray:4 5"/>
+          <text class="t" x="165" y="240" text-anchor="middle" style="fill:var(--amber)">same distance, very different share of the body</text>
         </svg>
       </div>
     </div>
@@ -107,9 +192,9 @@
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
         <li><a href="#sort">Circulation sort</a></li>
-        <li><a href="#practical">3D SA/V bench</a></li>
-        <li><a href="#concepts">Open, closed &amp; double</a></li>
-        <li><a href="#neutralise">3D circuit zoom</a></li>
+        <li><a href="#practical">Agar-cube bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Circuit zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -125,25 +210,25 @@
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
         <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>wake up your diffusion &amp; geometry toolkit</em></h2>
-        <p class="intro">Four foundational building blocks on diffusion distance, cube geometry, aerobic respiration, and biological organisation. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <h2>Before we start: <em>wake up your toolkit</em></h2>
+        <p class="intro">Four quick questions on diffusion, respiration gases, SA : V and units. Answer each in your head <strong>before</strong> you reveal the answer.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--paper-rgb),.3)">Try again</button>
         </div>
       </section>
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>From Surulere Stadium to <em>LUTH Cardiovascular Lab</em></h2>
-        <p class="intro">After a blistering 400 m race at Surulere National Stadium in Lagos, Tunde, Amaka, Coach Musa, and Dr Bamidele investigate why simple diffusion works for <em>Amoeba</em>, why a cockroach needs no haemoglobin, and why mammals need a 4-chamber double pump.</p>
+        <span class="phase" style="--pc:var(--warn)"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>The first clue at the <em>Oja Oba health-day tent</em></h2>
+        <p class="intro">Dr Aisha sends Chidi on a sprint across the market and feels his pulse when he gets back. His heart has nearly doubled its speed, and that is clue number one in the unit mystery.</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Tunde, Amaka, and Coach Musa at Surulere Stadium discussing SA/V ratio and insect open circulation, then Dr Bamidele at LUTH Cardiovascular Lab."></canvas>
-            <div class="stage-label"><i></i>3D story · Surulere Stadium → LUTH Cardiac Lab</div>
+            <canvas aria-label="Animated 3D story: Chidi sprints across the Oja Oba market for Dr Aisha, who feels his pulse; Baba Sule laughs about frogs; then in the lab Dr Aisha shows an Amoeba under the microscope and drops pink agar cubes into acid."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba health-day tent → Dr Aisha's teaching lab</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -153,38 +238,37 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Surulere National Stadium, Lagos:</strong> Tunde finishes the 400 m sprint with his pulse racing at 150 bpm: <em>“Coach Musa! Why can't oxygen just diffuse straight through my skin into my leg muscles like it does in a pond Amoeba?”</em></p>
-            <p><strong>Scene 2 · The SA/V Mathematical Trap:</strong> Amaka replies: <em>“Because SA/V = 6 ÷ L! When side length L grows 1,000 times larger, volume grows a billion-fold while surface area grows only a million-fold!”</em></p>
-            <p><strong>Scene 3 · Cockroach Open Haemocoel:</strong> Coach Musa points to a cockroach by the track bench: <em>“Insects use an open circulatory system — a 13-chambered dorsal tubular heart pumps colourless haemolymph into an open body cavity called a haemocoel!”</em></p>
-            <p><strong>Scene 4 · Why Insect Haemolymph Carries Zero O<sub>2</sub>:</strong> <em>“Even better for WAEC: cockroach haemolymph has no haemoglobin! Oxygen is piped directly to insect muscles through spiracles, tracheae, and tracheoles.”</em></p>
-            <p><strong>Scene 5 · Fish (2 Chambers) vs Toad (3) vs Mammal &amp; Crocodile (4):</strong> Vertebrates keep blood inside closed vessels, progressing from 2-chamber single circulation in fish to 4-chamber complete double circulation in birds, mammals, and crocodiles.</p>
-            <p><strong>Scene 6 · LUTH Cardiovascular Lab:</strong> Dr Bamidele invites the students to test cube scaling (<code>SA/V = 6 ÷ L</code>) and cardiac output on the 3D bench.</p>
+            <p><strong>Scene 1 · The tent:</strong> Dr Aisha asks Chidi to fetch a cable from the far end of the market. He sprints off and comes back with his chest heaving.</p>
+            <p><strong>Scene 2 · The pulse:</strong> She presses two fingers to his wrist and frowns at her watch. <em>“Your heart has nearly doubled its speed. Why should running make it do that?”</em></p>
+            <p><strong>Scene 3 · Baba Sule:</strong> He laughs from his stall: <em>“A frog in a gutter has no need to run like that. Small heart, small trouble!”</em></p>
+            <p><strong>Scene 4 · The lab:</strong> Dr Aisha shows a jar of pond water under a microscope: an <i>Amoeba</i> gliding with no heart and no blood. <em>“This one gets everything by diffusion. Chidi cannot. Today we find out why.”</em></p>
+            <p><strong>Scene 5 · The cubes:</strong> She drops pink agar cubes of four sizes into acid. It is time for the bench.</p>
           </div>
         </details>
       </section>
 
       <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:var(--warn)"><b>1</b>Wonder · Your predictions</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">Why does a fish lose blood pressure at its gills whereas a mammal maintains high systemic pressure? Pin your prediction before we test on the 3D bench.</p>
+        <p class="intro">If oxygen can spread by itself, why bother with a heart and blood at all? Pin your prediction before we test it on the bench.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that double circulation gives higher pressure than single circulation because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I predict that a bigger cube will… because…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Why does SA/V drop as an organism grows larger?</button>
-            <button type="button">Why doesn't cockroach haemolymph carry oxygen?</button>
-            <button type="button">Why is systemic pressure low in a bony fish?</button>
-            <button type="button">Which reptile has a complete 4-chambered heart?</button>
+            <button type="button">Big bodies are too thick for it (Tunde)</button>
+            <button type="button">We move fast, so we use more oxygen (Hauwa)</button>
+            <button type="button">Maybe the skin is too small for the body? (Ifeoma)</button>
+            <button type="button">Animals with no heart have no blood at all (Baba Sule)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
@@ -192,26 +276,31 @@
 
       <!-- ================= 3. SORT GAME ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
-        <h2>Open, Single Closed &amp; <em>Double Closed Circulation Sort</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Open Circulation (Insects)</strong>, <strong>Single Closed Circulation (Bony Fish)</strong>, and <strong>Double Closed Circulation (Amphibians, Reptiles, Birds &amp; Mammals)</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · sort game</span>
+        <h2>How does it <em>move its blood?</em></h2>
+        <p class="intro">Sort all 10 animals into the four bins: <strong>no transport system</strong> (diffusion only), <strong>open</strong>, <strong>closed, single</strong> and <strong>closed, double</strong>. Drag a card, or tap a card and then tap a bin.</p>
 
-        <div class="sort" id="kitchen-sort">
-          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+        <div class="sort" id="circ-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Animals to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Open Circulation bin">
-              <h4><i></i>Open Circulation (Insects)</h4>
-              <small>haemocoel · ostia · no Hb</small>
+            <div class="bin" data-bin="none" style="--bc:var(--sky)" tabindex="0" role="button" aria-label="No transport system bin">
+              <h4><i></i>No system</h4>
+              <small>diffusion only</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#38bdf8" tabindex="0" role="button" aria-label="Single Closed Circulation bin">
-              <h4><i></i>Single Closed (Fish)</h4>
-              <small>2 chambers · 1 pass · gill drop</small>
+            <div class="bin" data-bin="open" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Open circulation bin">
+              <h4><i></i>Open</h4>
+              <small>blood pools in a cavity</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#fb7185" tabindex="0" role="button" aria-label="Double Closed Circulation bin">
-              <h4><i></i>Double Closed (Tetrapods)</h4>
-              <small>3 or 4 chambers · 2 passes</small>
+            <div class="bin" data-bin="closed-single" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Closed single circulation bin">
+              <h4><i></i>Closed, single</h4>
+              <small>one trip through the heart</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="closed-double" style="--bc:var(--pink)" tabindex="0" role="button" aria-label="Closed double circulation bin">
+              <h4><i></i>Closed, double</h4>
+              <small>two trips through the heart</small>
               <div class="drop"></div>
             </div>
           </div>
@@ -228,68 +317,74 @@
 
       <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
-        <h2>3D SA/V Cube &amp; Pump Bench: <em>Verifying SA/V = 6 ÷ L</em></h2>
-        <p class="intro">Test five organism cube sizes (<code>L = 0.2, 1.0, 2.0, 5.0, 10.0 mm</code>) on Dr Bamidele’s 3D bench. Measure <strong>Surface Area SA = 6L² (mm²)</strong>, <strong>Volume V = L³ (mm³)</strong>, and <strong>SA/V = 6 ÷ L (mm⁻¹)</strong> to see why organisms larger than 1 mm require a vascular network and muscular heart.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The agar-cube bench: <em>how far does acid get in?</em></h2>
+        <p class="intro">Agar made with dilute alkali and phenolphthalein is <strong>pink</strong>. Wherever acid reaches, it turns <strong>colourless</strong>. So the colourless edge shows how far a substance can spread in 8 minutes, and the pink core shows where it never arrived. Four cubes (5, 10, 20 and 30 mm) go into the same beaker of dilute hydrochloric acid.</p>
 
-        <div class="callout warn" id="safety-box">
-          <p><strong>Biophysical Diffusion Law (Fick’s Principle):</strong> Diffusion time increases with the <strong>square of distance ($t \propto x^2$)</strong>. While oxygen diffuses across a <code>0.01 mm</code> capillary wall in milliseconds, diffusing across a <code>10 mm</code> unvascularised tissue block would take hours — causing central cells to suffocate without a mass-flow circulatory system.</p>
+        <div class="callout safety" id="safety-box">
+          <p><strong>Safety, as in a real lab:</strong> dilute acid is handled with forceps, never fingers. Cubes are cut on a tile with a sharp blade, away from your body, and eyes must be protected from the acid. Here the bench is a simulation, so you can focus on reading the results.</p>
         </div>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Select cube side L</h4><p>Tap Trials A to E to step cube side length <code>L</code> from microscopic <code>0.2 mm</code> up to macroscopic <code>10.0 mm</code>.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Compute SA = 6L² &amp; V = L³</h4><p>Observe how surface area grows with the square of <code>L</code> while metabolising volume grows with the cube of <code>L</code>.</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Evaluate SA/V = 6 ÷ L</h4><p>Divide <code>6L²</code> by <code>L³</code> to verify that <code>SA/V = 6 ÷ L</code> drops hyperbolically as the organism grows.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Compare subdivided capillary bed</h4><p>Toggle between a solid block and a capillary-subdivided block to see how internal vessels restore exchange surface area.</p></div>
+          <div class="method" id="m1"><b>01</b><h4>Cut the cubes</h4><p>Sides 5, 10, 20 and 30 mm.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Drop all four in acid</h4><p>Same beaker, same moment, forceps. Start the clock.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Blot, cut and measure</h4><p>After 8 minutes, measure the colourless depth.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Calculate</h4><p>Work out SA : V and % colourless.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Surface-Area-to-Volume tissue cube and beating mammalian heart pump bench."></canvas>
-            <div class="stage-label"><i></i>SA/V cube &amp; heart pump</div>
+            <canvas id="bench-canvas" aria-label="3D bench: a beaker of dilute hydrochloric acid holding four pink agar cubes of side 5, 10, 20 and 30 mm, with forceps, a tile, a blade, a ruler and an 8-minute clock. The cut-away cubes show a colourless rim and a pink core."></canvas>
+            <div class="stage-label"><i></i>3D agar-cube bench · drag to rotate · pick a cube</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D SA/V bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the table below and the expected results.</p></div>
           </div>
           <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
-          <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Tissue geometry" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Full Cube (SA/V = 6 ÷ L)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Half-Exposed Cube (3 ÷ L)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Stagnant Open Sinus</button>
+          <div class="stage-bar bench-ctl">
+            <div class="seg" role="group" aria-label="Cube side" id="cube-pick">
+              <button type="button" data-L="5" aria-pressed="false">5 mm</button>
+              <button type="button" data-L="10" aria-pressed="false">10 mm</button>
+              <button type="button" data-L="20" aria-pressed="false">20 mm</button>
+              <button type="button" data-L="30" aria-pressed="true">30 mm</button>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · 0.2 mm</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · 1.0 mm</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · 2.0 mm</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · 5.0 mm</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · 10.0 mm</button>
+            <div class="bench-steps" role="group" aria-label="Bench steps">
+              <button class="vt-btn zobo" type="button" id="bench-drop">1 · Drop in acid</button>
+              <button class="vt-btn" type="button" id="bench-skip">Skip 8 min</button>
+              <button class="vt-btn zobo" type="button" id="bench-measure" disabled>2 · Cut &amp; measure</button>
               <button class="vt-btn" type="button" id="bench-reset">Reset</button>
             </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 cube sizes</span>
+            <div class="seg" role="group" aria-label="Technique" id="bench-tech">
+              <button type="button" data-tech="ok" aria-pressed="true">Careful</button>
+              <button type="button" data-tech="late" aria-pressed="false">Lifted late</button>
+              <button type="button" data-tech="flat" aria-pressed="false">Lying flat</button>
+            </div>
+            <p class="bench-status"><span class="bench-clock" id="bench-clock">Clock <b>0.0</b> min · cubes measured <b>0</b> of 4</span><span class="stage-hint" id="bench-hint">Drop the cubes in the acid to begin</span></p>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
+        <div class="graph-card" id="graph-card">
           <div class="gc-head">
-            <div><span class="gc-kicker">Live graph · plots as you test cube sizes</span><h4>Surface-Area-to-Volume Ratio SA/V (mm⁻¹) against Side Length L (mm)</h4></div>
-            <span class="gc-badge wait" id="vi-badge">0 points</span>
+            <div><span class="gc-kicker">Live graph · plots as you measure</span><h4>% of volume colourless against SA : V</h4></div>
+            <span class="gc-badge wait" id="sav-badge">0 points</span>
           </div>
-          <div id="vi-graph"></div>
-          <div class="gc-stats" id="vi-stats"></div>
-          <p class="gc-note" id="vi-note"></p>
+          <div id="sav-graph"></div>
+          <div class="gc-stats" id="sav-stats"></div>
+          <p class="gc-note" id="sav-note"></p>
         </div>
 
-        <h3>Record your SA/V Scaling readings</h3>
-        <p>As you test Trials A–E on the 3D bench, select the matching <strong>Surface Area SA = 6L² (mm²)</strong>, <strong>Volume V = L³ (mm³)</strong>, and <strong>SA/V Ratio = 6 ÷ L (mm⁻¹)</strong> below.</p>
+        <h3>Record your results</h3>
+        <p>As you cut and measure each cube on the bench, its surface area, volume and acid depth appear below. Choose the value for <strong>SA : V</strong>, the <strong>volume still pink</strong> and the <strong>% colourless</strong>, then check your table.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
             <thead>
               <tr>
-                <th>Trial</th>
-                <th>Side Length L (mm)</th>
-                <th>Surface Area SA = 6L² (mm²)</th>
-                <th>Volume V = L³ (mm³)</th>
-                <th>SA/V Ratio = 6 ÷ L (mm⁻¹)</th>
+                <th>Side L (mm)</th>
+                <th>SA (mm²)</th>
+                <th>V (mm³)</th>
+                <th>SA : V (mm⁻¹)</th>
+                <th>Acid moved in (mm)</th>
+                <th>Volume still pink (mm³)</th>
+                <th>% volume colourless</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -301,327 +396,365 @@
         </div>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table &amp; SA/V scaling verification <small>open after recording yours</small></summary>
+          <summary>Expected results, precautions and sources of error <small>open after you record yours</small></summary>
           <div class="reveal-body">
+            <p><strong>Expected table (acid moved in 3.0 mm on every face):</strong></p>
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>Side L (mm)</th><th>SA = 6L² (mm²)</th><th>Volume V = L³ (mm³)</th><th>SA/V = 6 ÷ L (mm⁻¹)</th></tr></thead>
-                <tbody>
-                  <tr><td>A</td><td>0.2</td><td>0.24</td><td>0.008</td><td>30.00</td></tr>
-                  <tr><td>B</td><td>1.0</td><td>6.00</td><td>1.000</td><td>6.00</td></tr>
-                  <tr><td>C</td><td>2.0</td><td>24.00</td><td>8.000</td><td>3.00</td></tr>
-                  <tr><td>D</td><td>5.0</td><td>150.0</td><td>125.0</td><td>1.20</td></tr>
-                  <tr><td>E</td><td>10.0</td><td>600.0</td><td>1000</td><td>0.60</td></tr>
-                </tbody>
+                <thead><tr><th>L (mm)</th><th>SA (mm²)</th><th>V (mm³)</th><th>SA : V (mm⁻¹)</th><th>Colourless depth (mm)</th><th>Volume still pink (mm³)</th><th>% colourless</th></tr></thead>
+                <tbody id="expected-body"></tbody>
               </table>
             </div>
-            <p><strong>Ratio of SA/V between Trial A (0.2 mm) and Trial E (10.0 mm):</strong></p>
-            <div class="eq light">F = (SA/V)_A ÷ (SA/V)_E = 30.00 ÷ 0.60 = 50</div>
+            <p>In the 5 mm cube the two 3.0 mm fronts meet in the middle, so the whole cube clears. The acid went the same depth into every cube, yet the 30 mm cube is still about half pink in the middle: the same distance serves less and less of a bigger body.</p>
+            <p><strong>Precautions (past tense):</strong> the cubes were cut on a tile with a sharp blade and checked with a ruler before use · all cubes were placed in the acid at the same moment and lifted out at the same time · the acid fully covered every cube · the cubes were handled with forceps, and eyes were protected from the acid.</p>
+            <p><strong>Sources of error, with direction:</strong> a cube cut slightly larger than recorded had a real SA : V smaller than the value used, so its % colourless was <strong>too low</strong> for the SA : V plotted · a cube resting flat on the beaker floor had one face shielded from acid, so its % colourless came out <strong>too low</strong> · lifting a cube out late gave the acid extra time, so its % colourless was <strong>too high</strong> · the pale boundary is hard to judge by eye, so the colourless depth may be read <strong>too high or too low</strong> (random error).</p>
           </div>
         </details>
 
-        <h3>Practical Analysis Questions</h3>
+        <h3>Practical analysis questions</h3>
         <div class="aq" data-answer="l01-prac-q">
-          <div class="aq-top"><h4>Answer these three WAEC transport analysis questions, then compare with the model answers.</h4></div>
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>Why can <em>Amoeba</em> and <em>Paramecium</em> exchange gases across their cell membrane without gills, lungs, or blood?</li>
-            <li>How does a tapeworm (<em>Taenia solium</em>) or flatworm (<em>Planaria</em>) maintain a large <code>SA/V</code> ratio despite being several centimetres long?</li>
-            <li>How do internal capillary beds overcome the tiny external <code>SA/V</code> ratio of a human being?</li>
+            <li>Why was the colourless depth the same in every cube?</li>
+            <li>Which cube was fully cleared, and why?</li>
+            <li>What happens to SA : V each time L doubles?</li>
+            <li>What does the pink centre of the 30 mm cube stand for in a large animal?</li>
+            <li>Why does an <i>Amoeba</i> not need a heart?</li>
           </ol>
           <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>They are microscopic unicellular organisms with a very large <code>SA/V</code> ratio and a diffusion distance of less than <code>0.05 mm</code>, so simple diffusion and cyclosis are fast enough.</li>
-                <li>By having a <strong>dorso-ventrally flattened ribbon-like body</strong>, which keeps every internal cell extremely close to the external surface.</li>
-                <li>Branching capillaries penetrate within <code>0.05 mm</code> of every tissue cell, creating thousands of square metres of internal exchange surface area.</li>
+                <li>Acid spreads into agar by diffusion, and in the same time (8 minutes) it moves about the same distance, 3.0 mm, whatever the size of the cube.</li>
+                <li>The 5 mm cube. Its half-width is only 2.5 mm, less than 3.0 mm, so the acid reached the centre from every side.</li>
+                <li>It halves, because SA : V = 6/L. For example 10 mm gives 0.60 mm⁻¹ and 20 mm gives 0.30 mm⁻¹.</li>
+                <li>Cells deep inside the body, too far from the surface to be supplied in time by diffusion alone.</li>
+                <li>It is a single tiny cell with a huge SA : V, so everything it needs diffuses in through its surface quickly enough.</li>
               </ol>
             </div>
           </details>
+        </div>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 minutes in):</strong> stand up. Jog on the spot for 20 seconds, as Chidi did across the market, then sit and find the pulse at your wrist. Count how many beats you feel in 15 seconds. Your heart is speeding up to deliver oxygen to working muscles, just as the cube bench predicts. Anyone with a heart or breathing condition can march gently or simply watch.</p>
         </div>
       </section>
 
       <!-- ================= 4. CONCEPTS ================= -->
       <section class="l-sec" id="concepts">
         <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
-        <h2>Materials for Transport, <em>Open vs Closed</em> &amp; Single vs Double Circulation</h2>
-        <p class="intro">Let’s connect our 3D bench findings to the complete comparative tables and equations tested in WAEC, NECO, and JAMB Biology.</p>
+        <h2>Why large animals need a <em>transport system</em></h2>
+        <p class="intro">Your cube results explain Dr Aisha's first clue. Let us name what you saw.</p>
 
-        <h3 id="def-shm">1 · Materials Transported &amp; Media of Transport in Animals</h3>
-        <p>Every metabolising animal cell requires continuous delivery of raw materials and removal of toxic metabolic wastes across four transport media (<strong>cytoplasm, haemolymph, blood, and lymph/tissue fluid</strong>):</p>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Material Transported</th><th>Source Organ / Site</th><th>Destination Organ / Site</th><th>Form &amp; Medium of Transport in Mammals</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Oxygen (O<sub>2</sub>)</strong></td><td>Alveoli of lungs</td><td>All respiring body cells</td><td>As <strong>oxyhaemoglobin (HbO<sub>8</sub>)</strong> inside red blood cells (98.5%) and dissolved in plasma (1.5%).</td></tr>
-              <tr><td><strong>Carbon dioxide (CO<sub>2</sub>)</strong></td><td>Respiring tissue cells</td><td>Alveoli of lungs (exhaled)</td><td>Mainly as <strong>hydrogencarbonate ions (HCO<sub>3</sub><sup>−</sup>)</strong> in plasma (~70%), <strong>carbaminohaemoglobin</strong> (~23%), and dissolved CO<sub>2</sub> (~7%).</td></tr>
-              <tr><td><strong>Digested food</strong> (glucose, amino acids, fatty acids, vitamins, minerals)</td><td>Ileum villi (via hepatic portal vein &amp; lacteals)</td><td>Liver, muscles, growing &amp; respiring tissues</td><td>Glucose, amino acids, vitamins &amp; salts dissolved in blood plasma; lipids transported as chylomicrons via <strong>lymph</strong> into blood.</td></tr>
-              <tr><td><strong>Nitrogenous waste (Urea)</strong></td><td>Liver (deamination of excess amino acids)</td><td>Kidneys (excreted in urine) &amp; sweat glands</td><td>Dissolved in blood plasma.</td></tr>
-              <tr><td><strong>Hormones</strong> (e.g., adrenaline, insulin, thyroxine)</td><td>Endocrine (ductless) glands</td><td>Specific target organs</td><td>Dissolved in blood plasma.</td></tr>
-              <tr><td><strong>Water, salts, antibodies &amp; heat</strong></td><td>Gut, liver, active muscles, lymphocytes</td><td>Kidneys, skin, infection sites, whole body</td><td>Blood plasma &amp; lymph regulate osmoregulation, immunity, and uniform core body temperature (<code>37 °C</code>).</td></tr>
-            </tbody>
-          </table>
+        <h3>What is a transport system?</h3>
+        <p>A <strong>transport system</strong> is the set of parts that carries materials in bulk between the places where they are taken in, made, used and removed. In a mammal it has three parts:</p>
+        <div class="l01-parts">
+          <div><b>Pump</b>the heart</div>
+          <div><b>Channels</b>arteries, capillaries and veins</div>
+          <div><b>Medium</b>blood (with lymph as a second fluid)</div>
         </div>
 
-        <h3 id="def-terms">2 · Open vs Closed Circulatory Systems Compared</h3>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Feature</th><th>Open Circulatory System</th><th>Closed Circulatory System</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Vessel Continuity</strong></td><td>Circulating fluid leaves the dorsal vessel and empties into open body cavities (<strong>haemocoel / sinuses</strong>).</td><td>Blood remains strictly confined inside a continuous network of <strong>arteries, capillaries, and veins</strong>.</td></tr>
-              <tr><td><strong>Circulating Fluid</strong></td><td><strong>Haemolymph</strong> (no distinction between blood and interstitial fluid).</td><td><strong>Blood</strong> is distinct from <strong>tissue fluid</strong> and <strong>lymph</strong>.</td></tr>
-              <tr><td><strong>Direct Contact with Cells</strong></td><td>Haemolymph bathes internal organs and tissues directly.</td><td>Blood never touches tissue cells directly; exchange occurs across capillary walls via <strong>tissue fluid</strong>.</td></tr>
-              <tr><td><strong>Hydrostatic Pressure &amp; Speed</strong></td><td><strong>Very low pressure</strong> and slow, sluggish circulation.</td><td><strong>High pressure</strong> and rapid, precisely regulated circulation.</td></tr>
-              <tr><td><strong>Control of Distribution</strong></td><td>Cannot selectively redirect flow to specific active organs.</td><td>Arterioles constrict or dilate (vasoconstriction/vasodilation) to shunt blood to active muscles or organs.</td></tr>
-              <tr><td><strong>Oxygen Transport</strong></td><td>In insects (cockroach, grasshopper), haemolymph is colourless (<strong>no haemoglobin</strong>) and <strong>does NOT transport O<sub>2</sub></strong> (tracheal system delivers O<sub>2</sub>).</td><td>Red respiratory pigment (<strong>haemoglobin</strong>) carries O<sub>2</sub> (dissolved in plasma in earthworm; packed inside RBCs in vertebrates).</td></tr>
-              <tr><td><strong>Examples</strong></td><td><strong>Arthropods</strong> (insects, spiders, crabs, prawns) and most <strong>molluscs</strong> (snails, clams).</td><td><strong>Annelids</strong> (earthworm), <strong>cephalopod molluscs</strong> (squid, octopus), and all <strong>vertebrates</strong> (fish, amphibians, reptiles, birds, mammals).</td></tr>
-            </tbody>
-          </table>
+        <h3>Why big animals need one</h3>
+        <div class="callout big reveal" id="why-four">
+          <p><strong>Four reasons:</strong> (1) their SA : V is small, so the surface cannot supply the whole volume; (2) most cells lie far from the surface, and diffusion is far too slow over long distances; (3) active animals burn oxygen and food quickly; (4) materials are made in one organ and used in another (hormones, urea, absorbed food).</p>
         </div>
+        <div class="eq" id="eq-sav">SA : V = 6L² ÷ L³ = 6 ÷ L &nbsp;&nbsp;<span class="st">every time the side L doubles, SA : V halves</span></div>
 
-        <h3>3 · Governing Equations: SA/V Ratio &amp; Cardiac Output</h3>
-        <div class="eq" id="eq-shm" data-hook>SA / V = 6L^2 ÷ L^3 = 6 ÷ L</div>
-        <div class="eq" id="eq-omega">CO = HR × SV = 72 × 70 = 5040 mL/min = 5.04 L/min</div>
-        <div class="eq" id="eq-vel">t = V_blood ÷ CO = 5040 ÷ 5040 = 1.0 min = 60 s</div>
+        <h3>Materials carried by the blood</h3>
+        <ul class="l01-materials" id="materials">
+          <li><b>1</b>oxygen</li><li><b>2</b>carbon dioxide</li><li><b>3</b>products of digestion (amino acids, glucose, glycerol and fatty acids)</li><li><b>4</b>water</li><li><b>5</b>mineral salts</li><li><b>6</b>hormones</li><li><b>7</b>urea</li><li><b>8</b>antibodies</li><li><b>9</b>heat</li>
+        </ul>
 
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up beside your desk! Walk in a single slow circle tapping your chest <strong>once</strong> per lap to act out <strong>Fish Single Circulation (1 heart pass per circuit)</strong>. Now trace a figure-eight (<strong>8</strong>) on the floor — tap your right chest, step to the “lungs”, tap your left chest, and stride briskly around the “body” to experience <strong>Mammalian Double Circulation (2 heart passes per circuit)</strong>!</p>
-        </div>
-
-        <h3 id="props">4 · Single vs Incomplete Double vs Complete Double Circulation across Vertebrates</h3>
+        <h3 id="props">Two comparisons you must know</h3>
         <div class="tbl-wrap" id="props-table">
           <table class="tbl">
-            <thead><tr><th>Feature</th><th>Single Circulation (Bony Fish — <em>Tilapia</em>)</th><th>Incomplete Double Circulation (Amphibians &amp; Most Reptiles)</th><th>Complete Double Circulation (Birds, Mammals &amp; <strong>Crocodiles</strong>)</th></tr></thead>
+            <thead><tr><th>Open vs closed</th><th>Open circulation</th><th>Closed circulation</th></tr></thead>
             <tbody>
-              <tr><td><strong>Heart Chambers</strong></td><td><strong>2 chambers</strong> (1 atrium + 1 ventricle; plus sinus venosus &amp; conus arteriosus)</td><td><strong>3 chambers</strong> (2 atria + 1 undivided ventricle in toad; partially septate ventricle in lizards/snakes)</td><td><strong>4 chambers</strong> (2 atria + 2 completely separated ventricles)</td></tr>
-              <tr><td><strong>Heart Passages per Complete Lap</strong></td><td><strong>Once (1×)</strong> — Heart → Gills → Body → Heart</td><td><strong>Twice (2×)</strong> — Pulmocutaneous circuit + Systemic circuit</td><td><strong>Twice (2×)</strong> — Pulmonary circuit (right side) + Systemic circuit (left side)</td></tr>
-              <tr><td><strong>Blood in the Heart</strong></td><td>Contains <strong>only deoxygenated blood</strong></td><td>Right atrium = deoxygenated; Left atrium = oxygenated; single ventricle = <strong>some mixing</strong></td><td>Right side = strictly deoxygenated; Left side = strictly oxygenated (<strong>zero mixing</strong>)</td></tr>
-              <tr><td><strong>Systemic Arterial Pressure</strong></td><td><strong>Low</strong> (pressure is lost across narrow gill capillaries before reaching body organs)</td><td><strong>Moderate</strong> (re-pumped by ventricle after lungs, but lower than mammals)</td><td><strong>High (~120 mmHg systemic)</strong> while keeping pulmonary pressure safely low (~25 mmHg)</td></tr>
-              <tr><td><strong>Metabolic Rate &amp; Thermoregulation</strong></td><td>Low metabolic rate; <strong>poikilothermic</strong> (ectothermic)</td><td>Moderate metabolic rate; <strong>poikilothermic</strong> (ectothermic)</td><td>High metabolic rate; supports <strong>homoiothermy / endothermy</strong> in birds and mammals</td></tr>
+              <tr><td><strong>Where the blood is</strong></td><td>Pools in a body cavity, the haemocoel, bathing the organs</td><td>Kept inside vessels the whole way</td></tr>
+              <tr><td><strong>Pressure and speed</strong></td><td>Low, sluggish</td><td>High, fast</td></tr>
+              <tr><td><strong>Name of fluid</strong></td><td>Haemolymph</td><td>Blood</td></tr>
+              <tr><td><strong>Examples</strong></td><td>Cockroach, grasshopper, snail</td><td>Earthworm, tilapia, frog, pigeon, human</td></tr>
+            </tbody>
+          </table>
+          <table class="tbl" style="margin-top:14px">
+            <thead><tr><th>Single vs double</th><th>Single circulation</th><th>Double circulation</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Trips through the heart per full circuit</strong></td><td>One</td><td>Two</td></tr>
+              <tr><td><strong>Chambers</strong></td><td>Two in fish</td><td>Three in amphibians and most reptiles, four in birds and mammals</td></tr>
+              <tr><td><strong>Route</strong></td><td>Heart → gills → body → heart</td><td>Heart → lungs → heart, then heart → body → heart</td></tr>
+              <tr><td><strong>Examples</strong></td><td>Tilapia, catfish</td><td>Toad, lizard, pigeon, human</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 id="ph-h">Comparative Animal Transport Explorer</h3>
-        <p>Tap any pin below to compare how <em>Amoeba</em>, cockroach, tilapia, toad, and humans/crocodiles solve internal transport:</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Diffusion Only</div><div>Open Haemocoel (Insect)</div><div>Closed Vertebrate Systems (2 → 3 → 4 Chambers) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect heart chambers, circuit passes, pressure, and oxygen transport.</div>
+        <div class="callout tip reveal" id="double-adv">
+          <p><strong>Advantages of double circulation:</strong> blood returning from the lungs is pumped a second time, so it reaches the body at high pressure; and with four chambers, oxygen-rich and oxygen-poor blood never mix.</p>
+        </div>
+
+        <h3>Cube-side explorer</h3>
+        <p>Tap a pin to see how SA, V and SA : V change with the cube side L, and how much of the cube is still pink after 8 minutes (acid moved in 3.0 mm).</p>
+        <div class="ph-explorer" id="pos-explorer">
+          <div class="l01-track" id="pos-track"></div>
+          <div class="l01-ends" id="pos-nums"><span>← small cube: high SA : V</span><span>large cube: low SA : V →</span></div>
+          <div class="l01-cube" id="pos-cube" aria-hidden="true"></div>
+          <div class="ph-info" id="pos-info" aria-live="polite">Tap a pin to inspect a cube.</div>
         </div>
       </section>
 
-      <!-- ================= 5. 3D CIRCUIT ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Single vs Double Circulation Zoom</span>
-        <h2>Inside the loops: <em>2-Chamber Fish Single vs 4-Chamber Mammalian Double Circulation</em></h2>
-        <p class="intro">Rotate the 3D comparative circulation stage below! Compare the <strong>single-loop fish circuit</strong> on the left (where blood loses pressure in the gill capillaries before trickling to the body) with the <strong>figure-eight mammalian double circuit</strong> on the right (where oxygenated blood returns to the left ventricle to be repumped at 120 mmHg).</p>
+      <!-- ================= 5. CIRCUIT ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D zoom</span>
+        <h2>Three ways to move blood: <em>open, single, double</em></h2>
+        <p class="intro">Watch the fluid move round each design. Switch between them and read the two counters: how many trips through the heart per circuit, and the pressure with which the blood reaches the body tissues.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D comparison of fish single circulation (2 chambers, 1 loop) and mammalian double circulation (4 chambers, figure-8 pulmonary and systemic loops). Blue cells are deoxygenated, red are oxygenated, purple are mixed."></canvas>
-            <div class="stage-label"><i></i>Fish vs mammal circulation</div>
+            <canvas id="zoom-canvas" aria-label="3D comparison of circulation: an insect's open system with haemolymph in the body cavity, a fish's closed single circuit through the gills, and a mammal's closed double circuit through the lungs and the body."></canvas>
+            <div class="stage-label"><i></i>3D circuit zoom · drag to rotate</div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D circulation comparison stage couldn't start on this device.</p></div>
+            <div class="stage-fallback"><p>The 3D circuit zoom couldn't start on this device. Read the table in Make Sense instead.</p></div>
           </div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Circulation mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Both Loops Side-by-Side</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Fish Single (2 Chambers)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Mammal Double (4 Chambers)</button>
+            <div class="seg" role="group" aria-label="Circulation type" id="zoom-seg">
+              <button type="button" data-mode="open" aria-pressed="true">Open</button>
+              <button type="button" data-mode="single" aria-pressed="false">Closed, single</button>
+              <button type="button" data-mode="double" aria-pressed="false">Closed, double</button>
             </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Toggle Toad 3-Chamber Incomplete</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <button class="vt-btn zobo" type="button" id="zoom-next">Next design ▶</button>
             <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#3ee6c4"></i>Heart<b data-c="h">4 chambers</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>Passes<b data-c="oh">2× / lap</b></span>
-              <span class="counter"><i style="--c:#7cc4ff"></i>Mixing<b data-c="na">Zero</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Systemic P<b data-c="cl">120 mmHg</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>Group<b data-c="w">Mammal/Croc</b></span>
+              <span class="counter"><i style="--c:var(--sky)"></i>Trips through heart<b data-c="trips">1</b></span>
+              <span class="counter"><i style="--c:var(--crimson)"></i>Pressure at tissues<b data-c="pressure">low</b></span>
+              <span class="counter"><i style="--c:var(--amber)"></i>Example<b data-c="ex">cockroach</b></span>
             </div>
           </div>
         </div>
+        <p class="prac-note" id="zoom-note" aria-live="polite"></p>
       </section>
 
       <!-- ================= 6. WORKED EXAMPLES ================= -->
       <section class="l-sec" id="examples">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Every calculation is broken down one atomic mathematical step at a time with a plain-English explainer note underneath.</p>
+        <p class="intro">Attempt each problem on paper first, then check the working one line at a time.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Surface-Area-to-Volume Ratio (SA/V) of Microscopic vs Macroscopic Cubes</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>SA : V with a unit change</h4></div>
           <div class="example-body">
-            <p class="q">Compare a unicellular organism modelled as a cube of side length L<sub>1</sub> = 0.1 mm with a small multicellular animal modelled as a cube of side length L<sub>2</sub> = 100 mm. Calculate: (a) the surface-area-to-volume ratio (SA/V) of the unicellular cube, (b) the SA/V ratio of the multicellular cube, and (c) how many times larger the unicellular SA/V ratio is than the multicellular SA/V ratio.</p>
+            <p class="q">Find SA : V for a cube of side 2.0 cm, first in cm⁻¹ and then in mm⁻¹.</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) — Calculate SA/V of the 0.1 mm unicellular cube using SA/V = 6 ÷ L:</strong> <code>R_1 = 6 ÷ 0.1 = 60 mm^-1</code>.</li>
-              <li><strong>Part (b) — Calculate SA/V of the 100 mm multicellular cube:</strong> <code>R_2 = 6 ÷ 100 = 0.06 mm^-1</code>.</li>
-              <li><strong>Part (c) — Divide R<sub>1</sub> by R<sub>2</sub> to find the scaling factor F:</strong> <code>F = 60 ÷ 0.06 = 1000</code>.</li>
+              <li><strong>Surface area:</strong> <code>SA = 6L² = 6 × (2.0)² = 24 cm²</code>.</li>
+              <li><strong>Volume:</strong> <code>V = L³ = (2.0)³ = 8.0 cm³</code>.</li>
+              <li><strong>Ratio:</strong> <code>SA : V = 24 ÷ 8.0 = 3.0 cm⁻¹</code> (check: 6 ÷ 2.0 = 3.0).</li>
+              <li><strong>Convert:</strong> 1 cm = 10 mm, so "per cm" is ten times "per mm": <code>3.0 cm⁻¹ = 3.0 ÷ 10 = 0.30 mm⁻¹</code>.</li>
             </ol>
-            <div class="answer-line">(a) R<sub>1</sub> = 60 mm⁻¹ &nbsp;·&nbsp; (b) R<sub>2</sub> = 0.06 mm⁻¹ &nbsp;·&nbsp; (c) 1,000 times larger</div>
+            <div class="answer-line">3.0 cm⁻¹ = 0.30 mm⁻¹ (the same as the 20 mm bench cube)</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Cardiac Output (CO) &amp; Total Blood Circulation Time at Rest</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4><i>Amoeba</i> against Chidi</h4></div>
           <div class="example-body">
-            <p class="q">At rest before his race, Tunde has a heart rate HR = 72 beats/min and a left ventricular stroke volume SV = 70 mL/beat. Given that his total blood volume is 5,040 mL, calculate: (a) his resting cardiac output in mL/min and L/min, and (b) the time in seconds required for his heart to pump his entire blood volume once.</p>
+            <p class="q">Treat an <i>Amoeba</i> as a cube of side 0.20 mm and Chidi's body as a cube of side 0.40 m. How many times larger is the <i>Amoeba</i>'s SA : V?</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) Step 1 — Multiply heart rate HR by stroke volume SV:</strong> <code>CO = 72 × 70 = 5040 mL/min</code>.</li>
-              <li><strong>Part (a) Step 2 — Convert cardiac output from mL/min to L/min (÷ 1000):</strong> <code>CO_L = 5040 ÷ 1000 = 5.04 L/min</code>.</li>
-              <li><strong>Part (b) — Divide total blood volume by cardiac output to find circulation time t (min):</strong> <code>t = 5040 ÷ 5040 = 1.0 min = 60 s</code>.</li>
+              <li><strong>Same units first:</strong> <code>0.40 m × 1000 = 400 mm</code>.</li>
+              <li><strong><i>Amoeba</i>:</strong> <code>6 ÷ 0.20 = 30 mm⁻¹</code>.</li>
+              <li><strong>Chidi:</strong> <code>6 ÷ 400 = 0.015 mm⁻¹</code>.</li>
+              <li><strong>Compare:</strong> <code>30 ÷ 0.015 = 2000</code>.</li>
             </ol>
-            <div class="answer-line">(a) Resting Cardiac Output = 5,040 mL/min (5.04 L/min) &nbsp;·&nbsp; (b) Full Circulation Time = 60 seconds</div>
+            <div class="answer-line">About 2000 times larger, so diffusion through the surface serves the Amoeba but cannot serve Chidi</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Sprint Exercise Cardiac Output &amp; Percentage Increase</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Share of a cube reached by acid</h4></div>
           <div class="example-body">
-            <p class="q">During his 400 m sprint at Surulere National Stadium, Tunde’s heart rate rises to HR = 150 beats/min and his stroke volume increases to SV = 110 mL/beat. Calculate: (a) his sprint cardiac output in L/min, and (b) the time in seconds now needed to circulate his 5,040 mL blood volume once.</p>
+            <p class="q">In the bench, acid moved 3.0 mm into every face of the 20 mm cube. What percentage of the cube turned colourless?</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) Step 1 — Calculate sprint cardiac output in mL/min:</strong> <code>CO_sprint = 150 × 110 = 16500 mL/min</code>.</li>
-              <li><strong>Part (a) Step 2 — Convert mL/min to L/min (÷ 1000):</strong> <code>CO_L = 16500 ÷ 1000 = 16.5 L/min</code>.</li>
-              <li><strong>Part (b) — Calculate full circulation time in seconds:</strong> <code>t_s = (5040 ÷ 16500) × 60 = 18.3 s</code>.</li>
+              <li><strong>Pink centre side:</strong> <code>20 − (2 × 3.0) = 14 mm</code>.</li>
+              <li><strong>Pink volume and whole cube:</strong> <code>14³ = 2744 mm³</code> and <code>20³ = 8000 mm³</code>.</li>
+              <li><strong>Colourless volume:</strong> <code>8000 − 2744 = 5256 mm³</code>.</li>
+              <li><strong>Percentage:</strong> <code>5256 ÷ 8000 × 100 = 65.7%</code>.</li>
             </ol>
-            <div class="answer-line">(a) Sprint Cardiac Output = 16.5 L/min &nbsp;·&nbsp; (b) Full Circulation Time = 18.3 seconds</div>
+            <div class="answer-line">65.7% colourless; about a third of the cube was still unreached</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>A model table answer</h4></div>
+          <div class="example-body">
+            <p class="q">"Give the differences between open and closed circulation."</p>
+            <ol class="steps-sol">
+              <li><strong>Choose features that can be compared:</strong> where the blood is, pressure, and an example.</li>
+              <li><strong>Fill both columns on every row:</strong> a row with only one side scores nothing.</li>
+              <li><strong>Keep one feature per row</strong> and write the matching feature in the other column.</li>
+              <li><strong>Check each example is on the right side:</strong> a cockroach is open, an earthworm is closed.</li>
+            </ol>
+            <div class="tbl-wrap"><table class="tbl">
+              <thead><tr><th>Feature</th><th>Open</th><th>Closed</th></tr></thead>
+              <tbody>
+                <tr><td>Location of blood</td><td>Body cavity (haemocoel)</td><td>Inside vessels</td></tr>
+                <tr><td>Pressure</td><td>Low</td><td>High</td></tr>
+                <tr><td>Example</td><td>Cockroach</td><td>Earthworm</td></tr>
+              </tbody>
+            </table></div>
+            <div class="answer-line">Matched rows, both columns filled, one feature per row</div>
           </div>
         </article>
       </section>
 
       <!-- ================= 7. BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Back to Surulere Stadium: <em>prove why Tunde’s muscles need a 16.5 L/min double pump!</em></h2>
-        <p class="intro">Apply <code>SA/V = 6 ÷ L</code> and <code>CO = HR × SV</code> step by step to explain why Tunde’s leg muscles cannot rely on simple diffusion during his 400 m race.</p>
-
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Organism A · Pond Amoeba <small style="color:var(--muted);font-weight:500">· Unicellular (L = 0.1 mm)</small></h4>
-              <div class="clock-well">
-                <div style="width:26px;height:26px;border-radius:50%;background:radial-gradient(circle,#3ee6c4,#0d9488);box-shadow:0 0 14px rgba(62,230,196,.6)"></div>
-              </div>
-              <div class="vt-count"><span id="time-a">SA/V = 60 mm⁻¹ · Diffusion &lt; 0.05 mm</span><small>needs no heart or vessels</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Organism B · Tunde (Sprinter) <small style="color:var(--muted);font-weight:500" id="len-b-label">· L = 100 mm · HR = 72 → 150 bpm</small></h4>
-              <div class="clock-well">
-                <div style="width:58px;height:52px;border-radius:14px;border:2px solid #fb7185;background:rgba(225,29,72,.22);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fecdd3">4-CH</div>
-              </div>
-              <div class="vt-count"><span id="time-b">Why diffusion fails &amp; how CO scales</span><small>run Steps 1–3 below!</small></div>
-            </div>
-          </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Compare SA/V (0.1 mm vs 100 mm)</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compute Resting CO (72 × 70 mL)</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Compute Sprint CO (150 × 110 mL)</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset calculation</button>
-          </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Compare Amoeba's SA/V with Tunde's muscles and calculate his sprint cardiac output. Start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
-        </div>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Dr Aisha's <em>first clue</em></h2>
+        <p class="intro">Use the cube results and the circuit zoom to explain why Chidi's pulse nearly doubled. Answer the three steps in order.</p>
+        <div class="l01-bridge" id="bridge-steps"></div>
+        <div class="l01-verdict" id="bridge-verdict" aria-live="polite"></div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 1:</strong> As an organism’s size $L$ increases, its <strong>surface-area-to-volume ratio ($\text{SA/V} = 6 \div L$)</strong> plummets and diffusion distances grow too large for simple diffusion. While insects use low-pressure <strong>open circulation</strong> (where tracheae carry $\text{O}_2$) and fish use 2-chamber <strong>single circulation</strong>, birds, mammals, and crocodiles use 4-chamber <strong>complete double circulation</strong> to keep oxygenated and deoxygenated blood 100% separate at high systemic pressure!</p>
+          <p><strong>The big idea of Lesson 1:</strong> size and activity make diffusion too slow, so large animals pump blood through closed vessels, and mammals pump it twice.</p>
         </div>
       </section>
 
       <!-- ================= 8. QUIZ ================= -->
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
-        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <h2>Quick quiz: <em>12 WAEC, NECO and JAMB-style questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation of every option.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--paper-rgb),.3)">Retry quiz</button>
         </div>
       </section>
 
       <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 10 min</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 1.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal from Lesson 1.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can calculate SA/V = 6 ÷ L for cubes of different sizes and explain why large organisms need a transport system.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can list six materials transported in animals, their source and target organs, and the media of transport.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can contrast open and closed circulatory systems and explain why insect haemolymph does not carry oxygen.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can compare 2-chamber fish, 3-chamber amphibian, and 4-chamber mammalian/crocodilian circulation.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can calculate cardiac output (CO = HR × SV) and full circulation time (t = V_blood ÷ CO).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can give four reasons big animals need transport.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can list what blood carries.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate SA : V with unit changes.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can compare open and closed circulation.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can compare single and double circulation.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
-        <div class="aq" data-answer="l01-exit">
-          <div class="aq-top"><h4>In two sentences: why does cockroach haemolymph play no role in oxygen transport, and why is systemic arterial blood pressure much higher in a human than in a tilapia fish?</h4><span class="marks">2 marks</span></div>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>Calculate the SA : V of a 5.0 mm cube, and state one advantage of double circulation.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>Cockroach haemolymph lacks the respiratory pigment haemoglobin, so oxygen is delivered directly to tissues through air-filled tracheae and tracheoles <b>(1)</b>. In a tilapia fish (single circulation), blood loses pressure as it passes through narrow gill capillaries before reaching the body, whereas in a human (double circulation), oxygenated blood returns from the lungs to the thick left ventricle to be re-pumped at high pressure (~120 mmHg) <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>SA : V = 6 ÷ 5.0 = 1.2 mm⁻¹ <b>(1)</b>. Any one advantage: blood from the lungs is pumped a second time so it reaches the body at high pressure, or oxygen-rich and oxygen-poor blood never mix <b>(1)</b>.</p></div>
           </details>
         </div>
       </section>
 
       <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>Need for Transport, Open vs Closed &amp; Single vs Double Circulation</em></h2>
-        <p class="intro">Complete Part A (pulse and cardiac output investigation) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min at home</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 01. Write your own attempt first to unlock each model solution.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
 
-        <h3>Part A · Resting vs Exercise Pulse &amp; Cardiac Output Investigation</h3>
+        <h3>Part A · Home investigation: dye cubes</h3>
         <div class="aq" data-answer="l01-a1">
-          <div class="aq-top"><h4>Measure your radial wrist pulse for 60 seconds while sitting quietly (e.g., 72 bpm) and again immediately after 60 seconds of brisk spot-jogging (e.g., 135 bpm). Assuming a resting stroke volume of 70 mL and an exercise stroke volume of 100 mL, calculate your resting and exercise cardiac outputs in L/min.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="Your pulse counts and cardiac output calculations…" aria-label="Part A answer"></textarea>
+          <div class="aq-top"><h4>How far does colour travel into cubes of different sizes?</h4><span class="marks">Home investigation</span></div>
+          <div class="aq-q">
+            <p><strong>You need:</strong> a raw Irish potato or a piece of white yam, a kitchen knife and chopping board (an adult does the cutting), a 30 cm ruler, a cup of strong zobo drink or water with a few drops of food colouring, a spoon and a clock.</p>
+            <ol>
+              <li>Ask an adult to cut three cubes from the peeled potato or yam, of side 10 mm, 25 mm and 40 mm. Check each side with the ruler.</li>
+              <li>Lower all three cubes into the cup of coloured liquid at the same moment, using a spoon, and make sure the liquid covers them.</li>
+              <li>After 30 minutes, lift all three out together, rinse them quickly in clean water and pat them dry.</li>
+              <li>Ask the adult to cut each cube in half through its centre. Measure the depth of the coloured edge on each cut face.</li>
+              <li>For each cube, calculate SA : V, the volume still uncoloured, and the percentage of the volume that has been coloured.</li>
+              <li>Wash your hands, the knife and the board, and throw the used cubes away; do not eat them.</li>
+            </ol>
+          </div>
+          <textarea class="l-textarea" placeholder="Record your measurements, your table and a short conclusion…" aria-label="Part A answer"></textarea>
           <details class="reveal-box solution">
-            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <summary>Sample results and what a good answer shows <small>unlocks after you try</small></summary>
             <div class="reveal-body">
-              <p>Resting cardiac output: <code>CO_rest = 72 × 70 = 5040 mL/min = 5.04 L/min</code>.<br>
-              Exercise cardiac output: <code>CO_ex = 135 × 100 = 13500 mL/min = 13.5 L/min</code>.</p>
+              <p>Sample results table (dye moved 2.0 mm in from every face):</p>
+              <div class="tbl-wrap"><table class="tbl">
+                <thead><tr><th>Side L (mm)</th><th>SA (mm²)</th><th>V (mm³)</th><th>SA : V (mm⁻¹)</th><th>Uncoloured centre side (mm)</th><th>Uncoloured volume (mm³)</th><th>% volume coloured</th></tr></thead>
+                <tbody>
+                  <tr><td>10</td><td>600</td><td>1000</td><td>0.60</td><td>6.0</td><td>216</td><td>78.4</td></tr>
+                  <tr><td>25</td><td>3750</td><td>15 625</td><td>0.24</td><td>21.0</td><td>9261</td><td>40.7</td></tr>
+                  <tr><td>40</td><td>9600</td><td>64 000</td><td>0.15</td><td>36.0</td><td>46 656</td><td>27.1</td></tr>
+                </tbody>
+              </table></div>
+              <p><em>What a good answer shows:</em> the dye travelled about the same depth into every cube, yet the share of the cube it reached fell sharply as the cube grew, because SA : V fell; the uncoloured centre side is found by taking the depth off <em>both</em> sides (L − 2d); percentages are worked from volumes, not lengths; a smooth curve is drawn if % coloured is plotted against SA : V. A strong answer links the result to the unit mystery: the uncoloured core is like the cells deep inside Chidi's leg, which diffusion from the skin could never supply in time, so a heart and blood vessels are needed. It also names one source of error with its direction, for example a cube cut larger than recorded has a true SA : V smaller than the value used, so its % coloured looks too low for the SA : V plotted.</p>
             </div>
           </details>
         </div>
 
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <h3>Part B · Written paper (30 marks)</h3>
+
         <div class="aq" data-answer="l01-b1">
-          <div class="aq-top"><h4>1. (a) Explain why a unicellular organism such as <em>Amoeba</em> does not require a blood circulatory system whereas a mammal does [3 marks]. (b) Calculate the surface-area-to-volume ratio (SA/V) of a cube of side 0.5 mm and a cube of side 25 mm, and state how many times larger the first ratio is than the second [4 marks]. (c) List six substances transported by mammalian blood [3 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) <em>Amoeba</em> is microscopic with a very large surface-area-to-volume ratio (<code>SA/V</code>) and a tiny diffusion distance (&lt; 0.05 mm) so simple diffusion suffices <b>(1.5)</b>; a mammal is large and multicellular with a very small <code>SA/V</code> ratio and long diffusion distances, requiring a mass-flow circulatory system <b>(1.5)</b>.<br>
-            (b) Small cube: <code>R_1 = 6 ÷ 0.5 = 12.0 mm^-1</code> <b>(1.5)</b>. Large cube: <code>R_2 = 6 ÷ 25 = 0.24 mm^-1</code> <b>(1.5)</b>. Ratio: <code>F = 12.0 ÷ 0.24 = 50</code> times larger <b>(1)</b>.<br>
-            (c) Oxygen, carbon dioxide, digested food (glucose/amino acids), urea, hormones, antibodies, water/mineral salts, heat (any 6 × ½ = <b>3 marks</b>).</p>
-          </div></details>
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <div class="aq-q"><p>Define each term: (a) <em>transport system</em>; (b) <em>open circulation</em>; (c) <em>double circulation</em>.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) A transport system is the set of organs and fluids that moves materials in bulk between the places where they are taken in or made and the places where they are used or removed. (1) (b) Open circulation is a system in which the blood (haemolymph) leaves the vessels and flows through a body cavity, the haemocoel, bathing the organs directly. (1) (c) Double circulation is a system in which blood passes through the heart twice during one complete trip round the body: once on the way to and from the lungs, and once on the way to and from the rest of the body. (1)</p><p><strong>Mark scheme note:</strong> Equivalent wordings that keep the key ideas are credited. In (a) the idea of <em>bulk</em> movement between distant places is needed; "the circulation of blood" alone is too narrow. In (b) "blood flows slowly" alone scores zero; the mark is for blood <em>outside vessels</em> in a body cavity. In (c) "two circulations" without "through the heart twice per circuit" is not credited.</p></div></details>
         </div>
 
         <div class="aq" data-answer="l01-b2">
-          <div class="aq-top"><h4>2. (a) Construct a table contrasting an open circulatory system with a closed circulatory system under five headings [5 marks]. (b) Explain how a cockroach supplies oxygen to its flight muscles even though its haemolymph lacks haemoglobin [3 marks]. (c) Name one invertebrate that possesses a closed circulatory system [2 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) 1. <strong>Vessels:</strong> Fluid empties into open haemocoel vs Blood stays inside continuous vessels <b>(1)</b>. 2. <strong>Contact with cells:</strong> Haemolymph bathes organs directly vs Exchange occurs across capillary walls via tissue fluid <b>(1)</b>. 3. <strong>Pressure:</strong> Very low hydrostatic pressure vs High hydrostatic pressure <b>(1)</b>. 4. <strong>Speed of flow:</strong> Slow/sluggish vs Rapid <b>(1)</b>. 5. <strong>Example:</strong> Cockroach/grasshopper vs Earthworm/human <b>(1)</b>.<br>
-            (b) Air enters through paired lateral <strong>spiracles</strong> into branching chitin-lined <strong>tracheae</strong> and fluid-filled <strong>tracheoles</strong> that penetrate directly into flight muscle fibres for gaseous diffusion <b>(3)</b>.<br>
-            (c) <strong>Earthworm (<em>Lumbricus terrestris</em>)</strong> (or squid / octopus) <b>(2)</b>.</p>
-          </div></details>
+          <div class="aq-top"><h4>2. Why Chidi Needs a Transport System</h4><span class="marks">4 marks</span></div>
+          <div class="aq-q"><p>Give four reasons why a large, active animal such as Chidi cannot depend on diffusion alone to supply its cells.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (1) Its ratio of surface area to volume is small, so the body surface is too little to supply the whole volume. (1) (2) Most of its cells are far from the surface, and diffusion over long distances is far too slow. (1) (3) It is very active, so its cells use oxygen and food quickly and need a fast supply. (1) (4) Many substances are made in one organ and used or removed in another (for example urea is made in the liver but removed by the kidneys; hormones act far from the gland), so they must be carried. (1)</p><p><strong>Mark scheme note:</strong> "It is big" and "its surface area is small" repeat the same idea and earn one mark only; the credited point is the <em>ratio</em>. "Diffusion is slow" without "over long distances" is too vague. Saying the body surface area is smaller than an <em>Amoeba</em>'s is wrong and is penalised.</p></div></details>
         </div>
 
         <div class="aq" data-answer="l01-b3">
-          <div class="aq-top"><h4>3. (a) Distinguish between single circulation in a bony fish and double circulation in a mammal, stating the number of heart chambers in each [4 marks]. (b) State two advantages of complete double circulation over incomplete double circulation [2 marks]. (c) An athlete has a heart rate of 140 beats/min and a stroke volume of 105 mL/beat. Calculate his cardiac output in L/min and the time in seconds required to pump 4.90 L of blood [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) In a bony fish (<strong>2 chambers: 1 atrium, 1 ventricle</strong>), blood passes through the heart <strong>once</strong> per complete circuit (Heart → Gills → Body → Heart) <b>(2)</b>. In a mammal (<strong>4 chambers: 2 atria, 2 ventricles</strong>), blood passes through the heart <strong>twice</strong> per complete circuit via separate pulmonary and systemic loops <b>(2)</b>.<br>
-            (b) 1. Prevents any mixing of oxygenated and deoxygenated blood so tissues receive 100% oxygenated blood <b>(1)</b>. 2. Allows high systemic arterial pressure (~120 mmHg) while keeping pulmonary capillary pressure low (~25 mmHg), supporting endothermy <b>(1)</b>.<br>
-            (c) Cardiac output: <code>CO = 140 × 105 = 14700 mL/min</code> <b>(1)</b>; convert to L/min: <code>CO_L = 14700 ÷ 1000 = 14.7 L/min</code> <b>(1)</b>. Time for 4.90 L: <code>t = (4.90 ÷ 14.7) × 60 = 20.0 s</code> <b>(2)</b>.</p>
-          </div></details>
+          <div class="aq-top"><h4>3. The Parts of the System and What They Carry</h4><span class="marks">4 marks</span></div>
+          <div class="aq-q"><p>(a) Name the pump, the channels and the medium of the mammalian transport system. (b) Name one waste that blood carries from the liver to the kidneys.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) Pump: the heart. (1) Channels: the blood vessels (arteries, capillaries and veins). (1) Medium: blood (lymph is accepted as a second medium). (1) (b) Urea. (1)</p><p><strong>Mark scheme note:</strong> Each part scores only in its own slot; "blood" written as the pump scores zero for that slot. In (b) "urine" is not accepted: urine is made <em>in</em> the kidney, so it is not carried there by the blood.</p></div></details>
         </div>
 
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../../index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Unit Welcome Hub</a>
-          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 — Structure of the Mammalian Heart &amp; Pathway →</a>
+        <div class="aq" data-answer="l01-b4">
+          <div class="aq-top"><h4>4. Surface Area to Volume Ratio</h4><span class="marks">5 marks</span></div>
+          <div class="aq-q"><p>An agar cube has a side of 0.80 cm.</p><p>(a) Calculate its surface area in mm². (b) Calculate its volume in mm³. (c) Calculate its SA : V in mm⁻¹. (d) Express the SA : V in cm⁻¹. (e) A second cube has a side of 16 mm. State what happens to SA : V when the side is doubled, and give its new value.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) Side = 0.80 cm × 10 = 8.0 mm; SA = 6L² = 6 × 8.0² = 384 mm². (1) (b) V = L³ = 8.0³ = 512 mm³. (1) (c) SA : V = 384 ÷ 512 = 0.75 mm⁻¹. (1) (d) 1 cm = 10 mm, so a ratio per cm is ten times the ratio per mm: 0.75 × 10 = 7.5 cm⁻¹ (check: 6 ÷ 0.80 = 7.5). (1) (e) It halves: 6 ÷ 16 = 0.375 mm⁻¹. (1)</p><p><strong>Mark scheme note:</strong> Work carried forward is allowed from (a) to (c). Leaving the side as 0.80 in (a) and writing "3.84 mm²" loses the mark (no conversion). In (d), dividing by 10 (giving 0.075 cm⁻¹) is the commonest slip. Ratios given with no unit, or with mm² or mm³ as the unit, lose the mark in (c), (d) and (e).</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b5">
+          <div class="aq-top"><h4>5. Practical: Reading the Cube Results</h4><span class="marks">5 marks</span></div>
+          <div class="aq-q"><p>In a school version of the cube bench, acid moved 2.5 mm into every face of an 18 mm cube in 8 minutes.</p><p>(a) Calculate the SA : V of the cube. (b) Find the side of the pink centre that remained. (c) Calculate the volume of the pink centre. (d) Calculate the percentage of the cube's volume that turned colourless. (e) State what the pink centre represents in a large animal.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) SA : V = 6 ÷ 18 = 0.33 mm⁻¹. (1) (b) Pink centre side = 18 − (2 × 2.5) = 13 mm. (1) (c) Pink volume = 13³ = 2197 mm³. (1) (d) Whole cube = 18³ = 5832 mm³; colourless share = (5832 − 2197) ÷ 5832 × 100 = 62.3%. (1) (e) It represents cells deep inside the body, too far from the surface for diffusion to supply them in time. (1)</p><p><strong>Mark scheme note:</strong> Subtracting 2.5 mm only once in (b) (centre 15.5 mm) loses (b) but later marks may be earned on error carried forward. Giving the <em>pink</em> share (37.7%) in (d) is not credited. "Dead cells" in (e) is not accepted; the idea is cells that diffusion cannot reach fast enough.</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b6">
+          <div class="aq-top"><h4>6. Practical: Precautions and Errors</h4><span class="marks">3 marks</span></div>
+          <div class="aq-q"><p>(a) State two precautions that were taken in the agar-cube experiment. (b) A student lifted one cube out of the acid two minutes late. State and explain the effect on its percentage colourless.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) Any two, in the past tense: all the cubes were lowered into the acid at the same moment and lifted out together (1); the acid fully covered every cube (1); each cube was checked with a ruler after cutting (1); the cubes were handled with forceps and the eyes were protected from the acid (1). (Maximum 2.) (b) Its % colourless was too high, because the acid had extra time to move further into that cube. (1)</p><p><strong>Mark scheme note:</strong> Precautions written as commands ("cover the cubes") or in the future tense lose the marks. General rules such as "a lab coat was worn" are not specific to this experiment and are not accepted. In (b), the direction (too high) and the reason (extra time) must both be given for the mark.</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b7">
+          <div class="aq-top"><h4>7. Comparing Circulatory Systems</h4><span class="marks">4 marks</span></div>
+          <div class="aq-q"><p>Using one table, give two differences between open and closed circulation and two differences between single and double circulation. Name an example animal in each column.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong></p><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Feature</th><th>Open</th><th>Closed</th></tr></thead><tbody><tr><td>Where the blood is</td><td>Leaves vessels and pools in the haemocoel round the organs</td><td>Stays inside vessels all the way round (1)</td></tr><tr><td>Pressure and speed (with example)</td><td>Low pressure, slow flow; cockroach</td><td>High pressure, fast flow; earthworm or human (1)</td></tr></tbody></table></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Feature</th><th>Single</th><th>Double</th></tr></thead><tbody><tr><td>Trips through the heart per full circuit</td><td>One</td><td>Two (1)</td></tr><tr><td>Route (with example)</td><td>Heart → gills → body → heart; tilapia</td><td>Heart → lungs → heart → body → heart; pigeon or human (1)</td></tr></tbody></table></div><p><strong>Mark scheme note:</strong> Each mark needs a matched pair on one row <em>and</em> the examples must be correct for that row's mark; an insect named as closed, or a fish named as double, loses that row. "Chambers: two | four" is accepted as an alternative single-vs-double row. Answers in two separate paragraphs score at most half.</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b8">
+          <div class="aq-top"><h4>8. Solving the First Clue</h4><span class="marks">2 marks</span></div>
+          <div class="aq-q"><p>Baba Sule says a heart that pumps blood only once per circuit, as in a fish, would serve Chidi just as well. State two advantages of Chidi's double circulation that prove him wrong.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (1) Blood coming back from the lungs is pumped a second time, so it reaches Chidi's working muscles at high pressure and fast. (1) (2) The four-chambered heart with its septum keeps oxygen-rich and oxygen-poor blood apart, so the blood sent to his muscles is fully oxygenated. (1)</p><p><strong>Mark scheme note:</strong> "It is faster" without a reason linked to the second pumping is not credited. "No mixing" must refer to oxygenated and deoxygenated blood; "blood does not mix with lymph" scores zero.</p></div></details>
+        </div>
+
+        <div class="l01-pager">
+          <a class="btn btn-ghost" href="../../index.html" style="color:var(--paper-ink);border-color:var(--paper-line)">← The unit hub</a>
+          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2, the heart up close →</a>
         </div>
       </section>
     </main>
@@ -632,6 +765,7 @@
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
   <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/agar-cube-bench.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
@@ -641,9 +775,11 @@
   <script src="../../assets/js/study-graph.js"></script>
   <script src="graph.js"></script>
   <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="lesson.js"></script>
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
 </body>
 </html>

@@ -1,0 +1,7 @@
+{
+  "name": "explainer-video-skill",
+  "private": true,
+  "description": "Builds offline HTML explainer videos from director plans",
+  "dependencies": { "katex": "0.16.11" },
+  "optionalDependencies": { "playwright": "1.48.2" }
+}

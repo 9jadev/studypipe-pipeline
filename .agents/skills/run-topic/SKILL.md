@@ -7,6 +7,9 @@ description: Conducts the full StudyPipe pipeline for one topic or a batch from 
 
 You coordinate the other skills. You do not write lesson content yourself.
 
+> When you are running as the **studio-director** agent (`.agents/agents/studio-director.md`), keep this procedure but
+> delegate each step to the specialist subagent named there, instead of running the skill yourself.
+
 ## Inputs
 
 - A topic slug, e.g. `ss2-chem-acid-base-titration`, or the instruction "run the queue".
@@ -34,10 +37,19 @@ You coordinate the other skills. You do not write lesson content yourself.
         then review again. Maximum 2 fix loops, then `NEEDS-HUMAN`.
       - Interactive mode: after PASS, show the human a 10-line summary and wait for approval.
    5. `lesson-renderer` → `html/` (uses `story-builder` for `story.js`, `kit-builder` for `bench.js`/`zoom.js`, and `narration-choreographer` for `narration.js`)
+   5v. **Explainer videos** for the lessons resolved by `node scripts/video-picks.mjs topics/<slug> --list`.
+      `videos:` in `status.md` is `auto` by default (the lesson designer's scored *Explainer Video Plan* in `02-lesson.md`:
+      score ≥ 5, at most `video-cap`), or the human's `all` / `none` / `lesson-02,lesson-04`. Interactive: show the plan table
+      at the lesson approval gate; after the human confirms or edits it, freeze it with `--freeze`. For each resolved lesson:
+      `explainer-director` → `06-videos/lesson-0X-direction-script.md` (approved with the lesson in interactive mode) →
+      `lesson-0X.plan.cjs`. If a script needs a visual no kit provides, the director writes `06-videos/kit-requests/<id>.md` and the kit is
+      built on the fly first (`.agents/skills/explainer-video/references/adding-a-kit.md`: scaffold, draw, demo, three-screen QA) before
+      the plan is written. Then `node scripts/apply-video.mjs topics/<slug>` builds and embeds them, and the
+      `explainer-video` skill's three-screen QA proves them. Failed checks go back to the director, never edited by the builder.
    6. `html-qa` → `05-qa-report.md`. If it fails, send issues to `lesson-renderer`
       (max 2 loops), then `NEEDS-HUMAN`.
    7. `packager` → `exports/<slug>.zip`
-5. After each step update `status.md` (step, state, time, one-line note).
+5. After each step update `status.md` (step, state, time, one-line note) and run `node scripts/render-status.mjs topics/<slug>` so `status.html` updates automatically.
 6. At the end append one line to `run-log.md`:
    `YYYY-MM-DD HH:MM | <slug> | AWAITING-REVIEW / NEEDS-HUMAN | theme: <id> | kits reused: n | kits new: n | note`
 
@@ -54,6 +66,8 @@ You coordinate the other skills. You do not write lesson content yourself.
 # <slug>
 state: IN-PROGRESS | AWAITING-REVIEW | NEEDS-HUMAN | APPROVED
 theme: editorial-ink
+videos: auto
+video-cap: 3
 | step | state | updated | note |
 |---|---|---|---|
 | 1 map | done | 2026-11-01 22:10 | 6 sub-topics, WAEC+NECO+JAMB |

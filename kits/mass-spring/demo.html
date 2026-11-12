@@ -1,13 +1,185 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kit demo: mass-spring</title>
-<style>html,body{margin:0;height:100%;background:#0e1620}#host{width:100vw;height:100vh}</style>
+<title>Kit demo: mass-spring v2</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;min-height:100vh}
+  #stage{position:relative;width:100%;height:56vh;min-height:300px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  #modes,#ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  #modes{padding-bottom:0}
+  button{min-height:40px;padding:0 11px;border-radius:20px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  button.alt.on{background:#b4561b}
+  label.sl{display:flex;align-items:center;gap:6px;width:100%;font-size:12px}
+  label.sl input{flex:1;min-width:0}
+  label.sl b{min-width:74px;text-align:right;font:12px ui-monospace,monospace}
+  #readout{padding:2px 8px 12px}
+  #line{padding:4px 0 6px;font:12px ui-monospace,monospace;white-space:pre-wrap;word-break:break-word}
+  #ev{font:11px ui-monospace,monospace;opacity:.7;padding-top:4px}
+</style>
 </head><body>
-<div id="host"></div>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="modes"></div>
+  <div id="ui"></div>
+  <div id="readout"><div id="line"></div><div id="ev"></div></div>
+</div>
 <script src="../_vendor/three-bundle.min.js"></script>
-<script src="kit.js"></script>
 <script>
-  window.StudyPipeKits["mass-spring"].mount(document.getElementById("host"), {}, { emit: function (n, d) { console.log("event", n, JSON.stringify(d)); } });
+  /* ?props=1 loads ridge-road-props first (as lessons do); without it the kit uses its built-in stand-in okada */
+  if (/[?&]props=1/.test(location.search)) document.write('<script src="../ridge-road-props/ridge-road-props.js"><\/script>');
+</script>
+<script src="mass-spring.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.01, 60);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.05));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.3); dl.position.set(2, 5, 4); scene.add(dl);
+  var fill = new THREE.DirectionalLight(0xbcd6ff, 0.45); fill.position.set(-3, 2, 2); scene.add(fill);
+
+  var q = {}; location.search.replace(/[?&]([^=&]+)=([^&]*)/g, function (_, k, v) { q[k] = decodeURIComponent(v); });
+  var evLog = [];
+  var kit = MassSpringKit.create({ mode: q.mode || "period", view: q.view || "bench", onEvent: function (n, d) { evLog.unshift(n); evLog.length = Math.min(evLog.length, 6); document.getElementById("ev").textContent = "events: " + evLog.join(" · ") + (kit && kit.usesProps ? "  (okada body: RidgeRoadProps)" : ""); } });
+  scene.add(kit);
+
+  /* camera framing, tweened, from kit.viewFor() */
+  var view = { target: new THREE.Vector3(0, 0.6, 0), dist: 1.5, pitch: 0.12, yaw: 0.3 }, goal = null;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(2.2, 1.0 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(v.yaw) * Math.cos(v.pitch) * d, v.target.y + Math.sin(v.pitch) * d, v.target.z + Math.cos(v.yaw) * Math.cos(v.pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = kit.viewFor(name), r = kit.reading();
+    goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist, pitch: v.pitch, yaw: r.mode === "okada" && r.view === "bench" ? 0.45 : 0.3 };
+    if (instant) { view.target.copy(goal.target); view.dist = goal.dist; view.pitch = goal.pitch; view.yaw = goal.yaw; applyView(view); goal = null; }
+  }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view); }
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* UI */
+  var ui = document.getElementById("ui"), modes = document.getElementById("modes");
+  function btn(parent, label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; parent.appendChild(b); return b; }
+  function slider(label, min, max, step, val, fmt, fn) {
+    var l = document.createElement("label"); l.className = "sl"; l.innerHTML = "<span>" + label + "</span>";
+    var i = document.createElement("input"); i.type = "range"; i.min = min; i.max = max; i.step = step; i.value = val;
+    var b = document.createElement("b"); b.textContent = fmt(+val);
+    i.oninput = function () { b.textContent = fmt(+i.value); fn(+i.value); };
+    l.appendChild(i); l.appendChild(b); ui.appendChild(l); return i;
+  }
+  function choice(opts, cur, fn) { var bs = []; opts.forEach(function (o) { var b = btn(ui, o[1], function () { bs.forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); fn(o[0]); }, "alt"); if (o[0] === cur) b.classList.add("on"); bs.push(b); }); }
+
+  var PANELS = {
+    hooke: function (s) {
+      btn(ui, "Add 50 g", function () { kit.addMass(); });
+      btn(ui, "Remove 50 g", function () { kit.removeMass(); });
+      return ["spring", "pointer", "slotted-mass", "ruler"];
+    },
+    period: function (s) {
+      btn(ui, "+50 g", function () { kit.addMass(); }, "alt"); btn(ui, "−50 g", function () { kit.removeMass(); }, "alt");
+      btn(ui, "Pull & release", function () { kit.release(0.03); });
+      btn(ui, "Time 20", function () { kit.timeN(20); });
+      btn(ui, "Slow ×0.25", function (b) { var on = !b.classList.contains("on"); b.classList.toggle("on", on); kit.setState({ timeScale: on ? 0.25 : 1 }); }, "alt");
+      return ["spring", "stopwatch", "pointer"];
+    },
+    forces: function () {
+      btn(ui, "Pull & release", function () { kit.release(0.05); });
+      return ["f-arrow", "equilibrium", "mass"];
+    },
+    energy: function () {
+      slider("A", 0.02, 0.06, 0.01, 0.05, function (v) { return (v * 100).toFixed(0) + " cm"; }, function (v) { kit.setState({ A: v }); });
+      btn(ui, "Release", function () { kit.release(); });
+      return ["ke-bar", "pe-bar", "total-bar"];
+    },
+    damping: function (s) {
+      choice([["air", "Air"], ["water", "Water"], ["oil", "Oil"]], s.medium, function (v) { kit.setState({ medium: v }); });
+      btn(ui, "Release 5 cm", function () { kit.release(0.05); });
+      btn(ui, "Record amplitude", function () { kit.recordAmplitude(); });
+      return ["vane", "beaker", "pointer"];
+    },
+    testtube: function () {
+      btn(ui, "Push down & release", function () { kit.release(0.02); });
+      return ["testtube", "f-arrow"];
+    },
+    okada: function (s) {
+      choice([["bench", "Ride / park"], ["shock", "Shock cut-away"]], s.view, function (v) { kit.setState({ view: v }); render(); gotoView("all", true); });
+      choice([[true, "Leaking"], [false, "Healthy"]], s.leak, function (v) { kit.setState({ leak: v }); });
+      if (s.view === "shock") {
+        btn(ui, "Push once", function () { kit.push(); });
+        btn(ui, "10 pushes / 0.5 s", function () { kit.pushTrain(10, 0.5); });
+        return ["piston", "orifices", "oil", "rear-shock"];
+      }
+      choice([[200, "200 kg"], [250, "250 kg"]], s.mass, function (v) { kit.setState({ mass: v }); });
+      slider("Speed", 5, 35, 1, s.speed_kmh, function (v) { return v + " km/h"; }, function (v) { kit.setState({ parked: false, speed_kmh: v }); });
+      btn(ui, "Park & press", function () { kit.setState({ parked: true }); kit.press(0.03); });
+      btn(ui, "Time 20 bounces", function () { if (!kit.reading().parked) { kit.setState({ parked: true }); kit.press(0.03); } kit.timeN(20); });
+      return ["rear-shock", "crate", "carrier", "speedometer"];
+    }
+  };
+  function render() {
+    ui.innerHTML = ""; var s = kit.getState(), views = PANELS[s.mode](s);
+    btn(ui, "Reset", function () { kit.reset(); }, "alt");
+    btn(ui, "View all", function () { kit.highlight(null); gotoView("all"); }, "alt");
+    views.forEach(function (v) { btn(ui, "View " + v, function () { kit.highlight(v); gotoView(v); setTimeout(function () { kit.highlight(null); }, 1600); }, "alt"); });
+    btn(ui, "Labels", function (b) { var on = !b.classList.contains("on"); b.classList.toggle("on", on); kit.setState({ labels: on }); }, "alt on");
+  }
+  var MB = {};
+  MassSpringKit.modes.forEach(function (m) {
+    MB[m] = btn(modes, m, function () { kit.setState({ mode: m }); Object.keys(MB).forEach(function (k) { MB[k].classList.toggle("on", k === m); }); render(); gotoView("all", true); });
+  });
+  MB[kit.getState().mode].classList.add("on"); render(); gotoView("all", true);
+
+  /* tap a part to highlight it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var rc = cv.getBoundingClientRect(); ptr.set(((e.clientX - rc.left) / rc.width) * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera); var id = kit.pickPart(ray);
+    if (id) { kit.highlight(id); document.getElementById("ev").textContent = "picked: " + id; setTimeout(function () { kit.highlight(null); }, 900); }
+  });
+
+  /* live readout: every number from kit.reading() (the model) */
+  var line = document.getElementById("line"), lastS = "", lastPaint = 0;
+  function f(x, d) { return x == null || !isFinite(x) ? "–" : (+x).toFixed(d); }
+  function paint(t) {
+    if (t - lastPaint < 0.12) return; lastPaint = t;
+    var r = kit.reading(), s = "";
+    if (r.mode === "hooke") s = "m " + f(r.m, 3) + " kg  F = mg " + f(r.F, 3) + " N\nextension x = mg/k " + r.display.x_cm + " cm  pointer " + r.display.pointer_cm + " cm";
+    else if (r.mode === "period") s = "m " + f(r.m, 3) + " kg  k " + r.k + " N/m  watch " + f(r.watch.t, 2) + " s  count " + r.watch.count + (r.watch.running ? " (running)" : "") + "\n" + (r.watch.timed ? "t(" + r.n + ") " + r.display.t + " s  " : "model t(20) " + r.display.t + " s  ") + "T " + r.display.T + " s  f " + r.display.f + " Hz  ω " + r.display.w + "  T² " + r.display.T2;
+    else if (r.mode === "forces") s = "x " + f(r.x_cm, 2) + " cm (down +)  F = −kx " + f(r.F, 3) + " N\na = −(k/m)x " + f(r.a, 2) + " m/s²  v " + f(r.v, 3) + " m/s";
+    else if (r.mode === "energy" || r.mode === "damping") s = r.medium + " ratio " + r.ratio + "  A " + f(r.A * 100, 2) + " cm  E0 = ½kA² " + r.display.E0 + " J\nKE " + f(r.KE, 4) + "  PE " + f(r.PE, 4) + "  E " + f(r.E, 4) + " J  T " + r.display.T + " s  10 osc " + r.display.t10 + " s\ncycles " + r.cycles + "  amps " + r.amps.map(function (a) { return a.toFixed(2); }).join(" ") + (r.recorded.length ? "\nrecorded " + r.recorded.map(function (a) { return a.toFixed(2); }).join(" ") : "");
+    else if (r.mode === "testtube") s = "m " + r.m + " kg  k = ρgA " + f(r.k, 3) + " N/m  T " + f(r.T, 3) + " s  depth " + f(r.depth_cm, 1) + " cm\nx " + f(r.x * 100, 2) + " cm  restoring F " + f(r.F, 4) + " N";
+    else if (r.view === "shock") s = r.damper + " ζ " + r.zeta + "  oil level " + Math.round(r.oilLevel * 100) + " %  A " + f(r.A_cm, 2) + " cm\nenergy removed / cycle " + f(r.E_removed_per_cycle, 2) + " J (" + Math.round(r.removedFrac * 100) + " %)  pushes " + r.pushes + "\npeaks " + r.peaks.join(" ");
+    else s = (r.parked ? "parked  T0 " + r.display.T + " s  watch " + f(r.watch.t, 2) + " s count " + r.watch.count + (r.watch.timed ? "  t(" + r.n + ") " + r.display.t + " s" : "") : r.speed_kmh + " km/h  f = v/d " + r.display.f + " Hz  f0 " + r.display.f0 + " Hz") + "\n" + r.mass + " kg " + r.damper + "  A " + r.display.A_cm + " cm (now " + f(r.Acur * 100, 1) + ")  g/ω² " + r.display.th_cm + " cm  " + (r.lift ? "LIFT-OFF" : "stays on") + "  cracks " + r.cracks;
+    if (s !== lastS) { lastS = s; line.textContent = s; }
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      var k = Math.min(1, dt * 4);
+      view.target.lerp(goal.target, k); view.dist += (goal.dist - view.dist) * k; view.pitch += (goal.pitch - view.pitch) * k; view.yaw += (goal.yaw - view.yaw) * k;
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.002 && Math.abs(view.dist - goal.dist) < 0.005) goal = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    paint(clock.elapsedTime);
+  })();
+  window.__kit = kit; window.__gotoView = gotoView; window.__render = render; window.__MB = MB;
+})();
 </script>
 </body></html>

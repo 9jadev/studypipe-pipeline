@@ -1,4 +1,4 @@
-/* Lesson 02 · 3D Semi-Autonomous Organelle Ultrastructure Zoom — Mitochondrion (Cristae & Matrix) vs Chloroplast (Grana & Stroma) */
+/* Lesson 02 · 3D concept zoom — cut-away mitochondrion, chloroplast (CellKit) and the secretory protein route (ProteinRouteKit) */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
@@ -6,169 +6,264 @@
   if (!root || !canvas || typeof THREE === "undefined") return;
 
   var toastEl = document.getElementById("zoom-toast");
+  var cardEl = document.getElementById("zoom-card");
+  var readoutEl = document.getElementById("zoom-readout");
+  var subEl = document.getElementById("zoom-sub");
   var toastT;
   function toast(m) {
     if (!toastEl) return;
     toastEl.textContent = m;
     toastEl.classList.add("show");
     clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
+    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
   }
+  function emit(n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); }
 
-  var state = {
-    mode: "mix", // "mix" = Both Organelles, "acid" = Mitochondrion (Cristae), "base" = Chloroplast (Grana)
-    highV: false
+  var state = { mode: "mito", part: null, step: 0, playing: true, built: {}, readT: 0 };
+
+  /* ---------- text shown in the card for each selectable part ---------- */
+  var TEXT = {
+    mito: {
+      _: "<b>Mitochondrion</b> · two membranes. The inner membrane is folded into <b>cristae</b> around the fluid <b>matrix</b>. It releases energy (ATP) in aerobic respiration. Tap a part.",
+      outer: "<b>Outer membrane</b> · the first of the two membranes that wrap the mitochondrion.",
+      inner: "<b>Inner membrane</b> · the second membrane. It folds inwards into cristae, giving a large surface area for respiration.",
+      cristae: "<b>Cristae</b> · the folds of the inner membrane. More folds mean more surface area, so very active cells (muscle) have mitochondria with many cristae.",
+      matrix: "<b>Matrix</b> · the fluid inside the inner membrane. It contains enzymes for aerobic respiration, which releases energy as ATP."
+    },
+    chloro: {
+      _: "<b>Chloroplast</b> · two membranes around a fluid <b>stroma</b> holding stacks of <b>grana</b> with chlorophyll. It captures light to make food (photosynthesis). Tap a part.",
+      envelope: "<b>Envelope</b> · the two membranes that wrap the chloroplast.",
+      grana: "<b>Grana</b> · stacks of flat membrane discs that hold chlorophyll and trap light.",
+      stroma: "<b>Stroma</b> · the fluid around the grana, where the sugar-making reactions take place.",
+      starch: "<b>Starch grain</b> · stored food made from the sugar. Plant cells store starch, animal cells store glycogen."
+    },
+    route: { _: "<b>Protein route</b> · ribosome on the rough ER, then a vesicle to the Golgi body, then a vesicle to the cell membrane. Press a step." }
   };
+  var STEPS = ["Make", "Enter ER", "Vesicle", "Golgi", "Exit"];
+  var STEP_TEXT = [
+    "<b>1 · Making the protein</b> · a ribosome on the rough ER reads the instruction and joins amino acids into a chain.",
+    "<b>2 · Into the ER</b> · the growing chain threads into the rough ER and moves along its channels.",
+    "<b>3 · Transport vesicle</b> · a small bubble buds from the ER, carries the protein, and fuses with the Golgi body.",
+    "<b>4 · Golgi body</b> · the protein is modified and packed as it passes from the cis face to the trans face, then a secretory vesicle buds off.",
+    "<b>5 · Out of the cell</b> · the secretory vesicle fuses with the cell membrane and releases the protein outside (exocytosis)."
+  ];
 
-  var highlightPart = null;
   var api = {
-    setMode: setMode,
-    add: toggleSunlightAndO2,
-    reset: reset,
+    setMode: setMode, reset: reset, select: select, step: goStep,
     rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
+    highlight: function (p) { if (p) select(p, true); else if (hi) hi.set(null); },
+    state: function () { return { mode: state.mode, part: state.part, step: state.step }; }
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.zoom = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.85, 0),
-    pitch: 0.24,
-    yaw: 0.08,
-    fitWidth: 6.2,
-    distance: 6.0,
-    onFrame: frame
+  var stage = window.SceneKit && window.CellKit && window.SceneKit.createStage({
+    root: root, canvas: canvas, fov: 34, target: new THREE.Vector3(0, 0, 0), pitch: 0.22, yaw: 0.1,
+    distance: 1, fitHeight: 2.6, autoFit: false, portraitPitch: 0, onFrame: frame
   });
 
-  var mitoGroup, chloroGroup, keBar, peBar, totBar;
+  var groups = {}, kits = {}, hi, pickLabel, box = new THREE.Box3(), tgt = new THREE.Vector3(), tgtNow = new THREE.Vector3();
+  var routeKit = null, routeFocus = null;
+  var FRAME = { mito: { h: 2.5, w: 3.4 }, chloro: { h: 2.5, w: 3.8 }, route: { h: 3.7, w: 9 } };
 
   if (stage) build();
   wireButtons();
+  setMode("mito", true);
 
   function build() {
     var scene = stage.rig;
+    groups.mito = new THREE.Group(); groups.chloro = new THREE.Group(); groups.route = new THREE.Group();
+    scene.add(groups.mito, groups.chloro, groups.route);
 
-    mitoGroup = new THREE.Group();
-    mitoGroup.position.set(-1.35, 0.90, 0);
-    scene.add(mitoGroup);
+    var m = CellKit.mitochondrion({ cut: true });
+    m.scale.setScalar(1.15); m.rotation.set(0.0, 0.2, 0);
+    groups.mito.add(m); kits.mito = m;
 
-    chloroGroup = new THREE.Group();
-    chloroGroup.position.set(0.15, 0.90, 0);
-    scene.add(chloroGroup);
+    var c = CellKit.chloroplast({});
+    c.scale.setScalar(1.35); c.rotation.set(0.15, 0, 0);
+    groups.chloro.add(c); kits.chloro = c;
 
-    if (window.CellKit) {
-      var mApi = CellKit.mitochondrion({ scale: 0.78 });
-      mitoGroup.add(mApi.group);
-      var mTag = CellKit.label("Mitochondrion (Cristae · 38 ATP)", { bg: "rgba(244,63,94,0.92)" });
-      mTag.position.set(0, 0.78, 0);
-      mitoGroup.add(mTag);
-
-      var cApi = CellKit.chloroplast({ scale: 0.78 });
-      chloroGroup.add(cApi.group);
-      var cTag = CellKit.label("Chloroplast (Grana · Stroma)", { bg: "rgba(34,197,94,0.92)" });
-      cTag.position.set(0, 0.78, 0);
-      chloroGroup.add(cTag);
-    }
-
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.65, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.75, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 30, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.19 * t.userData.aspect, 0.19, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.30, 0xf43f5e, "ATP / Glc");
-    peBar  = makeBar(1.75, 0x22c55e, "O₂ / NADPH");
-    totBar = makeBar(2.20, 0xffb23f, "Ribosome S");
+    hi = CellKit.makeHighlighter(stage.scene);
+    pickLabel = CellKit.label(" ", { h: 0.2 }); pickLabel.visible = false; stage.scene.add(pickLabel);
 
     api.rect = function (part) {
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      if (state.mode === "acid") return stage.rectOf(mitoGroup, 16);
-      if (state.mode === "base") return stage.rectOf(chloroGroup, 16);
-      return stage.rectOf([mitoGroup, chloroGroup], 16);
+      var o = partObj(part);
+      return o ? stage.rectOf(o, 14) : stage.rectOf(groups[state.mode], 12);
     };
-
     stage.start();
   }
 
-  function setMode(m) {
-    state.mode = m;
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
-    });
-    if (m === "acid") toast("Mitochondrion: Folded inner cristae carry electron transport chains; aqueous matrix hosts Krebs cycle enzymes, circular DNA & 70S ribosomes!");
-    else if (m === "base") toast("Chloroplast: Thylakoid stacks (grana) trap light for photolysis; aqueous stroma hosts Calvin cycle (RuBisCO), circular DNA & 70S ribosomes!");
-    else toast("Side-by-side: Mitochondrion (left, respiration) and Chloroplast (right, photosynthesis).");
+  function ensureRoute() {
+    if (routeKit || !stage || !window.ProteinRouteKit) return routeKit;
+    routeKit = ProteinRouteKit.create({ step: 0, play: true, onEvent: function (name, d) {
+      if (name === "protein-route:step") { state.step = d.step; paintStep(); }
+    } });
+    groups.route.add(routeKit); kits.route = routeKit;
+    return routeKit;
   }
 
-  function toggleSunlightAndO2() {
-    state.highV = !state.highV;
-    toast(state.highV ? "Bright Sunlight + High O₂: Grana split water rapidly while cristae synthesise 38 ATP per glucose!" : "Basal metabolic rate restored.");
+  function partObj(part) {
+    var k = kits[state.mode];
+    if (!k || !k.userData || !k.userData.parts) return null;
+    var P = k.userData.parts;
+    if (state.mode === "mito") return { outer: P.outer, inner: P.inner, matrix: P.inner, cristae: P.cristae }[part] || k;
+    if (state.mode === "chloro") return { envelope: P.envelope, grana: P.grana, stroma: P.stroma, starch: P.starch }[part] || k;
+    if (state.mode === "route") {
+      var map = { ribosome: P.ribosome, roughER: P.roughER, er: P.roughER, golgi: P.golgi, membrane: P.membrane, vesicle: P.transportVesicle };
+      return map[part] || k;
+    }
+    return null;
+  }
+
+  /* ---------- modes ---------- */
+  function setMode(mode, quiet) {
+    if (mode !== "chloro" && mode !== "route") mode = "mito";
+    state.mode = mode; state.part = null;
+    root.querySelectorAll("#zoom-modes [data-mode]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-mode") === mode ? "true" : "false"); });
+    if (stage) {
+      if (mode === "route") ensureRoute();
+      Object.keys(groups).forEach(function (k) { groups[k].visible = k === mode; });
+      hi.set(null); pickLabel.visible = false;
+      var f = FRAME[mode];
+      stage.fitHeight = f.h; stage.fitWidth = f.w;
+      if (mode === "route" && routeKit) { routeKit.userData.api.goTo(0); focusRoute(0, true); }
+      else { stage.target.set(0, 0, 0); tgt.set(0, 0, 0); tgtNow.set(0, 0, 0); }
+      stage.yaw = mode === "route" ? 0.35 : 0.1;
+      stage.zoom = 1;
+      stage.resize();
+    }
+    buildSub();
+    paintCard();
+    paintReadout();
+    if (!quiet) { emit("l2:zoom", { mode: mode }); toast(mode === "mito" ? "Cut-away mitochondrion: tap a part." : mode === "chloro" ? "Chloroplast: tap a part." : "Protein route: press the five steps."); }
+  }
+
+  function buildSub() {
+    if (!subEl) return;
+    subEl.innerHTML = "";
+    var items = [];
+    if (state.mode === "mito") items = [["outer", "Outer membrane"], ["inner", "Inner membrane"], ["cristae", "Cristae"], ["matrix", "Matrix"]];
+    else if (state.mode === "chloro") items = [["envelope", "Envelope"], ["grana", "Grana"], ["stroma", "Stroma"], ["starch", "Starch grain"]];
+    else {
+      STEPS.forEach(function (s, i) { items.push(["step" + i, (i + 1) + ". " + s]); });
+      items.push(["play", state.playing ? "Pause" : "Play"]);
+    }
+    items.forEach(function (it) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "vt-btn"; b.setAttribute("data-zpart", it[0]); b.setAttribute("aria-pressed", "false");
+      b.textContent = it[1];
+      b.addEventListener("click", function () {
+        if (it[0] === "play") togglePlay();
+        else if (it[0].indexOf("step") === 0) goStep(+it[0].slice(4));
+        else select(it[0]);
+      });
+      subEl.appendChild(b);
+    });
+    if (state.mode === "route") paintStep();
+  }
+
+  function select(part, quiet) {
+    if (state.mode === "route") return;
+    var o = partObj(part), k = kits[state.mode];
+    if (!stage || !o) return;
+    state.part = part;
+    hi.set(o);
+    var label = (subEl && subEl.querySelector('[data-zpart="' + part + '"]')) ? subEl.querySelector('[data-zpart="' + part + '"]').textContent : part;
+    CellKit.setLabelText(pickLabel, label, { h: 0.2 });
+    pickLabel.userData.follow = o; pickLabel.visible = true;
+    if (subEl) subEl.querySelectorAll("[data-zpart]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-zpart") === part ? "true" : "false"); });
+    paintCard();
+    if (!quiet) emit("l2:zoom-part", { mode: state.mode, part: part });
+  }
+
+  function paintCard() {
+    if (!cardEl) return;
+    var t = TEXT[state.mode] || {};
+    if (state.mode === "route") { cardEl.innerHTML = STEP_TEXT[state.step] || t._; return; }
+    cardEl.innerHTML = state.part && t[state.part] ? t[state.part] : t._;
+  }
+
+  /* ---------- readouts: computed from the live model ---------- */
+  function paintReadout() {
+    if (!readoutEl) return;
+    var k = kits[state.mode], h = "";
+    if (state.mode === "mito" && k) {
+      var P = k.userData.parts;
+      h = "<div><span>Membranes</span><b>2</b></div><div><span>Cristae</span><b>" + (P.cristae ? P.cristae.children.length : 0) + "</b></div><div><span>Job</span><b>energy</b></div>";
+    } else if (state.mode === "chloro" && k) {
+      var G = k.userData.parts.grana, stacks = G ? G.children.length : 0, discs = stacks && G.children[0].children ? G.children[0].children.length : 0;
+      h = "<div><span>Membranes</span><b>2</b></div><div><span>Grana stacks</span><b>" + stacks + "</b></div><div><span>Discs / stack</span><b>" + discs + "</b></div><div><span>Job</span><b>food</b></div>";
+    } else if (state.mode === "route" && routeKit) {
+      var r = routeKit.reading();
+      h = "<div><span>Where</span><b>" + (r.compartment || "") + "</b></div><div><span>Amino acids</span><b>" + r.aaBuilt + " / " + r.aaTotal + "</b></div><div><span>Fusions</span><b>" + r.fusionEvents + "</b></div><div><span>Bilayers crossed</span><b>" + r.bilayersCrossed + "</b></div>";
+    }
+    readoutEl.innerHTML = h;
+  }
+
+  /* ---------- protein route controls ---------- */
+  function goStep(i) {
+    if (!stage || !ensureRoute()) return;
+    if (state.mode !== "route") setMode("route", true);
+    i = Math.max(0, Math.min(4, i | 0));
+    state.step = i; state.playing = true;
+    routeKit.setState({ step: i, play: true });
+    focusRoute(i);
+    paintStep(); paintCard();
+    emit("l2:route", { step: i });
+  }
+  function togglePlay() {
+    if (!routeKit) return;
+    state.playing = !state.playing;
+    routeKit.setState({ play: state.playing });
+    buildSub();
+  }
+  function focusRoute(step, snap) {
+    if (!routeKit) return;
+    var f = routeKit.userData.focusFor(step);
+    tgt.set(f.target[0], f.target[1], f.target[2]);
+    var span = Math.max(3.2, f.span);
+    stage.fitWidth = span; stage.fitHeight = 3.2;
+    stage.resize();
+    if (snap) tgtNow.copy(tgt);
+  }
+  function paintStep() {
+    if (!subEl) return;
+    subEl.querySelectorAll('[data-zpart^="step"]').forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-zpart") === "step" + state.step ? "true" : "false");
+    });
+    paintCard();
   }
 
   function reset() {
-    state.highV = false;
-    setMode("mix");
-    toast("Ultrastructure view reset.");
+    state.part = null;
+    if (routeKit) { routeKit.userData.api.reset(); state.step = 0; state.playing = true; }
+    if (hi) hi.set(null);
+    if (pickLabel) pickLabel.visible = false;
+    setMode("mito");
+    toast("Zoom reset.");
   }
 
   function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
+    root.querySelectorAll("#zoom-modes [data-mode]").forEach(function (b) {
       b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
     });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleSunlightAndO2);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
   }
 
+  /* ---------- frame ---------- */
   function frame(dt, t) {
-    if (!mitoGroup || !chloroGroup) return;
-    mitoGroup.rotation.y = Math.sin(t * 0.55) * 0.22;
-    chloroGroup.rotation.y = Math.cos(t * 0.50) * 0.22;
-
-    mitoGroup.visible = state.mode !== "base";
-    chloroGroup.visible = state.mode !== "acid";
-    mitoGroup.position.x = state.mode === "acid" ? -0.45 : -1.35;
-    chloroGroup.position.x = state.mode === "base" ? -0.45 : 0.15;
-
-    var atpPerGlc = state.highV ? 38 : 36;
-    var photoRate = state.mode === "acid" ? 0 : state.highV ? 100 : 60;
-
-    if (keBar) keBar.scale.y = Math.max(0.1, atpPerGlc / 40.0);
-    if (peBar) peBar.scale.y = Math.max(0.08, (photoRate + 10) / 110.0);
-    if (totBar) totBar.scale.y = 0.70;
-
-    var cV = document.querySelector('#zoom-counters [data-c="h"]');
-    var cI = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cR = document.querySelector('#zoom-counters [data-c="na"]');
-    var cT = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cP = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cV) cV.textContent = atpPerGlc + " ATP";
-    if (cI) cI.textContent = "70S";
-    if (cR) cR.textContent = "Circular";
-    if (cT) cT.textContent = "2 membranes";
-    if (cP) cP.textContent = state.mode === "base" ? "Grana/Stroma" : state.mode === "acid" ? "Cristae/Matrix" : "Both";
+    if (!kits.mito) return;
+    var k = kits[state.mode];
+    if (k && k.userData && k.userData.update) k.userData.update(dt, t);
+    hi.update(dt, t);
+    if (pickLabel.visible && pickLabel.userData.follow) {
+      box.setFromObject(pickLabel.userData.follow);
+      if (!box.isEmpty()) { box.getCenter(pickLabel.position); pickLabel.position.y = box.max.y + 0.22; }
+    }
+    if (state.mode === "route" && routeKit) {
+      tgtNow.lerp(tgt, Math.min(1, dt * 2.2));
+      stage.target.copy(tgtNow);
+    }
+    state.readT += dt;
+    if (state.readT > 0.25) { state.readT = 0; if (state.mode === "route") paintReadout(); }
   }
 })();

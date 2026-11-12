@@ -256,3 +256,7 @@ body.narr-active:not(.narr-minimised) .hero { padding-bottom: 140px; }
   .narr-spot::before, .narr-spot::after, .sparkle, .narr-cue .hand { animation: none !important; }
   .narr-caption { scroll-behavior: auto; }
 }
+
+/* Shown when the device reports no speech voice, so a silent tour is explained instead of looking broken */
+.narr-novoice { margin: 6px 0 0; padding: 6px 10px; border-radius: calc(8px * var(--corner, 1)); background: rgba(var(--warn-rgb), .14); color: var(--fg-soft, var(--fg)); font-size: 12px; line-height: 1.4; }
+.narr-novoice[hidden] { display: none; }

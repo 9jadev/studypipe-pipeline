@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: protein-route</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef7;font:14px/1.35 system-ui,sans-serif}
+  #wrap{max-width:560px;margin:0 auto;padding:6px 8px 10px;box-sizing:border-box}
+  #host{width:100%;height:56vh;min-height:300px;position:relative;border-radius:10px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#22344a,#0e1620)}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  .row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+  button{flex:1 1 auto;min-width:56px;min-height:40px;border:1px solid #3a5272;background:#1a2a40;color:#e8eef7;border-radius:8px;font:inherit}
+  button[aria-pressed=true]{background:#2f6fb0;border-color:#7fb4ec}
+  #read{margin-top:8px;padding:8px 10px;border-radius:8px;background:#142235;font-family:ui-monospace,monospace;font-size:12.5px;white-space:pre-wrap}
+  #read b{color:#ffd166}
+</style></head><body>
+<div id="wrap">
+  <div id="host"><canvas id="c"></canvas></div>
+  <div class="row" id="steps"></div>
+  <div class="row"><button id="play">Pause</button><button id="auto" aria-pressed="false">Auto-run</button><button id="lab" aria-pressed="true">Labels</button><button id="spd">Speed x1</button><button id="rst">Reset</button><button id="fol" aria-pressed="true">Follow</button></div>
+  <div id="read"></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="protein-route.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("host"), canvas = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xdbe8ff, 0x2a1a22, 0.95));
+  var key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(4, 8, 7); scene.add(key);
+  var rim = new THREE.DirectionalLight(0x8cc8ff, 0.6); rim.position.set(-5, 4, -6); scene.add(rim);
+  var camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  var kit = ProteinRouteKit.create({ step: 0, play: true, onEvent: function (n, d) { console.log("event", n, JSON.stringify(d.step != null ? { step: d.step } : { site: d.site })); } });
+  scene.add(kit);
+  var cam = kit.userData.camera, controls = new THREE.OrbitControls(camera, canvas);
+  controls.target.set(cam.target[0], cam.target[1], cam.target[2]); controls.enableDamping = true; controls.enablePan = false;
+  camera.position.set(cam.target[0] + Math.sin(cam.yaw) * Math.cos(cam.pitch) * 10, cam.target[1] + Math.sin(cam.pitch) * 10, cam.target[2] + Math.cos(cam.yaw) * Math.cos(cam.pitch) * 10);
+  var following = true, camT = new THREE.Vector3(cam.target[0], cam.target[1], cam.target[2]), camSpan = cam.span, tgtSpan = cam.span, tgtT = camT.clone();
+  function fit(snap) {
+    var w = host.clientWidth, h = host.clientHeight; if (renderer.domElement.width !== w) renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    var vf = camera.fov * Math.PI / 180, d = Math.max((3.7 / 2) / Math.tan(vf / 2), (camSpan / 2) / (Math.tan(vf / 2) * camera.aspect));
+    var off = camera.position.clone().sub(controls.target); if (off.lengthSq() < 1e-6) off.set(Math.sin(cam.yaw) * Math.cos(cam.pitch), Math.sin(cam.pitch), Math.cos(cam.yaw) * Math.cos(cam.pitch));
+    off.normalize().multiplyScalar(d); controls.target.copy(camT); camera.position.copy(camT).add(off); camera.updateProjectionMatrix();
+  }
+  function aim() {
+    if (following) { var f = kit.userData.focusFor(kit.reading().step); tgtT.set(f.target[0], f.target[1], f.target[2]); tgtSpan = f.span; }
+    else { tgtT.set(cam.target[0], cam.target[1], cam.target[2]); tgtSpan = cam.span; }
+  }
+  window.addEventListener("resize", function () { fit(); }); aim(); camT.copy(tgtT); camSpan = tgtSpan; fit();
+  var stepsEl = document.getElementById("steps");
+  kit.userData.stepNames.forEach(function (n, i) {
+    var b = document.createElement("button"); b.textContent = (i + 1) + ". " + n.split(" ").slice(0, 2).join(" "); b.title = n;
+    b.onclick = function () { kit.setState({ step: i, play: true }); document.getElementById("play").textContent = "Pause"; };
+    stepsEl.appendChild(b);
+  });
+  var playB = document.getElementById("play"), playing = true;
+  playB.onclick = function () { playing = !playing; kit.setState({ play: playing }); playB.textContent = playing ? "Pause" : "Play"; };
+  var autoB = document.getElementById("auto"); autoB.onclick = function () { var on = autoB.getAttribute("aria-pressed") !== "true"; autoB.setAttribute("aria-pressed", on); kit.setState({ autoAdvance: on }); };
+  var labB = document.getElementById("lab"); labB.onclick = function () { var on = labB.getAttribute("aria-pressed") !== "true"; labB.setAttribute("aria-pressed", on); kit.setState({ labels: on }); };
+  var sp = [1, 2, 0.5], si = 0, spdB = document.getElementById("spd"); spdB.onclick = function () { si = (si + 1) % 3; kit.setState({ speed: sp[si] }); spdB.textContent = "Speed x" + sp[si]; };
+  document.getElementById("rst").onclick = function () { kit.userData.api.reset(); playing = false; playB.textContent = "Play"; };
+  var folB = document.getElementById("fol"); folB.onclick = function () { following = folB.getAttribute("aria-pressed") !== "true"; folB.setAttribute("aria-pressed", following); };
+  var readEl = document.getElementById("read"), clock = new THREE.Clock(), lastTxt = "";
+  function showReading() {
+    var r = kit.reading();
+    var txt = "<b>" + (r.step + 1) + ". " + r.stepName + "</b>\nWhere: " + r.compartment + "\nAmino acids built: " + r.aaBuilt + " / " + r.aaTotal +
+      "\nVesicle trips: " + r.vesicleSteps + " | Fusions: " + r.fusionEvents + " | Golgi processing: " + Math.round(r.modified * 100) + "%" + (r.secreted ? "\n<b>Secreted from the cell</b>" : "");
+    if (txt !== lastTxt) { readEl.innerHTML = txt; lastTxt = txt; }
+  }
+  function frame() {
+    requestAnimationFrame(frame);
+    var dt = clock.getDelta(), t = clock.elapsedTime;
+    kit.update(dt, t); aim(); camT.lerp(tgtT, 1 - Math.exp(-dt * 3)); camSpan += (tgtSpan - camSpan) * (1 - Math.exp(-dt * 3)); fit(); controls.update(); showReading(); renderer.render(scene, camera);
+  }
+  window.__kit = kit; window.__fit = fit; frame();
+})();
+</script>
+</body></html>

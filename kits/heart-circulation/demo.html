@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: HeartKit v2.1</title>
+<style>
+  html,body{margin:0;height:100%;background:#0e1620;color:#e8eef6;font:14px/1.35 sans-serif}
+  .wrap{display:flex;flex-direction:column;height:100%}
+  #stage{position:relative;flex:1;min-height:300px}
+  #cv{width:100%;height:100%;display:block}
+  .bar{padding:8px;display:flex;flex-wrap:wrap;gap:6px;background:#16212e}
+  button{background:#26384d;color:#fff;border:0;border-radius:6px;padding:8px 10px;font-size:14px;min-height:36px}
+  button.on{background:#e04a8f}
+  #out{padding:6px 10px;background:#101a26;font-family:monospace;font-size:12px}
+</style>
+</head><body>
+<div class="wrap">
+  <div id="stage"><canvas id="cv"></canvas></div>
+  <div id="out"></div>
+  <div class="bar" id="tabs"><button data-m="valve" class="on">Valve</button><button data-m="vessels">Vessels</button><button data-m="smear">Smear</button><button data-m="heart">Heart</button></div>
+  <div class="bar" id="ctl"></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="heart-kit.js"></script>
+<script>
+(function () {
+  var cur = null, mode = "";
+  var stage = SceneKit.createStage({ root: document.getElementById("stage"), canvas: document.getElementById("cv"),
+    target: new THREE.Vector3(0, 0, 0), distance: 3.6, pitch: 0.25, yaw: 0.3, autoFit: false,
+    onFrame: function (dt, t) { if (cur) cur.update(dt, t); readout(); } });
+  if (!stage) return;
+  stage.start();
+  var out = document.getElementById("out"), ctl = document.getElementById("ctl");
+  var flags = {};
+  function btn(txt, fn, toggle) {
+    var b = document.createElement("button"); b.textContent = txt;
+    b.onclick = function () { var on = fn(); if (toggle) b.classList.toggle("on", !!on); };
+    ctl.appendChild(b); return b;
+  }
+  function readout() {
+    if (!cur) return;
+    var u = cur.userData;
+    out.textContent = "HeartKit v" + HeartKit.version + "  " + mode +
+      (mode === "valve" ? "  open=" + (u.open || 0).toFixed(2) + "  leak=" + (u.leak || 0).toFixed(2) : "") +
+      (mode === "vessels" ? "  focus=" + u.focus : "");
+  }
+  function show(m) {
+    mode = m; flags = {};
+    if (cur) stage.rig.remove(cur);
+    ctl.innerHTML = "";
+    if (m === "valve") {
+      cur = HeartKit.valve({ cusps: 2 });
+      btn("Open", function () { cur.setState({ open: 1 }); });
+      btn("Shut (squeeze)", function () { cur.setState({ open: 0 }); });
+      btn("Auto", function () { cur.setState("auto"); });
+      btn("Cut chordae", function () { flags.c = !flags.c; cur.setState({ chordaeCut: flags.c }); return flags.c; }, true);
+      btn("3 cusps", function () { cur.setState({ cusps: 3 }); });
+    } else if (m === "vessels") {
+      cur = HeartKit.vessels({});
+      ["artery", "vein", "capillary", null].forEach(function (f) { btn(f || "no focus", function () { cur.setState({ focus: f }); }); });
+    } else if (m === "smear") {
+      cur = HeartKit.bloodSmear({});
+      btn("Clot", function () { flags.k = !flags.k; cur.setState({ clot: flags.k }); return flags.k; }, true);
+      btn("Citrate", function () { flags.z = !flags.z; cur.setState({ citrate: flags.z }); return flags.z; }, true);
+      btn("Sickle", function () { flags.s = !flags.s; cur.setState({ sickle: flags.s }); return flags.s; }, true);
+    } else {
+      cur = HeartKit.heart({ bpm: 72 });
+    }
+    if (m === "smear") cur.scale.setScalar(0.6);
+    stage.rig.add(cur);
+  }
+  document.getElementById("tabs").onclick = function (e) {
+    var m = e.target.getAttribute && e.target.getAttribute("data-m"); if (!m) return;
+    [].forEach.call(this.children, function (b) { b.classList.toggle("on", b === e.target); });
+    show(m);
+  };
+  show("valve");
+  window.show = show; window.demoStage = stage; window.getKit = function () { return cur; };
+})();
+</script>
+</body></html>

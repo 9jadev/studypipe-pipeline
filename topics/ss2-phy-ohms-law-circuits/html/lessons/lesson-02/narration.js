@@ -1,255 +1,200 @@
-/* Lesson 02 · Choreographed StudyNarrator Script — EMF, Terminal P.D., Lost Volts & Internal Resistance (en-NG) */
+/* Lesson 02 · StudyNarrator choreography: EMF, Terminal P.D. & Internal Resistance (en-NG). 27 steps. */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
 
   waits: {
+    donow: {
+      event: "kit:donow", timeout: 120000,
+      prompt: "Your turn! Answer the four Do Now cards and mark yourself",
+      react: function () { return "Good. Now let us meet the missing volts."; }
+    },
     note: {
-      event: "kit:note",
-      prompt: "Type a prediction (or tap a seed question) and pin it to the Wonder Wall",
-      react: function () {
-        return "Pinned! Let's test your hypothesis about the missing 3.6 volts.";
-      }
+      event: "kit:note", timeout: 120000,
+      prompt: "Type your idea about the missing volts (or tap a seed note) and pin it",
+      react: function () { return "Pinned! Let us sort out what each reading really means."; }
     },
     sort: {
-      event: "l1:sort-checked",
-      prompt: "Sort all 12 cards into EMF (E), Terminal P.D. (V), and Lost Volts / Internal r, then tap Check my sorting",
+      event: "l2:sort", timeout: 180000,
+      prompt: "Sort all nine cards into EMF, terminal p.d. and lost volts, then tap Check",
       react: function (d) {
-        if (!d) return "Good effort!";
-        if (d.score === d.total) return "Twelve out of twelve! You distinguished open-circuit E M F, external terminal voltage V, and internal lost volts I r cleanly.";
-        if (d.score >= 9) return "Great work! " + d.score + " out of " + d.total + ". Check the notes below for any card you missed.";
-        return "You got " + d.score + " out of " + d.total + ". Review the feedback below — separating E, V, and I r is essential for Lesson 2!";
+        if (!d || d.total == null) return "No problem. You can try the sorting again later.";
+        if (d.correct === d.total) return "Perfect! Nine out of nine. You can tell EMF, terminal p.d. and lost volts apart.";
+        if (d.correct >= 7) return "Good work, " + d.correct + " out of " + d.total + ". Read the reasons below the bins.";
+        return "You got " + d.correct + " out of " + d.total + ". Remember: EMF never changes, terminal p.d. is what is left, lost volts are spent inside.";
       }
     },
     bench: {
-      event: "l1:bench-done",
-      prompt: "Test at least 4 external loads (Trials A–E) on the 3D Internal Resistance Bench",
-      react: function () {
-        return "Spot on! Notice how Terminal V plus Lost Volts I r always adds up to the full 12 point 0 volts E M F!";
-      }
+      event: "l2:bench-done", timeout: 300000,
+      prompt: "Your turn! Take five readings at five different loads",
+      react: function () { return "Well done! Five loads recorded. The straight line is ready to give us E and r."; }
+    },
+    pin: {
+      event: "l2:pin", timeout: 120000,
+      prompt: "Your turn! Tap the load pins and watch the terminal p.d. fall",
+      filter: function (d) { return d && d.R === 1; },
+      react: function () { return "At one ohm the current is large, so the lost volts are large and very little is left at the terminals."; }
     },
     bridge: {
-      event: "l1:vinegar-done",
-      prompt: "Run Steps 1, 2 and 3 to solve the Two-Readings Simultaneous Equation",
-      react: function () {
-        return "Mystery solved! Equating I one into R one plus r with I two into R two plus r gave r equals 1.20 ohms and E equals 12.0 volts.";
+      event: "l2:bridge", timeout: 180000,
+      prompt: "Your turn! Answer the three questions and give your verdict on the battery",
+      react: function (d) {
+        return d && d.correct
+          ? "Case settled! The EMF is intact; the missing volts were paid inside the cell across r."
+          : "Not quite. Look at the green rings: the open reading is the EMF, and the lost volts are dropped inside, not in the wires.";
       }
     },
     quiz: {
-      event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB quiz questions",
+      event: "kit:quiz-done", timeout: 600000,
+      prompt: "Answer all the quiz questions, or press Next to skip",
       react: function (d) {
         if (!d) return "Quiz complete!";
-        if (d.score >= 10) return "Outstanding — " + d.score + " out of " + d.total + "! You are ready for any exam question on E M F and internal resistance.";
-        if (d.score >= 7) return "Well done! " + d.score + " out of " + d.total + ". Review the explanations on the ones you missed.";
-        return "You scored " + d.score + " out of " + d.total + ". Replay the Make Sense and Electrolyte Zoom chapters, then retry!";
+        if (d.score >= d.total - 2) return "Excellent, " + d.score + " out of " + d.total + "! You understand internal resistance.";
+        if (d.score >= 9) return "Well done, " + d.score + " out of " + d.total + ". Read the explanations on the ones you missed.";
+        return "You scored " + d.score + " out of " + d.total + ". Go back to the bench and the graph, then try again.";
       }
     }
   },
 
   actions: {
-    "pin:0": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(0); },
-    "pin:3": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(3); },
-    "pin:4": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(4); },
-    "bench:heavy": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("heavy"); },
-    "bench:std":   function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("std"); },
-    "clock:1": function () { if (window.L01 && window.L01.vt) window.L01.vt.step1(); },
-    "clock:2": function () { if (window.L01 && window.L01.vt) window.L01.vt.step2(); }
+    story: function (arg) { if (window.StudyScenes && StudyScenes.story) StudyScenes.story.beat(+arg); },
+    open: function (arg) { var el = document.querySelector(arg); if (el && el.tagName === "DETAILS") el.open = true; },
+    bench: function (arg) {
+      var b = window.StudyScenes && StudyScenes.bench; if (!b) return;
+      var p = String(arg).split(":");
+      if (p[0] === "reset") b.reset();
+      else if (p[0] === "key") b.key(p[1] === "closed");
+      else if (p[0] === "load") b.load(+p[1]);
+      else if (p[0] === "rebuild") b.rebuildEmeka();
+      else if (p[0] === "demo") b.demo();
+      else if (p[0] === "hl") b.highlight(p[1] || null);
+    },
+    zoom: function (arg) {
+      var z = window.StudyScenes && StudyScenes.zoom; if (!z) return;
+      var p = String(arg).split(":");
+      if (p[0] === "key") z.key(p[1] === "closed");
+      else if (p[0] === "load") z.load(+p[1]);
+      else if (p[0] === "reset") z.reset();
+    },
+    pin: function (arg) { if (window.L02 && L02.showPin) L02.showPin(+arg, true); },
+    bridge: function (arg) {
+      if (!window.L02 || !L02.bridge || !L02.bridge.ui) return;
+      if (arg === "solve") L02.bridge.ui.solve(); else if (arg === "rebuild") L02.bridge.ui.rebuild();
+    }
   },
 
   script: [
     {
       title: "Welcome",
       steps: [
-        {
-          target: ".l-hero .display",
-          cue: "Lesson 2 · EMF & Internal Resistance",
-          sparkle: true,
-          say: "Welcome to Lesson 2! Today we are solving the Aba workshop battery mystery by mastering Electromotive Force E, Terminal Potential Difference V, Lost Volts I r, and Internal Resistance r."
-        },
-        {
-          target: "#objectives",
-          cue: "5 goals for Lesson 2",
-          say: "You will apply E equals I into R plus r, solve the classic two-readings simultaneous equation, and find E and r from the intercept and negative slope of a V-against-I graph."
-        }
+        { target: ".l-hero .display", cue: "Lesson 2 · EMF & Internal Resistance", sparkle: true,
+          say: "Welcome to Lesson 2 of the Ohm's law unit. Today we hunt for the volts that vanish the instant a battery is put under load." },
+        { target: ".l-hero .question", cue: "Our guiding question",
+          say: "Here is the puzzle. Emeka's resting battery reads twelve point zero volts, but it slumps to eight point four volts the moment the starter cranks. Where do the missing three point six volts go?" }
       ]
     },
     {
       title: "Do Now",
       steps: [
-        {
-          target: "#donow-list",
-          cue: "Spaced retrieval from Lesson 1",
-          say: "First, complete these four Do Now cards from Lesson 1 on Ohm's law, diameter scaling, charge flow, and opening the plug key."
-        }
+        { target: "#donow-list", cue: "Your turn", wait: "donow",
+          say: "Start with four quick Do Now cards from Lesson 1, on Ohm's law, the slope of a V against I graph and where the meters go. Answer each in your head, reveal it, and mark yourself honestly." }
       ]
     },
     {
       title: "The Story",
       steps: [
-        {
-          target: "#story-stage",
-          action: "story:0",
-          cue: "The 12.0 V → 8.4 V Drop",
-          say: "Back at Chinedu's workshop in Aba, Kelechi measures a newly charged 12-volt battery: it reads 12 point 0 volts when the switch is open, but plunges to 8 point 4 volts the instant he cranks the 2 point 8 ohm starter!"
-        },
-        {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:2",
-          cue: "Internal resistance r inside the cell",
-          say: "Oga Chinedu points out that the battery casing warms up because the sulfuric acid electrolyte and plates inside have their own internal resistance r."
-        },
-        {
-          target: { scene: "story", part: "clockB" },
-          action: "story:3",
-          cue: "3.6 V lost inside the battery!",
-          say: "When 3 amps flow through r equal to 1 point 2 ohms, 3 point 6 volts are lost inside the battery itself, leaving 8 point 4 volts for the starter motor!"
-        },
-        {
-          target: { scene: "story", part: "amaka" },
-          action: "story:5",
-          cue: "Plot V against I in the Lab",
-          say: "At the Physics Lab, Engineer Nkechi sets up a decade resistance box so we can vary R, measure V and I, and determine both E and r."
-        }
+        { target: { scene: "story", part: "battery" }, action: "story:0", cue: "A normal-looking battery",
+          say: "At Nkechi's auto-electric shop, Chinedu clips a voltmeter across Emeka's resting keke battery. Twelve point zero volts. It looks normal." },
+        { target: { scene: "story", part: "battery" }, action: "story:1", cue: "The reading falls",
+          say: "He throws the starter switch. The meter drops to eight point four volts and the headlamp dims. Where did three point six volts go?" },
+        { target: { scene: "story", part: "tobe" }, action: "story:2", cue: "Tobe's quick verdict",
+          say: "Tobe, the battery seller, says the battery is weak and should be dumped. We will test that claim." },
+        { target: { scene: "story", part: "nkechi" }, action: "story:3", cue: "Nkechi disagrees",
+          say: "Engr. Nkechi disagrees. The E M F has not fallen, she says. Those volts are spent inside the battery when a big current flows." },
+        { target: { scene: "story", part: "nkechi" }, action: "story:4", cue: "To the bench",
+          say: "Open key, you see the E M F. Closed key, you see what is left after the inside takes its cut. Let us go and measure it." }
       ]
     },
     {
       title: "Wonder Wall",
       steps: [
-        {
-          target: "#wall-wonder",
-          cue: "Pin your prediction",
-          wait: "note",
-          say: "Pin your prediction to the Wonder Wall: how can we find a battery's internal resistance r without opening its casing?"
-        }
+        { target: "#wall-wonder", cue: "Pin your idea", wait: "note",
+          say: "Pin your idea first. If the battery still has twelve volts, why does the meter show only eight point four volts when the starter runs?" }
       ]
     },
     {
-      title: "Concept Sort",
+      title: "Sort Game",
       steps: [
-        {
-          target: "#kitchen-sort",
-          cue: "Sort E, V, and Lost Volts Ir",
-          wait: "sort",
-          say: "Activity 1! Sort all twelve statements into Electromotive Force E, Terminal Potential Difference V, and Lost Volts or Internal Resistance r."
-        }
+        { target: "#rate-sort", cue: "Three bins",
+          say: "Now sort nine cards into three bins. E M F is the energy per coulomb the cell supplies, read on open circuit. Terminal p dot d is what is left for the outside. Lost volts, I r, are spent inside the cell." },
+        { target: "#rate-sort", cue: "Your turn", wait: "sort",
+          say: "Your turn. Drag each card, or tap a card then a bin, and press Check." }
       ]
     },
     {
-      title: "3D Practical",
+      title: "Virtual Lab",
       steps: [
-        {
-          target: { scene: "bench", part: "bob" },
-          cue: "12.0 V Cell (r = 1.2 Ω)",
-          say: "Here on the 3D bench is Chinedu's 12-volt battery with internal resistance r equal to 1 point 2 ohms."
-        },
-        {
-          target: { scene: "bench", part: "ruler" },
-          cue: "Decade Load Box R",
-          say: "In the front is the decade resistance box R, wired with a series ammeter and a parallel voltmeter across the battery terminals."
-        },
-        {
-          target: "#bench-cond",
-          action: "bench:heavy",
-          cue: "Open Key: V = E = 12.0 V",
-          say: "When we open the brass plug key, current I drops to zero, lost volts I r become zero, and the voltmeter reads the full open-circuit E M F of 12 point 0 volts!"
-        },
-        {
-          target: "#bench-stage",
-          action: "bench:std",
-          cue: "Your turn on the bench!",
-          wait: "bench",
-          say: "Now it's your turn! Tap Trials A through E to test at least four external loads and watch how Terminal V and Lost Volts behave."
-        },
-        {
-          target: "#expected",
-          action: "open:#expected",
-          cue: "Slope = −r = −1.20 Ω",
-          say: "Look at the completed table: as current rises from 1 amp to 3 amps, terminal voltage drops linearly from 10 point 8 volts to 8 point 4 volts with gradient minus 1 point 20 ohms!"
-        }
+        { target: "#method-cards", action: "bench:key:open", cue: "Four method cards",
+          say: "On the bench, follow four steps. Open the key and read the E M F. Close the key, pick a load, and record the current and the terminal p dot d. Spread the current over five loads. Then plot V against I." },
+        { target: { scene: "bench", part: "voltmeter" }, action: "bench:hl:voltmeter", cue: "Key open: the EMF",
+          say: "Key open. Almost no current flows, so there are no lost volts, and the voltmeter shows the full E M F, six point zero volts." },
+        { target: { scene: "bench", part: "rheostat" }, action: "bench:load:4.5", cue: "Close and load",
+          say: "Now close the key and set a load of four point five ohms. One amp flows, and the terminal p dot d drops to four point five volts. The difference, one point five volts, is the lost volts." },
+        { target: { scene: "bench", part: "ammeter" }, action: "bench:hl:ammeter", cue: "Read I and V",
+          say: "The ammeter in series reads the current, and the voltmeter in parallel reads the terminal p dot d. Record the pair, then open the key again." },
+        { target: "#bench-stage", action: "bench:hl:", cue: "Your turn", wait: "bench",
+          say: "Your turn. Take five readings at five different loads, so the current spans a good range. I will carry on after five loads." },
+        { target: "#graph-card", cue: "The V–I line",
+          say: "Look at the graph. The points fall on a straight line that slopes downward: V equals E minus r times I. Extended back to zero current it cuts the V axis at the E M F, and the magnitude of its gradient is the internal resistance." },
+        { target: "#expected", action: "open:#expected", cue: "Compare results",
+          say: "Compare with the expected results, then try the five locked analysis questions before you unlock the answers." }
       ]
     },
     {
-      title: "Complete Circuit Law",
+      title: "Make Sense",
       steps: [
-        {
-          target: "#eq-shm",
-          cue: "E = I(R + r) & V = E − Ir",
-          sparkle: true,
-          say: "Here is the complete circuit equation: E equals V plus v, which equals I R plus I r, or I into R plus r. Rearranging gives V equals E minus I r."
-        },
-        {
-          target: "#eq-vel",
-          cue: "Two Readings, Same Cell",
-          say: "And memorise this top JAMB and WAEC weapon: when the same cell supplies current I one to resistor R one and I two to resistor R two, equate I one into R one plus r with I two into R two plus r!"
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:0",
-          cue: "Open Circuit (I = 0)",
-          say: "On the Load Current Explorer, at open circuit I equals zero, 100 percent of E appears at the terminals."
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:4",
-          cue: "Short Circuit (R = 0)",
-          say: "At short circuit R equals zero, current hits I max equals E over r, terminal voltage collapses to zero, and all 12 volts turn into internal heat!"
-        }
+        { target: "#def-box", cue: "The four quantities",
+          say: "Let us name them. E M F is the energy per coulomb the cell gives the whole circuit. Internal resistance r is the opposition inside the cell. Lost volts are I r. Terminal p dot d is what is left, V equals E minus I r." },
+        { target: "#eq-full", cue: "The key equations",
+          say: "The master equation is E equals I times, bracket, R plus r. From it, the terminal p dot d is V equals E minus I r, and also V equals I R." },
+        { target: "#props-table", cue: "Open circuit versus on load",
+          say: "On open circuit the current is zero, the lost volts are zero, and the meter reads the E M F. On load, a current flows, the lost volts are I r, and the meter reads E minus I r." },
+        { target: "#pos-explorer", action: "pin:1", cue: "Load explorer", wait: "pin",
+          say: "Your turn. Tap the load pins for the same cell. Watch the terminal p dot d fall and the point slide down the line as the load gets heavier. Finish on the one ohm load." }
       ]
     },
     {
-      title: "3D Electrolyte Zoom",
+      title: "Zoom",
       steps: [
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:mix",
-          cue: "Ions migrating through acid",
-          say: "Zoom inside the lead-acid cell! As ions migrate between the positive and negative plates through the electrolyte, internal drag costs 3 point 6 lost volts."
-        },
-        {
-          target: { scene: "zoom", part: "bars" },
-          action: "zoom:mode:acid",
-          cue: "Open Circuit: Zero Lost Volts",
-          say: "Switch to Open Circuit: ion drift stops, the red Lost Volts bar drops to zero, and Terminal V equals the full 12 volts E M F!"
-        }
+        { target: "#zoom-stage", action: "zoom:key:closed", cue: "Inside the cell",
+          say: "Zoom inside the cell. Positive and negative ions cross the electrolyte, and some energy turns to heat on the internal resistance before the charge reaches the terminals." },
+        { target: "#zoom-stage", action: "zoom:load:1.5", cue: "The energy bar splits",
+          say: "Watch the energy per coulomb bar. The cell lifts each coulomb to the E M F, then the column splits into I R, the useful part for the outside, and I r, the lost part inside. A heavier load takes a bigger inside slice." }
       ]
     },
     {
-      title: "Worked Examples & Bridge",
+      title: "Worked Examples",
       steps: [
-        {
-          target: "#ex1",
-          cue: "Example 1 · Terminal P.D. & Lost Volts",
-          say: "Worked Example 1 solves the Aba starter drop in three clean lines."
-        },
-        {
-          target: "#ex2",
-          cue: "Example 2 · Two Readings Method",
-          say: "Worked Example 2 shows how to equate I one into R one plus r with I two into R two plus r to find both r and E."
-        },
-        {
-          target: "#vinegar-test",
-          action: "clock:1",
-          cue: "Solve the Two-Readings Case!",
-          wait: "bridge",
-          say: "Now use the two-readings method in the Bridge Challenge! Click Steps 1, 2, and 3 to solve for Chinedu's battery internal resistance and E M F."
-        }
+        { target: ["#ex1", "#ex2", "#ex3"], action: "zoom:reset", cue: "Three worked examples",
+          say: "Three worked examples. First, Emeka's battery: current is V over R, three amps; lost volts are three point six; so r is one point two ohms. Second, two readings give r and E together. Third, read E from the intercept and r from the gradient of a graph." }
       ]
     },
     {
-      title: "Quiz & Reflect",
+      title: "Solving the Mystery",
       steps: [
-        {
-          target: "#quiz",
-          cue: "12 WAEC & JAMB Questions",
-          wait: "quiz",
-          say: "Try all twelve exam questions on E M F, lost volts, two-load calculations, and V–I cell graphs!"
-        },
-        {
-          target: "#reflect",
-          cue: "Reflect & Assignment",
-          say: "Rate yourself from 1 to 4, answer the Exit Ticket, and complete the 30-mark assignment before heading to Lesson 3!"
-        }
+        { target: "#bridge-card", action: "bench:rebuild", cue: "Rebuild the circuit", wait: "bridge",
+          say: "Back to the workshop. Rebuild Emeka's circuit: open circuit twelve volts, then three amps through the starter drops three point six volts inside, leaving eight point four volts. Answer the three questions to settle Tobe's verdict." },
+        { target: "#big-idea", cue: "The big idea",
+          say: "The big idea. E M F is what the cell can give; terminal p dot d is what survives after I r is paid inside. A tired battery has a larger r, so it drops more volts under load even though its E M F is unchanged." },
+        { target: "#quiz-list", cue: "Quiz time", wait: "quiz",
+          say: "Now the quiz. Twelve questions in exam style, plus two review questions from Lesson 1." }
+      ]
+    },
+    {
+      title: "Quiz & Reflection",
+      steps: [
+        { target: "#reflect", cue: "Reflect and assignment",
+          say: "To finish, rate yourself from one to four on each goal, then do the exit ticket and the blank page recall. Your assignment is Part A and Part B from the questions for Lesson 2. Well done today." }
       ]
     }
   ]

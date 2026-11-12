@@ -1,178 +1,155 @@
-/* Lesson 01 · Simple Harmonic Motion & Simple Pendulum — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 04 · The Simple Pendulum — Restoring Force, Small Angles and T = 2π√(l/g)
+   Sort cards, angle-pin explorer, the Bridge steps and the 12 quiz questions
+   (03-questions.md § Lesson 04, order and keys unchanged). Every number on the bench and the
+   explorer is computed from PendulumKit.model / ShmKinematics2D.model, never typed in. */
 (function () {
   "use strict";
 
-  window.L01 = {
-    // ---- 1. Motion sort items ----
+  var G = 9.8;
+  var PM = window.PendulumKit && window.PendulumKit.model;
+  var SM = window.ShmKinematics2D && window.ShmKinematics2D.model;
+  var D2R = Math.PI / 180;
+
+  // fallbacks (only if a kit failed to load): the same formulas the kits use
+  function agm(a, b) { for (var i = 0; i < 30; i++) { var a1 = (a + b) / 2, b1 = Math.sqrt(a * b); a = a1; b = b1; if (Math.abs(a - b) < 1e-15) break; } return a; }
+  function period(l, g, deg) {
+    if (PM) return PM.period(l, g, deg, "exact");
+    return 2 * Math.PI * Math.sqrt(l / g) / agm(1, Math.cos(deg * D2R / 2));
+  }
+  function timeFor(n, l, g, deg) {
+    if (PM) return PM.timeFor(n, l, g, deg, "exact");
+    return Math.round(n * period(l, g, deg) * 100) / 100;
+  }
+  function lengthFor(T, g) { return PM ? PM.lengthFor(T, g) : g * T * T / (4 * Math.PI * Math.PI); }
+  function smallAngle(deg) {
+    if (SM) { var p = SM.pendulum(deg, 0.05, 0.5, G, deg); return { rad: p.theta_rad, sin: p.sin, diff: p.diff_pct }; }
+    var r = deg * D2R; return { rad: r, sin: Math.sin(r), diff: 100 * (r - Math.sin(r)) / r };
+  }
+  function periodIncrease(deg) {
+    var f = PM ? PM.exactFactor(deg) : 1 / agm(1, Math.cos(deg * D2R / 2));
+    return 100 * (f - 1);
+  }
+
+  window.L04 = {
+    G: G, period: period, timeFor: timeFor, lengthFor: lengthFor, smallAngle: smallAngle, periodIncrease: periodIncrease,
+
+    // ---- 2A sort: does it change the pendulum's period? (9 cards, 02-lesson.md) ----
+    bins: {
+      changes: "Changes T",
+      "no-change": "No change",
+      "only-large-angles": "Only at large angles"
+    },
     items: [
-      { id: "pendulum", name: "Pendulum swinging through 8°", emo: "🕰️", bin: "shm", why: "At small angles, the restoring pull −mg sin θ is directly proportional to displacement x towards the centre." },
-      { id: "spring", name: "Mass bouncing on a spiral spring", emo: "🔩", bin: "shm", why: "Hooke's law gives a restoring force F = −kx proportional to extension or compression from equilibrium." },
-      { id: "tuning", name: "Vibrating prong of a tuning fork", emo: "🎵", bin: "shm", why: "Elasticity of the steel prong pulls it back towards its rest position in proportion to displacement." },
-      { id: "testtube", name: "Loaded test-tube bobbing in water", emo: "🧪", bin: "shm", why: "Extra upthrust when pushed down (or extra weight when lifted) is proportional to vertical displacement x." },
-      { id: "fan", name: "Ceiling fan spinning at steady speed", emo: "🌀", bin: "periodic", why: "Repeats every rotation, so it is periodic — but it moves in one circular direction, not to-and-fro through an equilibrium centre." },
-      { id: "earth", name: "Earth orbiting the Sun each year", emo: "🌍", bin: "periodic", why: "Repeats every 365.25 days (periodic), but does not oscillate back and forth along a restoring path." },
-      { id: "ball", name: "Rubber ball bouncing on concrete", emo: "🏀", bin: "periodic", why: "Periodic while bouncing steadily, but acceleration is constant (−g) in the air rather than proportional to displacement x." },
-      { id: "heartbeat", name: "Heartbeat repeating 72 times/min", emo: "💓", bin: "periodic", why: "Rhythmic and periodic, but driven by biological muscle impulses rather than a linear restoring force −kx." },
-      { id: "mango", name: "Mango falling straight from a tree", emo: "🥭", bin: "non", why: "One-way accelerated fall under gravity; it does not repeat in cycles." },
-      { id: "danfo", name: "Danfo bus braking at a bus stop", emo: "🚌", bin: "non", why: "One-off deceleration to rest; there is no oscillation or cycle." },
-      { id: "stone", name: "Football kicked across a pitch", emo: "⚽", bin: "non", why: "Parabolic projectile flight from kick to landing — not periodic." },
-      { id: "rain", name: "Rainwater flowing down a gutter", emo: "🌧️", bin: "non", why: "Continuous one-way flow with no repeating equilibrium cycle." }
+      { id: "i1", emo: "📏", name: "Doubling the thread length", bin: "changes", why: "T ∝ √l, so a longer thread gives a longer period (×√2 here)." },
+      { id: "i2", emo: "🌙", name: "Moving the pendulum to the Moon", bin: "changes", why: "g is far smaller on the Moon and T ∝ 1/√g, so T grows (about ×2.45)." },
+      { id: "i3", emo: "🟤", name: "A brass bob instead of wood (same size)", bin: "no-change", why: "Mass cancels: more weight but also more inertia, so the acceleration is the same." },
+      { id: "i4", emo: "⚖️", name: "Doubling the bob's mass", bin: "no-change", why: "m appears in both F = mg sin θ and F = ma, so it cancels out of a = −(g/l)x." },
+      { id: "i5", emo: "📐", name: "Release at 5° instead of 10°", bin: "no-change", why: "Both are small angles: sin θ ≈ θ, the motion is SHM and T is the same (within 0.15 %)." },
+      { id: "i6", emo: "🧵", name: "A thread that stretches less (same length)", bin: "no-change", why: "Only the length matters; a less stretchy thread just keeps that length steady." },
+      { id: "i7", emo: "↗️", name: "Release at 45° instead of 10°", bin: "only-large-angles", why: "At 45° sin θ falls below θ, the force is no longer ∝ x, and T grows by about 4 %." },
+      { id: "i8", emo: "⛰️", name: "Timing on a hill instead of at sea level", bin: "changes", why: "g is very slightly smaller up a hill, so T is very slightly longer — too small to see with a stopwatch." },
+      { id: "i9", emo: "🎨", name: "Painting the bob a different colour", bin: "no-change", why: "Colour has nothing to do with the restoring force or the inertia." }
     ],
 
-    // ---- 2. 3D Pendulum bench trials (N = 20 oscillations, g = 9.81 m/s²) ----
-    trials: [
-      { label: "A", L: 0.40, t: "25.38", T: "1.269", T2: "1.61" },
-      { label: "B", L: 0.60, t: "31.08", T: "1.554", T2: "2.42" },
-      { label: "C", L: 0.80, t: "35.88", T: "1.794", T2: "3.22" },
-      { label: "D", L: 1.00, t: "40.12", T: "2.006", T2: "4.02" },
-      { label: "E", L: 1.20, t: "43.96", T: "2.198", T2: "4.83" }
-    ],
-    tOptions: ["25.38", "31.08", "35.88", "40.12", "43.96"],
-    TOptions: ["1.269", "1.554", "1.794", "2.006", "2.198"],
-    T2Options: ["1.61", "2.42", "3.22", "4.02", "4.83"],
+    // ---- Make-sense explorer pins (#pos-explorer): why WAEC says "small angle" ----
+    pins: [5, 10, 20, 30, 45],
 
-    // ---- 3. Swing Position Explorer pins (from -A to +A, A = 0.10 m, ω = 4.0 rad/s) ----
-    pins: [
-      { frac: -1.0, label: "−A", emo: "🛑", x: "−0.10 m", v: "0.00 m s⁻¹ (zero)", a: "+1.60 m s⁻² (max → right)", ke: "0%", pe: "100%", note: "Left extreme: the bob stops for an instant to reverse direction. Speed and KE are zero, while restoring acceleration and PE are at their maximum!" },
-      { frac: -0.6, label: "−0.6A", emo: "↗️", x: "−0.06 m", v: "0.32 m s⁻¹", a: "+0.96 m s⁻² (→ right)", ke: "64%", pe: "36%", note: "Partway in: potential energy is rapidly converting into kinetic energy as the restoring force pulls the bob towards the centre." },
-      { frac: -0.3, label: "−0.3A", emo: "⚡", x: "−0.03 m", v: "0.38 m s⁻¹", a: "+0.48 m s⁻² (→ right)", ke: "91%", pe: "9%", note: "Approaching the centre: speed is nearly at its peak and acceleration is shrinking rapidly as x approaches zero." },
-      { frac: 0.0,  label: "x = 0", emo: "🎯", x: "0.00 m", v: "0.40 m s⁻¹ (MAX)", a: "0.00 m s⁻² (ZERO)", ke: "100%", pe: "0%", note: "Equilibrium centre (fiducial mark): displacement, restoring force, acceleration and PE are all ZERO, while speed (vmax = ωA) and KE are 100% maximum!" },
-      { frac: 0.3,  label: "+0.3A", emo: "⚡", x: "+0.03 m", v: "0.38 m s⁻¹", a: "−0.48 m s⁻² (← left)", ke: "91%", pe: "9%", note: "Just past the centre: inertia carries the bob rightward, but restoring acceleration immediately flips leftward to slow it down." },
-      { frac: 0.6,  label: "+0.6A", emo: "↖️", x: "+0.06 m", v: "0.32 m s⁻¹", a: "−0.96 m s⁻² (← left)", ke: "64%", pe: "36%", note: "Climbing the right arc: speed drops as kinetic energy turns back into gravitational potential energy." },
-      { frac: 1.0,  label: "+A", emo: "🛑", x: "+0.10 m", v: "0.00 m s⁻¹ (zero)", a: "−1.60 m s⁻² (max ← left)", ke: "0%", pe: "100%", note: "Right extreme: speed hits zero at the top of the swing, while inward acceleration reaches its maximum (−ω²A) to pull the bob back." }
+    // ---- The Bridge: Tunde's test + Mrs Okafor's puzzle ----
+    bridge: [
+      {
+        q: "On the bench, the 50 g and the 100 g bobs on the same 0.50 m thread at 10° each take 28.44 s for 20 swings. What does this show?",
+        o: ["Mass does not change the period", "The heavier bob is slower", "The lighter bob is slower"],
+        a: 0,
+        why: "Both give T = 28.44 ÷ 20 = 1.42 s. The mass cancels in a = −(g/l)x, so a heavier bob is not 'steadier' or slower."
+      },
+      {
+        q: "The okada's bounce has T = 0.50 s. Which formula gives the length of a pendulum that keeps the same time?",
+        o: ["l = gT² ÷ 4π²", "l = 4π²T² ÷ g", "l = gT ÷ 2π"],
+        a: 0,
+        why: "Square T = 2π√(l/g): T² = 4π²l/g, so l = gT²/4π². The other two are the upside-down and the unsquared slips."
+      },
+      {
+        q: "Using g = 9.8 m s⁻², how long is Mrs Okafor's okada-matching pendulum?",
+        o: ["6.2 cm", "24.5 cm", "1.24 m"],
+        a: 0,
+        why: "l = 9.8 × 0.25 ÷ 39.5 = 0.062 m = 6.2 cm — exactly the okada's static sag mg/k, because the two periods match when l/g = m/k."
+      }
     ]
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
+  // ---- 12 interactive MCQs (03-questions.md § Lesson 04 Part 1) ----
   window.LESSON_QUIZ = [
     {
-      q: "Which statement correctly defines <strong>simple harmonic motion (SHM)</strong>?",
-      o: [
-        "Any motion that repeats itself in equal intervals of time",
-        "Motion in which acceleration is proportional to displacement from equilibrium and always directed towards it",
-        "Motion with constant speed along a circular path",
-        "Motion in which restoring force acts in the same direction as displacement"
-      ],
-      a: 1,
-      e: "All SHM is periodic, but only motions obeying <strong>a = −ω²x</strong> (acceleration proportional to displacement and directed <em>towards</em> the equilibrium centre) are simple harmonic.",
-      src: "WAEC-style"
-    },
-    {
-      q: "A student records <strong>36.0 s</strong> for <strong>20 complete oscillations</strong> of a simple pendulum. What are the period <strong>T</strong> and frequency <strong>f</strong>?",
-      o: [
-        "T = 0.56 s, f = 1.80 Hz",
-        "T = 1.80 s, f = 0.56 Hz",
-        "T = 18.0 s, f = 0.056 Hz",
-        "T = 720 s, f = 0.0014 Hz"
-      ],
-      a: 1,
-      e: "Period <strong>T = t ÷ N = 36.0 ÷ 20 = 1.80 s</strong>. Frequency <strong>f = 1 ÷ T = 1 ÷ 1.80 = 0.56 Hz</strong>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "If the effective length of a simple pendulum is <strong>quadrupled (L → 4L)</strong> at the same location, its period T:",
-      o: [
-        "becomes four times as large (4T)",
-        "doubles (2T)",
-        "is halved (½T)",
-        "remains unchanged (T)"
-      ],
-      a: 1,
-      e: "From <strong>T = 2π√(L/g)</strong>, period is proportional to <strong>√L</strong>. Multiplying L by 4 multiplies T by <strong>√4 = 2</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "A simple pendulum has a 50 g brass bob and a period of <strong>1.60 s</strong>. If the bob is replaced with a <strong>150 g lead bob</strong> at the exact same effective length L, the new period is:",
-      o: ["4.80 s", "2.77 s", "1.60 s", "0.53 s"],
-      a: 2,
-      e: "Mass <strong>m</strong> does not appear in <strong>T = 2π√(L/g)</strong> because gravitational pull and inertia scale equally with mass. The period remains <strong>1.60 s</strong>.",
-      src: "NECO-style"
-    },
-    {
-      q: "As an oscillating pendulum bob passes through its <strong>equilibrium centre (x = 0)</strong>, which pair of quantities is correct?",
-      o: [
-        "Velocity is zero; acceleration is maximum",
-        "Velocity is maximum; acceleration is zero",
-        "Both velocity and acceleration are maximum",
-        "Potential energy is maximum; kinetic energy is zero"
-      ],
-      a: 1,
-      e: "At <strong>x = 0</strong>, acceleration <strong>a = −ω²(0) = 0</strong> and all potential energy has turned into kinetic energy, so speed reaches <strong>v<sub>max</sub> = ωA</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "A body performs SHM with amplitude <strong>A = 0.05 m</strong> and angular frequency <strong>ω = 10 rad s<sup>−1</sup></strong>. What are its maximum speed <strong>v<sub>max</sub></strong> and maximum acceleration <strong>a<sub>max</sub></strong>?",
-      o: [
-        "0.50 m s⁻¹ and 5.0 m s⁻²",
-        "5.0 m s⁻¹ and 0.50 m s⁻²",
-        "0.50 m s⁻¹ and 0.05 m s⁻²",
-        "200 m s⁻¹ and 2000 m s⁻²"
-      ],
+      q: "A pendulum bob of mass m is pulled aside so its thread makes an angle θ with the vertical. Which force pulls it back towards its lowest point?",
+      o: ["mg sin θ, the component of its weight along the arc", "The tension in the thread", "mg cos θ, the component of its weight along the thread", "Its full weight, mg"],
       a: 0,
-      e: "<strong>v<sub>max</sub> = ωA = 10 × 0.05 = 0.50 m s⁻¹</strong>, and <strong>a<sub>max</sub> = ω²A = 10² × 0.05 = 5.0 m s⁻²</strong>.",
-      src: "JAMB-style"
+      e: "The weight splits into mg cos θ along the thread and mg sin θ along the arc. The tension balances the first part (and provides the centripetal pull), so the part left over to drive the bob back to the middle is mg sin θ. B acts along the thread, at right angles to the bob's path, so it cannot push the bob along the arc. C is the component the tension cancels. D acts straight down; only its component along the path restores the bob."
     },
     {
-      q: "In a simple pendulum experiment, a student plots <strong>L (m)</strong> on the vertical axis against <strong>T<sup>2</sup> (s<sup>2</sup>)</strong> on the horizontal axis and obtains a slope <strong>S = 0.248 m s<sup>−2</sup></strong>. The value of g is:",
-      o: [
-        "g = 4π²S ≈ 9.79 m s⁻²",
-        "g = 4π² ÷ S ≈ 159 m s⁻²",
-        "g = 2πS ≈ 1.56 m s⁻²",
-        "g = S ÷ 4π² ≈ 0.0063 m s⁻²"
-      ],
-      a: 0,
-      e: "Since <strong>L = (g ÷ 4π²)T²</strong>, the slope S of L against T² equals <strong>g ÷ 4π²</strong>. Therefore <strong>g = 4π²S = 39.478 × 0.248 ≈ 9.79 m s⁻²</strong>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "Why do WAEC practical instructions ask candidates to place the fiducial reference mark at the <strong>centre of the swing</strong> rather than at one extreme end?",
-      o: [
-        "The bob stops at the centre so it is easier to see",
-        "The bob moves fastest through the centre, making the instant of crossing sharp and reducing timing error",
-        "Air resistance acts only at the extreme ends",
-        "The thread is shortest at the centre"
-      ],
-      a: 1,
-      e: "At the extreme ends the bob lingers as it reverses, making the turnaround moment blurry. At <strong>x = 0</strong> it flashes past the pointer at maximum speed, giving a crisp timing mark.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "A particle in SHM has angular frequency <strong>ω = 3.0 rad s<sup>−1</sup></strong> and amplitude <strong>A = 0.10 m</strong>. Its speed at displacement <strong>x = 0.08 m</strong> is:",
-      o: ["0.30 m s⁻¹", "0.24 m s⁻¹", "0.18 m s⁻¹", "0.06 m s⁻¹"],
+      q: "A simple pendulum is 1.6 m long. What is its period? (Take g = 10 m s⁻².)",
+      o: ["0.40 s", "1.0 s", "2.5 s", "15.7 s"],
       a: 2,
-      e: "<strong>v = ω√(A² − x²) = 3.0 × √(0.10² − 0.08²) = 3.0 × √0.0036 = 3.0 × 0.06 = 0.18 m s⁻¹</strong>.",
-      src: "NECO-style"
+      e: "T = 2π√(l/g) = 2π√(1.6 ÷ 10) = 2π√0.16 = 2 × 3.142 × 0.40 = 2.5 s. A forgot the 2π (√0.16). B forgot the square root (2π × 0.16 = 1.0). D turned the fraction upside down (2π√(10 ÷ 1.6) = 2π × 2.5)."
     },
     {
-      q: "Which precaution is written in the exact style expected by <strong>WAEC Physics Paper 3</strong> examiners?",
-      o: [
-        "Avoid conical oscillation during the experiment.",
-        "I will make sure the fan is switched off.",
-        "Conical oscillation was avoided by displacing the bob through a small angle in a single vertical plane.",
-        "Do not push the bob when releasing it."
-      ],
-      a: 2,
-      e: "WAEC requires precautions to be stated in the <strong>past tense</strong>, describing what was done and how.",
-      src: "WAEC Practical"
+      q: "A pendulum 0.36 m long has a period of 1.2 s. Its thread is lengthened to 0.81 m. What is the new period?",
+      o: ["2.7 s", "0.80 s", "1.2 s", "1.8 s"],
+      a: 3,
+      e: "T ∝ √l, so T₂/T₁ = √(l₂/l₁) = √(0.81 ÷ 0.36) = √2.25 = 1.5, giving T₂ = 1.5 × 1.2 = 1.8 s. A multiplied by 2.25, leaving out the square root. B divided by 1.5, as if a longer thread swung faster. C assumes the length makes no difference; length is the one thing (with g) that does."
     },
     {
-      q: "Why does a pendulum clock that keeps accurate time in Lagos <strong>lose time</strong> when taken to the top of a high mountain where gravity g is slightly smaller?",
-      o: [
-        "Smaller g makes the period T = 2π√(L/g) longer, so each swing takes more time and the clock ticks slowly",
-        "Smaller g makes the period T shorter, so the clock ticks too fast",
-        "The brass bob loses mass at high altitude",
-        "Air resistance increases on a mountain"
-      ],
-      a: 0,
-      e: "Because <strong>g</strong> is in the denominator of <strong>T = 2π√(L/g)</strong>, a smaller g produces a longer period T. Each tick takes longer than 1 second, so the clock falls behind.",
-      src: "JAMB-style"
-    },
-    {
-      q: "The gradual decrease in amplitude of a freely swinging pendulum due to air resistance is called:",
-      o: ["Resonance", "Damping", "Diffraction", "Polarization"],
+      q: "Tunde replaces a 50 g wooden bob with a 100 g brass bob of the same size on the same thread and releases it through the same small angle. What happens to the period?",
+      o: ["It doubles, because the brass bob is twice as heavy", "It stays the same, because the period of a simple pendulum does not depend on the mass of the bob", "It becomes √2 times as long, because T ∝ √m", "It halves, because gravity pulls the heavier bob harder"],
       a: 1,
-      e: "<strong>Damping</strong> is the progressive loss of mechanical energy and amplitude due to resistive forces like air drag.",
-      src: "NECO-style"
+      e: "In a = −(g/l)x the mass has cancelled: doubling m doubles both the restoring force and the inertia, so the acceleration at each point is unchanged and T = 2π√(l/g) stays the same. A and D are the \"heavier changes the rhythm\" myth in both directions. C borrows T ∝ √m from the loaded spring; it does not apply to a pendulum."
+    },
+    {
+      q: "A pendulum has a period of 1.5 s on Earth. What would its period be on the Moon, where g is only one-sixth of its value on Earth?",
+      o: ["9.0 s", "0.61 s", "3.7 s", "0.25 s"],
+      a: 2,
+      e: "T ∝ 1/√g, so T_Moon = T_Earth × √(g_E/g_M) = 1.5 × √6 = 1.5 × 2.45 = 3.7 s. A multiplied by 6, leaving out the square root. B divided by √6, as if weaker gravity made the pendulum swing faster. D divided by 6."
+    },
+    {
+      q: "Why does the WAEC pendulum practical insist that the bob swings through a <strong>small</strong> angle?",
+      o: ["Only for small angles is sin θ ≈ θ, so the restoring force is proportional to the displacement and the motion is simple harmonic", "A large angle would make the thread break", "For a small angle the bob's mass no longer matters", "A small angle makes the period shorter, so timing is quicker"],
+      a: 0,
+      e: "The restoring force is mg sin θ. Only when θ is small (in radians) is sin θ ≈ θ ≈ x/l, which makes the force proportional to x and gives a = −(g/l)x, the SHM condition behind T = 2π√(l/g). B is not the reason (a lab thread copes easily). C is wrong because mass cancels at any angle. D gets it backwards: in the small-angle range the period hardly changes at all."
+    },
+    {
+      q: "A pendulum 0.900 m long makes 20 oscillations in 38.0 s. What value of g does this give?",
+      o: ["18.7 m s⁻²", "9.84 m s⁻²", "0.102 m s⁻²", "1.57 m s⁻²"],
+      a: 1,
+      e: "T = 38.0 ÷ 20 = 1.90 s, so T² = 3.61 s². Rearranging T = 2π√(l/g) gives g = 4π²l/T² = 39.48 × 0.900 ÷ 3.61 = 9.84 m s⁻². A divided by T instead of T² (forgot to square). C is T²/(4π²l), the rearrangement upside down. D used 2π in place of 4π² (2π × 0.900 ÷ 3.61), forgetting that squaring 2π gives 4π²."
+    },
+    {
+      q: "A simple pendulum and a mass on a spring both have a period of 1.0 s on Earth. Both are carried to the Moon. What happens to their periods there?",
+      o: ["Both periods become longer", "Both periods stay the same", "The pendulum's period stays the same; the spring's becomes longer", "The pendulum's period becomes longer; the spring's stays the same"],
+      a: 3,
+      e: "The pendulum's restoring force comes from gravity, so T = 2π√(l/g) grows when g falls. The spring's restoring force comes from its stiffness, and T = 2π√(m/k) contains no g, so its period is unchanged (only its resting stretch changes). A and B treat the two systems alike; C swaps them."
+    },
+    {
+      q: "What length of simple pendulum has a period of 1.20 s? (Take g = 9.8 m s⁻².)",
+      o: ["0.30 m", "0.36 m", "2.25 m", "5.80 m"],
+      a: 1,
+      e: "l = gT²/4π² = 9.8 × (1.20)² ÷ 39.48 = 9.8 × 1.44 ÷ 39.48 = 14.11 ÷ 39.48 = 0.36 m. A forgot to square T (9.8 × 1.20 ÷ 39.48). C divided by 2π instead of 4π². D turned the fraction upside down (4π²T²/g)."
+    },
+    {
+      q: "Zainab releases the same pendulum first at 10° and then at 45°. Which statement is correct?",
+      o: ["The period is exactly the same at both angles", "The period at 45° is much shorter because the bob moves faster", "The period at 45° is exactly 4.5 times as long, because the bob goes further", "The period at 45° is slightly longer, because sin θ is then noticeably less than θ and the restoring force is no longer proportional to displacement"],
+      a: 3,
+      e: "At 45° the motion is no longer quite SHM: the restoring force grows less quickly than the displacement, so the bob takes a little longer (about 4 % here). A is true only within the small-angle range, which 45° is outside. B ignores that the extra distance outweighs the extra speed. C assumes the period grows in proportion to the angle; in fact the change is only a few per cent."
+    },
+    {
+      q: "Pendulum Q is nine times as long as pendulum P, and both swing at the same place. What is the ratio of the frequency of P to the frequency of Q?",
+      o: ["3 : 1", "1 : 3", "9 : 1", "1 : 9"],
+      a: 0,
+      e: "T ∝ √l, so T_Q = √9 × T_P = 3T_P. Frequency is 1/T, so f_P : f_Q = 3 : 1: the shorter pendulum vibrates three times as often. B is the ratio of the periods, not the frequencies. C and D leave out the square root."
+    },
+    {
+      q: "Using data from the pendulum-laws bench, which graph would give a straight line through the origin?",
+      o: ["T against l", "T against 1/l", "T against √l", "T² against 1/l"],
+      a: 2,
+      e: "T = (2π/√g) × √l, so T is directly proportional to √l: plotting T against √l gives a straight line through the origin with gradient 2π/√g. (Equally, T² against l is a straight line through the origin.) A gives a curve that bends over, because T grows more slowly than l. B and D give curves, because T falls as 1/l grows, while the real T increases with l."
     }
   ];
 })();

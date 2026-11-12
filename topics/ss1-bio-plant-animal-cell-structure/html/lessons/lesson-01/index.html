@@ -3,42 +3,119 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 1 · Discovery of the Cell, Cell Theory &amp; Prokaryotes vs Eukaryotes · StudyPipe</title>
-  <meta name="description" content="StudyPipe Biology (SS1): Discovery of the Cell (Hooke to Virchow), Modern Cell Theory, Viruses as Borderline, Microscope Magnification (M = I/A), and Prokaryotes vs Eukaryotes.">
+  <title>Lesson 1 · Discovering the Cell · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS1) Lesson 1: the compound microscope, total magnification, cell size in micrometres, the cell theory and prokaryotes versus eukaryotes.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%2322c55e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='22' fill='%2316a34a'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23fef08a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+    .timetable { margin: 14px 0 0; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--fg-soft); }
+    .timetable b { color: var(--amber); }
+    .pend-hero-art { display: flex; align-items: center; justify-content: center; }
+    .hero-art { width: 100%; max-width: 420px; height: auto; }
+    .hero-art .box { fill: rgba(var(--teal-rgb), .14); stroke: var(--teal); stroke-width: 1.6; }
+    .hero-art .rbc { fill: rgba(var(--crimson-rgb), .32); stroke: var(--crimson); stroke-width: 1.6; }
+    .hero-art .rim { fill: none; stroke: var(--line-strong); stroke-width: 3; }
+    .hero-art text { fill: var(--fg); font-family: var(--font-mono); font-size: 12px; }
+    .hero-art .sub { fill: var(--fg-soft); font-size: 10.5px; }
+    .bench-pane[hidden] { display: none !important; }
+    /* bench dashboard: eyepiece disc beside the live readout — phone first, one tight block */
+    .bench-dash { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 10px; padding: 10px 12px 0; align-items: start; }
+    .bench-dash .eye-wrap { text-align: center; }
+    .bench-dash #eye-canvas { width: 132px; height: 132px; border-radius: 50%; background: var(--ink-950); box-shadow: 0 0 0 3px var(--line-strong); }
+    .bench-dash .eye-wrap small { display: block; margin-top: 4px; font-family: var(--font-mono); font-size: 10px; line-height: 1.3; color: var(--muted); }
+    .bench-dash .bench-readout { padding: 0; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+    .bench-dash .bench-readout div { padding: 5px 6px; }
+    .bench-dash .bench-readout span { font-size: 9.5px; letter-spacing: 0; white-space: normal; line-height: 1.2; }
+    .bench-dash .bench-readout b { white-space: normal; overflow-wrap: anywhere; display: block; font-size: 11px; line-height: 1.25; min-height: 2.3em; }
+    /* one compact control block: a labelled row per control, then the actions, then the hint */
+    .bench-ctl { flex-direction: column; align-items: stretch; gap: 5px; padding: 8px 12px; }
+    .ctl-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); align-items: center; gap: 8px; width: 100%; }
+    .ctl-row > b { font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+    .ctl-row .seg { display: flex; width: 100%; padding: 2px; gap: 2px; }
+    .ctl-row .seg button { flex: 1 1 0; min-width: 0; padding: 6px 2px; font-size: 12px; min-height: 36px; }
+    .ctl-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+    .bench-ctl .vt-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; width: 100%; margin: 0; }
+    .bench-ctl .vt-btn { min-height: 36px; min-width: 0; padding: 6px 4px; font-size: 12px; white-space: nowrap; }
+    .bench-ctl .stage-hint { width: 100%; margin: 0; font-size: 11px; line-height: 1.3; }
+    .vt-btn.pair { font-size: 11px; letter-spacing: -.01em; }
+    .vt-btn.locked { opacity: .45; }
+    @media (min-width: 641px) {
+      .bench-dash { grid-template-columns: 196px minmax(0, 1fr); gap: 14px; padding: 12px 14px 0; }
+      .bench-dash #eye-canvas { width: 184px; height: 184px; }
+      .bench-dash .eye-wrap small { font-size: 11px; margin-top: 6px; }
+      .bench-dash .bench-readout { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+      .bench-dash .bench-readout span { font-size: 10.5px; }
+      .bench-dash .bench-readout b { font-size: 14px; min-height: 0; }
+      .bench-ctl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: center; column-gap: 16px; row-gap: 8px; padding: 12px 16px; }
+      .ctl-row { grid-template-columns: 58px minmax(0, 1fr); }
+      .ctl-row > b { font-size: 11px; }
+      .ctl-row .seg { padding: 3px; gap: 3px; }
+      .ctl-row .seg button { font-size: 13px; min-height: 40px; padding: 8px 10px; }
+      .ctl-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+      .bench-ctl .vt-btn, .vt-btn.pair { font-size: 13px; min-height: 40px; }
+      .bench-ctl .stage-hint { width: auto; font-size: 13px; text-align: right; }
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #ff3d8b 0%, #ffb23f 25%, #38bdf8 50%, #3ee6c4 75%, #22c55e 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-    }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
+    .seg button.seen::after { content: " ✓"; }
+    div.method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    div.method.done { border-color: var(--ok); }
+    div.method.done b { color: var(--ok); }
+    #results-table tr.empty td { text-align: center; color: var(--paper-muted); font-style: italic; }
+    .results-note { margin: 10px 2px 0; font-size: 14.5px; line-height: 1.55; color: var(--paper-muted); }
+    .results-note b { color: var(--paper-ink); }
+    .org-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+    .bridge-slides { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-bottom: 12px; }
+    .bridge-slides figure { margin: 0; text-align: center; }
+    .bridge-slides canvas { width: 100%; max-width: 230px; aspect-ratio: 1; border-radius: 50%; background: var(--ink-950); box-shadow: 0 0 0 3px var(--line-strong); }
+    .bridge-slides figcaption { margin-top: 6px; font-family: var(--font-mono); font-size: 13px; color: var(--fg); }
+    .bridge-q { margin-top: 16px; }
+    .bridge-q .qopts { display: grid; gap: 8px; margin-top: 10px; }
+    .bridge-fb { margin-top: 12px; padding: 12px 14px; border-radius: calc(12px * var(--corner, 1)); font-size: 15px; line-height: 1.55; display: none; color: var(--fg); }
+    .bridge-fb.on { display: block; background: rgba(var(--ok-rgb), .14); }
+    .bridge-fb.bad { background: rgba(var(--crimson-rgb), .16); }
+    #big-idea:not(.unlocked) p { filter: blur(5px); user-select: none; }
+    #big-idea:not(.unlocked)::after { content: "Answer both questions above to unlock"; position: absolute; left: 70px; right: 20px; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--paper); }
+    .fb-row b { overflow-wrap: anywhere; }
+    .stage-label { max-width: calc(100% - 20px); }
+    /* method cards: a number badge, a heading and one short line */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px minmax(0, 1fr); column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; letter-spacing: .06em; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(340px, 96vw, 440px); }
+    /* 3D zoom bar: two segmented rows, the counters as two tiles, then the hint */
+    #zoom-stage .stage-bar { flex-direction: column; align-items: stretch; gap: 6px; padding: 8px 12px 10px; }
+    #zoom-stage .zrow { display: flex; align-items: center; gap: 6px; width: 100%; }
+    #zoom-stage .zrow .seg { display: flex; flex: 1 1 auto; min-width: 0; padding: 3px; gap: 3px; }
+    #zoom-stage .zrow .seg button { flex: 1 1 0; min-width: 0; padding: 8px 2px; font-size: 12px; min-height: 38px; }
+    #zoom-stage .zrow .vt-btn { flex: 0 0 auto; min-height: 38px; padding: 7px 12px; font-size: 12px; }
+    #zoom-stage .counters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; width: 100%; }
+    #zoom-stage .counter { font-size: 10.5px; line-height: 1.3; padding: 5px 8px; min-width: 0; }
+    #zoom-stage .counter b { display: block; margin-left: 0; font-size: 12px; }
+    #zoom-stage .stage-hint { width: 100%; margin: 0; font-size: 11.5px; }
+    @media (min-width: 641px) {
+      #method-cards div.method { padding: 10px 14px; }
+      #bench-stage .stage-canvas { height: clamp(340px, 48vw, 480px); }
+      #zoom-stage .stage-bar { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 10px; padding: 14px 16px; }
+      #zoom-stage .zrow { width: auto; flex: 0 1 auto; }
+      #zoom-stage .zrow .seg { flex: 0 1 auto; padding: 4px; gap: 4px; }
+      #zoom-stage .zrow .seg button { flex: 0 0 auto; font-size: 13px; padding: 8px 12px; min-height: 40px; }
+      #zoom-stage .counters { display: flex; width: auto; }
+      #zoom-stage .counter { font-size: 12px; padding: 6px 11px; }
+      #zoom-stage .counter b { display: inline; margin-left: 4px; font-size: inherit; }
+      #zoom-stage .stage-hint { width: auto; margin-left: auto; font-size: 13px; }
     }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
   <link rel="stylesheet" href="../../assets/css/theme.css">
 </head>
 <body class="lesson-page" data-lesson="l01">
@@ -48,7 +125,7 @@
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
       <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 1 of 5 · <b>Discovery, Cell Theory &amp; Prokaryotes</b></span>
+      <span class="l-crumb">Lesson 1 of 5 · <b>Discovering the Cell</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -58,14 +135,14 @@
     <div class="wrap l-hero-grid">
       <div>
         <span class="eyebrow reveal">SS1 Biology · Lesson 1 of 5 · 80 minutes</span>
-        <h1 class="display reveal" data-hook>Discovery of the Cell, <em>Cell Theory</em> &amp; Prokaryotes vs Eukaryotes</h1>
-        <p class="question reveal">How did a thin slice of dead bottle cork in 1665 reveal the hidden microscopic building blocks of every plant, animal, and microbe on Earth?</p>
+        <h1 class="display reveal" data-hook>Discovering the Cell: <em>Microscopes, Cell Theory</em> and Two Kinds of Cell</h1>
+        <p class="question reveal">Ugu leaves and blood look nothing alike, so what do they share, and how do we see it?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Trace the timeline of cell discovery from <strong>Hooke (1665)</strong> and <strong>Leeuwenhoek (1674)</strong> to <strong>Brown (1831)</strong>, <strong>Dujardin (1835)</strong>, <strong>Purkinje (1839)</strong>, <strong>Schleiden (1838)</strong>, <strong>Schwann (1839)</strong>, and <strong>Virchow (1855)</strong>.</span></li>
-          <li><b>02</b><span>State the four tenets of the <strong>Modern Cell Theory</strong> and explain why <strong>viruses</strong>, <strong>coenocytic hyphae</strong>, and <strong>mature mammalian red blood cells</strong> are notable exceptions.</span></li>
-          <li><b>03</b><span>Calculate total microscope magnification <strong>M<sub>total</sub> = M<sub>e</sub> × M<sub>o</sub></strong> and linear drawing magnification <strong>M = I ÷ A</strong> using unified micrometre (<code>1 mm = 1000 µm</code>) conversions.</span></li>
-          <li><b>04</b><span>Contrast <strong>prokaryotic cells</strong> (bacteria, cyanobacteria: nucleoid, 70S ribosomes, peptidoglycan wall) with <strong>eukaryotic cells</strong> (protists, fungi, plants, animals: nuclear envelope, 80S ribosomes, membrane-bound organelles).</span></li>
-          <li><b>05</b><span>Explain why electron microscopes resolve ultrastructure (<code>0.2 nm</code>) invisible to school light microscopes (<code>200 nm</code>).</span></li>
+          <li><b>01</b><span>State the <strong>three ideas of the cell theory</strong> and the contributions of <strong>Hooke, Dujardin, Schleiden and Schwann</strong>.</span></li>
+          <li><b>02</b><span>Define a <strong>cell</strong> and an <strong>organelle</strong>.</span></li>
+          <li><b>03</b><span>Name the parts of a <strong>compound microscope</strong> and calculate <strong>total magnification</strong>.</span></li>
+          <li><b>04</b><span>Calculate <strong>actual cell size</strong> from a field of view or an image, converting mm to µm.</span></li>
+          <li><b>05</b><span>Compare <strong>prokaryotic and eukaryotic</strong> cells in a matched table.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -74,6 +151,7 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <p class="timetable reveal" id="timetable">0–5 Do Now · 5–15 Wonder · 15–45 Investigate · <b>45–50 movement break</b> · 50–65 Make Sense · 65–80 Apply and Reflect</p>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
@@ -81,19 +159,27 @@
       </div>
 
       <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <rect x="24" y="36" width="124" height="170" rx="14" fill="rgba(217,138,0,0.12)" stroke="#ffb23f" stroke-width="2"/>
-          <text x="86" y="60" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">PROKARYOTE (70S)</text>
-          <ellipse cx="86" cy="118" rx="42" ry="22" fill="#0f172a" stroke="#ffb23f" stroke-width="2.2"/>
-          <path d="M64 118 Q86 104 108 118 Q86 132 64 118" fill="none" stroke="#f43f5e" stroke-width="2"/>
-          <text x="86" y="166" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Naked DNA · 2 µm</text>
-
-          <rect x="172" y="36" width="124" height="170" rx="14" fill="rgba(62,230,196,0.12)" stroke="#3ee6c4" stroke-width="2"/>
-          <text x="234" y="60" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">EUKARYOTE (80S)</text>
-          <rect x="194" y="80" width="80" height="72" rx="10" fill="#0f172a" stroke="#22c55e" stroke-width="2.4"/>
-          <circle cx="234" cy="116" r="16" fill="#7c3aed" stroke="#c4b5fd" stroke-width="1.8"/>
-          <text x="234" y="176" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">True Nucleus · 60 µm</text>
-          <text x="160" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">M = I ÷ A &nbsp;(1 mm = 1000 µm)</text>
+        <svg class="hero-art" viewBox="0 0 320 250" role="img" aria-label="Two microscope views: ugu peel with box-shaped walled cells and blood with round cells">
+          <defs>
+            <clipPath id="clipL"><circle cx="86" cy="104" r="70"/></clipPath>
+            <clipPath id="clipR"><circle cx="234" cy="104" r="70"/></clipPath>
+          </defs>
+          <g clip-path="url(#clipL)">
+            <rect class="box" x="30" y="46" width="34" height="30"/><rect class="box" x="64" y="46" width="34" height="30"/><rect class="box" x="98" y="46" width="34" height="30"/>
+            <rect class="box" x="30" y="76" width="34" height="30"/><rect class="box" x="64" y="76" width="34" height="30"/><rect class="box" x="98" y="76" width="34" height="30"/>
+            <rect class="box" x="30" y="106" width="34" height="30"/><rect class="box" x="64" y="106" width="34" height="30"/><rect class="box" x="98" y="106" width="34" height="30"/>
+            <rect class="box" x="30" y="136" width="34" height="30"/><rect class="box" x="64" y="136" width="34" height="30"/><rect class="box" x="98" y="136" width="34" height="30"/>
+          </g>
+          <circle class="rim" cx="86" cy="104" r="70"/>
+          <g clip-path="url(#clipR)">
+            <circle class="rbc" cx="200" cy="70" r="12"/><circle class="rbc" cx="232" cy="64" r="12"/><circle class="rbc" cx="262" cy="80" r="12"/>
+            <circle class="rbc" cx="190" cy="102" r="12"/><circle class="rbc" cx="222" cy="98" r="12"/><circle class="rbc" cx="254" cy="112" r="12"/>
+            <circle class="rbc" cx="204" cy="134" r="12"/><circle class="rbc" cx="238" cy="132" r="12"/><circle class="rbc" cx="268" cy="142" r="12"/>
+          </g>
+          <circle class="rim" cx="234" cy="104" r="70"/>
+          <text x="86" y="202" text-anchor="middle">ugu peel</text><text class="sub" x="86" y="218" text-anchor="middle">walls, box shapes</text>
+          <text x="234" y="202" text-anchor="middle">blood</text><text class="sub" x="234" y="218" text-anchor="middle">round, no walls</text>
+          <text class="sub" x="160" y="240" text-anchor="middle">both are made of cells</text>
         </svg>
       </div>
     </div>
@@ -105,10 +191,11 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Pioneer &amp; cell sort</a></li>
+        <li><a href="#sort">Who found what?</a></li>
         <li><a href="#practical">3D microscope</a></li>
-        <li><a href="#concepts">Cell Theory &amp; M</a></li>
-        <li><a href="#neutralise">3D cell zoom</a></li>
+        <li><a href="#movement-break">Movement break</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">3D zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -124,8 +211,8 @@
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
         <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>wake up your biology &amp; measurement toolkit</em></h2>
-        <p class="intro">Four foundational building blocks on the characteristics of life, SI micrometre conversions, compound lenses, and linear ratios. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <h2>Before we start: <em>wake up your cell toolkit</em></h2>
+        <p class="intro">Four quick questions from your earlier science and maths. Answer each in your head <strong>before</strong> you flip the card.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
@@ -135,14 +222,14 @@
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>From Mile 12 Market to <em>Hooke’s 1665 Cork &amp; Yaba Microscopy Lab</em></h2>
-        <p class="intro">At Mile 12 Market in Lagos, Tunde and Mama Titi uncover why Robert Hooke’s 1665 bottle-cork boxes were only empty walls — and how Dr. Kunle’s compound microscope measures living cells in micrometres.</p>
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 5 min</span>
+        <h2>Two ugu leaves at <em>Mile 12 Market</em></h2>
+        <p class="intro">Mama Ngozi shows Chinedu a limp leaf beside a crisp one. Same morning, same ugu. Why did one go soft? Dr Amaka at LUTH thinks the answer starts under a microscope.</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Tunde and Mama Titi at Mile 12 Market discussing Hooke's 1665 cork cells and protoplasm, then Dr. Kunle at the Yaba Microscopy Lab."></canvas>
-            <div class="stage-label"><i></i>3D story · Mile 12 Market → Yaba Microscopy Lab</div>
+            <canvas aria-label="Animated 3D story: Mama Ngozi, Chinedu and Coach Danjuma look at a crisp and a limp ugu leaf at Mile 12 Market, then Dr Amaka shows a leaf peel and a blood smear under a microscope at LUTH."></canvas>
+            <div class="stage-label"><i></i>3D story · Mile 12 Market → LUTH lab</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -152,38 +239,37 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Mile 12 Market, Lagos:</strong> Tunde holds up a purple onion bulb: <em>“Mama Titi! How can an onion bulb, an iroko tree, and a human being all be built from microscopic units we cannot see with our naked eyes?”</em></p>
-            <p><strong>Scene 2 · Hooke’s 1665 Cork:</strong> Alhaji Musa asks: <em>“When Robert Hooke looked at bottle cork in 1665 and coined the word ‘cell’, wasn't he looking at living cells?”</em></p>
-            <p><strong>Scene 3 · Dead Walls vs Living Protoplasm:</strong> Mama Titi replies: <em>“No! Cork is dead bark — Hooke saw only empty suberised cell walls. Leeuwenhoek saw living cells in 1674, Dujardin (1835) called the living jelly ‘sarcode’, and Purkinje (1839) named it protoplasm!”</em></p>
-            <p><strong>Scene 4 · Classical Cell Theory:</strong> Schleiden (1838, plants), Schwann (1839, animals), and Virchow (1855, <em>Omnis cellula e cellula</em>) established that all living organisms are built of cells that arise from pre-existing cells.</p>
-            <p><strong>Scene 5 · Bacteria &amp; Viruses:</strong> Bacteria are tiny 70S prokaryotes without a nuclear membrane, while viruses are acellular particles on the borderline of life.</p>
-            <p><strong>Scene 6 · Yaba Microscopy Lab:</strong> Dr. Kunle places an iodine-stained onion epidermis on the stage of a compound microscope to measure image size <code>I</code> across five objective lenses.</p>
+            <p><strong>Scene 1 · Mile 12 Market:</strong> Mama Ngozi shows Chinedu a limp ugu leaf beside a crisp one. <em>“Same leaves, same morning. One was washed in salty water.”</em></p>
+            <p><strong>Scene 2 · Coach Danjuma's idea:</strong> <em>“The salt soaks in and makes the leaf heavy, simple!”</em> Chinedu isn't convinced.</p>
+            <p><strong>Scene 3 · LUTH laboratory:</strong> Dr Amaka mentions a patient who must never get plain water through a drip. <em>“Leaves and blood obey the same rule. To see why, we start with what they're both made of.”</em></p>
+            <p><strong>Scene 4 · Under the microscope:</strong> She slides a thin ugu leaf peel and a smear of blood under the lens. Tiny compartments appear in both.</p>
+            <p><strong>Scene 5 · An invitation:</strong> <em>“In 1665 a man looking at cork named shapes like these. Today you'll see them yourselves.”</em></p>
           </div>
         </details>
       </section>
 
       <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions · 5 min</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">What separates a dead cork wall from a living cell, or a bacterium from an onion cell? Pin your prediction before we investigate on the 3D microscope bench.</p>
+        <p class="intro">Before we look: what do you think a leaf and a drop of blood could possibly have in common? Pin a prediction.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that prokaryotic bacteria differ from plant cells because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I predict that a leaf and blood both… because…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Did Robert Hooke see living protoplasm in 1665?</button>
-            <button type="button">Why are viruses excluded from the Cell Theory?</button>
-            <button type="button">How do we convert mm to µm in M = I ÷ A?</button>
-            <button type="button">What is the difference between 70S and 80S ribosomes?</button>
+            <button type="button">Both are wet? (Tolu)</button>
+            <button type="button">Both come from living things (Aisha)</button>
+            <button type="button">Maybe both are made of tiny bricks? (Emeka)</button>
+            <button type="button">Blood is a liquid, so it can't have parts (Coach Danjuma)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
@@ -191,26 +277,26 @@
 
       <!-- ================= 3. SORT GAME ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
-        <h2>Cell Theory Pioneers &amp; <em>Prokaryote vs Eukaryote Sort</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Cell Theory Pioneers</strong> (Hooke, Schleiden, Schwann, Virchow), <strong>Prokaryotic Features</strong> (bacteria &amp; cyanobacteria), and <strong>Eukaryotic Features</strong> (protists, fungi, plants, animals).</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>Who discovered what? <em>Sort the nine clues</em></h2>
+        <p class="intro">Place each clue with the scientist it belongs to. Tap a card, then tap a bin (or drag it). Each one has a short reason after you check.</p>
 
-        <div class="sort" id="kitchen-sort">
+        <div class="sort" id="hist-sort">
           <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Cell Theory Pioneers bin">
-              <h4><i></i>Cell Theory Pioneers</h4>
-              <small>Hooke, Schleiden, Schwann, Virchow</small>
+            <div class="bin" data-bin="hooke" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Robert Hooke bin">
+              <h4><i></i>Robert Hooke</h4>
+              <small>1665 · cork</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Prokaryotic Features bin">
-              <h4><i></i>Prokaryotic Features</h4>
-              <small>nucleoid · 70S · peptidoglycan</small>
+            <div class="bin" data-bin="dujardin" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Félix Dujardin bin">
+              <h4><i></i>Félix Dujardin</h4>
+              <small>1835 · the living jelly</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#22c55e" tabindex="0" role="button" aria-label="Eukaryotic Features bin">
-              <h4><i></i>Eukaryotic Features</h4>
-              <small>true nucleus · 80S · organelles</small>
+            <div class="bin" data-bin="schleiden-schwann" style="--bc:var(--pink)" tabindex="0" role="button" aria-label="Schleiden and Schwann bin">
+              <h4><i></i>Schleiden and Schwann</h4>
+              <small>1838 plants · 1839 animals</small>
               <div class="drop"></div>
             </div>
           </div>
@@ -227,223 +313,228 @@
 
       <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
-        <h2>3D Compound Microscope Bench: <em>Verifying Linear Magnification (M = I ÷ A)</em></h2>
-        <p class="intro">Step up to Dr. Kunle’s compound light microscope fitted with a <code>×10</code> eyepiece lens. Rotate the nosepiece across five objective lenses (<code>×4, ×10, ×20, ×40, ×60</code>), measure the apparent image length <strong>I (mm)</strong> of an onion epidermal cell, and verify that <strong>A = I ÷ M</strong> remains constant at <code>0.060 mm (60 µm)</code>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 22 min</span>
+        <h2>At the microscope: <em>focus, count and calculate</em></h2>
+        <p class="intro">Use the 3D compound microscope to look at cork, an onion peel and a blood smear. At each power you will count how many cells lie side by side across the field of view and work out the real width of one cell.</p>
 
-        <div class="callout warn" id="safety-box">
-          <p><strong>WAEC Paper 3 Microscope Handling Rules:</strong> Always begin focusing with the <strong>lowest-power objective lens (×4)</strong> clicked into position. Once switched to the <strong>high-power objective (×40)</strong>, turn <strong>only the fine adjustment knob</strong> — never the coarse adjustment knob — so the objective lens does not smash through the coverslip and glass slide.</p>
+        <div class="callout safety" id="safety-box">
+          <p><strong>Precautions (past tense, as WAEC writes them):</strong> the specimen was found on low power before high power was used · only the fine knob was used at ×40, so the objective did not crush the slide · the slide was held flat on the stage with the clips.</p>
         </div>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Clip slide on stage</h4><p>Centre the stained wet-mount slide over the stage aperture and secure it with the metallic stage clips.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Start with ×4 low-power lens</h4><p>Rotate the nosepiece to the ×4 scanning objective and adjust the iris diaphragm and mirror/illuminator for even brightness.</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Focus with coarse, then fine knob</h4><p>Bring the specimen into rough focus using the coarse knob at low power, then switch to ×10 or ×40 and sharpen with the fine knob only.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Compute M = I ÷ A in same units</h4><p>Measure image length <code>I</code> in mm, convert to µm (<code>×1000</code>), and divide by actual size <code>A</code> (or divide <code>I</code> by <code>M</code> to find <code>A</code>).</p></div>
+          <div class="method" id="m1"><b>01</b><h4>Focus on ×4</h4><p>Coarse knob until the cells look sharp.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Go to ×10, then ×40</h4><p>Fine knob only: at ×40 the coarse is locked.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Multiply the powers</h4><p>Eyepiece × objective: ten times forty is ×400.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Press Measure</h4><p>Cell width = field diameter ÷ cells across.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Compound Light Microscope bench with ocular eyepiece, revolving objective nosepiece, mechanical stage, coarse and fine adjustment knobs, and illuminated specimen field of view."></canvas>
-            <div class="stage-label"><i></i>3D Microscope Bench · drag to rotate · tap lens trials A–E</div>
+            <canvas id="bench-canvas" aria-label="3D compound microscope with eyepiece, three objectives, stage, mirror, coarse and fine focusing knobs and a slide."></canvas>
+            <div class="stage-label"><i></i>3D microscope · drag to turn · tap a part</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D microscope bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D microscope couldn't start on this device. Use the expected results below to follow the working.</p></div>
           </div>
-          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
-          <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Specimen slide" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Onion Epidermis (A = 60 µm)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Cheek Epithelium (A = 30 µm)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Coarse Knob at High Power (Blur!)</button>
+          <div class="bench-dash">
+            <div class="eye-wrap">
+              <canvas id="eye-canvas" width="360" height="360" aria-label="What you see through the eyepiece: the specimen inside a circular field of view."></canvas>
+              <small>What you see in the eyepiece</small>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · ×40</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · ×100</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · ×200</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · ×400</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · ×600</button>
+            <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          </div>
+          <div class="stage-bar bench-ctl">
+            <div class="ctl-row"><b>Lens</b>
+              <div class="seg" role="group" aria-label="Objective lens" id="bench-obj">
+                <button type="button" data-obj="0" aria-pressed="true">×4</button>
+                <button type="button" data-obj="1" aria-pressed="false">×10</button>
+                <button type="button" data-obj="2" aria-pressed="false">×40</button>
+              </div>
+            </div>
+            <div class="ctl-row"><b>Slide</b>
+              <div class="seg" role="group" aria-label="Slide" id="bench-slide">
+                <button type="button" data-slide="cork" aria-pressed="false">Cork</button>
+                <button type="button" data-slide="onion" aria-pressed="true">Onion peel</button>
+                <button type="button" data-slide="blood" aria-pressed="false">Blood smear</button>
+              </div>
+            </div>
+            <div class="ctl-row"><b>Focus</b>
+              <div class="ctl-grid">
+                <button class="vt-btn pair" type="button" data-ctl="coarse" data-dir="1" aria-label="Coarse knob up">Coarse ▲</button>
+                <button class="vt-btn pair" type="button" data-ctl="coarse" data-dir="-1" aria-label="Coarse knob down">Coarse ▼</button>
+                <button class="vt-btn pair" type="button" data-ctl="fine" data-dir="1" aria-label="Fine knob up">Fine ▲</button>
+                <button class="vt-btn pair" type="button" data-ctl="fine" data-dir="-1" aria-label="Fine knob down">Fine ▼</button>
+              </div>
+            </div>
+            <div class="ctl-row"><b>Light</b>
+              <div class="seg" role="group" aria-label="Mirror" id="bench-mirror">
+                <button type="button" data-mirror="plane" aria-pressed="true">Plane mirror</button>
+                <button type="button" data-mirror="concave" aria-pressed="false">Concave mirror</button>
+              </div>
+            </div>
+            <div class="vt-actions">
+              <button class="vt-btn zobo" type="button" id="bench-measure">Measure</button>
+              <button class="vt-btn" type="button" id="bench-auto">Auto-focus</button>
               <button class="vt-btn" type="button" id="bench-reset">Reset</button>
             </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 lens readings</span>
+            <span class="stage-hint" id="bench-hint">Measured 0 of 3 powers</span>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
-          <div class="gc-head">
-            <div><span class="gc-kicker">Live graph · plots as you switch lenses</span><h4>Image Size I (mm) against Total Magnification M (×)</h4></div>
-            <span class="gc-badge wait" id="vi-badge">0 points</span>
-          </div>
-          <div id="vi-graph"></div>
-          <div class="gc-stats" id="vi-stats"></div>
-          <p class="gc-note" id="vi-note"></p>
-        </div>
-
-        <h3>Record your Microscope Magnification readings</h3>
-        <p>As you test Trials A–E on the 3D microscope bench, select the matching <strong>Objective Lens Power</strong>, measured <strong>Image Length I (mm)</strong>, and calculated <strong>Actual Cell Length A = I ÷ M (mm)</strong> below.</p>
+        <h3>Your results</h3>
+        <p>Each time you press <b>Measure</b> on a sharp image, the model works out the numbers and adds a row.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
             <thead>
               <tr>
-                <th>Trial</th>
-                <th>Total Mag. M (×10 Eyepiece)</th>
-                <th>Objective Power M<sub>o</sub></th>
-                <th>Measured Image I (mm)</th>
-                <th>Actual Size A = I ÷ M (mm)</th>
+                <th>Objective</th>
+                <th>Total magnification</th>
+                <th>Field diameter (mm)</th>
+                <th>Cells across field</th>
+                <th>Cell width (mm)</th>
+                <th>Cell width (µm)</th>
               </tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
-        <div class="sort-bar">
-          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
-          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
-        </div>
+        <p class="results-note" id="results-note"></p>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table &amp; I–M graph slope calculation <small>open after recording yours</small></summary>
+          <summary>Expected results, onion peel <small>open after you have measured yours</small></summary>
           <div class="reveal-body">
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>Total Mag. M (×)</th><th>Objective M<sub>o</sub></th><th>Image Length I (mm)</th><th>Actual Length A = I ÷ M (mm)</th></tr></thead>
+                <thead><tr><th>Objective</th><th>Total magnification</th><th>Field (mm)</th><th>Cells across</th><th>Cell width (mm)</th><th>Cell width (µm)</th></tr></thead>
                 <tbody>
-                  <tr><td>A</td><td>40</td><td>4×</td><td>2.40</td><td>0.060 (60 µm)</td></tr>
-                  <tr><td>B</td><td>100</td><td>10×</td><td>6.00</td><td>0.060 (60 µm)</td></tr>
-                  <tr><td>C</td><td>200</td><td>20×</td><td>12.00</td><td>0.060 (60 µm)</td></tr>
-                  <tr><td>D</td><td>400</td><td>40×</td><td>24.00</td><td>0.060 (60 µm)</td></tr>
-                  <tr><td>E</td><td>600</td><td>60×</td><td>36.00</td><td>0.060 (60 µm)</td></tr>
+                  <tr><td>×4</td><td>×40</td><td>4.0</td><td>80</td><td>0.050</td><td>50</td></tr>
+                  <tr><td>×10</td><td>×100</td><td>1.6</td><td>32</td><td>0.050</td><td>50</td></tr>
+                  <tr><td>×40</td><td>×400</td><td>0.40</td><td>8</td><td>0.050</td><td>50</td></tr>
                 </tbody>
               </table>
             </div>
-            <p><strong>Slope of Image Length I (vertical) against Total Magnification M (horizontal):</strong></p>
-            <div class="eq light">A = ΔI ÷ ΔM = (36.00 − 6.00) ÷ (600 − 100) = 30.00 ÷ 500 = 0.060 mm = 60 µm</div>
+            <p><strong>The key insight:</strong> the cell width stays the same at every power. Magnifying changes the image, not the cell. Higher power shows fewer cells because the field of view gets smaller.</p>
           </div>
         </details>
 
-        <h3>Practical Analysis Questions</h3>
+        <h3>Practical analysis questions</h3>
         <div class="aq" data-answer="l01-prac-q">
-          <div class="aq-top"><h4>Answer these three WAEC microscopy analysis questions, then compare with the model answers.</h4></div>
+          <div class="aq-top"><h4>Try all five, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>Why must a student never use the coarse adjustment knob when the high-power (<code>×40</code>) objective lens is in position?</li>
-            <li>If the slope of the <code>I</code> against <code>M</code> graph is <code>0.060 mm</code>, what is the actual length of the cell in micrometres (<code>µm</code>)?</li>
-            <li>Why does switching from a <code>×10</code> objective to a <code>×40</code> objective make the field of view darker and narrower?</li>
+            <li>Why does the cell width stay the same even though the image grows?</li>
+            <li>Why did we start on the lowest power?</li>
+            <li>Why is only the fine knob used at ×40?</li>
+            <li>What would you see on a cork slide that differs from the onion peel?</li>
+            <li>Calculate the total magnification for a ×15 eyepiece and a ×40 objective.</li>
           </ol>
           <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>The working distance between the <code>×40</code> objective lens and the coverslip is less than 1 mm; turning the coarse knob moves the stage rapidly and can crack the slide and scratch the objective lens.</li>
-                <li>Convert millimetres to micrometres: <code>A = 0.060 mm × 1000 µm/mm = 60 µm</code>.</li>
-                <li>At <code>4×</code> higher magnification, light from a 16-times smaller area of the slide is spread across the eyepiece, reducing brightness and narrowing the field diameter by 4 times.</li>
+                <li>Magnification enlarges the <b>image</b>, not the cell. The real width is found from the field diameter ÷ number of cells, and neither the cell nor the maths changes between powers.</li>
+                <li>Low power gives the widest field of view, so the specimen is easy to find and centre before moving to a higher power.</li>
+                <li>The ×40 objective is very close to the slide. The tiny movements of the fine knob focus it safely; the coarse knob could drive the lens into the slide and crack it.</li>
+                <li>Cork shows only the empty walls of dead cells, with no contents. The onion peel shows living cells with contents and a stained nucleus.</li>
+                <li>Total magnification = 15 × 40 = <b>×600</b>.</li>
               </ol>
             </div>
           </details>
         </div>
       </section>
 
-      <!-- ================= 4. CONCEPTS ================= -->
-      <section class="l-sec" id="concepts">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
-        <h2>Discovery of the Cell, Modern Cell Theory &amp; <em>Prokaryotes vs Eukaryotes</em></h2>
-        <p class="intro">Let’s connect our 3D story and microscope bench observations to the complete historical timeline, equations, and comparison tables tested in WAEC, NECO, and JAMB Biology.</p>
-
-        <h3 id="def-shm">1 · Chronological Pioneers of Cell Discovery</h3>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Year</th><th>Scientist(s)</th><th>Nationality / Field</th><th>Landmark Contribution to Cytology</th></tr></thead>
-            <tbody>
-              <tr><td><strong>1665</strong></td><td><strong>Robert Hooke</strong></td><td>English physicist</td><td>Examined thin slices of dead bottle cork (<em>Quercus suber</em>) with a compound microscope; saw honeycomb chambers and coined the term <strong>“cell”</strong> (<em>cellulae</em>). Actually saw <strong>dead suberised plant cell walls</strong> lacking protoplasm.</td></tr>
-              <tr><td><strong>1674–1683</strong></td><td><strong>Antonie van Leeuwenhoek</strong></td><td>Dutch microscopist</td><td>Built high-clarity single-lens microscopes (~270×); first to observe <strong>free-living cells</strong> (“animalcules” — protozoa, bacteria, red blood cells, and spermatozoa) in pond water and body fluids.</td></tr>
-              <tr><td><strong>1831</strong></td><td><strong>Robert Brown</strong></td><td>Scottish botanist</td><td>Discovered and named the dense spherical <strong>nucleus</strong> inside orchid epidermal cells.</td></tr>
-              <tr><td><strong>1835</strong></td><td><strong>Félix Dujardin</strong></td><td>French zoologist</td><td>Observed the living, semi-fluid jelly inside single-celled animals (protozoa) and named it <strong>“sarcode”</strong>.</td></tr>
-              <tr><td><strong>1838</strong></td><td><strong>Matthias Jakob Schleiden</strong></td><td>German botanist</td><td>Concluded that <strong>all plant tissues are composed of cells</strong> and that the cell is the basic unit of plant structure.</td></tr>
-              <tr><td><strong>1839</strong></td><td><strong>Theodor Schwann</strong></td><td>German zoologist</td><td>Concluded that <strong>all animal tissues are composed of cells</strong> and formulated the classical <strong>Cell Theory</strong> jointly with Schleiden.</td></tr>
-              <tr><td><strong>1839 / 1846</strong></td><td><strong>J. E. Purkinje &amp; Hugo von Mohl</strong></td><td>Czech / German</td><td>Coined and applied the term <strong>“protoplasm”</strong> for the living substance (cytoplasm + nucleus) inside the cell.</td></tr>
-              <tr><td><strong>1855</strong></td><td><strong>Rudolf Virchow</strong></td><td>German physician</td><td>Added the third pillar: <strong><em>Omnis cellula e cellula</em></strong> — every new cell arises only by division of a <strong>pre-existing living cell</strong> (refuting spontaneous generation).</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 id="def-terms">2 · The Modern Cell Theory &amp; Its Notable Exceptions</h3>
-        <p>The <strong>four tenets of Modern Cell Theory</strong> state that:</p>
-        <ol>
-          <li>All known living organisms are composed of one or more cells and their products (the <strong>structural unit</strong> of life).</li>
-          <li>The cell is the smallest independent unit that carries out all metabolic processes of life (the <strong>functional unit</strong> of life).</li>
-          <li>All new cells arise solely by the division (binary fission, mitosis, or meiosis) of <strong>pre-existing living cells</strong>.</li>
-          <li>Cells contain hereditary information (<strong>DNA</strong>) which is replicated and passed from parent cell to daughter cell during cell division.</li>
-        </ol>
-        <p><strong>Exceptions &amp; Borderline Cases Tested by WAEC &amp; JAMB:</strong></p>
-        <ul>
-          <li><strong>Viruses (Borderline between Living and Non-Living):</strong> Viruses are <strong>acellular</strong> (no plasma membrane, no cytoplasm, no ribosomes, no ATP synthesis). Outside a host cell they are inert chemical crystals; inside a specific host cell they hijack host enzymes to replicate their <strong>DNA or RNA</strong> (never both).</li>
-          <li><strong>Coenocytic / Multinucleate Structures:</strong> Non-septate fungal hyphae (e.g., <em>Rhizopus</em>), coenocytic algae (<em>Vaucheria</em>), and vertebrate <strong>striated skeletal muscle fibres</strong> contain many nuclei sharing one continuous cytoplasm without cross-walls.</li>
-          <li><strong>Anucleate Mature Cells:</strong> Mature mammalian <strong>red blood cells (erythrocytes)</strong> and plant <strong>phloem sieve tube elements</strong> lose their nuclei at maturity to maximise space for haemoglobin transport and translocation respectively.</li>
-        </ul>
-
-        <h3>3 · Microscope Magnification &amp; Unit Conversion Equations</h3>
-        <p>In microscopy and WAEC Paper 3 biological drawings, every calculation follows three exact relationships:</p>
-        <div class="eq" id="eq-shm" data-hook>M_total = M_eyepiece × M_objective = 10 × 40 = 400×</div>
-        <div class="eq" id="eq-omega">M = I ÷ A &nbsp;&nbsp;⇒&nbsp;&nbsp; A = I ÷ M</div>
-        <div class="eq" id="eq-vel">1 mm = 1000 µm &nbsp;&nbsp;⇒&nbsp;&nbsp; 48 mm = 48 × 1000 = 48000 µm</div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up! Curl one arm in a single loose circle in front of your chest to represent the <strong>naked circular DNA loop</strong> floating freely in a prokaryotic bacterium. Now clasp both hands around your head like a protective helmet to represent the <strong>double-membrane nuclear envelope</strong> of a eukaryotic cell!</p>
-        </div>
-
-        <h3 id="props">4 · Prokaryotic vs Eukaryotic Cells Compared</h3>
-        <div class="tbl-wrap" id="props-table">
-          <table class="tbl">
-            <thead><tr><th>Feature</th><th>Prokaryotic Cell (e.g., Bacteria, <em>Nostoc</em>)</th><th>Eukaryotic Cell (Protists, Fungi, Plants, Animals)</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Typical Diameter</strong></td><td>Very small (<code>0.5 – 5 µm</code>)</td><td>Larger (<code>10 – 100 µm</code>)</td></tr>
-              <tr><td><strong>Nuclear Membrane</strong></td><td><strong>Absent</strong> — DNA lies free in the <strong>nucleoid</strong></td><td><strong>Present</strong> — true nucleus bounded by a double membrane with nuclear pores</td></tr>
-              <tr><td><strong>Genetic Material (DNA)</strong></td><td>Single <strong>circular naked DNA</strong> loop (no histone proteins) + optional <strong>plasmids</strong></td><td>Multiple <strong>linear DNA</strong> molecules coiled around <strong>histone proteins</strong> as chromosomes</td></tr>
-              <tr><td><strong>Ribosome Size</strong></td><td>Smaller <strong>70S</strong> ribosomes in cytoplasm</td><td>Larger <strong>80S</strong> ribosomes in cytoplasm/RER (70S inside mitochondria &amp; chloroplasts)</td></tr>
-              <tr><td><strong>Membrane-Bound Organelles</strong></td><td><strong>Absent</strong> (no mitochondria, no ER, no Golgi, no chloroplasts)</td><td><strong>Present</strong> (mitochondria, ER, Golgi body, lysosomes, plastids in plants)</td></tr>
-              <tr><td><strong>Cell Wall Composition</strong></td><td><strong>Peptidoglycan (murein)</strong></td><td><strong>Cellulose</strong> in plants, <strong>chitin</strong> in fungi, <strong>absent</strong> in animals</td></tr>
-              <tr><td><strong>Site of Cellular Respiration</strong></td><td>Plasma membrane infoldings (<strong>mesosomes</strong>) &amp; cytoplasm</td><td><strong>Mitochondria</strong> (and glycolysis in cytoplasm)</td></tr>
-              <tr><td><strong>Cell Division</strong></td><td>Simple <strong>binary fission</strong> (no spindle apparatus)</td><td><strong>Mitosis</strong> and <strong>meiosis</strong> using a microtubular spindle</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 id="ph-h">Biological Scale &amp; Resolution Explorer (0.1 µm to 60 µm)</h3>
-        <p>Tap any pin below to compare viruses, bacteria, red blood cells, cheek cells, and onion epidermal cells across the microscopic scale:</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Electron Microscope (&lt; 0.2 µm)</div><div>Prokaryotes (1–5 µm)</div><div>Eukaryotes (10–100 µm) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect actual size A (µm), microscope requirement, and cellular class.</div>
+      <!-- ================= 3C. MOVEMENT BREAK ================= -->
+      <section class="l-sec" id="movement-break">
+        <span class="phase" style="--pc:#7a9a00"><b>★</b>Active movement break · 45–50 min</span>
+        <h2>Stand up and <em>be the field of view</em></h2>
+        <div class="callout big reveal">
+          <p><strong>Five-minute break.</strong> Stand beside your desk and make a loop with your thumbs and fingers: that is your <em>field of view</em>. Line up eight classmates side by side inside an imaginary circle: eight cells across. Now step half of them out and watch the circle: it shows fewer, but each cell is as wide as before. Swap places and repeat with a ×10 eyepiece and ×40 objective, calling out “ten times forty, four hundred” each time. Sit down when everyone has multiplied, not added.</p>
         </div>
       </section>
 
-      <!-- ================= 5. 3D CELL ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Prokaryote vs Eukaryote Cut-Away</span>
-        <h2>Inside the cells: <em>70S Prokaryotic Bacterium vs 80S Eukaryotic Cell</em></h2>
-        <p class="intro">Rotate the 3D cut-away models below! Compare the <strong>prokaryotic rod bacterium</strong> (peptidoglycan capsule, naked circular nucleoid DNA, plasmid rings, 70S ribosomes, flagellum) with the <strong>eukaryotic cell</strong> (double nuclear envelope, nucleolus, mitochondria, rough ER, Golgi, 80S ribosomes).</p>
+      <!-- ================= 4. CONCEPTS (Make sense) ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Cells, the cell theory and <em>how big is a cell?</em></h2>
+        <p class="intro">Now connect what you saw at the microscope to the ideas that examiners ask about.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>Seeing the Cell</b><span class="lv-time">10 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: Seeing the Cell" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <h3>1 · A cell and an organelle</h3>
+        <p>A <strong>cell</strong> is the basic unit of life: the smallest part of an organism that is both its <strong>building block</strong> (structure) and its <strong>working unit</strong> (function).</p>
+        <p>An <strong>organelle</strong> is a tiny part inside the cytoplasm that is specialised to do one particular job for the cell.</p>
+
+        <div class="callout big reveal" id="cell-theory" data-hook>
+          <p><strong>The cell theory:</strong> (1) every organism consists of one cell or of many cells; (2) organisms are built from cells, and cells carry out their life processes; (3) new cells form only when existing cells divide (Virchow, 1855; useful though not required).</p>
+        </div>
+
+        <h3>2 · Equations to learn</h3>
+        <div class="eq" id="eq-mag">Total magnification = M<sub>eyepiece</sub> × M<sub>objective</sub></div>
+        <div class="eq" id="eq-actual">Actual size = image size ÷ magnification</div>
+        <div class="eq" id="eq-width">Cell width = field diameter ÷ number of cells side by side</div>
+        <div class="eq" id="eq-conv">1 mm = 1000 µm</div>
+
+        <h3>3 · Prokaryotes and eukaryotes</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Prokaryote</th><th>Eukaryote</th></tr></thead>
+            <tbody>
+              <tr><td>Nuclear membrane</td><td>Absent; DNA lies free in the cytoplasm</td><td>Present; DNA is inside a true nucleus</td></tr>
+              <tr><td>Membrane-bound organelles</td><td>Absent</td><td>Present: mitochondria, ER, Golgi</td></tr>
+              <tr><td>Ribosomes</td><td>Smaller</td><td>Larger</td></tr>
+              <tr><td>DNA</td><td>Circular</td><td>Linear chromosomes</td></tr>
+              <tr><td>Size</td><td>Usually smaller</td><td>Usually larger</td></tr>
+              <tr><td>Examples</td><td>Bacteria, blue-green algae</td><td>Plants, animals, fungi, protists</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="ph-h">Objective explorer</h3>
+        <p>Tap an objective to see how large a 50 µm cell looks in the image.</p>
+        <div class="ph-explorer" id="pos-explorer">
+          <h3>Objective lens</h3>
+          <p class="ph-sub">Eyepiece ×10. Image size = real size × total magnification.</p>
+          <div class="ph-choices" id="ex-choices" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+          <div class="ph-detail" id="ex-detail" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D zoom</span>
+        <h2>A bacterium beside a <em>plant cell</em></h2>
+        <p class="intro">Switch parts on and off to compare a prokaryote with a eukaryote. Then see them at true size.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D cut-away comparison of a prokaryotic Escherichia coli bacterium and a eukaryotic cell, with live bars for cell size, ribosome sedimentation coefficient, and organelle count."></canvas>
-            <div class="stage-label"><i></i>3D Prokaryote vs Eukaryote Cut-Away · drag to rotate</div>
+            <canvas id="zoom-canvas" aria-label="3D zoom: a plant cell with a nucleus and organelles above a bacterium whose DNA is a free loop and which has no organelles."></canvas>
+            <div class="stage-label"><i></i>3D zoom · plant cell vs bacterium</div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D cell comparison stage couldn't start on this device.</p></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device. Use the comparison table above.</p></div>
           </div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Cell comparison mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Both Cells Side-by-Side</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Prokaryote (E. coli · 70S)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Eukaryote (True Nucleus · 80S)</button>
+            <div class="zrow">
+              <div class="seg" role="group" aria-label="Size view">
+                <button type="button" data-mode="structure" aria-pressed="true">Compare parts</button>
+                <button type="button" data-mode="true" aria-pressed="false">True size</button>
+              </div>
+              <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
             </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Switch to Electron Scope (0.2 nm)</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="zrow">
+              <div class="seg" role="group" aria-label="Show or hide parts">
+                <button type="button" data-tog="nucleus" aria-pressed="true">Nucleus</button>
+                <button type="button" data-tog="organelles" aria-pressed="true">Organelles</button>
+                <button type="button" data-tog="ribosomes" aria-pressed="true">Ribosomes</button>
+              </div>
+            </div>
             <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#3ee6c4"></i>Size<b data-c="h">25.0 µm</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>Ribosomes<b data-c="oh">80S</b></span>
-              <span class="counter"><i style="--c:#7cc4ff"></i>DNA<b data-c="na">Envelope</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Organelles<b data-c="cl">8</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>Resolution<b data-c="w">200 nm</b></span>
+              <span class="counter"><i style="--c:var(--crimson)"></i>Bacterium: membrane-bound organelles<b data-c="bact">0</b></span>
+              <span class="counter"><i style="--c:var(--teal)"></i>Plant cell: membrane-bound organelles<b data-c="plant">many</b></span>
             </div>
+            <span class="stage-hint" id="zoom-hint"></span>
           </div>
         </div>
       </section>
@@ -452,81 +543,67 @@
       <section class="l-sec" id="examples">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Every calculation is broken down one atomic mathematical step at a time with a plain-English explainer note underneath.</p>
+        <p class="intro">Try each problem on paper first, then check the working.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Total Microscope Magnification &amp; Drawing Magnification in Micrometres</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Cell width from the field of view</h4></div>
           <div class="example-body">
-            <p class="q">A student examines an <em>Allium cepa</em> (onion) epidermal cell under a compound microscope fitted with a ×10 eyepiece and a ×40 objective lens. She makes a biological drawing of one cell measuring 48 mm in length. Given that the actual length of the onion cell is 60 µm, calculate: (a) the total magnification of the microscope, and (b) the linear magnification of her biological drawing.</p>
+            <p class="q">With a ×10 eyepiece and a ×40 objective, the field of view is 0.40 mm wide and 8 onion cells lie side by side across it. Find the total magnification and the width of one cell in µm.</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) — Total microscope magnification:</strong> <code>M_total = M_eyepiece × M_objective = 10 × 40 = 400×</code>.</li>
-              <li><strong>Part (b) Step 1 — Convert drawing length I from mm to µm:</strong> <code>I = 48 × 1000 = 48000 µm</code>.</li>
-              <li><strong>Part (b) Step 2 — Calculate linear magnification M of the drawing:</strong> <code>M = I ÷ A = 48000 ÷ 60 = 800×</code>.</li>
+              <li><strong>Total magnification:</strong> <code>10 × 40 = ×400</code> (multiply, never add).</li>
+              <li><strong>Cell width:</strong> <code>0.40 mm ÷ 8 = 0.050 mm</code>.</li>
+              <li><strong>Convert to µm:</strong> <code>0.050 mm × 1000 = 50 µm</code>.</li>
             </ol>
-            <div class="answer-line">(a) Total Microscope Magnification = ×400 &nbsp;·&nbsp; (b) Drawing Magnification = ×800</div>
+            <div class="answer-line">×400 · 50 µm</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Finding Actual Bacterial Size A (µm) from Photomicrograph Width</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Actual size from an image</h4></div>
           <div class="example-body">
-            <p class="q">In an electron photomicrograph taken at a linear magnification of ×15000, the image of a rod-shaped bacterium (<em>Escherichia coli</em>) measures 30 mm in length. Calculate the actual length A of the bacterium in micrometres (µm).</p>
+            <p class="q">A photomicrograph taken with a ×10 eyepiece and a ×40 objective shows a cheek cell 24 mm long. Find its actual length.</p>
             <ol class="steps-sol">
-              <li><strong>Step 1 — Convert image length I from millimetres to micrometres:</strong> <code>I = 30 × 1000 = 30000 µm</code>.</li>
-              <li><strong>Step 2 — Divide image length I by magnification M to find actual size A:</strong> <code>A = I ÷ M = 30000 ÷ 15000 = 2.0 µm</code>.</li>
+              <li><strong>Total magnification:</strong> <code>10 × 40 = ×400</code>.</li>
+              <li><strong>Actual size:</strong> <code>24 mm ÷ 400 = 0.060 mm</code>.</li>
+              <li><strong>Convert to µm:</strong> <code>0.060 mm × 1000 = 60 µm</code>.</li>
             </ol>
-            <div class="answer-line">Actual length of bacterium A = 2.0 µm</div>
+            <div class="answer-line">60 µm</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Comparing Eukaryotic vs Prokaryotic Cell Length Ratio</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Magnification of a drawing</h4></div>
           <div class="example-body">
-            <p class="q">An onion epidermal cell has an actual length of 0.060 mm while a bacterium has an actual length of 2.0 µm. How many of these bacteria laid end-to-end would equal the length of one onion epidermal cell?</p>
+            <p class="q">An onion cell 0.25 mm long is drawn 50 mm long. (a) Find the magnification of the drawing. (b) How long would the drawing be at ×150?</p>
             <ol class="steps-sol">
-              <li><strong>Step 1 — Convert onion cell length from mm to µm:</strong> <code>A_onion = 0.060 × 1000 = 60 µm</code>.</li>
-              <li><strong>Step 2 — Divide eukaryotic cell length by prokaryotic cell length:</strong> <code>N = A_onion ÷ A_bacterium = 60 ÷ 2.0 = 30</code>.</li>
+              <li><strong>(a) Magnification:</strong> <code>50 mm ÷ 0.25 mm = ×200</code> (no unit, because the mm cancel).</li>
+              <li><strong>(b) Drawing length at ×150:</strong> <code>150 × 0.25 mm = 37.5 mm</code>.</li>
             </ol>
-            <div class="answer-line">Number of bacteria = 30 bacteria laid end-to-end</div>
+            <div class="answer-line">(a) ×200 · (b) 37.5 mm</div>
           </div>
         </article>
       </section>
 
       <!-- ================= 7. BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Back to Yaba Lab: <em>calibrate Tunde’s onion cell &amp; compare with E. coli!</em></h2>
-        <p class="intro">Apply <code>1 mm = 1000 µm</code> and <code>A = I ÷ M</code> step by step to resolve Tunde’s unit mismatch and compare eukaryotic and prokaryotic scales.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the lab: <em>two unlabelled slides</em></h2>
+        <p class="intro">These are the two slides from Dr Amaka's bench, both at ×400. Which one is the ugu peel, and how big is a red blood cell?</p>
 
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Specimen A · E. coli Prokaryote <small style="color:var(--muted);font-weight:500">· Nucleoid, 70S</small></h4>
-              <div class="clock-well">
-                <div style="width:24px;height:12px;border-radius:6px;background:linear-gradient(90deg,#f59e0b,#fbbf24);box-shadow:0 0 14px rgba(251,191,36,.6)"></div>
-              </div>
-              <div class="vt-count"><span id="time-a">A = 2.0 µm · I = 0.8 mm at ×400</span><small>tiny prokaryotic rod</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Specimen B · Onion Epidermis <small style="color:var(--muted);font-weight:500" id="len-b-label">· I = 24 mm at ×400 (unconverted)</small></h4>
-              <div class="clock-well">
-                <div style="width:76%;height:34px;border-radius:6px;border:2px solid #22c55e;background:rgba(34,197,94,.18)"></div>
-              </div>
-              <div class="vt-count"><span id="time-b">Unit mismatch: mm vs µm</span><small>convert to µm first!</small></div>
-            </div>
+        <div class="vt" id="bridge-test">
+          <div class="bridge-slides">
+            <figure><canvas id="bridge-p" width="300" height="300" aria-label="Slide P: round cells with no walls, ×400"></canvas><figcaption>Slide P · ×400</figcaption></figure>
+            <figure><canvas id="bridge-q" width="300" height="300" aria-label="Slide Q: regular box-shaped cells with walls, ×400"></canvas><figcaption>Slide Q · ×400</figcaption></figure>
           </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Convert I = 24 mm to 24,000 µm</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Divide by M = 400× to find A</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Compare Eukaryote vs Prokaryote Ratio</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset calibration</button>
+          <div class="bridge-q">
+            <p id="bridge-qtext"></p>
+            <div class="qopts" id="bridge-opts"></div>
+            <div class="bridge-fb" id="bridge-fb" role="status" aria-live="polite"></div>
           </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Tunde measured I = 24 mm at ×400 magnification. Start with Step 1 to convert mm to µm.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
         </div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 1:</strong> Robert Hooke’s 1665 cork chambers were dead cell walls, whereas living cells contain <strong>protoplasm</strong> and arise only from pre-existing cells (<em>Omnis cellula e cellula</em>). Across the living world, <strong>prokaryotes</strong> (<code>70S</code>, naked circular DNA, no membrane-bound organelles) and <strong>eukaryotes</strong> (<code>80S</code>, true nucleus, mitochondria) obey the universal magnification law <strong>M = I ÷ A</strong>!</p>
+          <p><strong>The big idea of Lesson 1:</strong> both a leaf and blood are made of cells. The leaf cells have walls; the blood cells do not.</p>
         </div>
       </section>
 
@@ -534,7 +611,7 @@
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
         <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <p class="intro">Choose an option for instant feedback and a full explanation.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
@@ -544,85 +621,54 @@
 
       <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · self-rating</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 1.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal from Lesson 1.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can trace the contributions of Hooke, Leeuwenhoek, Brown, Dujardin, Purkinje, Schleiden, Schwann, and Virchow.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can state the four tenets of the Cell Theory and explain why viruses are on the borderline of life.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can convert mm to µm and use M = I ÷ A to solve microscopy magnification problems.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can contrast 70S prokaryotic cells with 80S eukaryotic cells across 6 key features.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can explain why electron microscopes have higher resolution than light microscopes.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can state the cell theory.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can name four scientists and their work.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate total magnification.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can find actual size in µm.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can compare prokaryotes and eukaryotes.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
         <div class="aq" data-answer="l01-exit">
-          <div class="aq-top"><h4>In two sentences: why did Robert Hooke see only empty chambers in 1665, and how does the genetic material of a bacterium differ from that of an onion cell?</h4><span class="marks">2 marks</span></div>
+          <div class="aq-top"><h4>Eyepiece ×10, objective ×10, and 20 cells lie side by side across a 2.0 mm field. Find the total magnification and the cell width in µm.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>Hooke examined dead bottle cork bark whose living protoplasm had died and dried away, leaving only empty suberised cell walls <b>(1)</b>. A bacterium has a single circular naked DNA loop in a cytoplasmic nucleoid (no nuclear membrane), whereas an onion cell has linear DNA bound to histone proteins inside a double-membrane nuclear envelope <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>Total magnification = 10 × 10 = ×100. Cell width = 2.0 mm ÷ 20 = 0.10 mm = 100 µm <b>(2)</b>.</p></div>
           </details>
         </div>
       </section>
 
       <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>Cell Theory, Microscopy &amp; Prokaryotes vs Eukaryotes</em></h2>
-        <p class="intro">Complete Part A (scale drawing exercise) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · Reflect and Apply</span>
+        <h2>Assignment: <em>discovering the cell</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 01.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
+        <h3>Part A · Home investigation</h3>
+        <p>Build a water-drop lens from clear plastic and a drop of clean water, and measure its magnification on a newspaper headline letter. Then look at a piece of onion skin through it and sketch what you see.</p>
+        <h3>Part B · Written paper (30 marks)</h3>
+        <ul>
+          <li>b1 · Definitions (3 marks)</li>
+          <li>b2 · The cell theory and its founders (4 marks)</li>
+          <li>b3 · Correcting Coach Danjuma (3 marks)</li>
+          <li>b4 · The compound microscope (3 marks)</li>
+          <li>b5 · Cell size from the field of view (5 marks)</li>
+          <li>b6 · Actual size and drawing magnification (5 marks)</li>
+          <li>b7 · Prokaryotes versus eukaryotes (4 marks)</li>
+          <li>b8 · Practical: viewing an onion peel (3 marks)</li>
+        </ul>
 
-        <h3>Part A · Scale &amp; Magnification Investigation</h3>
-        <div class="aq" data-answer="l01-a1">
-          <div class="aq-top"><h4>Measure the length of your thumb nail in millimetres (e.g., 12 mm). Convert this length into micrometres (µm) and calculate how many 60 µm onion epidermal cells and how many 2 µm E. coli bacteria could line up end-to-end across your thumbnail.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="Your measurement and calculation…" aria-label="Part A answer"></textarea>
-          <details class="reveal-box solution">
-            <summary>Sample answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body">
-              <p>Convert thumbnail length to µm: <code>L = 12 × 1000 = 12000 µm</code>.<br>
-              Number of onion cells: <code>N_onion = 12000 ÷ 60 = 200 cells</code>.<br>
-              Number of bacteria: <code>N_bacteria = 12000 ÷ 2 = 6000 bacteria</code>.</p>
-            </div>
-          </details>
-        </div>
-
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
-        <div class="aq" data-answer="l01-b1">
-          <div class="aq-top"><h4>1. (a) State the specific contribution of each of the following scientists to cell biology: (i) Robert Hooke (ii) Antonie van Leeuwenhoek (iii) Matthias Schleiden &amp; Theodor Schwann (iv) Rudolf Virchow [4 marks]. (b) State four tenets of the Modern Cell Theory [4 marks]. (c) Give two reasons why a virus is regarded as being on the borderline between living and non-living things [2 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) (i) <strong>Hooke (1665):</strong> Observed dead cork cell walls and coined the term “cell” <b>(1)</b>. (ii) <strong>Leeuwenhoek (1674):</strong> First observed living single-celled organisms (protozoa/bacteria) <b>(1)</b>. (iii) <strong>Schleiden &amp; Schwann (1838–1839):</strong> Established that all plants and animals are composed of cells <b>(1)</b>. (iv) <strong>Virchow (1855):</strong> Proved that all cells arise from pre-existing living cells (<em>Omnis cellula e cellula</em>) <b>(1)</b>.<br>
-            (b) 1. All living organisms are composed of cells and their products <b>(1)</b>. 2. The cell is the structural and functional unit of life <b>(1)</b>. 3. All new cells arise by division of pre-existing cells <b>(1)</b>. 4. Cells contain hereditary DNA passed to daughter cells <b>(1)</b>.<br>
-            (c) Non-living trait: A virus is acellular (lacks protoplasm/organelles) and can be crystallised like a salt outside a host <b>(1)</b>. Living trait: Inside a living host cell it replicates its nucleic acid (DNA or RNA) and mutates <b>(1)</b>.</p>
-          </div></details>
-        </div>
-
-        <div class="aq" data-answer="l01-b2">
-          <div class="aq-top"><h4>2. (a) Construct a table contrasting a prokaryotic bacterial cell with a eukaryotic plant cell under six distinct headings [6 marks]. (b) State two cell types or organisms that are exceptions to the rule that every cell has a single nucleus [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) 1. <strong>Nuclear envelope:</strong> Absent in bacterium (nucleoid) vs Present in plant cell <b>(1)</b>. 2. <strong>DNA form:</strong> Single circular naked DNA vs Multiple linear DNA molecules on histones <b>(1)</b>. 3. <strong>Ribosomes:</strong> 70S vs 80S in cytoplasm <b>(1)</b>. 4. <strong>Cell wall:</strong> Peptidoglycan (murein) vs Cellulose <b>(1)</b>. 5. <strong>Membrane-bound organelles:</strong> Absent vs Present (mitochondria, chloroplasts, ER, Golgi) <b>(1)</b>. 6. <strong>Cell division:</strong> Binary fission vs Mitosis/meiosis with spindle <b>(1)</b>.<br>
-            (b) 1. <strong>Mature mammalian red blood cell (or phloem sieve tube element):</strong> anucleate (0 nuclei) at maturity <b>(2)</b>. 2. <strong><em>Rhizopus</em> hypha (or skeletal muscle fibre):</strong> coenocytic / multinucleate (many nuclei in shared cytoplasm) <b>(2)</b>.</p>
-          </div></details>
-        </div>
-
-        <div class="aq" data-answer="l01-b3">
-          <div class="aq-top"><h4>3. (a) A microscope has a ×15 eyepiece and a ×40 objective lens. Calculate its total magnification [2 marks]. (b) A student draws a cheek cell measuring 54 mm across. If the actual diameter of the cheek cell is 45 µm, calculate the linear magnification of the drawing [4 marks]. (c) Under ×400 magnification, an image of a mitochondrion is 0.6 mm long. Calculate its actual length in micrometres [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Total magnification: <code>M_total = M_e × M_o = 15 × 40 = 600×</code> <b>(2)</b>.<br>
-            (b) Convert drawing size to µm: <code>I = 54 × 1000 = 54000 µm</code> <b>(2)</b>. Linear magnification: <code>M = I ÷ A = 54000 ÷ 45 = 1200×</code> <b>(2)</b>.<br>
-            (c) Convert image size to µm: <code>I = 0.6 × 1000 = 600 µm</code> <b>(2)</b>. Actual mitochondrion length: <code>A = I ÷ M = 600 ÷ 400 = 1.5 µm</code> <b>(2)</b>.</p>
-          </div></details>
-        </div>
-
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../../index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Unit Welcome Hub</a>
-          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 — Inside the Eukaryotic Cell (Organelles) →</a>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(var(--paper-ink-rgb), .12);">
+          <a class="btn btn-ghost" href="../../index.html">← Unit Welcome Hub</a>
+          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 · Inside the Cell →</a>
         </div>
       </section>
     </main>
@@ -633,18 +679,20 @@
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
   <script src="../../assets/js/cell-kit.js"></script>
+  <script src="../../assets/js/microscope-bench.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
   <script src="../../assets/js/story-scene.js"></script>
   <script src="story.js"></script>
   <script src="bench.js"></script>
-  <script src="../../assets/js/study-graph.js"></script>
-  <script src="graph.js"></script>
   <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="lesson.js"></script>
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
 </body>
 </html>

@@ -1,266 +1,139 @@
-/* Lesson 01 · 3D Vector & Energy Zoom Stage — live velocity vector (teal), acceleration vector (amber), and 3D KE/PE/Total Energy pillars */
+/* Lesson 04 · force zoom (window.StudyScenes.zoom)
+   Rule 5b: the force resolution is planar, so it is the 2D Paper.js "pendulum-forces" scene of
+   ShmKinematics2D in #zoom-canvas (thread at θ, mg, T, mg cos θ, mg sin θ, x/l triangle, a = g sin θ).
+   A small 3D PendulumKit "forces" view in #zoom-canvas-3d swings alongside for context only.
+   Every number comes from ShmKinematics2D.model (reading()). */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
   var canvas = document.getElementById("zoom-canvas");
-  if (!root || !canvas || typeof THREE === "undefined") return;
+  var canvas3 = document.getElementById("zoom-canvas-3d");
+  if (!root || !canvas) return;
 
-  var toastEl = document.getElementById("zoom-toast");
-  var toastT;
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var $ = function (s) { return document.querySelector(s); };
+  var toastEl = $("#zoom-toast"), toastT;
   function toast(m) {
     if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3400);
   }
 
-  var state = {
-    mode: "mix", // "mix" = Live SHM, "acid" = Freeze at Centre (x = 0), "base" = Freeze at Extreme (x = +A)
-    damped: false,
-    ampFactor: 1.0,
-    phase: 0
-  };
+  var state = { theta: 20, mass: 50, swing: false };
+  var readoutEl = $("#zoom-readout"), slider = $("#zoom-theta"), sliderV = $("#zoom-theta-v");
+  var massBtns = Array.prototype.slice.call(document.querySelectorAll("#zoom-stage [data-mass]"));
+  var swingBtn = $("#zoom-swing");
 
-  var highlightPart = null;
+  // ---------- 2D Paper.js force diagram ----------
+  var k2 = null;
+  if (window.paper && window.ShmKinematics2D) {
+    try {
+      k2 = ShmKinematics2D.create({ canvas: canvas, scene: "pendulum-forces", theta_deg: 20, mass_g: 50, l: 0.5, g: 9.8, autoplay: false, labels: true, surface: "ink", onChange: onChange });
+    } catch (e) { k2 = null; }
+  }
+  if (!k2) root.classList.add("no-webgl");   // clearly marked fallback: the stage shows its fallback text
+
+  // ---------- small 3D context (PendulumKit "forces": bob + thread swinging, no force arrows) ----------
+  var kit3 = null, stage3 = null, FOV = 32;
+  if (canvas3 && window.PendulumKit && window.SceneKit && typeof THREE !== "undefined") {
+    kit3 = PendulumKit.create({ mode: "forces", angle_deg: 20, l: 0.5, bob: 50, labels: false });
+    stage3 = SceneKit.createStage({
+      root: document.getElementById("zoom-ctx"), canvas: canvas3, fov: FOV, autoFit: false, zoomUi: false, portraitPitch: 0,
+      target: new THREE.Vector3(0.1, 1.2, 0), pitch: 0.08, yaw: 0.25, distance: 1.6, noOrbit: true, onFrame: frame3
+    });
+    if (stage3) { stage3.rig.add(kit3); stage3.start(); }
+  }
+  var aimed = false;
+  function frame3(dt, t) {
+    if (!kit3) return;
+    kit3.update(dt, t);
+    if (!aimed && stage3) {
+      aimed = true;
+      var v = kit3.viewFor("all"), tn = Math.tan(FOV * Math.PI / 360), a = stage3.camera.aspect || 0.75;
+      stage3.target.fromArray(v.target);
+      stage3.dist = Math.max(v.size[1] / 2 / tn, v.size[0] / 2 / (tn * a)) * 1.05 + v.size[2] / 2;
+    }
+    if (stage3 && aimed) {
+      // SceneKit.resize() resets dist; keep our framing
+      var v2 = kit3.viewFor("all"), tn2 = Math.tan(FOV * Math.PI / 360), a2 = stage3.camera.aspect || 0.75;
+      stage3.dist = Math.max(v2.size[1] / 2 / tn2, v2.size[0] / 2 / (tn2 * a2)) * 1.05 + v2.size[2] / 2;
+    }
+  }
+
+  // ---------- readouts ----------
+  function paint(r) {
+    r = r || (k2 && k2.reading());
+    if (!readoutEl || !r) return;
+    var d = r.display || {};
+    readoutEl.innerHTML =
+      '<div><span>θ / rad</span><b>' + (d.rad || "—") + '</b></div>' +
+      '<div><span>sin θ</span><b>' + (d.sin || "—") + '</b></div>' +
+      '<div class="hot"><span>mg sin θ</span><b>' + (r.mg_sin != null ? Math.abs(r.mg_sin).toFixed(3) + " N" : "—") + '</b></div>' +
+      '<div><span>a / m s⁻²</span><b>' + (r.a != null ? Math.abs(r.a).toFixed(2) : "—") + '</b></div>';
+  }
+  function onChange(r) {
+    if (r && r.theta0_deg != null && !state.swing) {
+      var th = Math.round(Math.abs(r.theta0_deg));
+      if (th !== state.theta) { state.theta = th; syncSlider(); if (kit3) kit3.setState({ angle_deg: th }); }
+    }
+    paint(r);
+  }
+  function syncSlider() {
+    if (slider) slider.value = String(state.theta);
+    if (sliderV) sliderV.textContent = state.theta + "°";
+  }
+
+  function setTheta(th) {
+    th = Math.max(2, Math.min(45, Math.round(+th)));
+    state.theta = th; syncSlider();
+    if (k2) k2.setState({ theta_deg: th });
+    if (kit3) kit3.setState({ angle_deg: th });
+    paint();
+  }
+  function setMass(m) {
+    if (m !== 50 && m !== 100) return;
+    state.mass = m;
+    massBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-mass") === m)); });
+    if (k2) k2.setState({ mass_g: m });
+    if (kit3) kit3.setState({ bob: m });
+    paint();
+    toast(m === 100 ? "100 g: mg, T and both components double — but a = g sin θ is unchanged." : "50 g: half the force, half the inertia — the same acceleration.");
+    emit("l4:zoom", { mode: "pendulum-forces", mass: m, theta: state.theta });
+  }
+  function setSwing(on) {
+    state.swing = !!on;
+    if (swingBtn) { swingBtn.setAttribute("aria-pressed", String(state.swing)); swingBtn.textContent = state.swing ? "Hold" : "Swing"; }
+    if (k2) { if (state.swing) k2.play(); else { k2.pause(); k2.setState({ theta_deg: state.theta, t: 0 }); } }
+  }
+
+  if (slider) slider.addEventListener("input", function () { setTheta(slider.value); });
+  if (slider) slider.addEventListener("change", function () { emit("l4:zoom", { mode: "pendulum-forces", theta: state.theta, mass: state.mass }); });
+  massBtns.forEach(function (b) { b.addEventListener("click", function () { setMass(+b.getAttribute("data-mass")); }); });
+  if (swingBtn) swingBtn.addEventListener("click", function () { setSwing(!state.swing); });
+
+  // ---------- scene API for narrator / tests ----------
   var api = {
-    setMode: setMode,
-    add: toggleDamping,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
+    setMode: function (m) {
+      // modes for the narrator: "theta:30", "mass:100", "swing", "hold"
+      var p = String(m || "").split(":");
+      if (p[0] === "theta") setTheta(+p[1]);
+      else if (p[0] === "mass") setMass(+p[1]);
+      else if (p[0] === "swing") setSwing(true);
+      else if (p[0] === "hold") setSwing(false);
+    },
+    theta: setTheta, mass: setMass, swing: setSwing,
+    reset: function () { setSwing(false); setTheta(20); setMass(50); },
+    highlight: function (p) { if (k2) k2.highlight(p || null); },
+    rect: function (p) {
+      if (p === "context" || p === "3d") { var c = document.getElementById("zoom-ctx"); var b = c.getBoundingClientRect(); return { left: b.left, top: b.top, width: b.width, height: b.height }; }
+      if (k2) return k2.rect(p);
+      var r = canvas.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height };
+    },
+    reading: function () { return k2 ? k2.reading() : null; }, kit: k2, kit3: kit3
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.zoom = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.9, 0),
-    pitch: 0.18,
-    yaw: 0,
-    fitWidth: 6.2,
-    distance: 6.2,
-    onFrame: frame
-  });
-
-  var pivotGroup, bobGroup, vArrow, aArrow, keBar, peBar, totBar;
-  var PIVOT_Y = 2.05;
-  var ROD_LEN = 1.35;
-
-  if (stage) build();
-  wireButtons();
-
-  function makeArrow(colorHex) {
-    var g = new THREE.Group();
-    var mat = new THREE.MeshBasicMaterial({ color: colorHex });
-    var shaftGeo = new THREE.CylinderGeometry(0.028, 0.028, 1, 12);
-    shaftGeo.translate(0, 0.5, 0);
-    var shaft = new THREE.Mesh(shaftGeo, mat);
-    shaft.rotation.z = -Math.PI / 2;
-    g.add(shaft);
-
-    var head = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.18, 16), mat);
-    head.rotation.z = -Math.PI / 2;
-    head.position.x = 1;
-    g.add(head);
-
-    g.userData.setVec = function (signedLen) {
-      var abs = Math.abs(signedLen);
-      if (abs < 0.03) {
-        g.visible = false;
-        return;
-      }
-      g.visible = true;
-      var dir = signedLen >= 0 ? 1 : -1;
-      g.scale.x = dir;
-      shaft.scale.y = abs;
-      head.position.x = abs;
-    };
-    return g;
-  }
-
-  function build() {
-    var scene = stage.rig;
-
-    // Reference equilibrium dashed vertical post at x = 0
-    var eqLine = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.01, 0.01, 2.0, 8),
-      new THREE.MeshBasicMaterial({ color: 0x3ee6c4, transparent: true, opacity: 0.35 })
-    );
-    eqLine.position.set(-0.7, 1.0, -0.15);
-    scene.add(eqLine);
-
-    var eqTag = SceneKit.labelTexture("x = 0 (equilibrium)", { size: 32, bg: "rgba(13,156,126,0.88)" });
-    var eqSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: eqTag, transparent: true, depthWrite: false }));
-    eqSpr.scale.set(0.21 * eqTag.userData.aspect, 0.21, 1);
-    eqSpr.position.set(-0.7, 0.15, 0);
-    scene.add(eqSpr);
-
-    // Oscillator pivot at (-0.7, PIVOT_Y, 0)
-    pivotGroup = new THREE.Group();
-    pivotGroup.position.set(-0.7, PIVOT_Y, 0);
-    scene.add(pivotGroup);
-
-    var strGeo = new THREE.CylinderGeometry(0.012, 0.012, ROD_LEN, 12);
-    strGeo.translate(0, -ROD_LEN / 2, 0);
-    var str = new THREE.Mesh(strGeo, new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.4 }));
-    pivotGroup.add(str);
-
-    bobGroup = new THREE.Group();
-    bobGroup.position.y = -ROD_LEN;
-    var bob = new THREE.Mesh(
-      new THREE.SphereGeometry(0.18, 32, 24),
-      new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.2, metalness: 0.85 })
-    );
-    bobGroup.add(bob);
-    pivotGroup.add(bobGroup);
-
-    // Velocity arrow (teal) and Acceleration arrow (amber) in world space following the bob
-    vArrow = makeArrow(0x3ee6c4);
-    aArrow = makeArrow(0xffb23f);
-    scene.add(vArrow);
-    scene.add(aArrow);
-
-    var vTag = SceneKit.labelTexture("v (velocity)", { size: 30, bg: "rgba(13,156,126,0.92)" });
-    var vSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: vTag, transparent: true, depthWrite: false }));
-    vSpr.scale.set(0.19 * vTag.userData.aspect, 0.19, 1);
-    vSpr.position.set(0, 0.22, 0);
-    vArrow.add(vSpr);
-
-    var aTag = SceneKit.labelTexture("a = −ω²x (restoring)", { size: 30, bg: "rgba(217,138,0,0.92)" });
-    var aSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: aTag, transparent: true, depthWrite: false }));
-    aSpr.scale.set(0.19 * aTag.userData.aspect, 0.19, 1);
-    aSpr.position.set(0, -0.22, 0);
-    aArrow.add(aSpr);
-
-    // 3D Live Energy Pillars on the right (x = 1.1 to 2.1)
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.6, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.55, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 32, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.20 * t.userData.aspect, 0.20, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.10, 0x9b8cff, "KE");
-    peBar  = makeBar(1.55, 0xc6f36b, "PE");
-    totBar = makeBar(2.00, 0x7cc4ff, "Total E");
-
-    api.rect = function (part) {
-      if (part === "bob" || part === "vectors") return stage.rectOf([bobGroup, vArrow, aArrow], 16);
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      return stage.rectOf(pivotGroup, 12);
-    };
-
-    stage.start();
-  }
-
-  function setMode(m) {
-    state.mode = m;
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
-    });
-    if (m === "acid") toast("Frozen at equilibrium (x = 0): Speed v and KE are MAXIMUM; acceleration a and PE are ZERO.");
-    else if (m === "base") toast("Frozen at right extreme (x = +A): Speed v is ZERO; inward acceleration a and PE are MAXIMUM.");
-    else toast("Live Simple Harmonic Motion: watch KE and PE trade places twice every cycle.");
-  }
-
-  function toggleDamping() {
-    state.damped = !state.damped;
-    if (!state.damped) state.ampFactor = 1.0;
-    toast(state.damped ? "Air damping ON: amplitude and total energy decay gradually while period stays constant." : "Air damping OFF: undamped SHM with constant mechanical energy.");
-  }
-
-  function reset() {
-    state.damped = false;
-    state.ampFactor = 1.0;
-    state.phase = 0;
-    setMode("mix");
-    toast("Oscillator reset to full amplitude (A = 0.10 m).");
-  }
-
-  function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
-    });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleDamping);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
-  }
-
-  function frame(dt) {
-    if (!pivotGroup) return;
-    var omega = 2.6;
-    if (state.mode === "mix") {
-      state.phase += dt * omega;
-      if (state.damped) {
-        state.ampFactor = Math.max(0.15, state.ampFactor * (1 - 0.12 * dt));
-      } else {
-        state.ampFactor = 1.0;
-      }
-    } else if (state.mode === "acid") {
-      // Equilibrium centre x = 0, moving rightward (cos = 1, sin = 0)
-      state.phase = 0;
-      state.ampFactor = 1.0;
-    } else if (state.mode === "base") {
-      // Right extreme x = +A (sin = 1, cos = 0)
-      state.phase = Math.PI / 2;
-      state.ampFactor = 1.0;
-    }
-
-    var s = Math.sin(state.phase) * state.ampFactor; // normalized displacement x / A0 in [-1, 1]
-    var c = Math.cos(state.phase) * state.ampFactor; // normalized velocity v / vmax in [-1, 1]
-
-    var maxAngle = 0.42;
-    pivotGroup.rotation.z = s * maxAngle;
-
-    var bobWorld = new THREE.Vector3();
-    bobGroup.getWorldPosition(bobWorld);
-
-    vArrow.position.set(bobWorld.x, bobWorld.y + 0.24, bobWorld.z + 0.18);
-    aArrow.position.set(bobWorld.x, bobWorld.y - 0.24, bobWorld.z + 0.18);
-
-    vArrow.userData.setVec(c * 0.95);
-    aArrow.userData.setVec(-s * 0.95); // restoring acceleration always opposite to displacement s!
-
-    var peFrac = s * s;
-    var keFrac = c * c;
-    var totFrac = peFrac + keFrac;
-
-    if (keBar) keBar.scale.y = Math.max(0.03, keFrac);
-    if (peBar) peBar.scale.y = Math.max(0.03, peFrac);
-    if (totBar) totBar.scale.y = Math.max(0.03, totFrac);
-
-    // Update live counters in .stage-bar (A = 0.10 m, ω = 4.0 rad/s => vmax = 0.40 m/s, amax = 1.60 m/s²)
-    var cA = document.querySelector('#zoom-counters [data-c="h"]');
-    var cV = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cKE = document.querySelector('#zoom-counters [data-c="na"]');
-    var cPE = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cTot = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cA) cA.textContent = (Math.abs(s) * 1.60).toFixed(2);
-    if (cV) cV.textContent = (Math.abs(c) * 0.40).toFixed(2);
-    if (cKE) cKE.textContent = Math.round(keFrac * 100);
-    if (cPE) cPE.textContent = Math.round(peFrac * 100);
-    if (cTot) cTot.textContent = Math.round(totFrac * 100);
-  }
+  syncSlider(); paint();
+  setInterval(function () { if (state.swing) paint(); }, 300);
 })();

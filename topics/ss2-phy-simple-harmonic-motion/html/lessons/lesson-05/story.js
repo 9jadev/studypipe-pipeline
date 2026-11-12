@@ -1,155 +1,93 @@
-/* Lesson 01 · 3D story beats: the slow school clock at Yaba Market & UNILAG Metrology Lab */
+/* Lesson 05 · 3D story (Set 2, the school physics lab): Mrs Okafor wants the class's own g;
+   Tunde measures only to the top of the bob and counts "one!" as he starts the stopwatch. */
 (function () {
   "use strict";
   if (!window.StoryStage || typeof THREE === "undefined") return;
 
-  var WIDE = [[0, 2.6, 7.2], [0, 1.3, 0]];
+  var X = 40;
+  var lab = null, tunde = null, zainab = null, ruler = null;
+  // fallback shots (02-lesson.md) are replaced by dressLab's framed shots when ridge-road-props is present
+  var SHOT = {
+    lab: [[X + 0.0, 2.2, 6.0], [X + 0.0, 1.3, 0]],
+    pendulum: [[X - 1.9, 2.0, 2.7], [X - 1.9, 1.15, -2.2]],
+    bench: [[X - 1.5, 2.2, 3.4], [X - 1.6, 1.1, -2.0]]
+  };
+  function shot(k) { return (k === "lab" && lab && lab.shots && lab.shots.lab) || SHOT[k]; }   // close shots are our own so nobody blocks the pendulum
 
-  function buildClockProp(labelText, rodLen, tagBg) {
-    var g = new THREE.Group();
-    var wood = StoryStage.std("#4a2c18", 0.65);
-    var brass = new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.25, metalness: 0.85 });
-    var faceMat = StoryStage.std("#fffaf2", 0.4);
-
-    // Tall wooden regulator case on the table
-    var back = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.82, 0.06), wood);
-    back.position.set(0, 0.42, -0.05);
-    g.add(back);
-    var topCap = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.06, 0.16), wood);
-    topCap.position.set(0, 0.84, 0);
-    g.add(topCap);
-    var base = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.05, 0.18), wood);
-    base.position.set(0, 0.025, 0);
-    g.add(base);
-
-    // Clock dial
-    var dial = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.02, 24), faceMat);
-    dial.rotation.x = Math.PI / 2;
-    dial.position.set(0, 0.68, 0.02);
-    g.add(dial);
-
-    // Swinging pendulum pivot
-    var pivot = new THREE.Group();
-    pivot.position.set(0, 0.54, 0.03);
-    var rod = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, rodLen, 10), brass);
-    rod.position.y = -rodLen / 2;
-    pivot.add(rod);
-    var bob = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.025, 24), brass);
-    bob.rotation.x = Math.PI / 2;
-    bob.position.y = -rodLen;
-    pivot.add(bob);
-    g.add(pivot);
-    g.userData.pivot = pivot;
-
-    // Label sprite above clock
-    var tag = StoryStage.sign(labelText, tagBg || "rgba(13,156,126,0.95)", "#fff", 0.16);
-    tag.position.set(0, 1.02, 0.05);
-    g.add(tag);
-    g.userData.tag = tag;
-    return g;
+  function place(w) {
+    var p = w.people, L = w.props.lab;
+    [p.amaka, tunde, zainab].forEach(function (person) { if (person && person.parent !== L) { person.parent.remove(person); L.add(person); } });
+    var sp = (lab && lab.spots) || { okafor: [-1.0, 0, -1.3], zainab: [0.35, 0, -1.15], tunde: [1.25, 0, -1.0] };
+    p.amaka.position.set(-0.45, 0, -1.2); void sp;
+    if (zainab) zainab.position.set(-2.55, 0, -1.5);
+    if (tunde) tunde.position.set(-1.25, 0, -1.5);
+    var look = new THREE.Vector3(-1.9, 0, -2.35);
+    [p.amaka, tunde, zainab].forEach(function (person) { if (person) { person.userData.target = null; person.userData.faceTarget = look; } });
+    if (tunde && tunde.hold) tunde.hold(null, "right");
+    if (lab && lab.pendulum && lab.pendulum.swing) lab.pendulum.swing(false);
   }
 
-  function reset(w) {
-    var p = w.people;
-    if (p.ngozi.parent !== w.props.market) { p.ngozi.parent.remove(p.ngozi); w.props.market.add(p.ngozi); }
-    p.ngozi.userData.target = null; p.ngozi.userData.faceTarget = null; p.ngozi.hold(null);
-    p.ngozi.position.set(0, 0, -1.0); p.ngozi.rotation.y = 0;
-  }
+  // the speaker turns towards the class (camera side), the others keep watching the pendulum
+  function face(person) { if (person) person.userData.faceTarget = new THREE.Vector3(person.position.x + 0.6, 0, 4); }
 
   var beats = [
     {
-      caption: "Yaba Market, Lagos. Mama Ngozi's school-clock & instrument stall.",
-      shot: WIDE, instant: true, hold: 5,
-      who: "cust1",
-      text: "Mama! This regulator wall clock we bought for our school assembly hall loses eight minutes every single hour!",
-      run: function (w) { reset(w); w.people.cust1.set("point"); }
+      caption: "The school physics laboratory, Ogbomoso. A pendulum hangs from a split cork.",
+      shot: SHOT.lab, instant: true, hold: 6, who: "amaka",
+      text: "The lift-off rule needs g. Textbooks say 9.8. Let's measure our own, here in Ogbomoso.",
+      run: function (w) { place(w); w.shot.apply(null, shot("lab").concat([true])); face(w.people.amaka); w.people.amaka.set("talk"); if (tunde) tunde.set("idle"); if (zainab) zainab.set("think"); }
     },
     {
-      caption: "Mrs Adeyemi blames the weight of the brass bob.",
-      shot: [[-0.4, 2.0, 5.0], [0.2, 1.3, 0.6]], hold: 5,
-      who: "cust2",
-      text: "I told them! The brass bob is too light. Tie a heavier lead weight on it so gravity pulls it faster!",
-      run: function (w) { reset(w); w.people.cust2.set("talk"); w.people.ngozi.set("think"); }
+      caption: "Tunde lays the metre rule along the thread and stops at the top of the bob.",
+      shot: SHOT.pendulum, hold: 5.5, who: "tunde",
+      text: "Eighty centimetres. Done.",
+      run: function (w) { place(w); w.shot.apply(null, shot("pendulum")); if (tunde) { tunde.set("point"); if (ruler && tunde.hold) tunde.hold(ruler, "right"); } }
     },
     {
-      caption: "Mama Ngozi wonders if the starting angle is the culprit.",
-      shot: [[0.3, 1.9, 2.5], [0, 1.6, -1]], hold: 4.8,
-      who: "ngozi",
-      text: "Ah-ah! Or maybe you didn't pull the pendulum wide enough when starting it? Both clocks came from the same workshop!",
-      run: function (w) { reset(w); w.people.ngozi.set("sad"); }
+      caption: "Zainab points to the middle of the brass bob.",
+      shot: SHOT.pendulum, hold: 6, who: "zainab",
+      text: "The bob's centre is lower. The pendulum swings from the cork to the centre of the bob.",
+      run: function (w) { place(w); w.shot.apply(null, shot("pendulum")); if (zainab) zainab.set("point"); if (tunde) tunde.set("think"); }
     },
     {
-      caption: "Clock A (accurate, L = 0.99 m) and Clock B (slow, L = 1.15 m) side by side on the stall.",
-      shot: [[0.65, 1.65, 1.55], [0.65, 1.35, 0.05]], hold: 5.5,
-      who: "ngozi",
-      text: "Look closely at Clock A and Clock B. Same brass bob, yet Clock B swings noticeably slower!",
-      run: function (w) { reset(w); w.people.ngozi.set("point"); }
-    },
-    {
-      caption: "Three suspects: bob mass, starting angle, or pendulum length?",
-      shot: [[1.4, 1.75, 2.2], [0.5, 1.35, 0.0]], hold: 5,
-      who: "ngozi",
-      text: "Is it the weight of the bob, the starting angle, or the position of the nut on the rod? How can we be sure?",
-      run: function (w) { reset(w); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "Across town, at the UNILAG Metrology & Physics Laboratory…",
-      shot: [[40.2, 2.3, 3.4], [40.3, 1.4, -1.8]], hold: 5.5,
-      who: "amaka",
-      text: "Don't guess! Put a pendulum on the retort stand, time twenty swings, and let the data speak!",
+      caption: "Tunde lets go, presses the stopwatch and shouts \"one!\". Mrs Okafor stops him.",
+      shot: SHOT.bench, hold: 6, who: "tunde",
+      text: "One! Two! Three…",
       run: function (w) {
-        var a = w.people.amaka;
-        a.userData.faceTarget = new THREE.Vector3(0.6, 0, -2.3);
-        a.set("point");
+        place(w); w.shot.apply(null, shot("bench"));
+        if (lab && lab.pendulum && lab.pendulum.swing) lab.pendulum.swing(true);
+        if (tunde) tunde.set("cheer"); w.people.amaka.set("point");
       }
+    },
+    {
+      caption: "Mrs Okafor: do it the examiner's way.",
+      shot: SHOT.lab, hold: 6.5, who: "amaka",
+      text: "Small slips like these are exactly where WAEC candidates lose marks. Let's do it the examiner's way and see how much each slip costs.",
+      run: function (w) { place(w); w.shot.apply(null, shot("lab")); face(w.people.amaka); w.people.amaka.set("talk"); if (zainab) zainab.set("idle"); if (tunde) tunde.set("sad"); }
     }
   ];
 
   window.StoryStage.wire("story-stage", "story", beats, {
-    names: {
-      ngozi: "Mama Ngozi",
-      cust1: "Kunle (School Prefect)",
-      cust2: "Mrs Adeyemi",
-      amaka: "Dr Amaka (Physics Lab)"
-    },
+    names: { amaka: "Mrs Okafor", okafor: "Mrs Okafor", zainab: "Zainab", tunde: "Tunde", ngozi: "Hajia Ramatu", cust1: "Dayo" },
     setup: function (api) {
-      // Customize market and lab signs for Physics
-      var mSign = StoryStage.sign("YABA CLOCK & INSTRUMENT STALL · LAGOS", "rgba(13,156,126,0.95)", "#fff", 0.48);
-      mSign.position.copy(api.props.mSign.position);
-      api.props.market.remove(api.props.mSign);
-      api.props.market.add(mSign);
-      api.props.mSign = mSign;
-
-      var lSign = StoryStage.sign("UNILAG METROLOGY & PHYSICS LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
-      lSign.position.copy(api.props.lSign.position);
-      api.props.lab.remove(api.props.lSign);
-      api.props.lab.add(lSign);
-      api.props.lSign = lSign;
-
-      // Replace bottles A & B with two animated 3D Regulator Clocks A & B
-      if (api.props.bottleA) api.props.bottleA.visible = false;
-      if (api.props.bottleB) api.props.bottleB.visible = false;
-      if (api.props.can) api.props.can.visible = false;
-
-      var clockA = buildClockProp("Clock A · 2.00 s", 0.34, "rgba(13,156,126,0.95)");
-      clockA.position.set(0.38, 0.94, 0.08);
-      api.props.market.add(clockA);
-      api.props.clockA = clockA;
-      api.props.bottleA = clockA;
-
-      var clockB = buildClockProp("Clock B · Slow!", 0.42, "rgba(200,38,74,0.95)");
-      clockB.position.set(0.92, 0.94, 0.08);
-      api.props.market.add(clockB);
-      api.props.clockB = clockB;
-      api.props.bottleB = clockB;
+      var S = window.StoryStage, P = api.props;
+      if (window.RidgeRoadProps) {
+        try { lab = RidgeRoadProps.dressLab(api, { l: 0.80 }); } catch (e) { lab = null; }
+      }
+      if (!lab && P.lSign) {
+        // stock lab set (fallback): just retitle it
+        var s = S.sign("PHYSICS LABORATORY", "rgba(31,53,80,0.95)", "#fff", 0.42);
+        s.position.copy(P.lSign.position); P.lab.remove(P.lSign); P.lab.add(s); P.lSign = s;
+      }
+      zainab = S.person({ skin: "#6b4430", outfit: "#2f7d4f", wrapper: true, hair: "bun" });
+      tunde = S.person({ skin: "#4f3322", outfit: "#f4f6f8", pants: "#9c8a5a", hair: "short" });
+      P.lab.add(zainab); P.lab.add(tunde);
+      api.people.zainab = zainab; api.people.tunde = tunde;
+      P.okafor = api.people.amaka;                // narrator target alias (not a second person, so it is not animated twice)
+      ruler = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.5, 0.006), S.std("#e3c46b", 0.6));
+      ruler.position.set(0, -0.2, 0.04);
+      api.people.cust1.visible = false; api.people.cust2.visible = false;
     },
-    onTick: function (api, dt, t) {
-      if (api.props.clockA && api.props.clockA.userData.pivot) {
-        api.props.clockA.userData.pivot.rotation.z = 0.24 * Math.sin(t * Math.PI);
-      }
-      if (api.props.clockB && api.props.clockB.userData.pivot) {
-        api.props.clockB.userData.pivot.rotation.z = 0.24 * Math.sin(t * (Math.PI / 1.08));
-      }
-    }
+    onTick: function (api, dt, t) { if (lab && lab.update) lab.update(dt, t); }
   });
 })();

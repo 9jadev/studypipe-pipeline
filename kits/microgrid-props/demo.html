@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: microgrid-props</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;background:#0b1512;color:#e6f4ef;font:13px/1.35 system-ui,sans-serif;overflow-x:hidden}
+  .st{position:relative;width:100%;height:54vh;min-height:290px}
+  .st canvas{display:block;width:100%;height:100%;touch-action:none}
+  .stage-canvas{position:absolute;inset:0}
+  .story-bubble{display:none}
+  [hidden]{display:none!important}
+  #ui,#faults{padding:6px 8px;display:flex;flex-wrap:wrap;gap:5px}
+  button{min-height:36px;padding:0 10px;border-radius:18px;border:0;background:#0f766e;color:#fff;font:600 12px system-ui;cursor:pointer}
+  button.on{background:#d97706}
+  button.alt{background:#1e3a34}
+  button.fault{background:#334155}
+  button.fault.on{background:#dc2626}
+  #line{padding:6px 10px 12px;font:11.5px/1.45 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;color:#a7f3d0}
+</style>
+</head><body>
+<div id="gal" class="st"><canvas id="c"></canvas></div>
+<div id="ui"></div>
+<div id="faults"></div>
+<div id="line"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/story-scene.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var K = window.MicrogridProps;
+  var host = document.getElementById("gal"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.95;
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0f1f1c);
+  var camera = new THREE.PerspectiveCamera(38, 1, 0.05, 80);
+  var controls = new THREE.OrbitControls(camera, cv);
+  controls.enablePan = false; controls.enableDamping = true;
+
+  scene.add(new THREE.HemisphereLight(0xbbeeff, 0x263829, 0.95));
+  var sun = new THREE.DirectionalLight(0xfff4d6, 1.35); sun.position.set(-5, 9, 7); scene.add(sun);
+  var rim = new THREE.DirectionalLight(0x38bdf8, 0.55); rim.position.set(6, 5, -6); scene.add(rim);
+
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(40, 20), new THREE.MeshStandardMaterial({ color: 0x1e2e26, roughness: 0.92 }));
+  ground.rotation.x = -Math.PI / 2; scene.add(ground);
+
+  var TY = 0.94;
+  var desk = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.08, 1.0), new THREE.MeshStandardMaterial({ color: 0x334155, roughness: 0.6 }));
+  desk.position.set(3.2, 0.9, 0); scene.add(desk);
+  [[-1.2, -0.42], [1.2, -0.42], [-1.2, 0.42], [1.2, 0.42]].forEach(function (p) {
+    var l = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.9, 0.08), desk.material);
+    l.position.set(3.2 + p[0], 0.45, p[1]); scene.add(l);
+  });
+
+  var solarArray = K.createSolarArray(); solarArray.position.set(-3.2, 0, 0); scene.add(solarArray);
+  var inverter = K.createInverterCabinet(); inverter.position.set(-1.1, 0, 0); scene.add(inverter);
+  var batteryRack = K.createBatteryRack(); batteryRack.position.set(0.0, 0, 0); scene.add(batteryRack);
+  var generator = K.createDieselGenerator(); generator.position.set(1.3, 0, 0); scene.add(generator);
+  var terminal = K.createScadaTerminal(); terminal.position.set(2.65, TY, 0.05); scene.add(terminal);
+  var smartMeter = K.createSmartMeter(); smartMeter.position.set(3.65, TY, 0.05); scene.add(smartMeter);
+  var fridge = K.createClinicFridge(); fridge.position.set(5.2, 0, 0); scene.add(fridge);
+
+  var all = [solarArray, inverter, batteryRack, generator, terminal, smartMeter, fridge];
+  var hl = K.makeHighlighter(scene);
+
+  var VIEWS = {
+    overview: { t: [0.8, 0.85, 0], d: 6.8, yaw: 0.2, pitch: 0.22 },
+    solar: { t: [-3.2, 0.85, 0], d: 2.8, yaw: 0.35, pitch: 0.22 },
+    inverter: { t: [-1.1, 0.88, 0], d: 1.85, yaw: 0.2, pitch: 0.15 },
+    batteryRack: { t: [0.0, 0.85, 0], d: 1.85, yaw: 0.18, pitch: 0.16 },
+    generator: { t: [1.3, 0.58, 0], d: 2.1, yaw: 0.35, pitch: 0.22 },
+    terminal: { t: [2.65, 1.12, 0.05], d: 0.95, yaw: 0.05, pitch: 0.28 },
+    smartMeter: { t: [3.65, 1.24, 0.05], d: 1.15, yaw: 0.0, pitch: 0.18 },
+    fridge: { t: [5.2, 0.85, 0], d: 1.9, yaw: -0.22, pitch: 0.15 }
+  };
+
+  var view = { target: new THREE.Vector3(0.8, 0.85, 0), dist: 6.8, yaw: 0.2, pitch: 0.22 }, goal = null;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(1.85, 1.05 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(
+      v.target.x + Math.sin(v.yaw) * Math.cos(v.pitch) * d,
+      v.target.y + Math.sin(v.pitch) * d,
+      v.target.z + Math.cos(v.yaw) * Math.cos(v.pitch) * d
+    );
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = VIEWS[name]; if (!v) return;
+    goal = { target: new THREE.Vector3().fromArray(v.t), dist: v.d, yaw: v.yaw, pitch: v.pitch };
+    if (instant) { view = goal; goal = null; applyView(view); controls.update(); }
+  }
+  function resize() {
+    var w = host.clientWidth, h = host.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view);
+  }
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* ---------------- StoryStage Set 1 + Set 2 ---------------- */
+  var story = null, station = null, activeFault = "normal", powerState = true;
+  function ensureStory() {
+    if (story) return story;
+    var root = document.createElement("div"); root.id = "story"; root.className = "stage-canvas";
+    root.innerHTML = '<div class="stage-canvas"><canvas id="sc"></canvas><div class="story-bubble"></div></div>';
+    host.appendChild(root);
+    story = StoryStage.create({
+      root: root, canvas: document.getElementById("sc"), bubble: null, beats: [],
+      setup: function (api) {
+        station = K.dressStation(api, { fault: activeFault });
+        var tari = StoryStage.person({ skin: "#4a2e1f", outfit: "#0284c7", pants: "#1c2433", hair: "short" });
+        tari.position.fromArray(station.spots.tari); api.lab.add(tari);
+        var babatunde = StoryStage.person({ skin: "#3d2618", outfit: "#d97706", pants: "#1c2433", hair: "short" });
+        babatunde.position.fromArray(station.spots.babatunde); api.lab.add(babatunde);
+      }
+    });
+    return story;
+  }
+
+  var STORY_SHOTS = {
+    set1Courtyard: function () { return station.shots.courtyardWide; },
+    set1Meter: function () { return station.shots.smartMeter; },
+    set2Control: function () { return station.shots.controlWide; },
+    set2Terminal: function () { return station.shots.terminal; },
+    set2Fridge: function () { return station.shots.fridge; }
+  };
+
+  function setViewMode(m) {
+    var isStory = /^set/.test(m);
+    cv.style.visibility = isStory ? "hidden" : "visible";
+    if (document.getElementById("story")) document.getElementById("story").style.visibility = isStory ? "visible" : "hidden";
+    if (isStory) {
+      var s = ensureStory(); if (!s) return;
+      var sh = STORY_SHOTS[m](); s.shot(sh[0], sh[1], true);
+      window.dispatchEvent(new Event("resize"));
+    } else {
+      resize(); gotoView(m, true);
+    }
+    document.querySelectorAll("#ui button[data-m]").forEach(function (b) { b.classList.toggle("on", b.dataset.m === m); });
+  }
+
+  function applyFault(f) {
+    activeFault = f;
+    var st = K.model.stationState(f);
+    powerState = st.powerOn;
+    inverter.setState(st);
+    batteryRack.setState(st);
+    generator.setState(st);
+    fridge.setState(st);
+    smartMeter.setState(st);
+    terminal.setState(st);
+    solarArray.setState({ solarKw: st.solarKw });
+    if (station) station.setFault(f);
+    document.querySelectorAll("#faults button[data-f]").forEach(function (b) { b.classList.toggle("on", b.dataset.f === f); });
+  }
+
+  var ui = document.getElementById("ui"), faultsBar = document.getElementById("faults");
+  function btn(parent, label, fn, cls, attr, val) {
+    var b = document.createElement("button"); b.textContent = label;
+    if (cls) b.className = cls;
+    if (attr) b.setAttribute(attr, val);
+    b.onclick = function () { fn(b); };
+    parent.appendChild(b); return b;
+  }
+
+  [["All Props", "overview"], ["Solar", "solar"], ["Inverter", "inverter"], ["Battery Rack", "batteryRack"],
+   ["Generator", "generator"], ["Terminal", "terminal"], ["Smart Meter", "smartMeter"], ["Fridge", "fridge"],
+   ["Set 1 Courtyard", "set1Courtyard"], ["Set 1 Meter", "set1Meter"], ["Set 2 Control", "set2Control"],
+   ["Set 2 Terminal", "set2Terminal"], ["Set 2 Fridge", "set2Fridge"]].forEach(function (v) {
+    btn(ui, v[0], function () { setViewMode(v[1]); }, "alt", "data-m", v[1]);
+  });
+
+  [["Normal", "normal"], ["L01 TypeError", "typeerror"], ["L02 Logic", "logic"], ["L03 Loop", "loop"],
+   ["L04 IndexError", "indexerror"], ["L05 Scope", "scope"], ["L06 Recovery", "recovery"]].forEach(function (f) {
+    btn(faultsBar, f[0], function () { applyFault(f[1]); }, "fault", "data-f", f[1]);
+  });
+
+  btn(faultsBar, "Toggle Power", function (b) {
+    powerState = !powerState;
+    var st = K.model.stationState(activeFault, powerState);
+    inverter.setState(st);
+    solarArray.setState({ solarKw: st.solarKw });
+    if (station) station.setPower(powerState);
+    b.classList.toggle("on", powerState);
+  }, "alt");
+
+  var line = document.getElementById("line"), last = "";
+  function paintReadout() {
+    var inv = inverter.reading(), br = batteryRack.reading(), fr = fridge.reading(), sm = smartMeter.reading();
+    var s = "[" + inv.code + "] " + inv.title + " | " + inv.line + "\n" +
+      "Solar: " + inv.solarKw.toFixed(1) + " kW | Battery SOC: " + br.batteryPct + "% (Cell idx: " + br.cellIndex + ", Alarm: " + br.indexAlarm + ") | CPU: " + inv.cpuPct + "% (" + inv.fanRpm + " RPM)\n" +
+      "Fridge: +" + fr.tempC.toFixed(1) + " C | Meter 101: N" + sm.bill101.toFixed(2) + " (VAT " + (sm.vatRate * 100).toFixed(1) + "%) | Reg: " + inv.hexCode + " [" + inv.bits.join("") + "]";
+    if (s !== last) { last = s; line.textContent = s; }
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
+    all.forEach(function (o) { o.update(dt, t); });
+    if (cv.style.visibility !== "hidden") {
+      if (goal) {
+        var k = Math.min(1, dt * 5);
+        view.target.lerp(goal.target, k); view.dist += (goal.dist - view.dist) * k;
+        view.yaw += (goal.yaw - view.yaw) * k; view.pitch += (goal.pitch - view.pitch) * k;
+        applyView(view); if (view.target.distanceTo(goal.target) < 0.003) goal = null;
+      }
+      controls.update(); renderer.render(scene, camera);
+    }
+    paintReadout();
+  })();
+
+  setViewMode("overview");
+  applyFault("normal");
+  window.__kit = K;
+})();
+</script>
+</body></html>

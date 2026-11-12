@@ -1,155 +1,134 @@
-/* Lesson 01 · 3D story beats: the slow school clock at Yaba Market & UNILAG Metrology Lab */
+/* Lesson 02 · 3D story: two extra crates on the okada (Set 1, Ridge Road) → Mrs Okafor's loaded spring (Set 2, lab).
+   Cast (05-build-plan.md): dayo = cust1, okafor = amaka, zainab + tunde = new StoryStage people.
+   Props come from RidgeRoadProps (dressRoad / dressLab); without it the stock sets stay and nothing throws. */
 (function () {
   "use strict";
   if (!window.StoryStage || typeof THREE === "undefined") return;
 
-  var WIDE = [[0, 2.6, 7.2], [0, 1.3, 0]];
+  var road = null, lab = null, zainab = null, tunde = null;
+  var loadTimer = null;
+  var WIDE1 = [[3.5, 1.8, 5.5], [0, 0.7, 0]];
+  var WIDE2 = [[40.3, 2.2, 6.0], [40.3, 1.2, -1.2]];
 
-  function buildClockProp(labelText, rodLen, tagBg) {
-    var g = new THREE.Group();
-    var wood = StoryStage.std("#4a2c18", 0.65);
-    var brass = new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.25, metalness: 0.85 });
-    var faceMat = StoryStage.std("#fffaf2", 0.4);
-
-    // Tall wooden regulator case on the table
-    var back = new THREE.Mesh(new THREE.BoxGeometry(0.36, 0.82, 0.06), wood);
-    back.position.set(0, 0.42, -0.05);
-    g.add(back);
-    var topCap = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.06, 0.16), wood);
-    topCap.position.set(0, 0.84, 0);
-    g.add(topCap);
-    var base = new THREE.Mesh(new THREE.BoxGeometry(0.40, 0.05, 0.18), wood);
-    base.position.set(0, 0.025, 0);
-    g.add(base);
-
-    // Clock dial
-    var dial = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.02, 24), faceMat);
-    dial.rotation.x = Math.PI / 2;
-    dial.position.set(0, 0.68, 0.02);
-    g.add(dial);
-
-    // Swinging pendulum pivot
-    var pivot = new THREE.Group();
-    pivot.position.set(0, 0.54, 0.03);
-    var rod = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, rodLen, 10), brass);
-    rod.position.y = -rodLen / 2;
-    pivot.add(rod);
-    var bob = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, 0.025, 24), brass);
-    bob.rotation.x = Math.PI / 2;
-    bob.position.y = -rodLen;
-    pivot.add(bob);
-    g.add(pivot);
-    g.userData.pivot = pivot;
-
-    // Label sprite above clock
-    var tag = StoryStage.sign(labelText, tagBg || "rgba(13,156,126,0.95)", "#fff", 0.16);
-    tag.position.set(0, 1.02, 0.05);
-    g.add(tag);
-    g.userData.tag = tag;
-    return g;
+  function shotOf(set, name, fallback) { return set && set.shots && set.shots[name] ? set.shots[name] : fallback; }
+  function place(p, parent, spot, fx, fz) {
+    if (!p || !parent) return;
+    parent.add(p);
+    if (spot) p.position.set(spot[0], 0, spot[2]);
+    p.userData.target = null; p.userData.state = "idle";
+    if (fx != null) p.userData.faceTarget = new THREE.Vector3(fx, 0, fz);
   }
-
-  function reset(w) {
-    var p = w.people;
-    if (p.ngozi.parent !== w.props.market) { p.ngozi.parent.remove(p.ngozi); w.props.market.add(p.ngozi); }
-    p.ngozi.userData.target = null; p.ngozi.userData.faceTarget = null; p.ngozi.hold(null);
-    p.ngozi.position.set(0, 0, -1.0); p.ngozi.rotation.y = 0;
+  function toRoad(w) {
+    var M = w.props.market, S = road ? road.spots : null;
+    place(zainab, M, S ? S.zainab : [1.6, 0, 1.2], 0, 0.9);
+    place(tunde, M, S ? S.tunde : [2.4, 0, 1.0], 0, 0.9);
   }
+  function toLab(w) {
+    var L = w.props.lab, S = lab ? lab.spots : null;
+    place(zainab, L, S ? S.zainab : [0.35, 0, -1.15], -0.75, -2.35);
+    place(tunde, L, S ? S.tunde : [1.25, 0, -1.0], -0.75, -2.35);
+  }
+  // framing around the parked okada (the props' "carrier" close-up is too tight on a portrait phone)
+  function okShot(far) {
+    var o = road && road.okada ? road.okada.position : { x: 0.1, z: 0.85 };
+    return far ? [[o.x + 3.4, 1.9, o.z + 4.4], [o.x + 0.6, 0.85, o.z - 0.4]] : [[o.x + 2.2, 1.6, o.z + 3.6], [o.x - 0.35, 0.75, o.z]];
+  }
+  function stopLoading() { if (loadTimer) { clearInterval(loadTimer); loadTimer = null; } }
 
   var beats = [
     {
-      caption: "Yaba Market, Lagos. Mama Ngozi's school-clock & instrument stall.",
-      shot: WIDE, instant: true, hold: 5,
-      who: "cust1",
-      text: "Mama! This regulator wall clock we bought for our school assembly hall loses eight minutes every single hour!",
-      run: function (w) { reset(w); w.people.cust1.set("point"); }
-    },
-    {
-      caption: "Mrs Adeyemi blames the weight of the brass bob.",
-      shot: [[-0.4, 2.0, 5.0], [0.2, 1.3, 0.6]], hold: 5,
-      who: "cust2",
-      text: "I told them! The brass bob is too light. Tie a heavier lead weight on it so gravity pulls it faster!",
-      run: function (w) { reset(w); w.people.cust2.set("talk"); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "Mama Ngozi wonders if the starting angle is the culprit.",
-      shot: [[0.3, 1.9, 2.5], [0, 1.6, -1]], hold: 4.8,
-      who: "ngozi",
-      text: "Ah-ah! Or maybe you didn't pull the pendulum wide enough when starting it? Both clocks came from the same workshop!",
-      run: function (w) { reset(w); w.people.ngozi.set("sad"); }
-    },
-    {
-      caption: "Clock A (accurate, L = 0.99 m) and Clock B (slow, L = 1.15 m) side by side on the stall.",
-      shot: [[0.65, 1.65, 1.55], [0.65, 1.35, 0.05]], hold: 5.5,
-      who: "ngozi",
-      text: "Look closely at Clock A and Clock B. Same brass bob, yet Clock B swings noticeably slower!",
-      run: function (w) { reset(w); w.people.ngozi.set("point"); }
-    },
-    {
-      caption: "Three suspects: bob mass, starting angle, or pendulum length?",
-      shot: [[1.4, 1.75, 2.2], [0.5, 1.35, 0.0]], hold: 5,
-      who: "ngozi",
-      text: "Is it the weight of the bob, the starting angle, or the position of the nut on the rod? How can we be sure?",
-      run: function (w) { reset(w); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "Across town, at the UNILAG Metrology & Physics Laboratory…",
-      shot: [[40.2, 2.3, 3.4], [40.3, 1.4, -1.8]], hold: 5.5,
-      who: "amaka",
-      text: "Don't guess! Put a pendulum on the retort stand, time twenty swings, and let the data speak!",
+      caption: "Ridge Road, Ogbomoso. Dayo straps two extra crates of eggs onto the okada's carrier.",
+      shot: WIDE1, instant: true, hold: 6,
+      who: "dayo",
+      text: "Hajia wants more eggs today. Heavier load, steadier ride — that's what my oga used to say.",
       run: function (w) {
-        var a = w.people.amaka;
-        a.userData.faceTarget = new THREE.Vector3(0.6, 0, -2.3);
-        a.set("point");
+        stopLoading(); toRoad(w);
+        if (road) { road.park(); road.setLoad(250); w.shot.apply(null, okShot(false)); }
+        w.people.dayo.set("talk");
+      }
+    },
+    {
+      caption: "Tunde nods. He is sure a heavy okada cannot bounce.",
+      shot: WIDE1, hold: 5,
+      who: "tunde",
+      text: "Exactly. Heavy things don't bounce.",
+      run: function (w) {
+        toRoad(w);
+        if (road) w.shot.apply(null, okShot(true));
+        if (tunde) tunde.set("point");
+      }
+    },
+    {
+      caption: "Zainab presses the loaded carrier down, lets go and times it. The bounce looks lazier.",
+      shot: WIDE1, hold: 6,
+      who: "zainab",
+      text: "It's still bouncing — just slower.",
+      run: function (w) {
+        toRoad(w);
+        if (road) { w.shot.apply(null, okShot(false)); road.press(0.04); }
+        if (zainab) zainab.set("think");
+      }
+    },
+    {
+      caption: "School physics lab. Mrs Okafor hangs 50 g slotted masses on a spiral spring, one at a time.",
+      shot: WIDE2, instant: true, hold: 7,
+      who: "okafor",
+      text: "Every extra 50 grams pulls it down by the same amount. That even pull-back is the secret.",
+      run: function (w) {
+        toLab(w);
+        if (lab) {
+          w.shot.apply(null, shotOf(lab, "spring", WIDE2));
+          var n = 1; lab.spring.bounce(false); lab.spring.setLoad(n);
+          stopLoading();
+          loadTimer = setInterval(function () { n++; lab.spring.setLoad(n); if (n >= 5) stopLoading(); }, 1100);
+        }
+        w.people.okafor.set("point");
+      }
+    },
+    {
+      caption: "She pulls the hanger down and lets go. The spring pulls it back towards the middle, again and again.",
+      shot: WIDE2, hold: 7,
+      who: "okafor",
+      text: "The further you pull, the harder the spring pulls back — always towards the middle. That is what makes the motion simple harmonic.",
+      run: function (w) {
+        toLab(w); stopLoading();
+        if (lab) { w.shot.apply(null, shotOf(lab, "spring", WIDE2)); lab.spring.setLoad(4); lab.spring.bounce(true, 0.03); }
+        w.people.okafor.set("talk");
+        if (zainab) zainab.set("think");
       }
     }
   ];
 
-  window.StoryStage.wire("story-stage", "story", beats, {
+  StoryStage.wire("story-stage", "story", beats, {
     names: {
-      ngozi: "Mama Ngozi",
-      cust1: "Kunle (School Prefect)",
-      cust2: "Mrs Adeyemi",
-      amaka: "Dr Amaka (Physics Lab)"
+      ramatu: "Hajia Ramatu", ngozi: "Hajia Ramatu", dayo: "Dayo", cust1: "Dayo",
+      zainab: "Zainab", tunde: "Tunde", sule: "Mallam Sule", okafor: "Mrs Okafor", amaka: "Mrs Okafor"
     },
     setup: function (api) {
-      // Customize market and lab signs for Physics
-      var mSign = StoryStage.sign("YABA CLOCK & INSTRUMENT STALL · LAGOS", "rgba(13,156,126,0.95)", "#fff", 0.48);
-      mSign.position.copy(api.props.mSign.position);
-      api.props.market.remove(api.props.mSign);
-      api.props.market.add(mSign);
-      api.props.mSign = mSign;
+      api.people.ramatu = api.people.ngozi;
+      api.people.dayo = api.people.cust1;
+      api.people.okafor = api.people.amaka;
+      if (api.people.cust2) api.people.cust2.visible = false;
 
-      var lSign = StoryStage.sign("UNILAG METROLOGY & PHYSICS LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
-      lSign.position.copy(api.props.lSign.position);
-      api.props.lab.remove(api.props.lSign);
-      api.props.lab.add(lSign);
-      api.props.lSign = lSign;
+      zainab = StoryStage.person({ skin: "#6b4430", outfit: "#2f7d4a", wrapper: true, hair: "bun" });
+      tunde = StoryStage.person({ skin: "#7a4a2e", outfit: "#f2f2ee", pants: "#a08a5c", hair: "short" });
+      api.props.market.add(zainab); api.props.market.add(tunde);
+      api.people.zainab = zainab; api.people.tunde = tunde;
 
-      // Replace bottles A & B with two animated 3D Regulator Clocks A & B
-      if (api.props.bottleA) api.props.bottleA.visible = false;
-      if (api.props.bottleB) api.props.bottleB.visible = false;
-      if (api.props.can) api.props.can.visible = false;
-
-      var clockA = buildClockProp("Clock A · 2.00 s", 0.34, "rgba(13,156,126,0.95)");
-      clockA.position.set(0.38, 0.94, 0.08);
-      api.props.market.add(clockA);
-      api.props.clockA = clockA;
-      api.props.bottleA = clockA;
-
-      var clockB = buildClockProp("Clock B · Slow!", 0.42, "rgba(200,38,74,0.95)");
-      clockB.position.set(0.92, 0.94, 0.08);
-      api.props.market.add(clockB);
-      api.props.clockB = clockB;
-      api.props.bottleB = clockB;
+      if (window.RidgeRoadProps) {
+        try {
+          road = RidgeRoadProps.dressRoad(api, { tape: false });
+          lab = RidgeRoadProps.dressLab(api, {});
+          var ox = road.okada.position; api.people.dayo.position.set(ox.x - 1.35, 0, ox.z - 0.75);
+          api.people.ramatu.position.fromArray(road.spots.ramatu);
+          var ok = api.people.okafor, s = lab.spots.okafor; ok.position.set(s[0], 0, s[2]);
+        } catch (e) { road = null; lab = null; }
+      }
+      toRoad(api);
     },
     onTick: function (api, dt, t) {
-      if (api.props.clockA && api.props.clockA.userData.pivot) {
-        api.props.clockA.userData.pivot.rotation.z = 0.24 * Math.sin(t * Math.PI);
-      }
-      if (api.props.clockB && api.props.clockB.userData.pivot) {
-        api.props.clockB.userData.pivot.rotation.z = 0.24 * Math.sin(t * (Math.PI / 1.08));
-      }
+      if (road && road.update) road.update(dt, t);
+      if (lab && lab.update) lab.update(dt, t);
     }
   });
 })();

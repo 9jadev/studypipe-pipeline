@@ -3,44 +3,90 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 2 · EMF, Terminal P.D., Lost Volts &amp; Internal Resistance · StudyPipe</title>
-  <meta name="description" content="StudyPipe Physics (SS2): Electromotive Force (E), Terminal Potential Difference (V = E − Ir), Lost Volts (v = Ir), Internal Resistance (r), and the Two-Readings Method.">
+  <title>Lesson 2 · EMF, Terminal P.D. &amp; Internal Resistance · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): electromotive force, terminal p.d., lost volts and internal resistance — find the missing 3.6 V with E = I(R + r) and a V–I graph.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='20' width='44' height='24' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='14' y='18' width='36' height='28' rx='5' fill='none' stroke='url(%23g)' stroke-width='4'/%3E%3Crect x='50' y='26' width='7' height='12' rx='2' fill='url(%23g)'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
+    /* ---- hero schematic ---- */
+    .ir-hero-art {
+      position: relative; height: 280px; border-radius: var(--radius-lg, 18px);
+      background: radial-gradient(circle at 50% 28%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
                   linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    .ir-hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* ---- compact circuit bench (phone first) ---- */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; margin: 0; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(330px, 92vw, 430px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 14px; white-space: nowrap; display: block; line-height: 1.2; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+
+    .ir-ctl { padding: 8px 12px; gap: 8px; }
+    #bench-key { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; }
+    #bench-key button { flex: 1; }
+    .ir-loads { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; width: 100%; }
+    .ir-loads .vt-btn { padding: 8px 2px; font-size: 12.5px; min-height: 42px; }
+    .ir-act { display: grid; grid-template-columns: 2fr 1fr; gap: 6px; width: 100%; }
+    .ir-ctl .stage-hint { margin: 0; width: 100%; font-size: 12.5px; }
+
+    /* ---- load explorer (#pos-explorer) ---- */
+    .pos-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 48px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 92px; }
+    .pos-info b { color: var(--crimson); }
+    .pos-bars { display: grid; gap: 7px; margin-top: 12px; }
+    .pos-bars .pb { display: grid; grid-template-columns: 74px 1fr 66px; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); }
+    .pos-bars .pb i { display: block; height: 14px; border-radius: 999px; background: rgba(var(--paper-ink-rgb), .08); position: relative; overflow: hidden; }
+    .pos-bars .pb i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w, 0%); border-radius: 999px; background: var(--c, var(--crimson)); transition: width .3s ease; }
+
+    /* ---- bridge ---- */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+
+    @media (min-width: 641px) {
+      #bench-stage .stage-canvas { height: clamp(340px, 46vw, 470px); }
+      #method-cards div.method { padding: 10px 14px; }
+      #bench-key, .ir-loads, .ir-act { width: auto; }
+      .ir-ctl { justify-content: space-between; }
     }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
-    /* keep lower-case r (internal) distinct from capital R (load) in the live labels */
-    #vi-stats .gc-stat span, #bench-readout span { text-transform: none; letter-spacing: .04em; }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
   <link rel="stylesheet" href="../../assets/css/theme.css">
 </head>
 <body class="lesson-page" data-lesson="l02">
@@ -50,7 +96,7 @@
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
       <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 2 of 5 · <b>EMF, Lost Volts &amp; Internal Resistance</b></span>
+      <span class="l-crumb">Lesson 2 of 5 · <b>EMF &amp; Internal Resistance</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -59,15 +105,15 @@
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Physics · Lesson 2 of 5 · 50 minutes</span>
-        <h1 class="display reveal" data-hook>EMF, Terminal P.D., Lost Volts &amp; <em>Internal Resistance</em></h1>
-        <p class="question reveal">Why does Chinedu’s 12.0 V battery read 12.0 V when idle, yet plunge to 8.4 V the instant the starter motor is switched on?</p>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 2 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>EMF, Terminal P.D. &amp; <em>Internal Resistance</em></h1>
+        <p class="question reveal">Emeka's resting battery reads 12.0 V, but it slumps to 8.4 V the instant the starter cranks. Where do the missing 3.6 volts go?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Define <strong>electromotive force (E)</strong>, <strong>terminal potential difference (V)</strong>, <strong>lost volts (v = Ir)</strong>, and <strong>internal resistance (r)</strong>.</span></li>
-          <li><b>02</b><span>Apply the complete circuit equation <strong>E = I(R + r)</strong> and <strong>V = E − Ir</strong> to calculate current, terminal voltage, and lost volts.</span></li>
-          <li><b>03</b><span>Solve the exam-favourite <strong>“two readings, same cell”</strong> problem using <strong>I<sub>1</sub>(R<sub>1</sub> + r) = I<sub>2</sub>(R<sub>2</sub> + r)</strong>.</span></li>
-          <li><b>04</b><span>Determine <strong>E</strong> and <strong>r</strong> from the vertical intercept and negative gradient of a <strong>V-against-I graph</strong> (<code>V = −rI + E</code>).</span></li>
-          <li><b>05</b><span>Calculate the maximum <strong>short-circuit current (I<sub>max</sub> = E ÷ r)</strong> and explain what happens inside a cell’s electrolyte under load.</span></li>
+          <li><b>01</b><span>Define <strong>electromotive force (E)</strong> and <strong>internal resistance (r)</strong>.</span></li>
+          <li><b>02</b><span>Apply the full-circuit relation <strong>E = I(R + r)</strong> and terminal p.d. <strong>V = E − Ir</strong>.</span></li>
+          <li><b>03</b><span>Explain <strong>lost volts (Ir)</strong> and why a voltmeter reads the EMF only on open circuit.</span></li>
+          <li><b>04</b><span>Find <strong>E</strong> and <strong>r</strong> by the two-readings method.</span></li>
+          <li><b>05</b><span>Find <strong>E</strong> (intercept) and <strong>r</strong> (gradient) from a <strong>V–I graph</strong>.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -76,20 +122,27 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–45</b> Investigate</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
 
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <rect x="44" y="42" width="232" height="170" rx="14" fill="none" stroke="rgba(255,178,63,0.45)" stroke-width="2.2"/>
-          <rect x="86" y="24" width="148" height="36" rx="8" fill="#1e293b" stroke="#f43f5e" stroke-width="2"/>
-          <text x="160" y="46" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="11.5" text-anchor="middle">Cell: E = 12 V, r = 1.2 Ω</text>
-          <rect x="106" y="192" width="108" height="32" rx="6" fill="#0f172a" stroke="#3ee6c4" stroke-width="2"/>
-          <text x="160" y="212" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">Load R = 2.8 Ω</text>
-          <text x="160" y="128" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="13.5" text-anchor="middle">V = E − Ir = 8.4 V</text>
+      <div class="ir-hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="30" y="34" width="150" height="112" rx="10" fill="#0f172a" stroke="#3ee6c4" stroke-width="2.2"/>
+          <text x="105" y="26" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">the cell</text>
+          <rect x="52" y="60" width="106" height="20" rx="4" fill="rgba(62,230,196,.18)" stroke="#3ee6c4" stroke-width="1.6"/>
+          <text x="105" y="74" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">E = 12.0 V</text>
+          <rect x="52" y="104" width="68" height="20" rx="4" fill="rgba(255,75,58,.18)" stroke="#ff4b3a" stroke-width="1.6"/>
+          <text x="86" y="118" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Ir = 3.6 V</text>
+          <text x="210" y="96" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="20" text-anchor="middle">V = 8.4 V</text>
+          <text x="210" y="124" fill="#a5b0c9" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">V = E − Ir</text>
+          <path d="M180 90h60" fill="none" stroke="#3ee6c4" stroke-width="2.4"/>
+          <path d="M240 90l-8-5v10z" fill="#3ee6c4"/>
         </svg>
       </div>
     </div>
@@ -101,10 +154,10 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Concept sort</a></li>
-        <li><a href="#practical">3D practical</a></li>
-        <li><a href="#concepts">E = I(R + r)</a></li>
-        <li><a href="#neutralise">Electrolyte zoom</a></li>
+        <li><a href="#sort">EMF or terminal p.d.?</a></li>
+        <li><a href="#practical">Internal-r bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Inside the cell</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -116,29 +169,28 @@
     </nav>
 
     <main class="l-main" id="main">
-
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
-        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>retrieve Lesson 1 from memory</em></h2>
-        <p class="intro">Four spaced-retrieval flashcards from Lesson 1 on Ohm’s law, wire diameter scaling, charge calculation, and WAEC key precautions.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lesson 1</em></h2>
+        <p class="intro">Four quick cards on Ohm's law, the slope of a V–I graph and meter placement. Answer each in your head <strong>before</strong> you reveal it.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
         </div>
       </section>
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>Where did the missing <em>3.6 volts</em> go?</h2>
-        <p class="intro">At Chinedu’s Auto-Electric Workshop in Aba, Kelechi watches a 12.0 V battery drop to 8.4 V the moment a 2.8 Ω starter load draws 3.0 A.</p>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The missing 3.6 volts at <em>Nkechi's workshop</em></h2>
+        <p class="intro">At the auto-electric shop on Ngwa Road, Chinedu clips a voltmeter across Emeka's keke battery. It reads a normal-looking 12.0 V. Then he cranks the starter…</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Kelechi and Oga Chinedu investigating the 12.0 V to 8.4 V battery drop in Aba, then Engr. Nkechi in the Physics Lab."></canvas>
-            <div class="stage-label"><i></i>3D story · Aba Battery Drop → V–I Graph Lab</div>
+            <canvas aria-label="Animated 3D story: Chinedu clips a voltmeter across a keke battery reading 12 volts, then cranks the starter and the reading drops to 8.4 volts while the lamp dims; Tobe says the battery is dead; Engr. Nkechi explains internal resistance."></canvas>
+            <div class="stage-label"><i></i>3D story · Nkechi Auto-Electric, Ngwa Rd, Aba</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -148,65 +200,64 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Open vs Closed Switch:</strong> Kelechi points at the voltmeter: <em>“Oga Chinedu! With the switch open, this battery reads 12.0 V. Why does it plunge to 8.4 V when I crank the 2.8 Ω starter?”</em></p>
-            <p><strong>Scene 2 · Papa Nnamdi's doubt:</strong> <em>“Where could 3.6 V hide? The voltmeter must be faulty!”</em></p>
-            <p><strong>Scene 3 · Warm battery casing:</strong> Chinedu touches the battery: <em>“Feel the casing! The acid and lead plates inside have internal resistance r = 1.2 Ω.”</em></p>
-            <p><strong>Scene 4 · Lost volts Ir:</strong> When <code>I = 3.0 A</code> flows through <code>r = 1.2 Ω</code>, <code>v = Ir = 3.6 V</code> is lost inside the battery itself, leaving <code>V = 12.0 − 3.6 = 8.4 V</code> at the external terminals.</p>
-            <p><strong>Scene 5 · Two readings method:</strong> By testing two known resistors <code>R₁</code> and <code>R₂</code>, we can find <code>r</code> and <code>E</code> without ever opening the battery.</p>
-            <p><strong>Scene 6 · Physics Lab:</strong> Engr. Nkechi wires a decade resistance box to plot <code>V</code> against <code>I</code> and reveal the intercept <code>E</code> and slope <code>−r</code>.</p>
+            <p><strong>Scene 1 · Chinedu:</strong> <em>“12.0 V, boss. It looks normal.”</em> He clips the voltmeter straight across the resting battery.</p>
+            <p><strong>Scene 2 · Chinedu:</strong> He throws the starter switch; the reading drops to 8.4 V and the lamp dims. <em>“It fell! Where did 3.6 volts go?”</em></p>
+            <p><strong>Scene 3 · Tobe:</strong> <em>“The battery is weak, it has lost its voltage. Dump it.”</em></p>
+            <p><strong>Scene 4 · Nkechi:</strong> <em>“The EMF has not fallen. Those volts are spent inside the battery when a big current flows. We'll measure how much resistance is hiding in there.”</em></p>
+            <p><strong>Scene 5 · Nkechi:</strong> She sets up the cell, key, rheostat and both meters. <em>“Open key: you see the EMF. Closed key: you see what's left after the inside takes its cut.”</em></p>
           </div>
         </details>
       </section>
 
       <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">Why does terminal voltage drop as you draw more current from a battery? Pin your prediction before testing the 3D bench.</p>
+        <p class="intro">If the battery still "has" 12.0 V, why does the meter show only 8.4 V when the starter runs? Pin your idea before we measure it.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that when current I increases, terminal voltage V… because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I think the missing volts went…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Where do the lost volts Ir go?</button>
-            <button type="button">How can two resistors find r and E?</button>
-            <button type="button">Why does the V–I graph slope downwards?</button>
-            <button type="button">What happens if a battery is short-circuited?</button>
+            <button type="button">The wires steal it? (Chinedu)</button>
+            <button type="button">The battery is dying (Tobe)</button>
+            <button type="button">Something inside the battery resists (Amara)</button>
+            <button type="button">The meter is faulty (Ngozi)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 3. SORT GAME ================= -->
+      <!-- ================= 3. SORT ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
-        <h2>Classify the quantities: <em>EMF (E), Terminal P.D. (V), or Lost Volts (Ir)?</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Electromotive Force (E)</strong>, <strong>Terminal Potential Difference (V = IR)</strong>, and <strong>Lost Volts &amp; Internal Resistance (v = Ir)</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · sort game</span>
+        <h2>EMF, terminal p.d. <em>or lost volts?</em></h2>
+        <p class="intro">Sort all 9 cards into the three bins. Drag a card, or tap a card and then tap a bin.</p>
 
-        <div class="sort" id="kitchen-sort">
+        <div class="sort" id="rate-sort">
           <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Electromotive Force E bin">
+            <div class="bin" data-bin="emf" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="EMF bin">
               <h4><i></i>EMF (E)</h4>
-              <small>total energy/C · open circuit (I = 0)</small>
+              <small>energy per coulomb, open-circuit</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Terminal P.D. V bin">
-              <h4><i></i>Terminal P.D. (V = IR)</h4>
-              <small>external load voltage (E − Ir)</small>
+            <div class="bin" data-bin="terminal-pd" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Terminal p.d. bin">
+              <h4><i></i>Terminal p.d. (V)</h4>
+              <small>what's left for the outside, V = IR</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Lost Volts and Internal r bin">
-              <h4><i></i>Lost Volts &amp; Internal r</h4>
-              <small>internal drop v = Ir &amp; slope −r</small>
+            <div class="bin" data-bin="lost-volts" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Lost volts bin">
+              <h4><i></i>Lost volts (Ir)</h4>
+              <small>spent inside the cell</small>
               <div class="drop"></div>
             </div>
           </div>
@@ -223,48 +274,50 @@
 
       <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
-        <h2>3D Internal Resistance Bench: <em>Measuring V, I &amp; Lost Volts</em></h2>
-        <p class="intro">Test five external resistance settings <strong>R</strong> from <code>10.8 Ω</code> down to <code>2.8 Ω</code> on Chinedu’s <code>12.0 V</code> battery (<code>r = 1.20 Ω</code>). Observe how terminal voltage <strong>V</strong> drops as current <strong>I</strong> increases.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The internal-resistance bench: <em>catch the lost volts</em></h2>
+        <p class="intro">On Nkechi's bench a cell (<strong>E = 6.0 V</strong>, <strong>r = 1.5 Ω</strong>) drives a rheostat load. Open the key to see the EMF; close it, pick a load and record the paired <strong>I</strong> and terminal <strong>V</strong>.</p>
 
         <div class="callout warn" id="safety-box">
-          <p><strong>Key Experimental Insight:</strong> Notice that for every single load setting, <strong>Terminal P.D. (V) + Lost Volts (v = Ir) = 12.00 V (EMF E)</strong>. When you open the plug key (<code>I = 0</code>), lost volts drop to zero and the voltmeter reads the full <code>12.00 V</code>!</p>
+          <p><strong>Examiner rules:</strong> the <strong>ammeter goes in series</strong> and the <strong>voltmeter in parallel</strong> across the cell. <strong>Open the key between readings</strong> so the cell does not warm and change r, and read the open-circuit EMF with a high-resistance voltmeter.</p>
         </div>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Measure Open-Circuit E</h4><p>With the plug key open (<code>I = 0 A</code>), read the voltmeter across the cell to find <code>E = 12.00 V</code>.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Set Load R on Resistance Box</h4><p>Select a known resistance <code>R</code> (from <code>10.8 Ω</code> down to <code>2.8 Ω</code>) on the decade box.</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Close Key &amp; Record (I, V)</h4><p>Close the plug key, read current <code>I</code> and terminal voltage <code>V = IR</code>, then open the key immediately.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Plot V against I</h4><p>Plot <code>V</code> (vertical) against <code>I</code> (horizontal): vertical intercept is <code>E</code> and gradient is <code>−r</code>.</p></div>
+          <div class="method now" id="m1"><b>01</b><h4>Read the EMF</h4><p>Key open: the voltmeter shows E.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Close &amp; load</h4><p>Pick a load, record paired I and V.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Spread the current</h4><p>Repeat for five different loads.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Plot V against I</h4><p>Intercept is E; gradient magnitude is r.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Internal Resistance lab bench with 12.0 V cell (r = 1.2 Ω), brass plug key, decade resistance box R, series ammeter, and parallel voltmeter."></canvas>
-            <div class="stage-label"><i></i>3D Internal Resistance Lab · drag to rotate · tap trials A–E</div>
+            <canvas id="bench-canvas" aria-label="3D internal-resistance bench: an accumulator cell with a plug key, a sliding rheostat, a series ammeter and a voltmeter in parallel across the cell, joined by red and black leads."></canvas>
+            <div class="stage-label"><i></i>3D internal-resistance bench · drag to rotate</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the table and worked examples below.</p></div>
           </div>
           <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
-          <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Circuit state" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Key CLOSED (V = E − Ir)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Key OPEN (I = 0, V = E)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Two-Readings Check</button>
+          <div class="stage-bar ir-ctl">
+            <div class="seg" role="group" aria-label="Key" id="bench-key">
+              <button type="button" data-key="open" aria-pressed="true">Key open (read E)</button>
+              <button type="button" data-key="closed" aria-pressed="false">Key closed</button>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · 10.8 Ω</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · 6.8 Ω</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · 4.8 Ω</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · 3.6 Ω</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · 2.8 Ω</button>
+            <div class="ir-loads" role="group" aria-label="Load resistance" id="bench-loads">
+              <button class="vt-btn" type="button" data-r="10.5">10.5 Ω</button>
+              <button class="vt-btn" type="button" data-r="4.5">4.5 Ω</button>
+              <button class="vt-btn" type="button" data-r="2.5">2.5 Ω</button>
+              <button class="vt-btn" type="button" data-r="1.5">1.5 Ω</button>
+              <button class="vt-btn" type="button" data-r="0.9">0.9 Ω</button>
+            </div>
+            <div class="ir-act">
+              <button class="vt-btn zobo" type="button" id="bench-take">Take reading</button>
               <button class="vt-btn" type="button" id="bench-reset">Reset</button>
             </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 loads</span>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
+        <div class="graph-card" id="graph-card">
           <div class="gc-head">
             <div><span class="gc-kicker">Live graph · plots as you record</span><h4>Terminal p.d. V against current I</h4></div>
             <span class="gc-badge wait" id="vi-badge">0 points</span>
@@ -274,294 +327,363 @@
           <p class="gc-note" id="vi-note"></p>
         </div>
 
-        <h3>Record your V, I &amp; Lost Volts table</h3>
+        <h3>Record your readings</h3>
+        <p>Each reading you take fills a row. Do five loads, then the graph gives you E and r.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
             <thead>
-              <tr>
-                <th>Trial</th>
-                <th>External Load R (Ω)</th>
-                <th>Current I (A)</th>
-                <th>Terminal P.D. V (V)</th>
-                <th>Lost Volts v = Ir (V)</th>
-              </tr>
+              <tr><th>Reading</th><th>R / Ω</th><th>I / A</th><th>V / V</th><th>Lost volts E − V / V</th></tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
-        <div class="sort-bar">
-          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
-          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
-        </div>
+        <p class="sheet-note" id="rows-line">Readings recorded: 0 of 5</p>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected table &amp; V–I graph gradient calculation <small>open after recording yours</small></summary>
+          <summary>Expected results &amp; graph <small>open after you record yours</small></summary>
           <div class="reveal-body">
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>Load R (Ω)</th><th>Current I (A)</th><th>Terminal V (V)</th><th>Lost Volts v = Ir (V)</th></tr></thead>
+                <thead><tr><th>R / Ω</th><th>I / A</th><th>V / V</th><th>Lost volts / V</th></tr></thead>
                 <tbody>
-                  <tr><td>A</td><td>10.8</td><td>1.00</td><td>10.80</td><td>1.20</td></tr>
-                  <tr><td>B</td><td>6.8</td><td>1.50</td><td>10.20</td><td>1.80</td></tr>
-                  <tr><td>C</td><td>4.8</td><td>2.00</td><td>9.60</td><td>2.40</td></tr>
-                  <tr><td>D</td><td>3.6</td><td>2.50</td><td>9.00</td><td>3.00</td></tr>
-                  <tr><td>E</td><td>2.8</td><td>3.00</td><td>8.40</td><td>3.60</td></tr>
+                  <tr><td>open</td><td>0.00</td><td>6.00</td><td>0.00</td></tr>
+                  <tr><td>10.5</td><td>0.50</td><td>5.25</td><td>0.75</td></tr>
+                  <tr><td>4.5</td><td>1.00</td><td>4.50</td><td>1.50</td></tr>
+                  <tr><td>2.5</td><td>1.50</td><td>3.75</td><td>2.25</td></tr>
+                  <tr><td>1.5</td><td>2.00</td><td>3.00</td><td>3.00</td></tr>
+                  <tr><td>0.9</td><td>2.50</td><td>2.25</td><td>3.75</td></tr>
                 </tbody>
               </table>
             </div>
-            <div class="eq light">Gradient of V vs I = (8.40 − 10.80) ÷ (3.00 − 1.00) = −2.40 ÷ 2.00 = −1.20 Ω = −r ⇒ r = 1.20 Ω</div>
-            <div class="eq light">Vertical intercept at I = 0: E = 10.80 + 1.20(1.00) = 12.00 V</div>
+            <div class="eq light">Vertical intercept = E = 6.0 V &nbsp;·&nbsp; gradient = ΔV ÷ ΔI = (2.25 − 5.25) ÷ (2.50 − 0.50) = −3.0 ÷ 2.0 = −1.5, so r = 1.5 Ω</div>
           </div>
         </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l02-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why is the open-circuit reading the EMF?</li>
+            <li>Why does the terminal p.d. fall as the current rises?</li>
+            <li>What does the vertical intercept represent, and what does the gradient represent?</li>
+            <li>Why should the voltmeter resistance be high?</li>
+            <li>Why does a battery feel warm under heavy load?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>With the key open almost no current flows, so Ir is practically zero and the voltmeter shows V = E − Ir = E, the full energy per coulomb the cell supplies.</li>
+                <li>A bigger current means a bigger drop Ir across the internal resistance, so less is left for the terminals: V = E − Ir falls as I rises.</li>
+                <li>The vertical intercept (I = 0) is the EMF E; the magnitude of the gradient (−ΔV/ΔI) is the internal resistance r, from V = E − rI.</li>
+                <li>A high-resistance voltmeter draws almost no current on "open circuit", so the Ir it causes is negligible and the EMF reading is not pulled below E.</li>
+                <li>Energy is wasted as heat inside the cell at the rate I²r, so the heavier the current the warmer the battery gets.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
       </section>
 
-      <!-- ================= 4. CONCEPTS ================= -->
+      <!-- ================= 4. CONCEPTS (Make Sense) ================= -->
       <section class="l-sec" id="concepts">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
-        <h2>The Complete Circuit Law &amp; <em>Two-Readings Method</em></h2>
-        <p class="intro">Every battery or cell consists of a pure voltage source of electromotive force <strong>E</strong> in series with its own internal resistance <strong>r</strong>.</p>
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Where the <em>missing volts</em> go</h2>
+        <p class="intro">Now we connect the readings you took to the names and equations WAEC, NECO and JAMB expect.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>EMF, Terminal P.D. &amp; Internal Resistance</b><span class="lv-time">12 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: EMF, Terminal P.D. &amp; Internal Resistance" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
 
-        <h3 id="def-shm">1 · Complete Circuit Equation &amp; Lost Volts</h3>
-        <p>By conservation of energy, the total electrical energy per coulomb supplied by the cell (<strong>E</strong>) equals the useful potential difference across the external load (<strong>V = IR</strong>) plus the potential drop wasted inside the cell (<strong>v = Ir</strong>):</p>
-        <div class="eq" id="eq-shm" data-hook>E = V + v = IR + Ir = I(R + r) &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; I = E ÷ (R + r)</div>
-        <div class="eq" id="eq-omega">Terminal P.D.: &nbsp; V = E − Ir &nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp; Lost Volts: &nbsp; v = E − V = Ir</div>
-
-        <h3 id="def-terms">2 · The “Two Readings, Same Cell” Archetype</h3>
-        <p>In WAEC and JAMB exams, you are often told that a cell supplies current <strong>I<sub>1</sub></strong> when connected to resistor <strong>R<sub>1</sub></strong>, and current <strong>I<sub>2</sub></strong> when connected to resistor <strong>R<sub>2</sub></strong>. Because the cell’s EMF <strong>E</strong> and internal resistance <strong>r</strong> are unchanged:</p>
-        <div class="eq" id="eq-vel">E = I<sub>1</sub>(R<sub>1</sub> + r) = I<sub>2</sub>(R<sub>2</sub> + r) &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; r = (I<sub>2</sub>R<sub>2</sub> − I<sub>1</sub>R<sub>1</sub>) ÷ (I<sub>1</sub> − I<sub>2</sub>)</div>
-        <div class="eq" id="eq-pend">Short-circuit (maximum) current when R = 0: &nbsp; I<sub>max</sub> = E ÷ r</div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Energy Tollgate Game):</strong> Stand up! Imagine each student is <code>1 Coulomb</code> of charge leaving the battery with <code>12 Joules</code> of energy (<code>E = 12 V</code>). At the battery exit door, pay an internal toll of <code>Ir = 3.6 J</code> (lost volts) and carry the remaining <code>V = 8.4 J</code> out to the starter motor!</p>
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up and act out the circuit. Hold both hands at your chest as the cell's EMF. Push them out fully: that is the energy per coulomb, E. Now take a small step back each time you "feed a bigger current" — the further you step, the more energy you keep for yourself (that is the lost volts Ir) and the less reaches your outstretched hands (the terminal p.d.). Do it three times, stepping back a little further each time, then shake out your arms and sit down.</p>
         </div>
 
-        <h3 id="props">Key Circuit States Compared</h3>
+        <div class="callout info reveal" id="def-box">
+          <p><strong>Electromotive force (EMF, E)</strong> is the total electrical energy the source gives to each coulomb driven round the whole circuit, in volts; it is the open-circuit terminal reading (I = 0). <strong>Internal resistance (r)</strong> is the opposition to current inside the source itself — its electrolyte and electrodes. <strong>Lost volts</strong> is the p.d. used up inside, Ir. <strong>Terminal p.d. (V)</strong> is what is left for the external circuit, V = E − Ir = IR.</p>
+        </div>
+
+        <h3>The equations</h3>
+        <div class="eq" id="eq-full" data-hook>E = I(R + r)</div>
+        <div class="eq" id="eq-term">V = E − Ir &nbsp;&nbsp;<span class="st">and</span>&nbsp;&nbsp; V = IR</div>
+        <div class="eq" id="eq-lost">lost volts = Ir &nbsp;&nbsp;<span class="st">two readings: E = I₁(R₁ + r) = I₂(R₂ + r)</span></div>
+
+        <h3 id="props">Open circuit versus on load</h3>
         <div class="tbl-wrap" id="props-table">
           <table class="tbl">
-            <thead><tr><th>Circuit Condition</th><th>External R</th><th>Current I</th><th>Terminal P.D. (V)</th><th>Lost Volts (v = Ir)</th></tr></thead>
+            <thead><tr><th>Condition</th><th>Current I</th><th>Lost volts Ir</th><th>Voltmeter reads</th></tr></thead>
             <tbody>
-              <tr><td><strong>Open Circuit (Key Open)</strong></td><td><code>R = ∞</code></td><td><code>I = 0 A</code></td><td><strong>V = E</strong> (Maximum)</td><td><code>v = 0 V</code></td></tr>
-              <tr><td><strong>Normal Load</strong></td><td><code>R &gt; 0</code></td><td><code>I = E / (R + r)</code></td><td><code>V = E − Ir = IR</code></td><td><code>v = Ir</code></td></tr>
-              <tr><td><strong>Matched Load (Max Power)</strong></td><td><code>R = r</code></td><td><code>I = E / (2r)</code></td><td><code>V = ½E</code></td><td><code>v = ½E</code></td></tr>
-              <tr><td><strong>Short Circuit (Danger!)</strong></td><td><code>R = 0 Ω</code></td><td><strong>I<sub>max</sub> = E / r</strong></td><td><code>V = 0 V</code></td><td><strong>v = E</strong> (100% internal heat)</td></tr>
+              <tr><td><strong>Open circuit</strong> (I = 0)</td><td>0</td><td>0</td><td>E (the full EMF)</td></tr>
+              <tr><td><strong>On load</strong> (I &gt; 0)</td><td>E ÷ (R + r)</td><td>Ir</td><td>E − Ir (the terminal p.d.)</td></tr>
             </tbody>
           </table>
         </div>
+        <p>The heavier the load (the smaller R), the larger the current, the larger the lost volts and the smaller the terminal p.d. The EMF itself never changes as the load changes.</p>
 
-        <h3 id="ph-h">Load Current &amp; Terminal Voltage Explorer</h3>
-        <p>Tap any pin along the current track below for Chinedu’s battery (<code>E = 12.0 V, r = 1.2 Ω</code>) to see how terminal voltage <code>V</code> and lost volts <code>Ir</code> shift from open circuit to short circuit:</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Open Circuit (V = E)</div><div>Normal Operating Range</div><div>Short Circuit (V = 0) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to see the exact voltage split between V and Ir.</div>
+        <h3 id="pos-h">Load explorer</h3>
+        <p>Tap a load pin for the same cell (E = 6.0 V, r = 1.5 Ω). Watch the terminal p.d. fall and the point slide down the V–I line as the load gets heavier.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a load pin to see I, lost volts Ir and the terminal p.d. V.</div>
+          <div class="pos-bars" id="pos-bars" aria-hidden="true">
+            <div class="pb"><span>Lost Ir / V</span><i style="--c:#ff4b3a" id="pb-lost"></i><b data-b="lost">0.00</b></div>
+            <div class="pb"><span>Terminal V / V</span><i style="--c:#3ee6c4" id="pb-v"></i><b data-b="v">6.00</b></div>
+          </div>
         </div>
       </section>
 
-      <!-- ================= 5. ELECTROLYTE ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Inside the Cell Zoom</span>
-        <h2>Inside the battery acid: <em>why internal resistance steals voltage</em></h2>
-        <p class="intro">Zoom inside the lead-acid cell! Watch positive and negative ions migrate through the electrolyte between the electrodes, and observe the three 3D voltage bars: <strong>EMF E</strong>, <strong>Terminal V</strong>, and <strong>Lost Volts Ir</strong>.</p>
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the cell: <em>who takes the first cut</em></h2>
+        <p class="intro">Positive and negative ions cross the electrolyte between the plates, and some energy turns to heat before the charge reaches the terminals. The energy-per-coulomb bar splits the EMF into <strong>IR</strong> (useful, external) and <strong>Ir</strong> (lost, internal). Toggle the key and change the load.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D view inside a lead-acid cell showing ions moving between positive and negative plates and 3D bars for EMF E, Terminal V, and Lost Volts Ir."></canvas>
-            <div class="stage-label"><i></i>3D Electrolyte Zoom · E = Terminal V + Lost Ir</div>
+            <canvas id="zoom-canvas" aria-label="3D zoom inside a lead-acid cell: positive and negative ions crossing the electrolyte between brown and grey plates, heat flashing inside, and an energy-per-coulomb bar that splits the EMF into the external IR and the internal Ir."></canvas>
+            <div class="stage-label"><i></i>3D zoom · inside the cell · drag to rotate</div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D electrolyte view couldn't start on this device.</p></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
           </div>
-          <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Battery load mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Starter Load (R = 2.8 Ω)</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Open Circuit (I = 0)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Short Circuit (R = 0)</button>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar ir-ctl">
+            <div class="seg" role="group" aria-label="Key" id="zoom-key">
+              <button type="button" data-key="open" aria-pressed="false">Key open</button>
+              <button type="button" data-key="closed" aria-pressed="true">Key closed</button>
             </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Toggle Fresh Electrolyte (r = 0.6 Ω)</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset cell</button>
-            <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#7cc4ff"></i>E (V)<b data-c="h">12.0</b></span>
-              <span class="counter"><i style="--c:#3ee6c4"></i>Term. V (V)<b data-c="oh">8.40</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Lost Ir (V)<b data-c="na">3.60</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>I (A)<b data-c="cl">3.00</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>r (Ω)<b data-c="w">1.20</b></span>
+            <div class="ir-loads" role="group" aria-label="Load resistance" id="zoom-loads">
+              <button class="vt-btn zobo" type="button" data-r="10.5">10.5 Ω</button>
+              <button class="vt-btn" type="button" data-r="4.5">4.5 Ω</button>
+              <button class="vt-btn" type="button" data-r="1.5">1.5 Ω</button>
             </div>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
           </div>
         </div>
       </section>
 
       <!-- ================= 6. WORKED EXAMPLES ================= -->
       <section class="l-sec" id="examples">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Master the three classic exam calculation patterns on EMF, lost volts, and internal resistance.</p>
+        <p class="intro">Try each problem on paper first, then check the step-by-step working.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Solving the Aba Workshop battery drop (V = E − Ir)</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>The mystery battery</h4></div>
           <div class="example-body">
-            <p class="q">An accumulator has an open-circuit EMF of 12.0 V. When connected across a 2.8 Ω starter resistor, the terminal potential difference drops to 8.4 V. Calculate: (a) the current I flowing in the circuit, (b) the lost volts v inside the accumulator, and (c) the internal resistance r of the accumulator.</p>
+            <p class="q">Emeka's battery reads 12.0 V on open circuit and 8.4 V while driving the 2.8 Ω starter. Find (a) the current, (b) the lost volts, (c) the internal resistance.</p>
             <ol class="steps-sol">
-              <li><strong>Current I from external load:</strong> <code>I = V ÷ R = 8.4 ÷ 2.8 = 3.0 A</code>.</li>
-              <li><strong>Lost volts v:</strong> <code>v = E − V = 12.0 − 8.4 = 3.6 V</code>.</li>
-              <li><strong>Internal resistance r:</strong> <code>r = v ÷ I = 3.6 ÷ 3.0 = 1.2 Ω</code>.</li>
+              <li><strong>Current from the terminal p.d.:</strong> <code>I = V ÷ R = 8.4 ÷ 2.8 = 3.0 A</code>.</li>
+              <li><strong>Lost volts:</strong> <code>Ir = E − V = 12.0 − 8.4 = 3.6 V</code>.</li>
+              <li><strong>Internal resistance:</strong> <code>r = (E − V) ÷ I = 3.6 ÷ 3.0 = 1.2 Ω</code>.</li>
             </ol>
-            <div class="answer-line">(a) I = 3.0 A &nbsp;·&nbsp; (b) v = 3.6 V &nbsp;·&nbsp; (c) r = 1.2 Ω</div>
+            <div class="answer-line">I = 3.0 A · lost volts = 3.6 V · r = 1.2 Ω (check: E = I(R + r) = 3.0 × (2.8 + 1.2) = 12.0 V).</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>“Two readings, same cell” simultaneous calculation</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Two readings, same cell</h4></div>
           <div class="example-body">
-            <p class="q">A cell supplies a current of 0.80 A when connected to a 4.0 Ω external resistor, and a current of 0.50 A when connected to a 7.0 Ω external resistor. Calculate: (a) the internal resistance r of the cell, and (b) the electromotive force E of the cell.</p>
+            <p class="q">A cell drives 0.80 A through a 4.0 Ω lamp, and 0.50 A through a 7.0 Ω lamp. Find its internal resistance and EMF.</p>
             <ol class="steps-sol">
-              <li><strong>Equate E for both loads:</strong> <code>E = I₁(R₁ + r) = I₂(R₂ + r) ⇒ 0.80(4.0 + r) = 0.50(7.0 + r)</code>.</li>
-              <li><strong>Expand and solve for r:</strong> <code>3.20 + 0.80r = 3.50 + 0.50r ⇒ 0.30r = 0.30 ⇒ r = 1.0 Ω</code>.</li>
-              <li><strong>Substitute r = 1.0 Ω to find E:</strong> <code>E = 0.80 × (4.0 + 1.0) = 0.80 × 5.0 = 4.0 V</code>.</li>
+              <li><strong>The EMF is the same both times:</strong> <code>0.80(4.0 + r) = 0.50(7.0 + r)</code>.</li>
+              <li><strong>Expand both sides:</strong> <code>3.2 + 0.80r = 3.5 + 0.50r</code>, so <code>0.30r = 0.30</code>.</li>
+              <li><strong>Internal resistance:</strong> <code>r = 1.0 Ω</code>.</li>
+              <li><strong>EMF:</strong> <code>E = 0.80 × (4.0 + 1.0) = 0.80 × 5.0 = 4.0 V</code>.</li>
             </ol>
-            <div class="answer-line">(a) r = 1.0 Ω &nbsp;·&nbsp; (b) E = 4.0 V</div>
+            <div class="answer-line">r = 1.0 Ω · E = 4.0 V.</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Intercepts &amp; gradient of a V–I cell graph</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>E and r from a graph, then a load</h4></div>
           <div class="example-body">
-            <p class="q">When terminal potential difference V is plotted on the vertical axis against current I on the horizontal axis for a battery, the straight line has a vertical intercept of 6.0 V and a horizontal intercept of 4.0 A. Find: (a) the EMF E, (b) the internal resistance r, and (c) the terminal p.d. when the battery delivers 1.2 A.</p>
+            <p class="q">A V–I graph for a cell has a vertical intercept of 6.0 V and a gradient of −1.5 V A⁻¹. Find the terminal p.d. when the current is 1.2 A.</p>
             <ol class="steps-sol">
-              <li><strong>Vertical intercept (at I = 0):</strong> <code>E = 6.0 V</code>.</li>
-              <li><strong>Internal resistance from slope magnitude:</strong> <code>r = E ÷ I<sub>max</sub> = 6.0 ÷ 4.0 = 1.5 Ω</code>.</li>
-              <li><strong>Terminal p.d. at I = 1.2 A:</strong> <code>V = E − Ir = 6.0 − (1.2 × 1.5) = 6.0 − 1.8 = 4.2 V</code>.</li>
+              <li><strong>Read the graph:</strong> intercept gives <code>E = 6.0 V</code> and the gradient magnitude gives <code>r = 1.5 Ω</code>.</li>
+              <li><strong>Lost volts at this current:</strong> <code>Ir = 1.2 × 1.5 = 1.8 V</code>.</li>
+              <li><strong>Terminal p.d.:</strong> <code>V = E − Ir = 6.0 − 1.8 = 4.2 V</code>.</li>
             </ol>
-            <div class="answer-line">(a) E = 6.0 V &nbsp;·&nbsp; (b) r = 1.5 Ω &nbsp;·&nbsp; (c) V = 4.2 V</div>
+            <div class="answer-line">V = 4.2 V.</div>
           </div>
         </article>
       </section>
 
       <!-- ================= 7. BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Solve Chinedu’s Battery Case using <em>Two Load Readings!</em></h2>
-        <p class="intro">Suppose we didn’t even have an open-circuit voltmeter reading — only two load readings: <code>R₁ = 10.8 Ω (I₁ = 1.0 A)</code> and <code>R₂ = 2.8 Ω (I₂ = 3.0 A)</code>. Step through the algebra below to uncover both <code>r</code> and <code>E</code>!</p>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the workshop: <em>settle Tobe's verdict</em></h2>
+        <p class="intro">Rebuild Emeka's circuit on the bench, then answer the three questions to settle whether the battery is really dead.</p>
 
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Reading 1 · Light Load <small style="color:var(--muted);font-weight:500">· R₁ = 10.8 Ω, I₁ = 1.0 A</small></h4>
-              <div class="clock-well">
-                <div style="font-family:var(--font-mono);font-size:1.1rem;color:#3ee6c4">E = 1.0(10.8 + r)</div>
-              </div>
-              <div class="vt-count"><span id="time-a">V₁ = 10.8 V</span><small>first equation</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Reading 2 · Starter Load <small style="color:var(--muted);font-weight:500" id="len-b-label">· R₂ = 2.8 Ω, I₂ = 3.0 A</small></h4>
-              <div class="clock-well">
-                <div style="font-family:var(--font-mono);font-size:1.1rem;color:#ffb23f">E = 3.0(2.8 + r)</div>
-              </div>
-              <div class="vt-count"><span id="time-b">V₂ = 8.4 V (Find r &amp; E!)</span><small>second equation</small></div>
-            </div>
+        <div class="bridge-card" id="bridge-card">
+          <h4>Where did the 3.6 V go?</h4>
+          <div class="vt-actions" style="margin:6px 0 0">
+            <button class="vt-btn" type="button" id="bridge-rebuild">Rebuild Emeka's circuit on the bench</button>
           </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Equate I₁(R₁ + r) = I₂(R₂ + r)</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Solve Linear Equation for r</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Substitute r to Find True EMF E</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset solver</button>
+          <div class="bridge-q" data-q="open"><p>1 · With the key open the voltmeter reads 12.0 V. That reading is the…</p><div class="opts"><button type="button" data-v="emf">EMF</button><button type="button" data-v="terminal">terminal p.d. under load</button></div></div>
+          <div class="bridge-q" data-q="drop"><p>2 · When 3.0 A flows, the 3.6 V is dropped…</p><div class="opts"><button type="button" data-v="inside">inside the battery, across r</button><button type="button" data-v="wires">in the connecting wires</button></div></div>
+          <div class="bridge-q" data-q="left"><p>3 · So the terminals are left at…</p><div class="opts"><button type="button" data-v="8_4">8.4 V</button><button type="button" data-v="0">0 V — the battery is dead</button></div></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
           </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Reading 1: R₁ = 10.8 Ω gives I₁ = 1.0 A. Reading 2: R₂ = 2.8 Ω gives I₂ = 3.0 A. Start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
         </div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 2:</strong> Every real voltage source has internal resistance <strong>r</strong>. Whenever current <strong>I</strong> flows, <strong>v = Ir</strong> volts are lost inside the cell itself, leaving <strong>V = E − Ir</strong> at the external terminals.</p>
+          <p><strong>The big idea of Lesson 2:</strong> EMF is what the cell <em>can</em> give; terminal p.d. is what survives after Ir is paid inside. The missing volts never left the chemistry — they were spent on the battery's own internal resistance. A tired battery has a larger r, so it drops more volts under load even though its EMF is unchanged.</p>
         </div>
       </section>
 
       <!-- ================= 8. QUIZ ================= -->
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
-        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Test your mastery of EMF, terminal p.d., lost volts, and the two-readings method.</p>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 1 come at the end.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
         </div>
       </section>
 
       <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate yourself from 1 to 4 on each learning objective from Lesson 2.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 2.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can distinguish EMF (E), terminal p.d. (V), and lost volts (v = Ir).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can use E = I(R + r) and V = E − Ir to calculate current and terminal voltage.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can solve for r and E from two load readings using I₁(R₁ + r) = I₂(R₂ + r).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can find E and r from the vertical intercept and negative slope of a V–I graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can calculate short-circuit current I_max = E ÷ r.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can define EMF and internal resistance.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can use E = I(R + r) and V = E − Ir.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain lost volts and the open-circuit rule.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can find E and r by two readings.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can find E and r from a V–I graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
-        <div class="aq" data-answer="l02-exit">
-          <div class="aq-top"><h4>Why does the cabin roof light of a car dim momentarily when the driver cranks the starter motor? Explain using V = E − Ir.</h4><span class="marks">2 marks</span></div>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>A solar-lantern battery of EMF 7.5 V and internal resistance 0.40 Ω lights a 2.1 Ω lamp. Find the terminal p.d.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>The starter motor has very low resistance and draws a huge current <code>I</code> from the battery, causing a large internal voltage drop <code>v = Ir</code> across the battery's internal resistance <b>(1)</b>. Consequently, the terminal potential difference <code>V = E − Ir</code> across the battery (and across the parallel cabin lamp) drops sharply, dimming the bulb <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>I = E ÷ (R + r) = 7.5 ÷ (2.1 + 0.40) = 7.5 ÷ 2.5 = 3.0 A <b>(1)</b>; V = E − Ir = 7.5 − 3.0 × 0.40 = 7.5 − 1.2 = 6.3 V <b>(1)</b>.</p></div>
           </details>
         </div>
       </section>
 
       <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>EMF &amp; Internal Resistance</em></h2>
-        <p class="intro">Complete Part A and the 30-mark Part B structured paper.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 02. Type your attempt first to unlock each model solution.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
 
-        <h3>Part A · Real-Life Voltage Drop Observation</h3>
+        <h3>Part A · Home investigation: new cell or tired cell?</h3>
         <div class="aq" data-answer="l02-a1">
-          <div class="aq-top"><h4>Observe a Keke Napep headlamp, car dashboard light, or household inverter battery display when a heavy load starts up. Describe what happens to the brightness or voltage readout and explain why an older battery shows a much bigger voltage dip than a brand-new battery.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="Your observation and explanation…" aria-label="Part A answer"></textarea>
+          <div class="aq-top"><h4>New cell or tired cell: whose internal resistance is bigger?</h4></div>
+          <p><strong>You need:</strong> one new and one well-used AA (1.5 V) torch cell, a 10 Ω resistor rated at least 0.5 W, two short clip leads, and a digital multimeter on the 20 V DC range. Use only small torch cells: never a car, keke or inverter battery, never the mains, and never join a cell's two terminals with a bare wire.</p>
+          <ol class="sub">
+            <li>Measure the voltage across the new cell with nothing else connected. Record it as E.</li>
+            <li>Clip the 10 Ω resistor across the cell and at once read the voltage across the terminals as V, then unclip (leave it on for no more than about 10 seconds).</li>
+            <li>Repeat steps 1–2 two more times and average the readings.</li>
+            <li>Do the same for the used cell.</li>
+            <li>For each cell work out I = V/10, the lost volts E − V, and r = (E − V)/I.</li>
+            <li>If an adult has a car or keke, watch from a safe distance whether the headlamps dim while the engine is started, and note it.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
           <details class="reveal-box solution">
-            <summary>Sample answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>An older battery has sulphated plates and higher internal resistance <code>r</code>. When heavy current <code>I</code> flows, the internal voltage drop <code>Ir</code> is much larger, causing a severe dip in terminal voltage <code>V = E − Ir</code>.</p></div>
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Cell</th><th>E / V</th><th>V (10 Ω) / V</th><th>I = V/10 / A</th><th>E − V / V</th><th>r / Ω</th></tr></thead><tbody>
+                <tr><td>New</td><td>1.58</td><td>1.52</td><td>0.152</td><td>0.06</td><td>0.39</td></tr>
+                <tr><td>Used</td><td>1.45</td><td>1.10</td><td>0.110</td><td>0.35</td><td>3.2</td></tr>
+              </tbody></table></div>
+              <p>Both cells read close to their EMF on open circuit, but the terminal p.d. drops once current flows. The used cell's EMF is only a little lower, while its internal resistance is several times larger, so it loses far more volts under load and delivers less current. The current is worked out from V/R using the <em>terminal</em> reading, not the EMF. A strong answer links this to Emeka: his battery's resting 12.0 V hides an internal resistance that only shows up when the starter draws a large current, just as the headlamps dim during starting. One source of error with its direction: leaving the resistor connected too long let the cell's p.d. sag as it drained, so V was too low and r came out too high; the meter's own resistance is very high, so the open-circuit E was only very slightly too low.</p>
+            </div>
           </details>
         </div>
 
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <h3>Part B · Written paper (30 marks)</h3>
         <div class="aq" data-answer="l02-b1">
-          <div class="aq-top"><h4>1. (a) Distinguish between the electromotive force (E) and the terminal potential difference (V) of a cell. (b) Explain why E is greater than V when the cell is discharging.</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) EMF <code>E</code> is the total electrical energy supplied per coulomb by the cell around the entire circuit (measured when <code>I = 0</code>), whereas terminal p.d. <code>V</code> is the electrical energy converted per coulomb in the external load <code>R</code> only when current flows <b>(6)</b>.<br>
-            (b) When current <code>I</code> flows, work per coulomb <code>v = Ir</code> is expended overcoming the internal resistance <code>r</code> of the electrolyte, so <code>V = E − Ir &lt; E</code> <b>(4)</b>.</p>
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <p>Define (a) the <em>electromotive force</em> of a cell; (b) the <em>internal resistance</em> of a cell; (c) the <em>terminal potential difference</em> of a cell.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The EMF of a cell is the total energy it supplies to each coulomb of charge it drives round the complete circuit, including through the cell itself; it equals the p.d. across the terminals when no current is drawn. (1) (b) The internal resistance is the opposition to current that comes from the cell's own materials, its electrolyte and plates. (1) (c) The terminal p.d. is the p.d. across the cell's terminals while it is supplying a current; it is the energy per coulomb available to the external circuit, V = E − Ir. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Equivalent wordings that keep the key ideas are credited. In (a) the idea of energy per coulomb for the <em>whole</em> circuit (or the open-circuit reading) is required; "the voltage of the battery" scores zero. In (b) the opposition must be placed <em>inside</em> the cell. In (c) the condition "while current flows" is needed.</small></p>
           </div></details>
         </div>
-
         <div class="aq" data-answer="l02-b2">
-          <div class="aq-top"><h4>2. A cell delivers a current of 0.75 A through a 3.0 Ω resistor and 0.45 A through a 5.4 Ω resistor. Calculate: (a) the internal resistance r of the cell, and (b) the EMF E of the cell.</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) r = … (b) E = …" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Using <code>I₁(R₁ + r) = I₂(R₂ + r)</code>: <code>0.75(3.0 + r) = 0.45(5.4 + r)</code> <b>(3)</b>.<br>
-            <code>2.25 + 0.75r = 2.43 + 0.45r ⇒ 0.30r = 0.18 ⇒ r = 0.60 Ω</code> <b>(4)</b>.<br>
-            (b) <code>E = 0.75 × (3.0 + 0.60) = 0.75 × 3.60 = 2.70 V</code> <b>(3)</b>.</p>
+          <div class="aq-top"><h4>2. Where the 3.6 V went</h4><span class="marks">3 marks</span></div>
+          <p>Chinedu's voltmeter reads 12.0 V across Emeka's resting battery and 8.4 V while the starter runs. Explain why the two readings differ, without using any numbers other than those given.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) With the starter off, almost no current flows through the battery, so nothing is dropped across its internal resistance and the voltmeter shows the EMF, 12.0 V. (1) (2) When the starter runs, a large current flows through the battery's internal resistance, and a p.d. Ir is used up inside the battery (as heat), here 3.6 V. (1) (3) The voltmeter now shows only what is left for the external circuit, the terminal p.d. V = E − Ir = 8.4 V; the EMF itself has not fallen. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> "The battery is weak" or "the voltage is lost in the wires" scores zero. Point 2 needs both the current <em>and</em> the internal resistance. Point 3 needs the statement that the EMF is unchanged.</small></p>
           </div></details>
         </div>
-
         <div class="aq" data-answer="l02-b3">
-          <div class="aq-top"><h4>3. A student plots terminal p.d. V (vertical) against current I (horizontal) for a lead-acid cell, obtaining a vertical intercept of 2.10 V and a horizontal intercept of 3.50 A. Determine: (a) the internal resistance r, and (b) the terminal voltage when I = 1.50 A.</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) r = … (b) V = …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Vertical intercept <code>E = 2.10 V</code> <b>(2)</b>. Magnitude of gradient <code>r = 2.10 ÷ 3.50 = 0.60 Ω</code> <b>(4)</b>.<br>
-            (b) At <code>I = 1.50 A</code>: <code>V = E − Ir = 2.10 − (1.50 × 0.60) = 2.10 − 0.90 = 1.20 V</code> <b>(4)</b>.</p>
+          <div class="aq-top"><h4>3. Deriving the terminal p.d. relation</h4><span class="marks">4 marks</span></div>
+          <p>A cell of EMF E and internal resistance r drives a current I through an external resistor R. (a) Starting from E = I(R + r), show that V = E − Ir. (b) Show that V = ER/(R + r). (c) Explain what V becomes when R is made very large.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Expanding, E = IR + Ir. (1) The terminal p.d. is the p.d. across R, V = IR, so E = V + Ir and V = E − Ir. (1) (b) The current is I = E/(R + r); substituting into V = IR gives V = ER/(R + r). (1) (c) As R becomes very large, R/(R + r) approaches 1, so V approaches E: on open circuit the terminal p.d. equals the EMF. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark needs its own step; writing V = E − Ir as a remembered formula earns only the second mark in (a). In (c) "V becomes zero" is the short-circuit case (R → 0) and is not credited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b4">
+          <div class="aq-top"><h4>4. Emeka's battery and the horn</h4><span class="marks">5 marks</span></div>
+          <p>Emeka's battery (EMF 12.0 V, internal resistance 1.2 Ω) is connected to his 6.8 Ω horn alone. (a) Calculate the current. (b) The terminal p.d. (c) The lost volts. (d) The rate at which energy is wasted as heat inside the battery. (e) The percentage of the battery's total power delivered to the horn.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) I = E/(R + r) = 12.0 ÷ (6.8 + 1.2) = 12.0 ÷ 8.0 = 1.5 A. (1) (b) V = IR = 1.5 × 6.8 = 10.2 V. (1) (c) Lost volts = Ir = 1.5 × 1.2 = 1.8 V (check: 12.0 − 10.2 = 1.8 V). (1) (d) P wasted = I²r = 1.5² × 1.2 = 2.7 W. (1) (e) Power to horn = I²R = 1.5² × 6.8 = 15.3 W; total power = EI = 12.0 × 1.5 = 18.0 W; percentage = 15.3 ÷ 18.0 × 100 = 85 %. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Error carried forward is allowed. I = E/R = 1.76 A (internal resistance left out) loses (a). In (d) giving Ir (1.8) with the unit W loses the mark. In (e) R/(R + r) × 100 = 85 % is accepted.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b5">
+          <div class="aq-top"><h4>5. Two loads, one battery</h4><span class="marks">4 marks</span></div>
+          <p>A solar-charged battery drives 0.40 A through a 22.0 Ω lamp, and 1.00 A through an 8.5 Ω fan motor. Assume both loads behave as fixed resistances. (a) Write an equation for the EMF in each case. (b) Solve them for the internal resistance. (c) Find the EMF.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) E = 0.40(22.0 + r) and E = 1.00(8.5 + r). (1) (b) Equating: 8.8 + 0.40r = 8.5 + 1.00r. (1) 0.30 = 0.60r, so r = 0.50 Ω. (1) (c) E = 0.40 × (22.0 + 0.50) = 0.40 × 22.5 = 9.0 V (check: 1.00 × 9.0 = 9.0 V). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Both EMF equations must include r. An algebra slip in (b) loses only the mark where it occurs; (c) may still be earned by error carried forward. "r = 0.5" without a unit loses that mark.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b6">
+          <div class="aq-top"><h4>6. Practical: V–I graph for a cell</h4><span class="marks">6 marks</span></div>
+          <p>Chinedu varied the load on an accumulator cell and recorded I / A: 0.20, 0.40, 0.60, 0.80, 1.00 and V / V: 1.92, 1.85, 1.76, 1.69, 1.60. (a) He is told to "plot V against I". State which quantity goes on the vertical axis and why a straight line is expected. (b) From the line extended to I = 0, find the EMF. (c) Using a large triangle, find the gradient, and hence r. (d) Find the short-circuit current. (e) Find the terminal p.d. when I = 0.50 A.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) V goes on the vertical axis; a straight line is expected because V = E − Ir with E and r constant, so V falls linearly as I increases. (1) (b) The line meets the V axis at E = 2.00 V (accept 1.98–2.02 V). (1) (c) Using (0.10 A, 1.96 V) and (1.10 A, 1.56 V): gradient = (1.56 − 1.96) ÷ (1.10 − 0.10) = −0.40 ÷ 1.00 = −0.40 V A⁻¹. (1) r = magnitude = 0.40 Ω (accept 0.38–0.42 Ω). (1) (d) At short circuit V = 0, so I = E/r = 2.00 ÷ 0.40 = 5.0 A. (1) (e) V = E − Ir = 2.00 − 0.50 × 0.40 = 1.80 V. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> The line of best fit is a straight line; joining the points dot to dot is not accepted. A triangle covering less than half the line loses the first mark in (c). Giving r as −0.40 Ω loses the second mark in (c). Error carried forward from (b) and (c) is allowed in (d) and (e).</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b7">
+          <div class="aq-top"><h4>7. Practical: precautions and errors</h4><span class="marks">3 marks</span></div>
+          <p>(a) State two precautions taken in the experiment of question 6. (b) The cell polarised during the run (reaction products built up at its plates), and its internal resistance rose. State and explain the effect on the value of r obtained from the graph.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any two, in the past tense: the key was opened between readings so the cell did not polarise and the resistor did not heat up (1); the open-circuit EMF was read with a high-resistance voltmeter so the current drawn was negligible (1); the connections were tightened and the terminals cleaned (1); parallax was avoided by reading each meter square to the scale (1); readings were repeated and spread over a wide range (1). (Maximum 2.) (b) The value of r was too high, because the later (higher-current) terminal readings sagged below the line they should have followed, making the gradient steeper. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Commands and future-tense statements score zero, as do vague precautions. In (b) both the direction (too high) and the reason (later points too low, steeper gradient) are needed.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b8">
+          <div class="aq-top"><h4>8. The verdict on Tobe's claim</h4><span class="marks">2 marks</span></div>
+          <p>Tobe says Emeka's battery "has lost its voltage" and must be thrown away. Using the evidence from Lesson 2, give two reasons why this conclusion is not justified yet.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) On open circuit the battery still reads 12.0 V, so its EMF has not fallen; the chemistry is still supplying the full energy per coulomb. (1) (2) The drop to 8.4 V happens only while current flows, so it is caused by lost volts across the internal resistance (1.2 Ω); the right next step is to measure r and compare it with a healthy battery's, not to discard the battery on the EMF. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> "The meter is faulty" scores zero. The second mark needs the link between the drop and the current through the internal resistance; "the voltage is lost in the wires" is not credited.</small></p>
           </div></details>
         </div>
 
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 1: Ohm’s Law &amp; Resistivity</a>
-          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3 — Series/Parallel Networks &amp; Cell Arrays →</a>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:var(--paper-ink)">← Lesson 1</a>
+          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3, networks &amp; power →</a>
         </div>
       </section>
     </main>
@@ -571,9 +693,13 @@
 
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/dc-circuit-bench.js"></script>
+  <script src="../../assets/js/dc-concept-zoom.js"></script>
+  <script src="../../assets/js/auto-workshop-props.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="../../assets/js/story-scene.js"></script>
   <script src="story.js"></script>
   <script src="bench.js"></script>
@@ -584,5 +710,7 @@
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
 </body>
 </html>

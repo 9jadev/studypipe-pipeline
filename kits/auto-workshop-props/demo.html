@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: auto-workshop-props</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  .st{position:relative;width:100%;height:56vh;min-height:300px}
+  .st canvas{display:block;width:100%;height:100%;touch-action:none}
+  .stage-canvas{position:absolute;inset:0}
+  .story-bubble{display:none}
+  [hidden]{display:none!important}
+  #ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  button{min-height:38px;padding:0 10px;border-radius:19px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  label{display:flex;align-items:center;gap:6px;font-size:12px}
+  input[type=range]{width:120px}
+  #line{padding:4px 10px 12px;font:12px ui-monospace,monospace;white-space:pre-wrap}
+</style>
+</head><body>
+<div id="gal" class="st"><canvas id="c"></canvas></div>
+<div id="ui"></div>
+<div id="line"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/story-scene.js"></script>
+<script src="auto-workshop-props.js"></script>
+<script>
+(function () {
+  var K = window.AutoWorkshopProps;
+  /* ---------------- gallery stage ---------------- */
+  var host = document.getElementById("gal"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x1a2430);
+  var camera = new THREE.PerspectiveCamera(38, 1, 0.02, 80);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xc4d6ff, 0x3a2a20, 0.9));
+  var sun = new THREE.DirectionalLight(0xfff1d6, 1.4); sun.position.set(-4, 9, 7); scene.add(sun);
+  var rim = new THREE.DirectionalLight(0x7cc4ff, 0.6); rim.position.set(5, 5, -6); scene.add(rim);
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(40, 20), new THREE.MeshStandardMaterial({ color: 0xc7a272, roughness: 0.95 }));
+  ground.rotation.x = -Math.PI / 2; scene.add(ground);
+  var TY = 0.94;
+  var table = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.08, 1.2), new THREE.MeshStandardMaterial({ color: 0x7a5230, roughness: 0.85 }));
+  table.position.set(4.2, 0.9, 0); scene.add(table);
+  [[-1.2, -0.5], [1.2, -0.5], [-1.2, 0.5], [1.2, 0.5]].forEach(function (p) { var l = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.9, 0.08), table.material); l.position.set(4.2 + p[0], 0.45, p[1]); scene.add(l); });
+
+  var keke = K.createKeke(); scene.add(keke);
+  var battery = K.createBattery({ E: 12.0, r: 1.2, corrosion: 0.6 }); battery.position.set(4.0, TY, -0.05); scene.add(battery);
+  var meter = K.createMultimeter(); meter.position.set(4.45, TY, 0.1); meter.rotation.y = -0.2; scene.add(meter);
+  var thin = K.createJumperSet({ gauge: "thin", from: [3.0, TY, 0.42], to: [4.1, TY, 0.48], floorY: TY, bend: 0.1 }); scene.add(thin);
+  var thick = K.createJumperSet({ gauge: "thick", from: [3.0, TY, 0.2], to: [4.1, TY, 0.26], floorY: TY, bend: 0.12 }); scene.add(thick);
+  var bulb = K.createBulb(); bulb.position.set(4.95, TY, -0.15); scene.add(bulb);
+  var coil = K.createWireCoil(); coil.position.set(5.2, TY, 0.2); scene.add(coil);
+  var cells = K.createCellPack({ n: 3, E: 1.5, r: 2.0, R: 1.0 }); cells.position.set(3.4, TY, -0.3); scene.add(cells);
+  var pump = K.createPump(); pump.position.set(5.0, TY, 0.35); pump.rotation.y = 0.4; scene.add(pump);
+  var board = K.createToolBoard(); board.position.set(8.2, 0, -0.3); scene.add(board);
+  scene.updateMatrixWorld(true);
+  var hl = K.makeHighlighter(scene);
+  var all = [keke, battery, meter, thin, thick, bulb, coil, cells, pump, board];
+
+  var VIEWS = {
+    keke: { t: [0, 0.85, 0], d: 4.6, yaw: 0.55, pitch: 0.2 },
+    kekeFront: { t: [0.9, 0.8, 0], d: 3.0, yaw: 1.25, pitch: 0.14 },
+    batteryBox: { t: [0.24, 0.6, 0.2], d: 1.3, yaw: 0.25, pitch: 0.3 },
+    battery: { t: [4.0, 1.04, -0.05], d: 0.75, yaw: 0.3, pitch: 0.45 },
+    cables: { t: [3.55, 0.96, 0.33], d: 1.35, yaw: 0.1, pitch: 0.75 },
+    clip: { t: [3.0, 0.96, 0.43], d: 0.34, yaw: -0.3, pitch: 0.55 },
+    bulb: { t: [5.07, 1.0, 0.0], d: 0.62, yaw: 0.15, pitch: 0.25 },
+    meter: { t: [4.22, 1.02, 0.02], d: 0.9, yaw: 0.0, pitch: 0.55 },
+    cells: { t: [3.4, 0.97, -0.3], d: 0.45, yaw: 0.0, pitch: 0.7 },
+    pump: { t: [5.0, 0.99, 0.35], d: 0.45, yaw: 0.5, pitch: 0.4 },
+    board: { t: [8.2, 1.4, -0.3], d: 2.4, yaw: 0.0, pitch: 0.1 }
+  };
+  var view = { target: new THREE.Vector3(0, 0.85, 0), dist: 4.6, yaw: 0.55, pitch: 0.2 }, goal = null;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(2.0, 1.1 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(v.yaw) * Math.cos(v.pitch) * d, v.target.y + Math.sin(v.pitch) * d, v.target.z + Math.cos(v.yaw) * Math.cos(v.pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = VIEWS[name]; if (!v) return;
+    goal = { target: new THREE.Vector3().fromArray(v.t), dist: v.d, yaw: v.yaw, pitch: v.pitch };
+    if (instant) { view = goal; goal = null; applyView(view); controls.update(); }
+  }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view); }
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* ---------------- story stage (StoryStage Set 1 + Set 2) ---------------- */
+  var story = null, shop = null, lab = null;
+  function ensureStory() {
+    if (story) return story;
+    // the story stage is created on first use, so the page starts with one canvas
+    // (an overlay inside the same stage box, shown with visibility so no canvas ever collapses)
+    var root = document.createElement("div"); root.id = "story"; root.className = "stage-canvas";
+    root.innerHTML = '<div class="stage-canvas"><canvas id="sc"></canvas><div class="story-bubble"></div></div>';
+    host.appendChild(root);
+    story = StoryStage.create({ root: root, canvas: document.getElementById("sc"), bubble: null, beats: [],
+      setup: function (api) {
+        shop = K.dressWorkshop(api, { include: ["keke", "battery", "cablesThin", "cablesThick", "meter", "toolBoard", "coil", "bulb", "cells", "pump"], tobeStall: true, meterOnBattery: true });
+        lab = K.dressBench(api, { include: ["battery", "meter", "cablesThin", "cablesThick", "coil", "bulb", "cells"], meterOnBattery: true });
+        var emeka = StoryStage.person({ skin: "#4a2e1f", outfit: "#e2b33a", pants: "#1c2433", hair: "short" });
+        emeka.position.fromArray(shop.spots.emeka); emeka.rotation.y = -0.6; api.props.market.add(emeka);
+        var tobe = StoryStage.person({ skin: "#6e4630", outfit: "#7a3b1d", pants: "#1c2433", hair: "short" });
+        tobe.position.fromArray(shop.spots.tobe); tobe.rotation.y = 0.3; api.props.market.add(tobe);
+        api.people.emeka = emeka; api.people.tobe = tobe;
+        api.people.cust1.position.fromArray(shop.spots.chinedu); api.people.cust1.rotation.y = Math.PI * 0.9;
+        api.people.cust2.visible = false;
+        shop.battery.setLoad(null);
+      },
+      onTick: function (api, dt, t) { shop.update(dt, t); lab.update(dt, t); }
+    });
+    return story;
+  }
+  var STORY_SHOTS = {
+    set1: function () { return shop.shots.wide; }, set1Keke: function () { return shop.shots.keke; },
+    set1Table: function () { return shop.shots.table; }, set1Box: function () { return shop.shots.batteryBox; },
+    set2: function () { return lab.shots.bench; }
+  };
+
+  /* ---------------- state + controls ---------------- */
+  var current = "keke";
+  function setMode(m) {
+    current = m;
+    var isStory = /^set/.test(m);
+    cv.style.visibility = isStory ? "hidden" : "visible";
+    if (document.getElementById("story")) document.getElementById("story").style.visibility = isStory ? "visible" : "hidden";
+    if (isStory) {
+      var s = ensureStory(); if (!s) return;
+      var sh = STORY_SHOTS[m](); s.shot(sh[0], sh[1], true);
+      if (m === "set1Box") shop.keke.setBatteryBox(1);
+      window.dispatchEvent(new Event("resize"));
+    } else { resize(); gotoView(m, true); keke.setBatteryBox(m === "batteryBox" ? 1 : box ? 1 : 0); }
+    document.querySelectorAll("#ui button[data-m]").forEach(function (b) { b.classList.toggle("on", b.dataset.m === m); });
+  }
+  var ui = document.getElementById("ui");
+  function btn(label, fn, cls, m) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; if (m) b.dataset.m = m; b.onclick = function () { fn(b); }; ui.appendChild(b); return b; }
+  [["Keke", "keke"], ["Nose", "kekeFront"], ["Battery box", "batteryBox"], ["Battery", "battery"], ["Cables", "cables"], ["Clamp", "clip"], ["Bulb", "bulb"], ["Meter", "meter"], ["Cells", "cells"], ["Pump", "pump"], ["Tool board", "board"],
+   ["Set 1", "set1"], ["Set 1 keke", "set1Keke"], ["Set 1 table", "set1Table"], ["Set 1 box", "set1Box"], ["Set 2", "set2"]].forEach(function (v) { btn(v[1].indexOf("set") === 0 ? v[0] : v[0], function () { setMode(v[1]); }, "alt", v[1]); });
+
+  var load = false, heat = false, box = false, par = false, run = false;
+  btn("Starter 2.8 Ω", function (b) { load = !load; battery.setLoad(load ? 2.8 : null); keke.battery.setLoad(load ? 2.8 : null); b.classList.toggle("on", load); });
+  btn("Box lid", function (b) { box = !box; keke.setBatteryBox(box ? 1 : 0); b.classList.toggle("on", box); });
+  btn("3.0 A in cables", function (b) { heat = !heat; thin.setCurrent(heat ? 3.0 : 0); thick.setCurrent(heat ? 3.0 : 0); b.classList.toggle("on", heat); });
+  btn("Parallel", function (b) { par = !par; cells.setArrangement(par ? "parallel" : "series"); b.classList.toggle("on", par); });
+  btn("Pump", function (b) { run = !run; pump.setRunning(run); b.classList.toggle("on", run); });
+  var lab1 = document.createElement("label"); lab1.innerHTML = "Bulb V <input type=range min=0 max=13 step=0.1 value=12 id=bv>"; ui.appendChild(lab1);
+  document.getElementById("bv").oninput = function (e) { bulb.setVoltage(+e.target.value); };
+  bulb.setVoltage(12);
+  meter.clipTo(battery);
+  // the keke headlamp brightness follows a 12 V headlamp bulb fed by the keke battery's terminal p.d.
+  keke.setLampSource(function () { return Math.min(1, K.model.lamp(keke.battery.reading().V, 12, 35).glow); });
+
+  /* tap a part to pulse it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    var hit = ray.intersectObjects(all, true)[0];
+    if (hit && hit.object.userData.partId) { hl.highlight(hit.object.userData.partId); console.log("part", hit.object.userData.partId); setTimeout(function () { hl.clear(); }, 700); }
+  });
+
+  var line = document.getElementById("line"), last = "";
+  function f(x, d) { return x == null ? "–" : x.toFixed(d); }
+  function paint() {
+    var b = battery.reading(), tr = thin.reading(), tk = thick.reading(), lb = bulb.reading(), c = cells.reading();
+    var s = "Battery  E " + f(b.E, 1) + " V  r " + f(b.r, 1) + " Ω  R " + (b.R == null ? "open" : f(b.R, 1) + " Ω") + "  I " + f(b.I, 2) + " A  V " + f(b.V, 1) + " V  lost " + f(b.lost, 1) + " V\n" +
+      "Cables @" + f(tr.I, 1) + " A  thin d " + f(tr.d_mm, 2) + " mm R " + f(tr.R_ohm, 3) + " Ω P " + f(tr.P_W, 2) + " W  |  thick d " + f(tk.d_mm, 2) + " mm R " + f(tk.R_ohm, 4) + " Ω P " + f(tk.P_W, 3) + " W  (ratio " + f(tr.R_ohm / tk.R_ohm, 1) + ")\n" +
+      "Bulb  V " + f(lb.V, 1) + " V  I " + f(lb.I, 2) + " A  R " + f(lb.R, 2) + " Ω  P " + f(lb.P, 1) + " W\n" +
+      "Cells  " + c.arrangement + "  E_t " + f(c.E_total, 2) + " V  r_t " + f(c.r_total, 2) + " Ω  pump " + f(c.R, 1) + " Ω → I " + f(c.I, 2) + " A\n" +
+      "Meter shows " + meter.reading().text + " " + meter.reading().unit + "   keke lamp " + f(keke.reading().lamp, 2);
+    if (s !== last) { last = s; line.textContent = s; }
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
+    all.forEach(function (o) { o.update(dt, t); });
+    if (cv.style.visibility !== "hidden") {
+      if (goal) {
+        var k = Math.min(1, dt * 4);
+        view.target.lerp(goal.target, k); view.dist += (goal.dist - view.dist) * k; view.yaw += (goal.yaw - view.yaw) * k; view.pitch += (goal.pitch - view.pitch) * k;
+        applyView(view); if (view.target.distanceTo(goal.target) < 0.003) goal = null;
+      }
+      controls.update(); renderer.render(scene, camera);
+    }
+    paint();
+  })();
+  setMode("keke");
+  console.log("triangles", JSON.stringify({ keke: K.triangles(keke), battery: K.triangles(battery), thinSet: K.triangles(thin), thickSet: K.triangles(thick), bulb: K.triangles(bulb), coil: K.triangles(coil), meter: K.triangles(meter), cells: K.triangles(cells), pump: K.triangles(pump), board: K.triangles(board) }));
+  window.__kit = K; window.__setMode = setMode; window.__props = { keke: keke, battery: battery, meter: meter, thin: thin, thick: thick, bulb: bulb, coil: coil, cells: cells, pump: pump, board: board };
+})();
+</script>
+</body></html>

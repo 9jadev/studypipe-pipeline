@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 3 · The Double Circuit · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): trace blood around the body on a 3D route tracer, with the pulmonary and systemic circulations, the hepatic portal system and the coronary supply.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 56C12 40 6 28 6 20a13 13 0 0 1 26-4 13 13 0 0 1 26 4c0 8-6 20-26 36z' fill='%23c8264a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .hero-art {
+      position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
+    }
+    .hero-art svg { width: 100%; height: auto; max-width: 330px; }
+    .hs-ch { fill: rgba(var(--crimson-rgb), .38); stroke: var(--crimson); stroke-width: 2; }
+    .hs-ch.blue { fill: var(--sky); fill-opacity: .3; stroke: var(--sky); }
+    .hs-wall { fill: none; stroke: var(--fg); stroke-width: 3; stroke-linejoin: round; }
+    .hs-t { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+    .hs-m { fill: var(--amber); font-family: var(--font-mono); font-size: 10.5px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    /* compact route tracer (phone first) */
+    .bench-presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; flex: 1 1 100%; }
+    .bench-presets .vt-btn { padding: 8px 4px; font-size: 12.5px; min-height: 40px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-mode { flex: 1 1 100%; } #bench-mode button { flex: 1; }
+    .bench-ctl, .bench-util { padding: 8px 12px; gap: 8px; }
+    .bench-util .bench-mode { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; width: 100%; }
+    .bench-util .vt-btn { padding: 8px 4px; font-size: 13px; min-height: 40px; }
+    .bench-util .stage-hint { margin: 0; width: 100%; font-size: 12.5px; }
+    #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13px; white-space: normal; display: block; line-height: 1.2; min-height: 2.4em; overflow-wrap: anywhere; }
+    #bench-stage .bench-readout b.sm { font-size: 11px; }
+    #bench-stage .bench-readout b i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; background: var(--muted); }
+    #bench-stage .bench-readout b i.blue { background: var(--sky); } #bench-stage .bench-readout b i.red { background: var(--crimson); }
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(340px, 96vw, 440px); }
+    #practical .intro { font-size: .95rem; line-height: 1.45; margin: 6px 0 0; }
+    @media (min-width: 641px) {
+      .bench-presets { grid-template-columns: repeat(4, auto); flex: 0 1 auto; }
+      .bench-ctl { justify-content: space-between; }
+      #bench-mode { flex: 0 0 auto; }
+      .bench-util .bench-mode { display: flex; width: auto; }
+      .bench-util .stage-hint { width: auto; margin-left: auto; }
+      #bench-stage .stage-canvas { height: clamp(340px, 48vw, 480px); }
+      #bench-stage .bench-readout b { min-height: 0; }
+      #method-cards div.method { padding: 10px 14px; }
+    }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; min-width: 0; }
+      #results-table tr { display: grid; grid-template-columns: minmax(0, 1fr) 50px 84px; column-gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table tbody tr:last-child { border-bottom: 0; }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 13px; }
+      #results-table th { font-size: 10.5px; background: none; }
+      #results-table thead tr { padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table th:nth-child(2) { display: none; }
+      #results-table th:nth-child(3) { text-align: center; }
+      #results-table td::before { content: none; }
+      #results-table td:nth-child(1) { font-weight: 700; }
+      #results-table td.route-cell { grid-row: 2; grid-column: 1 / -1; font-size: 11.5px; line-height: 1.35; color: var(--paper-muted); margin-top: 3px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; }
+      #results-table tr.open td.route-cell { -webkit-line-clamp: unset; }
+      #results-table td:nth-child(3), #results-table td:nth-child(4) { align-self: center; }
+      #results-table tbody tr.fresh td { background: none; } #results-table tbody tr.fresh { background: rgba(var(--amber-rgb), .12); }
+      .chip-btn { min-height: 34px; padding: 4px 10px; font-size: 12px; }
+      .chips { gap: 5px; }
+      #results-table td:nth-child(3) { text-align: center; }
+      #results-table td:nth-child(4) { white-space: nowrap; }
+      #practical .tbl-wrap { margin-top: 10px; }
+      #practical h3 { margin-bottom: 4px; }
+    }
+    .bench-mode { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .vt-btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    .bench-readout .hot b { color: var(--amber); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td.empty { color: var(--paper-faint); }
+    #results-table tr.fresh td { background: rgba(var(--amber-rgb), .12); }
+    .wall-bars { display: grid; gap: 8px; margin-top: 14px; }
+    .wall-bars .wb { display: grid; grid-template-columns: 74px 1fr 64px; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); }
+    .wall-bars .wb i { display: block; height: 14px; border-radius: 999px; background: rgba(var(--paper-ink-rgb), .08); position: relative; overflow: hidden; }
+    .wall-bars .wb i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w, 10%); background: var(--crimson); border-radius: 999px; }
+    .wall-bars .wb.on { color: var(--paper-ink); font-weight: 600; }
+    .wall-bars .wb.on i::after { background: var(--amber); }
+    .pos-track { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 48px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 96px; }
+    .pos-info b { color: var(--crimson); }
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+    .bridge-fig { width: 100%; max-width: 360px; margin: 14px auto 0; display: block; }
+    @media (max-width: 560px) {
+      .wall-bars .wb { grid-template-columns: 60px 1fr 54px; }
+      .pos-track { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+      .pos-pin { font-size: 12px; }
+      .stage-bar .seg button { padding: 8px 10px; font-size: 12.5px; }
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 2px; }
+    .chip-btn { min-height: 40px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12.5px; cursor: pointer; }
+    .chip-btn.ok { background: rgba(var(--ok-rgb), .22); border-color: var(--ok); color: var(--fg); }
+    .chip-btn.no { box-shadow: 0 0 0 2px var(--pink); }
+    .chip-btn[disabled] { opacity: .5; cursor: default; }
+    #free-chips[hidden] { display: none; }
+    .seq { display: grid; gap: 14px; margin-top: 12px; }
+    .seq-tray, .seq-line { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; padding: 10px; border-radius: var(--radius); border: 1.5px dashed rgba(var(--paper-ink-rgb), .22); background: var(--paper-card); }
+    .seq-line { flex-direction: column; flex-wrap: nowrap; counter-reset: sq; border-style: solid; border-color: var(--paper-line); }
+    .seq-card { min-height: 44px; padding: 8px 12px; border-radius: calc(12px * var(--corner, 1)); border: 1.5px solid rgba(var(--paper-ink-rgb), .2); background: var(--paper); color: var(--paper-ink); font-weight: 700; font-size: 13.5px; cursor: pointer; text-align: left; }
+    .seq-line .seq-card { display: flex; align-items: center; gap: 10px; counter-increment: sq; }
+    .seq-line .seq-card::before { content: counter(sq); font-family: var(--font-mono); font-size: 12px; min-width: 22px; height: 22px; border-radius: 999px; background: var(--paper-ink); color: var(--paper); display: inline-flex; align-items: center; justify-content: center; }
+    .seq-card.right { border-color: var(--ok); background: rgba(var(--ok-rgb), .12); }
+    .seq-card.wrong { border-color: var(--crimson); background: rgba(var(--crimson-rgb), .1); }
+    .seq-label { font-family: var(--font-mono); font-size: 11.5px; color: var(--paper-muted); margin: 0 0 4px; }
+    .route-cell { font-size: 12px; line-height: 1.45; }
+    #results-table td.lungs-yes { color: var(--crimson); font-weight: 700; }
+    .pos-track.eight { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .loop-fig { width: 100%; max-width: 330px; }
+    .hl-blue { fill: var(--sky); fill-opacity: .25; stroke: var(--sky); stroke-width: 3; }
+    .hl-red { fill: rgba(var(--crimson-rgb), .22); stroke: var(--crimson); stroke-width: 3; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l03">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 7 Lessons</a>
+      <span class="l-crumb">Lesson 3 of 7 · <b>The Double Circuit</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 3 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>The Double <em>Circuit</em></h1>
+        <p class="question reveal">How does the rider's donated blood reach his brain, and why does food from the gut go to the liver first?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Describe the <strong>full path of blood</strong> from the venae cavae back to the right atrium, naming every chamber, valve and vessel.</span></li>
+          <li><b>02</b><span>Distinguish the <strong>pulmonary</strong> and <strong>systemic</strong> circulations.</span></li>
+          <li><b>03</b><span>Describe the <strong>hepatic portal system</strong> and the <strong>coronary circulation</strong> and say why each matters.</span></li>
+          <li><b>04</b><span>Name the <strong>artery to and vein from</strong> the lungs, brain, arms, liver, gut, kidneys, legs and heart muscle.</span></li>
+          <li><b>05</b><span><strong>Trace any organ-to-organ route</strong>, always including the lungs.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Share results</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 290" role="img" class="loop-fig">
+          <!-- patient's RIGHT is on the reader's LEFT -->
+          <path class="hl-blue" d="M165 150C120 150 74 124 74 82c0-30 22-48 48-48 22 0 36 12 43 28"/>
+          <path class="hl-red" d="M165 150c46 0 92 26 92 68 0 30-22 48-48 48-22 0-36-12-44-28" transform="translate(0 4)"/>
+          <ellipse cx="165" cy="150" rx="34" ry="30" fill="rgba(var(--crimson-rgb), .5)" stroke="var(--crimson)" stroke-width="3"/>
+          <text class="hs-t" x="148" y="154">HEART</text>
+          <text class="hs-m" x="30" y="26">LOOP 1 · lungs</text>
+          <text class="hs-m" x="186" y="282">LOOP 2 · body</text>
+          <text class="hs-t" x="96" y="92">lungs</text>
+          <text class="hs-t" x="200" y="224">organs</text>
+          <path d="M120 108l-10 8 12 2" fill="none" stroke="var(--sky)" stroke-width="3"/>
+          <path d="M214 196l10-8-12-2" fill="none" stroke="var(--crimson)" stroke-width="3"/>
+          <text class="hs-m" x="30" y="150">patient's right = your left</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Put it in order</a></li>
+        <li><a href="#practical">Route tracer</a></li>
+        <li><a href="#concepts">Two loops</a></li>
+        <li><a href="#zoom">Liver &amp; heart zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 1 and 2</em></h2>
+        <p class="intro">Four quick cards on the chambers, the valves and single or double circulation. Answer each one in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>A drip in the rider's arm at <em>Oja Oba</em></h2>
+        <p class="intro">The okada rider is lying on a mat in the health-day tent. A nurse puts a drip into a vein in his forearm. Will the new blood reach his brain in a second?</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: the okada rider lies on a mat in the Oja Oba tent with a drip in his forearm; Chidi and Baba Sule argue about how fast it reaches his brain; Dr Aisha shows a glowing 3D body in the lab."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba tent → UCH lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · The tent:</strong> The okada rider is laid down on a mat, and a drip line goes into a vein in his forearm.</p>
+            <p><strong>Scene 2 · Chidi:</strong> <em>“The arm is close to the head. Will the new blood reach his brain in a second?”</em></p>
+            <p><strong>Scene 3 · Baba Sule:</strong> <em>“Of course. Vein to brain, straight up!”</em></p>
+            <p><strong>Scene 4 · The lab:</strong> Dr Aisha traces the route on a glowing 3D body: <em>“It has a much longer journey, and it must pass one organ you have forgotten.”</em></p>
+            <p><strong>Scene 5 · The invitation:</strong> To the route-tracer bench, to follow the blood vessel by vessel.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Starting in a vein of the arm, which organs must blood pass before it reaches the brain? Pin your idea before we trace it.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think the blood goes through…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Straight to the head (Bola)</button>
+            <button type="button">Through the heart first (Musa)</button>
+            <button type="button">The lungs, to get oxygen? (Adaeze)</button>
+            <button type="button">Veins go straight to the brain (Baba Sule)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT: PUT THE JOURNEY IN ORDER ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Put the journey <em>in order</em></h2>
+        <p class="intro">Build the journey from the venae cavae to the aorta. Tap a card to add it to your sequence (tap a numbered card to send it back). <strong>One card does not belong</strong>: leave it out.</p>
+
+        <div class="sort seq" id="seq-sort">
+          <div>
+            <p class="seq-label">CARDS</p>
+            <div class="seq-tray" id="seq-tray" aria-label="Cards to place"></div>
+          </div>
+          <div>
+            <p class="seq-label">YOUR JOURNEY, FIRST TO LAST</p>
+            <div class="seq-line" id="seq-line" aria-label="Your sequence" aria-live="polite"></div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my order</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The route tracer: <em>follow the blood</em></h2>
+        <p class="intro">Pick a route and follow the red-blue tracer. The big heart lights the part the tracer is in. Everyone faces you, so <strong>the patient's right is on your left</strong>.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Pick a route</h4><p>Choose one of the four preset routes.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Tap each part in order</h4><p>Free trace: you tap. Watch: it runs itself.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Watch the colour</h4><p>Blue is oxygen-poor; red only in the lungs.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Record and count valves</h4><p>Three finished routes fill the table.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D route tracer: a glass human body with lungs, liver, gut, kidneys, brain, arm and leg joined by named blood vessels, and a large beating heart beside it. A red and blue tracer particle follows the chosen route."></canvas>
+            <div class="stage-label"><i></i>3D route tracer · drag to rotate</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the table below and the worked examples instead.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar bench-ctl">
+            <div class="seg" role="group" aria-label="Trace mode" id="bench-mode">
+              <button type="button" data-mode="watch" aria-pressed="true">Watch</button>
+              <button type="button" data-mode="free" aria-pressed="false">Free trace</button>
+            </div>
+            <div class="bench-presets" id="bench-presets" role="group" aria-label="Route">
+              <button class="vt-btn" type="button" data-preset="armBrain">Arm → Brain</button>
+              <button class="vt-btn" type="button" data-preset="ileumBrain">Ileum → Brain</button>
+              <button class="vt-btn" type="button" data-preset="liverKidney">Liver → Kidney</button>
+              <button class="vt-btn" type="button" data-preset="lungsHeart">Lungs → Heart muscle</button>
+            </div>
+          </div>
+          <div class="stage-bar" id="free-chips" hidden>
+            <div style="width:100%">
+              <p class="seq-label" style="margin:0 0 6px">TAP THE NEXT PART, IN ORDER <span id="free-count"></span></p>
+              <div class="chips" id="chips" role="group" aria-label="Parts to tap"></div>
+            </div>
+          </div>
+          <div class="stage-bar bench-util">
+            <div class="bench-mode">
+              <button class="vt-btn" type="button" id="bench-hint-btn" disabled>Hint</button>
+              <button class="vt-btn" type="button" id="bench-skin" aria-pressed="true">Skin</button>
+              <button class="vt-btn" type="button" id="bench-labels" aria-pressed="true">Labels</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Choose a route</span>
+          </div>
+        </div>
+
+        <h3>Record your routes</h3>
+        <p>Each finished route fills a row. Do three.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr><th>Route</th><th>Vessels in order</th><th>Valves</th><th>Lungs?</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="route-line">Routes recorded: 0 of 3</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected routes <small>open after you trace</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Route</th><th>Vessels in order</th><th>Valves</th><th>Lungs?</th></tr></thead>
+                <tbody>
+                  <tr><td>Arm → brain</td><td class="route-cell">forearm vein · subclavian vein · SVC · RA · tricuspid valve · RV · pulmonary semilunar valve · pulmonary artery · lung capillaries · pulmonary vein · LA · bicuspid valve · LV · aortic semilunar valve · aorta · carotid artery · brain</td><td>4</td><td>yes</td></tr>
+                  <tr><td>Ileum → brain</td><td class="route-cell">hepatic portal vein · liver (glucose stored) · hepatic vein · IVC · heart and lungs as above · aorta · carotid artery · brain</td><td>4</td><td>yes</td></tr>
+                  <tr><td>Liver → kidney</td><td class="route-cell">hepatic vein · IVC · RA and RV · lung capillaries · LA and LV · aorta · renal artery · kidney</td><td>4</td><td>yes</td></tr>
+                  <tr><td>Lungs → heart muscle</td><td class="route-cell">pulmonary vein · LA · bicuspid valve · LV · aortic semilunar valve · aorta · coronary artery · heart muscle</td><td>2</td><td>starts there</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">tricuspid + pulmonary semilunar + bicuspid + aortic semilunar = 4 valves</div>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l03-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why must every body-to-body route pass through the lungs?</li>
+            <li>What changes in the blood in the lung capillaries?</li>
+            <li>Why does gut blood go to the liver first?</li>
+            <li>What makes the hepatic portal vein different from other veins?</li>
+            <li>Why can't heart muscle feed on the blood inside its chambers?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>The septum splits the heart in two. Blood can only get from the right side to the left side by going round through the lungs, so there is no shortcut.</li>
+                <li>It loses carbon dioxide and gains oxygen, turning dark oxygen-poor blood into bright oxygen-rich blood.</li>
+                <li>Gut blood carries newly absorbed food and any swallowed poisons. The liver stores extra glucose as glycogen, breaks down surplus amino acids and makes poisons harmless before the blood reaches the rest of the body.</li>
+                <li>It begins in capillaries (of the gut) and ends in capillaries (of the liver), instead of draining a capillary bed straight to the heart.</li>
+                <li>The heart wall is too thick for oxygen to diffuse from the chambers to every cell fast enough, and the right side holds oxygen-poor blood anyway. It needs its own supply, the coronary arteries.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Two loops, <em>two pumps</em></h2>
+        <p class="intro">Now we connect the route you traced to the names and jobs WAEC, NECO and JAMB expect.</p>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up and trace the double circuit on your own body. Point to your right ventricle in the middle of your chest, then sweep your right hand to your lungs (the small loop) and back to the left side of your chest. Now push your arm out to your head, then your toes (the big loop), and bring both hands back to your heart. Do two full circuits, breathing in as the blood passes the lungs. Shake out your hands and sit down.</p>
+        </div>
+
+        <div class="callout big reveal" id="two-loops">
+          <p><strong>Two loops (one complete circuit passes through the heart twice):</strong> the <strong>pulmonary circulation</strong> runs right ventricle → pulmonary artery → capillaries of the lungs → pulmonary veins → left atrium, and swaps carbon dioxide for oxygen. The <strong>systemic circulation</strong> runs left ventricle → aorta → every body organ → venae cavae → right atrium, and delivers oxygen and food while collecting wastes.</p>
+        </div>
+
+        <h3>Within the body</h3>
+        <div class="eq" id="vessel-chain">heart → arteries → arterioles → capillaries → venules → veins → heart</div>
+
+        <div class="callout info reveal" id="portal-box">
+          <p><strong>The hepatic portal system:</strong> blood leaving the stomach and intestines is rich in absorbed food and any swallowed poisons. Instead of returning straight to the heart, it travels in the <strong>hepatic portal vein</strong> to the liver. There, extra glucose is stored as glycogen, surplus amino acids are broken down (making urea) and poisons are made harmless. Only then does blood leave by the <strong>hepatic vein</strong> for the inferior vena cava. Any vein that links two capillary beds is called a <strong>portal vein</strong>.</p>
+        </div>
+
+        <div class="callout tip reveal" id="coronary-box">
+          <p><strong>The coronary circulation:</strong> the coronary arteries branch off the aorta just beyond its valve and spread over the heart surface; the coronary veins return blood to the right atrium. If a coronary artery is blocked, the muscle beyond it is starved of oxygen and dies: a <strong>heart attack</strong>.</p>
+        </div>
+
+        <h3 id="def-vessels">Named vessels</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Organ</th><th>In by (artery)</th><th>Out by (vein)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Lungs</strong></td><td>pulmonary artery</td><td>pulmonary veins</td></tr>
+              <tr><td><strong>Brain and head</strong></td><td>a carotid artery</td><td>a jugular vein</td></tr>
+              <tr><td><strong>Arm</strong></td><td>a subclavian artery</td><td>a subclavian vein</td></tr>
+              <tr><td><strong>Liver</strong></td><td>hepatic artery (and hepatic portal vein)</td><td>hepatic vein</td></tr>
+              <tr><td><strong>Gut</strong></td><td>a mesenteric artery</td><td>hepatic portal vein, going to the liver</td></tr>
+              <tr><td><strong>Kidney</strong></td><td>a renal artery</td><td>a renal vein</td></tr>
+              <tr><td><strong>Leg</strong></td><td>an iliac / femoral artery</td><td>an iliac / femoral vein</td></tr>
+              <tr><td><strong>Heart muscle</strong></td><td>coronary arteries</td><td>coronary veins</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>The largest artery is the <strong>aorta</strong>; the largest vein is the <strong>inferior vena cava</strong>.</p>
+
+        <h3 id="pos-h">Organ explorer</h3>
+        <p>Tap a pin. The artery in and the vein out light up on the 3D body in the route tracer above.</p>
+        <div id="pos-explorer">
+          <div class="pos-track eight" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to see an organ's artery and vein.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Zoom in: <em>the liver gate and the heart's own supply</em></h2>
+        <p class="intro"><strong>Portal</strong> follows gut capillaries into the hepatic portal vein, through the liver and out by the hepatic vein, while glucose is stored as glycogen. <strong>Coronary</strong> shows the arteries feeding the heart wall: press <em>Block</em>. <strong>Heart</strong> is the beating heart with both loops.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom: gut capillaries draining by the hepatic portal vein into the liver, with glucose spheres turning into glycogen granules; or the coronary arteries on the heart surface with a blockage toggle; or a beating heart."></canvas>
+            <div class="stage-label"><i></i>3D zoom · drag to rotate</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Zoom view" id="zoom-mode">
+              <button type="button" data-mode="portal" aria-pressed="true">Portal</button>
+              <button type="button" data-mode="coronary" aria-pressed="false">Coronary</button>
+              <button type="button" data-mode="heart" aria-pressed="false">Heart</button>
+            </div>
+          </div>
+          <div class="stage-bar">
+            <label class="counter" style="gap:10px;display:flex;align-items:center" id="store-wrap"><i style="--c:var(--amber)"></i>Glucose stored
+              <input type="range" id="zoom-store" min="0" max="1" step="0.05" value="0.6" aria-label="Share of glucose stored as glycogen" style="width:clamp(110px,40vw,220px)"></label>
+            <button class="vt-btn zobo" type="button" id="zoom-block" aria-pressed="false" disabled>Block the artery</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each route on paper first, then check the working. Every route starts at a named organ and names every valve.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>The drip: arm to brain</h4></div>
+          <div class="example-body">
+            <p class="q">List the path of blood from a forearm vein to the brain, naming the valves.</p>
+            <ol class="steps-sol">
+              <li><strong>Into the heart:</strong> forearm vein → subclavian vein → superior vena cava (SVC) → right atrium → tricuspid valve → right ventricle.</li>
+              <li><strong>To the lungs and back:</strong> pulmonary semilunar valve → pulmonary artery → lung capillaries (CO₂ out, O₂ in) → pulmonary veins → left atrium.</li>
+              <li><strong>Out to the brain:</strong> bicuspid valve → left ventricle → aortic semilunar valve → aorta → carotid artery → brain.</li>
+              <li><strong>Count the valves:</strong> <code>1 + 1 + 1 + 1 = 4</code> (tricuspid, pulmonary semilunar, bicuspid, aortic semilunar).</li>
+            </ol>
+            <div class="answer-line">Four heart valves are passed, and the lungs cannot be skipped.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Glucose from the ileum to a leg muscle</h4></div>
+          <div class="example-body">
+            <p class="q">Trace glucose from the capillaries of the ileum wall to a muscle in the leg.</p>
+            <ol class="steps-sol">
+              <li><strong>Gut to liver:</strong> capillaries of the ileum wall → hepatic portal vein → liver (sugar stored) → hepatic vein → IVC.</li>
+              <li><strong>Right side and lungs:</strong> right atrium → tricuspid valve → right ventricle → pulmonary semilunar valve → pulmonary artery → lung capillaries → pulmonary veins.</li>
+              <li><strong>Left side and out:</strong> left atrium → bicuspid valve → left ventricle → aortic semilunar valve → aorta → femoral artery → leg muscle.</li>
+              <li><strong>Count the valves:</strong> <code>1 + 1 + 1 + 1 = 4</code>.</li>
+            </ol>
+            <div class="answer-line">The liver comes first, the lungs second.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Urea from the liver to the kidney</h4></div>
+          <div class="example-body">
+            <p class="q">Trace urea made in the liver to the kidney, where it will be removed.</p>
+            <ol class="steps-sol">
+              <li><strong>Liver to the heart:</strong> liver → hepatic vein → IVC (inferior vena cava) → right atrium → tricuspid valve → right ventricle.</li>
+              <li><strong>Through the lungs:</strong> pulmonary semilunar valve → pulmonary artery → lung capillaries → pulmonary veins → left atrium → bicuspid valve → left ventricle.</li>
+              <li><strong>Out to the kidney:</strong> aortic semilunar valve → aorta → renal artery → kidney.</li>
+              <li><strong>Count the valves:</strong> <code>1 + 1 + 1 + 1 = 4</code>.</li>
+            </ol>
+            <div class="answer-line">Four valves again: the lungs are always on the way.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>Oxygen from the lungs to the heart muscle</h4></div>
+          <div class="example-body">
+            <p class="q">Trace newly oxygenated blood from the lung capillaries to the muscle of the heart wall.</p>
+            <ol class="steps-sol">
+              <li><strong>Lungs to the left heart:</strong> lung capillaries → pulmonary vein → left atrium → bicuspid valve → left ventricle.</li>
+              <li><strong>Out and round:</strong> aortic semilunar valve → aorta → coronary artery → heart muscle.</li>
+              <li><strong>Count the valves:</strong> <code>1 + 1 = 2</code> (bicuspid and aortic semilunar).</li>
+            </ol>
+            <div class="answer-line">Only two valves: the right side of the heart is not involved.</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the tent: <em>settle the rider's drip</em></h2>
+        <p class="intro">Trace the rider's drip route on the 3D body, then answer the three questions below.</p>
+
+        <div class="bridge-card" id="bridge-card">
+          <h4>Where does the drip go?</h4>
+          <div class="vt-actions" style="margin:6px 0 0">
+            <button class="vt-btn" type="button" id="bridge-trace">Trace the drip on the body</button>
+          </div>
+          <div class="bridge-q" data-q="first"><p>1 · After the forearm vein and the vena cava, the drip first reaches the…</p><div class="opts"><button type="button" data-v="ra">Right atrium</button><button type="button" data-v="la">Left atrium</button></div></div>
+          <div class="bridge-q" data-q="organ"><p>2 · Before it reaches the brain it must pass through the…</p><div class="opts"><button type="button" data-v="lungs">Lungs</button><button type="button" data-v="liver">Liver</button></div></div>
+          <div class="bridge-q" data-q="last"><p>3 · The vessel that finally carries it to the brain is the…</p><div class="opts"><button type="button" data-v="carotid">Carotid artery</button><button type="button" data-v="jugular">Jugular vein</button></div></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
+          </div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 3:</strong> blood makes two loops through two pumps. Every body-to-body trip passes the lungs, and gut blood visits the liver first.</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 2 come at the end.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 3.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can trace the full pathway from venae cavae to aorta.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can distinguish the pulmonary and systemic loops.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain the hepatic portal system.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain coronary supply and a heart attack.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can name the vessels for eight organs.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>Name the vessel that carries blood from the intestine to the liver, and the vessel that carries blood from the liver towards the heart.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>The <strong>hepatic portal vein</strong> <b>(1)</b>; the <strong>hepatic vein</strong> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 03. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home investigation: thread map</h3>
+        <div class="aq" data-answer="l03-a1">
+          <div class="aq-top"><h4>Trace three journeys on a life-size body outline.</h4></div>
+          <p><strong>You need:</strong> a large sheet (opened cement bags, old calendars or cartons taped together), a marker, red and blue wool or thread, sticky tape, a tape measure and a helper.</p>
+          <ol class="sub">
+            <li>Lie on the sheet and let your helper draw round your body. Draw a heart in the chest (patient's right on the sheet's left when the outline faces up), the two lungs, the liver, the gut, the kidneys and the brain.</li>
+            <li>Route 1 (drip in left forearm → right kidney): tape blue thread from the forearm to the heart, then from the right side of the heart to the lungs; tape red thread from the lungs back to the left side of the heart and on to the kidney. Write the name of each vessel and valve beside the thread.</li>
+            <li>Route 2 (amino acids from the ileum → right arm muscle) and Route 3 (oxygen from the lungs → heart muscle): repeat, remembering the liver on Route 2.</li>
+            <li>Measure the length of thread used for each route and count the heart valves passed.</li>
+            <li>Fold away the sheet and return the tape measure.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Route</th><th>Vessels in order (short form)</th><th>Valves</th><th>Lungs?</th><th>Thread (cm)</th></tr></thead><tbody>
+                <tr><td>Forearm drip → right kidney</td><td class="route-cell">subclavian v. → SVC → RA → tricuspid → RV → pulmonary semilunar → pulmonary a. → lung capillaries → pulmonary v. → LA → bicuspid → LV → aortic semilunar → aorta → renal a.</td><td>4</td><td>Yes</td><td>145</td></tr>
+                <tr><td>Ileum → right arm muscle</td><td class="route-cell">hepatic portal v. → liver → hepatic v. → IVC → RA → tricuspid → RV → pulmonary semilunar → pulmonary a. → lung capillaries → pulmonary v. → LA → bicuspid → LV → aortic semilunar → aorta → subclavian a.</td><td>4</td><td>Yes</td><td>170</td></tr>
+                <tr><td>Lungs → heart muscle</td><td class="route-cell">pulmonary v. → LA → bicuspid → LV → aortic semilunar → aorta → coronary a.</td><td>2</td><td>Starts there</td><td>40</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows that every route from one body organ to another passes the right side of the heart, then the lungs, then the left side, always with four heart valves; gut blood visits the liver before the heart; the route to the heart muscle uses only the left side and two valves; blue thread (oxygen-poor) changes to red (oxygen-rich) only in the lungs; and vessels are named correctly as artery (to the organ) or vein (from it). Thread lengths vary with body size. A strong answer notes that the "short" arm-to-kidney trip is in fact long because of the detour through the lungs, and links it to Baba Sule's wrong idea about the rider's drip.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l03-b1">
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <p>Define (a) <em>pulmonary circulation</em>; (b) <em>systemic circulation</em>; (c) <em>portal vein</em>.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The pulmonary circulation is the loop that carries blood from the right ventricle to the lungs and back to the left atrium, where carbon dioxide is lost and oxygen gained. (1) (b) The systemic circulation is the loop that carries blood from the left ventricle to all the body organs and back to the right atrium. (1) (c) A portal vein is a vein that begins in one capillary bed and ends in another capillary bed, instead of returning blood directly to the heart. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Equivalent wordings that keep the key ideas are credited. The start and end chambers are needed in (a) and (b); "blood going to the lungs" alone scores zero. "A vein that carries food" in (c) is not accepted; the mark is for linking two capillary beds.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b2">
+          <div class="aq-top"><h4>2. The Full Course of Blood</h4><span class="marks">6 marks</span></div>
+          <p>Starting with blood entering the heart from the venae cavae, describe its course through the heart, lungs and body until it returns to the right atrium. Name every chamber, valve and main vessel.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) Blood low in oxygen arrives in the right atrium, which squeezes it across the tricuspid valve to fill the right ventricle. (1) (2) The right ventricle contracts, forcing the pulmonary semilunar valve open, and the blood is sent along the pulmonary artery. (1) (3) In the capillaries round the air sacs of the lungs, carbon dioxide leaves the blood and oxygen enters it. (1) (4) Now rich in oxygen, it returns along the pulmonary veins into the left atrium, and from there crosses the bicuspid (mitral) valve to fill the left ventricle. (1) (5) The left ventricle contracts strongly, forcing the aortic semilunar valve open; the aorta divides into arteries and arterioles that lead to capillaries in every organ, where the cells take oxygen and nutrients from the blood. (1) (6) The capillaries merge into venules and then veins, which empty into the superior and inferior venae cavae, and these return the blood to the right atrium. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark point needs its named valve or vessel; a point with a wrong valve (e.g. "bicuspid" on the right) scores zero. Skipping the lungs loses mark (3) and breaks the sequence for (4). Answers in a clear arrow chain are fully acceptable if every named part is present.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b3">
+          <div class="aq-top"><h4>3. The Hepatic Portal System</h4><span class="marks">4 marks</span></div>
+          <p>(a) State where the hepatic portal vein begins and where it ends. (b) State three things the liver does to the blood it receives through this vein.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) It begins in the capillaries of the stomach and intestine walls and ends in the capillaries of the liver. (1) (b) Extra glucose is stored as glycogen. (1) Surplus amino acids are broken down (deaminated), forming urea. (1) Poisons and drugs absorbed from the gut are made harmless (detoxified). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> "It goes to the heart" in (a) scores zero. In (b) the three marks are for three different jobs; "removes glucose" and "stores sugar" count as one point. "Makes bile from the blood" is not accepted here, since the question is about changes to the blood's absorbed contents.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b4">
+          <div class="aq-top"><h4>4. Feeding the Heart Itself</h4><span class="marks">3 marks</span></div>
+          <p>(a) From which vessel do the coronary arteries branch? (b) Explain why heart muscle cannot rely on the blood inside its own chambers for oxygen. (c) State what happens if a coronary artery is blocked.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) From the aorta, just beyond the aortic semilunar valve. (1) (b) The heart wall is too thick for oxygen to diffuse from the chambers to all its cells fast enough (and the right-side chambers hold oxygen-poor blood). (1) (c) The heart muscle beyond the blockage is starved of oxygen and dies: a heart attack. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> "From the heart" in (a) is too vague. In (b), the key idea is diffusion distance through a thick wall, the same reason from Lesson 01 that large animals need transport. "The person dies" in (c) without the idea of starved heart muscle earns nothing.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b5">
+          <div class="aq-top"><h4>5. Vessels In and Out</h4><span class="marks">4 marks</span></div>
+          <p>For each organ, name the artery that brings blood to it and the vein that takes blood away: (a) kidney; (b) arm; (c) leg; (d) brain.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Renal artery; renal vein. (1) (b) Subclavian artery; subclavian vein. (1) (c) Iliac (or femoral) artery; iliac (or femoral) vein. (1) (d) Carotid artery; jugular vein. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark needs both vessels correct and in the right order (artery in, vein out). Swapping the artery and vein for an organ scores zero for that organ.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b6">
+          <div class="aq-top"><h4>6. From the Ileum to an Arm Muscle</h4><span class="marks">5 marks</span></div>
+          <p>Trace the route taken by an amino acid absorbed in the ileum until it reaches a muscle in the arm. Name every vessel, chamber and valve.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) The ileum capillaries drain into the hepatic portal vein, which carries the amino acid into the liver. (1) (2) Blood leaves the liver by the hepatic vein, which empties into the inferior vena cava. (1) (3) It reaches the right atrium, crosses the tricuspid valve to the right ventricle, and is pumped past the pulmonary semilunar valve along the pulmonary artery. (1) (4) After the lung capillaries, the pulmonary veins return it to the left atrium, and it crosses the bicuspid valve to the left ventricle. (1) (5) The left ventricle pumps it past the aortic semilunar valve and out along the aorta, which hands it to the subclavian artery supplying the arm muscle. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Sending the amino acid from the gut straight to the heart loses marks (1) and (2). Any route that leaves out the lungs loses mark (4). "Vena cava" without "inferior" is accepted only if the hepatic vein is named before it.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b7">
+          <div class="aq-top"><h4>7. Data Analysis: A Faulty Route</h4><span class="marks">3 marks</span></div>
+          <p>On the route-tracer bench, a student recorded this journey for urea leaving the kidney and reaching the brain: <em>renal vein → inferior vena cava → right atrium → tricuspid valve → right ventricle → left atrium → bicuspid valve → left ventricle → aortic semilunar valve → aorta → carotid artery → brain.</em>&lt;br&gt;(a) Identify the stage the student left out. (b) Explain why this stage cannot be skipped. (c) State how many heart valves the correct route passes.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The trip to the lungs: right ventricle → pulmonary semilunar valve → pulmonary artery → lung capillaries → pulmonary veins → left atrium. (1) (b) The septum separates the two halves of the heart, so blood can only get from the right side to the left side by going round through the lungs. (1) (c) Four (tricuspid, pulmonary semilunar, bicuspid, aortic semilunar). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> "The lungs" alone earns (a) only if the answer makes clear the stage lies between the right ventricle and left atrium. In (b), "to get oxygen" alone is not enough; the mark is for the halves being separated, so there is no other path. Answers of "2" in (c) come from counting only one side.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b8">
+          <div class="aq-top"><h4>8. Practical: Setting Up the Rider's Drip</h4><span class="marks">2 marks</span></div>
+          <p>At the screening tent, a nurse set up a drip in the okada rider's forearm vein. (a) Give one reason the drip was put into a vein and not an artery. (b) State one precaution the nurse took.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any one: blood pressure in a vein is low, so fluid can run in and there is little bleeding at the needle site (1); veins lie near the surface and are easy to find (1); a vein carries the fluid to the heart, which then pumps it to the whole body (1). (Maximum 1.) (b) Any one, in the past tense: hands were washed and gloves worn (1); a new, sterile needle was used once only (1); air bubbles were run out of the line before it was connected (1); the label on the bag was checked against the rider's card (1). (Maximum 1.)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a), "arteries carry oxygenated blood" is not a reason and scores zero. A precaution written as an instruction or in the future tense loses the mark in (b).</small></p>
+          </div></details>
+        </div>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-02/index.html" style="color:var(--paper-ink)">← Lesson 2</a>
+          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4, the beating heart →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/body-circuit.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

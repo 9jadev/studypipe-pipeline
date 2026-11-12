@@ -1,43 +1,26 @@
-/* Lesson 01 · interactions: LessonKit boot, Motion Sort, Pendulum Results Table, Swing Position Explorer, and Clock Bridge Test */
+/* Lesson 03 · interactions: "where does it happen?" sort (SortDnD), the Position Explorer (#pos-explorer)
+   and the lift-off bridge. LessonKit (shared) runs Do Now, Wonder Wall, quiz, rating and locked solutions. */
 (function () {
   "use strict";
-  var D = window.L01;
+  var D = window.L03;
   if (!D) return;
-
-  // Boot shared LessonKit (Progress Rail, Do Now, Wonder Wall, Quiz, Self-Rating, Locked Solutions)
-  if (window.LessonKit && window.LessonKit.boot) {
-    window.LessonKit.boot({
-      lessonId: "l03",
-      wonderSeeds: [
-        "I think a heavier brass bob falls faster, so its period T should be shorter — Kunle",
-        "If you pull the bob to a wider angle, it has further to travel, so maybe it takes longer? — Halima",
-        "Wait — if you pull it wider, doesn't it also speed up more on the way down? — Chidi",
-        "Why do WAEC practical instructions always ask us to time 20 oscillations instead of just 1? — Zainab"
-      ],
-      quiz: window.LESSON_QUIZ || []
-    });
-  }
 
   var toast = window.LessonKit ? window.LessonKit.toast : function () {};
   var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
-  var burst = function (el, n) { if (window.StudyNarrator && el) window.StudyNarrator.burst(el.getBoundingClientRect(), n || 14); };
+  var burst = function (el, n) { if (window.StudyNarrator && el && window.StudyNarrator.burst) window.StudyNarrator.burst(el.getBoundingClientRect(), n || 14); };
+  var M = window.ShmKinematics2D && window.ShmKinematics2D.model;
+  var sf = window.ShmKinematics2D ? window.ShmKinematics2D.format.sf : function (v, n) { return Math.abs(v) < 1e-9 ? "0" : String(+v.toPrecision(n)).replace(/-/g, "−"); };
 
-  // =========================================================
-  // 1. Everyday Motion Sort (drag on desktop, tap-tap on mobile)
-  // =========================================================
+  // ---------------- 1. Sort: where does it happen? ----------------
   var tray = document.getElementById("sort-tray");
-  var bins = Array.prototype.slice.call(document.querySelectorAll(".bin"));
+  var bins = Array.prototype.slice.call(document.querySelectorAll("#shm-sort .bin"));
   var picked = null;
 
   function shuffle(a) {
     a = a.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-
   function buildSort() {
     if (!tray) return;
     tray.innerHTML = "";
@@ -46,15 +29,13 @@
     document.getElementById("sort-score").textContent = "";
     shuffle(D.items).forEach(function (it) {
       var b = document.createElement("button");
-      b.type = "button";
-      b.className = "sort-item";
-      b.setAttribute("data-id", it.id);
-      b.innerHTML = '<span class="emo" aria-hidden="true">' + it.emo + "</span>" + it.name;
-      attachDrag(b);
+      b.type = "button"; b.className = "sort-item"; b.setAttribute("data-id", it.id);
+      b.textContent = it.name;
+      if (window.SortDnD) SortDnD.attach(b, { bins: bins, onDrop: place, onTap: pick });
+      else b.addEventListener("click", function () { pick(b); });
       tray.appendChild(b);
     });
   }
-
   function pick(b) {
     if (picked) picked.classList.remove("picked");
     picked = picked === b ? null : b;
@@ -71,250 +52,107 @@
     bin.addEventListener("click", function (e) { if (e.target.closest(".sort-item")) return; if (picked) place(picked, bin); });
     bin.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && picked) { e.preventDefault(); place(picked, bin); } });
   });
-
-  function attachDrag(b) {
-    var sx, sy, dragging = false, ghost = null, pid = null;
-    b.addEventListener("pointerdown", function (e) {
-      if (e.button !== undefined && e.button !== 0) return;
-      sx = e.clientX; sy = e.clientY; pid = e.pointerId; dragging = false;
-      try { b.setPointerCapture(pid); } catch (er) {}
-    });
-    b.addEventListener("pointermove", function (e) {
-      if (pid !== e.pointerId) return;
-      if (!dragging && Math.hypot(e.clientX - sx, e.clientY - sy) > 8) {
-        dragging = true;
-        ghost = b.cloneNode(true);
-        ghost.style.cssText = "position:fixed;z-index:95;pointer-events:none;margin:0;transform:rotate(-3deg) scale(1.05);box-shadow:0 18px 30px -10px rgba(0,0,0,.6)";
-        document.body.appendChild(ghost);
-        b.classList.add("dragging");
-      }
-      if (dragging) {
-        ghost.style.left = (e.clientX - ghost.offsetWidth / 2) + "px";
-        ghost.style.top = (e.clientY - ghost.offsetHeight / 2) + "px";
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        bins.forEach(function (bn) { bn.classList.toggle("over", bn === over); });
-      }
-    });
-    function end(e) {
-      if (pid !== e.pointerId) return;
-      pid = null;
-      if (dragging) {
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        if (ghost) ghost.remove();
-        ghost = null;
-        b.classList.remove("dragging");
-        if (over) place(b, over);
-        else bins.forEach(function (bn) { bn.classList.remove("over"); });
-        dragging = false;
-      } else if (e.type === "pointerup") pick(b);
-    }
-    b.addEventListener("pointerup", end);
-    b.addEventListener("pointercancel", end);
-    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(b); } });
-    b.addEventListener("click", function (e) { e.preventDefault(); });
-  }
-
   function checkSort() {
     var placed = 0, right = 0, rows = [];
-    var labels = { shm: "Simple Harmonic (SHM)", periodic: "Periodic (not SHM)", non: "Not periodic" };
+    var labels = {}; D.bins.forEach(function (b) { labels[b.id] = b.label; });
     D.items.forEach(function (it) {
-      var el = document.querySelector('.sort-item[data-id="' + it.id + '"]');
-      var bin = el && el.closest(".bin");
-      var chosen = bin ? bin.getAttribute("data-bin") : null;
+      var el = document.querySelector('#shm-sort .sort-item[data-id="' + it.id + '"]');
+      var bin = el && el.closest(".bin"), chosen = bin ? bin.getAttribute("data-bin") : null;
       if (chosen) placed++;
-      var ok = chosen === it.bin;
-      if (ok) right++;
+      var ok = chosen === it.bin; if (ok) right++;
       if (el) { el.classList.toggle("right", ok); el.classList.toggle("wrong", !!chosen && !ok); }
-      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" +
-        labels[it.bin] + ". " + it.why + "</span></div>");
+      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.name + "</b><span>" + labels[it.bin] + ". " + it.why + "</span></div>");
     });
-    if (placed < D.items.length) {
-      toast("Place all " + D.items.length + " motions first. " + (D.items.length - placed) + " still in the tray.");
-      return;
-    }
-    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the explanations below.");
-    var fb = document.getElementById("sort-feedback");
-    fb.innerHTML = rows.join("");
-    fb.classList.add("on");
-    if (right >= 10) burst(document.getElementById("sort-score"), 20);
-    emit("l1:sort-checked", { score: right, total: D.items.length });
+    if (placed < D.items.length) { toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray."); return; }
+    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the notes below.");
+    var fb = document.getElementById("sort-feedback"); fb.innerHTML = rows.join(""); fb.classList.add("on");
+    if (right >= 9) burst(document.getElementById("sort-score"), 20);
+    emit("l3:sort", { correct: right, total: D.items.length });
   }
-
   if (tray) {
     buildSort();
     document.getElementById("sort-check").addEventListener("click", checkSort);
     document.getElementById("sort-reset").addEventListener("click", buildSort);
   }
 
-  // =========================================================
-  // 2. Interactive WAEC Pendulum Results Table
-  // =========================================================
-  var tbody = document.querySelector("#results-table tbody");
-  if (tbody) {
-    var opt = function (list) {
-      return '<option value="">choose…</option>' + list.map(function (o) { return "<option>" + o + "</option>"; }).join("");
+  // ---------------- 2. Position Explorer (#pos-explorer): pins on the A = 0.30 m, T = 2.0 s circle ----------------
+  var track = document.getElementById("pos-track");
+  if (track) {
+    var A = D.lab.A, T = D.lab.T;
+    var info = document.getElementById("pos-info"), pinEls = [];
+    var shm = function (deg) {
+      var th = deg * Math.PI / 180;
+      if (M) return M.shm(A, T, th);
+      var w = 2 * Math.PI / T, x = A * Math.sin(th);
+      return { w: w, x: x, v: w * A * Math.cos(th), a: -w * w * x };
     };
-    D.trials.forEach(function (trObj, i) {
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td><b>" + trObj.label + "</b></td>" +
-        "<td>" + trObj.L.toFixed(2) + "</td>" +
-        '<td><select data-k="t" aria-label="Time t for 20 swings at L = ' + trObj.L.toFixed(2) + ' m">' + opt(D.tOptions) + "</select></td>" +
-        '<td><select data-k="T" aria-label="Period T at L = ' + trObj.L.toFixed(2) + ' m">' + opt(D.TOptions) + "</select></td>" +
-        '<td><select data-k="T2" aria-label="T squared at L = ' + trObj.L.toFixed(2) + ' m">' + opt(D.T2Options) + "</select></td>";
-      tbody.appendChild(tr);
-
-      var saved = window.LessonKit ? window.LessonKit.Store.get("shm-table-" + i, {}) : {};
-      tr.querySelectorAll("select").forEach(function (s) {
-        var k = s.getAttribute("data-k");
-        if (saved[k]) s.value = saved[k];
-        s.addEventListener("change", function () {
-          saved[k] = s.value;
-          if (window.LessonKit) window.LessonKit.Store.set("shm-table-" + i, saved);
-          s.parentElement.classList.remove("ok", "no");
-        });
-      });
+    var showPin = function (i, quiet) {
+      var p = D.pins[i]; if (!p) return;
+      pinEls.forEach(function (el, k) { el.setAttribute("aria-pressed", String(k === i)); });
+      var s = shm(p.deg);
+      info.innerHTML = "<b>ωt = " + p.deg + "°</b> · x = <b>" + sf(s.x, 3) + " m</b> · v = <b>" + sf(s.v, 3) + " m/s</b> · a = <b>" + sf(s.a, 3) + " m/s²</b><br>" + p.note;
+      if (!quiet) emit("l3:pin", { deg: p.deg, index: i, x: s.x, v: s.v, a: s.a });
+    };
+    D.pins.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "pos-pin"; b.setAttribute("aria-pressed", "false");
+      b.textContent = p.deg + "°";
+      b.setAttribute("aria-label", "Phase angle " + p.deg + " degrees");
+      b.addEventListener("click", function () { showPin(i); });
+      track.appendChild(b); pinEls.push(b);
     });
-
-    document.getElementById("results-check").addEventListener("click", function () {
-      var right = 0, filled = 0, total = D.trials.length * 3;
-      Array.prototype.forEach.call(tbody.rows, function (tr, i) {
-        tr.querySelectorAll("select").forEach(function (s) {
-          var k = s.getAttribute("data-k"), exp = D.trials[i][k];
-          s.parentElement.classList.remove("ok", "no");
-          if (!s.value) return;
-          filled++;
-          var ok = s.value === exp;
-          if (ok) right++;
-          s.parentElement.classList.add(ok ? "ok" : "no");
-        });
-      });
-      var out = document.getElementById("results-score");
-      if (!filled) { out.textContent = "Fill in at least one row from your 3D timings first."; return; }
-      out.textContent = right + " of " + filled + " readings match the WAEC table" + (filled < total ? " (" + (total - filled) + " still blank)." : "!");
-      emit("l1:table-checked", { right: right, filled: filled });
-    });
+    D.showPin = showPin;
   }
 
-  // =========================================================
-  // 3. Swing Position Explorer (-A to +A)
-  // =========================================================
-  var track = document.getElementById("ph-track");
-  if (track && D.pins) {
-    var nums = document.getElementById("ph-nums");
-    var labels = ["−A", "−0.5A", "0", "+0.5A", "+A"];
-    labels.forEach(function (lb, k) {
-      var sp = document.createElement("span");
-      sp.textContent = lb;
-      sp.style.left = (k / (labels.length - 1) * 100) + "%";
-      nums.appendChild(sp);
+  // ---------------- 3. Bridge: do the crates fly, and where? ----------------
+  var card = document.getElementById("bridge-card");
+  if (card) {
+    var ANS = { a3: "stay", a8: "lift", where: "top" };
+    var pickd = {}, verdict = document.getElementById("bridge-verdict");
+    var zoom = function () { return window.StudyScenes && window.StudyScenes.zoom; };
+    Array.prototype.forEach.call(card.querySelectorAll("[data-try]"), function (b) {
+      b.addEventListener("click", function () {
+        var z = zoom(), cm = +b.getAttribute("data-try");
+        var r = z && z.setA ? z.setA(cm) : null;
+        var out = document.getElementById("bridge-try");
+        var w = D.okada.w, amax = r ? r.a_max : w * w * cm / 100;
+        if (out) out.innerHTML = "A = <b>" + cm + " cm</b> → a<sub>max</sub> = ω²A = <b>" + amax.toFixed(1) + " m/s²</b> " + (amax >= D.okada.g ? "&gt; g" : "&lt; g") + ". Look at the zoom above.";
+      });
     });
-    nums.style.margin = "8px 10px 0";
-
-    var info = document.getElementById("ph-info");
-    var pinEls = [];
-    D.pins.forEach(function (pObj, idx) {
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "ph-pin";
-      var pct = ((pObj.frac + 1) / 2) * 100;
-      btn.style.left = pct + "%";
-      if (idx % 2 === 1) btn.classList.add("up");
-      btn.innerHTML = '<span aria-hidden="true">' + pObj.emo + "</span>";
-      btn.setAttribute("aria-label", pObj.label + ", displacement " + pObj.x);
-      btn.addEventListener("click", function () { showPin(idx); });
-      track.appendChild(btn);
-      pinEls.push(btn);
-    });
-
-    var showPin = function (i) {
-      var pObj = D.pins[i];
-      if (!pObj) return;
-      pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
-      info.innerHTML =
-        "<b>Position " + pObj.label + " (x = " + pObj.x + ")</b> · " +
-        "Speed <code>|v| = " + pObj.v + "</code> · " +
-        "Acceleration <code>a = " + pObj.a + "</code> · " +
-        "Energy: <b>KE " + pObj.ke + " / PE " + pObj.pe + "</b><br>" +
-        pObj.note;
+    var pickOpt = function (q, v) {
+      pickd[q] = v;
+      Array.prototype.forEach.call(card.querySelectorAll('[data-q="' + q + '"] button'), function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === v)); b.classList.remove("ok", "no");
+      });
     };
-    window.L01.showPin = showPin;
-    showPin(3); // default highlight x = 0 centre
-  }
-
-  // =========================================================
-  // 4. Two-Clock Mystery Solver (#vinegar-test in #bridge)
-  // =========================================================
-  var vt = document.getElementById("vinegar-test");
-  if (vt) {
-    var bStep1 = document.getElementById("vt-zobo");
-    var bStep2 = document.getElementById("vt-drop1");
-    var bStep3 = document.getElementById("vt-drop5");
-    var bReset = document.getElementById("vt-reset");
-    var status = document.getElementById("vt-status");
-    var verdict = document.getElementById("vt-verdict");
-    var rodB = document.getElementById("rod-b");
-    var bobB = document.getElementById("bob-b");
-    var timeB = document.getElementById("time-b");
-    var lenBLabel = document.getElementById("len-b-label");
-
-    bStep1.addEventListener("click", function () {
-      bStep1.disabled = true;
-      bStep2.disabled = false;
-      if (bobB) bobB.style.transform = "scale(1.28)";
-      status.innerHTML = "We clipped a heavy lead weight onto Clock B's bob… and its period is <strong>still 2.15 s!</strong> Mrs Adeyemi's theory is busted: mass does not change the period. Now try Step 2 (shorten the length L).";
-      emit("l1:clock-mass-tested", {});
+    Array.prototype.forEach.call(card.querySelectorAll(".bridge-q"), function (qEl) {
+      var q = qEl.getAttribute("data-q");
+      Array.prototype.forEach.call(qEl.querySelectorAll("button"), function (b) { b.addEventListener("click", function () { pickOpt(q, b.getAttribute("data-v")); }); });
     });
-
-    bStep2.addEventListener("click", function () {
-      bStep2.disabled = true;
-      bStep3.disabled = false;
-      if (rodB) {
-        rodB.style.height = "114px";
-        rodB.style.animationDuration = "1.038s";
-      }
-      if (lenBLabel) lenBLabel.textContent = "· L = 1.070 m";
-      if (timeB) timeB.textContent = "2.08 s";
-      status.innerHTML = "Aha! Screwing the regulating nut UP shortened L from 1.150 m to 1.070 m, and the period dropped to <strong>2.08 s</strong>! Now click Step 3 to bring L to 0.994 m.";
-    });
-
-    bStep3.addEventListener("click", function () {
-      bStep3.disabled = true;
-      if (rodB) {
-        rodB.style.height = "105px";
-        rodB.style.animationDuration = "1.0s";
-      }
-      if (lenBLabel) lenBLabel.textContent = "· L = 0.994 m (Calibrated!)";
-      if (timeB) timeB.textContent = "2.00 s ✓";
-      status.innerHTML = "Both pendulums now swing in <strong>perfect 2.00 s lockstep!</strong>";
-      verdict.innerHTML =
-        "<strong>Case solved!</strong> Clock B was running slow because its regulating nut had slipped down the rod, lengthening L from <strong>0.994 m</strong> to <strong>1.150 m</strong> (increasing T from 2.00 s to 2.15 s). Because <strong>T = 2π√(L/g)</strong> depends on <strong>length L</strong> and not mass, screwing the nut upward by <strong>15.6 cm</strong> restored exact timekeeping!";
-      verdict.classList.add("on");
-      burst(verdict, 24);
-      emit("l1:vinegar-done", { L: 0.994, T: 2.00 });
-    });
-
-    bReset.addEventListener("click", function () {
-      bStep1.disabled = false;
-      bStep2.disabled = true;
-      bStep3.disabled = true;
-      verdict.classList.remove("on");
-      if (bobB) bobB.style.transform = "scale(1)";
-      if (rodB) {
-        rodB.style.height = "124px";
-        rodB.style.animationDuration = "1.075s";
-      }
-      if (lenBLabel) lenBLabel.textContent = "· L = 1.150 m";
-      if (timeB) timeB.textContent = "2.15 s";
-      status.innerHTML = "Clock A ticks with T = 2.00 s, while Clock B is dragging at T = 2.15 s. Start with Step 1.";
-    });
-
-    window.L01.vt = {
-      step1: function () { bStep1.click(); },
-      step2: function () { bStep2.click(); },
-      step3: function () { bStep3.click(); }
+    var check = function () {
+      var keys = Object.keys(ANS);
+      if (keys.some(function (k) { return !pickd[k]; })) { toast("Answer all three questions first."); return; }
+      var all = true;
+      keys.forEach(function (k) {
+        var ok = pickd[k] === ANS[k]; if (!ok) all = false;
+        Array.prototype.forEach.call(card.querySelectorAll('[data-q="' + k + '"] button'), function (b) {
+          b.classList.toggle("ok", b.getAttribute("data-v") === ANS[k]);
+          b.classList.toggle("no", b.getAttribute("data-v") === pickd[k] && !ok);
+        });
+      });
+      var w = D.okada.w, th = D.okada.g / (w * w) * 100;
+      verdict.classList.add("on"); verdict.classList.toggle("bad", !all);
+      verdict.innerHTML = all
+        ? "<strong>Verdict:</strong> the crates fly at the <strong>top</strong> of the bounce, where the carrier's speed is zero but its downward acceleration ω²A is greatest — not where the bike moves fastest. Only gravity pulls the crate down; the carrier can only push up. So once ω²A &gt; g the carrier drops away faster than the crate can fall. At ω ≈ 12.6 rad/s that needs A ≥ g/ω² = <b>" + th.toFixed(1) + " cm</b>. Something on Ridge Road must be pumping the bounce that big."
+        : "<strong>Not quite.</strong> At A = 3 cm, a_max = 4.7 m/s² is less than g, so the carrier never falls away faster than the crate. At 8 cm, a_max = 12.6 m/s² is more than g. The crate leaves at the top, where the carrier is still for an instant but accelerating downwards hardest. The green rings show the right answers.";
+      if (all) burst(verdict, 24);
+      emit("l3:bridge", { correct: all });
     };
+    document.getElementById("bridge-check").addEventListener("click", check);
+    document.getElementById("bridge-reset").addEventListener("click", function () {
+      pickd = {}; verdict.classList.remove("on", "bad");
+      Array.prototype.forEach.call(card.querySelectorAll(".bridge-q button"), function (b) { b.setAttribute("aria-pressed", "false"); b.classList.remove("ok", "no"); });
+    });
+    D.bridge = { pick: pickOpt, check: check };
   }
 })();

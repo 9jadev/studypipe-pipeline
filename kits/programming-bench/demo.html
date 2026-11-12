@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: programming-bench</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #0b141e;
+    color: #e2e8f0;
+    font: 13px/1.38 system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+  }
+  #wrap {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 100vw;
+  }
+  #stage {
+    position: relative;
+    width: 100%;
+    height: 52vh;
+    min-height: 280px;
+  }
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    touch-action: none;
+  }
+  #modes, #ui {
+    padding: 6px 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  #modes { padding-bottom: 2px; }
+  button {
+    min-height: 36px;
+    padding: 0 10px;
+    border-radius: 18px;
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    background: #153e5c;
+    color: #f8fafc;
+    font: 600 12px system-ui, sans-serif;
+    cursor: pointer;
+  }
+  button.on {
+    background: #059669;
+    border-color: #34d399;
+  }
+  button.alt {
+    background: #1e293b;
+    border-color: rgba(148, 163, 184, 0.25);
+  }
+  button.alt.on {
+    background: #0284c7;
+    border-color: #38bdf8;
+  }
+  #readout {
+    padding: 4px 8px 14px;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  #line {
+    padding: 6px 8px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 8px;
+    font: 12px/1.45 ui-monospace, SFMono-Regular, monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: 6px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font: 11.5px ui-monospace, SFMono-Regular, monospace;
+  }
+  th, td {
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 3px 5px;
+    text-align: left;
+  }
+  th {
+    background: rgba(56, 189, 248, 0.12);
+    color: #38bdf8;
+  }
+  #ev {
+    font: 11px ui-monospace, SFMono-Regular, monospace;
+    color: #94a3b8;
+    padding-top: 5px;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="modes"></div>
+  <div id="ui"></div>
+  <div id="readout">
+    <div id="line"></div>
+    <table id="tbl"></table>
+    <div id="ev"></div>
+  </div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0b141e);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.05, 80);
+  var controls = new THREE.OrbitControls(camera, cv);
+  controls.enablePan = false;
+  controls.enableDamping = true;
+
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x334155, 1.1));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.35);
+  dl.position.set(3, 6, 4);
+  scene.add(dl);
+  var fill = new THREE.DirectionalLight(0x93c5fd, 0.5);
+  fill.position.set(-4, 3, 2);
+  scene.add(fill);
+
+  var evLog = [];
+  var kit = ProgrammingBench.create({
+    mode: "memory-stage",
+    onEvent: function (n) {
+      evLog.unshift(n);
+      evLog.length = Math.min(evLog.length, 6);
+      document.getElementById("ev").textContent = "events: " + evLog.join(" · ") + " | tris: " + kit.triangles();
+    }
+  });
+  scene.add(kit);
+
+  var view = { target: new THREE.Vector3(0, 0.35, 0), dist: 6.5, pitch: 0.72 }, goal = null;
+  function fitDist(d) {
+    var a = camera.aspect || 1;
+    return d * Math.max(1, Math.min(1.95, 1.12 / a));
+  }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(
+      v.target.x,
+      v.target.y + Math.sin(v.pitch) * d,
+      v.target.z + Math.cos(v.pitch) * d
+    );
+    controls.target.copy(v.target);
+    camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = kit.viewFor(name);
+    goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist, pitch: v.pitch };
+    if (instant) {
+      view.target.copy(goal.target);
+      view.dist = goal.dist;
+      view.pitch = goal.pitch;
+      applyView(view);
+      goal = null;
+    }
+  }
+  function resize() {
+    var w = host.clientWidth || 360, h = host.clientHeight || 300;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    applyView(view);
+  }
+  new ResizeObserver(resize).observe(host);
+  resize();
+
+  var modesEl = document.getElementById("modes");
+  var uiEl = document.getElementById("ui");
+  var MB = {};
+
+  var MODE_LABELS = {
+    "memory-stage": "L01 Memory",
+    "logic-switchboard": "L02 Logic",
+    "loop-stepper": "L03 Loop",
+    "array-rack": "L04 Array",
+    "function-factory": "L05 Function",
+    "trace-console": "L06 Trace"
+  };
+
+  function btn(parent, label, fn, cls) {
+    var b = document.createElement("button");
+    b.textContent = label;
+    if (cls) b.className = cls;
+    b.onclick = function () { fn(b); };
+    parent.appendChild(b);
+    return b;
+  }
+
+  ProgrammingBench.modes.forEach(function (m) {
+    MB[m] = btn(modesEl, MODE_LABELS[m] || m, function () {
+      kit.setState({ mode: m });
+      Object.keys(MB).forEach(function (k) { MB[k].classList.toggle("on", k === m); });
+      renderUI();
+      gotoView("all", true);
+    });
+  });
+  MB["memory-stage"].classList.add("on");
+
+  function renderUI() {
+    uiEl.innerHTML = "";
+    var r = kit.reading();
+    var m = r.mode;
+
+    if (m === "memory-stage") {
+      btn(uiEl, '"150" + 20 (TypeError)', function () { kit.setState({ exprMode: "mismatch" }); kit.takeReading(); }, "alt");
+      btn(uiEl, 'int("150") + 20 = 170', function () { kit.setState({ exprMode: "cast" }); kit.takeReading(); }, "alt");
+      btn(uiEl, '"200" + "50"', function () { kit.setState({ exprMode: "concat", aVal: "200", bVal: 50 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "12 + 8*2 - 6/2 = 25", function () { kit.setState({ exprMode: "precedence" }); kit.takeReading(); }, "alt");
+      ["cpu", "alu", "slot1", "display", "led"].forEach(function (p) {
+        btn(uiEl, "Focus " + p, function () { kit.highlight(p); gotoView(p); }, "alt");
+      });
+    } else if (m === "logic-switchboard") {
+      btn(uiEl, "Bat 15% / Grid OFF", function () { kit.setState({ battery: 15, grid_online: false }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Bat 15% / Grid ON", function () { kit.setState({ battery: 15, grid_online: true }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Bat 85% / Grid OFF", function () { kit.setState({ battery: 85, grid_online: false }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Mode: Fixed vs Buggy", function () {
+        var next = kit.reading().logicMode === "fixed" ? "buggy" : "fixed";
+        kit.setState({ logicMode: next });
+        kit.takeReading();
+      }, "alt");
+      ["batteryDial", "gridSwitch", "notGate", "andGate", "relay", "generator"].forEach(function (p) {
+        btn(uiEl, "Focus " + p, function () { kit.highlight(p); gotoView(p); }, "alt");
+      });
+    } else if (m === "loop-stepper") {
+      btn(uiEl, "Step +1", function () { kit.step(); }, "alt");
+      btn(uiEl, "Solar 7-Day (382 kWh)", function () { kit.setState({ dataset: "solar", stepIndex: 7 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "range(1,6) Sum=15", function () { kit.setState({ dataset: "range5", stepIndex: 5 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Infinite Loop Watchdog", function () { kit.setState({ dataset: "infinite", stepIndex: 6 }); kit.takeReading(); }, "alt");
+      ["gear", "counterReg", "accumReg", "condDiamond", "watchdog"].forEach(function (p) {
+        btn(uiEl, "Focus " + p, function () { kit.highlight(p); gotoView(p); }, "alt");
+      });
+    } else if (m === "array-rack") {
+      btn(uiEl, "Index 0 (3.25V)", function () { kit.setState({ index: 0 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Index 3 (Min 2.95V)", function () { kit.setState({ index: 3 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Index 7 (3.20V)", function () { kit.setState({ index: 7 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Index 8 (IndexError!)", function () { kit.setState({ index: 8 }); kit.takeReading(); }, "alt");
+      ["pointer", "slot0", "slot3", "oobZone", "alarm"].forEach(function (p) {
+        btn(uiEl, "Focus " + p, function () { kit.highlight(p); gotoView(p); }, "alt");
+      });
+    } else if (m === "function-factory") {
+      [85, 120, 210, 45].forEach(function (u) {
+        btn(uiEl, u + " kWh Call", function () { kit.setState({ units: u }); kit.takeReading(); }, "alt");
+      });
+      ["hopper", "localDome", "returnChute", "globalPillar", "display"].forEach(function (p) {
+        btn(uiEl, "Focus " + p, function () { kit.highlight(p); gotoView(p); }, "alt");
+      });
+    } else if (m === "trace-console") {
+      btn(uiEl, "Set 0x7E (126)", function () { kit.setState({ byteVal: 0x7E, traceStep: 3 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Set 0x53 (83)", function () { kit.setState({ byteVal: 0x53 }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Set 0xFF (255)", function () { kit.setState({ byteVal: 0xFF }); kit.takeReading(); }, "alt");
+      btn(uiEl, "Step Trace", function () { kit.step(); }, "alt");
+      ["switches", "hexDisplay", "traceScreen", "contactor", "statusBeacon"].forEach(function (p) {
+        btn(uiEl, "Focus " + p, function () { kit.highlight(p); gotoView(p); }, "alt");
+      });
+    }
+
+    btn(uiEl, "View All", function () { kit.highlight(null); gotoView("all"); }, "alt");
+    btn(uiEl, "Reset", function () { kit.reset(); }, "alt");
+  }
+
+  renderUI();
+  gotoView("all", true);
+
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var rc = cv.getBoundingClientRect();
+    ptr.set(((e.clientX - rc.left) / rc.width) * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    var id = kit.pickPart(ray);
+    if (id) {
+      kit.highlight(id);
+      setTimeout(function () { kit.highlight(null); }, 1000);
+    }
+  });
+
+  var lineEl = document.getElementById("line"), tblEl = document.getElementById("tbl"), lastKey = "";
+  function paintReadout() {
+    var r = kit.reading(), s = "";
+    if (r.mode === "memory-stage") {
+      s = "L01 Memory Stage | Expr: " + r.expr + " -> " + r.result + " [" + r.status + "]\nAllocated: " + r.totalBytes + "B across 6 slots (0x01..0x06)";
+    } else if (r.mode === "logic-switchboard") {
+      s = "L02 Logic Switchboard | " + r.expr + "\nBattery: " + r.battery + "% (<20=" + r.low_battery + ") | Grid: " + (r.grid_online ? "Online" : "Offline") + " | Relay: " + r.status;
+    } else if (r.mode === "loop-stepper") {
+      s = "L03 Loop Stepper | " + r.loopHeader + "\nStep: " + r.stepIndex + " | i=" + r.i + " | total=" + r.total + " | mean=" + r.mean + " | " + r.status;
+    } else if (r.mode === "array-rack") {
+      s = "L04 Array Rack | " + r.formula + "\nIndex: " + r.index + " -> " + (r.outOfBounds ? r.error : (r.value.toFixed(2) + " V")) + " | Min: " + r.min_voltage.toFixed(2) + " V at [" + r.min_index + "]";
+    } else if (r.mode === "function-factory") {
+      s = "L05 Function Factory | " + r.signature + "\nLocal: energy=₦" + r.energy_cost.toFixed(2) + ", vat=₦" + r.vat_amount.toFixed(2) + " -> Return: ₦" + r.total_bill.toFixed(2) + " | Global: ₦" + r.global_revenue.toFixed(2);
+    } else {
+      s = "L06 Trace Console | Hex: " + r.hex + " | Bin: " + r.binary + " | Dec: " + r.decimal + "\nEven Sum: " + r.evenSum + " (count=" + r.evenCount + ") | " + r.gridStatus;
+    }
+    var key = s + "|" + r.rows.length;
+    if (key === lastKey) return;
+    lastKey = key;
+    lineEl.textContent = s;
+
+    if (!r.rows.length) {
+      tblEl.innerHTML = "";
+      return;
+    }
+    var cols = Object.keys(r.rows[0]);
+    tblEl.innerHTML =
+      "<tr>" + cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr>" +
+      r.rows.map(function (row) {
+        return "<tr>" + cols.map(function (c) { return "<td>" + row[c] + "</td>"; }).join("") + "</tr>";
+      }).join("");
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      var k = Math.min(1, dt * 5);
+      view.target.lerp(goal.target, k);
+      view.dist += (goal.dist - view.dist) * k;
+      view.pitch += (goal.pitch - view.pitch) * k;
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01) goal = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    paintReadout();
+  })();
+
+  window.__kit = kit;
+  window.__gotoView = gotoView;
+})();
+</script>
+</body>
+</html>

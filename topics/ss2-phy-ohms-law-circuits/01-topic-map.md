@@ -1,141 +1,129 @@
-# 01 — Topic Map: Ohm's Law & Current Electricity (`ss2-phy-ohms-law-circuits`)
-
-## 1. Syllabus & Target Audience
-- **Subject:** Physics
-- **Level:** Senior Secondary 2 (SS2) / Exam Prep (SS3)
-- **Syllabuses Covered:**
-  - **WAEC WASSCE Physics:** Section IV (Electricity & Magnetism) — Electric current, potential difference, electromotive force (e.m.f.), Ohm's law, resistance, series and parallel circuits, internal resistance of cells, electrical energy and power, resistivity and conductivity, shunt and multiplier (galvanometer conversion), Wheatstone bridge, metre bridge, and potentiometer; plus **Paper 3 (Practical Physics)** electricity experiments.
-  - **NECO SSCE Physics:** Current electricity, circuit networks, cell arrangements, bridge and null-deflection measurements, and practical electricity tables/graphs.
-  - **JAMB UTME Physics:** Current electricity — Ohm's law, series/parallel combinations, EMF and internal resistance, power and cell efficiency, ammeter/voltmeter conversion, metre bridge, and potentiometer calculations.
-
+---
+slug: ss2-phy-ohms-law-circuits
+subject: Physics
+class: SS2
+exams: [WAEC, NECO, JAMB]
+practical: true
+lessons_count: 5
+duration_per_lesson_min: 80
 ---
 
-## 2. Paraphrasing & Originality Commitment
-All definitions, explanations, Nigerian phenomena, worked examples, and assessment items in this unit are **100% originally authored and paraphrased**. No sentences, problem stems, or numerical setups are copied verbatim from the uploaded past-question source bank or any textbook. Every calculation archetype and practical paradigm identified in the syllabus is taught through fresh Nigerian contexts and newly constructed numbers.
+# Topic Map: Ohm's Law & Current Electricity — Current, P.D., EMF, Networks and Null Methods
 
----
+## 1. Paraphrased Syllabus Scope (WAEC | NECO | JAMB)
 
-## 3. Unit-Wide Nigerian Phenomenon & Mystery Thread
-- **The Case File:** *The Aba Tailoring Workshop & Keke Battery Drop*
-  - At **Chinedu's Garment & Auto-Electric Workshop on Ngwa Road, Aba**, an apprentice measures a newly charged $12.0\text{ V}$ lead-acid battery with a digital voltmeter while nothing is connected: it reads a healthy **$12.0\text{ V}$**.
-  - Yet the moment he flips the main workshop changeover switch to crank the starter motor or run the low-resistance pressing iron heater, the cabin roof lamp dims dramatically and the voltmeter across the battery terminals plunges to **$8.4\text{ V}$**!
-  - Even stranger: when his boss, **Engr. Nkechi**, measures the same battery on a **100 cm potentiometer wire** at the test bench, the balance point gives the full **$12.0\text{ V}$** with zero voltage drop.
-- **Driving Unit Question:** *Where do the missing $3.6\text{ V}$ disappear to when current flows, how do series and parallel networks split current and voltage, how can a delicate $10\text{ mA}$ galvanometer measure $10\text{ A}$ or $150\text{ V}$ without burning out, and why does a potentiometer measure true EMF when a voltmeter fails?*
+| Board | What candidates must be able to do (paraphrased) |
+|---|---|
+| **WAEC SSCE (Theory)** | Explain current as rate of charge flow and potential difference as energy transferred per coulomb; state and apply Ohm's law for a conductor at steady temperature; distinguish ohmic conductors from non-ohmic devices (a filament bulb, a diode, an electrolyte such as acidified or salty water between inert plates, where gas forms at the plates). Work out the resistance of a uniform wire from its length, cross-section and material (resistivity), and combine resistors in series and in parallel. Define electromotive force and internal resistance, and apply the full-circuit relation linking EMF, terminal p.d. and lost volts. Combine cells in series and in parallel. Calculate electrical energy, power and the efficiency of a source. Explain how a sensitive galvanometer is turned into an ammeter (with a shunt) or a voltmeter (with a multiplier). State the balance conditions for a metre bridge and a slide-wire potentiometer and use them to compare resistances and EMFs. |
+| **WAEC Paper 3 (Practical)** | Set up a current–voltage circuit with an ammeter in series and a voltmeter in parallel, take at least five paired readings, tabulate to the correct decimal places and find a resistance from the slope of the graph. Find the balance length on a metre bridge for several standard values and deduce an unknown resistance (and a diameter ratio of two wires from the slope). Operate a potentiometer: record the "jockey-off" meter reading first, then balance lengths, plot the required graph and deduce EMF, internal resistance or a p.d. State precautions in acceptable wording (past tense) and identify sources of error. |
+| **NECO SSCE** | The same senior-secondary scope and examining style as WAEC, with a strong preference for tabulated readings, clearly labelled graphs, slope triangles, and the metre-bridge and potentiometer practicals. |
+| **JAMB UTME** | Under "Current electricity": apply Ohm's law and the EMF/internal-resistance relation; handle series and parallel resistor and cell combinations; compute power and source efficiency; size an ammeter shunt or a voltmeter multiplier; and use the metre-bridge and potentiometer balance conditions. Numerical multiple-choice items are very frequent. |
 
----
+## 2. Unit Mystery Thread & 3D Story Cast
 
-## 4. Transversal Competences (`L1`–`L7`) Across the Unit
-- **`L1` Thinking & Learning to Learn:** Formulating hypotheses about hidden internal resistance ($r$), testing predictions on 3D circuit benches, and interpreting linear slopes and intercepts ($V$ vs $I$, $R_2$ vs $R_1$).
-- **`L2` Cultural Competence, Interaction & Self-Expression:** Connecting physics principles to Nigerian artisanal workshops (Aba auto-electricians, Onitsha electronics markets, Alaba solar/battery installers, school physics labs) and articulating past-tense experimental precautions clearly.
-- **`L3` Taking Care of Oneself & Managing Daily Life:** Calculating household appliance power ratings ($P = IV$), avoiding overloaded extension sockets, and recognizing when high battery internal resistance causes heat waste.
-- **`L4` Multiliteracy:** Translating fluently between 3D physical circuit benches, standard schematic symbols, algebraic equations, and plotted linear graphs ($V$–$I$, $R_2$–$R_1$, $1/I$–$l$).
-- **`L5` ICT Competence:** Operating interactive 3D circuit simulations, virtual ammeters/voltmeters, sliding rheostats, and null-balance jockeys.
-- **`L6` Working Life & Entrepreneurship:** Diagnosing sulphated batteries vs wiring drops, sizing shunt/multiplier resistors in meter repair, and evaluating cell efficiency ($\eta = \frac{R}{R+r} \times 100\%$).
-- **`L7` Participation, Involvement & Building a Sustainable Future:** Minimising $I^2r$ Joule heating losses in solar-inverter DC cabling by selecting proper wire cross-sectional area ($A$) and low-resistivity copper ($\rho = RA/L$).
+**The case: The Ngwa Road Keke Battery Drop.**
+At **Engr. Nkechi's Auto-Electric Workshop on Ngwa Road, Aba**, a tricycle (keke) rider, **Emeka**, complains that his keke starts sluggishly and the headlamp dims whenever he revs the engine. His battery was charged only last week. On the bench, **Chinedu** (an SS2 apprentice) clips a digital voltmeter straight across the resting battery: it reads a normal-looking **12.0 V**. Yet the instant Chinedu throws the switch to the starter motor, that same voltmeter collapses to **8.4 V** and the test lamp goes dim. **Tobe**, a fellow apprentice, is sure the battery is simply "half dead" and should be thrown away. But when **Engr. Nkechi** balances the battery against her 100 cm potentiometer wire, where no current is drawn from it, the needle settles at the full **12.0 V** — the battery's true EMF has not fallen at all.
 
----
+**Driving unit question:** *Where do the missing 3.6 V go the moment current flows, how do series and parallel networks share current and voltage, how can a delicate 15 mA galvanometer safely test a 3 A starter line or a 40 V bank, and why does the potentiometer still read 12.0 V when the voltmeter does not?*
 
-## 5. Multi-Lesson Unit Architecture (Welcome Hub + 5 Progressive Lessons)
+| Lesson | The piece of the mystery it unlocks |
+|---|---|
+| 01 | What current and p.d. really are, why the thick starter cable barely warms while the thin lamp wire glows, and how to measure a resistance from a V–I graph. |
+| 02 | **The core clue:** the 3.6 V are not lost in the wires — they are dropped *inside* the battery across its internal resistance the moment a large current flows (lost volts, terminal p.d.). |
+| 03 | Whether the shop's backup cells should be wired in series or in parallel to run a low-resistance pump, why a worn battery runs hot, and how much of its power is wasted (networks, cell arrays, power, efficiency). |
+| 04 | How Nkechi's tiny 15 mA galvanometer is converted — with a parallel shunt or a series multiplier — to measure the starter current and the bank voltage without burning out. |
+| 05 | **The resolution:** proving the battery's true 12.0 V EMF with the potentiometer null method (no current drawn, so no lost volts) and measuring an unknown coil exactly on the metre bridge — the verdict: EMF unchanged, internal resistance risen (sulphated plates / corroded terminals) — clean, recharge and re-test `r`; replace only if `r` stays high. |
 
-### Unit Welcome Hub (`html/index.html`)
-- **3D Hero Lab (`#lab-canvas`):** Interactive 3D DC Circuit & Internal Resistance Bench (`StudyLab`) featuring a lead-acid cell ($E$, $r$), brass plug key, sliding rheostat load $R$, analogue series ammeter, parallel voltmeter, and animated electron-drift beads.
-- **01 / The Unit Mystery (`#mystery`):** The Aba Workshop $12.0\text{ V} \to 8.4\text{ V}$ voltage collapse case file + WAEC/NECO/JAMB exam weight breakdown.
-- **02 / The 5-Lesson Journey (`#journey`):** Interactive cards linking to Lessons 01–05.
-- **03 / Interactive Concept Explorer (`#explorer`):** 4-tab live SVG curve explorer (*1. Ohmic vs Non-Ohmic $I$–$V$*, *2. Terminal P.D. $V = E - Ir$ Line*, *3. Cell Efficiency $\eta$ vs Load Ratio $R/r$*, *4. Potentiometer & Metre Bridge Null Balance*).
-- **04 / What You'll Master, 6 Exam Archetypes & 3 Myth-Busters (`#master`, `#archetypes`, `#myths`):** Overview of the 6 core calculation patterns and 3 interactive flip cards busting classic student misconceptions.
-- **05 / How We Learn (`#method`, `#kit`, `.finale`):** Overview of the 5-phase inquiry loop and launch button into Lesson 01.
+**StoryStage cast:** `nkechi` = Engr. Nkechi (master auto-electrician, the expert) · `chinedu` = Chinedu (SS2 apprentice, the learner) · `tobe` = Tobe (apprentice who holds the misconceptions) · `emeka` = Emeka (keke rider whose battery is the case). **Sets:** the workshop floor with the keke and battery (Set 1) and Nkechi's precision test bench with the potentiometer and metre bridge (Set 2).
 
----
+## 3. Unit Welcome Hub Specification
 
-### Lesson 01: Ohm's Law, Metallic Conduction & Wire Resistivity (`html/lessons/lesson-01/`)
-- **Core Concepts:**
-  1. Electric current $I = Q/t$ (conventional current vs electron drift) and potential difference $V = W/Q$.
-  2. Ohm's Law: $V \propto I$ at constant temperature and physical conditions ($V = IR$).
-  3. Ohmic conductors (constantan, manganin, copper at constant $T$) vs non-ohmic devices (filament lamp, semiconductor diode, electrolyte).
-  4. Factors affecting resistance of a uniform wire: length $L$, cross-sectional area $A = \pi d^2/4$, material resistivity $\rho$ ($R = \frac{\rho L}{A}$, so $R \propto \frac{L}{d^2}$), and temperature.
-  5. **WAEC Paper 3 Practical 3 (Ohm's Law $V$–$I$ Graph):** Ammeter in series, voltmeter in parallel across constantan resistance wire, rheostat in series, key removed between readings to prevent heating; slope of $V$ against $I$ equals $R$.
-- **3D Interactive Stages:**
-  - `story.js`: Aba workshop apprentice testing thin vs thick copper jumper cables and watching a filament bulb heat up.
-  - `bench.js`: 3D Ohm's Law & Resistivity Bench — adjust wire length $L$ ($20\text{–}100\text{ cm}$), wire diameter $d$ ($0.3\text{–}1.2\text{ mm}$), material ($\text{Copper}$, $\text{Constantan}$, $\text{Nichrome}$), and rheostat slider to plot $V$ vs $I$.
-  - `zoom.js`: 3D Atomic Lattice Drift Zoom — drifting free electrons colliding with vibrating metal ions as temperature or electric field changes.
+- **3D Hero Lab (`#lab-canvas`, `window.StudyLab`):** an interactive DC circuit and internal-resistance bench — a 12 V lead-acid cell (adjustable EMF `E` and internal resistance `r`), a brass plug key, a sliding rheostat load `R`, a series ammeter and a parallel voltmeter, with drifting electron beads. Three HUD modes: `ohms-law` (vary `R`, read `V` and `I`, watch `V/I` stay constant for the wire) · `internal-resistance` (open key → `V = E`; close key → `V = E − Ir`, with the live V–I line) · `null` (slide a jockey on a 100 cm wire until the galvanometer reads zero). *(Build note / kit gap in § 10.)*
+- **Marquee (12 terms):** current `I = Q/t` · p.d. `V = W/Q` · Ohm's law `V = IR` · resistivity `ρ` · EMF `E` · internal resistance `r` · lost volts `Ir` · series `R = R₁ + R₂` · parallel `1/R = 1/R₁ + 1/R₂` · power `P = IV` · shunt / multiplier · potentiometer `E ∝ l`.
+- **Unit Mystery Case File (`#mystery`):** the 12.0 V → 8.4 V collapse on Ngwa Road, with clue cards (resting 12.0 V · under-load 8.4 V · potentiometer 12.0 V · lamp dims when the starter cranks) and three exam-weight stat cards (`Marks at stake` · `Exam boards: WAEC · NECO · JAMB` · `Core laws: Ohm, EMF, null balance`).
+- **Explorer tabs (4, live SVG curve):** *1. Ohmic vs non-ohmic I–V* (axes `I` vertical against `V`: straight line through the origin for the wire vs a curve that bends over towards the `V` axis for a filament lamp) · *2. Terminal p.d. V = E − Ir* (straight line, vertical intercept `E`, gradient `−r`) · *3. Power and efficiency vs load R* (two **smooth curves**: `P` peaks where `R = r`; `η = R/(R+r)` rises towards 100 %) · *4. Potentiometer balance V = kl* (straight line through the origin).
+- **6 calculation archetypes:**
+  1. Ohm's law and power: `V = IR`; `P = IV = I²R = V²/R`; charge `Q = It`.
+  2. Resistance of a wire: `R = ρL/A`, `A = πd²/4`, so `R ∝ L/d²`; resistivity `ρ = RA/L`.
+  3. EMF and internal resistance: `E = I(R + r)`, terminal p.d. `V = E − Ir`, lost volts `Ir`; the two-readings method.
+  4. Networks and cell arrays: series `R = ΣR`; parallel `1/R = Σ(1/R)`; cells in series add `E` and `r`; identical cells in parallel keep `E`, give `r/n`; efficiency `η = R/(R+r)`.
+  5. Meter conversion: shunt `R_s = I_g R_g /(I − I_g)`; multiplier `R_m = V/I_g − R_g`.
+  6. Null methods: metre bridge `R/S = l/(100 − l)`; potentiometer `E₁/E₂ = l₁/l₂`; internal resistance `r = R(l₁ − l₂)/l₂`.
+- **3 myth-buster flip cards:**
+  1. *"A voltmeter across a battery always shows its EMF."* — Only on open circuit. The moment current flows, it shows the terminal p.d. `V = E − Ir`, which is smaller.
+  2. *"Joining identical cells in parallel raises the voltage."* — Parallel identical cells keep one cell's EMF; what falls is the internal resistance (`r/n`), letting the group deliver more current.
+  3. *"To build a voltmeter you just put the whole resistance in series with the galvanometer."* — You add a **multiplier** `R_m = (V/I_g) − R_g`; the galvanometer's own coil resistance must be subtracted from the total.
 
----
+## 4. Multi-Lesson Breakdown
 
-### Lesson 02: EMF, Terminal P.D., Lost Volts & Internal Resistance (`html/lessons/lesson-02/`)
-- **Core Concepts:**
-  1. Electromotive force ($E$): total electrical energy supplied per coulomb by the source ($E = W_{\text{total}}/Q$), measured on open circuit ($I = 0$).
-  2. Internal resistance ($r$): opposition offered by the electrolyte and electrodes inside the cell itself.
-  3. Complete circuit equation: $E = V + v = IR + Ir = I(R + r)$.
-  4. Terminal potential difference ($V = IR = E - Ir$) and lost volts ($v = Ir$).
-  5. **"Two Readings, Same Cell" Archetype:** When load $R_1$ draws $I_1$ and load $R_2$ draws $I_2$ from the same cell, $E = I_1(R_1 + r) = I_2(R_2 + r) \implies r = \frac{I_2 R_2 - I_1 R_1}{I_1 - I_2}$.
-  6. Graphical determination of $E$ and $r$: plotting terminal p.d. $V$ on the vertical axis against current $I$ on the horizontal axis yields a straight line $V = -rI + E$ with vertical intercept $E$ and gradient $-r$.
-- **3D Interactive Stages:**
-  - `story.js`: Chinedu's $12.0\text{ V}$ battery dropping to $8.4\text{ V}$ under a $2.8\,\Omega$ starter load in Aba.
-  - `bench.js`: 3D Internal Resistance & Lost Volts Lab — toggle the brass plug key (open circuit $V = E$ vs closed circuit $V = E - Ir$), adjust external load $R$ and cell internal resistance $r$, and watch the live $V$–$I$ straight-line graph plot its intercept $E$ and negative slope $-r$.
-  - `zoom.js`: 3D Inside the Cell Electrolyte Zoom — ions migrating through battery acid between lead plates, showing energy dissipated as internal heat ($Ir$ lost volts) before charges ever reach the external brass terminals.
+| Lesson | Title | Driving question | 3D lab bench | 3D zoom | Bridge | Retrieval |
+|---|---|---|---|---|---|---|
+| **01** | **Current, P.D., Ohm's Law & the Resistance of Wires** | Why does the thin lamp wire glow while the thick starter cable barely warms, and how do we measure a resistance? | Ohm's-law & resistivity bench: vary `R`, material, length `L` and diameter `d`; take V–I pairs; plot V against I; a wire gives a straight line through the origin, a filament lamp a curve | Atomic-lattice drift: free electrons colliding with vibrating ions; thin vs thick wire; heating | Decide which jumper cable (thin vs thick) is overheating Emeka's circuit | from: 0 (charge, units, decimals) |
+| **02** | **EMF, Terminal P.D., Lost Volts & Internal Resistance** | Where do the missing 3.6 V go the instant the starter cranks? | Internal-resistance lab: toggle the key (open `V = E`; closed `V = E − Ir`), adjust `R` and `r`, read the live V–I straight line with intercept `E` and gradient `−r` | Inside the cell: ions crossing the electrolyte between plates; energy wasted as heat (`Ir`) before charge reaches the terminals | Explain the 12.0 V → 8.4 V collapse and find the battery's `r` | from: 1 |
+| **03** | **Series & Parallel Networks, Cell Arrays, Power & Efficiency** | Series or parallel for the shop's backup cells, and why does a worn battery run hot? | Network & cell-array builder: series/parallel resistors and cells; read total current, branch currents, load power, wasted power and efficiency; `P–R` and `η–R` smooth curves | Current splitting at a parallel node (`I = I₁ + I₂`); power shared between load `R` and internal `r` | Choose the cell arrangement that runs the low-resistance pump best | from: 1, 2 |
+| **04** | **Galvanometer Conversion — Ammeter Shunts & Voltmeter Multipliers** | How can a 15 mA galvanometer test a 3 A line or a 40 V bank and survive? | Conversion bench: Ammeter mode (parallel shunt `R_s`) vs Voltmeter mode (series multiplier `R_m`); dial the full-scale range; watch the current split and needle deflection | Moving coil, hairspring and radial field; thick shunt strip carrying ~99 % of the current vs the fine series multiplier dropping the excess voltage | Size the shunt and the multiplier Nkechi needs for the starter test | from: 1, 2, 3 |
+| **05** | **Null Methods — Metre Bridge, Potentiometer & WAEC Practicals** | How does the potentiometer still read the true 12.0 V, and how do we measure an unknown coil exactly? | Dual bench: metre bridge (slide the jockey, find the balance length, `R/S = l/(100−l)`) and potentiometer (balance lengths, `E ∝ l`, internal resistance by two lengths); WAEC tables | Potential gradient along the slide wire falling steadily until it equals the test EMF and the galvanometer current drops to zero | Solve the mystery: true EMF 12.0 V, risen internal resistance | from: 1, 2, 3, 4 |
 
----
+## 5. Unit Learning Objectives
 
-### Lesson 03: Series & Parallel Networks, Cell Arrays, Power & Efficiency (`html/lessons/lesson-03/`)
-- **Core Concepts:**
-  1. Resistors in series: same current $I$ through each, voltages add ($V = V_1 + V_2 + \dots$), $R_{\text{eq}} = R_1 + R_2 + \dots$
-  2. Resistors in parallel: same p.d. $V$ across each branch, currents split inversely with resistance ($I_1/I_2 = R_2/R_1$), $\frac{1}{R_{\text{eq}}} = \frac{1}{R_1} + \frac{1}{R_2} + \dots$, and for two branches $R_{\text{eq}} = \frac{R_1 R_2}{R_1 + R_2}$.
-  3. Series-parallel combination networks: collapsing parallel pods first, then adding series resistors, then working backwards to find branch currents and potential drops.
-  4. Cells in series ($E_{\text{total}} = nE$, $r_{\text{total}} = nr$ for aiding cells; opposing cell subtracts $E$ but still adds $r$!) vs **identical cells in parallel** ($E_{\text{total}} = E$, $r_{\text{total}} = \frac{r}{n}$).
-  5. Electrical energy ($W = IVt = I^2Rt = \frac{V^2}{R}t$) and power ($P = IV = I^2R = \frac{V^2}{R}$).
-  6. Cell efficiency: $\eta = \frac{\text{Useful power in external load}}{\text{Total power generated by cell}} \times 100\% = \frac{I^2 R}{I^2(R + r)} \times 100\% = \frac{R}{R + r} \times 100\% = \frac{V}{E} \times 100\%$.
-- **3D Interactive Stages:**
-  - `story.js`: Solar-inverter technician in Surulere choosing between wiring three $2.0\text{ V}$ cells in series vs in parallel to power a low-resistance DC water pump.
-  - `bench.js`: 3D Network & Cell Array Builder — switch between Series Cells, Parallel Cells, and Mixed Resistor Pods ($R_1, R_2, R_3$), measuring total current $I$, branch currents, load power $P_{\text{load}}$, wasted internal power $P_{\text{lost}}$, and cell efficiency $\eta$.
-  - `zoom.js`: 3D Hydraulic-Electric Junction & Efficiency Zoom — visualizing current splitting at a parallel node ($I = I_1 + I_2$) and power partitioning between external load $R$ and internal resistance $r$.
+1. **LO1 (Remember, Understand):** Define current, potential difference, EMF and internal resistance, and state Ohm's law with its conditions.
+2. **LO2 (Apply):** Use `V = IR`, `Q = It` and `P = IV = I²R = V²/R` in Nigerian workshop and household contexts, including unit conversions.
+3. **LO3 (Apply, Analyse):** Calculate the resistance of a uniform wire from `R = ρL/A`, use the proportionality `R ∝ L/d²`, and distinguish ohmic from non-ohmic behaviour from a V–I graph.
+4. **LO4 (Apply, Analyse):** Relate EMF, terminal p.d. and lost volts; find `E` and `r` from two readings and from the intercept and gradient of a V–I graph.
+5. **LO5 (Apply):** Reduce series–parallel resistor networks and combine cells in series and in parallel, then find branch currents and potential drops.
+6. **LO6 (Apply, Evaluate):** Compute electrical energy, power and source efficiency, and interpret the `P–R` and `η–R` curves.
+7. **LO7 (Apply):** Size an ammeter shunt and a voltmeter multiplier, and explain why an ideal ammeter has low resistance and an ideal voltmeter high resistance.
+8. **LO8 (Apply, Evaluate):** Use the metre-bridge and potentiometer balance conditions to find resistances, compare EMFs and measure internal resistance, state precautions in the past tense, and identify sources of error with their direction.
 
----
+## 6. Prerequisites & Spaced Retrieval Matrix
 
-### Lesson 04: Galvanometer Conversion — Ammeter Shunts & Voltmeter Multipliers (`html/lessons/lesson-04/`)
-- **Core Concepts:**
-  1. Why a sensitive moving-coil galvanometer (e.g. full-scale deflection current $I_g = 5\text{–}20\text{ mA}$, coil resistance $R_g = 5\text{–}50\,\Omega$) cannot directly measure large currents ($5\text{–}10\text{ A}$) or high voltages ($50\text{–}250\text{ V}$).
-  2. **Converting a Galvanometer to an Ammeter (Shunt $R_s$):**
-     - Connect a very low-resistance **shunt ($R_s$)** in **parallel** with the galvanometer so that most of the line current ($I - I_g$) bypasses the delicate coil.
-     - Parallel voltage equality: $V_g = V_s \implies I_g R_g = (I - I_g) R_s \implies R_s = \frac{I_g R_g}{I - I_g}$.
-     - Ideal ammeter has very low total resistance so it does not reduce the circuit current when connected in series.
-  3. **Converting a Galvanometer to a Voltmeter (Multiplier $R_m$):**
-     - Connect a very high-resistance **multiplier ($R_m$)** in **series** with the galvanometer so that at full-scale voltage $V$, the current does not exceed $I_g$.
-     - Series voltage equation: $V = I_g(R_g + R_m) \implies R_m = \frac{V}{I_g} - R_g$.
-     - **Exam Trap Alert:** Distinguish between *total resistance of the converted voltmeter* ($R_{\text{total}} = V/I_g = R_g + R_m$) and the *additional series multiplier resistance required* ($R_m = R_{\text{total}} - R_g$).
-- **3D Interactive Stages:**
-  - `story.js`: Instrument repair technician at Onitsha Head Bridge market rescuing a student's $10\text{ mA}$ galvanometer from burning out on a $5\text{ A}$ generator line.
-  - `bench.js`: 3D Galvanometer Conversion Bench — toggle between **Ammeter Mode (Parallel Shunt $R_s$)** and **Voltmeter Mode (Series Multiplier $R_m$)**, dial the target full-scale range ($I$ or $V$), and test the converted meter on a live circuit with needle deflection and current-split readouts.
-  - `zoom.js`: 3D Moving-Coil & Current Bypass Zoom — close-up of the hairspring, pointer, and radial magnetic field alongside the thick copper shunt strip carrying $99\%$ of the current vs the fine series multiplier bobbin dropping excess voltage.
+| Lesson | Retrieves from | Key retrieval points |
+|---|---|---|
+| 01 | Prerequisites (from: 0) | Charge is measured in coulombs; a cell drives current round a circuit; reading a scale without parallax; multiplying and dividing decimals; area of a circle `πd²/4`. |
+| 02 | Lesson 01 | `V = IR`; a V–I graph slope is resistance; ohmic vs non-ohmic; what an ammeter and a voltmeter measure. |
+| 03 | Lessons 01–02 | `E = I(R + r)`; terminal p.d. `V = E − Ir`; lost volts `Ir`; a voltmeter under load does not read the EMF. |
+| 04 | Lessons 01–03 | Series carries the same current; parallel shares the same p.d.; identical cells in parallel give `r/n`; efficiency `η = R/(R+r)`. |
+| 05 | Lessons 01–04 | Shunt and multiplier formulae; an ideal voltmeter draws almost no current; `R ∝ L/d²`; a balanced bridge draws no current through the galvanometer. |
 
----
+## 7. Transversal Competences (L1–L7)
 
-### Lesson 05: Null-Balance Precision — Metre Bridge, Potentiometer & WAEC Practicals (`html/lessons/lesson-05/`)
-- **Core Concepts:**
-  1. **Wheatstone Bridge & Metre Bridge:**
-     - Four-resistor diamond network balanced when potential at the two middle junctions is equal ($I_g = 0$): $\frac{R_1}{R_2} = \frac{R_3}{R_4}$.
-     - On a $100\text{ cm}$ uniform constantan metre bridge wire: $\frac{R_{\text{left}}}{R_{\text{right}}} = \frac{l}{100 - l} \implies R_{\text{right}} = R_{\text{left}}\left(\frac{100 - l}{l}\right)$.
-  2. **WAEC Paper 3 Practical 1 (Metre Bridge Comparison of Two Wires $A$ and $B$):**
-     - Standard resistor $R_x = 1.0\,\Omega$ in left gap; test wire of length $L = 100, 95, 85, 75, 65\text{ cm}$ in right gap.
-     - Plotting wire resistance $R_2$ against $R_1$ yields slope $s = \frac{R_2}{R_1} = \left(\frac{d_1}{d_2}\right)^2$, so diameter ratio $\sqrt{s} = \frac{d_1}{d_2}$.
-  3. **Potentiometer Principle & Calculations:**
-     - Uniform slide wire driven by an accumulator $E_0$: potential drop per unit length $k = V_{\text{AB}}/100$ is constant ($V \propto l$).
-     - Comparing two cells: $\frac{E_1}{E_2} = \frac{l_1}{l_2}$.
-     - **Why a Potentiometer Beats a Voltmeter:** At the null balance point ($I_g = 0$), **zero current** is drawn from the test cell, so internal resistance $r$ causes zero lost volts ($Ir = 0$) and true open-circuit EMF $E$ is measured!
-     - **Driver Circuit Series Resistor Trap:** If the driver cell $E_0$ is in series with an external resistor $R_{\text{ext}}$ and potentiometer wire resistance $R_p$, first find total potential drop across the wire $V_{\text{AB}} = E_0 \left(\frac{R_p}{R_p + R_{\text{ext}}}\right)$, then $E_{\text{test}} = \frac{l}{100} V_{\text{AB}}$.
-     - Internal resistance by potentiometer: open-circuit balance length $l_1$ ($E \propto l_1$) and shunted balance length $l_2$ across load $R$ ($V \propto l_2$) give $r = R\left(\frac{l_1 - l_2}{l_2}\right)$.
-  4. **WAEC Paper 3 Practical 2 & Standard Precautions:**
-     - Potentiometer tables ($l$, $l^{-1}$, $I$, $I^{-1}$, $V$) and past-tense precautions acceptable to WAEC examiners (*"I ensured tight and clean electrical connections"*, *"I removed the plug key immediately after each reading to prevent heating of the wire"*, *"I tapped the jockey lightly on the wire instead of scraping it so the cross-sectional area remained uniform"*, *"I avoided parallax error when reading the metre rule and ammeter/galvanometer"*).
-- **3D Interactive Stages:**
-  - `story.js`: Engr. Nkechi resolving the Aba workshop battery mystery on a $100\text{ cm}$ mahogany potentiometer board where $I_g = 0$ reveals the true $12.0\text{ V}$ EMF.
-  - `bench.js`: 3D Dual Metre Bridge & Potentiometer Bench — slide the brass jockey along the $100\text{ cm}$ constantan wire, watch the centre-zero galvanometer needle swing from negative through zero (`NULL BALANCE!`) to positive, switch between **Metre Bridge Mode** and **Potentiometer Mode**, and record WAEC practical readings.
-  - `zoom.js`: 3D Null-Point Potential Gradient Zoom — comparing the potential slope along the slide wire with the test cell's EMF until both potentials match and galvanometer current drops to zero.
+- **L1 · Thinking and learning to learn:** forming and testing predictions on the circuit, cell and null benches; reading slopes and intercepts.
+- **L2 · Cultural interaction and self-expression:** linking physics to Aba auto-electric work, Onitsha meter repair and solar-battery installers, and writing precautions clearly.
+- **L3 · Managing daily life and safety:** safe wiring, avoiding overloaded sockets, and recognising when a hot battery or cable signals wasted power.
+- **L4 · Multiliteracy:** moving between 3D benches, circuit symbols, equations and graphs (V–I, P–R, η–R, potentiometer).
+- **L5 · Digital and simulation competence:** operating virtual meters, rheostats and a null-balance jockey.
+- **L6 · Working-life skills and entrepreneurship:** diagnosing a faulty battery vs faulty wiring, sizing shunts and multipliers in meter repair, and judging source efficiency.
+- **L7 · Building a sustainable future:** cutting `I²r` heating losses with the right cable and good connections in solar-inverter DC wiring.
 
----
+## 8. Exam Emphasis & Chief Examiner Traps
 
-## 6. Spaced Retrieval Map (`retrieval-bank.js`)
-Every lesson starts with a **Phase 0: Do Now** pulling 3 quick questions from earlier lessons or foundational prerequisites:
-- **Lesson 01 Pool:** Charge/current definition ($I = Q/t$), Ohm's law $V = IR$, resistivity proportionality $R \propto L/d^2$.
-- **Lesson 02 Pool:** Terminal p.d. $V = E - Ir$, lost volts $Ir$, slope and intercept of $V$–$I$ graph, plus retrieval from Lesson 01.
-- **Lesson 03 Pool:** Parallel cells EMF ($E_{\text{tot}} = E$, $r_{\text{tot}} = r/n$), current divider, cell efficiency $\eta = R/(R+r)$, plus retrieval from Lessons 01–02.
-- **Lesson 04 Pool:** Shunt formula $R_s = I_g R_g/(I - I_g)$, multiplier formula $R_m = (V/I_g) - R_g$, total vs added resistance, plus retrieval from Lessons 01–03.
-- **Lesson 05 Pool:** Metre bridge $R_1/R_2 = l/(100-l)$, potentiometer $E_1/E_2 = l_1/l_2$, null-point zero current reason, WAEC past-tense precautions, plus retrieval from Lessons 01–04.
+1. **The voltmeter does not read the EMF under load.** Candidates routinely call the terminal p.d. the EMF. The EMF is the open-circuit reading; once current flows, the terminals show `E − Ir`. This single idea drives the whole unit.
+2. **Full driver EMF is not all across the potentiometer wire.** A reported trap: with a series resistor in the driver circuit, find the current first, then the p.d. across the wire is `I × R_wire`. Assuming the whole driver EMF sits on the wire gives wrong balance lengths.
+3. **Multiplier is total resistance minus the coil.** For a voltmeter, `R_m = V/I_g − R_g`; writing `R_total = V/I_g` as the added resistor loses marks.
+4. **Series vs parallel cells.** Series adds EMF and adds `r`; identical cells in parallel keep one EMF and give `r/n`. Mixing these up is a classic error.
+5. **Resistance depends on diameter squared.** `R ∝ 1/d²`, not `1/d`; doubling the diameter quarters the resistance.
+6. **"Plot A against B" puts A on the vertical axis.** Plotting the wrong variable vertically, and using a slope triangle that is too small, cost marks every year in the practical.
+7. **Practical discipline.** Record the "jockey-off" ammeter reading the question asks for; open the key between readings to stop the wire warming; give readings to the stated decimal places and check that they show the expected trend before leaving the bench.
+8. **Graph shape must match the physics.** V–I for a wire, V–I for a cell, and `V = kl` for the potentiometer are genuinely **straight lines**; power and efficiency against load are **smooth curves**, never a straight regression line.
+
+## 9. Known Misconceptions
+
+| Misconception | What the unit teaches instead |
+|---|---|
+| A voltmeter across a battery reads its EMF. | Only on open circuit; under load it reads the terminal p.d. `V = E − Ir`. |
+| The "missing volts" are lost in the connecting wires. | They are dropped inside the cell across its internal resistance `r` as `Ir`. |
+| Identical cells in parallel give a bigger voltage. | The EMF stays the same; parallel lowers `r` to `r/n` and shares the current. |
+| Resistance is proportional to diameter. | Resistance is proportional to `1/d²` (through the cross-sectional area). |
+| The multiplier resistance equals `V/I_g`. | That is the total; the multiplier is `V/I_g − R_g`. |
+| An ammeter should have high resistance for accuracy. | An ideal ammeter has very low resistance (in series) and an ideal voltmeter very high resistance (in parallel). |
+| The whole driver EMF sits across the potentiometer wire. | Share it by resistance: the wire gets `I × R_wire`, after finding the current. |
+
+## 10. Sources Consulted (paraphrased)
+
+- `sources/Current Electricity Past Questions Bank (WAEC, NECO, JAMB).pdf`: a reworded bank of WAEC/NECO/JAMB items with the six recurring question types, three practical paradigms (metre bridge, potentiometer, V–I), sample readings, examiner-reported traps and precaution rules. Read for scope, exam weighting and examiner expectations only; nothing is copied. Every scenario, number, definition and question in this unit is newly authored.
+- Standard textbook values of resistivity used in worked examples (copper ≈ `1.7 × 10⁻⁸ Ω m`, constantan ≈ `4.9 × 10⁻⁷ Ω m`, nichrome ≈ `1.1 × 10⁻⁶ Ω m`) are well-established constants, not source-specific data.
+
+### Build notes & kit gaps (for `lesson-renderer` / `kit-builder`)
+- **`kits/dc-circuit-bench/kit.js` is incomplete.** It currently exposes only `window.DCCircuitKit` with two part-builders (`createAccumulatorCell`, `createAnalogMeter`). The parametric, window-exposed **`DcCircuitBench`** with the five physics modes advertised in the kit README (`ohms-law`, `internal-resistance`, `network-cells`, `galvanometer`, `bridge-potentiometer`) is **not yet implemented**. Every bench in this unit assumes that full bench exists and that readings are computed from a physics model (so each mode/condition button changes the numbers it physically should). `kit-builder` must build it out before the lessons render. Modelled numbers to reproduce: open-circuit `V = E`; closed `V = E − Ir`; the mystery battery `E = 12.0 V`, under a `2.8 Ω` starter `V = 8.4 V`, `I = 3.0 A`, `r = 1.2 Ω`.
+- **`kits/study-graph/` (`window.StudyGraph`) is complete** and drives every lesson graph via a per-lesson `graph.js`. Use `fit: "line"`/`"origin"` for the genuinely linear plots (V–I wire, V–I cell, potentiometer `V = kl`, metre-bridge `R₂` vs `R₁`) and the `fn` smooth-curve option for `P–R` and `η–R`. No gap.
+- **Video kits** available for Lesson 02 in `kits/catalog.md`: `circuit`, `cell`, `toll`, `graph`. Lessons 03 and 04 would use `graph` plus board, or newly built video kits (network-builder and galvanometer-conversion are video-kit gaps the director can build on the fly).

@@ -1,114 +1,107 @@
-/* Lesson 02 · 3D story beats: Mama Titi's Ugu Leaf vs Catfish Fillet at Mile 12 Market & Organelle Dissection at Yaba Lab */
+/* Lesson 02 · 3D story beats: Dr Amaka, Coach Danjuma and Chinedu in the LUTH teaching lab, with a giant plant cell and animal cell on the screen */
 (function () {
   "use strict";
   if (!window.StoryStage || typeof THREE === "undefined") return;
 
-  var WIDE = [[0, 2.6, 7.2], [0, 1.3, 0]];
+  // everything happens in the lab set, which sits at world x = 40
+  var LX = 40;
+  var WIDE = [[LX - 1.5, 2.9, 3.9], [LX - 1.5, 2.3, -3.0]];
 
-  function buildCellModelProp(labelText, isPlant, tagBg) {
-    var g = new THREE.Group();
-    if (window.CellKit) {
-      var model = isPlant ? CellKit.plantCell({ scale: 0.34 }) : CellKit.animalCell({ scale: 0.36 });
-      model.group.position.y = 0.28;
-      g.add(model.group);
-    }
-    var tag = StoryStage.sign(labelText, tagBg || "rgba(13,156,126,0.95)", "#fff", 0.16);
-    tag.position.set(0, 0.68, 0.05);
-    g.add(tag);
-    return g;
-  }
+  var plantCell = null, animalCell = null;
 
   function reset(w) {
     var p = w.people;
-    if (p.ngozi.parent !== w.props.market) { p.ngozi.parent.remove(p.ngozi); w.props.market.add(p.ngozi); }
-    p.ngozi.userData.target = null; p.ngozi.userData.faceTarget = null; p.ngozi.hold(null);
-    p.ngozi.position.set(0, 0, -1.0); p.ngozi.rotation.y = 0;
+    p.amaka.userData.faceTarget = new THREE.Vector3(-1.2, 0, -3);
+    p.cust1.userData.faceTarget = new THREE.Vector3(-1.2, 0, -3);
+    p.cust2.userData.faceTarget = new THREE.Vector3(-1.2, 0, -3);
   }
 
   var beats = [
     {
-      caption: "Mile 12 Market, Lagos. Tunde compares a stiff green ugu leaf with a soft catfish fillet.",
-      shot: WIDE, instant: true, hold: 5,
+      caption: "The LUTH teaching lab. Dr Amaka projects two giant cells.",
+      shot: WIDE, instant: true, hold: 5.2,
+      who: "amaka",
+      text: "Today we look inside the cell. On the left is a plant cell from an ugu leaf, on the right an animal cell from a cheek.",
+      run: function (w) { reset(w); w.people.amaka.set("point"); }
+    },
+    {
+      caption: "Coach Danjuma is not impressed.",
+      shot: [[LX + 0.5, 2.1, 2.5], [LX - 0.1, 1.6, -1.0]], hold: 4.8,
+      who: "cust2",
+      text: "A cell is just a bag of water, Doctor. What else is in there?",
+      run: function (w) { reset(w); w.people.cust2.set("talk"); w.people.amaka.set("think"); }
+    },
+    {
+      caption: "Chinedu spots a thick outer layer around the plant cell only.",
+      shot: [[LX - 2.7, 2.4, 1.8], [LX - 2.1, 2.3, -2.8]], hold: 5,
       who: "cust1",
-      text: "Mama Titi! Why does a green ugu leaf stand firm and make its own sugar in sunlight, while a catfish muscle cell is soft, flexible, and must eat food to survive?",
+      text: "Madam, the ugu cell has a thick layer all around the outside. The cheek cell does not.",
       run: function (w) { reset(w); w.people.cust1.set("point"); }
     },
     {
-      caption: "Alhaji Musa wonders if plant cells have chloroplasts INSTEAD of mitochondria.",
-      shot: [[-0.4, 2.0, 5.0], [0.2, 1.3, 0.6]], hold: 5,
-      who: "cust2",
-      text: "Wait — don't plant cells have chloroplasts for energy while animal cells have mitochondria instead?",
-      run: function (w) { reset(w); w.people.cust2.set("talk"); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "Mama Titi corrects the #1 WAEC misconception!",
-      shot: [[0.3, 1.9, 2.5], [0, 1.6, -1]], hold: 5.2,
-      who: "ngozi",
-      text: "Careful! That is a classic exam trap! Plant cells have BOTH chloroplasts AND mitochondria — chloroplasts make glucose in sunlight, and mitochondria burn that glucose into ATP day and night!",
-      run: function (w) { reset(w); w.people.ngozi.set("talk"); }
-    },
-    {
-      caption: "Plant Cell (Cellulose Wall, Chloroplasts, Sap Vacuole) vs Animal Cell (Flexible Membrane, Centrioles, Lysosomes).",
-      shot: [[0.65, 1.65, 1.55], [0.65, 1.35, 0.05]], hold: 5.5,
-      who: "ngozi",
-      text: "Look at the 3D models: the plant cell has a rigid cellulose wall, green chloroplasts, and a giant sap vacuole that pushes the nucleus to the side!",
-      run: function (w) { reset(w); w.people.ngozi.set("point"); }
-    },
-    {
-      caption: "How do organelles cooperate like a factory inside the cell?",
-      shot: [[1.4, 1.75, 2.2], [0.5, 1.35, 0.0]], hold: 5,
-      who: "ngozi",
-      text: "Inside both cells, the nucleus sends mRNA to 80S ribosomes on the Rough ER, and the Golgi body packages the finished proteins into vesicles!",
-      run: function (w) { reset(w); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "At the Yaba Cytology Lab with Dr. Kunle…",
-      shot: [[40.2, 2.3, 3.4], [40.3, 1.4, -1.8]], hold: 5.5,
+      caption: "Dr Amaka: that wall and the sap vacuole decide what water does.",
+      shot: [[LX - 1.3, 2.6, 3.4], [LX - 1.3, 2.2, -2.5]], hold: 5.8,
       who: "amaka",
-      text: "Let's dissect our 3D plant and animal cells on the bench and measure how mitochondrial cristae surface area drives ATP production across five tissues!",
-      run: function (w) {
-        var a = w.people.amaka;
-        a.userData.faceTarget = new THREE.Vector3(0.6, 0, -2.3);
-        a.set("point");
-      }
+      text: "Exactly. That wall, and the big sap vacuole, will decide what happens to a leaf in salty water. Today we open the cell and meet its workers.",
+      run: function (w) { reset(w); w.people.amaka.set("talk"); }
+    },
+    {
+      caption: "The organelle dissector is ready.",
+      shot: [[LX - 0.9, 2.4, 3.2], [LX - 1.1, 2.0, -2.0]], hold: 5,
+      who: "amaka",
+      text: "Come to the dissector. Tap each part of the cell, and find out what each worker does.",
+      run: function (w) { reset(w); w.people.amaka.set("wave"); w.people.cust1.set("cheer"); }
     }
   ];
 
   window.StoryStage.wire("story-stage", "story", beats, {
-    names: {
-      ngozi: "Mama Titi",
-      cust1: "Tunde (SS1 Student)",
-      cust2: "Alhaji Musa",
-      amaka: "Dr. Kunle (Yaba Lab)"
-    },
+    names: { ngozi: "Mama Ngozi", cust1: "Chinedu", cust2: "Coach Danjuma", amaka: "Dr Amaka" },
     setup: function (api) {
-      var mSign = StoryStage.sign("UGU LEAF vs CATFISH · MILE 12", "rgba(13,156,126,0.95)", "#fff", 0.44);
-      mSign.position.copy(api.props.mSign.position);
-      api.props.market.remove(api.props.mSign);
-      api.props.market.add(mSign);
-      api.props.mSign = mSign;
+      var lab = api.props.lab, P = api.people;
 
-      var lSign = StoryStage.sign("YABA EUKARYOTIC ORGANELLE LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
-      lSign.position.copy(api.props.lSign.position);
-      api.props.lab.remove(api.props.lSign);
-      api.props.lab.add(lSign);
-      api.props.lSign = lSign;
+      // bring the three speakers into the lab
+      [["amaka", -1.0, -1.7], ["cust1", -2.4, -0.7], ["cust2", -0.2, -0.6]].forEach(function (a) {
+        var pr = P[a[0]];
+        if (pr.parent) pr.parent.remove(pr);
+        lab.add(pr);
+        pr.position.set(a[1], 0, a[2]);
+        pr.rotation.y = 0;
+      });
+      P.ngozi.visible = false;
 
-      if (api.props.bottleA) api.props.bottleA.visible = false;
-      if (api.props.bottleB) api.props.bottleB.visible = false;
-      if (api.props.can) api.props.can.visible = false;
+      // retitle the lab sign
+      var lSign = StoryStage.sign("LUTH CELL BIOLOGY TEACHING LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
+      lSign.position.set(3.9, 3.65, -3.05);
+      lab.remove(api.props.lSign); lab.add(lSign); api.props.lSign = lSign;
 
-      var propA = buildCellModelProp("Plant Cell (Wall + Vacuole)", true, "rgba(34,197,94,0.95)");
-      propA.position.set(0.38, 0.94, 0.08);
-      api.props.market.add(propA);
-      api.props.clockA = propA;
-      api.props.bottleA = propA;
+      // projector screen with the two giant cells in front of it
+      var screenMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.9 });
+      var screen = new THREE.Mesh(new THREE.BoxGeometry(3.7, 1.9, 0.06), screenMat);
+      screen.position.set(-1.6, 2.75, -3.0);
+      lab.add(screen);
+      var frame = new THREE.Mesh(new THREE.BoxGeometry(3.82, 2.02, 0.04), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 }));
+      frame.position.set(-1.6, 2.75, -3.04);
+      lab.add(frame);
 
-      var propB = buildCellModelProp("Animal Cell (Centrioles)", false, "rgba(244,63,94,0.95)");
-      propB.position.set(0.92, 0.94, 0.08);
-      api.props.market.add(propB);
-      api.props.clockB = propB;
-      api.props.bottleB = propB;
+      if (window.CellKit) {
+        plantCell = CellKit.plantCell({ w: 2.2, h: 1.45, d: 1.25, chloroplasts: 12, tonicity: 1 });
+        plantCell.scale.setScalar(0.55);
+        plantCell.position.set(-2.3, 2.7, -2.7);
+        plantCell.rotation.set(0.14, 0.34, 0);
+        animalCell = CellKit.animalCell({ r: 0.95, seed: 9 });
+        animalCell.scale.setScalar(0.6);
+        animalCell.position.set(-0.9, 2.7, -2.7);
+        animalCell.rotation.set(0.2, -0.28, 0);
+        lab.add(plantCell, animalCell);
+        var l1 = CellKit.label("Plant cell", { h: 0.2 }); l1.position.set(-2.3, 3.55, -2.7); lab.add(l1);
+        var l2 = CellKit.label("Animal cell", { h: 0.2 }); l2.position.set(-0.9, 3.55, -2.7); lab.add(l2);
+      }
+      // hide the unrelated bench clutter that would hide the screen
+      ["balance", "burette", "flask", "vflask"].forEach(function (k) { if (api.props[k]) api.props[k].visible = false; });
+    },
+    onTick: function (api, dt, t) {
+      if (plantCell && plantCell.userData.update) plantCell.userData.update(dt, t);
+      if (animalCell && animalCell.userData.update) animalCell.userData.update(dt, t);
     }
   });
 })();

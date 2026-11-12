@@ -1,4 +1,4 @@
-/* Lesson 03 · Choreographed StudyNarrator Script — Forms of Living Cells & Levels of Biological Organisation (en-NG) */
+/* Lesson 03 · StudyNarrator choreography (en-NG): Forms of Cells and Levels of Organisation */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
@@ -7,54 +7,57 @@ window.NARRATION = {
     note: {
       event: "kit:note",
       prompt: "Type a prediction (or tap a seed question) and pin it to the Wonder Wall",
-      react: function () {
-        return "Pinned! Let's explore the four forms of living cells and the five levels of organisation.";
-      }
+      react: function () { return "Pinned! Now let us put the pond organisms in order."; }
     },
     sort: {
-      event: "l3:sort-checked",
-      prompt: "Sort all 12 cards into Single Free-Living Cells, Colonies & Filaments, and Tissues/Organs/Systems, then tap Check my sorting",
+      event: "l3:sort",
+      prompt: "Sort all nine specimens into free-living, colony or filament, and tissue level, then tap Check my sorting",
       react: function (d) {
-        if (!d) return "Good effort!";
-        if (d.score === d.total) return "Twelve out of twelve! You sorted free-living protists, Volvox colonies, Spirogyra filaments, and multicellular tissues and organs perfectly.";
-        if (d.score >= 9) return "Nice work! " + d.score + " out of " + d.total + ". Check the notes below for any card that slipped.";
-        return "You got " + d.score + " out of " + d.total + ". Review the feedback below — WAEC tests Volvox versus Spirogyra and the onion bulb organ level almost every year!";
+        if (!d) return "Good effort! Check the notes under the bins.";
+        if (d.correct === d.total) return "Nine out of nine! You can tell a single cell, a colony, a filament and a tissue apart.";
+        if (d.correct >= 7) return "Nice work! " + d.correct + " out of " + d.total + ". Read the notes for the ones that slipped.";
+        return "You got " + d.correct + " out of " + d.total + ". Read the notes: the key question is whether the cells share out the jobs.";
       }
     },
     bench: {
       event: "l3:bench-done",
-      prompt: "Record at least 4 cube & protist trials (A–E) on the 3D SA/V bench",
-      react: function () {
-        return "Well done! You proved that as side length L grows from 1 millimetre to 6 millimetres, surface-area-to-volume ratio SA over V drops from 6 down to 1!";
-      }
+      prompt: "Calculate at least four cubes on Station B",
+      already: function () { var s = window.StudyScenes && window.StudyScenes.bench && window.StudyScenes.bench.state(); return s && s.cubes >= 4 ? { count: s.cubes } : null; },
+      react: function () { return "Well done! Four cubes calculated. Now watch what happens to S A to V on the graph, and compare the pale centres."; }
     },
     bridge: {
-      event: "l3:vinegar-done",
-      prompt: "Run Steps 1, 2 and 3 to classify Mama Titi's onion bulb and SA/V scaling",
-      react: function () {
-        return "Spot on! An onion bulb is a complete plant organ because it combines epidermal, storage parenchyma, xylem, and phloem tissues.";
-      }
+      event: "l3:bridge",
+      prompt: "Scale the body up, then answer the question about Dr Amaka's patient",
+      filter: function (d) { return !!d.correct; },
+      react: function () { return "Exactly! A big body has a small S A to V, so the cells deep inside are too far from the surface for diffusion. That is why blood must do the carrying."; }
     },
     quiz: {
       event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB quiz questions",
+      prompt: "Answer all the quiz questions",
       react: function (d) {
         if (!d) return "Quiz complete!";
-        if (d.score >= 10) return "Outstanding — " + d.score + " out of " + d.total + "! You have mastered Forms of Living Cells and Biological Organisation.";
-        if (d.score >= 7) return "Well done! " + d.score + " out of " + d.total + ". Review the explanations on the ones you missed.";
-        return "You scored " + d.score + " out of " + d.total + ". Replay the Make Sense and 3D Protist Zoom chapters, then retry!";
+        if (d.score >= d.total - 2) return "Outstanding! " + d.score + " out of " + d.total + ". You have mastered forms of cells and S A to V.";
+        if (d.score >= Math.round(d.total * 0.6)) return "Well done! " + d.score + " out of " + d.total + ". Read the explanations for the ones you missed.";
+        return "You scored " + d.score + " out of " + d.total + ". Replay the pond survey and the cube bench, then try again.";
       }
     }
   },
 
   actions: {
-    "pin:0": function () { if (window.L03 && window.L03.showPin) window.L03.showPin(0); },
-    "pin:2": function () { if (window.L03 && window.L03.showPin) window.L03.showPin(2); },
-    "pin:4": function () { if (window.L03 && window.L03.showPin) window.L03.showPin(4); },
-    "bench:heavy": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("heavy"); },
-    "bench:std":   function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("std"); },
-    "clock:1": function () { if (window.L03 && window.L03.vt) window.L03.vt.step1(); },
-    "clock:2": function () { if (window.L03 && window.L03.vt) window.L03.vt.step2(); }
+    story: function (arg) { var s = window.StudyScenes && window.StudyScenes.story; if (s) s.beat(parseInt(arg, 10) || 0); },
+    open: function (arg) { var d = document.querySelector(arg); if (d && d.tagName === "DETAILS") d.open = true; },
+    bench: function (arg) {
+      var b = window.StudyScenes && window.StudyScenes.bench; if (!b) return;
+      var p = String(arg).split(":");
+      if (p[0] === "mode") b.setMode(p[1]);
+      else if (p[0] === "org") b.org(p[1]);
+      else if (p[0] === "pick") b.pick(+p[1]);
+      else if (p[0] === "calc") b.calc(p[1] != null ? +p[1] : undefined);
+    },
+    zoom: function (arg) { var z = window.StudyScenes && window.StudyScenes.zoom; if (z) z.setMode(arg); },
+    pin: function (arg) { if (window.L03 && window.L03.showPin) window.L03.showPin(parseInt(arg, 10) || 0); },
+    ladder: function () { if (window.L03 && window.L03.ladder) window.L03.ladder.climb(); },
+    scale: function (arg) { if (window.L03 && window.L03.bridgeScale) window.L03.bridgeScale(parseInt(arg, 10) || 0); }
   },
 
   script: [
@@ -62,20 +65,12 @@ window.NARRATION = {
       title: "Welcome",
       steps: [
         {
-          target: ".l-hero .display",
-          cue: "Lesson 3 · Forms of Living Cells & Organisation",
-          sparkle: true,
-          say: "Welcome to Lesson 3! Today we explore the four forms in which living cells exist — single free-living cells, colonies, filaments, and part of a multicellular organism — plus the five levels of biological organisation and the surface-area-to-volume law!"
+          target: ".l-hero .display", cue: "Lesson 3 · Forms of cells", sparkle: true,
+          say: "Welcome to Lesson 3! Today we meet the creatures in a drop of drain water, and we find out why an Amoeba can live alone while Chinedu needs a heart, lungs and blood."
         },
         {
-          target: ".l-hero .question",
-          cue: "Our guiding question",
-          say: "Here is our guiding puzzle: why can a microscopic Amoeba in Ogun River water breathe across its cell membrane alone, while a Tilapia fish or onion plant needs specialized tissues, organs, and transport systems?"
-        },
-        {
-          target: "#objectives",
-          cue: "5 goals for Lesson 3",
-          say: "By the end of this lesson you will distinguish Amoeba, Paramecium, Euglena, and Chlamydomonas, contrast colonial Volvox with filamentous Spirogyra, classify tissues and organs like the onion bulb, and calculate surface-area-to-volume ratios."
+          target: ["#objectives", "#timetable"], cue: "Five goals · 80 minutes",
+          say: "By the end you will describe the forms of cells, tell a colony from a tissue, name the ways cells feed, order the six levels of organisation, and calculate surface area to volume ratio. We follow the timetable shown: Do Now, Wonder, Investigate, a movement break at forty-five minutes, Make Sense, then Apply and Reflect."
         }
       ]
     },
@@ -83,9 +78,12 @@ window.NARRATION = {
       title: "Do Now",
       steps: [
         {
-          target: "#donow-list",
-          cue: "Retrieve Lessons 1 & 2",
-          say: "Start with these four retrieval cards on mitochondria, the Golgi secretory pathway, starch versus glycogen storage, and cube geometry."
+          target: "#donow-list", cue: "Wake up your toolkit", sparkle: true,
+          say: "Start with four quick questions from Lessons 1 and 2: the contractile vacuole, plant-only structures, respiration, and a magnification sum. Answer in your head before you flip each card."
+        },
+        {
+          target: "#donow-list", wait: "donow",
+          say: "Your turn. Reveal and mark each card. I will carry on when all four are marked."
         }
       ]
     },
@@ -93,34 +91,24 @@ window.NARRATION = {
       title: "The Story",
       steps: [
         {
-          target: "#story-stage",
-          action: "story:0",
-          cue: "Ogun River Pond Safari",
-          say: "By the Ogun River near Mile 12 Market, Tunde scoops a jar of green pond water and holds up one of Mama Titi's purple onion bulbs."
+          target: { scene: "story", part: "cust1" }, action: "story:0", cue: "Mile 12 Market",
+          say: "At Mile 12 Market in Lagos, Chinedu has scooped green water from the drain beside the stalls into a jar."
         },
         {
-          target: { scene: "story", part: "cust2" },
-          action: "story:1",
-          cue: "Is an onion bulb a tissue?",
-          say: "Alhaji Musa guesses that a whole onion bulb is just a single storage tissue."
+          target: { scene: "story", part: "cust2" }, action: "story:1", cue: "Coach Danjuma",
+          say: "Coach Danjuma frowns. He says nothing can live in that, it is just dirty water."
         },
         {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:2",
-          cue: "An onion bulb is an ORGAN!",
-          say: "Mama Titi corrects him right away: the thin peel is epidermal tissue, but the whole onion bulb combines epidermis, storage parenchyma, xylem, and phloem — making it a complete plant organ!"
+          target: { scene: "story", part: "dish" }, action: "story:2", cue: "Under the microscope",
+          say: "But in Dr Amaka's lab, one drop shows a blob that keeps changing shape, a slipper covered in hairs, a green spindle with a whip, and a hollow green ball."
         },
         {
-          target: { scene: "story", part: "clockA" },
-          action: "story:3",
-          cue: "Volvox Colony vs Spirogyra Filament",
-          say: "And in the pond jar are single free-living Euglena, hollow spherical Volvox colonies, and unbranched Spirogyra filaments!"
+          target: { scene: "story", part: "amaka" }, action: "story:3", cue: "The puzzle",
+          say: "Dr Amaka says each of these is a whole living thing. Yet Chinedu is billions of cells working together. Why the difference?"
         },
         {
-          target: { scene: "story", part: "amaka" },
-          action: "story:5",
-          cue: "To the Yaba SA/V Lab!",
-          say: "At the Yaba Lab, Doctor Kunle sets up our 3D protist carousel and surface-area-to-volume scaling cubes."
+          target: { scene: "story", part: "amaka" }, action: "story:4", cue: "Pond survey and cubes",
+          say: "She invites us to survey the pond, and then to cut agar cubes and let the numbers answer the puzzle."
         }
       ]
     },
@@ -128,122 +116,125 @@ window.NARRATION = {
       title: "Wonder Wall",
       steps: [
         {
-          target: "#wall-wonder",
-          cue: "Pin your prediction",
-          wait: "note",
-          say: "Pin your prediction to the Wonder Wall before we sort the twelve organisms and structures!"
+          target: "#wall-wonder", cue: "Pin your prediction", wait: "note",
+          say: "Before we investigate, pin your prediction. Is a single cell that lives on its own simpler, or smarter, than your whole body?"
         }
       ]
     },
     {
-      title: "Cell Forms Sort",
+      title: "Sort",
       steps: [
         {
-          target: "#kitchen-sort",
-          cue: "Free-Living vs Colony/Filament vs Tissue/Organ",
-          wait: "sort",
-          say: "Activity 1! Sort all twelve cards into Single Free-Living Cells, Colonies and Filaments, and Tissues, Organs or Systems, then tap Check my sorting."
+          target: "#form-sort", cue: "How does it live?", wait: "sort",
+          say: "Activity one. Sort the nine specimens into free-living, colony or filament, and tissue level. Ask yourself: do the cells share out the jobs? Then tap Check my sorting."
         }
       ]
     },
     {
-      title: "3D Protist & SA/V Bench",
+      title: "3D Practical",
       steps: [
         {
-          target: { scene: "bench", part: "clamp" },
-          cue: "3D Protist Safari Carousel",
-          say: "On the left of our 3D bench is the live pond specimen — starting with mixotrophic Euglena with its green chloroplasts, red eyespot, and anterior flagellum."
+          target: "#method-cards", cue: "Four method cards",
+          say: "Now the practical, with two stations. Method card one: survey the pond. Cards two and three: choose a cube, press Calculate and record the numbers. Card four: compare the undyed centres."
         },
         {
-          target: { scene: "bench", part: "bob" },
-          action: "bench:test:0",
-          cue: "3D Scaling Cube (SA/V = 6/L)",
-          say: "On the right is our 3D scaling cube: at side length L equals 1 millimetre, surface area is 6 square millimetres and volume is 1 cubic millimetre, giving a huge ratio of 6 per millimetre!"
+          target: { scene: "bench", part: "volvox" }, action: "bench:org:volvox", cue: "Station A · Volvox", sparkle: true,
+          say: "Station A is the pond. Here is Volvox, a hollow ball of similar green cells. Tap each of the seven organisms in turn, and especially compare Volvox with Hydra, whose cells have different jobs."
         },
         {
-          target: "#bench-stage",
-          action: "bench:std",
-          cue: "Your turn on the bench!",
-          wait: "bench",
-          say: "Now it's your turn! Tap Trials A to E to inspect Euglena, Paramecium, Amoeba, Volvox, and Spirogyra while recording SA, V, and SA over V."
+          target: { scene: "bench", part: "core" }, action: "bench:calc:6", cue: "Station B · 6 mm cube",
+          say: "Station B is the cube bench. I will calculate the six millimetre cube. The surface area is six times six squared, the volume is six cubed, and watch the dye soak in. The middle stays pale, because it is far from every face."
         },
         {
-          target: "#results-table",
-          cue: "Complete the SA/V table",
-          say: "Select the matching surface area, volume, and SA-over-V ratio in the table below."
+          target: "#bench-stage", cue: "Your turn on the bench!", wait: "bench",
+          say: "Now it is your turn. Pick a side, press Calculate, and do at least four cubes."
+        },
+        {
+          target: ["#graph-card", "#results-table"], cue: "Table and graph",
+          say: "Record each cube in the results table. On the graph, the dots fall on a smooth curve, not a straight line. Every time the side doubles, S A to V halves. The smallest cubes are fully dyed, but the big cube keeps a pale centre."
         }
       ]
     },
     {
-      title: "Hierarchy & SA/V Law",
+      title: "Make Sense",
       steps: [
         {
-          target: "#eq-shm",
-          cue: "Surface-Area-to-Volume Law: SA/V = 6 ÷ L",
-          sparkle: true,
-          say: "Look at the mathematical proof: surface area is 6 L squared while volume is L cubed, so the ratio SA over V simplifies to 6 divided by L! As an organism grows larger, SA over V drops inversely with L."
+          target: "#props-table", cue: "Seven forms", sparkle: true,
+          say: "Let us make sense of the survey. Amoeba, Paramecium, Euglena and Chlamydomonas live alone. Volvox is a colony, Spirogyra is a filament, and Hydra is at the tissue level. Amoeba and Paramecium are holozoic, Chlamydomonas, Volvox and Spirogyra are autotrophic, and Euglena is autotrophic in light but saprophytic in darkness."
         },
         {
-          target: "#ph-explorer",
-          action: "pin:2",
-          cue: "Level 3 · Why an Onion Bulb is an Organ",
-          say: "Tap Pin 3 on the Biological Hierarchy Explorer: an onion bulb, leaf, root, heart, or eye is an organ because it integrates several distinct tissues."
+          target: "#colony-vs-tissue", cue: "Colony or tissue?",
+          say: "What separates a colony from a tissue is the sharing of jobs. Volvox cells are copies of one another and each can live by itself. Hydra cells have different jobs and cannot live apart."
+        },
+        {
+          target: "#eq-levels", cue: "Six levels",
+          say: "The levels run from organelle to cell, to tissue, to organ, to system, and finally to the organism."
+        },
+        {
+          target: "#eq-sav", cue: "Six over L", sparkle: true,
+          say: "And the key formula: surface area over volume equals six L squared over L cubed, which simplifies to six over L. As L grows, the ratio falls."
+        },
+        {
+          target: "#pos-explorer", action: "pin:5", cue: "Cube explorer",
+          say: "In the explorer, tap the cube sides. At six millimetres the ratio is only one, and nearly a third of the volume stays undyed."
         }
       ]
     },
     {
-      title: "3D Protist & Hydra Zoom",
+      title: "3D Zoom",
       steps: [
         {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:mix",
-          cue: "Euglena & Volvox Colony",
-          say: "Rotate our 3D models of Euglena and the spherical Volvox colony linked by cytoplasmic bridges!"
+          target: { scene: "zoom", part: "volvox" }, action: "zoom:colony", cue: "Volvox beside Hydra",
+          say: "In the zoom, Volvox sits beside Hydra. Volvox cells are alike, so it is a colony. Hydra has two layers of cells doing different jobs, so it is at the tissue level."
         },
         {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:acid",
-          cue: "Spirogyra Unbranched Filament",
-          say: "Switch to Spirogyra: notice the cylindrical cells joined end to end, each containing a spiral ribbon chloroplast studded with starch-forming pyrenoids."
-        },
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:base",
-          cue: "Hydra (Diploblastic Tissue Level)",
-          say: "Switch to Hydra: this freshwater animal has ectoderm and endoderm tissues and stinging tentacles, but no true organs!"
+          target: "#level-ladder", action: "zoom:ladder", cue: "Climb the ladder",
+          say: "Now climb the ladder: organelle, cell, tissue, organ, system and organism. Each step is built from the one below."
         }
       ]
     },
     {
-      title: "Worked Examples & Bridge",
+      title: "Worked Examples",
       steps: [
         {
-          target: "#ex1",
-          cue: "Example 1 · Cube SA/V Calculation",
-          say: "Study Worked Example 1: every step from SA equals 6 L squared to SA over V equals 6 over L is shown in LaTeX with an explainer note underneath."
-        },
-        {
-          target: "#vinegar-test",
-          action: "clock:1",
-          cue: "Classify the Onion Bulb!",
-          wait: "bridge",
-          say: "Now complete Steps 1, 2, and 3 in the Bridge solver to prove why Mama Titi's onion bulb is a plant organ!"
+          target: "#examples", cue: "Three examples",
+          say: "In the worked examples, the two millimetre cube gives three point zero. Comparing the one and six millimetre cubes shows the small cube has six times more surface for each cubic millimetre. And an Amoeba modelled as a cube has an S A to V three hundred times larger than a small frog's."
         }
       ]
     },
     {
-      title: "Quiz & Reflect",
+      title: "Explainer Video",
       steps: [
         {
-          target: "#quiz",
-          cue: "12 WAEC & JAMB Questions",
-          wait: "quiz",
-          say: "Test yourself on these twelve exam-style questions on Euglena, Volvox, Spirogyra, Hydra, SA-over-V ratios, and levels of organisation."
-        },
+          target: ["#lesson-video", "#concepts h2"], cue: "Explainer video",
+          say: "At the start of Make Sense there is a short explainer video that shows colony, tissue and the level ladder in motion. Watch it any time you want a second look."
+        }
+      ]
+    },
+    {
+      title: "The Big Idea",
+      steps: [
         {
-          target: "#reflect",
-          cue: "Rate your confidence & Assignment",
-          say: "Rate your confidence from 1 to 4, complete the Exit Ticket, and try the 30-mark assignment before moving to Lesson 4!"
+          target: "#bridge-test", action: "scale:3", cue: "Why does the patient need blood?", wait: "bridge",
+          say: "Back to the lab. Scale the body up from an Amoeba to a small frog and watch S A to V fall. Then explain why Dr Amaka's patient needs blood to deliver water at all."
+        }
+      ]
+    },
+    {
+      title: "Quiz",
+      steps: [
+        {
+          target: "#quiz-list", cue: "Twelve questions", wait: "quiz",
+          say: "Now the quiz, in WAEC, NECO and JAMB style. Pick an option for instant feedback and read every explanation."
+        }
+      ]
+    },
+    {
+      title: "Reflect and Assignment",
+      steps: [
+        {
+          target: ["#rate-list", "#assignment"], cue: "Rate yourself 1 to 4",
+          say: "Rate yourself from one to four on each goal, and try the exit ticket: the S A to V of a five millimetre cube. For your assignment, do Part A and Part B from the questions file for Lesson 3. Well done today!"
         }
       ]
     }

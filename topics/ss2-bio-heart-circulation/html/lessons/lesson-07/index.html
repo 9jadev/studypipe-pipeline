@@ -1,0 +1,814 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 7 · Blood Groups and Closing the Case · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): ABO and Rhesus typing on a 3D tile, agglutination, transfusion choices, haemolytic disease of the newborn, circulatory disorders and the final solved case file.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 56C12 40 6 28 6 20a13 13 0 0 1 26-4 13 13 0 0 1 26 4c0 8-6 20-26 36z' fill='%23c8264a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <style>
+    .hero-art {
+      position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
+    }
+    .hero-art svg { width: 100%; height: auto; max-width: 330px; }
+    .ha-tile { fill: var(--ink-800, var(--ink-900)); stroke: var(--line-strong); stroke-width: 2; }
+    .ha-well { fill: rgba(var(--crimson-rgb), .35); stroke: var(--fg); stroke-width: 2; }
+    .ha-cell { fill: var(--crimson); }
+    .ha-t { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+    .ha-m { fill: var(--amber); font-family: var(--font-mono); font-size: 10.5px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    .bench-mode { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .bench-mode .blab { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+    /* compact method cards: number badge + heading + one short line */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; }
+    /* compact typing-tile bench controls (phone first) */
+    .bench-ctl, .bench-util { display: grid; gap: 6px; width: 100%; padding: 8px 12px; }
+    .bench-ctl .seg, .bench-util .seg { display: grid; width: 100%; gap: 4px; padding: 3px; }
+    .bench-ctl .seg button, .bench-util .seg button { padding: 6px 2px; font-size: 11.5px; min-height: 34px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-sample { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    #bench-sample button { font-size: 10.5px; padding: 6px 1px; letter-spacing: -.02em; }
+    #bench-sample button.isdone::after { content: "✓"; margin-left: 1px; }
+    #bench-cond { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .bench-steps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 5px; }
+    .bench-tools { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+    .bench-steps .vt-btn, .bench-tools .vt-btn { padding: 6px 4px; font-size: 12.5px; min-height: 38px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bench-util .stage-hint { margin-left: 0; width: 100%; font-size: 11.5px; line-height: 1.4; }
+    #bench-readout { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; padding: 10px 10px 0; }
+    #bench-readout div { padding: 5px 6px; }
+    #bench-readout span { font-size: 9px; letter-spacing: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-readout b { font-size: 12px; white-space: normal; display: block; line-height: 1.2; min-height: 2.4em; overflow-wrap: anywhere; }
+    @media (min-width: 641px) {
+      #method-cards div.method { padding: 10px 14px; }
+      .bench-ctl, .bench-util { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 16px; }
+      .bench-ctl .seg, .bench-util .seg { display: inline-flex; width: auto; padding: 4px; }
+      .bench-ctl .seg button, .bench-util .seg button { padding: 8px 12px; font-size: 13px; }
+      #bench-sample button { font-size: 13px; padding: 8px 12px; letter-spacing: normal; }
+      .bench-steps, .bench-tools { display: flex; flex-wrap: wrap; gap: 8px; }
+      .bench-steps .vt-btn, .bench-tools .vt-btn { padding: 10px 14px; font-size: 13.5px; }
+      .bench-util .stage-hint { width: auto; margin-left: auto; font-size: 13px; }
+      #bench-readout b { min-height: 0; font-size: 14px; }
+    }
+    .vt-btn[disabled], .seg button[disabled] { opacity: .45; cursor: not-allowed; }
+    .seg button.isdone::after { content: " ✓"; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    .bench-readout .hot b { color: var(--amber); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td.empty { color: var(--paper-faint); }
+    #results-table tr.fresh td { background: rgba(var(--amber-rgb), .12); }
+    #results-table td.pos { font-weight: 700; color: var(--crimson); }
+    #results-table td.yes { color: var(--ok); font-weight: 700; }
+    #results-table td.no { color: var(--crimson); font-weight: 700; }
+    .abo-grid { display: grid; grid-template-columns: 56px repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 16px; align-items: center; }
+    .abo-grid .hd { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); text-align: center; }
+    .abo-grid .hd.row { text-align: right; padding-right: 4px; }
+    .abo-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 46px; padding: 4px 2px; font-weight: 700; font-size: 12.5px; cursor: pointer; }
+    .abo-pin.safe { background: rgba(var(--ok-rgb), .12); border-color: var(--ok); }
+    .abo-pin.clash { background: rgba(var(--crimson-rgb), .12); border-color: var(--crimson); }
+    .abo-pin[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--paper-ink); }
+    .abo-rh { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 14px; align-items: center; }
+    .rh-seg { display: inline-flex; gap: 6px; }
+    .rh-seg button { min-height: 44px; min-width: 64px; padding: 6px 14px; border-radius: 22px; border: 1.5px solid rgba(var(--paper-ink-rgb), .3); background: var(--paper-card); color: var(--paper-ink); font-weight: 700; cursor: pointer; }
+    .rh-seg button[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .abo-rh .blab { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--paper-muted); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 96px; }
+    .pos-info b { color: var(--crimson); }
+    .stage-bar[hidden] { display: none; }
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-card h5 { margin: 22px 0 6px; color: var(--amber); font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 22px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; text-align: left; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+    .bridge-verdict p { margin: 0 0 8px; }
+    .claims { display: grid; gap: 8px; margin-top: 8px; }
+    .claim { border: 1.5px solid var(--line-strong); border-radius: var(--radius); background: transparent; color: var(--fg-soft); text-align: left; padding: 10px 14px; min-height: 48px; cursor: pointer; font-size: 14.5px; }
+    .claim b { color: var(--amber); font-family: var(--font-mono); margin-right: 6px; }
+    .claim .fix { display: none; margin-top: 6px; color: var(--fg); }
+    .claim[aria-pressed="true"] { border-color: var(--ok); }
+    .claim[aria-pressed="true"] .said { text-decoration: line-through; opacity: .65; }
+    .claim[aria-pressed="true"] .fix { display: block; }
+    .claim-count { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-top: 8px; }
+    @media (max-width: 560px) {
+      .abo-grid { grid-template-columns: 44px repeat(4, minmax(0, 1fr)); gap: 4px; }
+      .abo-pin { font-size: 11.5px; }
+      #zoom-stage .seg button { padding: 8px 10px; font-size: 12.5px; }
+    }
+    /* compact results table on phones: one tight row per sample instead of seven stacked lines */
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; min-width: 0; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table tr { display: grid; grid-template-columns: minmax(0, 1fr) 30px 30px 30px 36px 42px 44px; column-gap: 4px; padding: 7px 8px; border-bottom: 1px solid var(--paper-line); align-items: center; }
+      #results-table tbody tr:last-child { border-bottom: 0; }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12.5px; text-align: center; min-height: 0; }
+      #results-table th { font-size: 9px; line-height: 1.2; background: none; letter-spacing: 0; align-self: end; }
+      #results-table thead tr { padding: 6px 8px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table th:first-child, #results-table td:first-child { text-align: left; font-size: 13px; }
+      #results-table td::before { content: none; }
+      #results-table tbody tr.fresh td { background: none; }
+      #results-table tbody tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l07">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 7 Lessons</a>
+      <span class="l-crumb">Lesson 7 of 7 · <b>Closing the Case</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 7 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Blood Groups and <em>Closing the Case</em></h1>
+        <p class="question reveal">Which of the six bags can save a B Rh− rider, and how great a danger is Mama Bisi's 160/100?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>State the <strong>antigens and antibodies</strong> of the four ABO groups and predict safe donors and recipients.</span></li>
+          <li><b>02</b><span>Explain <strong>agglutination</strong> and why donor and patient blood are typed and test-mixed before any transfusion.</span></li>
+          <li><b>03</b><span>Explain the <strong>Rhesus factor</strong> and how haemolytic disease of the newborn arises and is prevented.</span></li>
+          <li><b>04</b><span>Give the <strong>cause, a sign and a prevention</strong> for common circulatory disorders.</span></li>
+          <li><b>05</b><span>Bring Lessons 01–06 together to <strong>solve the three Oja Oba cases</strong>.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Share results</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 290" role="img">
+          <rect class="ha-tile" x="20" y="40" width="290" height="190" rx="18"/>
+          <!-- anti-A, anti-B, anti-D wells for one sample: only the anti-B well clumps (group B, Rh-) -->
+          <circle class="ha-well" cx="85" cy="135" r="38"/>
+          <circle class="ha-well" cx="165" cy="135" r="38"/>
+          <circle class="ha-well" cx="245" cy="135" r="38"/>
+          <g class="ha-cell">
+            <circle cx="150" cy="122" r="5"/><circle cx="162" cy="116" r="5"/><circle cx="174" cy="124" r="5"/><circle cx="156" cy="134" r="5"/>
+            <circle cx="170" cy="138" r="5"/><circle cx="182" cy="132" r="5"/><circle cx="160" cy="148" r="5"/><circle cx="174" cy="152" r="5"/><circle cx="148" cy="144" r="5"/>
+          </g>
+          <text class="ha-t" x="62" y="196">anti-A</text><text class="ha-t" x="142" y="196">anti-B</text><text class="ha-t" x="222" y="196">anti-D</text>
+          <text class="ha-m" x="76" y="212">smooth</text><text class="ha-m" x="146" y="212">CLUMPS</text><text class="ha-m" x="226" y="212">smooth</text>
+          <text class="ha-m" x="40" y="272">the rider: B, Rh-</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Safe to give?</a></li>
+        <li><a href="#practical">Typing tile</a></li>
+        <li><a href="#concepts">Groups &amp; disorders</a></li>
+        <li><a href="#zoom">Clumps &amp; Rhesus</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">Case closed</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 1, 4, 5 and 6</em></h2>
+        <p class="intro">Four quick cards from earlier in the unit. Answer each one in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The cool box at the <em>Oja Oba tent</em></h2>
+        <p class="intro">The okada rider has lost a lot of blood. The health tent has a cool box with six bags. One wrong choice could be fatal, and Mama Bisi is worried about her own pressure too.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: at the Oja Oba health tent a cool box holds six blood bags, O positive, O negative, A negative, B positive, B negative and AB negative, beside the injured okada rider whose card reads B Rh negative. Baba Sule says take the AB, Chidi says any bag will do, and Dr Aisha says test first. The story ends in the UCH teaching lab at the typing tile."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba tent → UCH lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · The cool box:</strong> The lid opens on six bags: O+, O−, A−, B+, B− and AB−. The rider's card reads <em>B, Rh negative</em>.</p>
+            <p><strong>Scene 2 · Baba Sule:</strong> <em>“Take the AB! It has both letters, so it suits everybody.”</em></p>
+            <p><strong>Scene 3 · Chidi:</strong> <em>“Blood is blood. Won't any bag do?”</em></p>
+            <p><strong>Scene 4 · Dr Aisha:</strong> <em>“The wrong bag can kill him faster than the crash. We test first.”</em> Meanwhile Mama Bisi asks whether her 160/100 is “just tiredness”.</p>
+            <p><strong>Scene 5 · The invitation:</strong> To the typing tile in the UCH lab, to find out which bag is safe.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">What could go wrong if the rider receives the wrong bag of blood? Pin your idea before we test.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think the wrong blood could…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">His body will fight the new blood? (Tobi)</button>
+            <button type="button">The blood will clump up (Hadiza)</button>
+            <button type="button">Any blood works in an emergency (Chidi)</button>
+            <button type="button">AB suits everybody (Baba Sule)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT GAME ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Safe to give to <em>this patient</em>?</h2>
+        <p class="intro">Sort all 8 cards into <strong>safe</strong> or <strong>unsafe</strong>. The first four cards are for a <strong>group A</strong> patient, the last four for a <strong>group AB</strong> patient. Tap a card, then tap a bin (or drag it).</p>
+
+        <div class="sort" id="abo-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="safe" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Safe bin">
+              <h4><i></i>Safe</h4><small>no antigen meets a matching antibody</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="unsafe" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Unsafe bin">
+              <h4><i></i>Unsafe</h4><small>the cells would clump</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The typing tile: <em>ABO and Rhesus, five samples</em></h2>
+        <p class="intro">Dr Aisha's bench has a white tile, three sera (anti-A, anti-B, anti-D) and five samples: the <strong>rider</strong> and four donors. Type every sample, then decide which donor is safe for the rider. The answer stays hidden until you <strong>read</strong> each row.</p>
+
+        <div class="callout safety" id="safety-box">
+          <p><strong>Safety:</strong> in a real class the teacher uses a commercial typing kit with the teacher's own or donated, screened samples. The lancet is sterile, used once and dropped into the sharps bin, and students never share lancets. Wear gloves and disinfect the tile afterwards.</p>
+        </div>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Three drops of serum</h4><p>anti-A, anti-B and anti-D in labelled wells.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Add sample and mix</h4><p>A fresh stirrer for every well.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Rock the tile</h4><p>Rock gently; wait the full 2 minutes.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Read and decide</h4><p>Look for clumping, then name the group.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D typing bench: a white tile with three wells for each of five samples, anti-A, anti-B and anti-D dropper bottles, stirrers, a sample bottle, a lancet, a sharps bin and a stopwatch. Wells that match clump into red specks."></canvas>
+            <div class="stage-label"><i></i>3D typing bench · drag to rotate</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the buttons and the results table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar bench-ctl">
+            <div class="bench-steps" role="group" aria-label="Bench steps">
+              <button class="vt-btn zobo" type="button" id="bench-s1">1 · Add serum</button>
+              <button class="vt-btn" type="button" id="bench-s2" disabled>2 · Add sample</button>
+              <button class="vt-btn" type="button" id="bench-s3" disabled>3 · Rock 2 min</button>
+              <button class="vt-btn" type="button" id="bench-s4" disabled>4 · Read tile</button>
+            </div>
+            <div class="seg" role="group" aria-label="Sample" id="bench-sample">
+              <button type="button" data-sample="rider" aria-pressed="true">Rider</button>
+              <button type="button" data-sample="donor1" aria-pressed="false">Donor 1</button>
+              <button type="button" data-sample="donor2" aria-pressed="false">Donor 2</button>
+              <button type="button" data-sample="donor3" aria-pressed="false">Donor 3</button>
+              <button type="button" data-sample="donor4" aria-pressed="false">Donor 4</button>
+            </div>
+          </div>
+          <div class="stage-bar bench-util">
+            <div class="seg" role="group" aria-label="Technique" id="bench-cond">
+              <button type="button" data-cond="careful" aria-pressed="true">Careful</button>
+              <button type="button" data-cond="early" aria-pressed="false">Read early</button>
+              <button type="button" data-cond="stirrer" aria-pressed="false">One stirrer</button>
+              <button type="button" data-cond="drying" aria-pressed="false">Drying edge</button>
+            </div>
+            <div class="bench-tools" role="group" aria-label="Bench tools">
+              <button class="vt-btn" type="button" id="bench-auto">Auto-run</button>
+              <button class="vt-btn" type="button" id="bench-reset">Redo sample</button>
+              <button class="vt-btn" type="button" id="bench-labels" aria-pressed="false">Labels</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Samples read: 0 of 5</span>
+          </div>
+        </div>
+
+        <h3>Record your readings</h3>
+        <p>The table fills as you read each row. <strong>+</strong> means the well clumped, <strong>−</strong> means it stayed smooth.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr><th>Sample</th><th>Anti-A</th><th>Anti-B</th><th>Anti-D</th><th>ABO group</th><th>Rhesus</th><th>Safe for rider?</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="safe-line">Read all five rows to choose the rider's bag.</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected readings <small>open after you read every sample</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Sample</th><th>Anti-A</th><th>Anti-B</th><th>Anti-D</th><th>ABO group</th><th>Rhesus</th><th>Safe for rider?</th></tr></thead>
+                <tbody>
+                  <tr><td>Rider</td><td>−</td><td>+</td><td>−</td><td>B</td><td>Rh−</td><td>(patient)</td></tr>
+                  <tr><td>Donor 1</td><td>−</td><td>−</td><td>−</td><td>O</td><td>Rh−</td><td>yes</td></tr>
+                  <tr><td>Donor 2</td><td>+</td><td>−</td><td>−</td><td>A</td><td>Rh−</td><td>no</td></tr>
+                  <tr><td>Donor 3</td><td>−</td><td>+</td><td>+</td><td>B</td><td>Rh+</td><td>no (Rh+ cells could sensitise him)</td></tr>
+                  <tr><td>Donor 4</td><td>+</td><td>+</td><td>−</td><td>AB</td><td>Rh−</td><td>no</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+
+        <h3>Precautions and sources of error</h3>
+        <div class="callout tip">
+          <p><strong>Precautions (past tense):</strong> a separate clean stirrer was used for each well · wells were labelled before any serum was added · (teacher only) the lancet was sterile, used once and dropped into a sharps bin · gloves were worn and the tile was disinfected after use · every result was read after the full 2 minutes.</p>
+        </div>
+        <div class="callout info">
+          <p><strong>Sources of error (with direction):</strong> reading before 2 minutes missed weak clumping, so a positive well was read as negative (a <strong>false negative</strong>) · reusing one stirrer carried cells and serum between wells and could cause clumping that does not belong there (a <strong>false positive</strong>) · a drying drop at the edge of a well can look grainy and be mistaken for clumping (a <strong>false positive</strong>).</p>
+        </div>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l07-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why does group B blood clump in anti-B serum?</li>
+            <li>Why is Donor 4 unsafe though it contains the B antigen the rider already has?</li>
+            <li>Which donor is the universal ABO donor, and why?</li>
+            <li>Why is Rh+ blood avoided for an Rh− patient?</li>
+            <li>Why are fresh stirrers needed?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Group B red cells carry antigen B. The antibody in anti-B serum fits that antigen, and each Y-shaped antibody links neighbouring cells, so the cells clump.</li>
+                <li>Donor 4 (AB) carries antigen A as well as B. The rider's plasma holds anti-a, which would clump the donor's cells, so it is unsafe.</li>
+                <li>Donor 1 (group O) is the universal ABO donor: its red cells carry neither antigen A nor B, so no antibody in any patient's plasma can clump them.</li>
+                <li>Rh+ cells carry the D antigen. An Rh− patient has no anti-D at first, but would start making it after meeting Rh+ cells, and a later transfusion could cause a reaction.</li>
+                <li>A used stirrer carries serum and cells from one well to the next, which can cause clumping that does not belong there (a false positive).</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Groups, clumps, Rhesus and <em>disorders</em></h2>
+        <p class="intro">Now we connect what the tile showed to the rules WAEC, NECO and JAMB expect, then to the disorders of the circulation.</p>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up and march on the spot for one minute, swinging your arms, then shake out your legs and take five slow breaths. Moving the leg muscles squeezes the leg veins and pushes blood back to the heart, which is why you keep moving on long journeys. Sit, find your pulse and count it for 15 seconds.</p>
+        </div>
+
+        <h3 id="def-abo">1 · The ABO groups</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Group</th><th>Antigen on red cells</th><th>Antibody in plasma</th><th>Gives to</th><th>Gets from</th></tr></thead>
+            <tbody>
+              <tr><td><strong>A</strong></td><td>A</td><td>anti-b</td><td>A, AB</td><td>A, O</td></tr>
+              <tr><td><strong>B</strong></td><td>B</td><td>anti-a</td><td>B, AB</td><td>B, O</td></tr>
+              <tr><td><strong>AB</strong></td><td>A and B</td><td>neither</td><td>AB only</td><td>all four: <em>universal recipient</em></td></tr>
+              <tr><td><strong>O</strong></td><td>neither A nor B</td><td>anti-a and anti-b</td><td>all four: <em>universal donor</em></td><td>O only</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout big reveal" id="agglutination-rule" data-hook>
+          <p><strong>Agglutination:</strong> if donor red cells carry an antigen that matches an antibody in the patient's plasma, the antibodies link the cells into clumps. The clumps can block small vessels and the burst cells can damage the kidneys, which can be fatal. The rule: look at the <strong>donor's antigens</strong> and the <strong>patient's antibodies</strong>.</p>
+        </div>
+        <p>Hospitals therefore test the group of both people and mix samples to check for clumping before any transfusion. Donated blood is also screened for syphilis, HIV and hepatitis B and C, and stored with an anticoagulant such as sodium citrate.</p>
+
+        <h3 id="def-rh">2 · The Rhesus factor</h3>
+        <div class="callout" id="rhesus-callout">
+          <p>People whose red cells carry the Rhesus (D) antigen are <strong>Rh+</strong> (the majority); those without it are <strong>Rh−</strong>. An Rh− person makes anti-D only after meeting Rh+ cells. If an Rh− mother carries an Rh+ baby, baby cells can enter her blood at birth and sensitise her. In a later Rh+ pregnancy her anti-D crosses the placenta and attacks the red cells of the unborn child, a condition called <strong>haemolytic disease of the newborn</strong>. An <strong>anti-D injection</strong> given to the mother soon after each delivery prevents this.</p>
+        </div>
+
+        <h3 id="def-disorders">3 · Disorders of the circulation</h3>
+        <div class="tbl-wrap" id="disorders-table">
+          <table class="tbl">
+            <thead><tr><th>Disorder</th><th>Cause</th><th>Sign</th><th>Prevention</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Hypertension</strong></td><td>pressure stays high; risk rises with stress, obesity, salt, smoking, alcohol and family history</td><td>headaches, often no sign at all</td><td>less salt, exercise, weight control, regular checks, prescribed drugs</td></tr>
+              <tr><td><strong>Atherosclerosis</strong></td><td>fatty deposits narrow and stiffen arteries</td><td>chest pain on effort</td><td>avoid smoking, eat less saturated fat, stay active</td></tr>
+              <tr><td><strong>Coronary heart disease and heart attack</strong></td><td>a blocked coronary artery; the muscle dies</td><td>crushing chest pain</td><td>as atherosclerosis, and urgent care</td></tr>
+              <tr><td><strong>Stroke</strong></td><td>part of the brain loses its blood supply, or a vessel bursts</td><td>sudden weakness on one side, slurred speech</td><td>control blood pressure</td></tr>
+              <tr><td><strong>Thrombosis</strong></td><td>a clot forms inside a vessel</td><td>painful swollen limb</td><td>keep moving on long journeys, anticoagulants</td></tr>
+              <tr><td><strong>Varicose veins</strong></td><td>failed vein valves</td><td>swollen, twisting leg veins</td><td>avoid standing still for hours, exercise</td></tr>
+              <tr><td><strong>Anaemia</strong></td><td>a shortage of red cells or of haemoglobin, from iron lack, malaria, hookworm or blood loss</td><td>tiredness, pale palms</td><td>iron-rich food, deworming and malaria treatment</td></tr>
+              <tr><td><strong>Sickle cell anaemia</strong></td><td>inherited HbS; cells bend into sickles and jam in capillaries</td><td>painful crises</td><td>genotype testing and counselling before marriage</td></tr>
+              <tr><td><strong>Leukaemia</strong></td><td>cancer of the white cells</td><td>repeated infections</td><td>hospital treatment</td></tr>
+              <tr><td><strong>Haemophilia</strong></td><td>inherited, sex-linked clotting failure</td><td>prolonged bleeding</td><td>avoid injury, clotting factor</td></tr>
+              <tr><td><strong>Hole in the heart</strong></td><td>an opening in the septum present from birth; blood mixes</td><td>breathlessness, poor feeding and growth, a heart murmur; a bluish tinge only in severe cases</td><td>surgery</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout tip" id="habits">
+          <p><strong>Healthy heart habits:</strong> regular exercise · meals with little saturated fat, salt or sugar · no smoking · little or no alcohol · managing stress · keeping a healthy weight · regular check-ups.</p>
+        </div>
+
+        <h3 id="pos-h">Donor and patient explorer</h3>
+        <p>Tap a square: a donor's cells meet a patient's plasma. The 3D zoom below shows the result, and you see the antigen and antibody that decide it. Use the Rhesus switches to add the D antigen.</p>
+        <div id="pos-explorer">
+          <div class="abo-grid" id="abo-grid" role="group" aria-label="Donor and patient grid"></div>
+          <div class="abo-rh">
+            <div class="bench-mode"><span class="blab">DONOR</span>
+              <div class="rh-seg" role="group" aria-label="Donor Rhesus" id="rh-donor"><button type="button" data-rh="+" aria-pressed="false">Rh+</button><button type="button" data-rh="-" aria-pressed="true">Rh−</button></div></div>
+            <div class="bench-mode"><span class="blab">PATIENT</span>
+              <div class="rh-seg" role="group" aria-label="Patient Rhesus" id="rh-patient"><button type="button" data-rh="+" aria-pressed="false">Rh+</button><button type="button" data-rh="-" aria-pressed="true">Rh−</button></div></div>
+          </div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a donor and patient pair to test it.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the clump: <em>antibodies and Rhesus</em></h2>
+        <p class="intro">Watch Y-shaped antibodies bridge group B cells in anti-B serum until they clump, beside a serum that does not match. Switch to <em>Rhesus</em> to follow an Rh− mother through two pregnancies, with and without the anti-D injection.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom: Y-shaped antibodies bridging red cells into clumps in a matching serum, with a non-matching serum below for comparison, or a staged animation of Rhesus sensitisation over two pregnancies."></canvas>
+            <div class="stage-label"><i></i>3D zoom · drag to rotate</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Zoom view" id="zoom-mode">
+              <button type="button" data-mode="agglutination" aria-pressed="true">Agglutination</button>
+              <button type="button" data-mode="rhesus" aria-pressed="false">Rhesus</button>
+            </div>
+          </div>
+          <div class="stage-bar" id="zoom-agg-bar">
+            <div class="seg" role="group" aria-label="Donor group" id="zoom-donor">
+              <button type="button" data-donor="A" aria-pressed="false">Cells A</button>
+              <button type="button" data-donor="B" aria-pressed="true">Cells B</button>
+              <button type="button" data-donor="AB" aria-pressed="false">Cells AB</button>
+              <button type="button" data-donor="O" aria-pressed="false">Cells O</button>
+            </div>
+            <div class="seg" role="group" aria-label="Serum" id="zoom-serum">
+              <button type="button" data-serum="anti-A" aria-pressed="false">anti-A</button>
+              <button type="button" data-serum="anti-B" aria-pressed="true">anti-B</button>
+              <button type="button" data-serum="anti-D" aria-pressed="false">anti-D</button>
+            </div>
+          </div>
+          <div class="stage-bar" id="zoom-agg-bar2">
+            <label class="counter" style="gap:10px;display:flex;align-items:center"><i style="--c:var(--teal)"></i>Mixing time
+              <input type="range" id="zoom-agg" min="0" max="1" step="0.01" value="0" aria-label="How far the antibodies have bridged the cells" style="width:clamp(110px,40vw,220px)"></label>
+            <button class="vt-btn zobo" type="button" id="zoom-auto" aria-pressed="true">Auto-loop</button>
+          </div>
+          <div class="stage-bar" id="zoom-rh-bar" hidden>
+            <div class="seg" role="group" aria-label="Rhesus stage" id="zoom-stage-seg">
+              <button type="button" data-st="0" aria-pressed="true">Pregnancy 1</button>
+              <button type="button" data-st="1" aria-pressed="false">Birth</button>
+              <button type="button" data-st="2" aria-pressed="false">After birth</button>
+              <button type="button" data-st="3" aria-pressed="false">Pregnancy 2</button>
+            </div>
+            <button class="vt-btn" type="button" id="zoom-inject" aria-pressed="false">Give anti-D injection</button>
+            <button class="vt-btn zobo" type="button" id="zoom-play">▶ Play</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each problem on paper first, then check the working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Reading a tile</h4></div>
+          <div class="example-body">
+            <p class="q">A sample clumps with anti-A and anti-D but not with anti-B. Find the group.</p>
+            <ol class="steps-sol">
+              <li><strong>Anti-A:</strong> it clumps, so antigen A is present.</li>
+              <li><strong>Anti-B:</strong> no clumping, so antigen B is absent; the ABO group is A.</li>
+              <li><strong>Anti-D:</strong> it clumps, so the Rhesus antigen is present.</li>
+            </ol>
+            <div class="answer-line">The sample is group A and Rhesus positive.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Choosing bags for the rider</h4></div>
+          <div class="example-body">
+            <p class="q">The patient is B, Rh−. The bags are O+, O−, A−, B+, B− and AB−. Which can he safely receive?</p>
+            <ol class="steps-sol">
+              <li><strong>ABO:</strong> his plasma holds anti-a, so reject bags with antigen A (A− and AB−). B and O cells are acceptable.</li>
+              <li><strong>Rhesus:</strong> he is Rh−, so reject Rh+ bags (O+ and B+) so that he is not sensitised.</li>
+              <li><strong>Left:</strong> B− (exact match, first choice) and O−.</li>
+            </ol>
+            <div class="answer-line">B negative first, O negative as the alternative.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Mama Bisi's reading</h4></div>
+          <div class="example-body">
+            <p class="q">Her pressure is 160/100 mmHg. Hypertension is diagnosed when readings on two different days are 140 mmHg or more systolic, or 90 mmHg or more diastolic. What do her numbers say?</p>
+            <ol class="steps-sol">
+              <li><strong>Systolic:</strong> <code>160 ≥ 140</code>, above the line.</li>
+              <li><strong>Diastolic:</strong> <code>100 ≥ 90</code>, above the line.</li>
+              <li><strong>Pulse pressure:</strong> <code>160 − 100 = 60 mmHg</code>, compared with <code>120 − 80 = 40 mmHg</code> normally: a stiffer, harder-worked arterial system.</li>
+            </ol>
+            <div class="answer-line">Both numbers are high; she needs repeat checks and treatment, not rest alone.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>A Rhesus pregnancy</h4></div>
+          <div class="example-body">
+            <p class="q">An Rh− woman's first baby is Rh+. Explain the risk to her second Rh+ baby in steps, and say how it is prevented.</p>
+            <ol class="steps-sol">
+              <li><strong>First birth:</strong> baby cells enter her blood.</li>
+              <li><strong>Her response:</strong> she makes anti-D.</li>
+              <li><strong>Second pregnancy:</strong> her anti-D crosses the placenta.</li>
+              <li><strong>Result:</strong> the baby's red cells are destroyed.</li>
+            </ol>
+            <div class="answer-line">Prevention: an anti D injection soon after the first delivery.</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Case closed: <em>fill in Dr Aisha's whiteboard</em></h2>
+        <p class="intro">Solve the three Oja Oba cases, then flip Baba Sule's seven wrong claims one by one.</p>
+
+        <div class="bridge-card" id="bridge-card">
+          <h4>Dr Aisha's whiteboard</h4>
+          <div id="bridge-cases"></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
+          </div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+          <h5>BABA SULE'S SEVEN CLAIMS · TAP TO FLIP</h5>
+          <div class="claims" id="claims"></div>
+          <div class="claim-count" id="claim-count">0 of 7 flipped</div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 7:</strong> a working circulation needs a healthy pump, sound vessels, the right pressure and the right blood, and each can be tested and protected.</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 6 come at the end.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 7.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can state the antigens and antibodies for each ABO group.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can pick safe donors for a patient.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain agglutination.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain haemolytic disease of the newborn.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can give the cause and prevention of four disorders.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>Which group is the universal recipient, and why?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Group <strong>AB</strong> <b>(1)</b>; its plasma has neither anti-a nor anti-b, so no donor's A or B cells are clumped <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 07. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home investigation: the paper cross-match and the family salt check</h3>
+        <div class="aq" data-answer="l07-a1">
+          <div class="aq-top"><h4>Build a paper model of clumping, then check the salt in your home.</h4></div>
+          <p>You will build a paper model that shows why some donor–patient pairs clump, and then look at one everyday habit that affects blood pressure in your home. You will not use any blood or needles.</p>
+          <p><strong>You need:</strong> thin card or an old exercise-book cover, scissors, a pencil and ruler, a teaspoon, and a notebook.</p>
+          <div class="callout safety"><p><strong>Safety and respect:</strong> Do not prick anyone's finger or handle anyone's blood. Asking relatives about their blood group, genotype or blood pressure is optional: ask politely, accept "I don't know" or "I'd rather not say", and keep their answers private.</p></div>
+          <ol class="sub">
+            <li><strong>The paper cells.</strong> Cut out 8 card circles as red cells. Draw a small triangle on the edge of two of them (antigen A), a small square on two (antigen B), both shapes on two (group AB) and nothing on the last two (group O). Label each with its group.</li>
+            <li><strong>The paper antibodies.</strong> Cut out Y-shaped cards. On the arms of some, cut a triangle-shaped notch (anti-a); on others, a square notch (anti-b). A group A patient gets anti-b cards, group B gets anti-a, group O gets both, group AB gets none.</li>
+            <li>Draw a 4 × 4 grid with donors down the side and patients across the top. For each square, test whether any of the patient's antibody notches fits a shape on the donor's cell. If one fits, write "clumps"; if none fits, write "safe".</li>
+            <li>Add a Rhesus row: mark a dot on cells that are Rh+, and decide which of them an Rh− patient should not receive.</li>
+            <li><strong>The salt check.</strong> For one day, ask whoever cooks to let you note how many level teaspoons of salt and how many seasoning cubes go into the family's meals. Divide by the number of people who ate.</li>
+            <li>Write a short heart-health plan for your home with three changes, one of which uses your salt result.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your grid, salt result and heart-health plan…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Donor ↓ / Patient →</th><th>A</th><th>B</th><th>AB</th><th>O</th></tr></thead><tbody><tr><td>A</td><td>safe</td><td>clumps</td><td>safe</td><td>clumps</td></tr><tr><td>B</td><td>clumps</td><td>safe</td><td>safe</td><td>clumps</td></tr><tr><td>AB</td><td>clumps</td><td>clumps</td><td>safe</td><td>clumps</td></tr><tr><td>O</td><td>safe</td><td>safe</td><td>safe</td><td>safe</td></tr></tbody></table></div>
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Salt check (one day, 5 people)</th><th>Amount</th></tr></thead><tbody><tr><td>Level teaspoons of salt</td><td>3</td></tr><tr><td>Seasoning cubes</td><td>4</td></tr><tr><td>Salt per person</td><td>3 ÷ 5 = 0.6 teaspoon, plus the salt in the cubes</td></tr></tbody></table></div>
+              <p>the grid matches the ABO rules (O gives to all four groups; AB receives from all four; A and B each receive from their own group and O); the student states the rule in words, that the donor's antigens are checked against the patient's antibodies; the Rhesus row keeps Rh+ cells away from Rh− patients; the salt result is honest, notes that seasoning cubes also contain salt, and compares the amount with the World Health Organization's advice for adults of less than 5 g of salt a day, just under one level teaspoon; the three-change plan is practical for a Nigerian home (for example, fewer cubes, more vegetables and fruit, a daily walk, a pressure check for adults at a health day); and one limit of the paper model is stated, for example that real antibodies are dissolved in plasma and real cells carry many antigen copies.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l07-b1">
+          <div class="aq-top"><h4>1. The ABO groups</h4><span class="marks">4 marks</span></div>
+          <p>Copy and complete the table for the four ABO blood groups.</p><div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Group</th><th>Antigen carried on the red cells</th><th>Antibody found in the plasma</th></tr></thead><tbody><tr><td>A</td><td></td><td></td></tr><tr><td>B</td><td></td><td></td></tr><tr><td>AB</td><td></td><td></td></tr><tr><td>O</td><td></td><td></td></tr></tbody></table></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Group</th><th>Antigen carried on the red cells</th><th>Antibody found in the plasma</th></tr></thead><tbody><tr><td>A</td><td>A</td><td>anti-b (1)</td></tr><tr><td>B</td><td>B</td><td>anti-a (1)</td></tr><tr><td>AB</td><td>A and B</td><td>none (1)</td></tr><tr><td>O</td><td>neither A nor B</td><td>both anti-a and anti-b (1)</td></tr></tbody></table></div>
+            <p><small><strong>Mark scheme note:</strong> One mark per row, and only when both cells of that row are correct. A common slip gives group A "anti-a", which would make a person attack their own cells; that row scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b2">
+          <div class="aq-top"><h4>2. Agglutination</h4><span class="marks">3 marks</span></div>
+          <p>(a) State what is meant by agglutination. (1 mark)<br>(b) Explain why giving group A blood to a group B patient is dangerous. (2 marks)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Agglutination is the clumping together of red cells when the antigen on them meets the antibody that matches it (1). Equivalent wordings that keep the key ideas are credited. (b) The donor's red cells carry antigen A, and the patient's plasma contains anti-a, so the donor cells are clumped (1). The clumps can block small vessels such as capillaries and the burst cells can damage the kidneys, which may kill the patient (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Do not credit "the blood clots" for (a): clumping is not clotting. In (b) the first mark needs both the donor's antigen and the patient's antibody; naming only one does not earn it.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b3">
+          <div class="aq-top"><h4>3. Choosing the rider's bag</h4><span class="marks">5 marks</span></div>
+          <p>The injured okada rider is group B, Rh−. The cool box holds O+, O−, A−, B+, B− and AB−. State which bags are safe for him and explain your choice.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>A− and AB− are rejected, because their cells carry antigen A, which the anti-a in his plasma would clump (1). O+ and B+ are rejected, because he is Rh− and Rh+ cells could make him produce anti-D, so a later transfusion could cause a reaction (1). B− is the first choice, as an exact match for both ABO and Rhesus (1). O− is the alternative if B− runs out (1), because its cells carry no A, B or D antigen for his antibodies to react with (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark is for a separate decision; a candidate who simply lists "B− and O−" without reasons earns only the two marks for naming them. Choosing AB− because "AB receives from everybody" confuses the universal recipient with a universal donor and scores zero for that line.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b4">
+          <div class="aq-top"><h4>4. Haemolytic disease of the newborn</h4><span class="marks">5 marks</span></div>
+          <p>(a) Explain how an Rh− mother's second Rh+ baby can be harmed. (4 marks)<br>(b) State how this is prevented. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) At the birth of her first Rh+ baby, some of the baby's red cells, which carry the Rhesus (D) antigen, enter the mother's blood (1). Her immune system responds by making anti-D antibodies (1). In a later pregnancy with an Rh+ baby, her anti-D crosses the placenta into the baby's blood (1). The anti-D destroys the baby's red cells, so the baby becomes anaemic and may die (1). (b) The mother is given an anti-D injection soon after each Rh+ delivery (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Reversing the Rhesus groups (an Rh+ mother with an Rh− baby) scores zero for the whole of (a). The first baby is not usually harmed; candidates who say it is lose the first mark. "Anti-D is given to the baby" does not earn (b).</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b5">
+          <div class="aq-top"><h4>5. Reading a typing tile</h4><span class="marks">3 marks</span></div>
+          <p>Three donors were typed with anti-A, anti-B and anti-D serum (+ = clumping, − = no clumping).</p><div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Donor</th><th>Anti-A</th><th>Anti-B</th><th>Anti-D</th></tr></thead><tbody><tr><td>P</td><td>+</td><td>−</td><td>+</td></tr><tr><td>Q</td><td>−</td><td>−</td><td>+</td></tr><tr><td>R</td><td>+</td><td>+</td><td>+</td></tr></tbody></table></div><p>State the full blood group of each donor.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>P: group A, Rh+ (1). Q: group O, Rh+ (1). R: group AB, Rh+ (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark needs both the ABO group and the Rhesus group. Q is often given as "AB" by candidates who read "no clumping" as "both antigens present"; that scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b6">
+          <div class="aq-top"><h4>6. Practical: precautions and errors</h4><span class="marks">4 marks</span></div>
+          <p>(a) State <strong>two</strong> precautions that were taken during the blood-typing practical. (2 marks)<br>(b) For <strong>two</strong> sources of error, state the effect on the result and why. (2 marks)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any two, in the past tense: a separate clean stirrer was used for each well (1); the wells were labelled before any serum was added (1); the lancet was sterile, used once and dropped into a sharps bin (1); gloves were worn and the tile was disinfected after use (1); each well was read only after the full 2 minutes (1). (b) Any two: reading before 2 minutes missed weak clumping, so a positive well was recorded as negative, a false negative (1); reusing one stirrer carried cells and serum between wells, giving clumping that did not belong there, a false positive (1); a drop drying at the edge of a well looked grainy and was mistaken for clumping, a false positive (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Precautions must be in the past tense; "use a new stirrer" loses the mark. An error needs both the effect (false positive or false negative) and the reason. "Use clean apparatus" with no detail is not credited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b7">
+          <div class="aq-top"><h4>7. Circulatory disorders</h4><span class="marks">3 marks</span></div>
+          <p>For each disorder, state its cause and <strong>one</strong> way to prevent or control it: (a) atherosclerosis, (b) sickle cell anaemia, (c) varicose veins.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Fatty deposits build up in artery walls, narrowing and hardening them; prevented by eating less saturated fat, not smoking and keeping active (1). (b) An inherited abnormal haemoglobin (HbS) makes red cells bend into sickle shapes that jam in capillaries; reduced by genotype testing and counselling before marriage (1). (c) The valves in leg veins fail, so blood pools and the veins swell and twist; reduced by avoiding standing still for many hours and by regular exercise (1).</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark needs both the cause and a matching prevention. "Eat a good diet" alone is too vague. Do not credit "sickle cell is caught from an infected person": it is inherited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b8">
+          <div class="aq-top"><h4>8. Mama Bisi's follow-up</h4><span class="marks">3 marks</span></div>
+          <p>At health day Mama Bisi's pressure was 160/100 mmHg. Three months after cutting down on salt, her reading is 146/94 mmHg. Take 140/90 mmHg as the warning line.<br>(a) Is her new reading still above the warning line? Give a reason. (1 mark)<br>(b) Calculate her pulse pressure on each visit. (1 mark)<br>(c) Suggest <strong>one</strong> further change, other than eating less salt, that would help her. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Yes: 146 is above 140 and 94 is above 90, so both numbers are still high (1). (b) First visit: 160 − 100 = 60 mmHg; now: 146 − 94 = 52 mmHg (1). (c) Any one: regular exercise such as a daily walk; losing excess weight; not smoking; little or no alcohol; managing stress; taking the drugs her doctor prescribes and having her pressure checked regularly (1).</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) the answer must compare both numbers with the line; "yes, it is high" with no comparison scores zero. In (b) both values are needed for the mark; adding the numbers (260 and 240) instead of subtracting scores zero. "Rest" alone is not credited in (c).</small></p>
+          </div></details>
+        </div>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-06/index.html" style="color:var(--paper-ink)">← Lesson 6</a>
+          <a class="btn btn-tour" href="../../index.html">Back to the unit →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/abo-typing-bench.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+</body>
+</html>

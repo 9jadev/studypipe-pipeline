@@ -1,195 +1,185 @@
-/* Lesson 05 · Choreographed StudyNarrator Script — Null-Balance Precision (en-NG) */
+/* Lesson 05 · StudyNarrator choreography: Null Methods (en-NG). 27 steps.
+   Symbols are spelled out for the voice ("R over S", "k l", "E minus I r"). */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
 
   waits: {
     note: {
-      event: "kit:note",
-      prompt: "Pin your question or prediction about null balance to the Wonder Wall",
-      react: function () {
-        return "Pinned! Let's see why null balance draws zero current and preserves true EMF.";
-      }
+      event: "kit:note", timeout: 120000,
+      prompt: "Type your idea (or tap a seed note) and pin it to the Wonder Wall",
+      react: function () { return "Pinned! Now let us sort the null-method statements."; }
     },
     sort: {
-      event: "sort:checked",
-      prompt: "Sort all 10 cards into Metre Bridge, Potentiometer, or WAEC Precautions, then tap Check",
+      event: "l5:sort", timeout: 180000,
+      prompt: "Sort all ten cards into metre bridge, potentiometer or both, then tap Check",
       react: function (d) {
-        if (!d) return "Good effort!";
-        if (d.right === d.total) return "Ten out of ten! You have mastered Wheatstone bridges, potentiometers, and WAEC Paper 3 precautions.";
-        return "You got " + d.right + " out of " + d.total + ". Review the cards in red — tapping the jockey preserves uniform cross-sectional area!";
+        if (!d || d.total == null) return "No problem, you can try the sort again later.";
+        if (d.correct === d.total) return "Perfect, all ten right! Both are null methods, but only the potentiometer draws no current.";
+        return "You got " + d.correct + " out of " + d.total + ". Read the reasons below, then on to the bench.";
       }
     },
     bench: {
-      event: "bench:record",
-      prompt: "Find the balance point and log at least 1 reading on the 3D bridge bench",
-      react: function () {
-        return "Logged! Notice that at null balance, the centre-zero pointer stands dead vertical at 0.00 mA.";
-      }
+      event: "l5:bench-done", timeout: 300000,
+      prompt: "Your turn! Find a metre-bridge null and a potentiometer null",
+      react: function () { return "Well done. Both nulls found. At the potentiometer balance, no current was drawn, so you read the true EMF."; }
+    },
+    pin: {
+      event: "l5:pin", timeout: 120000,
+      prompt: "Your turn! Tap the length pins and watch the p.d. rise in step with the length",
+      react: function () { return "See how V equals k l: the p.d. is proportional to the length. That is the potentiometer principle."; }
     },
     bridge: {
-      event: "vinegar:pick",
-      prompt: "Solve the driver series-resistor trap and pick the true test cell EMF",
+      event: "l5:bridge", timeout: 180000,
+      prompt: "Your turn! Balance Emeka's battery, then answer the three questions and give your verdict",
       react: function (d) {
-        if (d && d.ok) return "Masterful! 1.25 V — because V_AB across the 10 Ω wire is 2.50 V, and 50 cm takes half of 2.50 V!";
-        return "Watch out for the driver series resistor: find V_AB across the 10 Ω wire first, which is 2.50 V, then take half at 50 cm!";
+        return d && d.correct
+          ? "Case closed! The EMF is still twelve volts; only the internal resistance has risen."
+          : "Not quite. At balance no current flows, so the length gives the true EMF, and the fault is a risen internal resistance.";
       }
     },
     quiz: {
-      event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB unit quiz questions",
+      event: "kit:quiz-done", timeout: 600000,
+      prompt: "Answer all the quiz questions, or press Next to skip",
       react: function (d) {
-        if (!d) return "Unit quiz complete!";
-        if (d.score >= 10) return "Superb — " + d.score + " out of " + d.total + "! You are 100% prepared for WAEC theory and practical exams.";
-        return "You scored " + d.score + " out of " + d.total + ". Review the explanations below, then celebrate finishing the unit!";
+        if (!d) return "Quiz complete!";
+        if (d.score >= d.total - 2) return "Excellent, " + d.score + " out of " + d.total + "! You have mastered the null methods.";
+        return "You scored " + d.score + " out of " + d.total + ". Read the explanations on the ones you missed.";
       }
     }
   },
 
   actions: {
-    "story:0": function () { var b = document.querySelector('#story [data-beat="0"]'); if (b) b.click(); },
-    "story:1": function () { var b = document.querySelector('#story [data-beat="1"]'); if (b) b.click(); },
-    "story:2": function () { var b = document.querySelector('#story [data-beat="2"]'); if (b) b.click(); },
-    "bench:metre": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setConfig({ mode: "metre-bridge", jockeyL: 40.0 }); },
-    "bench:pot": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setConfig({ mode: "potentiometer", jockeyL: 50.0 }); },
-    "zoom:null": function () { if (window.StudyScenes && window.StudyScenes.zoom) window.StudyScenes.zoom.setMode("null-point"); }
+    story: function (arg) { if (window.StudyScenes && StudyScenes.story) StudyScenes.story.beat(+arg); },
+    open: function (arg) { var el = document.querySelector(arg); if (el && el.tagName === "DETAILS") el.open = true; },
+    bench: function (arg) {
+      var b = window.StudyScenes && StudyScenes.bench; if (!b) return;
+      var p = String(arg).split(":");
+      if (p[0] === "mode") b.setMode(p[1]);
+      else if (p[0] === "balance") b.findBalance();
+      else if (p[0] === "hl") b.highlight(p[1] || null);
+      else if (p[0] === "reset") b.setMode("bridge");
+    },
+    zoom: function (arg) {
+      var z = window.StudyScenes && StudyScenes.zoom; if (!z) return;
+      var p = String(arg).split(":");
+      if (p[0] === "mode") z.setMode(p[1]);
+      else if (p[0] === "balance") z.findBalance();
+      else if (p[0] === "hl") z.highlight(p[1] || null);
+    },
+    pin: function (arg) { if (window.L05 && L05.showPin) L05.showPin(+arg, true); },
+    bridge: function (arg) {
+      if (!window.L05 || !L05.bridge_api) return;
+      if (arg === "solve") L05.bridge_api.solve(); else if (arg === "balance") L05.bridge_api.balance();
+    }
   },
 
   script: [
     {
       title: "Welcome",
       steps: [
-        {
-          target: ".l-hero .display",
-          cue: "Lesson 5 · Null-Balance Precision",
-          sparkle: true,
-          say: "Welcome to Lesson 5, our grand unit finale! Today we are mastering the Wheatstone bridge, the metre bridge, the 100-centimetre potentiometer, and WAEC Physics Practical Paper 3 precautions."
-        },
-        {
-          target: "#objectives",
-          cue: "5 goals for Lesson 5",
-          say: "You will apply R 1 over R 2 equals l over 100 minus l, prove the two-wire square root of s identity, solve potentiometer driver circuits, and write official WAEC precautions."
-        }
+        { target: ".l-hero .display", cue: "Lesson 5 · Null Methods", sparkle: true,
+          say: "Welcome to Lesson 5, the finale. Today we solve the mystery for good, using two null methods: the metre bridge and the potentiometer." },
+        { target: ".l-hero .question", cue: "Our guiding question",
+          say: "Here is our question. How does the potentiometer still read Emeka's true twelve volts when it draws no current, and how do we measure an unknown coil exactly?" }
       ]
     },
     {
       title: "Do Now",
       steps: [
-        {
-          target: "#donow-list",
-          cue: "Retrieve Lessons 1–4",
-          say: "Warm up with these four retrieval cards on ammeter shunts, voltmeter multipliers, parallel cells, and wire diameter scaling."
-        }
+        { target: "#donow-list", cue: "Your turn", wait: "donow",
+          say: "Start with four quick Do Now cards from Lessons 1, 2 and 4. Answer each from memory, reveal it, and mark yourself. I will carry on when you have marked them all." }
       ]
     },
     {
       title: "The Story",
       steps: [
-        {
-          target: "#story-stage",
-          action: "story:0",
-          cue: "Aba Workshop battery mystery",
-          say: "Back in Aba, Engineer Nkechi shows Chinedu why even a high-grade voltmeter draws current and loses volts. To measure true open-circuit E M F, we use a null-balance potentiometer!"
-        },
-        {
-          target: "#story-stage",
-          action: "story:1",
-          cue: "Tapping the jockey to I_g = 0",
-          say: "Chinedu taps the brass jockey gently along the constantan wire until the galvanometer needle reads zero. When current is zero, lost volts I r is zero!"
-        },
-        {
-          target: "#story-stage",
-          action: "story:2",
-          cue: "Case closed & WAEC Paper 3 mastered",
-          say: "Case closed! With true E M F verified at 12.0 volts and internal resistance at 1.2 ohms, Chinedu cleans the terminals and masters the entire unit!"
-        }
+        { target: { scene: "story", part: "amaka" }, action: "story:0", cue: "Ask the battery",
+          say: "At the test bench, Engr. Nkechi lays Emeka's battery beside a hundred centimetre slide wire. The voltmeter lied under load, she says, so let us ask the battery without taking any current from it." },
+        { target: { scene: "story", part: "cust1" }, action: "story:1", cue: "Chinedu slides the jockey",
+          say: "Chinedu slides the jockey along the wire. The centre-zero galvanometer swings one way, then the other." },
+        { target: { scene: "story", part: "amaka" }, action: "story:2", cue: "The driver",
+          say: "To balance twelve volts, Nkechi uses a twenty-four volt driver, set so the wire carries zero point one five zero volts per centimetre." },
+        { target: { scene: "story", part: "amaka" }, action: "story:3", cue: "Eighty centimetres",
+          say: "The needle settles at eighty point zero centimetres. E equals k l, so zero point one five zero times eighty is twelve point zero volts. The EMF is unchanged; the internal resistance has risen." },
+        { target: { scene: "story", part: "amaka" }, action: "story:4", cue: "To the bench",
+          say: "Same idea, different question: on the metre bridge we find a resistance exactly, by where the galvanometer reads zero. Let us go to the bench." }
       ]
     },
     {
       title: "Wonder Wall",
       steps: [
-        {
-          target: "#wall-wonder",
-          cue: "Pin your question",
-          wait: "note",
-          say: "Pin your prediction: why does tapping instead of dragging the jockey preserve the uniform potential gradient?"
-        }
+        { target: "#wall-wonder", cue: "Pin your idea", wait: "note",
+          say: "Pin your idea. How can you measure a cell's voltage without drawing any current from it?" }
       ]
     },
     {
-      title: "Concept Sort",
+      title: "Sort Game",
       steps: [
-        {
-          target: "#kitchen-sort",
-          cue: "Sort bridge rules",
-          wait: "sort",
-          say: "Sort these 10 cards into Wheatstone and Metre Bridge, Potentiometer, or WAEC Paper 3 Precautions, then tap Check my sorting."
-        }
+        { target: "#l05-sort", cue: "Sort the statements",
+          say: "First, sort ten statements into metre bridge, potentiometer, or true of both. Remember: both are null methods, but only the potentiometer draws no current at balance." },
+        { target: "#l05-sort", cue: "Your turn", wait: "sort",
+          say: "Your turn. Place all ten cards, then tap Check." }
       ]
     },
     {
-      title: "3D Practical",
+      title: "Virtual Lab",
       steps: [
-        {
-          target: "#bench-stage",
-          action: "bench:metre",
-          cue: "3D Dual Bridge Bench",
-          wait: "bench",
-          say: "Slide the brass jockey on our 3D bridge bench! Find the exact null balance point where the green halo lights up and log your reading."
-        }
+        { target: "#method-cards", action: "bench:reset", cue: "Four method cards",
+          say: "Now the null-balance bench. Follow the four method cards: set the standard, slide the jockey for a zero galvanometer reading, then record and compute." },
+        { target: { scene: "bench", part: "standard" }, action: "bench:balance", cue: "Metre bridge null",
+          say: "Watch the metre bridge. A seven point zero ohm standard sits in the left gap. The jockey taps to the null at fifty-six point zero centimetres, so the unknown is seven times forty-four over fifty-six, five point five zero ohms." },
+        { target: { scene: "bench", part: "testcell" }, action: "bench:mode:potentiometer", cue: "Switch to the potentiometer",
+          say: "Now switch to the potentiometer. A one point five zero volt cell balances on the school driver, where k is zero point zero two zero zero volts per centimetre." },
+        { target: "#bench-stage", cue: "Your turn", wait: "bench",
+          say: "Your turn. Find a metre-bridge null and a potentiometer null. Tap Find null point, or slide the jockey yourself. I will carry on after both." },
+        { target: "#graph-card", cue: "p.d. against length",
+          say: "Look at the graph. V equals k l is a straight line through the origin, so the p.d. is proportional to the length. The one point five zero volt cell balances at seventy-five point zero centimetres." }
       ]
     },
     {
       title: "Make Sense",
       steps: [
-        {
-          target: "#concepts",
-          cue: "Core bridge formulas",
-          say: "Review the key relationships: metre bridge balance, the WAEC two-wire diameter ratio square root of s equals d 1 over d 2, and the driver series-resistor divider."
-        }
+        { target: "#metre-bridge-box", cue: "The metre bridge",
+          say: "Make sense of it. The metre bridge balances when R over S equals l over a hundred minus l, so an unknown R is the standard times a hundred minus l, over l." },
+        { target: "#potentiometer-box", cue: "The potentiometer",
+          say: "The potentiometer uses V equals k l. Because the balanced cell passes no current, there are no lost volts, so its full EMF is read. Comparing cells, E one over E two equals l one over l two, and r equals R times l one minus l two, over l two." },
+        { target: "#driver-box", cue: "The driver trap",
+          say: "Mind the driver trap. The whole driver EMF is not across the wire: part drops across the series rheostat. Work out V wire first, then the gradient k." },
+        { target: "#pos-explorer", action: "pin:3", cue: "Length explorer", wait: "pin",
+          say: "Your turn. Tap the length pins and watch V equals k l rise in step with the length. The marked lengths show how internal resistance is found from an open and a loaded balance." }
       ]
     },
     {
-      title: "Concept Zoom",
+      title: "Zoom",
       steps: [
-        {
-          target: "#zoom-stage",
-          action: "zoom:null",
-          cue: "Zero-current null point",
-          say: "Look inside the contact! At the Exact Null Point, driver current flows steadily along the top wire while the green charges below stand completely still — proving I g equals zero and lost volts I r equals zero!"
-        }
+        { target: "#zoom-stage", action: "zoom:mode:school", cue: "The potential ramp",
+          say: "Zoom in on the potential ramp. The potential falls steadily along the wire. The green line is the cell's EMF; the red gap is E minus k l. Press Find null and the gap closes to zero, where the galvanometer current fades away." },
+        { target: "#zoom-stage", action: "zoom:mode:keke", cue: "Emeka's battery",
+          say: "Now Emeka's battery, with the twenty-four volt driver. The gradient is steeper, zero point one five zero volts per centimetre, and it balances at eighty point zero centimetres, reading its true twelve volts." }
       ]
     },
     {
       title: "Worked Examples",
       steps: [
-        {
-          target: "#examples",
-          cue: "Step-by-step solutions",
-          say: "Study these step-by-step worked examples covering metre bridge unknown resistance, the two-wire slope identity, driver series resistors, and internal resistance."
-        }
+        { target: ["#ex1", "#ex2", "#ex3"], action: "zoom:mode:school", cue: "Three worked examples",
+          say: "Three worked examples. The metre bridge and resistivity of a coil. The potentiometer driver circuit, where only part of the driver volts sits across the wire. And internal resistance from two balance lengths, giving zero point seven five ohms." }
       ]
     },
     {
-      title: "The Big Idea",
+      title: "Solving the Mystery",
       steps: [
-        {
-          target: "#vinegar-test",
-          cue: "The Driver Resistor Trap",
-          wait: "bridge",
-          say: "Conquer the ultimate exam trap: find the test cell E M F when a 3.0-volt driver battery is in series with a 2.0-ohm resistor and a 10-ohm wire, balancing at 50 centimetres!"
-        }
+        { target: "#bridge-card", action: "bridge:balance", cue: "Case closed", wait: "bridge",
+          say: "Now solve the mystery. Balance Emeka's battery on the potentiometer: no current drawn, so it reads the full twelve volts. Answer the three questions and give your verdict." }
       ]
     },
     {
-      title: "Quiz",
+      title: "Quiz & Reflection",
       steps: [
-        {
-          target: "#quiz-list",
-          cue: "Final Unit Checkpoint",
-          wait: "quiz",
-          say: "Take the 12-question final checkpoint, rate your confidence, and unlock the WAEC Paper 3 practical marking schemes!"
-        }
+        { target: "#quiz-list", cue: "Quiz time", wait: "quiz",
+          say: "Now the quiz. Twelve questions in WAEC, NECO and JAMB style, plus two review questions from earlier lessons." },
+        { target: "#reflect", cue: "Reflect and assignment",
+          say: "To finish, rate yourself from one to four on each goal, then do the exit ticket, the blank-page recall and the assignment. Congratulations, you have finished the whole unit. Well done." }
       ]
     }
   ]

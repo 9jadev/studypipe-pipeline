@@ -509,7 +509,10 @@
       // Operators and punctuation
       if (/[=+−\-*/<>≤≥≠≈∝±×÷·]/.test(ch)) {
         var dispOp = ch === "-" ? "−" : ch === "*" ? "×" : ch;
-        out.push('<span class="sp-op">' + escapeHtml(dispOp) + "</span>");
+        // a minus at the start, or straight after another operator, is a sign (−mg), not subtraction: keep it attached
+        var prevTok = out.length ? out[out.length - 1] : "";
+        var isSign = dispOp === "−" && (!prevTok || /^<span class="sp-op">[=+−×÷·<>≤≥≈∝±]<\/span>$/.test(prevTok));
+        out.push('<span class="' + (isSign ? "sp-sign" : "sp-op") + '">' + escapeHtml(dispOp) + "</span>");
         i++;
         continue;
       }
@@ -579,7 +582,7 @@
     var inner = parseLatexToHtml(tex);
     var cls = displayMode ? "sp-math sp-math-display" : "sp-math";
     var speech = escapeHtml(latexToSpeech(tex));
-    return '<span class="' + cls + '" data-latex="' + escapeHtml(tex) + '" aria-label="' + speech + '">' + inner + "</span>";
+    return '<span class="' + cls + '" data-latex="' + escapeHtml(tex) + '" data-math-upgraded="1" aria-label="' + speech + '">' + inner + "</span>";
   }
 
   // ---------- 3. Step-by-Step Calculation Decomposer & Explainer Engine ----------
@@ -854,8 +857,42 @@
   }
 
   // ---------- 4. Explain Concept Formula Banners (.eq) ----------
+  // Simple harmonic motion banners (ss2-phy-simple-harmonic-motion). Each pattern is specific to one
+  // banner of that unit, so it cannot capture the equations of other units; checked before the generic patterns.
+  function shmBannerNote(t) {
+    var rules = [
+      [/T\s*=\s*t\s*\/\s*n/, /4A/, "Timing an oscillation: the period T is the total time divided by the number of complete oscillations n, the frequency f is its reciprocal, ω = 2πf changes cycles per second into radians per second, and one complete oscillation covers a distance of 4A."],
+      [/F\s*=\s*kx/, /F\s*=\s*[−\-]kx/, "Hooke's law: within the elastic limit the stretching force is proportional to the extension, F = kx. The restoring force has the same size but points back towards equilibrium, which is the meaning of the minus sign."],
+      [/a\s*=\s*[−\-]\(k\/m\)x/, /ω²x/, "Spring as SHM: Newton's second law with F = −kx gives a = −(k/m)x. Matching this with a = −ω²x shows that ω² = k/m, so the loaded spring is simple harmonic."],
+      [/T\s*=\s*2π√\(m\/k\)/, null, "Period of a loaded spring: divide the mass by the spring constant, take the square root and multiply by 2π. More mass lengthens the period; a stiffer spring shortens it."],
+      [/T²\s*=\s*\(4π²\/k\)\s*m/, null, "Straight-line form: squaring the period formula gives T² = (4π²/k)m, so a graph of T² against m is a line through the origin. Its slope 4π²/k gives the spring constant k."],
+      [/x\s*=\s*A\s*sin\s*ωt/, /v\s*=\s*ω√/, "Reference-circle results: the displacement is x = A sin ωt, the speed v = ω√(A² − x²) falls to zero at x = ±A, and the acceleration a = −ω²x always points back to the centre."],
+      [/v_\{max\}\s*=\s*ωA/, /a_\{max\}/, "Extreme values: the greatest speed ωA is at the centre (x = 0) and the greatest acceleration ω²A is at the ends (x = ±A), where the body is momentarily at rest."],
+      [/F\s*=\s*[−\-]\s*mg\s*sin\s*θ/, null, "Restoring force on the bob: only the weight component along the arc, mg sin θ, pulls the bob back. The minus sign shows that it acts towards the lowest point."],
+      [/a\s*[≈=]\s*[−\-]\(g\/l\)x/, null, "Small-angle step: when θ is small, sin θ ≈ θ ≈ x/l, so the force is about −mg(x/l). Dividing by m cancels the mass and leaves a ≈ −(g/l)x."],
+      [/T\s*=\s*2π√\(l\/g\)/, null, "Period of a simple pendulum: divide the length by g, take the square root and multiply by 2π. Only l and g matter for small swings; the mass of the bob does not."],
+      [/ω²\s*=\s*g\s*\/\s*l/, null, "Matching a = −(g/l)x with a = −ω²x gives ω² = g/l. Only the length l and gravity g set the swing, not the mass of the bob."],
+      [/T₂\s*\/\s*T₁/, null, "Period ratio: because T ∝ √l, dividing the two periods leaves the square root of the length ratio; the constants 2π and g cancel."],
+      [/l\s*=\s*gT²\s*\/\s*4π²/, null, "Length from the period: square T = 2π√(l/g), then multiply by g and divide by 4π² to make l the subject."],
+      [/l\s*=\s*thread\s*\+\s*r/, /4π²\s*\/\s*s/, "Pendulum practical: add the bob's radius r to the thread length to get l; T = t̄/n; and T² = (4π²/g)l is a line through the origin, so g = 4π² ÷ slope. In the ceiling variant l = H − y, giving a negative slope."],
+      [/s\s*=\s*\(4\.032/, /g\s*=\s*4π²/, "Reading g from the graph: divide the rise in T² by the run in l to get the slope s, then divide 4π² by s to find g."],
+      [/E\s*=\s*½kA²/, /½mω²A²/, "Total energy: E = ½kA², and since k = mω² it also equals ½mω²A². The energy depends on the square of the amplitude, so doubling A quadruples it."],
+      [/PE\s*=\s*½kx²/, /KE\s*=\s*½k/, "Sharing the energy: at displacement x the spring stores PE = ½kx², and the rest of the total, KE = ½k(A² − x²), is kinetic."],
+      [/KE\s*=\s*PE\s*at/, /A\s*\/\s*√2/, "Equal energies: KE = PE means each is half of the total, so ½kx² = ¼kA² and x = A/√2, about 71 % of the way out, not halfway."],
+      [/E\s*=\s*mgh/, /½mv_\{?max\}?²/, "Pendulum energy: at the end of the swing all the energy is mgh, and at the lowest point it is all kinetic, ½mv²max, so v_max = √(2gh)."],
+      [/f\s*=\s*v\s*\/\s*d/, /ω²A\s*≥\s*g/, "Resonance chain: ridges d apart are met at f = v/d, resonance happens when f = f₀ so v = d f₀, and f₀ follows from k and m. The crates leave the carrier when ω²A ≥ g."]
+    ];
+    for (var i = 0; i < rules.length; i++) {
+      var r = rules[i];
+      if (r[0].test(t) && (!r[1] || r[1].test(t))) return r[2];
+    }
+    return null;
+  }
+
   function explainFormulaBanner(rawText) {
     var t = htmlToMathTokens(rawText);
+    var shmNote = shmBannerNote(t);
+    if (shmNote) return shmNote;
     if (/sin i.*sin r/i.test(t) && /v_?\{?1\}?/i.test(t)) {
       return "Snell's Law & Wave Speed Chain: Dividing sin i by sin r gives the relative refractive index, which equals the ratio of wave speeds (v₁ ÷ v₂) and wavelengths (λ₁ ÷ λ₂) at constant frequency f.";
     }
@@ -1000,30 +1037,40 @@
         codeEl.outerHTML = renderLatex(txt, false);
       });
 
-      // Second: if plain text in .qexp or .dn-a has an equation calculation (like "n = sin i / sin r = 0.500 / 0.333 = 1.50")
-      if (extractedChains.length === 0) {
+      // Second: if a Do Now answer has plain-text calculations, decompose them.
+      // Quiz explanations and assignment solutions use their <code> chains above;
+      // running prose through the same parser turns sentences into fake equations.
+      if (extractedChains.length === 0 && el.classList.contains("dn-a")) {
         var plain = htmlToMathTokens(el.innerHTML);
-        var eqRegex = /([a-zA-Z0-9_^{}()[\]\sθλωρσπΔΩ]+=\s*[^.;]+?[0-9][^.;]*)/g;
-        var match;
-        while ((match = eqRegex.exec(plain)) !== null) {
-          var candidate = match[1].trim();
-          // Trim leading prose words before the actual LHS symbol
-          var lhsClean = candidate.replace(/^(?:Using|From|Since|Therefore|Thus|So|Because|Here|With|And|where|gives|is|at)\s+/i, "");
-          var eqSplit = lhsClean.split("=");
-          if (eqSplit.length >= 2 && hasNumbers(lhsClean)) {
-            // Keep only the last token/expression of LHS before the first '='
-            var firstLhs = eqSplit[0].trim();
-            var lhsWords = firstLhs.split(/\s+/);
-            if (lhsWords.length > 3) {
-              firstLhs = lhsWords.slice(-2).join(" ");
-            }
-            var rebuilt = firstLhs + " = " + eqSplit.slice(1).join(" = ");
-            var cSteps = decomposeEquationChain(rebuilt);
-            if (cSteps.length >= 1) {
-              extractedChains.push(cSteps);
-            }
+        // Split at semicolons and sentence-ending periods, but never at decimal points.
+        var clauses = [];
+        plain.split(/\s*;\s*/).forEach(function (part) {
+          part.split(/\.\s+/).forEach(function (sentence) { clauses.push(sentence); });
+        });
+        clauses.forEach(function (clause) {
+          clause = clause.trim().replace(/\.+$/, "");
+          if (!clause || clause.indexOf("=") === -1) return;
+          // A colon before the calculation is prose (keep the part after it);
+          // a colon after the calculation starts an explanation (keep the part before it).
+          var firstEq = clause.indexOf("=");
+          var colon = clause.lastIndexOf(":");
+          if (colon !== -1 && firstEq !== -1) {
+            if (colon < firstEq) clause = clause.slice(colon + 1).trim();
+            else if (clause.slice(firstEq + 1, colon).indexOf("=") === -1) clause = clause.slice(0, colon).trim();
           }
-        }
+          var eqSplit = clause.split(/\s*=\s*/);
+          if (eqSplit.length < 2) return;
+          // Drop a leading list label like "(a)" or "b4."
+          var firstLhs = eqSplit[0].trim().replace(/^(?:\([a-z]\)|[a-z]\d{1,2}[.)])\s*/i, "");
+          firstLhs = firstLhs.replace(/^(?:Using|From|Since|Therefore|Thus|So|Because|Here|With|And|where|gives|is|at)\s+/i, "");
+          var lhsWords = firstLhs.split(/\s+/).filter(Boolean);
+          if (lhsWords.length > 4) firstLhs = lhsWords.slice(-2).join(" ");
+          firstLhs = firstLhs.replace(/^(?:and|or)\s+/i, "");
+          if (!firstLhs || !hasNumbers(clause)) return;
+          var rebuilt = firstLhs + " = " + eqSplit.slice(1).join(" = ");
+          var cSteps = decomposeEquationChain(rebuilt);
+          if (cSteps.length >= 1) extractedChains.push(cSteps);
+        });
       }
 
       if (extractedChains.length > 0) {
@@ -1061,6 +1108,23 @@
     });
   }
 
+  function upgradeSpMath(root) {
+    var nodes = (root || document).querySelectorAll(".sp-math[data-latex]:not([data-math-upgraded])");
+    Array.prototype.forEach.call(nodes, function (el) {
+      el.setAttribute("data-math-upgraded", "1");
+      if (el.children.length > 0) return;
+      var tex = el.getAttribute("data-latex");
+      if (!tex) return;
+      var isBlock = el.tagName === "DIV" || el.classList.contains("sp-math-block");
+      var converted = toLatex(tex);
+      if (isBlock) el.classList.add("sp-math-display");
+      if (!el.getAttribute("aria-label")) {
+        el.setAttribute("aria-label", latexToSpeech(converted));
+      }
+      el.innerHTML = parseLatexToHtml(converted);
+    });
+  }
+
   var upgrading = false;
   function upgradePage(root) {
     if (upgrading) return;
@@ -1071,6 +1135,7 @@
       upgradeProseAndExplanations(root);
       upgradeWelcomeHubEquations(root);
       upgradeInlineCodes(root);
+      upgradeSpMath(root);
     } finally {
       upgrading = false;
     }

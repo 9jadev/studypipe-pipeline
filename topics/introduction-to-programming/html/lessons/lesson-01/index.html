@@ -1,0 +1,797 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 1 · From Logic to Code: Languages, Translators &amp; Variables · StudyPipe</title>
+  <meta name="description" content="StudyPipe Computer Studies (SS1): programming languages, compilers vs interpreters, data types, type casting, and RAM variable allocation.">
+  <meta name="theme-color" content="#04140f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='18' width='44' height='28' rx='6' fill='%2322c55e'/%3E%3Ctext x='32' y='37' font-family='monospace' font-size='16' font-weight='bold' fill='%2304140f' text-anchor='middle'%3E0x01%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--teal-rgb, 62, 230, 196), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(310px, 88vw, 410px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    @media (min-width: 520px) {
+      #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13.5px; display: block; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--crimson); }
+    .l1-chips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+    .l1-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 52px; }
+    .l1-chip-btn { min-height: 34px; padding: 4px 9px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 11.5px; cursor: pointer; font-family: var(--font-mono); }
+    .l1-chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .l1-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .l1-actions .vt-btn { flex: 1; min-width: 110px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-soft); }
+
+    /* results table (one compact row per reading) */
+    #results-table td .rc-sub { display: block; font-size: 10.5px; color: var(--paper-muted); margin-top: 2px; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 1.3fr .8fr .9fr 1fr; gap: 4px; padding: 6px 8px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 1.3fr .8fr .9fr 1fr; gap: 4px; padding: 7px 8px; border-bottom: 1px solid var(--paper-line); align-items: center; }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12px; word-break: break-word; }
+      #results-table th { font-size: 10px; }
+      #results-table td::before { content: none; }
+    }
+
+    /* data-type & operator explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 52px; padding: 6px 6px; font-weight: 700; font-size: 12px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin small { font-weight: 500; opacity: .75; font-size: 10.5px; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--crimson); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 12.5px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+    .l1-zoom-desc { padding: 8px 12px 2px; font-size: 13px; color: var(--fg-soft); line-height: 1.45; }
+    .l1-zoom-desc strong { color: var(--amber); }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .l1-bq { margin-top: 14px; }
+    .l1-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; line-height: 1.4; }
+    .l1-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l1-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; }
+    .l1-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .l1-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .l1-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .l1-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .l1-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l01">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 6 Lessons</a>
+      <span class="l-crumb">Lesson 1 of 6 · <b>From Logic to Code</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Computer Studies · Lesson 1 of 6 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>From Logic to Code: <em>Languages, Translators &amp; Variables</em></h1>
+        <p class="question reveal">How does a computer convert human instructions into physical machine action, and how does it store information in memory?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Define a <strong>computer program</strong> and explain the concept of programming.</span></li>
+          <li><b>02</b><span>Differentiate between <strong>machine language</strong>, <strong>assembly language</strong>, and <strong>high-level languages</strong>.</span></li>
+          <li><b>03</b><span>Compare <strong>compilers</strong> and <strong>interpreters</strong> (whole-program vs line-by-line translation).</span></li>
+          <li><b>04</b><span>Identify standard <strong>data types</strong> (<code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>) and distinguish <strong>variables</strong> from <strong>constants</strong>.</span></li>
+          <li><b>05</b><span>Declare and assign variables in <strong>Python</strong> and <strong>BASIC</strong>, and resolve <strong>data type mismatch</strong> errors.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Movement break</span><span><b>45–60</b> Make sense</span><span><b>60–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="20" y="24" width="280" height="192" rx="14" fill="none" stroke="rgba(62,230,196,.45)" stroke-width="2"/>
+          <rect x="36" y="42" width="248" height="44" rx="8" fill="rgba(244,63,94,.14)" stroke="rgba(244,63,94,.55)" stroke-width="1.5"/>
+          <text x="160" y="61" fill="#fda4af" font-family="var(--font-mono)" font-size="12.5" text-anchor="middle">"150" + 20  →  TypeError!</text>
+          <text x="160" y="78" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="10.5" text-anchor="middle">str (5 B) + int (2 B) = incompatible</text>
+          <rect x="36" y="98" width="248" height="46" rx="8" fill="rgba(34,197,94,.14)" stroke="rgba(34,197,94,.6)" stroke-width="1.5"/>
+          <text x="160" y="118" fill="var(--amber)" font-family="var(--font-mono)" font-size="13.5" font-weight="bold" text-anchor="middle">int("150") + 20  =  170</text>
+          <text x="160" y="136" fill="var(--fg)" font-family="var(--font-mono)" font-size="10.5" text-anchor="middle">Explicit type cast → ALU addition</text>
+          <text x="160" y="172" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="11.5" text-anchor="middle">0x01: 230 (int) · 0x02: 68.5 (float)</text>
+          <text x="160" y="194" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="11.5" text-anchor="middle">0x03: "Ikogosi" (str · 7 B)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Language sort</a></li>
+        <li><a href="#practical">Memory bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Pipeline zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- 0. DO NOW -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up your digital toolkit</em></h2>
+        <p class="intro">Four quick retrieval cards on binary digits, algebraic substitution, computer RAM, and 4-bit binary numbers. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- 1. STORY -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>A <code>TypeError</code> lockout at <em>Ikogosi Microgrid</em></h2>
+        <p class="intro">In the Ikogosi Smart Solar Microgrid control room in Ekiti State, a storm rolls in and the SCADA controller trips on line 12: <code>total_power = "150" + 20</code>. Why can a computer with millions of transistors not add 150 and 20?</p>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Amina, Tari, and Chief Babatunde in the Ikogosi Smart Solar Microgrid control room inspecting the SCADA terminal flashing a TypeError on total_power = '150' + 20."></canvas>
+            <div class="stage-label"><i></i>3D story · Ikogosi Microgrid, Ekiti</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Amina:</strong> <em>“Thunder just rolled over the warm springs, Tari! Let's boot the SCADA maintenance terminal and check the solar array telemetry.”</em></p>
+            <p><strong>Scene 2 · Amina:</strong> plugs the serial cable into the solar controller box; the status screen flashes red: <code>SYSTEM ERROR: TypeError: can only concatenate str to str</code>.</p>
+            <p><strong>Scene 3 · Tari:</strong> reads the code on screen: <code>total_power = "150" + 20</code>. <em>“How can a modern processor with millions of transistors fail to add 150 and 20?”</em></p>
+            <p><strong>Scene 4 · Amina:</strong> points at the quotation marks. <em>“Look at the quotes around <code>"150"</code>! To the interpreter, quotes mean text letters, not a number. It refuses to add an integer to a string!”</em></p>
+            <p><strong>Scene 5 · Chief Babatunde:</strong> enters with a multimeter, worried lightning burned out the solar inverter. Amina reassures him the hardware is fine and promises to fix the data type bug.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2. WONDER WALL -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Before we test on the memory bench: why does writing <code>"50"</code> with quotes behave completely differently from writing <code>50</code> without quotes inside a computer program? Pin your idea.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think quotes around a number make the computer…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">Quotes tell the computer to treat digits as text characters, not a quantity (Amina)</button>
+            <button type="button">Adding text strings joins them together instead of summing (Tari)</button>
+            <button type="button">Computers lack common sense and follow strict data type rules (Chidi)</button>
+            <button type="button">A translator must convert text into binary numbers first (Bisi)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3. SORT -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>High-level, low-level <em>or translator?</em></h2>
+        <p class="intro">Sort each of the 9 computing cards into its bin. Drag it, or tap a card then tap its target bin.</p>
+        <div class="sort" id="prog-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="high" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="High-Level Languages bin">
+              <h4><i></i>High-Level Languages</h4><small>human-readable English syntax</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="trans" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Language Translators bin">
+              <h4><i></i>Language Translators</h4><small>converts source to machine code</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="low" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Low-Level Code bin">
+              <h4><i></i>Low-Level Code</h4><small>binary 0s/1s &amp; assembly mnemonics</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3B. PRACTICAL -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The RAM bench: <em>allocate variables &amp; cast types</em></h2>
+        <p class="intro">Inspect the 6 labeled RAM addresses (<code>0x01</code>–<code>0x06</code>) and the CPU/ALU bus. Allocate integer, float, and string variables, trigger the <code>"150" + 20</code> type mismatch, and apply <code>int()</code> casting to fix it.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Allocate int &amp; float</h4><p>Store voltage (2 B) and tariff (4 B).</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Allocate string in RAM</h4><p>Store "Ikogosi" across 7 contiguous bytes.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Test the string trap</h4><p>Run "150" + 20 and observe TypeError.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Cast with int(a) + b</h4><p>Convert string to integer and get 170.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Variable and Memory Allocation Bench: 6 bevelled RAM slots (0x01 to 0x06), CPU and ALU processor core, glowing data bus traces, and OLED readout screen."></canvas>
+            <div class="stage-label"><i></i>3D RAM &amp; ALU bench · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the controls and table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar l1-chips" id="bench-mode" role="group" aria-label="Core memory and type steps">
+            <span class="lab-t">Step</span>
+            <button class="l1-chip-btn" type="button" data-preset="slot1" aria-pressed="true">1: 0x01 int</button>
+            <button class="l1-chip-btn" type="button" data-preset="slot2" aria-pressed="false">2: 0x02 float</button>
+            <button class="l1-chip-btn" type="button" data-preset="slot3" aria-pressed="false">3: 0x03 str</button>
+            <button class="l1-chip-btn" type="button" data-preset="mismatch" aria-pressed="false">4: "150"+20</button>
+            <button class="l1-chip-btn" type="button" data-preset="cast" aria-pressed="false">5: int("150")+20</button>
+          </div>
+          <div class="stage-bar l1-chips" id="bench-expr" role="group" aria-label="Bonus ALU expressions">
+            <span class="lab-t">Extra</span>
+            <button class="l1-chip-btn" type="button" data-preset="concat" aria-pressed="false">"150"+"20"</button>
+            <button class="l1-chip-btn" type="button" data-preset="precedence" aria-pressed="false">12+8*2-6/2</button>
+            <button class="l1-chip-btn" type="button" data-preset="bonus" aria-pressed="false">1500+1500*0.20</button>
+          </div>
+          <div class="stage-bar l1-actions">
+            <button class="vt-btn zobo" type="button" id="bench-take">Allocate &amp; Execute</button>
+            <button class="vt-btn" type="button" id="bench-step">Next Step</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Completed 0 of 5 core memory steps</span>
+          </div>
+        </div>
+
+        <h3>Record your memory &amp; expression trials</h3>
+        <p>Each tap on <strong>Allocate &amp; Execute</strong> logs a row into your RAM inspection table. Record all five core steps.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Variable / Expr</th><th>Type</th><th>Value</th><th>Size / Status</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="results-line">Memory steps recorded: 0</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected memory table <small>open after you record your 5 steps</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Variable / Expression</th><th>Declared Type</th><th>Address</th><th>Raw Value</th><th>Memory Size</th></tr></thead>
+                <tbody>
+                  <tr><td><code>voltage = 230</code></td><td>Integer (<code>int</code>)</td><td><code>0x01</code></td><td><code>230</code></td><td>2 bytes</td></tr>
+                  <tr><td><code>tariff = 68.5</code></td><td>Float (<code>float</code>)</td><td><code>0x02</code></td><td><code>68.5</code></td><td>4 bytes</td></tr>
+                  <tr><td><code>location = "Ikogosi"</code></td><td>String (<code>str</code>)</td><td><code>0x03</code></td><td><code>"Ikogosi"</code></td><td>7 bytes</td></tr>
+                  <tr><td><code>"150" + 20</code></td><td>Mismatch (<code>str + int</code>)</td><td><code>0x05 + ALU</code></td><td><code>TypeError</code></td><td>5 B + 2 B</td></tr>
+                  <tr><td><code>int("150") + 20</code></td><td>Casted Integer (<code>int</code>)</td><td><code>0x06</code></td><td><code>170</code></td><td>2 bytes</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>An integer stores its value as compact binary bits (2 bytes for <code>230</code>), whereas a string stores one ASCII byte per character (7 bytes for <code>"Ikogosi"</code>). Adding <code>"150"</code> and <code>20</code> raises a <code>TypeError</code> until <code>int("150")</code> converts the string into a numeric integer.</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l01-prac-q">
+          <div class="aq-top"><h4>Answer these three lab analysis questions, then compare with the model answers.</h4><span class="marks">6 marks</span></div>
+          <ol class="sub">
+            <li>What happened when attempting to add <code>"150"</code> and <code>20</code> without type casting?</li>
+            <li>Why does an integer take less memory than a string containing multiple characters?</li>
+            <li>In the past tense, state how you resolved the data type error on the virtual bench.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="1. … 2. … 3. …" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>The bench flagged a <code>TypeError: Mismatched types (string + integer)</code> because the interpreter cannot concatenate or numerically add a raw integer to a quoted text string. <b>(2)</b></li>
+                <li>An integer encodes the whole quantity directly in binary (e.g. 2 bytes), whereas a string allocates separate byte storage for each individual ASCII/UTF-8 character. <b>(2)</b></li>
+                <li>I applied the <code>int()</code> type-casting function to convert the string <code>"150"</code> into the integer <code>150</code> before adding <code>20</code>, which produced the correct sum of <code>170</code>. <b>(2)</b></li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 4. CONCEPTS (Phase 3 · Make sense — keep .phase + h2 directly inside #concepts for apply-video.mjs) -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Phase 3 · Make sense · 15 min</span>
+        <h2>Languages, Translators &amp; <em>Memory Variables</em></h2>
+        <p class="intro">Now connect what you observed on the RAM bench to the formal definitions, translator comparisons, and variable rules tested in WAEC, NECO, and JAMB.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>Languages, Translators &amp; Memory Variables</b><span class="lv-time">8 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: Languages, Translators &amp; Memory Variables" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> Stand up! Hold both hands open if you are a <strong>String</strong> (quoting characters in the air), or clap once sharply if you are an <strong>Integer</strong>. When your partner calls out <code>int()</code>, transform from quoting in the air to clapping out the exact sum! Shake out your arms, then sit back down.</p>
+        </div>
+
+        <h3 id="def-program">1. Programs, Source Code &amp; Language Generations</h3>
+        <p>A <strong>computer program</strong> is a sequence of logical instructions written to direct a computer to perform a specific task. <strong>Computer programming</strong> is the process of designing, writing, testing, debugging, and maintaining those instructions.</p>
+        <ul>
+          <li><strong>Machine Language (1st Generation · Low-Level):</strong> Written in raw binary digits (<code>0</code>s and <code>1</code>s representing low and high transistor voltages). It is the <em>only</em> language directly executed by the CPU without any translation, but it is hardware-dependent and tedious for humans.</li>
+          <li><strong>Assembly Language (2nd Generation · Low-Level):</strong> Uses short symbolic mnemonics such as <code>MOV</code>, <code>ADD</code>, and <code>SUB</code>. It requires a translator called an <strong>Assembler</strong> to convert mnemonics into machine code.</li>
+          <li><strong>High-Level Languages (3rd Generation &amp; above):</strong> Use human-readable English keywords and mathematical notation (e.g. <strong>Python</strong>, <strong>BASIC</strong>, <strong>Java</strong>, <strong>C++</strong>). They are portable across machines and require a <strong>Compiler</strong> or <strong>Interpreter</strong> to translate source code into machine code.</li>
+        </ul>
+
+        <h3>2. Compiler vs. Interpreter Comparison</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead>
+              <tr><th>Feature</th><th>Compiler</th><th>Interpreter</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Translation Input</strong></td><td>Translates the <strong>entire source program</strong> at once before execution</td><td>Translates and executes source code <strong>line-by-line</strong> at runtime</td></tr>
+              <tr><td><strong>Output File</strong></td><td>Generates a standalone <strong>object / executable file</strong> (e.g. <code>.exe</code>)</td><td>Does <strong>not</strong> save standalone object code; needs source file every run</td></tr>
+              <tr><td><strong>Execution Speed</strong></td><td><strong>Faster</strong> runtime execution (already compiled to native binary)</td><td><strong>Slower</strong> runtime execution (translates every line while running)</td></tr>
+              <tr><td><strong>Error Detection</strong></td><td>Scans the whole file and reports all syntax errors together after compilation</td><td><strong>Halts immediately</strong> at the very first syntax or runtime error encountered</td></tr>
+              <tr><td><strong>Example Languages</strong></td><td>C, C++, Rust, Go, Fortran</td><td>Python, BASIC, JavaScript, Ruby</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="var-rules">3. Data Types, Variables, Constants &amp; Naming Rules</h3>
+        <p>A <strong>variable</strong> is a named memory location in RAM whose stored value can change during program execution. A <strong>constant</strong> is an immutable named value that remains fixed throughout execution (such as <code>VAT_RATE = 0.075</code>).</p>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead>
+              <tr><th>Data Type</th><th>Python Keyword</th><th>Meaning &amp; Examples</th><th>Typical RAM Role</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Integer</strong></td><td><code>int</code></td><td>Whole positive or negative numbers without decimals: <code>230</code>, <code>-15</code>, <code>0</code></td><td>Counters, array indices, whole kWh units</td></tr>
+              <tr><td><strong>Floating-Point</strong></td><td><code>float</code></td><td>Real numbers containing a decimal point: <code>68.5</code>, <code>220.75</code>, <code>0.15</code></td><td>Tariff rates, voltages, temperatures</td></tr>
+              <tr><td><strong>String</strong></td><td><code>str</code></td><td>Sequence of text characters enclosed in quotes: <code>"Ikogosi"</code>, <code>"150"</code></td><td>Names, meter serial numbers, messages</td></tr>
+              <tr><td><strong>Boolean</strong></td><td><code>bool</code></td><td>Logical truth value: <code>True</code> or <code>False</code> (case-sensitive in Python)</td><td>Sensor flags, relay switch states</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout big reveal">
+          <p><strong>Three Golden Rules for Valid Variable Identifiers (WAEC / JAMB):</strong><br>
+          1. Must begin with a <strong>letter</strong> (<code>a–z</code>, <code>A–Z</code>) or an <strong>underscore</strong> (<code>_</code>) — <em>never</em> a digit (<code>_student_age</code> is valid; <code>2nd_score</code> is invalid).<br>
+          2. Must <strong>not contain spaces</strong> or arithmetic hyphens (use <code>total_bill</code>, never <code>total bill</code> or <code>total-bill</code>).<br>
+          3. Must <strong>not be a reserved keyword</strong> of the language (such as <code>class</code>, <code>for</code>, <code>if</code>, <code>def</code>, <code>return</code>).</p>
+        </div>
+
+        <div class="study-code-snippet"
+             data-title="variables_py_vs_basic.py"
+             data-lang="python"
+             data-notes='{"1": "Python assigns integer 230 to voltage dynamically.", "2": "Float 68.5 assigned to tariff.", "3": "String literal enclosed in double quotes.", "4": "In BASIC: LET assigns numbers; $ suffix denotes a string variable."}'
+             data-output="Voltage: 230 V | Tariff: N68.5 | Site: Ikogosi">
+          <code>
+voltage = 230
+tariff = 68.5
+location = "Ikogosi"
+# Equivalent BASIC: LET VOLTAGE = 230 : LET LOCATION$ = "Ikogosi"
+          </code>
+        </div>
+
+        <h3 id="pos-h">4. Interactive Data Type &amp; Operator Precedence Explorer</h3>
+        <p>Tap each expression pin below to inspect how Python evaluates type casting (<code>int()</code>, <code>str()</code>), integer floor division (<code>//</code>), modulus remainder (<code>%</code>), and BODMAS operator precedence.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap an expression pin above to inspect its data type and step-by-step evaluation.</div>
+        </div>
+      </section>
+
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>The translation pipeline: <em>from Python to silicon pulses</em></h2>
+        <p class="intro">Step through the 4 stages of translation for <code>total_kwh = int("85") + 20</code> and switch between a <strong>Compiler</strong> (single batch pass) and an <strong>Interpreter</strong> (line-by-line runtime execution).</p>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D Translation Pipeline Zoom: Source code card, Lexer/Parser AST tokenizer, Compiler vs Interpreter gate, 8-bit binary pulse bus, and Silicon ALU die."></canvas>
+            <div class="stage-label"><i></i>3D pipeline zoom · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="l1-zoom-desc" id="zoom-desc" aria-live="polite"></div>
+          <div class="stage-bar l1-chips" id="zoom-trans" role="group" aria-label="Translator mode">
+            <span class="lab-t">Mode</span>
+            <button class="l1-chip-btn" type="button" data-trans="compiler" aria-pressed="true">Compiler (Whole File)</button>
+            <button class="l1-chip-btn" type="button" data-trans="interpreter" aria-pressed="false">Interpreter (Line-by-Line)</button>
+          </div>
+          <div class="stage-bar l1-chips" id="zoom-steps" role="group" aria-label="Pipeline stage">
+            <span class="lab-t">Stage</span>
+            <button class="l1-chip-btn" type="button" data-step="0" aria-pressed="true">1: Source</button>
+            <button class="l1-chip-btn" type="button" data-step="1" aria-pressed="false">2: Tokens</button>
+            <button class="l1-chip-btn" type="button" data-step="2" aria-pressed="false">3: Gate</button>
+            <button class="l1-chip-btn" type="button" data-step="3" aria-pressed="false">4: ALU Bus</button>
+          </div>
+          <div class="stage-bar l1-chips" id="zoom-raw" role="group" aria-label="Sensor string input">
+            <span class="lab-t">Input</span>
+            <button class="l1-chip-btn" type="button" data-raw="85" aria-pressed="true">"85" + 20</button>
+            <button class="l1-chip-btn" type="button" data-raw="150" aria-pressed="false">"150" + 20</button>
+            <button class="l1-chip-btn" type="button" data-raw="210" aria-pressed="false">"210" + 20</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples: <em>code traces &amp; atomic math</em></h2>
+        <p class="intro">Step through the code execution traces and read every mathematical operation line-by-line.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1.1</span><h4>Airtime recharge bonus script in Python &amp; BASIC</h4></div>
+          <div class="example-body">
+            <p class="q">A telecom promo awards a 15% airtime bonus on a ₦1,000 recharge. Trace the Python and BASIC programs to find <code>bonus_amount</code> and <code>total_credit</code>.</p>
+            <div class="study-code-snippet"
+                 data-title="airtime_bonus.py"
+                 data-lang="python"
+                 data-notes='{"1": "Store integer 1000 in variable recharge.", "2": "Store float 0.15 (15%) in variable bonus_rate.", "3": "Multiply 1000 by 0.15 to get 150.0.", "4": "Add 1000 and 150.0 to get 1150.0.", "5": "Cast total_credit to str so + can concatenate it to the label."}'
+                 data-trace='[{"line":1,"vars":{"recharge":"1000 (int)"}},{"line":2,"vars":{"recharge":"1000","bonus_rate":"0.15 (float)"}},{"line":3,"vars":{"recharge":"1000","bonus_rate":"0.15","bonus_amount":"150.0 (float)"}},{"line":4,"vars":{"recharge":"1000","bonus_amount":"150.0","total_credit":"1150.0 (float)"}},{"line":5,"vars":{"total_credit":"1150.0","output":"Total Airtime: N1150.0"}}]'
+                 data-output="Total Airtime: N1150.0">
+              <code>
+recharge = 1000
+bonus_rate = 0.15
+bonus_amount = recharge * bonus_rate
+total_credit = recharge + bonus_amount
+print("Total Airtime: N" + str(total_credit))
+              </code>
+            </div>
+            <div class="study-code-snippet"
+                 data-title="AIRTIME.BAS"
+                 data-lang="basic"
+                 data-notes='{"1": "REM documents the program purpose.", "2": "LET assigns 1000 to RECHARGE.", "3": "LET assigns 0.15 to BONUSRATE.", "4": "Compute BONUSAMOUNT = 150.", "5": "Compute TOTALCREDIT = 1150.", "6": "PRINT outputs the label and numeric value."}'
+                 data-output="Total Airtime: N 1150">
+              <code>
+REM Airtime Recharge Bonus in BASIC
+LET RECHARGE = 1000
+LET BONUSRATE = 0.15
+LET BONUSAMOUNT = RECHARGE * BONUSRATE
+LET TOTALCREDIT = RECHARGE + BONUSAMOUNT
+PRINT "Total Airtime: N"; TOTALCREDIT
+END
+              </code>
+            </div>
+            <ol class="steps-sol">
+              <li>
+                <div class="sp-math" data-latex="\text{bonus\_amount} = \text{recharge} \times \text{bonus\_rate} = 1000 \times 0.15 = 150"></div>
+                <div class="m-step-note">Multiply the ₦1,000 recharge by the 0.15 decimal bonus rate to obtain a ₦150 bonus.</div>
+              </li>
+              <li>
+                <div class="sp-math" data-latex="\text{total\_credit} = \text{recharge} + \text{bonus\_amount} = 1000 + 150 = \boxed{1150}"></div>
+                <div class="m-step-note">Add the ₦150 bonus to the ₦1,000 base recharge to get a total airtime credit of ₦1,150.</div>
+              </li>
+            </ol>
+            <div class="answer-line">bonus_amount = ₦150.00 · total_credit = ₦1,150.00</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1.2</span><h4>Type conversion &amp; NEPA electricity billing with 7.5% VAT</h4></div>
+          <div class="example-body">
+            <p class="q">A smart meter transmits <code>units_str = "85"</code>. Convert this string to an integer, multiply by the tariff rate of ₦68 per kWh, and compute the total bill including 7.5% Value Added Tax (VAT).</p>
+            <div class="study-code-snippet"
+                 data-title="nepa_vat_bill.py"
+                 data-lang="python"
+                 data-notes='{"1": "Smart meter sends units as a quoted text string.", "2": "int() casts \"85\" into the integer 85.", "3": "Tariff rate is ₦68 per kWh.", "4": "Energy charge = 85 * 68 = 5780.", "5": "7.5% VAT = 5780 * 0.075 = 433.50.", "6": "Total bill = 5780 + 433.50 = 6213.50."}'
+                 data-trace='[{"line":1,"vars":{"units_str":"\"85\" (str)"}},{"line":2,"vars":{"units_str":"\"85\"","units":"85 (int)"}},{"line":3,"vars":{"units":"85","tariff":"68 (int)"}},{"line":4,"vars":{"units":"85","tariff":"68","energy_cost":"5780 (int)"}},{"line":5,"vars":{"energy_cost":"5780","vat":"433.5 (float)"}},{"line":6,"vars":{"energy_cost":"5780","vat":"433.5","total_bill":"6213.5 (float)"}}]'
+                 data-output="Energy: N5780 | VAT (7.5%): N433.5 | Total Bill: N6213.5">
+              <code>
+units_str = "85"
+units = int(units_str)
+tariff = 68
+energy_cost = units * tariff
+vat = energy_cost * 0.075
+total_bill = energy_cost + vat
+print("Energy: N" + str(energy_cost) + " | VAT (7.5%): N" + str(vat) + " | Total Bill: N" + str(total_bill))
+              </code>
+            </div>
+            <ol class="steps-sol">
+              <li>
+                <div class="sp-math" data-latex="\text{units} = \text{int}(\text{``85''}) = 85\text{ kWh}"></div>
+                <div class="m-step-note">Cast the raw meter string <code>"85"</code> to the integer <code>85</code> so arithmetic multiplication is valid.</div>
+              </li>
+              <li>
+                <div class="sp-math" data-latex="\text{energy\_cost} = 85 \times 68 = 5780\text{ Naira}"></div>
+                <div class="m-step-note">Multiply 85 kWh by ₦68 per unit to find the base energy charge of ₦5,780.</div>
+              </li>
+              <li>
+                <div class="sp-math" data-latex="\text{vat} = 5780 \times 0.075 = 433.50\text{ Naira}"></div>
+                <div class="m-step-note">Multiply ₦5,780 by the 7.5% VAT rate (0.075) to get ₦433.50.</div>
+              </li>
+              <li>
+                <div class="sp-math" data-latex="\text{total\_bill} = 5780 + 433.50 = \boxed{6213.50\text{ Naira}}"></div>
+                <div class="m-step-note">Add the base energy cost and VAT to obtain the final electricity bill of ₦6,213.50.</div>
+              </li>
+            </ol>
+            <div class="answer-line">energy_cost = ₦5,780.00 · VAT (7.5%) = ₦433.50 · total_bill = ₦6,213.50</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1.3</span><h4>Floor division, modulus &amp; operator precedence</h4></div>
+          <div class="example-body">
+            <p class="q">(a) Find the integer quotient and remainder when 19 solar panels are grouped into strings of 4 using <code>19 // 4</code> and <code>19 % 4</code>. (b) Evaluate <code>result = 12 + 8 * 2 - 6 / 2</code>.</p>
+            <ol class="steps-sol">
+              <li>
+                <div class="sp-math" data-latex="19 \div 4 = 4.75 \implies 19 \text{ // } 4 = 4\quad\text{and}\quad 19 \bmod 4 = 19 - (4 \times 4) = 3"></div>
+                <div class="m-step-note">Floor division <code>//</code> drops the <code>.75</code> decimal to leave 4 full groups; modulus <code>%</code> gives the 3 remaining panels.</div>
+              </li>
+              <li>
+                <div class="sp-math" data-latex="\text{result} = 12 + (8 \times 2) - (6 \div 2) = 12 + 16 - 3.0 = 28 - 3.0 = \boxed{25.0}"></div>
+                <div class="m-step-note">Following operator precedence, evaluate multiplication (<code>8 * 2 = 16</code>) and division (<code>6 / 2 = 3.0</code>) before addition and subtraction to get <code>25.0</code>.</div>
+              </li>
+            </ol>
+            <div class="answer-line">19 // 4 = 4 · 19 % 4 = 3 · 12 + 8 * 2 - 6 / 2 = 25</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 7. BRIDGE -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Ikogosi: <em>patch <code>sensor_log.py</code></em></h2>
+        <p class="intro">Amina opens the broken solar telemetry script <code>sensor_log.py</code> on the control room laptop. Resolve all three bugs to bring the status monitor back online.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div class="study-code-snippet"
+               data-title="sensor_log_buggy.py (3 BUGS)"
+               data-lang="python"
+               data-notes='{"1": "BUG 1: Identifier starts with digit 2 (SyntaxError).", "2": "BUG 2: Adding str \"150\" and int 20 without int() cast (TypeError).", "3": "BUG 3: Concatenating int total_power to str without str() cast."}'>
+            <code>
+2nd_panel_kw = "150"
+total_power = 2nd_panel_kw + 20
+print("Grid Output: " + total_power + " kW")
+            </code>
+          </div>
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 1:</strong> Computers execute binary voltage states with zero guesswork. Compilers and interpreters enforce strict identifier syntax and data type rules: text strings in quotes (<code>"150"</code>) must be explicitly cast with <code>int()</code> or <code>float()</code> before arithmetic, and numeric results must be cast with <code>str()</code> before joining to text.</p>
+        </div>
+      </section>
+
+      <!-- 8. QUIZ -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB (12 questions)</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full exam explanation.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- 9. REFLECT -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 10 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning objective of Lesson 1.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can define a computer program, source code, and object code.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can differentiate machine language, assembly language, and high-level languages.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can compare a compiler and an interpreter across speed, output, and error reporting.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can identify <code>int</code>, <code>float</code>, <code>str</code>, and <code>bool</code> types and apply variable naming rules.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can resolve data type mismatch errors using <code>int()</code>, <code>float()</code>, and <code>str()</code>.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l01-exit">
+          <div class="aq-top"><h4>Explain the exact difference between writing <code>x = 5</code> and <code>x = "5"</code> in Python, and state what <code>x + x</code> produces in each case.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><code>x = 5</code> assigns the numeric <strong>integer</strong> <code>5</code> to <code>x</code>, so <code>x + x</code> performs arithmetic addition and evaluates to <code>10</code> <b>(1)</b>. <code>x = "5"</code> assigns a one-character <strong>string</strong> literal to <code>x</code>, so <code>x + x</code> performs string concatenation and evaluates to <code>"55"</code> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and recall the key ideas of Lesson 1: <strong>Program &amp; source vs object code</strong> · <strong>Machine, assembly &amp; high-level languages</strong> · <strong>Compiler vs interpreter</strong> · <strong><code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code> &amp; constants</strong> · <strong>Identifier rules &amp; explicit type casting (<code>int()</code>, <code>str()</code>)</strong>.</p>
+        </div>
+      </section>
+
+      <!-- 10. ASSIGNMENT -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Household Data Audit &amp; 30-Mark Exam Paper</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B from <code>03-questions.md</code> § Lesson 01</strong>. Type your attempt in each box first to unlock the model solution and marking scheme.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
+
+        <h3>Part A · Practical Home Investigation (Household Data Audit)</h3>
+        <div class="aq" data-answer="l01-a1">
+          <div class="aq-top"><h4>Locate two electrical utility or digital service receipts at home (e.g. a prepaid electricity token receipt and an MTN/Airtel airtime recharge SMS). Identify 5 distinct data items and classify each into: Identifier Name, Data Type (<code>int</code>, <code>float</code>, <code>str</code>, <code>bool</code>), and Variable vs Constant.</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="List 5 items with their example value, identifier, data type, and mutability…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results table &amp; marking guidance <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap">
+                <table class="tbl">
+                  <thead><tr><th>Data Item</th><th>Example Value</th><th>Proposed Identifier</th><th>Data Type</th><th>Mutability</th></tr></thead>
+                  <tbody>
+                    <tr><td>Customer Name</td><td><code>"Babatunde Adeleke"</code></td><td><code>customer_name</code></td><td>String (<code>str</code>)</td><td>Variable</td></tr>
+                    <tr><td>Meter Number</td><td><code>"45021899321"</code></td><td><code>meter_number</code></td><td>String (<code>str</code>)</td><td>Constant</td></tr>
+                    <tr><td>Tariff Rate</td><td><code>68.00</code></td><td><code>tariff_rate</code></td><td>Float (<code>float</code>)</td><td>Constant</td></tr>
+                    <tr><td>Units Consumed</td><td><code>145</code></td><td><code>units_kwh</code></td><td>Integer (<code>int</code>)</td><td>Variable</td></tr>
+                    <tr><td>Debt Cleared</td><td><code>True</code></td><td><code>is_debt_free</code></td><td>Boolean (<code>bool</code>)</td><td>Variable</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>Marking guidance:</strong> Award 2 marks for realistic item selection, 2 marks for correct data type classification, and 1 mark for valid identifier naming.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · 30-Mark Written Examination Paper</h3>
+        <div class="aq" data-answer="l01-b1">
+          <div class="aq-top"><h4>b1. Define <em>computer programming</em> (1) and distinguish between <em>source code</em> (1) and <em>object code</em> (2).</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Define programming, source code, and object code…" aria-label="b1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Computer programming is the process of designing, writing, testing, and maintaining instructions for a computer to execute <b>(1)</b>. Source code is human-readable code written in a high-level or assembly language <b>(1)</b>. Object code is machine-readable binary code generated after translation by a compiler or assembler <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b2">
+          <div class="aq-top"><h4>b2. State three major differences between a <em>compiler</em> and an <em>interpreter</em>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(1) … (2) … (3) …" aria-label="b2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) A compiler translates the entire source code into machine code in one batch before execution, whereas an interpreter translates and executes instructions line-by-line <b>(2)</b>.<br>(2) A compiler produces an independent executable object file (<code>.exe</code>), whereas an interpreter does not save object code and requires the source code on every run <b>(1)</b>.<br>(3) A compiler lists all syntax errors at the end of compilation, whereas an interpreter halts immediately at the first error encountered <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b3">
+          <div class="aq-top"><h4>b3. Identify whether each identifier is valid or invalid in standard Python, stating the reason: (i) <code>2nd_test</code>, (ii) <code>user_total</code>, (iii) <code>for</code>, (iv) <code>total-score</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(i) … (ii) … (iii) … (iv) …" aria-label="b3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(i) <code>2nd_test</code> — <strong>Invalid:</strong> starts with a numeric digit <b>(1)</b>.<br>(ii) <code>user_total</code> — <strong>Valid:</strong> uses only letters and an underscore <b>(1)</b>.<br>(iii) <code>for</code> — <strong>Invalid:</strong> reserved Python keyword <b>(1)</b>.<br>(iv) <code>total-score</code> — <strong>Invalid:</strong> contains a hyphen/minus operator <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b4">
+          <div class="aq-top"><h4>b4. State the exact data type and evaluated result for: (i) <code>x = 15 &gt; 8</code>, (ii) <code>y = "50" + "50"</code>, (iii) <code>z = 25 / 2</code>, (iv) <code>w = 25 // 2</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(i) … (ii) … (iii) … (iv) …" aria-label="b4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(i) <code>bool</code>, <code>True</code> <b>(1)</b>; (ii) <code>str</code>, <code>"5050"</code> <b>(1)</b>; (iii) <code>float</code>, <code>12.5</code> <b>(1)</b>; (iv) <code>int</code>, <code>12</code> <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b5">
+          <div class="aq-top"><h4>b5. Write a 4-line Python script that prompts the user for their name and birth year, calculates their current age in 2026, and prints: <code>"Hello [Name], you are [Age] years old."</code></h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Write your 4-line Python script…" aria-label="b5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <pre><code>name = input("Enter your name: ")              # (1)
+birth_year = int(input("Enter birth year: "))   # (1)
+age = 2026 - birth_year                         # (1)
+print("Hello " + name + ", you are " + str(age) + " years old.") # (1)</code></pre>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b6">
+          <div class="aq-top"><h4>b6. Explain what a <em>type mismatch error</em> is and demonstrate how to resolve it when adding <code>cost = "4500"</code> and <code>vat = 337.5</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Explain and show the corrected Python statement…" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>A type mismatch error occurs when an operation is attempted on incompatible data types, such as attempting to add a text string and a numeric float <b>(2)</b>. It is resolved by casting the string to a numeric float or integer before adding: <code>total = float(cost) + vat</code> (evaluating to <code>4837.5</code>) <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b7">
+          <div class="aq-top"><h4>b7. State the standard flowchart symbols for: (i) Start/Terminal, (ii) Input/Output, (iii) Processing step.</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="(i) … (ii) … (iii) …" aria-label="b7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(i) <strong>Start / Terminal:</strong> Oval (or rounded rectangle) <b>(1)</b>.<br>(ii) <strong>Input / Output:</strong> Parallelogram <b>(1)</b>.<br>(iii) <strong>Processing step:</strong> Rectangle <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b8">
+          <div class="aq-top"><h4>b8. Name two low-level languages and state one major reason programmers prefer high-level languages.</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="Two low-level languages and one reason…" aria-label="b8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Low-level languages: <strong>Machine language</strong> and <strong>Assembly language</strong> <b>(2)</b>. High-level languages are preferred because they use human-readable English-like syntax, are much faster to write and debug, and are portable across different hardware architectures <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../../index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Unit Welcome Hub</a>
+          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 — Conditional Logic &amp; Branching →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/programming-bench.js"></script>
+  <script src="../../assets/js/programming-zoom.js"></script>
+  <script src="../../assets/js/microgrid-props.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
+</body>
+</html>

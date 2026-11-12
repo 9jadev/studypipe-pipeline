@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: osmometer-bench</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;min-height:100vh}
+  #stage{position:relative;width:100%;height:56vh;min-height:300px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  #ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  button{min-height:40px;padding:0 11px;border-radius:20px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  #readout{padding:2px 8px 10px}
+  table{border-collapse:collapse;width:100%;font:12px ui-monospace,monospace}
+  th,td{border:1px solid rgba(255,255,255,.18);padding:2px 4px;text-align:right}
+  th{background:rgba(255,255,255,.08)}
+  tr.sel td{background:rgba(255,200,74,.14)}
+  #line{padding:4px 0 6px}
+</style>
+</head><body>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="ui"></div>
+  <div id="readout"><div id="line"></div><table id="tbl"></table></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="osmometer-bench.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.05, 60);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.05));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.35); dl.position.set(2, 4, 3.5); scene.add(dl);
+  var fill = new THREE.DirectionalLight(0xbcd6ff, 0.45); fill.position.set(-3, 2, 2); scene.add(fill);
+
+  var rows = [];
+  var kit = OsmometerKit.create({ onEvent: function (n, d) { console.log("event", n, JSON.stringify(d)); } });
+  scene.add(kit);
+  var hl = OsmometerKit.makeHighlighter(scene);
+
+  /* camera framing, tweened */
+  var view = { target: new THREE.Vector3(0, 0.7, 0.35), dist: 6.6 }, goal = null, pitch = 0.36, yaw = 0;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(1.8, 0.95 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(yaw) * Math.cos(pitch) * d, v.target.y + Math.sin(pitch) * d, v.target.z + Math.cos(yaw) * Math.cos(pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name) { var v = kit.viewFor(name); goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist }; }
+  function resize() {
+    var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view);
+  }
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* controls */
+  var ui = document.getElementById("ui");
+  function btn(label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; ui.appendChild(b); return b; }
+  btn("Run all 6", function () { kit.runAll(); });
+  btn("Weigh", function () { kit.weigh(); });
+  btn("Leave 30 min", function () { kit.leave(30); });
+  btn("Re-weigh", function () { kit.reweigh(); });
+  var sel = []; for (var i = 0; i < 6; i++) (function (i) { sel.push(btn("Tube " + (i * 0.2).toFixed(1), function () { kit.select(i); }, "alt")); })(i);
+  [["unblotted", "Unblotted"], ["overBlotted", "Over-blotted"], ["evaporation", "Evaporation"]].forEach(function (e) {
+    btn(e[1], function (b) { var o = {}; o[e[0]] = !kit.reading().errors[e[0]]; kit.setState({ errors: o }); b.classList.toggle("on", o[e[0]]); }, "alt");
+  });
+  ["all", "rack", "balance", "tile", "borer"].forEach(function (v) { btn("View " + v, function () { gotoView(v); }, "alt"); });
+  btn("Reset", function () { kit.reset(); document.querySelectorAll("button.on").forEach(function (b) { b.classList.remove("on"); }); kit.setState({ errors: { unblotted: false, overBlotted: false, evaporation: false } }); }, "alt");
+
+  /* tap a tube / strip to select it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera); var id = kit.pickPart(ray);
+    if (id) { var m = /^(tube|strip)(\d)$/.exec(id); if (m) kit.select(+m[2]); hl.highlight(id); setTimeout(function () { hl.clear(); }, 700); }
+  });
+
+  /* live readout, computed from the model */
+  var line = document.getElementById("line"), tbl = document.getElementById("tbl"), lastKey = "";
+  function paint() {
+    var r = kit.reading(), key = JSON.stringify(r); if (key === lastKey) return; lastKey = key;
+    line.textContent = "Balance " + r.balance_g + " g · t = " + r.elapsed_min + " min · weighed " + r.nWeighed + "/" + r.n + " · re-weighed " + r.nDone + "/" + r.n +
+      (r.isotonic_est != null ? " · isotonic ≈ " + r.isotonic_est + " mol dm⁻³" : "");
+    var h = "<tr><th>c</th><th>m₀ g</th><th>m₁ g</th><th>Δ g</th><th>%</th><th>strip</th></tr>";
+    r.rows.forEach(function (x) {
+      function f(v, d) { return v == null ? "–" : (v > 0 && d === 2 && x.change_g === v ? "+" : "") + v.toFixed(d); }
+      h += "<tr" + (x.i === r.selected ? ' class="sel"' : "") + "><td>" + x.conc.toFixed(1) + "</td><td>" + (x.weighed || x.inTube || x.done ? x.m0.toFixed(2) : "–") + "</td><td>" + f(x.m1, 2) + "</td><td>" +
+        (x.change_g == null ? "–" : (x.change_g > 0 ? "+" : "−") + Math.abs(x.change_g).toFixed(2)) + "</td><td>" +
+        (x.pct == null ? "–" : (x.pct > 0 ? "+" : "−") + Math.abs(x.pct).toFixed(1)) + "</td><td>" + (x.firmness || x.state) + "</td></tr>";
+    });
+    tbl.innerHTML = h;
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      view.target.lerp(goal.target, Math.min(1, dt * 4)); view.dist += (goal.dist - view.dist) * Math.min(1, dt * 4);
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01) goal = null;
+      controls.update();
+    } else controls.update();
+    renderer.render(scene, camera);
+    paint();
+  })();
+  window.__kit = kit; window.__gotoView = gotoView;
+})();
+</script>
+</body></html>

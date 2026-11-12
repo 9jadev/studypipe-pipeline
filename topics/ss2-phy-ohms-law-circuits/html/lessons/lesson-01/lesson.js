@@ -1,40 +1,21 @@
-/* Lesson 01 · interactions: LessonKit boot, Conductor Sort, Ohm's Law V–I Table, Resistivity Dimension Explorer, and Aba Cable Bridge Test */
+/* Lesson 01 · interactions: Ohmic/non-ohmic sort (SortDnD), V–I results table (filled from the bench),
+   wire-dimension explorer (#pos-explorer) and the thin-vs-thick jumper-cable bridge.
+   LessonKit (shared) runs Do Now, Wonder Wall, quiz, rating and locked solutions. */
 (function () {
   "use strict";
   var D = window.L01;
   if (!D) return;
 
-  if (window.LessonKit && window.LessonKit.boot) {
-    window.LessonKit.boot({
-      lessonId: "l01",
-      wonderSeeds: [
-        "I think any 1-metre metal wire carries the exact same current across 2.0 V — Papa Nnamdi",
-        "If you double the diameter of a wire, does resistance halve or drop to one-quarter? — Kelechi",
-        "Why does a torch bulb's V–I graph curve upward when the bulb glows white-hot? — Halima",
-        "Why do WAEC examiners insist that we remove the plug key immediately after each reading? — Chidi"
-      ],
-      quiz: window.LESSON_QUIZ || []
-    });
-  }
-
   var toast = window.LessonKit ? window.LessonKit.toast : function () {};
   var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
   var burst = function (el, n) { if (window.StudyNarrator && el) window.StudyNarrator.burst(el.getBoundingClientRect(), n || 14); };
 
-  // 1. Conductor & Circuit Rule Sort
+  // ============ 1. Ohmic / non-ohmic sort ============
   var tray = document.getElementById("sort-tray");
-  var bins = Array.prototype.slice.call(document.querySelectorAll(".bin"));
+  var bins = Array.prototype.slice.call(document.querySelectorAll("#ohm-sort .bin"));
   var picked = null;
 
-  function shuffle(a) {
-    a = a.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
-    return a;
-  }
-
+  function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function buildSort() {
     if (!tray) return;
     tray.innerHTML = "";
@@ -43,15 +24,12 @@
     document.getElementById("sort-score").textContent = "";
     shuffle(D.items).forEach(function (it) {
       var b = document.createElement("button");
-      b.type = "button";
-      b.className = "sort-item";
-      b.setAttribute("data-id", it.id);
+      b.type = "button"; b.className = "sort-item"; b.setAttribute("data-id", it.id);
       b.innerHTML = '<span class="emo" aria-hidden="true">' + it.emo + "</span>" + it.name;
-      attachDrag(b);
+      SortDnD.attach(b, { bins: bins, onDrop: place, onTap: pick });
       tray.appendChild(b);
     });
   }
-
   function pick(b) {
     if (picked) picked.classList.remove("picked");
     picked = picked === b ? null : b;
@@ -68,229 +46,116 @@
     bin.addEventListener("click", function (e) { if (e.target.closest(".sort-item")) return; if (picked) place(picked, bin); });
     bin.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && picked) { e.preventDefault(); place(picked, bin); } });
   });
-
-  function attachDrag(b) {
-    var sx, sy, dragging = false, ghost = null, pid = null;
-    b.addEventListener("pointerdown", function (e) {
-      if (e.button !== undefined && e.button !== 0) return;
-      sx = e.clientX; sy = e.clientY; pid = e.pointerId; dragging = false;
-      try { b.setPointerCapture(pid); } catch (er) {}
-    });
-    b.addEventListener("pointermove", function (e) {
-      if (pid !== e.pointerId) return;
-      if (!dragging && Math.hypot(e.clientX - sx, e.clientY - sy) > 8) {
-        dragging = true;
-        ghost = b.cloneNode(true);
-        ghost.style.cssText = "position:fixed;z-index:95;pointer-events:none;margin:0;transform:rotate(-3deg) scale(1.05);box-shadow:0 18px 30px -10px rgba(0,0,0,.6)";
-        document.body.appendChild(ghost);
-        b.classList.add("dragging");
-      }
-      if (dragging) {
-        ghost.style.left = (e.clientX - ghost.offsetWidth / 2) + "px";
-        ghost.style.top = (e.clientY - ghost.offsetHeight / 2) + "px";
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        bins.forEach(function (bn) { bn.classList.toggle("over", bn === over); });
-      }
-    });
-    function end(e) {
-      if (pid !== e.pointerId) return;
-      pid = null;
-      if (dragging) {
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        if (ghost) ghost.remove();
-        ghost = null;
-        b.classList.remove("dragging");
-        if (over) place(b, over);
-        else bins.forEach(function (bn) { bn.classList.remove("over"); });
-        dragging = false;
-      } else if (e.type === "pointerup") pick(b);
-    }
-    b.addEventListener("pointerup", end);
-    b.addEventListener("pointercancel", end);
-    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(b); } });
-    b.addEventListener("click", function (e) { e.preventDefault(); });
-  }
-
   function checkSort() {
     var placed = 0, right = 0, rows = [];
-    var labels = { shm: "Ohmic Conductor", periodic: "Non-Ohmic Device", non: "WAEC Circuit Rule / Precaution" };
     D.items.forEach(function (it) {
-      var el = document.querySelector('.sort-item[data-id="' + it.id + '"]');
+      var el = document.querySelector('#ohm-sort .sort-item[data-id="' + it.id + '"]');
       var bin = el && el.closest(".bin");
       var chosen = bin ? bin.getAttribute("data-bin") : null;
       if (chosen) placed++;
       var ok = chosen === it.bin;
       if (ok) right++;
       if (el) { el.classList.toggle("right", ok); el.classList.toggle("wrong", !!chosen && !ok); }
-      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" +
-        labels[it.bin] + ". " + it.why + "</span></div>");
+      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" + D.bins[it.bin] + ". " + it.why + "</span></div>");
     });
-    if (placed < D.items.length) {
-      toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray.");
-      return;
-    }
-    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the explanations below.");
-    var fb = document.getElementById("sort-feedback");
-    fb.innerHTML = rows.join("");
-    fb.classList.add("on");
-    if (right >= 10) burst(document.getElementById("sort-score"), 20);
-    emit("l1:sort-checked", { score: right, total: D.items.length });
+    if (placed < D.items.length) { toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray."); return; }
+    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the reasons below.");
+    var fb = document.getElementById("sort-feedback"); fb.innerHTML = rows.join(""); fb.classList.add("on");
+    if (right >= 8) burst(document.getElementById("sort-score"), 20);
+    emit("l1:sort", { correct: right, total: D.items.length });
   }
-
   if (tray) {
     buildSort();
     document.getElementById("sort-check").addEventListener("click", checkSort);
     document.getElementById("sort-reset").addEventListener("click", buildSort);
   }
 
-  // 2. Interactive WAEC Ohm's Law V–I Results Table
+  // ============ 2. V–I results table (filled from the bench) ============
   var tbody = document.querySelector("#results-table tbody");
+  var rcount = 0;
+  function compShort(c) { return c === "lamp" ? "Filament lamp" : c === "copper" ? "Copper wire" : "Constantan wire"; }
   if (tbody) {
-    var opt = function (list) {
-      return '<option value="">choose…</option>' + list.map(function (o) { return "<option>" + o + "</option>"; }).join("");
-    };
-    D.trials.forEach(function (trObj, i) {
-      var tr = document.createElement("tr");
+    document.addEventListener("l1:bench", function (e) {
+      var d = e.detail || {};
+      if (d.I == null) return;
+      rcount++;
+      var ratio = d.ratio == null ? "–" : d.ratio.toFixed(2);
+      var tr = document.createElement("tr"); tr.className = "fresh";
       tr.innerHTML =
-        "<td><b>" + trObj.label + "</b></td>" +
-        "<td>" + trObj.L.toFixed(2) + "</td>" +
-        '<td><select data-k="t" aria-label="Current I (A) for trial ' + trObj.label + '">' + opt(D.tOptions) + "</select></td>" +
-        '<td><select data-k="T" aria-label="Potential difference V (V) for trial ' + trObj.label + '">' + opt(D.TOptions) + "</select></td>" +
-        '<td><select data-k="T2" aria-label="Resistance R = V/I (Ω) for trial ' + trObj.label + '">' + opt(D.T2Options) + "</select></td>";
+        '<td data-label="Reading"><b>' + rcount + "</b><span class=\"rc-sub\">" + compShort(d.comp) + "</span></td>" +
+        '<td data-label="I / A">' + (d.I).toFixed(2) + "</td>" +
+        '<td data-label="V / V">' + (+d.V).toFixed(2) + "</td>" +
+        '<td data-label="V÷I / Ω">' + ratio + "</td>";
       tbody.appendChild(tr);
-
-      var saved = window.LessonKit ? window.LessonKit.Store.get("ohm-l01-table-" + i, {}) : {};
-      tr.querySelectorAll("select").forEach(function (s) {
-        var k = s.getAttribute("data-k");
-        if (saved[k]) s.value = saved[k];
-        s.addEventListener("change", function () {
-          saved[k] = s.value;
-          if (window.LessonKit) window.LessonKit.Store.set("ohm-l01-table-" + i, saved);
-          s.parentElement.classList.remove("ok", "no");
-        });
-      });
+      setTimeout(function () { tr.classList.remove("fresh"); }, 1500);
+      var sub = tr.querySelector(".rc-sub"); if (sub) sub.addEventListener("click", function () { tr.classList.toggle("open"); });
+      var line = document.getElementById("results-line");
+      if (line) line.textContent = "Readings recorded: " + rcount;
     });
-
-    document.getElementById("results-check").addEventListener("click", function () {
-      var right = 0, filled = 0, total = D.trials.length * 3;
-      Array.prototype.forEach.call(tbody.rows, function (tr, i) {
-        tr.querySelectorAll("select").forEach(function (s) {
-          var k = s.getAttribute("data-k"), exp = D.trials[i][k];
-          s.parentElement.classList.remove("ok", "no");
-          if (!s.value) return;
-          filled++;
-          var ok = s.value === exp;
-          if (ok) right++;
-          s.parentElement.classList.add(ok ? "ok" : "no");
-        });
-      });
-      var out = document.getElementById("results-score");
-      if (!filled) { out.textContent = "Fill in at least one row from your 3D circuit readings first."; return; }
-      out.textContent = right + " of " + filled + " readings match the WAEC table" + (filled < total ? " (" + (total - filled) + " still blank)." : "!");
-      emit("l1:table-checked", { right: right, filled: filled });
+    document.addEventListener("l1:bench-reset", function () {
+      tbody.innerHTML = ""; rcount = 0;
+      var line = document.getElementById("results-line"); if (line) line.textContent = "Readings recorded: 0";
     });
   }
 
-  // 3. Wire Dimension & Resistivity Explorer
-  var track = document.getElementById("ph-track");
+  // ============ 3. Wire-dimension explorer (#pos-explorer) ============
+  var track = document.getElementById("pos-track");
   if (track && D.pins) {
-    var nums = document.getElementById("ph-nums");
-    var labels = ["½L, 2d", "1L, 2d", "Ref (L₀, d₀)", "2L, 1d", "2L, ½d"];
-    labels.forEach(function (lb, k) {
-      var sp = document.createElement("span");
-      sp.textContent = lb;
-      sp.style.left = (k / (labels.length - 1) * 100) + "%";
-      nums.appendChild(sp);
-    });
-    nums.style.margin = "8px 10px 0";
-
-    var info = document.getElementById("ph-info");
-    var pinEls = [];
-    D.pins.forEach(function (pObj, idx) {
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "ph-pin";
-      var pct = ((pObj.frac + 1) / 2) * 100;
-      btn.style.left = pct + "%";
-      if (idx % 2 === 1) btn.classList.add("up");
-      btn.innerHTML = '<span aria-hidden="true">' + pObj.emo + "</span>";
-      btn.setAttribute("aria-label", pObj.label + ", " + pObj.x);
-      btn.addEventListener("click", function () { showPin(idx); });
-      track.appendChild(btn);
-      pinEls.push(btn);
-    });
-
-    var showPin = function (i) {
-      var pObj = D.pins[i];
-      if (!pObj) return;
-      pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
-      info.innerHTML =
-        "<b>" + pObj.label + " (" + pObj.x + ")</b> · " +
-        "Resistance <code>" + pObj.v + "</code> · " +
-        "Current <code>" + pObj.a + "</code> · " +
-        "Scaling: <b>" + pObj.ke + " → " + pObj.pe + "</b><br>" +
-        pObj.note;
+    var info = document.getElementById("pos-info"), pinEls = [];
+    var showPin = function (i, quiet) {
+      var p = D.pins[i]; if (!p) return;
+      pinEls.forEach(function (el, k) { el.setAttribute("aria-pressed", String(k === i)); });
+      var A = D.area(p.d), R = D.wireR(p.L, p.d);
+      info.innerHTML = "<b>" + p.label + "</b> · L = " + p.L + " cm, d = " + p.d.toFixed(2) + " mm<br>" +
+        "A = πd²/4 = <b>" + A.toExponential(2).replace("e", " × 10^").replace("^-", "⁻").replace("^", "") + " m²</b> · " +
+        "R = ρL/A = <b>" + R.toFixed(2) + " Ω</b><br>" + p.note;
+      if (!quiet) emit("l1:pin", { index: i, L: p.L, d: p.d });
     };
-    window.L01.showPin = showPin;
-    showPin(2);
+    D.pins.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "pos-pin"; b.setAttribute("aria-pressed", "false");
+      b.innerHTML = p.L + " cm<br>" + p.d.toFixed(2) + " mm";
+      b.setAttribute("aria-label", p.label + ", length " + p.L + " cm, diameter " + p.d + " mm");
+      b.addEventListener("click", function () { showPin(i); });
+      track.appendChild(b); pinEls.push(b);
+    });
+    D.showPin = showPin;
+    showPin(D.refPin, true);
   }
 
-  // 4. Aba Workshop Cable Bridge Solver (#vinegar-test in #bridge)
-  var vt = document.getElementById("vinegar-test");
-  if (vt) {
-    var bStep1 = document.getElementById("vt-zobo");
-    var bStep2 = document.getElementById("vt-drop1");
-    var bStep3 = document.getElementById("vt-drop5");
-    var bReset = document.getElementById("vt-reset");
-    var status = document.getElementById("vt-status");
-    var verdict = document.getElementById("vt-verdict");
-    var timeB = document.getElementById("time-b");
-    var lenBLabel = document.getElementById("len-b-label");
-
-    bStep1.addEventListener("click", function () {
-      bStep1.disabled = true;
-      bStep2.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· L = 1.00 m, d = 0.80 mm (2× d)";
-      if (timeB) timeB.textContent = "R = 1.00 Ω · I = 2.00 A";
-      status.innerHTML = "Step 1: Doubling wire diameter from 0.40 mm to 0.80 mm quadrupled area A (πd²/4), dropping R from <strong>4.00 Ω to 1.00 Ω</strong>! Now click Step 2 to halve the cable length.";
+  // ============ 4. Bridge: thin vs thick jumper cable (3 reasoning steps) ============
+  var bridgeRoot = document.getElementById("bridge-steps");
+  if (bridgeRoot && D.bridge) {
+    var answered = 0, correct = 0;
+    var verdict = document.getElementById("bridge-verdict");
+    D.bridge.forEach(function (st, i) {
+      var card = document.createElement("div");
+      card.className = "ohm-bq";
+      card.innerHTML = "<h4>Step " + (i + 1) + ". " + st.q + '</h4><div class="opts"></div><p class="why"></p>';
+      var opts = card.querySelector(".opts"), why = card.querySelector(".why");
+      st.o.forEach(function (text, k) {
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = text;
+        b.addEventListener("click", function () {
+          if (card.getAttribute("data-done")) return;
+          card.setAttribute("data-done", "1");
+          var ok = k === st.a; if (ok) correct++; answered++;
+          Array.prototype.forEach.call(opts.children, function (x, j) { x.disabled = true; x.classList.toggle("correct", j === st.a); x.classList.toggle("incorrect", j === k && !ok); });
+          why.textContent = (ok ? "Yes. " : "Not quite. ") + st.why; why.classList.add("on");
+          if (ok) burst(b, 10);
+          if (answered === D.bridge.length) finishBridge();
+        });
+        opts.appendChild(b);
+      });
+      bridgeRoot.appendChild(card);
     });
-
-    bStep2.addEventListener("click", function () {
-      bStep2.disabled = true;
-      bStep3.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· L = 0.50 m, d = 0.80 mm";
-      if (timeB) timeB.textContent = "R = 0.50 Ω · I = 4.00 A";
-      status.innerHTML = "Step 2: Halving length L from 1.00 m to 0.50 m cut R in half again to <strong>0.50 Ω</strong>! Now click Step 3 to switch from constantan to low-resistivity copper.";
-    });
-
-    bStep3.addEventListener("click", function () {
-      bStep3.disabled = true;
-      if (lenBLabel) lenBLabel.textContent = "· Copper (d = 0.80 mm, L = 0.50 m) ✓";
-      if (timeB) timeB.textContent = "R = 0.017 Ω · Full Crank! ✓";
-      status.innerHTML = "Both jumper cables now deliver full current with negligible voltage drop!";
-      verdict.innerHTML =
-        "<strong>Workshop Puzzle Solved!</strong> Because <strong>R = 4ρL ÷ (πd²)</strong>, a thin constantan wire has high resistivity ρ and tiny cross-sectional area A, choking the current. Using a <strong>short, thick copper cable</strong> slashes ρ, L, and 1/d² simultaneously!";
-      verdict.classList.add("on");
-      burst(verdict, 24);
-      emit("l1:vinegar-done", { R: 0.017 });
-    });
-
-    bReset.addEventListener("click", function () {
-      bStep1.disabled = false;
-      bStep2.disabled = true;
-      bStep3.disabled = true;
-      verdict.classList.remove("on");
-      if (lenBLabel) lenBLabel.textContent = "· L = 1.00 m, d = 0.40 mm";
-      if (timeB) timeB.textContent = "R = 4.00 Ω · I = 0.50 A";
-      status.innerHTML = "Rig A (Thick Cable) delivers 4.00 A, while Rig B (Thin Wire) chokes at 0.50 A. Start with Step 1.";
-    });
-
-    window.L01.vt = {
-      step1: function () { bStep1.click(); },
-      step2: function () { bStep2.click(); },
-      step3: function () { bStep3.click(); }
-    };
+    function finishBridge() {
+      verdict.innerHTML = "<strong>Case settled.</strong> The thin cable has 16 times the resistance of the thick one of the same length and metal, so at the same current it burns 16 times the power and runs hot. It is the thin wire, not a 'bad' one. You got " + correct + " of " + D.bridge.length + " first time.";
+      verdict.classList.add("on"); burst(verdict, 24);
+      var big = document.getElementById("big-idea"); if (big) big.classList.add("reveal", "in");
+      emit("l1:bridge", { correct: correct === D.bridge.length, score: correct, total: D.bridge.length });
+    }
+    D.bridge.solve = function () { Array.prototype.forEach.call(bridgeRoot.children, function (card, i) { if (!card.getAttribute("data-done")) card.querySelectorAll(".opts button")[D.bridge[i].a].click(); }); };
+    D.bridgeAnswer = function (step) { var card = bridgeRoot.children[step]; if (card && !card.getAttribute("data-done")) card.querySelectorAll(".opts button")[D.bridge[step].a].click(); };
   }
 })();

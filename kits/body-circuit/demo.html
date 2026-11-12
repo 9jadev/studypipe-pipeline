@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: body-circuit</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;min-height:100vh}
+  #stage{position:relative;width:100%;height:58vh;min-height:320px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  #ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  button{min-height:40px;padding:0 11px;border-radius:20px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  #readout{padding:2px 8px 10px;font:12px/1.4 ui-monospace,monospace}
+  #hint{padding:2px 8px;color:#ffd166}
+</style>
+</head><body>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="ui"></div>
+  <div id="hint"></div>
+  <div id="readout"></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="body-circuit.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  var camera = new THREE.PerspectiveCamera(38, 1, 0.05, 80);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.1));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.3); dl.position.set(2, 4, 4); scene.add(dl);
+  var fill = new THREE.DirectionalLight(0xbcd6ff, 0.5); fill.position.set(-3, 2, 2); scene.add(fill);
+
+  var lastEvent = "", kit = BodyCircuit.create({ labels: true, onEvent: function (n, d) { lastEvent = n; if (n === "route-done") console.log("route-done", JSON.stringify(d)); } });
+  scene.add(kit);
+
+  var view = { target: new THREE.Vector3(0, 1.72, 0), dist: 6.0 }, goal = null, pitch = 0.12, yaw = 0;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(1.9, 0.62 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(yaw) * Math.cos(pitch) * d, v.target.y + Math.sin(pitch) * d, v.target.z + Math.cos(yaw) * Math.cos(pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name) { var v = kit.viewFor(name); goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist }; }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view); }
+  new ResizeObserver(resize).observe(host); resize();
+
+  var ui = document.getElementById("ui"), hint = document.getElementById("hint");
+  function btn(label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; ui.appendChild(b); return b; }
+  function setView(v, cam) { kit.setState({ view: v }); gotoView(cam || v); }
+  btn("Arm → brain", function () { setView("body"); kit.trace("armBrain"); });
+  btn("Ileum → brain", function () { setView("body"); kit.trace("ileumBrain"); });
+  btn("Liver → kidney", function () { setView("body"); kit.trace("liverKidney"); });
+  btn("Lungs → heart muscle", function () { setView("body"); kit.trace("lungsHeart"); });
+  btn("Free trace", function () { setView("body"); kit.freeTrace("forearmVein", "brainCap"); hint.textContent = "Tap: " + kit.hint(); });
+  btn("Tap next", function () { var h = kit.hint(); if (!h) return; var e = BodyCircuit.model.edges.filter(function (x) { return x.label === h; })[0]; var r = kit.tap(e.part); hint.textContent = "Tap: " + (kit.hint() || "done"); }, "alt");
+  btn("Portal view", function () { setView("portal"); });
+  btn("Coronary view", function () { setView("coronary"); });
+  btn("Block", function (b) { var on = !kit.reading().coronary || !kit.reading().coronary.blocked; setView("coronary"); kit.setState({ blocked: on }); b.classList.toggle("on", on); }, "alt");
+  btn("Body", function () { setView("body"); }, "alt");
+  btn("Labels", function (b) { var cur = b._s = ((b._s || 0) + 1) % 3; kit.setState({ labels: [true, "vessels", false][cur] }); }, "alt");
+  ["head", "chest", "gut", "arm", "leg"].forEach(function (v) { btn("View " + v, function () { setView("body", v); }, "alt"); });
+  btn("Reset", function () { kit.reset(); hint.textContent = ""; setView("body"); }, "alt");
+
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera); var id = kit.pickPart(ray);
+    if (id) { var t = kit.tap(id); if (kit.hint()) hint.textContent = "Tap: " + kit.hint(); kit.highlight(id); setTimeout(function () { kit.highlight(id, false); }, 700); }
+  });
+
+  var out = document.getElementById("readout"), lastKey = "";
+  function paint() {
+    var r = kit.reading(), key = JSON.stringify(r); if (key === lastKey) return; lastKey = key;
+    var h = "<b>" + (r.routeName || r.view) + "</b> · valves " + r.valves + " · lungs " + (r.passedLungs ? "yes" : "no") + (r.complete ? " · complete" : "") + "<br>" + r.route.join(" · ");
+    if (r.portal) h += "<br>glucose seen " + r.portal.glucoseSeen + " · stored " + r.portal.stored + " · granules " + r.portal.glycogenGranules;
+    if (r.coronary) h += "<br>muscle at risk " + r.coronary.musclePctAtRisk + " % · starved " + r.coronary.musclePctStarved + " %";
+    out.innerHTML = h;
+  }
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      view.target.lerp(goal.target, Math.min(1, dt * 4)); view.dist += (goal.dist - view.dist) * Math.min(1, dt * 4);
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01) goal = null;
+    }
+    controls.update(); renderer.render(scene, camera); paint();
+  })();
+  window.__kit = kit; window.__renderer = renderer; window.__camera = camera; window.__setView = setView; window.__gotoView = gotoView; window.__scene = scene;
+})();
+</script>
+</body></html>

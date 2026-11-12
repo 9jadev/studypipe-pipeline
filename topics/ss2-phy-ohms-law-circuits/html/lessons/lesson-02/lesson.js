@@ -1,57 +1,39 @@
-/* Lesson 02 · interactions: LessonKit boot, EMF/Lost Volts Sort, V–I Table, Load Current Explorer, and Two-Readings Bridge Solver */
+/* Lesson 02 · interactions: the EMF / terminal p.d. / lost-volts sort (SortDnD), the load explorer
+   (#pos-explorer) and the "where did the 3.6 V go?" bridge. LessonKit runs Do Now, Wonder Wall,
+   quiz, rating and locked solutions. */
 (function () {
   "use strict";
-  var D = window.L01;
+  var D = window.L02;
   if (!D) return;
-
-  if (window.LessonKit && window.LessonKit.boot) {
-    window.LessonKit.boot({
-      lessonId: "l02",
-      wonderSeeds: [
-        "Where do the missing 3.6 V go when Chinedu's 12.0 V battery drops to 8.4 V under load? — Kelechi",
-        "Can we find the internal resistance r of a sealed battery without cutting it open? — Zainab",
-        "Why does the V-against-I graph of a cell slope downwards instead of upwards? — Chidi",
-        "When can the terminal p.d. V across a battery ever be GREATER than its EMF E? — Halima"
-      ],
-      quiz: window.LESSON_QUIZ || []
-    });
-  }
 
   var toast = window.LessonKit ? window.LessonKit.toast : function () {};
   var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
   var burst = function (el, n) { if (window.StudyNarrator && el) window.StudyNarrator.burst(el.getBoundingClientRect(), n || 14); };
 
-  // 1. Sort activity
+  // ============ 1. Sort (SortDnD bins) ============
   var tray = document.getElementById("sort-tray");
-  var bins = Array.prototype.slice.call(document.querySelectorAll(".bin"));
+  var bins = Array.prototype.slice.call(document.querySelectorAll("#rate-sort .bin"));
   var picked = null;
 
   function shuffle(a) {
     a = a.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-
   function buildSort() {
     if (!tray) return;
     tray.innerHTML = "";
     bins.forEach(function (b) { b.querySelector(".drop").innerHTML = ""; });
-    document.getElementById("sort-feedback").classList.remove("on");
-    document.getElementById("sort-score").textContent = "";
+    var fb = document.getElementById("sort-feedback"); if (fb) fb.classList.remove("on");
+    var sc = document.getElementById("sort-score"); if (sc) sc.textContent = "";
     shuffle(D.items).forEach(function (it) {
       var b = document.createElement("button");
-      b.type = "button";
-      b.className = "sort-item";
-      b.setAttribute("data-id", it.id);
+      b.type = "button"; b.className = "sort-item"; b.setAttribute("data-id", it.id);
       b.innerHTML = '<span class="emo" aria-hidden="true">' + it.emo + "</span>" + it.name;
-      attachDrag(b);
+      if (window.SortDnD) SortDnD.attach(b, { bins: bins, onDrop: place, onTap: pick });
       tray.appendChild(b);
     });
   }
-
   function pick(b) {
     if (picked) picked.classList.remove("picked");
     picked = picked === b ? null : b;
@@ -69,228 +51,117 @@
     bin.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && picked) { e.preventDefault(); place(picked, bin); } });
   });
 
-  function attachDrag(b) {
-    var sx, sy, dragging = false, ghost = null, pid = null;
-    b.addEventListener("pointerdown", function (e) {
-      if (e.button !== undefined && e.button !== 0) return;
-      sx = e.clientX; sy = e.clientY; pid = e.pointerId; dragging = false;
-      try { b.setPointerCapture(pid); } catch (er) {}
-    });
-    b.addEventListener("pointermove", function (e) {
-      if (pid !== e.pointerId) return;
-      if (!dragging && Math.hypot(e.clientX - sx, e.clientY - sy) > 8) {
-        dragging = true;
-        ghost = b.cloneNode(true);
-        ghost.style.cssText = "position:fixed;z-index:95;pointer-events:none;margin:0;transform:rotate(-3deg) scale(1.05);box-shadow:0 18px 30px -10px rgba(0,0,0,.6)";
-        document.body.appendChild(ghost);
-        b.classList.add("dragging");
-      }
-      if (dragging) {
-        ghost.style.left = (e.clientX - ghost.offsetWidth / 2) + "px";
-        ghost.style.top = (e.clientY - ghost.offsetHeight / 2) + "px";
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        bins.forEach(function (bn) { bn.classList.toggle("over", bn === over); });
-      }
-    });
-    function end(e) {
-      if (pid !== e.pointerId) return;
-      pid = null;
-      if (dragging) {
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        if (ghost) ghost.remove();
-        ghost = null;
-        b.classList.remove("dragging");
-        if (over) place(b, over);
-        else bins.forEach(function (bn) { bn.classList.remove("over"); });
-        dragging = false;
-      } else if (e.type === "pointerup") pick(b);
-    }
-    b.addEventListener("pointerup", end);
-    b.addEventListener("pointercancel", end);
-    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(b); } });
-    b.addEventListener("click", function (e) { e.preventDefault(); });
-  }
-
   function checkSort() {
     var placed = 0, right = 0, rows = [];
-    var labels = { shm: "Electromotive Force (E)", periodic: "Terminal P.D. (V = IR)", non: "Lost Volts & Internal Resistance (v = Ir)" };
     D.items.forEach(function (it) {
-      var el = document.querySelector('.sort-item[data-id="' + it.id + '"]');
+      var el = document.querySelector('#rate-sort .sort-item[data-id="' + it.id + '"]');
       var bin = el && el.closest(".bin");
       var chosen = bin ? bin.getAttribute("data-bin") : null;
       if (chosen) placed++;
       var ok = chosen === it.bin;
       if (ok) right++;
       if (el) { el.classList.toggle("right", ok); el.classList.toggle("wrong", !!chosen && !ok); }
-      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" +
-        labels[it.bin] + ". " + it.why + "</span></div>");
+      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" + D.bins[it.bin] + ". " + it.why + "</span></div>");
     });
-    if (placed < D.items.length) {
-      toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray.");
-      return;
-    }
-    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the explanations below.");
+    if (placed < D.items.length) { toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray."); return; }
+    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the reasons below.");
     var fb = document.getElementById("sort-feedback");
-    fb.innerHTML = rows.join("");
-    fb.classList.add("on");
-    if (right >= 10) burst(document.getElementById("sort-score"), 20);
-    emit("l1:sort-checked", { score: right, total: D.items.length });
+    fb.innerHTML = rows.join(""); fb.classList.add("on");
+    if (right >= 8) burst(document.getElementById("sort-score"), 20);
+    emit("l2:sort", { correct: right, total: D.items.length });
   }
-
   if (tray) {
     buildSort();
     document.getElementById("sort-check").addEventListener("click", checkSort);
     document.getElementById("sort-reset").addEventListener("click", buildSort);
   }
 
-  // 2. Interactive WAEC V–I Cell Table
-  var tbody = document.querySelector("#results-table tbody");
-  if (tbody) {
-    var opt = function (list) {
-      return '<option value="">choose…</option>' + list.map(function (o) { return "<option>" + o + "</option>"; }).join("");
+  // ============ 2. Load explorer (#pos-explorer) ============
+  var track = document.getElementById("pos-track");
+  if (track) {
+    var info = document.getElementById("pos-info"), pinEls = [];
+    var pbLost = document.getElementById("pb-lost"), pbV = document.getElementById("pb-v");
+    var bars = document.getElementById("pos-bars");
+
+    function solve(R) {
+      var sc = window.StudyScenes && window.StudyScenes.bench;
+      if (sc && sc.model) return sc.model(R);
+      var E = D.cell.E, r = D.cell.r;
+      if (R == null) return { R: null, I: 0, V: E, lost: 0, E: E, r: r };
+      var I = E / (R + r), lost = I * r;
+      return { R: R, I: I, V: E - lost, lost: lost, E: E, r: r };
+    }
+    function setBar(el, val, max) { if (el) el.style.setProperty("--w", Math.max(0, Math.min(100, (val / max) * 100)) + "%"); }
+
+    var showPin = function (i, quiet) {
+      var p = D.pins[i]; if (!p) return;
+      pinEls.forEach(function (el, k) { el.setAttribute("aria-pressed", String(k === i)); });
+      var m = solve(p.R), E = D.cell.E;
+      info.innerHTML = p.R == null
+        ? "<b>Open circuit</b> (I = 0): no current, so no lost volts. The terminals show the full EMF, <b>V = " + E.toFixed(1) + " V</b>."
+        : "<b>Load " + p.R + " Ω</b>: I = <b>" + m.I.toFixed(2) + " A</b>. Lost volts Ir = <b>" + m.lost.toFixed(2) + " V</b>. Terminal p.d. V = E − Ir = <b>" + m.V.toFixed(2) + " V</b>.";
+      if (bars) bars.setAttribute("aria-hidden", "false");
+      setBar(pbLost, m.lost, E); setBar(pbV, m.V, E);
+      if (bars) { bars.querySelector('[data-b="lost"]').textContent = m.lost.toFixed(2); bars.querySelector('[data-b="v"]').textContent = m.V.toFixed(2); }
+      // drive the bench + graph marker so the point slides down the V–I line
+      var sc = window.StudyScenes && window.StudyScenes.bench;
+      if (sc) { if (p.R == null) sc.key(false); else sc.load(p.R); }
+      emit("l2:pin", { R: p.R, I: m.I, V: m.V, lost: m.lost });
+      if (!quiet) emit("kit:pin", { key: p.key, index: i });
     };
-    D.trials.forEach(function (trObj, i) {
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td><b>" + trObj.label + "</b></td>" +
-        "<td>" + trObj.L.toFixed(1) + "</td>" +
-        '<td><select data-k="t" aria-label="Current I (A) for trial ' + trObj.label + '">' + opt(D.tOptions) + "</select></td>" +
-        '<td><select data-k="T" aria-label="Terminal P.D. V (V) for trial ' + trObj.label + '">' + opt(D.TOptions) + "</select></td>" +
-        '<td><select data-k="T2" aria-label="Lost Volts v = Ir (V) for trial ' + trObj.label + '">' + opt(D.T2Options) + "</select></td>";
-      tbody.appendChild(tr);
-
-      var saved = window.LessonKit ? window.LessonKit.Store.get("ohm-l02-table-" + i, {}) : {};
-      tr.querySelectorAll("select").forEach(function (s) {
-        var k = s.getAttribute("data-k");
-        if (saved[k]) s.value = saved[k];
-        s.addEventListener("change", function () {
-          saved[k] = s.value;
-          if (window.LessonKit) window.LessonKit.Store.set("ohm-l02-table-" + i, saved);
-          s.parentElement.classList.remove("ok", "no");
-        });
-      });
+    D.pins.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "pos-pin"; b.setAttribute("aria-pressed", "false");
+      b.textContent = p.label; b.setAttribute("aria-label", p.R == null ? "Open circuit" : "Load " + p.R + " ohms");
+      b.addEventListener("click", function () { showPin(i); });
+      track.appendChild(b); pinEls.push(b);
     });
-
-    document.getElementById("results-check").addEventListener("click", function () {
-      var right = 0, filled = 0, total = D.trials.length * 3;
-      Array.prototype.forEach.call(tbody.rows, function (tr, i) {
-        tr.querySelectorAll("select").forEach(function (s) {
-          var k = s.getAttribute("data-k"), exp = D.trials[i][k];
-          s.parentElement.classList.remove("ok", "no");
-          if (!s.value) return;
-          filled++;
-          var ok = s.value === exp;
-          if (ok) right++;
-          s.parentElement.classList.add(ok ? "ok" : "no");
-        });
-      });
-      var out = document.getElementById("results-score");
-      if (!filled) { out.textContent = "Fill in at least one row from your 3D cell readings first."; return; }
-      out.textContent = right + " of " + filled + " readings match the WAEC table" + (filled < total ? " (" + (total - filled) + " still blank)." : "!");
-      emit("l1:table-checked", { right: right, filled: filled });
-    });
+    D.showPin = showPin;
   }
 
-  // 3. Load Current & Terminal Voltage Explorer
-  var track = document.getElementById("ph-track");
-  if (track && D.pins) {
-    var nums = document.getElementById("ph-nums");
-    var labels = ["I = 0 A", "I = 1.0 A", "I = 2.0 A", "I = 3.0 A", "Short (10 A)"];
-    labels.forEach(function (lb, k) {
-      var sp = document.createElement("span");
-      sp.textContent = lb;
-      sp.style.left = (k / (labels.length - 1) * 100) + "%";
-      nums.appendChild(sp);
-    });
-    nums.style.margin = "8px 10px 0";
-
-    var info = document.getElementById("ph-info");
-    var pinEls = [];
-    D.pins.forEach(function (pObj, idx) {
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "ph-pin";
-      var pct = ((pObj.frac + 1) / 2) * 100;
-      btn.style.left = pct + "%";
-      if (idx % 2 === 1) btn.classList.add("up");
-      btn.innerHTML = '<span aria-hidden="true">' + pObj.emo + "</span>";
-      btn.setAttribute("aria-label", pObj.label + ", " + pObj.x);
-      btn.addEventListener("click", function () { showPin(idx); });
-      track.appendChild(btn);
-      pinEls.push(btn);
-    });
-
-    var showPin = function (i) {
-      var pObj = D.pins[i];
-      if (!pObj) return;
-      pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
-      info.innerHTML =
-        "<b>" + pObj.label + " (" + pObj.x + ")</b> · " +
-        "Terminal P.D. <code>" + pObj.v + "</code> · " +
-        "Lost Volts <code>" + pObj.a + "</code> · " +
-        "Split: <b>" + pObj.ke + " / " + pObj.pe + "</b><br>" +
-        pObj.note;
+  // ============ 3. The "where did 3.6 V go?" bridge ============
+  var card = document.getElementById("bridge-card");
+  if (card) {
+    var ANS = D.bridge.answers, pickd = {}, verdict = document.getElementById("bridge-verdict");
+    var pickOpt = function (q, v) {
+      pickd[q] = v;
+      Array.prototype.forEach.call(card.querySelectorAll('[data-q="' + q + '"] button'), function (b) {
+        b.setAttribute("aria-pressed", String(b.getAttribute("data-v") === v)); b.classList.remove("ok", "no");
+      });
     };
-    window.L01.showPin = showPin;
-    showPin(3);
-  }
-
-  // 4. Two-Readings Simultaneous Solver (#vinegar-test in #bridge)
-  var vt = document.getElementById("vinegar-test");
-  if (vt) {
-    var bStep1 = document.getElementById("vt-zobo");
-    var bStep2 = document.getElementById("vt-drop1");
-    var bStep3 = document.getElementById("vt-drop5");
-    var bReset = document.getElementById("vt-reset");
-    var status = document.getElementById("vt-status");
-    var verdict = document.getElementById("vt-verdict");
-    var timeB = document.getElementById("time-b");
-    var lenBLabel = document.getElementById("len-b-label");
-
-    bStep1.addEventListener("click", function () {
-      bStep1.disabled = true;
-      bStep2.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· Equating E = I₁(R₁+r) = I₂(R₂+r)";
-      if (timeB) timeB.textContent = "1.0(10.8 + r) = 3.0(2.8 + r)";
-      status.innerHTML = "Step 1: Since the same battery supplies both loads, we equate EMF: <strong>1.0(10.8 + r) = 3.0(2.8 + r)</strong>. Click Step 2 to expand and solve for r!";
+    Array.prototype.forEach.call(card.querySelectorAll(".bridge-q"), function (qEl) {
+      var q = qEl.getAttribute("data-q");
+      Array.prototype.forEach.call(qEl.querySelectorAll("button"), function (b) { b.addEventListener("click", function () { pickOpt(q, b.getAttribute("data-v")); }); });
     });
-
-    bStep2.addEventListener("click", function () {
-      bStep2.disabled = true;
-      bStep3.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· 10.8 + r = 8.4 + 3r ⇒ 2r = 2.4";
-      if (timeB) timeB.textContent = "r = 1.20 Ω ✓";
-      status.innerHTML = "Step 2: Expanding gives 10.8 + r = 8.4 + 3.0r ⇒ 2.0r = 2.4 ⇒ <strong>r = 1.20 Ω</strong>! Now click Step 3 to substitute r back and find E.";
-    });
-
-    bStep3.addEventListener("click", function () {
-      bStep3.disabled = true;
-      if (lenBLabel) lenBLabel.textContent = "· Solved! r = 1.20 Ω, E = 12.0 V ✓";
-      if (timeB) timeB.textContent = "E = 12.0 V · Lost Ir = 3.6 V ✓";
-      status.innerHTML = "Substitute r = 1.20 Ω: E = 3.0(2.8 + 1.2) = 12.0 V!";
-      verdict.innerHTML =
-        "<strong>Aba Battery Case Solved!</strong> Chinedu's battery has true EMF <strong>E = 12.0 V</strong> and internal resistance <strong>r = 1.20 Ω</strong>. Under the 2.8 Ω starter load (I = 3.0 A), <strong>v = Ir = 3.6 V</strong> is dropped inside the acid, leaving <strong>V = 12.0 − 3.6 = 8.4 V</strong> at the terminals!";
-      verdict.classList.add("on");
-      burst(verdict, 24);
-      emit("l1:vinegar-done", { r: 1.2, E: 12.0 });
-    });
-
-    bReset.addEventListener("click", function () {
-      bStep1.disabled = false;
-      bStep2.disabled = true;
-      bStep3.disabled = true;
-      verdict.classList.remove("on");
-      if (lenBLabel) lenBLabel.textContent = "· Reading 2: R₂ = 2.8 Ω, I₂ = 3.0 A";
-      if (timeB) timeB.textContent = "V₂ = 8.4 V (Find r & E!)";
-      status.innerHTML = "Reading 1: R₁ = 10.8 Ω gives I₁ = 1.0 A. Reading 2: R₂ = 2.8 Ω gives I₂ = 3.0 A. Start with Step 1.";
-    });
-
-    window.L01.vt = {
-      step1: function () { bStep1.click(); },
-      step2: function () { bStep2.click(); },
-      step3: function () { bStep3.click(); }
+    var rebuild = function () {
+      var sc = window.StudyScenes && window.StudyScenes.bench;
+      if (sc && sc.rebuildEmeka) sc.rebuildEmeka();
+      var el = document.getElementById("bench-stage"); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: "smooth", block: "center" });
     };
+    var rb = document.getElementById("bridge-rebuild"); if (rb) rb.addEventListener("click", rebuild);
+    var check = function () {
+      var keys = Object.keys(ANS);
+      if (keys.some(function (k) { return !pickd[k]; })) { toast("Answer all three questions first."); return; }
+      var all = true;
+      keys.forEach(function (k) {
+        var ok = pickd[k] === ANS[k]; if (!ok) all = false;
+        Array.prototype.forEach.call(card.querySelectorAll('[data-q="' + k + '"] button'), function (b) {
+          b.classList.toggle("ok", b.getAttribute("data-v") === ANS[k]);
+          b.classList.toggle("no", b.getAttribute("data-v") === pickd[k] && !ok);
+        });
+      });
+      verdict.classList.add("on"); verdict.classList.toggle("bad", !all);
+      verdict.innerHTML = all
+        ? "<strong>Case settled.</strong> The open-circuit 12.0 V is the EMF — the chemistry is intact. When 3.0 A flows, 3.6 V is dropped inside the battery across its internal resistance (1.2 Ω), leaving 8.4 V at the terminals. The battery is not dead; Tobe is wrong to dump it on the EMF alone."
+        : "<strong>Not quite.</strong> The open-circuit reading is the EMF (the chemistry still gives 12.0 V). The missing 3.6 V is dropped <em>inside</em> the cell across r, not in the wires, so the terminals are left at 8.4 V, not 0 V. The green rings show the right answers.";
+      if (all) burst(verdict, 24);
+      emit("l2:bridge", { correct: all });
+    };
+    document.getElementById("bridge-check").addEventListener("click", check);
+    document.getElementById("bridge-reset").addEventListener("click", function () {
+      pickd = {}; verdict.classList.remove("on", "bad");
+      Array.prototype.forEach.call(card.querySelectorAll(".bridge-q button"), function (b) { b.setAttribute("aria-pressed", "false"); b.classList.remove("ok", "no"); });
+    });
+    D.bridge.ui = { rebuild: rebuild, check: check, solve: function () { pickOpt("open", "emf"); pickOpt("drop", "inside"); pickOpt("left", "8_4"); check(); } };
   }
 })();

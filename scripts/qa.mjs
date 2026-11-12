@@ -7,6 +7,9 @@
  *
  * Usage:
  *   node scripts/qa.mjs topics/<slug>              → checks Welcome Hub + all lessons in topics/<slug>/html/
+ *   node scripts/qa.mjs topics/<slug> --lesson lesson-03 → checks only that lesson (no Welcome Hub);
+ *                                                     report goes to qa/lesson-03/report.md, never 05-qa-report.md,
+ *                                                     so parallel lesson-builders can self-check safely
  *   node scripts/qa.mjs kits/<kit-id>/demo.html    → checks one kit demo
  *
  * Output: <target>/05-qa-report.md (topics) or printed report (kits) + qa/ screenshots.
@@ -21,8 +24,11 @@ const arg = process.argv[2];
 if (!arg) { console.error("usage: node scripts/qa.mjs topics/<slug> | kits/<id>/demo.html"); process.exit(2); }
 
 const isTopic = !arg.endsWith(".html");
+const lessonFlag = process.argv.indexOf("--lesson");
+const onlyLesson = lessonFlag > 0 ? process.argv[lessonFlag + 1] : null;
+if (lessonFlag > 0 && !/^lesson-\d+$/.test(onlyLesson || "")) { console.error("--lesson needs a folder name like lesson-03"); process.exit(2); }
 const htmlFile = path.resolve(isTopic ? path.join(arg, "html", "index.html") : arg);
-const outDir = path.resolve(isTopic ? path.join(arg, "qa") : path.join(path.dirname(arg), "qa"));
+const outDir = path.resolve(isTopic ? path.join(arg, "qa", ...(onlyLesson ? [onlyLesson] : [])) : path.join(path.dirname(arg), "qa"));
 if (!fs.existsSync(htmlFile)) { console.error("Not found: " + htmlFile); process.exit(2); }
 fs.mkdirSync(outDir, { recursive: true });
 
@@ -35,6 +41,8 @@ const context = await browser.newContext({
   viewport: { width: 360, height: 740 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true,
 });
 const page = await context.newPage();
+page.setDefaultTimeout(120000);        // page.goto/screenshot default is 30 s, which fails when the machine is busy
+page.setDefaultNavigationTimeout(120000);
 
 let where = "load";
 page.on("console", (m) => { if (m.type() === "error") add("BLOCKING", where, "console error: " + m.text()); });
@@ -69,6 +77,87 @@ async function checkScreen(label, scopeSelector = null) {
 const shots = [];
 let sectionCount = 0;
 let lessonsChecked = 0;
+
+
+// Layout sanity (phone width): catches stretched controls, e.g. a short label that is hundreds of px tall because a
+// lesson class name collides with a shared stylesheet rule (the `.lab` hero-stage clash found in heart lessons 02/03/06/07).
+async function checkLayoutSanity(prefix) {
+  where = `${prefix}:layout`;
+  const found = await page.evaluate(() => {
+    const out = { tall: [], bars: [], long: [], bench: null };
+    const skip = /^(CANVAS|IFRAME|SVG|TEXTAREA|VIDEO|IMG|PATH|G|CIRCLE|RECT|HTML|BODY)$/i;
+    const label = (el) => (el.tagName.toLowerCase() + (el.className && typeof el.className === "string" ? "." + el.className.trim().split(/\s+/).slice(0, 2).join(".") : "") + (el.id ? "#" + el.id : ""));
+    const visible = (el) => { const r = el.getBoundingClientRect(); const cs = getComputedStyle(el); return r.width > 0 && r.height > 0 && cs.display !== "none" && cs.visibility !== "hidden"; };
+    // 1. a leaf element with a few words of text must never be taller than ~160px
+    for (const el of document.querySelectorAll("body *")) {
+      if (skip.test(el.tagName) || el.closest("svg, canvas, .narr-dock, .narr-spot, .stage-canvas, .lab-fallback")) continue;
+      if (el.children.length) continue;
+      const t = (el.textContent || "").trim();
+      if (!t || t.length > 40 || !visible(el)) continue;
+      const h = el.getBoundingClientRect().height;
+      if (h > 160) out.tall.push(`${label(el)} "${t.slice(0, 24)}" is ${Math.round(h)}px tall in a ${Math.round(el.getBoundingClientRect().width)}px-wide box (font ${getComputedStyle(el).fontSize})`);
+    }
+    // 2. control bars and readouts: blocking when a bar holds a lot of EMPTY space (children occupy far less than the
+    //    bar), warning when it is simply long (many buttons wrapping) so the author can tighten it
+    for (const el of document.querySelectorAll(".stage-bar, .bench-mode, .seg, .chips, .bench-readout, .stage-hint")) {
+      if (!visible(el)) continue;
+      const r = el.getBoundingClientRect();
+      let top = Infinity, bottom = -Infinity;
+      for (const k of el.querySelectorAll("*")) {
+        if (!visible(k)) continue;
+        const kr = k.getBoundingClientRect();
+        if (kr.height > 0.9 * r.height && k.children.length) continue;   // a big wrapper is not "content"
+        top = Math.min(top, kr.top); bottom = Math.max(bottom, kr.bottom);
+      }
+      const used = bottom > top ? bottom - top : 0;
+      const empty = Math.round(r.height - used);
+      if (used && empty > 120) out.bars.push(`${label(el)} is ${Math.round(r.height)}px tall but its content only needs ${Math.round(used)}px`);
+      else if (r.height > 260) out.long.push(`${label(el)} is ${Math.round(r.height)}px tall`);
+    }
+    // 3. everything under the 3D canvas in the bench stage (controls, readouts) should stay short on a phone
+    const st = document.querySelector("#bench-stage");
+    const cv = st && st.querySelector(".stage-canvas");
+    if (st && cv && visible(st)) {
+      const total = st.getBoundingClientRect().height, canvasH = cv.getBoundingClientRect().height;
+      out.bench = { controls: Math.round(total - canvasH), canvas: Math.round(canvasH) };
+    }
+    return out;
+  });
+  for (const m of found.tall.slice(0, 5)) add("BLOCKING", where, "stretched element: " + m + " — usually a class name colliding with a shared stylesheet rule (.lab/.stage/.hud/.hero), or large text wrapping in a narrow column");
+  for (const m of found.bars.slice(0, 5)) add("BLOCKING", where, "stretched control bar: " + m);
+  for (const m of found.long.slice(0, 3)) add("WARN", where, "tall control bar: " + m + " at 360px width; consider tightening");
+  if (found.bench && found.bench.controls > 900) add("WARN", where, `controls under the 3D bench take ${found.bench.controls}px at 360px width (canvas ${found.bench.canvas}px); consider tightening`);
+}
+
+
+// Drag-and-drop sanity for the sort game (human report, 2026-11-08: "the drag and drop
+// gets frozen, especially when you drag it at the edge of two particular groups").
+// The bins usually sit far below the tray on a phone, so a drag can only reach them if
+// the shared module auto-scrolls; and the seam between two bins must not be a dead zone.
+async function checkSortDnD(prefix) {
+  where = `${prefix}:sort`;
+  const info = await page.evaluate(() => {
+    const item = document.querySelector(".sort-item");
+    const bins = Array.prototype.slice.call(document.querySelectorAll(".bin"));
+    if (!item || bins.length < 2) return null;              // this lesson has no bin sort
+    const wired = typeof window.SortDnD === "object" && typeof window.SortDnD.attach === "function";
+    const ta = getComputedStyle(item).touchAction;
+    // how far the learner must travel from the tray to the first bin
+    const gap = Math.round(bins[0].getBoundingClientRect().top - item.getBoundingClientRect().bottom);
+    // the widest seam between two neighbouring bins
+    let seam = 0;
+    for (let i = 1; i < bins.length; i++) {
+      const a = bins[i - 1].getBoundingClientRect(), b = bins[i].getBoundingClientRect();
+      seam = Math.max(seam, Math.round(b.top - a.bottom));
+    }
+    return { wired, ta, gap, seam, snap: (window.SortDnD && window.SortDnD.SNAP) || 0, vh: window.innerHeight };
+  });
+  if (!info) return;
+  if (!info.wired) add("BLOCKING", where, "sort game found but window.SortDnD is missing — the per-lesson drag code froze when the bins were below the fold; load assets/js/sort-dnd.js before lesson.js");
+  if (info.ta !== "none") add("BLOCKING", where, `.sort-item has touch-action: ${info.ta} (must be "none", or the browser steals the drag gesture)`);
+  if (info.gap > info.vh && !info.wired) add("BLOCKING", where, `the first bin is ${info.gap}px below the tray (screen is ${info.vh}px) and nothing auto-scrolls, so a drag can never reach it`);
+  if (info.seam > info.snap) add("BLOCKING", where, `the gap between two bins is ${info.seam}px but drops only snap within ${info.snap}px, so releasing between two groups silently does nothing`);
+}
 
 async function checkEditorialLesson(lessonHtmlPath, prefix) {
   where = `${prefix}:load`;
@@ -133,6 +222,11 @@ async function checkEditorialLesson(lessonHtmlPath, prefix) {
     }
   }
 
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.waitForTimeout(500);
+  await checkLayoutSanity(prefix);
+  await checkSortDnD(prefix);
+
   // Test Narrator spotlight choreography
   where = `${prefix}:narrator`;
   await page.evaluate(() => {
@@ -155,6 +249,7 @@ if (isTopic) {
   const hasMultiLessons = fs.existsSync(lessonsDir) && fs.statSync(lessonsDir).isDirectory();
 
   if (hasMultiLessons) {
+    if (!onlyLesson) {
     // 1. Check Unit Welcome Hub (html/index.html)
     where = "welcome:load";
     await page.goto(pathToFileURL(htmlFile).href);
@@ -188,6 +283,7 @@ if (isTopic) {
     if (!welcomeCheck.hasNarrator || !welcomeCheck.hasNarrationScript) add("BLOCKING", "welcome", "Welcome Hub StudyNarrator tour missing");
 
     shots.push(await checkScreen("welcome-00-hero", ".hero"));
+    await checkLayoutSanity("welcome");
 
     for (const secId of ["mystery", "journey", "explorer", "master", "method"]) {
       where = `welcome:${secId}`;
@@ -205,10 +301,14 @@ if (isTopic) {
     shots.push(await checkScreen("welcome-99-narrator"));
     await page.evaluate(() => { if (window.StudyNarrator && window.StudyNarrator.close) window.StudyNarrator.close(); });
 
+    }
+
     // 2. Check each lesson in html/lessons/lesson-XX/index.html
     const lessonFolders = fs.readdirSync(lessonsDir)
       .filter((f) => fs.statSync(path.join(lessonsDir, f)).isDirectory())
+      .filter((f) => !onlyLesson || f === onlyLesson)
       .sort();
+    if (onlyLesson && !lessonFolders.length) add("BLOCKING", onlyLesson, `lessons/${onlyLesson}/ does not exist`);
 
     for (const folder of lessonFolders) {
       const lFile = path.join(lessonsDir, folder, "index.html");
@@ -217,6 +317,34 @@ if (isTopic) {
         continue;
       }
       await checkEditorialLesson(lFile, folder);
+    }
+
+    // 3. Explainer videos (06-videos/lesson-0X.plan.cjs → lessons/lesson-0X/video.html, see scripts/apply-video.mjs)
+    const plansDir = path.resolve(arg, "06-videos");
+    for (const folder of lessonFolders) {
+      const lFile = path.join(lessonsDir, folder, "index.html"), vFile = path.join(lessonsDir, folder, "video.html");
+      const hasPlan = fs.existsSync(path.join(plansDir, `${folder}.plan.cjs`)), hasVideo = fs.existsSync(vFile);
+      if (!hasPlan && !hasVideo) continue;
+      where = `${folder}:video`;
+      if (hasPlan && !hasVideo) { add("BLOCKING", where, `06-videos/${folder}.plan.cjs is not built — run node scripts/apply-video.mjs ${arg}`); continue; }
+      if (!fs.existsSync(lFile) || !fs.readFileSync(lFile, "utf8").includes("<!-- studypipe:video -->")) { add("BLOCKING", where, `video.html exists but is not embedded in ${folder}/index.html — run node scripts/apply-video.mjs ${arg}`); continue; }
+      await page.goto(pathToFileURL(lFile).href);
+      await page.waitForTimeout(900);
+      await page.evaluate(() => { const v = document.getElementById("lesson-video"); if (v) v.scrollIntoView({ block: "start" }); });
+      await page.waitForTimeout(2600);
+      const vf = page.frames().find((f) => f.url().endsWith(`${folder}/video.html`));
+      if (!vf) { add("BLOCKING", where, "video iframe did not load"); continue; }
+      const v = await vf.evaluate(() => ({ embedded: document.documentElement.classList.contains("embedded"), cues: (typeof DATA !== "undefined" && DATA.cues ? DATA.cues.length : 0), world: (document.getElementById("frame") || {}).dataset?.theme }))
+        .catch((e) => ({ error: e.message }));
+      const h = await page.evaluate(() => { const f = document.querySelector(".lesson-video-frame"); return f ? f.getBoundingClientRect().height : 0; });
+      if (v.error) add("BLOCKING", where, "video page failed: " + v.error);
+      else {
+        if (!v.embedded) add("BLOCKING", where, "video never completed the handshake with the lesson (assets/js/video-embed.js missing or broken): speech would not use the app's TTS path");
+        if (!v.cues) add("BLOCKING", where, "video has no narration cues");
+        if (h < 200) add("BLOCKING", where, `video iframe is only ${Math.round(h)}px tall (size message not applied)`);
+      }
+      shots.push(await checkScreen(`${folder}-video`, "#lesson-video"));
+      add("INFO", where, `explainer video OK: ${v.cues} lines, world ${v.world}, iframe ${Math.round(h)}px. Deep checks: node .agents/skills/explainer-video/scripts/qa.cjs ${path.relative(process.cwd(), vFile)}`);
     }
   } else {
     await page.goto(pathToFileURL(htmlFile).href);
@@ -288,13 +416,15 @@ const report = [
   `sections checked: ${sectionCount || "n/a"}`,
   "",
   "## Issues",
-  issues.length ? issues.map((i) => `- **${i.level}** [${i.where}] ${i.msg}`).join("\n") : "- none",
+  issues.filter((i) => i.level !== "INFO").length ? issues.filter((i) => i.level !== "INFO").map((i) => `- **${i.level}** [${i.where}] ${i.msg}`).join("\n") : "- none",
+  ...(issues.some((i) => i.level === "INFO") ? ["", "## Notes", issues.filter((i) => i.level === "INFO").map((i) => `- [${i.where}] ${i.msg}`).join("\n")] : []),
   "",
   "## Screenshots (review these visually)",
   shots.map((s) => `- ${path.relative(process.cwd(), s)}`).join("\n"),
   "",
 ].join("\n");
 
-if (isTopic) fs.writeFileSync(path.join(arg, "05-qa-report.md"), report);
+if (isTopic && onlyLesson) fs.writeFileSync(path.join(outDir, "report.md"), report);
+else if (isTopic) fs.writeFileSync(path.join(arg, "05-qa-report.md"), report);
 console.log(report);
 process.exit(blocking.length ? 1 : 0);

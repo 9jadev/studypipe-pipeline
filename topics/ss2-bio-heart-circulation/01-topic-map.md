@@ -4,7 +4,7 @@ subject: Biology
 class: SS2
 exams: [WAEC, NECO, JAMB]
 practical: true
-lessons_count: 5
+lessons_count: 7
 duration_per_lesson_min: 80
 ---
 
@@ -12,129 +12,125 @@ duration_per_lesson_min: 80
 
 ## 1. Paraphrased Syllabus Scope (WAEC | NECO | JAMB)
 
-This 5-lesson SS2 Biology unit covers **Transport in Mammals (The Human Heart, Blood Vessels, Blood, Lymphatic System, and Circulatory Disorders)** across all three Nigerian examination boards, rewritten in 100% original language:
+| Board | What candidates must be able to do (paraphrased) |
+|---|---|
+| **WAEC SSCE** (Transport in animals, SS2) | Give reasons why large many-celled animals cannot rely on diffusion and list what blood carries. Tell open from closed circulation and single from double circulation, with named animals. Draw and label a longitudinal section through a mammalian heart and link each chamber wall, valve and great vessel to its job. Trace blood through the pulmonary, systemic, hepatic portal and coronary routes, including organ-to-organ journeys. Explain the cardiac cycle, the two heart sounds, the pacemaker and conducting tissue, pulse and blood pressure, and what raises or lowers heart rate. Compare arteries, veins and capillaries (usually as a table) and explain how tissue fluid and lymph form. State what blood is made of and what each part does, explain clotting, the ABO groups, the Rhesus factor and safe transfusion, and give the cause and prevention of common circulatory disorders. |
+| **WAEC Paper 3** | Identify a sheep, goat or cow heart and its parts, cut it to show the chambers and explain the thicker left ventricle; tell an artery from a vein on a chart or slide by wall and lumen; recognise red and white cells on a smear or chart; read a stethoscope or blood-pressure instrument; draw specimens to examiner rules. |
+| **NECO SSCE** | Same content as WAEC. Examiners favour "state five differences" (best answered in a matched two-column table) and "describe the course of blood from X to Y" questions. |
+| **JAMB UTME** (Transport) | Quick-recall objective items on the need for transport, the materials carried, the channels (heart, arteries, veins, capillaries) and the media (blood, lymph); open vs closed systems; recognising heart parts on a diagram; pulmonary vessel exceptions; hepatic portal route; pacemaker; heart sounds; blood groups and Rhesus. Plant transport media (cell sap, xylem, phloem) belong to a separate unit and are not taught here. |
 
-| Exam Board | Syllabus Section | Core Competencies & Assessment Focus (Paraphrased) |
-|---|---|---|
-| **WAEC SSCE** | Section B / SS2: Transport in Animals & Mammalian Circulatory System | Explain why multicellular animals require an internal transport system; compare open and closed circulatory systems and single vs double circulation; draw and label the longitudinal section of the mammalian heart; relate chamber wall thickness and valve structure to function; trace the pathway of blood through pulmonary, systemic, coronary, and hepatic portal circuits; tabulate structural and functional differences between arteries, veins, and capillaries; describe the composition and functions of blood, tissue fluid, and lymph; explain the enzymatic blood-clotting cascade, ABO and Rhesus blood group compatibility, and cardiovascular disorders; identify dissected mammalian heart specimens and blood-vessel transverse sections in Paper 3 Practical. |
-| **NECO SSCE** | Transport in Animals (Circulatory System in Mammals) | High emphasis on structured tabular comparisons (*"State five differences between an artery and a vein"*, *"Compare blood, tissue fluid, and lymph"*), step-by-step blood pathway tracing from one organ to another (always passing through the heart and lungs), explaining the myogenic heartbeat (SAN, AVN, Bundle of His, Purkinje fibres), and drawing a clean, unshaded longitudinal section of the heart with ruled horizontal label lines. |
-| **JAMB UTME** | Transport: Need for Transport, Channels, Media & Mechanisms | Rapid-recall and analytical MCQs on surface-area-to-volume scaling ($\text{SA}/\text{V} = 6/L$), open vs closed systems (cockroach/snail vs earthworm/tilapia/mammal), pulmonary artery and pulmonary vein exceptions, hepatic portal vein routing (ileum $\rightarrow$ liver), cardiac cycle timing ($\text{CO} = \text{HR} \times \text{SV}$), clotting cofactors ($\text{Ca}^{2+}$, Vitamin K, thromboplastin, prothrombin, thrombin, fibrinogen, fibrin), and ABO/Rhesus blood transfusion compatibility. |
-
----
+Linked areas examiners pull in: blood groups and Rhesus (also under Variation/Genetics), the lymphatic system and immunity, sickle cell and other circulatory disorders (Health). Placement: JAMB *Transport*; WAEC and NECO *Transport in animals* (mammalian circulatory system). Section numbers change between syllabus editions, so none are quoted.
 
 ## 2. Unit Mystery Thread & 3D Story Cast
 
-- **Unit Anchor Phenomenon ("The Surulere Stadium Sprint, Coach Danjuma's Stethoscope & LUTH Blood Bank Emergency"):**
-  During the Lagos State Inter-Collegiate 400 m final at Teslim Balogun Stadium in Surulere, 16-year-old SS2 sprinter **Chinedu** finishes in $51\text{ s}$. When Sports Physician **Dr. Halima** places her stethoscope on Chinedu's chest and wraps a sphygmomanometer cuff around his arm, his heart rate has jumped from $70\text{ bpm}$ at rest to $175\text{ bpm}$, his blood pressure reads $155/85\text{ mmHg}$, and a loud *"Lub-Dub"* echoes twice every second. Meanwhile, across the road at LUTH Idi-Araba Emergency Ward, a road-traffic accident patient of **Blood Group B ($\text{Rh}^-$)** urgently needs a blood transfusion, while a butcher at Surulere Market shows **Nurse Kemi** a freshly dissected goat heart whose left ventricular wall is three times thicker than its right wall.
-  - **Question 1 (Lesson 01):** Why can a tiny pond *Amoeba* get all its oxygen by simple diffusion without a heart or blood, while a cockroach uses low-pressure open haemolymph, a *Tilapia* fish uses a 2-chambered single-circuit heart, and Chinedu needs a high-pressure 4-chambered double-circulation pump moving $17.5\text{ L/min}$ during a sprint?
-  - **Question 2 (Lesson 02):** Why is the muscular wall of the left ventricle three times thicker than the right ventricle in the goat and human heart, how do the tricuspid, bicuspid, and semilunar valves (plus chordae tendineae) enforce strictly one-way flow, and why must glucose absorbed in Chinedu's ileum pass through the liver via the hepatic portal vein before reaching his heart?
-  - **Question 3 (Lesson 03):** What makes the heart beat on its own even outside the body (myogenic SAN $\rightarrow$ AVN $\rightarrow$ Bundle of His $\rightarrow$ Purkinje fibres), what produces the *"Lub"* and *"Dub"* stethoscope sounds during a $0.8\text{ s}$ cardiac cycle, and how do we calculate Cardiac Output ($\text{CO}$), Pulse Pressure ($\text{PP}$), and Mean Arterial Pressure ($\text{MAP}$)?
-  - **Question 4 (Lesson 04):** How do thick-walled elastic arteries, wide-lumened valved veins, and one-cell-thick capillaries work together so hydrostatic pressure ($P_c$) filters plasma into tissue fluid at the arterial end while osmotic pressure ($\pi_c$) and lymphatic vessels return it without causing oedema?
-  - **Question 5 (Lesson 05):** How do biconcave anucleate erythrocytes, phagocytes, lymphocytes, and platelets (via the thromboplastin–thrombin–fibrin cascade) keep Chinedu alive, which donor bags at LUTH Blood Bank are safe for a Group B ($\text{Rh}^-$) patient without causing fatal agglutination, and how do we score $10/10$ on a WAEC Paper 3 heart dissection and biological drawing?
+**The case: Three Readings on Health Day at Oja Oba.**
+On a free health-screening Saturday at Oja Oba market in Ibadan, **Dr Aisha**, a heart specialist from UCH, sets up a tent with a stethoscope, a blood-pressure cuff and a whiteboard. Three cases end up on her board before noon:
+1. **Chidi**, an SS2 student and school footballer, races the length of the market to fetch her a cable. His wrist pulse goes from 68 to 132 beats per minute, and through the stethoscope she hears a pounding "lub-dub". Within five minutes it is almost back to normal.
+2. **Mama Bisi**, who sells pepper and stands at her stall from dawn to dusk, has puffy ankles that hold a thumb dent, lumpy blue veins on her calves and a reading of 160/100 mmHg.
+3. An **okada rider** is carried in after a crash on the Oyo road, bleeding from a deep gash. His donor card says group **B, Rhesus negative**. The blood-bank cool box that the ambulance brings holds six bags: O+, O−, A−, B+, B− and AB−.
 
-- **Recurring 3D Story Cast (`StoryStage`):**
-  - **Nurse Kemi (`ngozi`):** Senior Cardiovascular Nurse Educator at Surulere Sports Clinic & Market Outreach.
-  - **Chinedu (`cust1`):** Curious SS2 400 m sprinter and Biology student preparing for WAEC and JAMB.
-  - **Coach Danjuma (`cust2`):** Veteran athletics coach who holds several common misconceptions about heart chambers, veins, and blood groups.
-  - **Dr. Halima (`amaka`):** Consultant Cardiologist & Haematologist at LUTH Idi-Araba Physiology & Blood Bank Lab.
+**Baba Sule**, the butcher next to the tent, follows every case with loud opinions that are often wrong ("the thick side of the heart is the right side", "blue blood is in the veins", "AB can give to everybody"). He also supplies a fresh goat heart for dissection. The unit question on Dr Aisha's board: **What keeps blood moving, delivering and safe, and what has gone right or wrong in each of the three cases?**
 
----
+| Lesson | The piece of the mystery it unlocks |
+|---|---|
+| 01 | Why Chidi needs a heart and blood at all, when a pond *Amoeba* manages without (SA:V, closed double circulation). |
+| 02 | What the pump looks like inside: Baba Sule's goat heart, the thick left ventricle, the valves (and why he has the sides wrong). |
+| 03 | The route blood takes: why the okada rider's donated blood must pass the lungs before reaching his brain, and why food from the gut visits the liver first. |
+| 04 | Why Chidi's pulse leapt and recovered (pacemaker, cardiac cycle, heart sounds, cardiac output). **Case 1 closed.** |
+| 05 | Why Mama Bisi's ankles swell (vessel structure, capillary pressure, tissue fluid, lymph, faulty vein valves). **Case 2 explained.** |
+| 06 | Why the rider's wound eventually sealed and what he lost (blood composition, clotting). |
+| 07 | **The answer**: which bags are safe for a B Rh− patient, why Mama Bisi's pressure is a danger, and how to keep a heart healthy. **Case 3 closed; whole case file solved.** |
 
-## 3. Unit Welcome Hub Specification (`html/index.html`)
+**StoryStage cast:** `ngozi` = Mama Bisi (pepper seller, Oja Oba) · `cust1` = Chidi (SS2 student and footballer) · `cust2` = Baba Sule (butcher; carries the misconceptions) · `amaka` = Dr Aisha (UCH heart specialist and lab tutor). Sets: the market screening tent (Set 1) and the UCH teaching lab (Set 2).
 
-- **Hero 3D Lab (`welcome-lab.js` / `window.StudyLab`):**
-  - Interactive **3D Beating Mammalian Heart & Double-Circulation Cut-Away Stage** built with `window.HeartKit`:
-    - Mode 1: **4-Chamber Heart Cut-Away** (RA, RV, LA, LV with $3\times$ thicker LV wall, interventricular septum, tricuspid & bicuspid valves with chordae tendineae, pulmonary & aortic semilunar valves, venae cavae, pulmonary artery, pulmonary veins, and aortic arch with coronary branches).
-    - Mode 2: **Pulmonary vs Systemic Double Circuit** (animated deoxygenated blue RBCs flowing $\text{RA} \rightarrow \text{RV} \rightarrow \text{Lungs}$ and oxygenated crimson RBCs flowing $\text{Lungs} \rightarrow \text{LA} \rightarrow \text{LV} \rightarrow \text{Aorta} \rightarrow \text{Body}$).
-    - Mode 3: **Rest ($72\text{ bpm}$) vs Sprint ($160\text{ bpm}$) Pacemaker Wave** (live SAN $\rightarrow$ AVN $\rightarrow$ Purkinje electrical glow + live $\text{HR}$, $\text{SV}$, and $\text{CO}$ readout).
-- **Interactive Concept Explorer (`#explorer`):**
-  - 4 interactive tabs with dynamic SVG pressure/volume curve:
-    1. *Cardiac Cycle & Valve Timing ($0.80\text{ s}$ at $75\text{ bpm}$)*
-    2. *Double Circulation & Organ Pathways (Pulmonary, Systemic & Hepatic Portal)*
-    3. *Artery $\rightarrow$ Capillary $\rightarrow$ Vein Pressure & Velocity Profile*
-    4. *Blood Clotting Cascade & ABO/Rhesus Compatibility*
-- **6 Calculation Archetypes (`#archetypes`):**
-  1. Surface-Area-to-Volume Ratio & Diffusion Limit ($\text{SA}/\text{V} = 6/L$)
-  2. Cardiac Output & Sprint Reserve ($\text{CO} = \text{HR} \times \text{SV}$)
-  3. Cardiac Cycle Period & Phase Durations ($T = 60/\text{HR}$)
-  4. Stroke Volume & Ejection Fraction ($\text{SV} = \text{EDV} - \text{ESV}$, $\text{EF} = \frac{\text{SV}}{\text{EDV}}\times 100\%$)
-  5. Pulse Pressure, Mean Arterial Pressure & Capillary Filtration ($\text{PP} = P_{\text{sys}} - P_{\text{dia}}$, $\text{NFP} = P_c - \pi_c$)
-  6. WAEC Paper 3 Heart Drawing Magnification & Haemocytometer Cell Count ($M = I / A$)
-- **3 Myth-Buster Flip Cards (`#myths`):**
-  - *Myth 1:* "All arteries carry oxygenated blood and all veins carry deoxygenated blood." $\rightarrow$ **Truth:** Arteries are defined by direction (**away** from the heart) and veins by flow **toward** the heart. The **pulmonary artery** carries deoxygenated blood to the lungs, while the **pulmonary veins** carry oxygenated blood to the left atrium!
-  - *Myth 2:* "On a front-view diagram of the heart, the left ventricle is drawn on the left-hand side of your paper." $\rightarrow$ **Truth:** Anatomical diagrams show the patient facing you! The patient's **right atrium and right ventricle** are on the viewer's **left**, and the thick-walled **left ventricle** is on the viewer's **right**.
-  - *Myth 3:* "Blood Group AB is the universal donor because it has both A and B antigens." $\rightarrow$ **Truth:** **Blood Group O** is the **universal red-cell donor** because its RBCs carry neither Antigen A nor Antigen B. **Blood Group AB** is the **universal recipient** because its plasma contains neither anti-a nor anti-b antibodies!
+## 3. Unit Welcome Hub Specification
 
----
+- **3D Hero Lab (`window.StudyLab`)**, built with the existing `heart-circulation` kit (`HeartKit` v2), three modes:
+  - `heart`: `HeartKit.heart({ mode: "both" })`, the four-chamber cut-away with blood flow; tap a part for name and job.
+  - `circuit`: `HeartKit.circuitCompare({ mode: "double" })` with a toggle to `single` (fish) and `open` (insect).
+  - `pace`: `HeartKit.heart({ mode: "pace" })`, the SAN → AVN → bundle of His → Purkinje spark; slider 60–180 bpm; HUD shows bpm, cycle time (60 ÷ bpm) and valve state.
+- **Explorer tabs (4)** with a live SVG curve: *Surface area : volume* (6/L falling as cube side grows) · *Pulse recovery* (smooth curve of heart rate against minutes after exercise) · *Pressure along the circuit* (smooth curve falling from aorta to vena cava) · *Capillary filtration* (Pc falling along a capillary against a flat πc line; the crossing point marks where filtration turns into reabsorption).
+- **6 calculation archetypes:**
+  1. SA : V of a cube, 6/L, with a unit conversion
+  2. Heart rate from a timed pulse count, and cycle time = 60 ÷ heart rate
+  3. Cardiac output = heart rate × stroke volume, cm³ → dm³
+  4. Net filtration pressure = Pc − πc at both ends of a capillary
+  5. Blood speed from flow = area × speed (aorta vs capillary bed)
+  6. Red cell count from a haemocytometer, and actual size = image ÷ magnification
+- **3 myth-buster flip cards:** "Arteries carry oxygenated blood, veins carry deoxygenated blood" (direction from the heart decides; the pulmonary pair breaks the oxygen rule) · "On a heart diagram the left ventricle is on your left" (the drawing faces you, so the patient's left is on your right) · "AB is the universal donor" (O gives to all four ABO groups; AB receives from all four).
 
-## 4. Multi-Lesson Breakdown (Lessons 01 to 05)
+## 4. Multi-Lesson Breakdown
 
-| Lesson | Title | Driving Inquiry Question | 3D Virtual Lab Bench (`bench.js`) | 3D Concept Zoom (`zoom.js`) | Spaced Retrieval (`from`) |
-|---|---|---|---|---|---|
-| **Lesson 01** | **Need for Transport: Open vs Closed & Single vs Double Circulation** | Why can't large active animals rely on simple diffusion, and why does a 4-chambered double circulation outperform open and single-circuit systems? | **3D Comparative Circulation & SA/V Scaling Bench:** Measure diffusion core starvation across cube sizes $L = 1\text{–}6\text{ mm}$ and compare flow rate & systemic pressure across Cockroach (open), Tilapia (single), and Mammal (double). | **3D Single (2-Chamber Fish) vs Double (4-Chamber Mammal) Circuit Zoom:** Live pressure-drop comparison across gill capillaries vs pulmonary + systemic loops. | Prerequisite foundations (`from: 0`) |
-| **Lesson 02** | **Structure of the Mammalian Heart & The Double-Circulation Pathway** | Why is the left ventricle wall three times thicker than the right, how do heart valves prevent backflow, and how does blood travel from the ileum to the brain? | **3D Mammalian Heart Dissector & Chamber Pressure Bench:** Measure wall thickness ($w$) and peak systolic pressure ($P$) across RA, LA, RV, and LV under normal, athletic-hypertrophy, and septal-defect conditions. | **3D Valve & Portal Pathway Zoom:** Tricuspid/Bicuspid chordae tendineae mechanics + live 3D tracer for Pulmonary, Systemic, Coronary, and Hepatic Portal routes. | Pulls 4 cards from **Lesson 01** (`from: 1`) |
-| **Lesson 03** | **Working of the Heart: Cardiac Cycle, Pacemaker (SAN/AVN), Heart Sounds & Blood Pressure** | How does the heart generate its own electrical rhythm, what causes the *"Lub-Dub"* sounds, and how do HR and SV control Cardiac Output during exercise? | **3D Cardiac Cycle, Stethoscope & Sphygmomanometer Bench:** Record Heart Rate ($\text{HR}$), Stroke Volume ($\text{SV}$), and Cardiac Output ($\text{CO} = \text{HR}\times\text{SV}$) across 5 activity levels (Sleep $\rightarrow$ Sprint) under normal, sympathetic/adrenaline, and vagal-tone conditions. | **3D Electrical Conduction & Cardiac Cycle Phase Zoom:** Live SAN $\rightarrow$ AVN $\rightarrow$ Bundle of His $\rightarrow$ Purkinje impulse wave + $0.8\text{ s}$ systole/diastole valve timing. | Pulls 4 cards from **Lessons 01–02** (`from: 1, 2`) |
-| **Lesson 04** | **Blood Vessels, Capillary Exchange, the Lymphatic System & Cardiovascular Disorders** | How are arteries, veins, and capillaries structurally adapted to their roles, and how does plasma become tissue fluid and lymph without causing oedema? | **3D Blood Vessel Hemodynamics & Capillary Ultrafiltration Bench:** Measure hydrostatic pressure ($P_c$), blood velocity, and net filtration pressure ($\text{NFP} = P_c - \pi_c$) across 5 points from Aorta $\rightarrow$ Vena Cava under normal, hypertensive, and protein-deficient (oedema) conditions. | **3D Artery vs Vein vs Capillary & Lymphatic Bed Zoom:** Tunica media/lumen cross-sections, venous pocket valves + skeletal muscle pump, and capillary-to-lymphatic fluid exchange. | Pulls 4 cards from **Lessons 01–03** (`from: 2, 3`) |
-| **Lesson 05** | **Blood Composition, Clotting Cascade, ABO/Rhesus Groups & WAEC Paper 3 Practical Clinic** | How do blood cells, clotting factors, and ABO/Rhesus antigens protect life, and how do we master WAEC Paper 3 heart specimens and biological drawings? | **3D Blood Smear Microscopy, Coagulation & ABO/Rhesus Cross-Match Bench:** Measure drawing magnification ($M = I / A$), test ABO/Rhesus donor-recipient pairs for agglutination, and audit WAEC heart drawings across 5 specimens. | **3D Erythrocyte, Leucocyte, Fibrin Clot & ABO Antigen-Antibody Zoom:** Biconcave RBC $\text{HbO}_2$ loading, thrombin-fibrin mesh formation, and Antigen-Antibody clumping vs safe transfusion. | Pulls 4 cards from **Lessons 01–04** (`from: 1, 2, 3, 4`) |
+| Lesson | Title | Driving question | 3D bench (`bench.js`) | 3D zoom (`zoom.js`) | Bridge | Retrieval |
+|---|---|---|---|---|---|---|
+| **01** | **Why Big Bodies Need a Transport System: Open, Closed, Single and Double Circulation** | An *Amoeba* has no heart, so why does Chidi need one? | Agar-cube diffusion practical: phenolphthalein-alkali agar cubes (5, 10, 20, 30 mm) in dilute acid; % volume cleared after 8 min against SA:V (`HeartKit.cube`) | `circuitCompare`: open (cockroach) → single (tilapia) → double (human); flow and pressure shown | Explain why Chidi's sprint would be impossible on diffusion or on a fish-style circuit | from: 0 (SS1 cells, diffusion, SA:V) |
+| **02** | **The Heart Up Close: Chambers, Walls, Valves and the Goat-Heart Dissection** | Baba Sule says the thick side is the right side. Who is right? | Goat-heart dissection bench (`heart`, `dissect` mode): cut, identify, measure wall thickness of RA, LA, RV, LV, septum | Valve close-up (`HeartKit.valve`): cusps opening, chordae tendineae stopping inversion; 3 vs 2 cusps | Label the goat heart correctly and settle the "thick side" argument | from: 1 |
+| **03** | **The Double Circuit: Tracing Blood Around the Body** | How does the rider's donated blood reach his brain, and why does food from the gut go to the liver first? | Route-tracer bench: tap vessels and valves in order on the 3D heart and body map (`heart`, `both` mode); wrong taps flash | Hepatic portal and coronary zoom: gut → liver capillaries → hepatic vein; aorta → coronary arteries → heart muscle | Trace drip in the rider's arm → brain, naming every valve and vessel | from: 1, 2 |
+| **04** | **The Beating Heart: Cardiac Cycle, Heart Sounds, Pacemaker, Pulse and Blood Pressure** | Why did Chidi's pulse leap to 132 and then settle again? | Pulse-rate practical: 15 s counts at rest and each minute for 5 min after 2 min of step-ups; plot recovery curve | Conduction and cycle zoom (`heart`, `pace` and `sys` modes): SAN spark, AV delay, valves opening and shutting with LUB and DUB | **Case 1 closed**: explain Chidi's readings | from: 1, 2, 3 |
+| **05** | **Arteries, Veins, Capillaries, Tissue Fluid and Lymph** | Why do Mama Bisi's ankles swell after a day of standing? | Two stations: vessel cross-section slides measured with an eyepiece graticule (`vessels`); capillary pressure probe at 5 points (`capillaryBed`) | Capillary bed: filtration out at the arterial end, return at the venous end, blind-ended lymph capillary, oedema mode | **Case 2 explained**: raised venous-end pressure and faulty valves → oedema | from: 2, 3, 4 |
+| **06** | **Blood: Plasma, Cells and Clotting** | The rider's cut finally stopped oozing. What sealed it, and what did he lose? | Blood smear and haemocytometer bench (`bloodSmear`): identify cells at ×400, count red cells in 5 squares, measure a red cell | Clotting cascade zoom (`bloodSmear` with `clot`): thromboplastin → thrombin → fibrin mesh trapping red cells | Explain the sealed wound and why the rider still needs a transfusion | from: 3, 4, 5 |
+| **07** | **Blood Groups, Rhesus, Transfusion and Disorders: Closing the Case** | Which of the six bags can save a B Rh− rider, and how great a danger is Mama Bisi's 160/100? | ABO and Rhesus typing tile: anti-A, anti-B, anti-D sera on the rider's and four donors' samples; read clumping | Antigen–antibody zoom (video kit `blood`, ABO scene, as reference; 3D: `bloodSmear` clumped vs free cells) | **Whole case file solved**: safe bags (O−, B−), hypertension advice, healthy-heart plan | from: 1, 4, 5, 6 |
 
----
+## 5. Unit Learning Objectives
 
-## 5. Unit Learning Objectives (with Bloom Level)
-
-1. **LO1 (Understand & Apply):** Explain why large multicellular animals require a specialised transport system using surface-area-to-volume ratio ($\text{SA}/\text{V} = 6/L$), and compare open vs closed and single vs double circulatory systems with named Nigerian animal examples.
-2. **LO2 (Understand & Analyse):** Identify the external and internal structures of the mammalian heart (pericardium, myocardium, endocardium, septum, 4 chambers, 4 valves, chordae tendineae, papillary muscles, and attached great vessels) and relate wall-thickness differences to pressure requirements.
-3. **LO3 (Apply & Analyse):** Trace the complete step-by-step pathway of blood through the pulmonary, systemic, coronary, and hepatic portal circulations between any two named body organs.
-4. **LO4 (Understand & Apply):** Describe the myogenic electrical conduction system of the heart ($\text{SAN} \rightarrow \text{AVN} \rightarrow \text{Bundle of His} \rightarrow \text{Purkinje fibres}$), the phases of the $0.8\text{ s}$ cardiac cycle, the origin of *"Lub"* and *"Dub"* heart sounds, and calculate Cardiac Output ($\text{CO} = \text{HR} \times \text{SV}$), cardiac period ($T = 60/\text{HR}$), Ejection Fraction ($\text{EF}$), and Pulse Pressure ($\text{PP}$).
-5. **LO5 (Analyse):** Compare the structure and function of arteries, veins, and capillaries, identify the major named arteries and veins supplying key organs, explain tissue fluid formation by ultrafiltration and lymphatic return, and analyse the causes and prevention of major cardiovascular disorders.
-6. **LO6 (Apply & Evaluate):** Describe the composition and functions of mammalian blood (plasma, erythrocytes, phagocytes, lymphocytes, platelets), explain the 4-stage enzymatic blood-clotting cascade, predict ABO and Rhesus blood transfusion compatibility, and produce WAEC-compliant biological drawings and magnification calculations ($M = I / A$).
-
----
+1. **LO1 (Understand, Apply):** Explain why large active animals need a transport system, using SA:V calculations, and list the materials blood carries.
+2. **LO2 (Analyse):** Compare open and closed, and single and double, circulation with named animals, and state the advantages of double circulation.
+3. **LO3 (Remember, Understand):** Name and locate the coverings, chambers, septum, valves, chordae tendineae and great vessels of the mammalian heart, and relate wall thickness to the distance blood is pumped.
+4. **LO4 (Apply):** Draw and label a longitudinal section of the heart to WAEC rules and calculate drawing magnification and actual size.
+5. **LO5 (Apply, Analyse):** Trace the pulmonary, systemic, hepatic portal and coronary routes, and any organ-to-organ journey, naming every valve and vessel.
+6. **LO6 (Understand, Apply):** Describe the cardiac cycle, the heart sounds and the conducting system; calculate heart rate, cycle time and cardiac output; explain pulse, blood pressure and factors changing heart rate.
+7. **LO7 (Analyse):** Tabulate differences between arteries, veins and capillaries; explain tissue fluid formation with net filtration pressure, and the roles of the lymphatic system.
+8. **LO8 (Understand, Apply):** Describe the composition of blood, the structure and functions of each cell type and the clotting sequence; calculate cell counts and sizes.
+9. **LO9 (Apply, Evaluate):** Predict ABO and Rhesus compatibility, explain haemolytic disease of the newborn, and give cause, symptom and prevention for major circulatory disorders.
 
 ## 6. Prerequisites & Spaced Retrieval Matrix
 
-| Target Lesson | Prerequisite / Earlier Lesson Retrieved (`retrieval-bank.js`) | Key Retrieval Concepts |
+| Lesson | Retrieves from | Key retrieval points |
 |---|---|---|
-| **Lesson 01** | SS1 Cell Structure & Diffusion (`from: 0`) | Diffusion definition, selective permeability, cell-to-system hierarchy, aerobic respiration demand for $\text{O}_2$ and glucose. |
-| **Lesson 02** | Lesson 01 (`from: 1`) | $\text{SA}/\text{V} = 6/L$ scaling, open vs closed circulation (haemocoel vs vessels), single vs double circulation, $\text{CO} = \text{HR} \times \text{SV}$. |
-| **Lesson 03** | Lessons 01–02 (`from: 1, 2`) | Left vs right ventricle wall thickness, tricuspid vs bicuspid valves & chordae tendineae, pulmonary artery/vein exception, hepatic portal vein route. |
-| **Lesson 04** | Lessons 02–03 (`from: 2, 3`) | $\text{SAN} \rightarrow \text{AVN} \rightarrow \text{Bundle of His} \rightarrow \text{Purkinje}$ pathway, *"Lub"* vs *"Dub"* valve closures, $\text{CO} = \text{HR} \times \text{SV}$, systolic/diastolic blood pressure ($120/80\text{ mmHg}$). |
-| **Lesson 05** | Lessons 01–04 (`from: 1, 2, 3, 4`) | Artery vs vein vs capillary structure, renal/hepatic/carotid vessels, capillary ultrafiltration & lymph return to subclavian vein, hypertension & sickle-cell anaemia. |
+| 01 | Prerequisites (from: 0) | Diffusion and what drives it; SA:V = 6/L from SS1; aerobic respiration needs oxygen and glucose; mm ↔ cm ↔ m. |
+| 02 | Lesson 01 | Why diffusion fails in big bodies; open vs closed; single vs double; what blood carries. |
+| 03 | Lessons 01–02 | Four chambers and what each receives and sends; four valves and their sides; thick LV and why. |
+| 04 | Lessons 01–03 | Pulmonary and systemic routes; the pulmonary vessel exceptions; valve positions; chordae tendineae. |
+| 05 | Lessons 02–04 | Why the LV is thick; pulse as the artery's stretch and recoil; 120/80 mmHg; hepatic portal vein. |
+| 06 | Lessons 03–05 | Capillaries as the exchange site; tissue fluid lacks red cells and most proteins; lymph returns to the subclavian vein; route questions. |
+| 07 | Lessons 01, 04–06 | Plasma proteins (antibodies); clotting vs clumping; blood pressure and heart rate; functions of blood. |
 
----
+## 7. Transversal Competences (L1–L7)
 
-## 7. Transversal Competences (`L1`–`L7`)
-
-- **L1 (Thinking and learning to learn):** Connecting physical scaling laws ($\text{SA}/\text{V} = 6/L$, pressure-flow mechanics, and net filtration pressure $\text{NFP} = P_c - \pi_c$) to biological anatomy.
-- **L3 (Managing daily life and safety):** First-aid bleeding control, blood pressure awareness ($120/80\text{ mmHg}$), genotype/Rhesus counselling before marriage and childbirth, and safe screened blood transfusion practices.
-- **L4 (Multiliteracy):** Reading ECG/pacemaker waves, Wiggers pressure curves, ABO cross-match matrices, vessel histological cross-sections, and WAEC biological drawing conventions.
-- **L5 (Digital and simulation competence):** Manipulating 3D interactive heart chambers, valve cycles, capillary beds, and haemocytometer slides across 5 virtual lab benches.
-- **L6 (Working-life skills and entrepreneurship):** Connecting secondary-school Biology to clinical careers in cardiology, nursing, medical laboratory science, and haematology at Nigerian teaching hospitals (LUTH, UCH, UNTH, ABUTH).
-
----
+- **L1** thinking and learning to learn: predicting pulse, cube and filtration results before testing them; correcting Baba Sule's claims with evidence.
+- **L3** managing daily life and safety: safe dissection and lancet use, first aid for bleeding, blood screening, healthy heart habits, genotype and Rhesus awareness.
+- **L4** multiliteracy: heart diagrams in front view, cross-sections, pulse and pressure graphs, typing tiles, examiner drawing rules.
+- **L5** digital and simulation competence: 3D heart, valve, capillary and blood benches.
+- **L6** working-life skills: careers in nursing, medical laboratory science, cardiology and blood banking at Nigerian teaching hospitals.
+- **L7** building a sustainable future: voluntary blood donation, community screening days, salt-light diets.
 
 ## 8. Exam Emphasis & Chief Examiner Traps
 
-1. **Right vs Left on Heart Diagrams:** In a ventral (front) view of the mammalian heart, the right atrium and right ventricle are on the **left side of the page**, and the left atrium and left ventricle are on the **right side of the page**. Swapping them loses all label marks.
-2. **Tricuspid vs Bicuspid ("Right = tRi"):** Candidates frequently swap the atrioventricular valves. **Tricuspid** is on the **right** ($\text{RA} \rightarrow \text{RV}$); **Bicuspid (Mitral)** is on the **left** ($\text{LA} \rightarrow \text{LV}$).
-3. **Defining Arteries and Veins:** Never define an artery as *"a vessel that carries oxygenated blood"*. Define an **artery** as a vessel that carries blood **away from the heart**, and a **vein** as a vessel that carries blood **toward the heart**, then state the pulmonary exceptions.
-4. **Skipping the Lungs or Liver in Pathway Questions:** Any blood pathway from one systemic organ (e.g., ileum or kidney) to another systemic organ (e.g., brain or leg) **must** pass through the right side of the heart $\rightarrow$ **lungs** $\rightarrow$ left side of the heart. Blood leaving the stomach/intestines **must** first pass through the **hepatic portal vein** to the **liver** before entering the hepatic vein and inferior vena cava.
-5. **Clotting vs Agglutination:** Blood **clotting** (coagulation) is the conversion of soluble plasma **fibrinogen** into insoluble **fibrin** threads via thromboplastin, $\text{Ca}^{2+}$, Vitamin K, and thrombin. **Agglutination** is the antigen-antibody clumping of red blood cells in an incompatible blood transfusion. Never confuse the two!
-6. **WAEC Paper 3 Drawing Rules:** Drawings must have a capitalised title underneath (e.g., *DIAGRAM OF THE LONGITUDINAL SECTION OF THE MAMMALIAN HEART*), continuous sharp pencil outlines, zero shading, horizontal ruled label lines that never cross and have **no arrowheads**, a visibly thicker left ventricular wall, and stated magnification ($M = \times 1\text{ to }\times 2$).
-
----
+1. **Sides on the diagram.** In front view the patient's right is on the reader's left. The right atrium and right ventricle are drawn on the left of the page; the thick left ventricle is on the right.
+2. **Valve names.** Tricuspid on the right (memory hook "tRi = Right"), bicuspid (mitral) on the left, semilunar valves at the bases of the aorta and pulmonary artery. Swapping them is the commonest lost mark.
+3. **Artery and vein defined by direction**, not oxygen. A full answer names the exceptions: the pulmonary artery carries deoxygenated blood; the pulmonary veins carry oxygenated blood.
+4. **Route questions must pass the lungs.** Any journey from one body organ to another goes right half of the heart → lungs → left half. Blood from the gut goes to the liver by the hepatic portal vein first, never straight to the heart.
+5. **"Differences" questions** are answered in a matched two-column table, one feature per row, both columns filled.
+6. **Universal donor and recipient.** O is the universal donor; AB is the universal recipient. Rhesus trouble in pregnancy needs an Rh− mother and an Rh+ baby.
+7. **Clotting is not clumping.** Clotting turns fibrinogen into fibrin threads at a wound; agglutination is red cells clumping when an antigen meets the antibody that fits it.
+8. **Heart sounds.** "Lub" is the atrioventricular valves closing; "dub" is the semilunar valves closing. Neither is the sound of a chamber contracting.
+9. **Drawing rules.** Title in capitals, at least half a page, clean unshaded lines, ruled horizontal label lines without arrowheads, thicker left ventricle wall, flow arrows only inside the heart.
 
 ## 9. Known Misconceptions
 
-| Student Misconception | Scientific Reality Taught in Unit |
+| Misconception | What the unit teaches instead |
 |---|---|
-| "The heart muscle gets its oxygen directly from the blood inside its four chambers." | The myocardium is too thick for diffusion from the chambers; it receives oxygenated blood via the **coronary arteries** branching off the base of the aorta. |
-| "The brain initiates every single heartbeat via nerves." | Cardiac muscle is **myogenic** — the **Sinoatrial Node (SAN)** initiates each beat autonomously; nerves and adrenaline only speed up or slow down the rate. |
-| "Tissue fluid, lymph, and blood plasma are identical." | Red blood cells and most large plasma proteins remain inside capillaries; tissue fluid and lymph lack erythrocytes and have very low plasma protein concentration. |
-| "An $\text{Rh}^+$ mother carrying an $\text{Rh}^-$ baby causes haemolytic disease of the newborn." | Erythroblastosis foetalis occurs when an **$\text{Rh}^-$ mother** is sensitised by an **$\text{Rh}^+$ foetus** and produces anti-Rh (anti-D) antibodies that cross the placenta in a subsequent $\text{Rh}^+$ pregnancy. |
+| Arteries carry oxygenated blood and veins carry deoxygenated blood. | Direction from the heart decides; the pulmonary artery and veins break the oxygen pattern. |
+| Blood in veins is blue. | Deoxygenated blood is dark red; veins look blue through skin because of how light passes through tissue. |
+| The brain starts every heartbeat. | Heart muscle is myogenic: the SAN starts each beat; nerves and adrenaline only change the rate. |
+| The heart muscle feeds on the blood inside its chambers. | It is supplied by the coronary arteries, the first branches of the aorta. |
+| The right side of the heart is thicker because it does more work. | The left ventricle is about three times thicker because it pumps to the whole body; the right only pumps to the lungs. |
+| Fish blood goes round the heart two times per lap. | Fish have single circulation: heart → gills → body → heart. |
+| Tissue fluid, lymph and plasma are the same thing. | Tissue fluid and lymph lack red cells and most plasma proteins; lymph carries many lymphocytes and, after a meal, fats. |
+| AB is the universal donor. | O is the universal donor; AB is the universal recipient. |
+| An Rh+ mother with an Rh− baby is at risk. | The risk is an Rh− mother carrying an Rh+ baby, usually in a later pregnancy. |
 
----
+## 10. Sources Consulted (paraphrased)
 
-## 10. Sources Consulted (Paraphrased)
-
-- Uploaded study guide in `topics/ss2-bio-heart-circulation/sources/` (*The Human Heart and Blood Circulation — WAEC, NECO & JAMB Study Guide*, read for syllabus scope and recurring question patterns only; 100% paraphrased).
-- Official WAEC SSCE, NECO SSCE, and JAMB UTME Biology syllabuses and Chief Examiners' Reports on mammalian transport, heart anatomy, blood vessels, blood groups, and Paper 3 practical conventions.
+- `sources/The Human Heart and Blood Circulation — WAEC, NECO & JAMB Study Guide.pdf`: syllabus summary for the three boards, core notes, a recurring-question bank and JAMB-style items. Read for scope and examiner expectations only; nothing is copied, and every scenario, number and question in this unit is new.
+- Standard physiology teaching values not in the source (capillary flow speed about 0.03–0.04 cm/s, roughly a thousand times slower than in the aorta; capillary hydrostatic pressures near 35 → 15 mmHg against a plasma protein osmotic pressure near 25 mmHg). The exact figures used (0.035 cm/s; 36 and 16 mmHg for a skeletal-muscle bed) are approximate textbook teaching values.

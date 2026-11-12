@@ -1,162 +1,137 @@
-/* Lesson 02 · EMF, Terminal P.D., Lost Volts & Internal Resistance — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 02 · EMF, Terminal P.D., Lost Volts & Internal Resistance
+   — sort cards (EMF / terminal p.d. / lost volts), load-explorer pins, bridge answers,
+   and the 12 quiz questions (03-questions.md § Lesson 02 Part 1 → window.LESSON_QUIZ, keys unchanged). */
 (function () {
   "use strict";
 
-  window.L01 = {
-    // ---- 1. EMF, Terminal P.D. & Lost Volts Sort items ----
+  window.L02 = {
+    // ---- 2A sort: EMF or terminal p.d.? (3 bins, 9 cards) ----
+    bins: {
+      emf: "EMF (E)",
+      "terminal-pd": "Terminal p.d. (V)",
+      "lost-volts": "Lost volts (Ir)"
+    },
     items: [
-      { id: "emf_def", name: "Total electrical energy supplied per coulomb by the source (W_total / Q)", emo: "⚡", bin: "shm", why: "Electromotive force (E) is the total energy supplied per unit charge around the entire circuit (inside + outside)." },
-      { id: "open_v", name: "Voltmeter reading across cell terminals when the plug key is OPEN (I = 0)", emo: "🔓", bin: "shm", why: "When current I = 0, lost volts Ir = 0, so terminal p.d. equals the open-circuit EMF (V = E)." },
-      { id: "v_int", name: "Vertical axis intercept on a graph of Terminal P.D. (V) against Current (I)", emo: "📈", bin: "shm", why: "In V = −rI + E, the vertical intercept at I = 0 gives the electromotive force E." },
-      { id: "pot_null", name: "Voltage measured by a potentiometer at the null balance point (I_g = 0)", emo: "🎯", bin: "shm", why: "Because zero current is drawn at null balance, no voltage is dropped across r and true EMF E is measured." },
-      { id: "term_pd", name: "Potential difference V = IR across the external load resistor R when key is CLOSED", emo: "💡", bin: "periodic", why: "Terminal potential difference V is the useful energy per coulomb delivered to the external circuit (V = E − Ir)." },
-      { id: "closed_v", name: "Reading of 8.4 V across Chinedu's 12.0 V battery while cranking a 2.8 Ω starter", emo: "🚗", bin: "periodic", why: "Under a 3.0 A load, 3.6 V is lost inside the battery (Ir), leaving a terminal p.d. of V = 8.4 V." },
-      { id: "ext_work", name: "Useful electrical work done per coulomb outside the battery terminals", emo: "🔌", bin: "periodic", why: "Terminal p.d. V measures work done per unit charge in the external load R only." },
-      { id: "eff_num", name: "Numerator V in the cell efficiency formula η = (V ÷ E) × 100%", emo: "📊", bin: "periodic", why: "Cell efficiency is the ratio of useful terminal voltage V = IR to total EMF E = I(R + r)." },
-      { id: "lost_v", name: "Potential drop v = Ir dissipated as heat inside the battery electrolyte", emo: "🔥", bin: "non", why: "Lost volts (v = Ir) is the potential difference wasted overcoming the cell's internal resistance r." },
-      { id: "electrolyte", name: "Opposition to ion flow offered by the acid and plates inside the cell (r)", emo: "🧪", bin: "non", why: "Internal resistance r arises from the finite ionic conductivity of the electrolyte and electrodes." },
-      { id: "slope_vi", name: "Magnitude of the negative gradient (−ΔV / ΔI) of a V-against-I cell graph", emo: "📐", bin: "non", why: "From V = −rI + E, the slope of V against I is −r, so the magnitude of the slope equals internal resistance r." },
-      { id: "two_read", name: "Unknown r solved from I₁(R₁ + r) = I₂(R₂ + r) using two external resistors", emo: "🧮", bin: "non", why: "Equating E for two different loads directly yields the internal resistance r of the cell." }
+      { id: "open-read", name: "A voltmeter across a cell with the key open", bin: "emf", emo: "🔌", why: "No current flows, so V = E − Ir = E: the open-circuit reading is the EMF." },
+      { id: "energy-coulomb", name: "The total energy given to each coulomb by the cell", bin: "emf", emo: "⚡", why: "That is the definition of the EMF: energy per coulomb for the whole circuit." },
+      { id: "starter-read", name: "The voltmeter reading while the starter runs", bin: "terminal-pd", emo: "📟", why: "A current is flowing, so the terminals show V = E − Ir, less than E." },
+      { id: "ir-external", name: "The I R across the external load", bin: "terminal-pd", emo: "💡", why: "The p.d. shared out to the outside circuit is the terminal p.d., V = IR." },
+      { id: "ir-inside", name: "The I r drop across the cell's inside", bin: "lost-volts", emo: "🔥", why: "The volts used up on the internal resistance are the lost volts, Ir." },
+      { id: "warm-cell", name: "The reason a battery warms under heavy load", bin: "lost-volts", emo: "🌡️", why: "Energy I²r is spent inside the cell on its internal resistance: lost volts at work." },
+      { id: "never-changes", name: "The number that never changes as the load changes", bin: "emf", emo: "🔒", why: "For a given cell the EMF is fixed by its chemistry; only V and Ir change with load." },
+      { id: "shrinks", name: "What gets smaller as you draw more current", bin: "terminal-pd", emo: "📉", why: "Larger I means larger Ir, so the terminal p.d. V = E − Ir falls." },
+      { id: "the-gap", name: "The gap between 12.0 V and 8.4 V here", bin: "lost-volts", emo: "➖", why: "E − V = 12.0 − 8.4 = 3.6 V, the lost volts dropped inside Emeka's battery." }
     ],
 
-    // ---- 2. 3D Internal Resistance Practical trials (Cell E = 12.0 V, r = 1.20 Ω) ----
-    // L = External Load R (Ω), t = Current I (A), T = Terminal P.D. V (V), T2 = Lost Volts v = Ir (V)
-    trials: [
-      { label: "A", L: 10.8, t: "1.00", T: "10.80", T2: "1.20" },
-      { label: "B", L: 6.8,  t: "1.50", T: "10.20", T2: "1.80" },
-      { label: "C", L: 4.8,  t: "2.00", T: "9.60",  T2: "2.40" },
-      { label: "D", L: 3.6,  t: "2.50", T: "9.00",  T2: "3.00" },
-      { label: "E", L: 2.8,  t: "3.00", T: "8.40",  T2: "3.60" }
-    ],
-    tOptions: ["1.00", "1.50", "2.00", "2.50", "3.00"],
-    TOptions: ["8.40", "9.00", "9.60", "10.20", "10.80"],
-    T2Options: ["1.20", "1.80", "2.40", "3.00", "3.60"],
-
-    // ---- 3. Load Current & Terminal Voltage Explorer pins (E = 12.0 V, r = 1.2 Ω) ----
+    // ---- load explorer (#pos-explorer): fixed cell E = 6.0 V, r = 1.5 Ω; pins are external loads ----
+    cell: { E: 6.0, r: 1.5 },
     pins: [
-      { frac: -1.0, label: "Open Circuit", emo: "🔓", x: "I = 0.00 A (R = ∞)", v: "V = 12.00 V (= E)", a: "v = 0.00 V (Zero loss)", ke: "100% E", pe: "0% Lost", note: "With the switch open, zero current flows through r. Lost volts Ir = 0, so the voltmeter reads the full EMF E = 12.0 V!" },
-      { frac: -0.5, label: "Light Load", emo: "💡", x: "I = 1.00 A (R = 10.8 Ω)", v: "V = 10.80 V", a: "v = 1.20 V", ke: "90% V", pe: "10% Lost", note: "At 1.0 A, only 1.0 × 1.2 = 1.2 V is lost inside the cell, leaving 10.8 V across the external load." },
-      { frac: 0.0,  label: "Medium Load", emo: "🎯", x: "I = 2.00 A (R = 4.8 Ω)", v: "V = 9.60 V", a: "v = 2.40 V", ke: "80% V", pe: "20% Lost", note: "Doubling current to 2.0 A doubles the internal voltage drop Ir to 2.40 V, pulling terminal voltage down to 9.60 V." },
-      { frac: 0.5,  label: "Starter Load", emo: "🚗", x: "I = 3.00 A (R = 2.8 Ω)", v: "V = 8.40 V", a: "v = 3.60 V", ke: "70% V", pe: "30% Lost", note: "Chinedu's Aba Workshop case! At I = 3.0 A, v = 3.0 × 1.2 = 3.6 V is lost inside the battery, leaving V = 8.4 V." },
-      { frac: 1.0,  label: "Short Circuit!", emo: "⚠️", x: "I_max = 10.0 A (R = 0 Ω)", v: "V = 0.00 V", a: "v = 12.00 V (All heat!)", ke: "0% V", pe: "100% Lost!", note: "If the terminals are shorted (R = 0), current surges to I_max = E/r = 12.0/1.2 = 10.0 A and all 12.0 V is dissipated as dangerous heat inside the battery!" }
-    ]
+      { key: "open", label: "Open", R: null },
+      { key: "6", label: "6 Ω", R: 6 },
+      { key: "3", label: "3 Ω", R: 3 },
+      { key: "2", label: "2 Ω", R: 2 },
+      { key: "1", label: "1 Ω", R: 1 }
+    ],
+
+    // ---- bridge (#bridge): rebuild Emeka's circuit ----
+    bridge: {
+      answers: { open: "emf", drop: "inside", left: "8_4" },
+      preset: "keke"   // E = 12.0 V, r = 1.2 Ω, R = 2.8 Ω → I 3.0 A, lost 3.6 V, V 8.4 V
+    }
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
   window.LESSON_QUIZ = [
     {
-      q: "Why is the <strong>terminal potential difference (V)</strong> of a cell less than its <strong>electromotive force (E)</strong> whenever current is being drawn from the cell?",
+      q: "Which statement best describes the electromotive force (EMF) of a cell?",
       o: [
-        "Because part of the EMF is used up in overcoming the internal resistance r of the cell (lost volts = Ir)",
-        "Because the external resistor creates extra charge",
-        "Because the ammeter absorbs all the voltage",
-        "Because EMF only exists in alternating current circuits"
-      ],
-      a: 0,
-      e: "When current <strong>I</strong> flows, energy per coulomb <strong>v = Ir</strong> is lost as heat inside the electrolyte, leaving <strong>V = E − Ir</strong> for the external load.",
-      src: "WAEC-style"
-    },
-    {
-      q: "An accumulator of EMF <strong>12.0 V</strong> and internal resistance <strong>1.2 Ω</strong> is connected to a starter load of resistance <strong>2.8 Ω</strong>. What are the current I and terminal p.d. V?",
-      o: [
-        "I = 3.0 A, V = 8.4 V",
-        "I = 4.29 A, V = 12.0 V",
-        "I = 3.0 A, V = 3.6 V",
-        "I = 10.0 A, V = 8.4 V"
-      ],
-      a: 0,
-      e: "Current <strong>I = E ÷ (R + r) = 12.0 ÷ (2.8 + 1.2) = 12.0 ÷ 4.0 = 3.0 A</strong>. Terminal p.d. <strong>V = IR = 3.0 × 2.8 = 8.4 V</strong> (or 12.0 − 3.0×1.2 = 8.4 V).",
-      src: "WAEC-style"
-    },
-    {
-      q: "A cell supplies a current of <strong>0.80 A</strong> when connected to a <strong>4.0 Ω</strong> resistor, and a current of <strong>0.50 A</strong> when connected to a <strong>7.0 Ω</strong> resistor. Calculate the internal resistance <strong>r</strong> of the cell.",
-      o: ["1.0 Ω", "0.50 Ω", "1.5 Ω", "2.0 Ω"],
-      a: 0,
-      e: "Using <strong>I₁(R₁ + r) = I₂(R₂ + r)</strong>: <strong>0.80(4.0 + r) = 0.50(7.0 + r) ⇒ 3.2 + 0.80r = 3.5 + 0.50r ⇒ 0.30r = 0.30 ⇒ r = 1.0 Ω</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "For the cell in Question 3 (which supplies <strong>0.80 A</strong> to a <strong>4.0 Ω</strong> resistor and has internal resistance <strong>r = 1.0 Ω</strong>), what is its electromotive force <strong>E</strong>?",
-      o: ["3.2 V", "4.0 V", "3.5 V", "5.0 V"],
-      a: 1,
-      e: "Substitute r = 1.0 Ω into <strong>E = I₁(R₁ + r) = 0.80 × (4.0 + 1.0) = 0.80 × 5.0 = 4.0 V</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "A battery of EMF <strong>6.0 V</strong> has an internal resistance of <strong>0.40 Ω</strong>. What is the <strong>maximum (short-circuit) current</strong> it can deliver if its terminals are shorted by a thick copper bar of negligible resistance?",
-      o: ["2.4 A", "15.0 A", "6.4 A", "0.067 A"],
-      a: 1,
-      e: "On a short circuit, external resistance <strong>R = 0</strong>, so <strong>I<sub>max</sub> = E ÷ r = 6.0 ÷ 0.40 = 15.0 A</strong>.",
-      src: "NECO-style"
-    },
-    {
-      q: "A student plots a graph of terminal potential difference <strong>V (vertical axis)</strong> against current <strong>I (horizontal axis)</strong> for a dry cell. Which statement correctly describes the graph?",
-      o: [
-        "A straight line through the origin with positive slope r",
-        "A downward-sloping straight line with vertical intercept equal to E and gradient equal to −r",
-        "A parabola curving upward",
-        "A horizontal line at V = 0"
-      ],
-      a: 1,
-      e: "Comparing <strong>V = −rI + E</strong> with <strong>y = mx + c</strong> shows that the vertical intercept (c) is <strong>E</strong> and the gradient (m) is <strong>−r</strong>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "A cell of EMF <strong>1.5 V</strong> reads <strong>1.2 V</strong> on a high-resistance voltmeter when delivering a current of <strong>0.60 A</strong> to a torch bulb. What are the <strong>lost volts</strong> and the <strong>internal resistance r</strong>?",
-      o: [
-        "Lost volts = 0.30 V, r = 0.50 Ω",
-        "Lost volts = 1.20 V, r = 2.00 Ω",
-        "Lost volts = 0.30 V, r = 2.50 Ω",
-        "Lost volts = 2.70 V, r = 0.50 Ω"
-      ],
-      a: 0,
-      e: "Lost volts <strong>v = E − V = 1.5 − 1.2 = 0.30 V</strong>. Since <strong>v = Ir</strong>, internal resistance <strong>r = 0.30 ÷ 0.60 = 0.50 Ω</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "A cell supplies a current of <strong>0.60 A</strong> through a <strong>2.0 Ω</strong> coil and <strong>0.30 A</strong> through a <strong>5.0 Ω</strong> coil. What is the EMF of the cell?",
-      o: ["1.8 V", "1.5 V", "1.2 V", "3.0 V"],
-      a: 0,
-      e: "First find r: <strong>0.60(2.0 + r) = 0.30(5.0 + r) ⇒ 1.2 + 0.6r = 1.5 + 0.3r ⇒ 0.3r = 0.3 ⇒ r = 1.0 Ω</strong>. Then <strong>E = 0.60(2.0 + 1.0) = 1.8 V</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "On a graph of terminal voltage <strong>V</strong> against current <strong>I</strong> for a cell, the vertical intercept is <strong>6.0 V</strong> and the horizontal intercept (where V = 0) is <strong>4.0 A</strong>. What is the internal resistance r of the cell?",
-      o: ["1.5 Ω", "0.67 Ω", "24.0 Ω", "2.0 Ω"],
-      a: 0,
-      e: "Magnitude of gradient <strong>r = E ÷ I<sub>max</sub> = 6.0 ÷ 4.0 = 1.5 Ω</strong>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "Under what condition is the terminal potential difference <strong>V</strong> across a cell <em>greater</em> than its EMF <strong>E</strong> (V = E + Ir)?",
-      o: [
-        "When the cell is being charged by an external DC charger forcing current backwards into the positive terminal",
-        "When the cell is on open circuit",
-        "When the cell is short-circuited",
-        "When the cell is completely flat"
-      ],
-      a: 0,
-      e: "During <strong>charging</strong>, the external charger must overcome both the cell's EMF <strong>E</strong> and its internal voltage drop <strong>Ir</strong>, so terminal voltage is <strong>V = E + Ir</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Which factor inside a chemical cell increases its internal resistance <strong>r</strong>?",
-      o: [
-        "Decreasing the distance between the electrodes",
-        "Increasing the submerged surface area of the plates",
-        "Polarisation (gas bubbles covering the electrode) or drying/sulphation of the electrolyte",
-        "Using a more conductive electrolyte"
+        "The p.d. across the cell's terminals while it is driving a current",
+        "The energy wasted inside the cell for each coulomb that passes through it",
+        "The total energy the cell gives to each coulomb of charge driven round the whole circuit",
+        "The current the cell supplies for each ohm of external resistance"
       ],
       a: 2,
-      e: "Gas bubbles on the plate (polarisation), smaller plate area, wider plate separation, or depleted electrolyte all increase internal resistance <strong>r</strong>.",
-      src: "NECO-style"
+      e: "EMF is the full energy per coulomb the source supplies to the complete circuit, inside and outside; it equals the terminal reading only when no current flows. A describes the terminal p.d. (V = E − Ir), which is less than the EMF once current flows. B describes the lost volts (Ir), only the internal share. D mixes up Ohm's law: current per ohm is not an energy per coulomb."
     },
     {
-      q: "A cell of EMF <strong>E = 3.0 V</strong> and internal resistance <strong>r = 0.50 Ω</strong> is connected to a resistor of <strong>R = 2.50 Ω</strong>. What fraction of the total energy supplied by the cell is wasted inside the cell?",
-      o: ["1/6 (16.7%)", "5/6 (83.3%)", "1/5 (20.0%)", "1/2 (50.0%)"],
+      q: "Before switching on the starter, Chinedu clips a high-resistance voltmeter across Emeka's resting battery. Why does this reading equal the battery's EMF?",
+      o: [
+        "Almost no current flows, so the lost volts Ir inside the battery are practically zero",
+        "The battery's internal resistance disappears while the key is open",
+        "The voltmeter adds its own EMF to the battery's terminal p.d.",
+        "The battery's EMF rises whenever no current is being drawn"
+      ],
       a: 0,
-      e: "Fraction wasted internally is <strong>r ÷ (R + r) = 0.50 ÷ (2.50 + 0.50) = 0.50 ÷ 3.00 = 1/6 ≈ 16.7%</strong>.",
-      src: "JAMB-style"
+      e: "With (nearly) zero current, V = E − Ir = E − 0 = E, so the terminals show the full EMF. B is wrong: r belongs to the electrolyte and plates and is always there; what vanishes is the current through it. C is wrong: a voltmeter is not a source and adds no EMF. D is wrong: the EMF is fixed by the cell's chemistry; it is the terminal p.d., not the EMF, that changes with current."
+    },
+    {
+      q: "Emeka's battery (EMF 12.0 V, internal resistance 1.2 Ω) is connected to his 4.8 Ω headlamp alone. What does a voltmeter across the battery terminals read?",
+      o: ["12.0 V", "2.4 V", "9.0 V", "9.6 V"],
+      a: 3,
+      e: "I = E/(R + r) = 12.0 ÷ (4.8 + 1.2) = 12.0 ÷ 6.0 = 2.0 A. Lost volts = Ir = 2.0 × 1.2 = 2.4 V, so V = E − Ir = 12.0 − 2.4 = 9.6 V (check: V = IR = 2.0 × 4.8 = 9.6 V). A ignores the internal resistance. B is the lost volts, not the terminal p.d. C found the current as E/R = 2.5 A (forgot to add r), then subtracted 2.5 × 1.2."
+    },
+    {
+      q: "A battery of EMF 9.0 V and internal resistance 0.50 Ω drives a current through a 4.0 Ω resistor. What are the lost volts?",
+      o: ["8.0 V", "1.0 V", "1.125 V", "4.5 V"],
+      a: 1,
+      e: "I = E/(R + r) = 9.0 ÷ 4.5 = 2.0 A; lost volts = Ir = 2.0 × 0.50 = 1.0 V. A (8.0 V) is the terminal p.d. IR, the useful part. C found I = E/R = 2.25 A (forgot the internal resistance), then multiplied by r. D multiplied the EMF by r (9.0 × 0.50), skipping the current."
+    },
+    {
+      q: "A radio battery of EMF 4.5 V drives a current of 0.60 A through a 6.5 Ω resistor. What is its internal resistance?",
+      o: ["7.5 Ω", "0.60 Ω", "14 Ω", "1.0 Ω"],
+      a: 3,
+      e: "E = I(R + r), so R + r = E/I = 4.5 ÷ 0.60 = 7.5 Ω and r = 7.5 − 6.5 = 1.0 Ω. (Or: terminal p.d. = 0.60 × 6.5 = 3.9 V, lost volts = 0.60 V, r = 0.60 ÷ 0.60 = 1.0 Ω.) A is the total resistance E/I: the external 6.5 Ω was not subtracted. B is the lost volts written as a resistance, without dividing by the current. C added R instead of subtracting it."
+    },
+    {
+      q: "With a variable load, a cell's terminal p.d. is 1.40 V when the current is 0.20 A, and 1.10 V when the current is 0.80 A. What are its EMF and internal resistance?",
+      o: ["1.40 V and 0.50 Ω", "1.50 V and 2.0 Ω", "1.50 V and 0.50 Ω", "1.25 V and 0.50 Ω"],
+      a: 2,
+      e: "V = E − Ir, so r = −ΔV/ΔI = (1.40 − 1.10) ÷ (0.80 − 0.20) = 0.30 ÷ 0.60 = 0.50 Ω, and E = V + Ir = 1.40 + 0.20 × 0.50 = 1.50 V (check: 1.10 + 0.80 × 0.50 = 1.50 V). A takes the first terminal reading as the EMF, forgetting that a current was already flowing. B used ΔI/ΔV, the gradient upside down. D averaged the two terminal readings."
+    },
+    {
+      q: "Chinedu's V–I graph for a cell (V vertical, I horizontal) is a straight line that cuts the V axis at 3.0 V and the I axis at 4.0 A. What are the cell's EMF and internal resistance?",
+      o: ["3.0 V and 0.75 Ω", "4.0 V and 0.75 Ω", "3.0 V and 1.33 Ω", "3.0 V and 12 Ω"],
+      a: 0,
+      e: "The vertical intercept (I = 0) is the EMF, E = 3.0 V. The magnitude of the gradient is r = 3.0 V ÷ 4.0 A = 0.75 Ω; the I-axis intercept is the short-circuit current, where V = 0 and E = Ir. B read the wrong axis for the EMF. C used ΔI/ΔV, inverted. D multiplied the intercepts instead of dividing them."
+    },
+    {
+      q: "Nkechi reduces the load resistance connected to a battery step by step, so that the battery supplies more and more current. What happens to its terminal p.d.?",
+      o: [
+        "It rises, because more current is flowing",
+        "It falls, because the larger current makes the lost volts Ir larger",
+        "It stays equal to the EMF, because the EMF of the battery is constant",
+        "It falls, because the EMF of the battery falls as the load gets heavier"
+      ],
+      a: 1,
+      e: "V = E − Ir with E and r fixed, so as I grows the internal drop Ir grows and V falls; this is the straight, downward-sloping V–I line. A assumes 'more current, more voltage', which is true for a fixed resistor, not for a cell's terminals. C confuses a constant EMF with a constant terminal p.d.; they are equal only when I = 0. D blames the EMF, which does not change with load: that is Tobe's mistake."
+    },
+    {
+      q: "A month later Emeka's battery still has an EMF of 12.0 V, but when it drives the same 2.8 Ω starter the terminal p.d. is only 7.0 V. What is its internal resistance now?",
+      o: ["1.2 Ω", "2.8 Ω", "2.0 Ω", "4.8 Ω"],
+      a: 2,
+      e: "I = V/R = 7.0 ÷ 2.8 = 2.5 A; lost volts = E − V = 12.0 − 7.0 = 5.0 V; r = 5.0 ÷ 2.5 = 2.0 Ω (check: 2.5 × (2.8 + 2.0) = 12.0 V). A repeats last month's value. B gives the starter's own resistance. D is E/I = 4.8 Ω, the total circuit resistance: the external 2.8 Ω was not subtracted."
+    },
+    {
+      q: "A 24 V battery bank of internal resistance 0.50 Ω supplies a 5.5 Ω motor. At what rate is energy wasted as heat inside the bank?",
+      o: ["88 W", "96 W", "2.0 W", "8.0 W"],
+      a: 3,
+      e: "I = E/(R + r) = 24 ÷ 6.0 = 4.0 A; power wasted inside = I²r = 4.0² × 0.50 = 8.0 W. A (88 W) is I²R, the power delivered to the motor. B (96 W) is EI, the total power the bank supplies. C (2.0 W) is Ir written as watts: the student forgot to multiply by the current once more."
+    },
+    {
+      q: "A torch cell drives 0.30 A through a 4.5 Ω bulb and 0.50 A through a 2.5 Ω bulb. Assuming the bulbs keep these resistances, what are the cell's internal resistance and EMF?",
+      o: ["0.50 Ω and 1.5 V", "0.50 Ω and 1.35 V", "2.0 Ω and 1.95 V", "0.10 Ω and 1.38 V"],
+      a: 0,
+      e: "The EMF is the same both times: 0.30(4.5 + r) = 0.50(2.5 + r), so 1.35 + 0.30r = 1.25 + 0.50r, giving 0.20r = 0.10 and r = 0.50 Ω; then E = 0.30 × (4.5 + 0.50) = 1.5 V. B found r correctly but took E as I₁R₁ = 1.35 V, forgetting r. C solved 0.20r = 0.10 upside down. D wrote 0.10 as r without dividing by 0.20."
+    },
+    {
+      q: "To measure the EMF on open circuit, Tobe used a cheap voltmeter whose resistance was not very high. How did this affect his value of E?",
+      o: [
+        "It was too high, because the voltmeter added its own p.d. to the cell's",
+        "It was too low, because the voltmeter drew a small current, so a little p.d. was lost across the internal resistance",
+        "It was correct, because no current flows when the circuit is open",
+        "It was too low, because the voltmeter's resistance added to the cell's internal resistance"
+      ],
+      a: 1,
+      e: "Any voltmeter of finite resistance completes a circuit across the cell, so a small current flows and the reading is E − Ir, slightly below E. A wrongly treats the voltmeter as a source. C forgets that the voltmeter itself is a load. D has the direction right but the wrong reason: the meter is the external resistance, not part of r; the error comes from the current it draws through r."
     }
   ];
 })();

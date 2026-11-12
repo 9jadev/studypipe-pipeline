@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ss2-phy-simple-harmonic-motion — Live Status Dashboard</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #111827;
+      --card-subtle: #162032;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --primary: #6366f1;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      padding: 24px;
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      color: #fff;
+    }
+    .topic-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    .badge {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-state {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+    .badge-state.done { background: rgba(16, 185, 129, 0.2); color: var(--success); border-color: rgba(16, 185, 129, 0.4); }
+    .badge-state.awaiting-review { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border-color: rgba(245, 158, 11, 0.4); }
+    .badge-state.needs-human { background: rgba(239, 68, 68, 0.2); color: #f87171; border-color: rgba(239, 68, 68, 0.4); }
+
+    /* Alert Banner */
+    .banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-radius: 10px;
+      border: 1px solid;
+    }
+    .banner-icon { font-size: 28px; }
+    .banner h2 { font-size: 16px; font-weight: 700; margin-bottom: 2px; }
+    .banner p { font-size: 13px; opacity: 0.9; }
+
+    .banner-danger { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5; }
+    .banner-warning { background: rgba(245, 158, 11, 0.12); border-color: rgba(245, 158, 11, 0.4); color: #fde68a; }
+    .banner-review { background: rgba(6, 182, 212, 0.12); border-color: rgba(6, 182, 212, 0.4); color: #a5f3fc; }
+    .banner-success { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+    .banner-info { background: rgba(99, 102, 241, 0.12); border-color: rgba(99, 102, 241, 0.4); color: #c7d2fe; }
+
+    /* Action Buttons */
+    .action-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+    }
+    .btn:hover { background: #1f2937; border-color: rgba(255, 255, 255, 0.2); transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .btn-primary:hover { background: #4f46e5; }
+    .btn-accent { background: rgba(6, 182, 212, 0.15); color: #67e8f9; border-color: rgba(6, 182, 212, 0.3); }
+
+    /* Progress & Stepper */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .card-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .progress-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      width: 100%;
+      transition: width 0.3s ease;
+    }
+
+    /* Steps Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th {
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .step-tag {
+      font-weight: 700;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+    .step-status {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+    }
+    .step-status.done { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .step-status.todo { background: rgba(255, 255, 255, 0.05); color: var(--text-dim); }
+    .step-status.in-progress { background: rgba(245, 158, 11, 0.15); color: #fbbf24; animation: pulse 1.5s infinite; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    /* Screenshots Grid */
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 10px;
+    }
+    .shot-card {
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.15s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .shot-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .shot-img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      background: #000;
+      display: block;
+    }
+    .shot-name {
+      padding: 8px 10px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo-badge">⚡</div>
+        <div>
+          <h1 style="font-size: 18px; font-weight: 700;">ss2-phy-simple-harmonic-motion</h1>
+          <div class="topic-meta-row">
+            <span class="badge badge-state awaiting-review">AWAITING-REVIEW</span>
+            <span>🎨 Theme: <strong>editorial-ink</strong></span>
+            <span>🎬 Videos: <strong>auto</strong></span>
+            
+          </div>
+        </div>
+      </div>
+      <div>
+        <a href="../../status.html" class="btn" style="font-size: 12px;">← All Topics</a>
+      </div>
+    </header>
+
+    <!-- Prominent Action / Status Banner -->
+    <div class="banner banner-review">
+      <div class="banner-icon">📱</div>
+      <div>
+        <h2>Packaged & Awaiting Your Mobile Review</h2>
+        <p>All 8 stages finished with QA PASS. Open the Welcome Hub below on phone view to test the live lessons.</p>
+      </div>
+    </div>
+
+    <!-- Quick Action Bar -->
+    <div class="action-bar">
+      <a href="html/index.html" class="btn btn-primary" target="_blank">📱 Preview Welcome Hub</a>
+      <a href="02-lesson.md" class="btn" target="_blank">📄 02-lesson.md</a>
+      <a href="03-questions.md" class="btn" target="_blank">📝 03-questions.md</a>
+      <a href="04-review.md" class="btn" target="_blank">🛡️ 04-review.md (PASS)</a>
+      <a href="05-qa-report.md" class="btn" target="_blank">🧪 05-qa-report.md (PASS)</a>
+      <a href="../../exports/ss2-phy-simple-harmonic-motion.zip" class="btn btn-accent" download>📦 Download ZIP (837 KB)</a>
+    </div>
+
+    <!-- 8-Step Pipeline Progress -->
+    <div class="card">
+      <div class="card-title">
+        <span>Pipeline Progress</span>
+        <span style="font-family: var(--font-mono); color: var(--accent);">100% (8/8)</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill"></div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Stage</th>
+            <th>Status</th>
+            <th>Updated</th>
+            <th>Notes &amp; Agent Activities</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td class="step-tag">1 map</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:28</td>
+              <td style="color: var(--text-muted);">Phenomenon-based 5-phase map (Yaba Market clock mystery + UNILAG Metrology Lab, L1/L4/L6 competences)</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">2 lesson</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:28</td>
+              <td style="color: var(--text-muted);">5-phase inquiry lesson: Do Now, 3D Story, Wonder Wall, Motion Sort, 3D Pendulum Lab, 3D Vector/Energy Zoom, 4 Worked Examples, Clock Bridge, Reflect, 30-mark Assignment</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">3 questions</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:29</td>
+              <td style="color: var(--text-muted);">12 original WAEC/NECO/JAMB MCQs + Part A home pendulum investigation + Part B 30-mark written paper (`b1`–`b8`)</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">4 review</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:29</td>
+              <td style="color: var(--text-muted);">PASS — 100% paraphrased/original, all calculations and past-tense precautions verified</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">5 render</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:37</td>
+              <td style="color: var(--text-muted);">Rendered editorial HTML with bundled Fraunces/Manrope/JetBrains Mono fonts, StoryStage, SceneKit 3D Lab & Vector Zoom, LessonKit, and StudyNarrator spotlight script</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">6 kits</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:37</td>
+              <td style="color: var(--text-muted);">Built 3D Yaba Market Clock Story (`story.js`), 3D Pendulum Lab Bench (`bench.js`), and 3D Vector & Energy Zoom (`zoom.js`)</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">7 qa</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:43</td>
+              <td style="color: var(--text-muted);">PASS — 12 sections + narrator spotlight verified at 360×740 offline (`05-qa-report.md` + 14 screenshots in `qa/`)</td>
+            </tr>
+          
+            <tr>
+              <td class="step-tag">8 package</td>
+              <td><span class="step-status done">done</span></td>
+              <td style="font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);">2026-11-03 16:45</td>
+              <td style="color: var(--text-muted);">Packaged `exports/ss2-phy-simple-harmonic-motion.zip` (616 KB, 24 files)</td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+
+    <!-- QA Mobile Screenshots -->
+    
+      <div class="card">
+        <div class="card-title">
+          <span>Mobile Phone QA Captures (83)</span>
+          <span style="font-size: 11px; color: var(--text-dim);">360 × 740 Viewport</span>
+        </div>
+        <div class="screenshots-grid">
+          
+            <a href="qa/00-hero.png" class="shot-card" target="_blank">
+              <img src="qa/00-hero.png" class="shot-img" alt="00-hero.png" loading="lazy">
+              <div class="shot-name">00-hero.png</div>
+            </a>
+          
+            <a href="qa/01-donow.png" class="shot-card" target="_blank">
+              <img src="qa/01-donow.png" class="shot-img" alt="01-donow.png" loading="lazy">
+              <div class="shot-name">01-donow.png</div>
+            </a>
+          
+            <a href="qa/01-hook.png" class="shot-card" target="_blank">
+              <img src="qa/01-hook.png" class="shot-img" alt="01-hook.png" loading="lazy">
+              <div class="shot-name">01-hook.png</div>
+            </a>
+          
+            <a href="qa/02-explore-lab.png" class="shot-card" target="_blank">
+              <img src="qa/02-explore-lab.png" class="shot-img" alt="02-explore-lab.png" loading="lazy">
+              <div class="shot-name">02-explore-lab.png</div>
+            </a>
+          
+            <a href="qa/02-story.png" class="shot-card" target="_blank">
+              <img src="qa/02-story.png" class="shot-img" alt="02-story.png" loading="lazy">
+              <div class="shot-name">02-story.png</div>
+            </a>
+          
+            <a href="qa/03-explain-oscillation.png" class="shot-card" target="_blank">
+              <img src="qa/03-explain-oscillation.png" class="shot-img" alt="03-explain-oscillation.png" loading="lazy">
+              <div class="shot-name">03-explain-oscillation.png</div>
+            </a>
+          
+            <a href="qa/03-wonder.png" class="shot-card" target="_blank">
+              <img src="qa/03-wonder.png" class="shot-img" alt="03-wonder.png" loading="lazy">
+              <div class="shot-name">03-wonder.png</div>
+            </a>
+          
+            <a href="qa/04-explain-shm.png" class="shot-card" target="_blank">
+              <img src="qa/04-explain-shm.png" class="shot-img" alt="04-explain-shm.png" loading="lazy">
+              <div class="shot-name">04-explain-shm.png</div>
+            </a>
+          
+        </div>
+      </div>
+    
+
+    <!-- Human Feedback Log -->
+    
+  </div>
+</body>
+</html>

@@ -1,179 +1,371 @@
 /* ==========================================================
-   StudyPipe — Spaced Retrieval Bank for The Human Heart & Blood Circulation (L1–L5)
-   Used by LessonKit across lessons/lesson-01 .. lesson-05
+   StudyPipe — Spaced Retrieval Bank · The Human Heart and Blood Circulation (L1–L7)
+   Read by LessonKit in lessons/lesson-01 .. lesson-07 (classic script, offline).
+   donow  : 4 warm-up cards per lesson (from: 0 = prerequisite, from: N = Lesson N;
+            sec = the section id in that earlier lesson the "Revisit" link opens)
+   quiz   : 2 review MCQs from earlier lessons (l02 onward), appended after the lesson's own quiz
+   recall : blank-page recall prompt + the key points to tick off
+   Content matches 02-lesson.md (Do Now and Recall lists), all original wording.
    ========================================================== */
 window.RETRIEVAL_BANK = {
   l01: {
-    title: "Need for Transport — Open vs Closed & Single vs Double Circulation",
+    title: "Why Big Bodies Need a Transport System: Open, Closed, Single and Double Circulation",
     donow: [
       {
-        from: 0, sec: "concepts", where: "Simple Diffusion & Concentration Gradient",
-        q: "What is diffusion, and why is it fast only over microscopic distances (less than 0.1 mm)?",
-        a: "<strong>Diffusion</strong> is the passive net movement of particles from higher to lower concentration. Diffusion time increases with the <strong>square of the distance</strong>, so it is far too slow across thick multicellular tissues."
+        from: 0, sec: "concepts", where: "Diffusion",
+        q: "What is diffusion?",
+        a: "The net spreading of particles from a region where they are <strong>crowded</strong> to a region where they are <strong>fewer</strong>."
       },
       {
-        from: 0, sec: "concepts", where: "Surface-Area-to-Volume Ratio of a Cube",
-        q: "For a cube of side length L, write the formulas for surface area (SA), volume (V), and the simplified SA/V ratio.",
-        a: "<code>SA = 6L²</code>, <code>V = L³</code>, and therefore <code>SA / V = 6 ÷ L</code> (which drops rapidly as L increases)."
+        from: 0, sec: "concepts", where: "Respiration gases",
+        q: "Which gas does a cell need for aerobic respiration, and which gas does it give off?",
+        a: "It takes in <strong>oxygen</strong> and gives off <strong>carbon dioxide</strong>."
       },
       {
-        from: 0, sec: "concepts", where: "Aerobic Cellular Respiration",
-        q: "Which two raw materials must reach every human muscle cell for aerobic respiration, and which two waste products must be carried away?",
-        a: "<strong>Oxygen (O₂) and glucose</strong> must be delivered; <strong>carbon dioxide (CO₂) and water / metabolic heat / urea</strong> must be removed."
+        from: 0, sec: "examples", where: "Surface area : volume",
+        q: "Write SA : V for a cube of side L.",
+        a: "6L² ÷ L³ = <strong>6/L</strong>."
       },
       {
-        from: 0, sec: "practical", where: "Levels of Biological Organisation",
-        q: "At what level of organisation is the human heart classified, and what level is the entire cardiovascular apparatus?",
-        a: "The <strong>heart</strong> is an <strong>organ</strong> (cardiac muscle, connective, nervous, and epithelial tissues), while the heart + blood vessels + blood form an <strong>organ system</strong>."
+        from: 0, sec: "examples", where: "Units of length",
+        q: "Convert 0.40 m to millimetres.",
+        a: "0.40 × 1000 = <strong>400 mm</strong>."
       }
     ],
+    quiz: [],
     recall: {
-      prompt: "Without looking back at the notes, tick off every core idea from Lesson 1 you can state from memory:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 1, then tick each point below that you wrote, even in your own words:",
       points: [
-        "As an organism's linear dimension L increases, its surface-area-to-volume ratio (SA/V = 6/L) drops hyperbolically and diffusion distance increases, requiring a mass-flow circulatory system.",
-        "Open circulation (arthropods like cockroach/grasshopper) pumps colourless haemolymph (no haemoglobin, so it does not carry O₂) into an open haemocoel via dorsal ostia at low pressure.",
-        "Closed circulation (earthworm, fish, amphibians, reptiles, birds, mammals) keeps blood inside continuous vessels at high pressure with rapid flow and ultrafiltration.",
-        "Fish have single circulation (2-chamber heart: 1 atrium, 1 ventricle; blood passes through the heart once per circuit and loses pressure at the gill capillaries), whereas mammals and birds have complete double circulation (4 chambers, zero mixing, high systemic pressure)."
+        "Four reasons a big, active animal cannot depend on diffusion: small SA : V, cells far from the surface, fast use of oxygen and food, and materials made in one organ but used in another.",
+        "Nine materials carried: oxygen, carbon dioxide, digestion products, water, mineral salts, hormones, urea, antibodies and heat.",
+        "A mammal's transport system: a pump (the heart), channels (arteries, capillaries and veins) and a medium (blood, with lymph as a second fluid).",
+        "Open circulation: blood pools in a body cavity at low pressure (cockroach, grasshopper, snail). Closed: blood stays inside vessels (earthworm, tilapia, frog, pigeon, human).",
+        "Single circulation: one trip through the heart per circuit (tilapia, catfish). Double: two trips, heart to lungs and heart to body (toad, lizard, pigeon, human).",
+        "Two advantages of double circulation: blood reaches the body at high pressure, and with four chambers oxygen-rich and oxygen-poor blood never mix.",
+        "SA : V = 6L² ÷ L³ = 6/L: every time the side doubles, the ratio halves."
       ]
     }
   },
 
   l02: {
-    title: "Structure of the Mammalian Heart & The Double-Circulation Pathway",
+    title: "The Heart Up Close: Chambers, Walls, Valves and the Goat-Heart Dissection",
     donow: [
       {
-        from: 1, sec: "concepts", where: "Surface-Area-to-Volume Ratio",
-        q: "How many times larger is the SA/V ratio (6/L) of a 0.2 mm protozoan cube compared to a 100 mm mammal cube?",
-        a: "<code>R₁ = 6 ÷ 0.2 = 30 mm⁻¹</code> and <code>R₂ = 6 ÷ 100 = 0.06 mm⁻¹</code>. Ratio <code>F = 30 ÷ 0.06 = 500 times</code> larger!"
+        from: 1, sec: "concepts", where: "Why a transport system",
+        q: "Give two reasons why Chidi needs a transport system.",
+        a: "Any two of: <strong>small SA : V</strong>; <strong>cells far from the surface</strong>; <strong>high activity and oxygen demand</strong>."
       },
       {
-        from: 1, sec: "concepts", where: "Cockroach Haemolymph vs Mammalian Blood",
-        q: "Why does a cockroach's haemolymph NOT transport oxygen even though it circulates through the haemocoel?",
-        a: "Cockroach haemolymph <strong>lacks haemoglobin</strong> (respiratory pigment); oxygen is delivered directly to tissues by the <strong>tracheal system</strong> (spiracles and tracheoles)."
+        from: 1, sec: "concepts", where: "Parts of the system",
+        q: "Name the pump, the channels and the medium.",
+        a: "<strong>Heart</strong>; <strong>blood vessels</strong>; <strong>blood</strong>."
       },
       {
-        from: 1, sec: "concepts", where: "Single vs Double Circulation",
-        q: "Why is systemic arterial blood pressure much lower in a bony fish (tilapia) than in a human?",
-        a: "In fish <strong>single circulation</strong>, blood passes from the ventricle through narrow <strong>gill capillaries</strong> first, losing most of its pressure before reaching body organs."
+        from: 1, sec: "props-table", where: "Fish heart",
+        q: "How many chambers are in a fish heart, and is its circulation single or double?",
+        a: "<strong>Two</strong> chambers; <strong>single</strong> circulation."
       },
       {
-        from: 1, sec: "examples", where: "Cardiac Output & Circulation Time",
-        q: "At HR = 80 bpm and stroke volume SV = 75 mL, what is the cardiac output CO in L/min?",
-        a: "<code>CO = 80 × 75 = 6000 mL/min = 6.0 L/min</code>."
+        from: 1, sec: "concepts", where: "Double circulation",
+        q: "State one advantage of double circulation.",
+        a: "Blood reaches the body at <strong>high pressure</strong>, or oxygen-rich and oxygen-poor blood <strong>do not mix</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 1,
+        q: "What is the SA : V of a cube of side 10 mm?",
+        o: ["0.60 mm⁻¹", "6.0 mm⁻¹", "60 mm⁻¹", "0.060 mm⁻¹"],
+        a: 0,
+        e: "SA : V = 6/L = 6 ÷ 10 = 0.60 mm⁻¹. Check: SA = 6 × 100 = 600 mm² and V = 1000 mm³, and 600 ÷ 1000 = 0.60."
+      },
+      {
+        from: 1,
+        q: "Which of these animals has closed, double circulation?",
+        o: ["Cockroach", "Tilapia", "Garden snail", "Pigeon"],
+        a: 3,
+        e: "A pigeon has a four-chambered heart and a separate trip to the lungs. A cockroach and a snail have open circulation, and a tilapia has closed but single circulation."
       }
     ],
     recall: {
-      prompt: "Close your notes and recall the heart membranes, wall-thickness hierarchy, four valves, and complete pathway:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 2, then tick each point below that you wrote:",
       points: [
-        "The heart sits in the thoracic mediastinum enclosed by a double-walled pericardium filled with pericardial fluid that reduces friction and prevents over-expansion.",
-        "Wall-thickness hierarchy: Left Ventricle (~15 mm, 120 mmHg systemic) > Right Ventricle (~5 mm, 25 mmHg pulmonary) > Left & Right Atria (~2 mm); the interventricular septum prevents any mixing.",
-        "Four one-way valves: Tricuspid (3 flaps, RA→RV), Bicuspid/Mitral (2 flaps, LA→LV) anchored by chordae tendineae to papillary muscles, plus Pulmonary and Aortic Semilunar valves.",
-        "The Pulmonary Artery carries deoxygenated blood (RV→lungs), the Pulmonary Vein carries oxygenated blood (lungs→LA), the Coronary Artery branches off the base of the aorta to feed cardiac muscle, and the Hepatic Portal Vein links gut capillaries to liver capillaries."
+        "Heart coverings and wall: pericardium (two-layered sac with slippery fluid), myocardium (thick heart muscle) and endocardium (smooth lining).",
+        "Four chambers with in and out: RA (from venae cavae to RV), RV (to lungs by the pulmonary artery), LA (from four pulmonary veins to LV), LV (to the body by the aorta).",
+        "The left ventricle wall is the thickest, about three times the right, because it pumps blood to the whole body.",
+        "Four valves: tricuspid (RA and RV, three flaps), bicuspid or mitral (LA and LV, two flaps), pulmonary and aortic semilunar valves (three pockets each).",
+        "Chordae tendineae anchor the AV flaps to papillary muscles so the flaps are not blown back into the atria; the septum keeps the two sides apart.",
+        "Great vessels: superior and inferior venae cavae, pulmonary artery, four pulmonary veins, aorta, and the coronary arteries that feed the heart muscle.",
+        "Drawing rules: heart faces you (patient's right on your left), LV wall thicker than RV, ruled label lines without arrowheads, capital-letter title, magnification stated."
       ]
     }
   },
 
   l03: {
-    title: "Working of the Heart — Cardiac Cycle, Pacemaker, Heart Sounds & Blood Pressure",
+    title: "The Double Circuit: Tracing Blood Around the Body",
     donow: [
       {
-        from: 2, sec: "concepts", where: "Ventricular Wall Thickness Ratio",
-        q: "Why is the muscular wall of the left ventricle about 3 times thicker than the wall of the right ventricle?",
-        a: "The <strong>left ventricle</strong> must generate high pressure (<strong>~120 mmHg</strong>) to pump blood through the long <strong>systemic circuit</strong> around the whole body, whereas the right ventricle pumps only to the nearby lungs (<strong>~25 mmHg</strong>)."
+        from: 2, sec: "concepts", where: "Left atrium",
+        q: "Which chamber receives blood from the pulmonary veins?",
+        a: "The <strong>left atrium</strong>."
       },
       {
-        from: 2, sec: "concepts", where: "The Great Vessel Exception",
-        q: "Name the ONLY artery in an adult mammal that carries deoxygenated blood and the ONLY vein that carries oxygenated blood.",
-        a: "<strong>Pulmonary artery</strong> (carries deoxygenated blood from RV to lungs) and <strong>pulmonary vein</strong> (carries oxygenated blood from lungs to LA)."
+        from: 2, sec: "props-table", where: "Tricuspid valve",
+        q: "Where is the tricuspid valve?",
+        a: "<strong>Between the right atrium and the right ventricle.</strong>"
       },
       {
-        from: 2, sec: "concepts", where: "Heart Valves & Chordae Tendineae",
-        q: "What is the exact function of the chordae tendineae and papillary muscles attached to the bicuspid and tricuspid valves?",
-        a: "They hold the AV valve cusps taut during ventricular contraction so the flaps <strong>do not invert (turn inside out) into the atria</strong>, preventing backflow."
+        from: 2, sec: "concepts", where: "Wall thickness",
+        q: "Why is the left ventricle the thickest chamber?",
+        a: "It pumps blood to the <strong>whole body</strong>."
       },
       {
-        from: 1, sec: "concepts", where: "Vertebrate Heart Chambers",
-        q: "How many heart chambers do bony fish, amphibians (toad), and mammals have, and which reptile is the 4-chamber exception?",
-        a: "<strong>Fish:</strong> 2 chambers · <strong>Amphibians:</strong> 3 chambers · <strong>Mammals & birds:</strong> 4 chambers · <strong>Crocodile:</strong> reptile exception with a complete 4-chambered heart."
+        from: 1, sec: "concepts", where: "Double circulation",
+        q: "Is circulation in a pigeon single or double?",
+        a: "<strong>Double.</strong>"
+      }
+    ],
+    quiz: [
+      {
+        from: 2,
+        q: "Which valve lies between the left atrium and the left ventricle?",
+        o: ["Bicuspid (mitral) valve", "Tricuspid valve", "Pulmonary semilunar valve", "Aortic semilunar valve"],
+        a: 0,
+        e: "The bicuspid (mitral) valve, with two flaps, guards the opening from the left atrium to the left ventricle. The tricuspid valve is on the right side."
+      },
+      {
+        from: 2,
+        q: "Which statement about the pulmonary veins is correct?",
+        o: ["They carry oxygen-poor blood to the lungs", "They carry oxygen-rich blood from the lungs to the left atrium", "They carry oxygen-rich blood from the left ventricle to the body", "They bring oxygen-poor blood into the right atrium"],
+        a: 1,
+        e: "There are four pulmonary veins, and they return oxygen-rich blood from the lungs to the left atrium. They are veins because they carry blood towards the heart."
       }
     ],
     recall: {
-      prompt: "Without looking back, recall the myogenic conduction pathway, cardiac cycle phases, Lub-Dub sounds, and blood pressure:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 3, then tick each point below that you wrote:",
       points: [
-        "Cardiac muscle is myogenic: the Sinoatrial Node (SAN) in the upper right atrial wall sets the pace → atria contract → Atrioventricular Node (AVN) delays the impulse by ~0.10 s so ventricles fill → Bundle of His → Purkinje fibres sweep upward from the apex.",
-        "At 75 bpm, one cardiac cycle lasts T = 60 ÷ 75 = 0.80 s: Atrial Systole (0.10 s, AV open, SL closed) → Ventricular Systole (0.30 s, AV snap shut = 'LUB', SL forced open) → General Diastole (0.40 s, SL snap shut = 'DUB').",
-        "First heart sound ('LUB') is caused by simultaneous closure of the tricuspid and bicuspid (AV) valves at the start of ventricular systole; second sound ('DUB') is caused by closure of the aortic and pulmonary semilunar valves at the start of ventricular diastole.",
-        "Normal adult blood pressure is 120/80 mmHg measured with a sphygmomanometer over the brachial artery (Pulse Pressure PP = 40 mmHg, MAP = 80 + 40/3 = 93.3 mmHg)."
+        "The 13-step pathway: venae cavae, right atrium, tricuspid valve, right ventricle, pulmonary semilunar valve, pulmonary artery, lung capillaries, pulmonary veins, left atrium, bicuspid valve, left ventricle, aortic semilunar valve, aorta.",
+        "Two loops: pulmonary (RV to lungs to LA) swaps carbon dioxide for oxygen; systemic (LV to body to RA) delivers oxygen and food and collects wastes.",
+        "Hepatic portal vein: gut to liver, where glucose is stored as glycogen, surplus amino acids are broken down and poisons are made harmless. A portal vein links two capillary beds.",
+        "Coronary arteries branch off the aorta just beyond its valve; a blocked one starves the heart muscle and causes a heart attack.",
+        "Organ vessel pairs: lungs (pulmonary artery and veins), brain (carotid and jugular), arm (subclavian), liver (hepatic artery and portal vein in, hepatic vein out), gut, kidney (renal), leg (femoral or iliac), heart muscle (coronary).",
+        "Any organ-to-organ route must pass through the lungs; the largest artery is the aorta and the largest vein is the inferior vena cava."
       ]
     }
   },
 
   l04: {
-    title: "Blood Vessels, Capillary Exchange, the Lymphatic System & Cardiovascular Disorders",
+    title: "The Beating Heart: Cardiac Cycle, Heart Sounds, Pacemaker, Pulse and Blood Pressure",
     donow: [
       {
-        from: 3, sec: "concepts", where: "Heart Sounds ('Lub-Dub')",
-        q: "Which exact valves close to produce the first heart sound ('LUB') and which valves close to produce the second heart sound ('DUB')?",
-        a: "<strong>'LUB' (S1):</strong> closure of the <strong>bicuspid and tricuspid (AV) valves</strong> at ventricular systole. <strong>'DUB' (S2):</strong> closure of the <strong>aortic and pulmonary semilunar valves</strong> at ventricular diastole."
+        from: 2, sec: "concepts", where: "Great vessels",
+        q: "Which vessel carries blood from the left ventricle?",
+        a: "The <strong>aorta</strong>."
       },
       {
-        from: 3, sec: "concepts", where: "Myogenic Conduction & AVN Delay",
-        q: "Where is the sinoatrial node (SAN) located, and why does the AVN delay the electrical impulse by ~0.10 s?",
-        a: "The <strong>SAN</strong> is in the upper wall of the <strong>right atrium</strong>. The 0.10 s AVN delay lets the <strong>atria finish emptying into the ventricles</strong> before ventricular contraction begins."
+        from: 2, sec: "concepts", where: "Chordae tendineae",
+        q: "What do the chordae tendineae do?",
+        a: "They hold the AV valve flaps so they <strong>do not turn back into the atria</strong>."
       },
       {
-        from: 3, sec: "examples", where: "Pulse Pressure & Mean Arterial Pressure",
-        q: "For a patient with blood pressure 135/90 mmHg, calculate the pulse pressure (PP) and mean arterial pressure (MAP).",
-        a: "<code>PP = 135 − 90 = 45 mmHg</code>. Then <code>MAP = 90 + (45 ÷ 3) = 90 + 15 = 105 mmHg</code>."
+        from: 3, sec: "concepts", where: "Coronary circulation",
+        q: "Which vessel supplies the heart muscle?",
+        a: "The <strong>coronary artery</strong>."
       },
       {
-        from: 2, sec: "concepts", where: "Coronary Circulation",
-        q: "From which major vessel do the coronary arteries branch off, and what happens if one is blocked by a thrombus?",
-        a: "They branch off the <strong>base of the aorta</strong> just above the aortic semilunar valve; blockage starves cardiac muscle of oxygen, causing a <strong>myocardial infarction (heart attack)</strong>."
+        from: 3, sec: "concepts", where: "Two loops",
+        q: "Name the two loops of the double circulation.",
+        a: "<strong>Pulmonary</strong> and <strong>systemic</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 3,
+        q: "Blood leaving the stomach and intestines travels to which organ before returning to the heart?",
+        o: ["Kidney", "Liver", "Lungs", "Brain"],
+        a: 1,
+        e: "The hepatic portal vein carries blood from the gut to the liver, where glucose is stored, surplus amino acids are broken down and poisons are made harmless."
+      },
+      {
+        from: 3,
+        q: "Blood returning from the lungs enters which chamber of the heart first?",
+        o: ["Right atrium", "Left atrium", "Right ventricle", "Left ventricle"],
+        a: 1,
+        e: "The four pulmonary veins empty oxygen-rich blood into the left atrium, which then passes it through the bicuspid valve to the left ventricle."
       }
     ],
     recall: {
-      prompt: "Close your notes and recall the artery-vein-capillary differences, Starling capillary exchange, and lymphatic drainage:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 4, then tick each point below that you wrote:",
       points: [
-        "Arteries have thick elastic and muscular walls, a narrow lumen, high pulsatile pressure, and no valves (except semilunar valves at the heart base); veins have thin walls, a wide lumen, low non-pulsatile pressure, and pocket valves assisted by the skeletal muscle pump.",
-        "Capillaries have a one-cell-thick squamous endothelium and huge total cross-sectional area (~4,500 cm²), slowing blood velocity (v = Q/A ≈ 0.03 cm/s) for rapid diffusion.",
-        "At the arterial end of a capillary (P_c = 35 mmHg > π_c = 25 mmHg, NFP = +10 mmHg), ultrafiltration forms tissue fluid (which lacks RBCs, platelets, and large plasma proteins).",
-        "At the venous end (P_c = 15 mmHg < π_c = 25 mmHg, NFP = −10 mmHg), ~85% of fluid is reabsorbed and the remaining ~15% drains into blind-ended lymphatic vessels (returning to the subclavian veins, absorbing fats via lacteals, and producing lymphocytes)."
+        "Four stages of the cycle (about 0.8 s at 75 bpm): all relaxed (about 0.4 s), atria contract (about 0.1 s), ventricles contract (about 0.3 s), ventricles relax. Systole is contraction; diastole is relaxation.",
+        "Lub is the AV valves closing as the ventricles start to squeeze; dub is the semilunar valves closing as the ventricles relax. A murmur hints at a leaky or narrowed valve.",
+        "Control chain: SAN (pacemaker in the right atrium wall), AVN (short delay), bundle of His (down the septum), Purkinje fibres (up both ventricle walls).",
+        "Cardiac muscle is myogenic: the beat starts inside the heart. The medulla only adjusts the rate; sympathetic nerves and adrenaline speed it up, the vagus nerve slows it.",
+        "Pulse is the bulge and spring-back of an artery wall with each beat; felt at the wrist (radial), neck (carotid), temple and groin. Blood pressure is about 120/80 mmHg, measured with a sphygmomanometer.",
+        "Faster: exercise, fear or excitement, fever, high carbon dioxide, caffeine. Slower: sleep and rest, long-term fitness (resting rate), vagus nerve impulses.",
+        "Equations: heart rate = beats in t × 60 ÷ t; cycle time T = 60 ÷ heart rate; cardiac output = heart rate × stroke volume; % change = (new − old) ÷ old × 100."
       ]
     }
   },
 
   l05: {
-    title: "Composition of Blood, Clotting Cascade, ABO/Rhesus Groups & WAEC Paper 3 Clinic",
+    title: "Arteries, Veins, Capillaries, Tissue Fluid and Lymph",
     donow: [
       {
-        from: 4, sec: "concepts", where: "Artery vs Vein Structure",
-        q: "Why do veins require pocket semilunar valves along their length whereas arteries do not?",
-        a: "Blood in <strong>veins</strong> flows at <strong>very low pressure</strong> (often uphill against gravity), so valves prevent backflow; <strong>arteries</strong> carry blood under <strong>high ventricular pressure</strong> that drives it forward continuously."
+        from: 2, sec: "concepts", where: "Wall thickness",
+        q: "Why is the LV wall thicker than the RV wall?",
+        a: "It pumps blood to the <strong>whole body</strong>, not just the nearby lungs."
       },
       {
-        from: 4, sec: "examples", where: "Starling Net Filtration Pressure",
-        q: "At the arterial end of a capillary, P_c = 36 mmHg and π_c = 25 mmHg. What is the Net Filtration Pressure and direction of fluid movement?",
-        a: "<code>NFP = P_c − π_c = 36 − 25 = +11 mmHg</code> (positive ⇒ <strong>ultrafiltration outward</strong> into tissue spaces)."
+        from: 3, sec: "concepts", where: "Hepatic portal vein",
+        q: "Which vessel takes blood from the gut to the liver?",
+        a: "The <strong>hepatic portal vein</strong>."
       },
       {
-        from: 4, sec: "concepts", where: "Blood vs Tissue Fluid vs Lymph",
-        q: "Which three components of whole blood cannot pass through capillary walls into normal tissue fluid?",
-        a: "<strong>Red blood cells (erythrocytes)</strong>, <strong>platelets (thrombocytes)</strong>, and <strong>large plasma proteins</strong> (albumin, fibrinogen)."
+        from: 4, sec: "concepts", where: "Pulse",
+        q: "What is a pulse?",
+        a: "The throb of an artery as its wall <strong>bulges and springs back</strong> after every beat of the left ventricle."
       },
       {
-        from: 2, sec: "concepts", where: "Double-Circulation Pathway",
-        q: "Name the two valves that blood passes through in sequence when travelling from the right atrium to the pulmonary artery.",
-        a: "First the <strong>tricuspid valve</strong> (RA → RV), then the <strong>pulmonary semilunar valve</strong> (RV → pulmonary artery)."
+        from: 4, sec: "concepts", where: "Blood pressure",
+        q: "What do the two numbers in 120/80 mmHg stand for?",
+        a: "The pressure while the ventricles <strong>contract</strong> / while they <strong>relax</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 4,
+        q: "The \"dub\" heart sound is made when:",
+        o: ["The AV valves close", "The semilunar valves close", "The atria contract", "The SAN fires"],
+        a: 1,
+        e: "Dub is the shorter, sharper second sound, made as the ventricles relax and the semilunar pockets fill and snap shut. Lub is the AV valves closing."
+      },
+      {
+        from: 4,
+        q: "A student counts 20 beats in 15 seconds. What is the heart rate?",
+        o: ["35 bpm", "80 bpm", "300 bpm", "5 bpm"],
+        a: 1,
+        e: "Heart rate = 20 × 60 ÷ 15 = 80 bpm (four lots of 15 s make a minute). Adding the numbers (35) or multiplying them (300) gives wrong values."
       }
     ],
     recall: {
-      prompt: "Without looking back, recall blood components, the 4-step clotting cascade, ABO/Rhesus compatibility, and WAEC Paper 3 heart rules:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 5, then tick each point below that you wrote:",
       points: [
-        "Whole blood consists of 55% straw-coloured plasma (water, albumin, fibrinogen, antibodies, glucose, urea, CO₂ as HCO₃⁻) and 45% cellular elements: biconcave enucleate erythrocytes (RBCs, haemoglobin, 120-day lifespan), nucleated leucocytes (phagocytes with lobed nuclei + lymphocytes making antibodies), and thrombocytes (platelets).",
-        "4-step blood clotting cascade: Damaged platelets/tissue release Thromboplastin → converts Prothrombin to active Thrombin (requires Ca²⁺ ions and Vitamin K) → Thrombin converts soluble Fibrinogen into insoluble Fibrin threads → traps RBCs to form a clot (Serum = Plasma minus Fibrinogen).",
-        "Agglutination occurs when donor RBC antigen meets matching recipient plasma antibody: Group O (no A/B antigens) is universal RBC donor; Group AB (no anti-A/anti-B antibodies) is universal recipient; Rhesus incompatibility (Rh⁻ mother + Rh⁺ foetuses) causes erythroblastosis fetalis.",
-        "WAEC Paper 3 Heart Drawing Rules: Identify anterior/ventral view by the diagonal coronary sulcus and thicker left ventricle on the right of the page; draw double lines for chamber walls showing the 3:1 LV:RV thickness ratio; use sharp HB unshaded lines, horizontal parallel guidelines, and state M = I ÷ A."
+        "Artery, vein and capillary compared on nine rows: direction, usual blood, wall, lumen, valves, pressure, speed, position and what a cut vessel looks like.",
+        "Adaptations: artery walls are elastic and muscular and spring back; veins have pocket valves and the leg muscles squeeze them; capillaries have one-cell walls, huge numbers and slow flow.",
+        "Tissue fluid in four steps: Pc is greater than πc at the arterial end, so fluid is squeezed out; cells take what they need and add wastes; at the venous end Pc is below πc, so most returns; the rest enters lymph capillaries.",
+        "NFP = Pc − πc (+11 mmHg out at 36 against 25; −9 mmHg in at 16 against 25); flow Q = A × v, so the same flow over a bigger total area moves slowly.",
+        "Lymph route: lymph capillaries, valved lymphatics, nodes, thoracic or right lymphatic duct, subclavian veins. Four jobs: return fluid and proteins, carry fat from the lacteals, filter germs in nodes, make lymphocytes.",
+        "Blood, tissue fluid and lymph compared on red cells, plasma proteins, white cells, fat and where each is found.",
+        "Oedema: too much fluid stays in the tissues (high venous pressure, low plasma protein). Elephantiasis: the lymph vessels are blocked, for instance by filarial worms."
+      ]
+    }
+  },
+
+  l06: {
+    title: "Blood: Plasma, Cells and Clotting",
+    donow: [
+      {
+        from: 5, sec: "concepts", where: "Lymph return",
+        q: "Which vessel returns lymph to the blood?",
+        a: "The <strong>subclavian vein</strong>."
+      },
+      {
+        from: 5, sec: "concepts", where: "Tissue fluid",
+        q: "What does tissue fluid lack that blood has?",
+        a: "<strong>Red cells</strong> and most <strong>plasma proteins</strong>."
+      },
+      {
+        from: 4, sec: "concepts", where: "Heart sounds",
+        q: "What does the \"dub\" sound mean?",
+        a: "The <strong>semilunar valves closing</strong>."
+      },
+      {
+        from: 3, sec: "props-table", where: "Named vessels",
+        q: "Which artery supplies the kidney?",
+        a: "The <strong>renal artery</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 5,
+        q: "At the arterial end of a capillary, fluid leaves the blood because:",
+        o: ["Blood pressure Pc is greater than the pull of plasma proteins πc", "The pull of plasma proteins πc is greater than Pc", "Red cells burst and release water", "The lymph vessels pump it out"],
+        a: 0,
+        e: "At the arterial end Pc (about 36 mmHg) beats πc (25 mmHg), so net filtration pressure is positive and water with dissolved food is squeezed out."
+      },
+      {
+        from: 5,
+        q: "Lymph is finally returned to the blood through the:",
+        o: ["Hepatic portal vein", "Subclavian veins", "Pulmonary veins", "Renal veins"],
+        a: 1,
+        e: "The thoracic duct and the right lymphatic duct empty lymph into the subclavian veins near the neck."
+      }
+    ],
+    recall: {
+      prompt: "Close your notes. Write down everything you remember from Lesson 6, then tick each point below that you wrote:",
+      points: [
+        "Blood is about 55% plasma and 45% cells; an adult carries roughly 5 to 6 dm³.",
+        "Plasma is straw-coloured and about nine-tenths water; it carries food, salts, hormones, urea, most carbon dioxide, proteins (albumin, fibrinogen, prothrombin, antibodies) and heat. Serum is plasma without the clotting proteins.",
+        "Red cells, white cells and platelets compared on shape, nucleus, number per mm³, where made, life span and job.",
+        "Red cell adaptations: biconcave disc, no nucleus (more haemoglobin), small and bendy, and carbonic anhydrase. Anaemia is too few red cells or too little haemoglobin.",
+        "Phagocytes have a lobed or bean-shaped nucleus and swallow germs; lymphocytes have one large round nucleus and make antibodies.",
+        "Clotting: thromboplastin turns prothrombin into thrombin (vitamin K and calcium help); thrombin turns fibrinogen into fibrin threads; the net traps red cells and becomes a clot, then a scab.",
+        "Blood stays liquid in healthy vessels because the lining is smooth and heparin is present. Haemophilia is an inherited, sex-linked failure of clotting."
+      ]
+    }
+  },
+
+  l07: {
+    title: "Blood Groups, Rhesus, Transfusion and Disorders: Closing the Case",
+    donow: [
+      {
+        from: 6, sec: "concepts", where: "Plasma proteins",
+        q: "Which plasma proteins defend the body?",
+        a: "<strong>Antibodies</strong> (globulins)."
+      },
+      {
+        from: 6, sec: "concepts", where: "Clotting",
+        q: "Name the insoluble protein in a clot.",
+        a: "<strong>Fibrin.</strong>"
+      },
+      {
+        from: 4, sec: "concepts", where: "Blood pressure",
+        q: "What does 120/80 mmHg stand for?",
+        a: "Pressure in the arteries while the ventricles <strong>contract</strong> / <strong>relax</strong>."
+      },
+      {
+        from: 1, sec: "concepts", where: "Materials carried",
+        q: "List three materials carried by blood.",
+        a: "Any three, e.g. <strong>oxygen, glucose, urea</strong> (also carbon dioxide, hormones, antibodies, heat)."
+      }
+    ],
+    quiz: [
+      {
+        from: 6,
+        q: "Which protein forms the insoluble threads of a blood clot?",
+        o: ["Fibrinogen", "Fibrin", "Haemoglobin", "Albumin"],
+        a: 1,
+        e: "Thrombin changes dissolved fibrinogen into solid fibrin threads. Fibrinogen is the soluble form that is already in plasma."
+      },
+      {
+        from: 6,
+        q: "Which blood component releases thromboplastin, together with injured tissue, to start clotting?",
+        o: ["Red cells", "Phagocytes", "Platelets", "Lymphocytes"],
+        a: 2,
+        e: "Platelets and damaged tissue release thromboplastin, which starts the chain that ends with a fibrin net."
+      }
+    ],
+    recall: {
+      prompt: "Close your notes. Write down everything you remember from Lesson 7, then tick each point below that you wrote:",
+      points: [
+        "ABO table: A (antigen A, anti-b), B (antigen B, anti-a), AB (both antigens, no antibodies: universal recipient), O (no antigens, both antibodies: universal donor).",
+        "The agglutination rule: look at the donor's antigens and the patient's antibodies; a match makes the cells clump and can block vessels and damage the kidneys.",
+        "Rhesus: Rh+ cells carry the D antigen. An Rh− mother carrying an Rh+ baby may make anti-D, which attacks the red cells of a later Rh+ baby (haemolytic disease of the newborn); an anti-D injection after delivery prevents it.",
+        "Before a transfusion: type both people, test-mix for clumping, screen the blood (syphilis, HIV, hepatitis B and C) and store it with sodium citrate as the anticoagulant.",
+        "Eleven disorders, each with a cause, a sign and one prevention: hypertension, atherosclerosis, coronary heart disease, stroke, thrombosis, varicose veins, anaemia, sickle cell anaemia, leukaemia, haemophilia and hole in the heart.",
+        "Healthy-heart habits: regular exercise, little saturated fat, salt or sugar, no smoking, little or no alcohol, managing stress, a healthy weight and regular check-ups.",
+        "The three solved cases: Chidi's pulse, Mama Bisi's ankles and the rider's safe bags (O− and B−, the two bags that suit a B Rh− patient)."
       ]
     }
   }

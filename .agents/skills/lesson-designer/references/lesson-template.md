@@ -134,4 +134,16 @@ Four spaced-retrieval flashcards answered from memory before revealing:
 
 ## 6. Narrator Choreography Blueprint (`window.NARRATION`)
 List the chapters (`Welcome`, `Do Now`, `The Story`, `Wonder Wall`, `Sort Game`, `Virtual Lab`, `Make Sense`, `Vector & Energy Zoom`, `Worked Examples`, `Solving the Mystery`, `Quiz & Reflection`) and key `wait` triggers (`note`, `sort`, `bench`, `bridge`, `quiz`) for `narration.js`.
+
+---
+
+## 7. Explainer Video Plan
+video_cap: 3
+
+Score every lesson with `references/video-criteria.md`. A lesson is recommended at ≥ 5 points, top `video_cap` only.
+
+| lesson | score | recommend | reasons | video would cover |
+|---|---|---|---|---|
+| lesson-01 | 2 | no | +2 invisible mechanism · +1 graph reading · −3 practical-led · +2 misconception | — the pendulum bench already shows it live |
+| lesson-02 | 8 | yes | +3 multi-step calculations · +2 frequently examined · +2 misconception · +1 graph reading | T = 2π√(l/g), finding g from a T²–l graph, two worked examples · kits: graph |
 ````

@@ -1,181 +1,140 @@
-/* Lesson 05 · 3D Light vs Electron Microscopy Resolution & WAEC Biological Drawing Audit Stage */
+/* Lesson 05 · 3D zoom (window.StudyScenes.zoom) — SlideViewKit: what you can really see on a school slide.
+   The eyepiece disc shows the onion (or cheek) slide at ×100 or ×400 beside a textbook diagram. Structures that cannot be seen
+   on the stained slide fade out of the diagram, and the reason comes from the kit's visibility model (kit.reading()). */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
   var canvas = document.getElementById("zoom-canvas");
-  if (!root || !canvas || typeof THREE === "undefined") return;
+  if (!root || !canvas || typeof THREE === "undefined" || !window.SlideViewKit) return;
 
-  var toastEl = document.getElementById("zoom-toast");
-  var toastT;
-  function toast(m) {
-    if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
-  }
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var state = { M: 400, specimen: "onion", seen: {}, picked: null };
+  var kit = SlideViewKit.create({ M: state.M, specimen: state.specimen, showTextbook: true, aspect: 0.8 });
+  var api = window.StudyScenes.zoom = window.StudyScenes.zoom || {};
 
-  var state = {
-    mode: "mix", // "mix" = Onion Drawing (Double Wall), "acid" = Cheek Drawing (Single Line), "base" = EM Ultrastructure (0.2 nm)
-    highV: false
-  };
-
-  var highlightPart = null;
-  var api = {
-    setMode: setMode,
-    add: toggleRulerGuidelines,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
-  };
-  window.StudyScenes = window.StudyScenes || {};
-  window.StudyScenes.zoom = api;
-
+  var holder = canvas.parentElement;
   var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.85, 0),
-    pitch: 0.22,
-    yaw: 0.08,
-    fitWidth: 6.2,
-    distance: 6.0,
-    onFrame: frame
+    root: root, canvas: canvas, fov: 32, pitch: 0, yaw: 0, minYaw: 0, maxYaw: 0, portraitPitch: 0,
+    target: new THREE.Vector3(0, 0, 0), distance: 1, autoFit: false, adaptiveHeight: false,
+    onFrame: function (dt, t) { kit.update(dt, t); frame(dt, t); }
   });
-
-  var onionGroup, cheekGroup, emGroup, keBar, peBar, totBar;
-
-  if (stage) build();
-  wireButtons();
-
-  function build() {
-    var scene = stage.rig;
-
-    onionGroup = new THREE.Group();
-    onionGroup.position.set(-0.65, 0.90, 0);
-    scene.add(onionGroup);
-
-    cheekGroup = new THREE.Group();
-    cheekGroup.position.set(-0.65, 0.90, 0);
-    cheekGroup.visible = false;
-    scene.add(cheekGroup);
-
-    emGroup = new THREE.Group();
-    emGroup.position.set(-0.65, 0.90, 0);
-    emGroup.visible = false;
-    scene.add(emGroup);
-
-    if (window.CellKit) {
-      var oApi = CellKit.plantCell({ onion: true, scale: 0.88 });
-      onionGroup.add(oApi.group);
-      var oTag = CellKit.label("Onion Wet Mount (Iodine · Double Wall · ×1200)", { bg: "rgba(217,138,0,0.92)" });
-      oTag.position.set(0, 0.94, 0);
-      onionGroup.add(oTag);
-
-      var cApi = CellKit.animalCell({ cheek: true, scale: 0.88 });
-      cheekGroup.add(cApi.group);
-      var cTag = CellKit.label("Cheek Wet Mount (Methylene Blue · Single Line · ×1000)", { bg: "rgba(59,108,246,0.92)" });
-      cTag.position.set(0, 0.94, 0);
-      cheekGroup.add(cTag);
-
-      var eApi = CellKit.plantCell({ scale: 0.88 });
-      emGroup.add(eApi.group);
-      var eTag = CellKit.label("TEM Ultrastructure (0.2 nm · Cristae, Grana, 80S Ribosomes)", { bg: "rgba(13,156,126,0.92)" });
-      eTag.position.set(0, 0.94, 0);
-      emGroup.add(eTag);
-    }
-
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.65, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.75, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 30, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.19 * t.userData.aspect, 0.19, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.30, 0x3ee6c4, "Max Mag.");
-    peBar  = makeBar(1.75, 0xffb23f, "Res. Power");
-    totBar = makeBar(2.20, 0x22c55e, "WAEC Score");
-
-    api.rect = function (part) {
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      return stage.rectOf(onionGroup, 16);
-    };
-
+  var glow = null, highlightPart = null, hl = null, tmp = new THREE.Vector3();
+  if (stage) {
+    stage.rig.add(kit);
+    glow = SceneKit.glowSprite("rgba(255,178,63,0.9)", 1.6);
+    glow.material.opacity = 0; stage.rig.add(glow);
+    hl = SlideViewKit.makeHighlighter(stage.scene);
+    refit();
     stage.start();
+    if (window.ResizeObserver) new ResizeObserver(refit).observe(holder); else window.addEventListener("resize", refit);
+  } else {
+    var last = performance.now();
+    (function tick() { var n = performance.now(); kit.update(Math.min(0.05, (n - last) / 1000), n / 1000); last = n; requestAnimationFrame(tick); })();
   }
-
-  function setMode(m) {
-    state.mode = m;
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
-    });
-    onionGroup.visible = m === "mix";
-    cheekGroup.visible = m === "acid";
-    emGroup.visible = m === "base";
-
-    if (m === "acid") toast("Human Cheek Cell (Methylene Blue): Draw a single continuous outline for the plasma membrane, central nucleus, and granular cytoplasm!");
-    else if (m === "base") toast("Transmission Electron Microscope (×500,000, 0.2 nm): Resolves ribosomes, ER, Golgi, and cristae invisible under light microscopy!");
-    else toast("Onion Epidermal Cell (Iodine Stain): Draw a double line for the cellulose cell wall, peripheral nucleus, and large central vacuole!");
+  function refit() {
+    var w = holder.clientWidth, h = holder.clientHeight;
+    if (!w || !h) return;
+    var f = kit.layout(w / h);
+    stage.fitHeight = f.h * 1.06; stage.fitWidth = f.w * 1.06;
+    stage.target.set(f.target[0], f.target[1], f.target[2]);
+    stage.resize();
   }
-
-  function toggleRulerGuidelines() {
-    state.highV = !state.highV;
-    toast(state.highV ? "WAEC Rubric Check ON: Horizontal ruled label lines without arrowheads + Title + Magnification = 10/10 marks!" : "Standard view restored.");
-  }
-
-  function reset() {
-    state.highV = false;
-    setMode("mix");
-    toast("Stage reset to Iodine-stained Onion Epidermal view.");
-  }
-
-  function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
-    });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleRulerGuidelines);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
-  }
-
   function frame(dt, t) {
-    onionGroup.rotation.y = Math.sin(t * 0.45) * 0.18;
-    cheekGroup.rotation.y = Math.sin(t * 0.45) * 0.18;
-    emGroup.rotation.y = Math.sin(t * 0.45) * 0.18;
-
-    var isEM = state.mode === "base";
-    if (keBar) keBar.scale.y = isEM ? 0.98 : 0.35;
-    if (peBar) peBar.scale.y = isEM ? 0.98 : 0.28;
-    if (totBar) totBar.scale.y = state.highV ? 1.0 : 0.85;
-
-    var cV = document.querySelector('#zoom-counters [data-c="h"]');
-    var cI = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cR = document.querySelector('#zoom-counters [data-c="na"]');
-    var cT = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cP = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cV) cV.textContent = isEM ? "×500,000" : "×1,500";
-    if (cI) cI.textContent = isEM ? "0.2 nm" : "200 nm";
-    if (cR) cR.textContent = isEM ? "Lead/OsO₄" : state.mode === "acid" ? "Meth. Blue" : "Iodine";
-    if (cT) cT.textContent = isEM ? "Dead/Vac." : "Living/Wet";
-    if (cP) cP.textContent = state.mode === "acid" ? "Single Line" : "Double Line";
+    if (!glow) return;
+    var obj = highlightPart && kit.parts[highlightPart];
+    if (obj) { obj.getWorldPosition(tmp); stage.rig.worldToLocal(tmp); glow.position.set(tmp.x, tmp.y, tmp.z + 0.25); }
+    glow.material.opacity += ((obj ? 0.4 + 0.2 * Math.sin(t * 5) : 0) - glow.material.opacity) * Math.min(1, dt * 7);
   }
+
+  // ---- readout + structure chips (painted from the kit's reading) ----
+  var readoutEl = document.getElementById("zoom-readout");
+  var itemsEl = document.getElementById("zoom-items");
+  var noteEl = document.getElementById("zoom-note");
+  function paint() {
+    var r = kit.reading();
+    if (readoutEl) {
+      readoutEl.innerHTML =
+        "<div><span>Slide</span><b>" + (r.specimen === "onion" ? "onion" : "cheek") + "</b></div>" +
+        "<div><span>Total mag.</span><b>×" + r.M + "</b></div>" +
+        "<div><span>Field</span><b>" + r.field_mm + " mm</b></div>" +
+        "<div><span>Cells across</span><b>" + r.cells_across + "</b></div>" +
+        "<div><span>Visible</span><b>" + r.visibleCount + "</b></div>" +
+        '<div class="hot"><span>Not visible</span><b>' + r.hiddenCount + "</b></div>";
+    }
+    if (itemsEl) {
+      itemsEl.innerHTML = "";
+      r.items.forEach(function (it) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "zi " + (it.visible ? "vis" : "hid") + (state.picked === it.id ? " on" : "");
+        b.setAttribute("data-id", it.id);
+        b.setAttribute("aria-pressed", state.picked === it.id ? "true" : "false");
+        b.innerHTML = '<i aria-hidden="true">' + (it.visible ? "✓" : "✕") + "</i>" + it.name;
+        b.addEventListener("click", function () { pick(it.id); });
+        itemsEl.appendChild(b);
+      });
+    }
+    if (noteEl && !state.picked) {
+      noteEl.innerHTML = r.visibleCount + " structures can be seen and drawn from this slide; " + r.hiddenCount + " cannot. Tap a structure to see why.";
+    }
+    root.querySelectorAll("#zoom-mag [data-mag]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-mag")) === String(state.M) ? "true" : "false"); });
+    root.querySelectorAll("#zoom-spec [data-spec]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-spec") === state.specimen ? "true" : "false"); });
+  }
+  function pick(id) {
+    state.picked = id;
+    var it = kit.pickItem(id);
+    if (it && noteEl) {
+      noteEl.innerHTML = "<b>" + it.name + ":</b> " + (it.visible ? "visible on this slide. " : "not visible on this slide (" + it.reason + "). ") + it.why;
+    }
+    api.highlight(id);
+    paint();
+  }
+  function setMode(m) {
+    m = String(m);
+    if (m === "x100" || m === "100") state.M = 100;
+    else if (m === "x400" || m === "400") state.M = 400;
+    else if (m === "onion" || m === "cheek") state.specimen = m;
+    else if (m === "book") { kit.setState({ showTextbook: true }); refit && stage && refit(); }
+    else if (m === "eyepiece") { kit.setState({ showTextbook: false }); stage && refit(); }
+    kit.setState({ M: state.M, specimen: state.specimen });
+    state.seen[state.specimen + "-" + state.M] = true;
+    state.picked = null;
+    paint();
+    emit("l5:zoom", { mode: m, M: state.M, specimen: state.specimen, seen: Object.keys(state.seen).length, reading: kit.reading() });
+  }
+
+  api.rect = function (part) {
+    if (!stage) return null;
+    var obj = part && kit.parts[part];
+    if (obj && obj.visible === false) obj = null;
+    return stage.rectOf(obj || kit, 14);
+  };
+  api.highlight = function (part) {
+    highlightPart = part || null;
+    if (hl) hl.highlight(part && /^(eyepiece|bezel)$/.test(part) ? part : null);
+  };
+  api.setMode = setMode;
+  api.reset = function () { state.picked = null; state.specimen = "onion"; state.M = 400; state.seen = {}; kit.setState({ M: 400, specimen: "onion", showTextbook: true }); stage && refit(); paint(); };
+  api.pick = pick;
+  api.reading = function () { return kit.reading(); };
+  api.kit = kit;
+  api.stage = stage;
+
+  // taps on the diagram rows
+  if (stage) {
+    canvas.addEventListener("pointerup", function (e) {
+      if (Math.abs(e.movementX || 0) > 6) return;
+      var objs = kit.userData.itemIds.map(function (i) { return kit.parts[i]; }).filter(function (o) { return o && o.visible; });
+      var hit = stage.pick(e, objs);
+      if (hit) pick(hit.object.userData.partId);
+    });
+  }
+
+  root.querySelectorAll("#zoom-mag [data-mag]").forEach(function (b) { b.addEventListener("click", function () { setMode(b.getAttribute("data-mag")); }); });
+  root.querySelectorAll("#zoom-spec [data-spec]").forEach(function (b) { b.addEventListener("click", function () { setMode(b.getAttribute("data-spec")); }); });
+  var rs = document.getElementById("zoom-reset");
+  if (rs) rs.addEventListener("click", api.reset);
+
+  state.seen[state.specimen + "-" + state.M] = true;
+  paint();
 })();

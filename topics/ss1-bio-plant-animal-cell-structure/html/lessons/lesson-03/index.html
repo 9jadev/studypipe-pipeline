@@ -3,42 +3,80 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 3 · Forms of Living Cells &amp; Levels of Biological Organisation · StudyPipe</title>
-  <meta name="description" content="StudyPipe Biology (SS1): Forms of Living Cells (Amoeba, Paramecium, Euglena, Chlamydomonas, Volvox, Spirogyra), Levels of Organisation, and Surface-Area-to-Volume Ratio (SA/V = 6/L).">
+  <title>Lesson 3 · Forms of Cells and Levels of Organisation · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS1) Lesson 3: free-living cells, colonies, filaments and tissues, cell nutrition, levels of organisation and surface area to volume ratio.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='32' cy='32' r='22' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='22' fill='%2316a34a'/%3E%3Ccircle cx='32' cy='32' r='8' fill='%23fef08a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+    .timetable { margin: 14px 0 0; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.7; color: var(--fg-soft); }
+    .timetable b { color: var(--amber); }
+    .lad-art { width: 100%; max-width: 420px; height: auto; }
+    .lad-art .st { fill: rgba(var(--amber-rgb), .16); stroke: var(--amber); stroke-width: 1.6; }
+    .lad-art .st.alt { fill: rgba(var(--teal-rgb), .16); stroke: var(--teal); }
+    .lad-art text { fill: var(--fg); font-family: var(--font-mono); font-size: 13px; }
+    .lad-art .sub { fill: var(--fg-soft); font-size: 10.5px; }
+    .pend-hero-art { display: flex; align-items: center; justify-content: center; }
+    .bench-pane[hidden] { display: none !important; }
+    .org-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    /* Phone: keep this bar compact (QA layout budget is 260px at 360px width) */
+    @media (max-width: 640px) {
+      #bench-mode { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+      #bench-mode button { padding: 8px 6px; font-size: 12.5px; }
+      .org-chips { gap: 5px; }
+      .org-chips .vt-btn { font-size: 11.5px; padding: 7px 8px; }
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #3ee6c4 0%, #22c55e 25%, #ffb23f 50%, #f97316 75%, #f43f5e 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-    }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .org-chips .vt-btn { font-size: 12.5px; padding: 8px 10px; }
+    .org-chips .vt-btn[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--teal); }
+    .org-chips .vt-btn.seen::after { content: " ✓"; color: var(--teal); }
+    #bench-readout .wide { grid-column: 1 / -1; }
+    #bench-readout b { white-space: normal; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.3; }
+    #survey-info { margin: 12px 14px 0; }
+    #survey-info[hidden] { display: none; }
+    #survey-info .num { font-size: 18px; }
+    #survey-info .num small { font-size: 13.5px; }
+    #cube-l button.seen::after { content: " ✓"; }
+    #cube-note { margin: 10px 14px 0; font-size: 14px; line-height: 1.55; color: var(--fg-soft); }
+    #cube-note[hidden] { display: none; }
+    #cube-note b { color: var(--fg); }
+    .cube-mini { display: grid; place-items: center; margin: 6px auto 4px; width: 112px; height: 112px; }
+    .cube-mini .outer { position: relative; display: grid; place-items: center; border-radius: 4px; background: rgba(var(--crimson-rgb), .6); border: 1.5px solid var(--pink); transition: width .3s, height .3s; }
+    .cube-mini .core { background: rgba(var(--paper-card-rgb, 255, 250, 242), .95); border: 1px dashed var(--muted); border-radius: 2px; transition: width .3s, height .3s; }
+    .ph-detail .mini-row { display: grid; grid-template-columns: 124px minmax(0, 1fr); gap: 14px; align-items: center; }
+    @media (max-width: 420px) { .ph-detail .mini-row { grid-template-columns: 96px minmax(0, 1fr); gap: 10px; } .cube-mini { width: 96px; height: 96px; } }
+    .ladder { margin: 18px 0 0; padding: 14px; border-radius: var(--radius); background: var(--ink-900); color: var(--fg); }
+    .ladder ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+    .ladder li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: center; padding: 10px 12px; border-radius: calc(12px * var(--corner, 1)); background: rgba(255, 255, 255, .05); border: 1.5px solid transparent; opacity: .45; transform: translateX(-6px); transition: opacity .35s, transform .35s, border-color .35s, background .35s; }
+    .ladder li.on { opacity: 1; transform: none; border-color: var(--teal); background: rgba(var(--teal-rgb), .1); }
+    .ladder li b { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--amber); color: var(--on-amber, var(--ink-950)); font-family: var(--font-mono); font-size: 13px; }
+    .ladder li span { font-size: 14px; line-height: 1.4; color: var(--fg-soft); }
+    .ladder li strong { display: block; font-size: 15.5px; color: var(--fg); }
+    .ladder-bar { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .size-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+    .size-row .vt-btn[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--teal); }
+    .size-out { margin-top: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; }
+    .size-out div { background: rgba(255, 255, 255, .05); border: 1px solid var(--line); border-radius: calc(12px * var(--corner, 1)); padding: 8px 10px; }
+    .size-out span { display: block; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+    .size-out b { font-family: var(--font-mono); font-size: 15px; color: var(--fg); }
+    .bridge-q { margin-top: 16px; }
+    #bridge-qtext { color: var(--fg); font-weight: 600; }
+    .bridge-q .qopts { display: grid; gap: 8px; margin-top: 10px; }
+    .bridge-fb { margin-top: 12px; padding: 12px 14px; border-radius: calc(12px * var(--corner, 1)); font-size: 15px; line-height: 1.55; display: none; }
+    .bridge-fb.on { display: block; background: rgba(var(--ok-rgb), .1); }
+    .bridge-fb.bad { background: rgba(var(--crimson-rgb), .1); }
+    .forms-tbl td:first-child { font-style: italic; font-weight: 700; }
+    .chain { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .chain span { padding: 4px 10px; border-radius: 999px; background: rgba(var(--amber-rgb), .16); }
+    .chain span + span::before { content: "→ "; color: var(--amber); }
+    .stage-label { max-width: calc(100% - 20px); }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
   <link rel="stylesheet" href="../../assets/css/theme.css">
 </head>
 <body class="lesson-page" data-lesson="l03">
@@ -58,14 +96,14 @@
     <div class="wrap l-hero-grid">
       <div>
         <span class="eyebrow reveal">SS1 Biology · Lesson 3 of 5 · 80 minutes</span>
-        <h1 class="display reveal" data-hook>Forms in Which Living Cells Exist &amp; <em>Levels of Organisation</em></h1>
-        <p class="question reveal">Why can a single microscopic Amoeba in Ogun River water breathe across its plasma membrane alone, while a Tilapia fish or onion plant requires tissues, organs, and transport systems?</p>
+        <h1 class="display reveal" data-hook>Forms of Cells and <em>Levels of Organisation</em></h1>
+        <p class="question reveal">Why can an <em>Amoeba</em> live alone in a pond while Chinedu needs a heart, lungs and blood?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Describe the four forms in which living cells exist: <strong>(i) single free-living cells, (ii) colonies, (iii) filaments, and (iv) part of a multicellular organism</strong>.</span></li>
-          <li><b>02</b><span>Explain the structural adaptations of <strong><em>Amoeba</em>, <em>Paramecium</em>, <em>Euglena</em> (mixotrophic plant + animal traits), and <em>Chlamydomonas</em></strong>, and contrast colonial <strong><em>Volvox</em></strong> with filamentous <strong><em>Spirogyra</em></strong>.</span></li>
-          <li><b>03</b><span>Classify biological structures across the five levels of organisation (<strong>Cell → Tissue → Organ → Organ System → Organism</strong>), including why an <strong>onion bulb</strong> is an organ and why <strong><em>Hydra</em></strong> is at the tissue level.</span></li>
-          <li><b>04</b><span>Calculate surface area <strong>SA = 6L<sup>2</sup></strong>, volume <strong>V = L<sup>3</sup></strong>, and <strong>SA ÷ V = 6 ÷ L</strong> for cuboidal cells to explain why large organisms need mass-transport systems.</span></li>
-          <li><b>05</b><span>Evaluate the biological <strong>advantages and disadvantages of complexity</strong> and division of labour in multicellular organisms.</span></li>
+          <li><b>01</b><span>Describe <strong>free-living, colonial, filamentous and tissue-level</strong> forms with named examples.</span></li>
+          <li><b>02</b><span>Distinguish a <strong>colony</strong> (<em>Volvox</em>) from a <strong>tissue</strong> (<em>Hydra</em>).</span></li>
+          <li><b>03</b><span>Describe nutrition as a cell property: <strong>autotrophic, saprophytic and holozoic</strong>.</span></li>
+          <li><b>04</b><span>Arrange <strong>organelle → cell → tissue → organ → system → organism</strong> with examples.</span></li>
+          <li><b>05</b><span>Calculate the <strong>surface area to volume ratio</strong> and explain why large organisms need transport systems.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -74,6 +112,7 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <p class="timetable reveal" id="timetable">0–5 Do Now · 5–15 Wonder · 15–45 Investigate · <b>45–50 movement break</b> · 50–65 Make Sense · 65–80 Apply and Reflect</p>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
@@ -81,22 +120,16 @@
       </div>
 
       <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <circle cx="72" cy="86" r="34" fill="rgba(34,197,94,0.16)" stroke="#22c55e" stroke-width="2"/>
-          <circle cx="58" cy="76" r="5" fill="#4ade80"/><circle cx="84" cy="74" r="5" fill="#4ade80"/>
-          <circle cx="64" cy="98" r="5" fill="#4ade80"/><circle cx="86" cy="96" r="5" fill="#4ade80"/>
-          <text x="72" y="138" fill="#22c55e" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Volvox (Colony)</text>
-
-          <rect x="132" y="66" width="84" height="38" rx="6" fill="rgba(62,230,196,0.14)" stroke="#3ee6c4" stroke-width="2"/>
-          <path d="M138 72 L156 98 L174 72 L192 98 L210 72" fill="none" stroke="#22c55e" stroke-width="2.2"/>
-          <text x="174" y="138" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">Spirogyra (Filament)</text>
-
-          <rect x="238" y="56" width="58" height="58" rx="6" fill="rgba(255,178,63,0.15)" stroke="#ffb23f" stroke-width="2"/>
-          <text x="267" y="90" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">6 ÷ L</text>
-          <text x="267" y="138" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">SA/V Scaling</text>
-
-          <text x="160" y="192" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="11" text-anchor="middle">Cell → Tissue → Organ → System → Organism</text>
-          <text x="160" y="224" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">SA ÷ V = 6L² ÷ L³ = 6 ÷ L</text>
+        <svg class="lad-art" viewBox="0 -14 320 264" role="img" aria-label="Ladder of six levels of organisation">
+          <rect class="st" x="14" y="196" width="130" height="34" rx="9"/><text x="24" y="218">1 organelle</text>
+          <rect class="st alt" x="48" y="156" width="130" height="34" rx="9"/><text x="58" y="178">2 cell</text>
+          <rect class="st" x="82" y="116" width="130" height="34" rx="9"/><text x="92" y="138">3 tissue</text>
+          <rect class="st alt" x="116" y="76" width="130" height="34" rx="9"/><text x="126" y="98">4 organ</text>
+          <rect class="st" x="150" y="36" width="130" height="34" rx="9"/><text x="160" y="58">5 system</text>
+          <rect class="st alt" x="184" y="-2" width="124" height="32" rx="9"/><text x="194" y="19">6 organism</text>
+          <text class="sub" x="152" y="218">nucleus</text>
+          <text class="sub" x="186" y="178">Euglena</text>
+          <text class="sub" x="220" y="138">Hydra</text>
         </svg>
       </div>
     </div>
@@ -108,10 +141,11 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Cell forms sort</a></li>
-        <li><a href="#practical">3D SA/V &amp; protists</a></li>
-        <li><a href="#concepts">Forms &amp; hierarchy</a></li>
-        <li><a href="#neutralise">3D protist zoom</a></li>
+        <li><a href="#sort">How does it live?</a></li>
+        <li><a href="#practical">3D practical</a></li>
+        <li><a href="#movement-break">Movement break</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">3D zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -126,9 +160,9 @@
 
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
-        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Spaced Retrieval · 5 min</span>
-        <h2>Before we start: <em>retrieve Lessons 1 &amp; 2</em></h2>
-        <p class="intro">Four quick retrieval cards on mitochondrial cristae, the Golgi secretory pathway, plant vs animal carbohydrate storage, and cube geometry.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up your cell toolkit</em></h2>
+        <p class="intro">Four questions from Lessons 1 and 2. Answer each in your head <strong>before</strong> you flip the card.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
@@ -138,14 +172,14 @@
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>Ogun River Pond Safari &amp; <em>Mama Titi’s Onion Bulb</em></h2>
-        <p class="intro">In a drop of green Ogun River pond water, single cells, hollow colonies, and green filaments thrive side by side — while on Mama Titi’s stall sits a purple onion bulb that surprises Alhaji Musa.</p>
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 5 min</span>
+        <h2>Green water from a drain beside <em>Mile 12 Market</em></h2>
+        <p class="intro">Chinedu scoops green water from a drain into a jar. Coach Danjuma says nothing lives in it. Dr Amaka's microscope says otherwise.</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Tunde and Mama Titi examining Volvox colonies, Spirogyra filaments, and an onion bulb at Mile 12 Market, then Dr. Kunle at the Yaba Lab."></canvas>
-            <div class="stage-label"><i></i>3D story · Pond Protists, Colonies &amp; The Onion Bulb Organ</div>
+            <canvas aria-label="Animated 3D story: Chinedu and Coach Danjuma at Mile 12 Market with a jar of drain water, then Dr Amaka showing four pond organisms under the microscope."></canvas>
+            <div class="stage-label"><i></i>3D story · Market → LUTH lab</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -155,38 +189,37 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Ogun River bank, Mile 12:</strong> Tunde holds up a jar of green pond water and a purple onion bulb: <em>“Mama Titi! In this pond water, single cells swim on their own — so why do humans and onion plants need millions of cells arranged into tissues and organs?”</em></p>
-            <p><strong>Scene 2 · Alhaji Musa’s guess:</strong> <em>“And isn't a whole onion bulb just a single storage tissue?”</em></p>
-            <p><strong>Scene 3 · Mama Titi’s WAEC correction:</strong> <em>“The thin peel is epidermal tissue, yes — but the whole onion bulb combines epidermis, fleshy storage parenchyma, xylem, and phloem! Multiple tissues working together make an onion bulb a complete plant ORGAN!”</em></p>
-            <p><strong>Scene 4 · Four Forms of Living Cells:</strong> In the pond jar live single free-living <em>Euglena</em> and <em>Amoeba</em>, spherical <em>Volvox</em> colonies, and unbranched <em>Spirogyra</em> filaments.</p>
-            <p><strong>Scene 5 · The SA/V Bottleneck:</strong> As side length <code>L</code> increases, volume <code>L³</code> outgrows surface area <code>6L²</code>, so <code>SA ÷ V = 6 ÷ L</code> drops and simple diffusion can no longer supply the interior.</p>
-            <p><strong>Scene 6 · Yaba Lab:</strong> Dr. Kunle invites us to test the five 3D pond specimens and measure <code>SA ÷ V</code> across five cube sizes.</p>
+            <p><strong>Scene 1 · Market:</strong> Chinedu holds up a jar of green drain water. <em>“Coach, look what I scooped from the gutter beside the market!”</em></p>
+            <p><strong>Scene 2 · Market:</strong> Coach Danjuma frowns. <em>“Nothing lives in that. It is just dirty water.”</em></p>
+            <p><strong>Scene 3 · Lab:</strong> Under the microscope Dr Amaka shows a blob that keeps changing shape, a slipper covered in hairs, a green spindle with a whip, and a hollow green ball.</p>
+            <p><strong>Scene 4 · Lab:</strong> <em>“Each of these is a whole living thing, yet Chinedu is billions of cells working together. Why the difference?”</em></p>
+            <p><strong>Scene 5 · Lab:</strong> Dr Amaka invites you to run the pond survey and the cube bench.</p>
           </div>
         </details>
       </section>
 
       <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions · 5 min</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">How do colonies differ from filaments, why is <em>Euglena</em> both plant-like and animal-like, and why does <code>SA ÷ V</code> fall as organisms grow? Pin your prediction below.</p>
+        <p class="intro">Is a single cell that lives on its own “simpler” or “smarter” than your body? Pin a prediction before we investigate.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that as a cell doubles in side length L, its SA/V ratio will…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I predict that a single cell… because…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">What makes Euglena both plant-like and animal-like?</button>
-            <button type="button">How does Volvox differ from Spirogyra?</button>
-            <button type="button">Why is an onion bulb classified as an organ?</button>
-            <button type="button">Why does SA ÷ V = 6 ÷ L drop when L increases?</button>
+            <button type="button">One cell can't do everything (Bola)</button>
+            <button type="button">It must eat and breathe somehow (Ifeanyi)</button>
+            <button type="button">Big animals need hearts because they are big? (Halima)</button>
+            <button type="button">Volvox has many cells, so it's a tissue (Coach Danjuma)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
@@ -194,26 +227,26 @@
 
       <!-- ================= 3. SORT GAME ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
-        <h2>Forms of Living Cells &amp; <em>Biological Hierarchy Sort</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Single Free-Living Cells</strong> (<em>Amoeba, Paramecium, Euglena, Chlamydomonas</em>), <strong>Colonies &amp; Filaments</strong> (<em>Volvox, Pandorina, Spirogyra, Oscillatoria</em>), and <strong>Tissues, Organs &amp; Systems</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
+        <h2>How does it live? <em>Sort the nine specimens</em></h2>
+        <p class="intro">Place all nine cards in <strong>free-living</strong>, <strong>colony or filament</strong>, or <strong>tissue level</strong>. Tap a card, then tap a bin (or drag it).</p>
 
-        <div class="sort" id="kitchen-sort">
+        <div class="sort" id="form-sort">
           <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Single Free-Living Cells bin">
-              <h4><i></i>Single Free-Living Cells</h4>
-              <small>Amoeba · Paramecium · Euglena · Chlamydomonas</small>
+            <div class="bin" data-bin="free" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Free-living single cell bin">
+              <h4><i></i>Free-living</h4>
+              <small>one cell, lives alone</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#22c55e" tabindex="0" role="button" aria-label="Colonies and Filaments bin">
-              <h4><i></i>Colonies &amp; Filaments</h4>
-              <small>Volvox · Pandorina · Spirogyra · Nostoc</small>
+            <div class="bin" data-bin="colony-filament" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Colony or filament bin">
+              <h4><i></i>Colony or filament</h4>
+              <small>alike cells, little sharing</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Tissues, Organs and Systems bin">
-              <h4><i></i>Tissues, Organs &amp; Systems</h4>
-              <small>epidermis · Hydra · onion bulb · shoot</small>
+            <div class="bin" data-bin="tissue" style="--bc:var(--pink)" tabindex="0" role="button" aria-label="Tissue level bin">
+              <h4><i></i>Tissue level</h4>
+              <small>cells share out the jobs</small>
               <div class="drop"></div>
             </div>
           </div>
@@ -230,68 +263,66 @@
 
       <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Pond Safari &amp; SA/V Scaling Bench · 15 min</span>
-        <h2>3D Pond Micro-Safari &amp; <em>Surface-Area-to-Volume (SA ÷ V = 6 ÷ L) Bench</em></h2>
-        <p class="intro">Tap Trials A–E below to inspect five 3D pond specimens (<em>Euglena, Paramecium, Amoeba, Volvox, Spirogyra</em>) while measuring how increasing cube side length <strong>L</strong> from <code>1.0 mm</code> to <code>6.0 mm</code> changes surface area <strong>SA = 6L²</strong>, volume <strong>V = L³</strong>, and the critical ratio <strong>SA ÷ V = 6 ÷ L</strong>.</p>
-
-        <div class="callout warn" id="safety-box">
-          <p><strong>Biophysical Scaling Law:</strong> Every living cell exchanges oxygen, nutrients, and wastes across its <strong>surface area ($\propto L^2$)</strong> to support the metabolic demand of its <strong>volume ($\propto L^3$)</strong>. When <code>L</code> grows 6 times larger, surface area increases <code>36×</code> but volume increases <code>216×</code> — so <strong>SA ÷ V drops to one-sixth</strong>!</p>
-        </div>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 22 min</span>
+        <h2>Two stations: <em>the pond survey and the cube bench</em></h2>
+        <p class="intro">At Station A you meet the seven pond organisms. At Station B you cut agar cubes of different sizes, soak them in dye and compare surface area with volume.</p>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Inspect 3D Protist (Left)</h4><p>Each trial switches the 3D specimen between <em>Euglena, Paramecium, Amoeba, Volvox</em>, and <em>Spirogyra</em>.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Measure Cube SA = 6L²</h4><p>A cube has 6 equal square faces, each of area <code>L²</code>, giving total surface area <code>SA = 6L²</code> in <code>mm²</code>.</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Measure Cube V = L³</h4><p>Internal metabolic volume is <code>V = L × L × L = L³</code> in <code>mm³</code>.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Compute SA ÷ V = 6 ÷ L</h4><p>Divide <code>SA</code> by <code>V</code> to verify the hyperbolic decline from <code>6.00 mm⁻¹</code> at <code>1 mm</code> down to <code>1.00 mm⁻¹</code> at <code>6 mm</code>.</p></div>
+          <div class="method" id="m1"><b>STEP 01</b><h4>Survey the pond</h4><p>At Station A, tap each of the seven organisms. Note its form (free-living, colony, filament or tissue) and how it feeds.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Choose a cube, press Calculate</h4><p>At Station B, pick a cube side <code>L</code> (1, 2, 3, 4 or 6 mm) and press <b>Calculate</b>. Watch the dye soak in.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Record SA, V and SA : V</h4><p>Fill the results table: <code>SA = 6L²</code>, <code>V = L³</code>, then SA ÷ V. The graph plots each cube as you record it.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Compare the undyed centre</h4><p>Look at the pale core of the small cubes and of the 6 mm cube. Which one keeps the larger undyed centre?</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Pond Micro-Safari showing Euglena, Paramecium, Amoeba, Volvox, and Spirogyra alongside a 3D Surface-Area-to-Volume scaling cube."></canvas>
-            <div class="stage-label"><i></i>3D Protist Safari &amp; SA/V Cube Bench · drag to rotate</div>
+            <canvas id="bench-canvas" aria-label="3D practical bench. Station A shows each pond organism one at a time. Station B shows an agar cube cut open, with the dye front and the undyed centre."></canvas>
+            <div class="stage-label"><i></i>3D bench · drag to rotate · two stations</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the buttons and the results table below.</p></div>
           </div>
           <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="ph-detail" id="survey-info" aria-live="polite"></div>
+          <p class="cube-note" id="cube-note" hidden></p>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Surface geometry condition" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Smooth Cube (SA/V = 6/L)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Folded Microvilli (2× SA/V)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Unfolded Core Hypoxia</button>
+            <div class="seg" role="group" aria-label="Station" id="bench-mode">
+              <button type="button" data-mode="pond" aria-pressed="true" aria-label="Station A: pond survey">A · Pond</button>
+              <button type="button" data-mode="cube" aria-pressed="false" aria-label="Station B: surface area to volume cubes">B · SA:V cubes</button>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · L = 1 mm (Euglena)</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · L = 2 mm (Paramecium)</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · L = 3 mm (Amoeba)</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · L = 4 mm (Volvox)</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · L = 6 mm (Spirogyra)</button>
-              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <div class="bench-pane" id="pane-pond">
+              <div class="org-chips" id="org-chips" role="group" aria-label="Pond organisms"></div>
             </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 cube &amp; protist trials</span>
+            <div class="bench-pane" id="pane-cube" hidden>
+              <div class="seg" role="group" aria-label="Cube side L in millimetres" id="cube-l"></div>
+              <div class="vt-actions" style="margin-top:8px">
+                <button class="vt-btn zobo" type="button" id="cube-calc">Calculate</button>
+                <button class="vt-btn" type="button" id="cube-reset">Reset</button>
+              </div>
+            </div>
+            <span class="stage-hint" id="bench-hint">Pond: 0 of 7 seen · Cubes: 0 of 5 calculated</span>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
+        <div class="graph-card" id="graph-card">
           <div class="gc-head">
-            <div><span class="gc-kicker">Live graph · plots as you test cube sizes</span><h4>Surface-Area-to-Volume Ratio SA ÷ V (mm⁻¹) against Side Length L (mm)</h4></div>
-            <span class="gc-badge wait" id="vi-badge">0 points</span>
+            <div><span class="gc-kicker">Live graph · plots as you calculate</span><h4>SA : V against cube side L</h4></div>
+            <span class="gc-badge wait" id="sv-badge">0 points</span>
           </div>
-          <div id="vi-graph"></div>
-          <div class="gc-stats" id="vi-stats"></div>
-          <p class="gc-note" id="vi-note"></p>
+          <div id="sv-graph"></div>
+          <div class="gc-stats" id="sv-stats"></div>
+          <p class="gc-note" id="sv-note"></p>
         </div>
 
-        <h3>Record your SA, V, and SA ÷ V readings</h3>
-        <p>As you test Trials A–E on the 3D bench, select the matching <strong>Surface Area SA = 6L² (mm²)</strong>, <strong>Volume V = L³ (mm³)</strong>, and <strong>Ratio SA ÷ V = 6 ÷ L (mm⁻¹)</strong> below.</p>
+        <h3>Record your cube results</h3>
+        <p>Choose SA, V and SA : V for each cube side L. Use the Calculate readouts above.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
             <thead>
               <tr>
-                <th>Trial</th>
-                <th>Side Length L (mm)</th>
-                <th>Surface Area SA = 6L² (mm²)</th>
-                <th>Volume V = L³ (mm³)</th>
-                <th>Ratio SA ÷ V = 6 ÷ L (mm⁻¹)</th>
+                <th>L (mm)</th>
+                <th>SA (mm²)</th>
+                <th>V (mm³)</th>
+                <th>SA : V (mm⁻¹)</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -303,176 +334,143 @@
         </div>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table &amp; SA/V scaling proof <small>open after recording yours</small></summary>
+          <summary>Expected results table <small>open after you have recorded yours</small></summary>
           <div class="reveal-body">
             <div class="tbl-wrap">
-              <table class="tbl">
-                <thead><tr><th>Trial</th><th>Side L (mm)</th><th>SA = 6L² (mm²)</th><th>V = L³ (mm³)</th><th>Ratio SA ÷ V = 6 ÷ L (mm⁻¹)</th></tr></thead>
-                <tbody>
-                  <tr><td>A</td><td>1.0</td><td>6.0</td><td>1.0</td><td>6.00</td></tr>
-                  <tr><td>B</td><td>2.0</td><td>24.0</td><td>8.0</td><td>3.00</td></tr>
-                  <tr><td>C</td><td>3.0</td><td>54.0</td><td>27.0</td><td>2.00</td></tr>
-                  <tr><td>D</td><td>4.0</td><td>96.0</td><td>64.0</td><td>1.50</td></tr>
-                  <tr><td>E</td><td>6.0</td><td>216.0</td><td>216.0</td><td>1.00</td></tr>
-                </tbody>
+              <table class="tbl" id="expected-table">
+                <thead><tr><th>L (mm)</th><th>SA (mm²)</th><th>V (mm³)</th><th>SA : V (mm⁻¹)</th></tr></thead>
+                <tbody></tbody>
               </table>
             </div>
-            <p><strong>Ratio of SA/V at L = 1 mm to SA/V at L = 6 mm:</strong></p>
-            <div class="eq light">(SA ÷ V)_1 ÷ (SA ÷ V)_6 = 6.00 ÷ 1.00 = 6 : 1</div>
+            <p>Every time L doubles (1 → 2), SA : V halves (6.0 → 3.0), because SA : V = 6 ÷ L.</p>
           </div>
         </details>
 
-        <h3>Practical Analysis Questions</h3>
+        <h3>Practical analysis questions</h3>
         <div class="aq" data-answer="l03-prac-q">
-          <div class="aq-top"><h4>Answer these three WAEC scaling and protist analysis questions, then compare with the model answers.</h4></div>
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>Why does the ratio <code>SA ÷ V</code> decrease from <code>6.00 mm⁻¹</code> to <code>1.00 mm⁻¹</code> when cube side length increases from <code>1 mm</code> to <code>6 mm</code>?</li>
-            <li>How do single cells like root hair cells or intestinal epithelial cells increase their <code>SA ÷ V</code> ratio without becoming smaller?</li>
-            <li>Why does a freshwater <em>Amoeba</em> or <em>Paramecium</em> burst if its contractile vacuole is inactivated, whereas a marine protozoan in isotonic seawater rarely needs a contractile vacuole?</li>
+            <li>What happens to SA : V as the side L doubles?</li>
+            <li>Why does the centre of a large cube stay undyed?</li>
+            <li>Why can <em>Amoeba</em> rely on diffusion?</li>
+            <li>Why does <em>Euglena</em> puzzle classifiers?</li>
+            <li>Why is <em>Volvox</em> not a tissue?</li>
           </ol>
           <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>Surface area grows with the square of length (<code>6L²</code>) whereas volume grows with the cube of length (<code>L³</code>), so <code>SA ÷ V = 6 ÷ L</code> falls inversely with length.</li>
-                <li>By folding their plasma membrane into projections (microvilli in intestinal cells, long tubular extensions in root hair cells, or flattened biconcave discs in red blood cells).</li>
-                <li>Freshwater is strongly hypotonic to protozoan cytoplasm, so water enters continuously by osmosis and must be pumped out by the contractile vacuole; seawater is nearly isotonic to marine protozoans.</li>
+                <li>SA : V halves. In the table, 6.0 mm⁻¹ for the 1 mm cube becomes 3.0 mm⁻¹ for the 2 mm cube, because SA : V = 6 ÷ L.</li>
+                <li>Dye reaches only a short distance in the time allowed. In a big cube the middle is far from every face, so the dye does not get there and a pale core remains.</li>
+                <li><em>Amoeba</em> is tiny, so it has a very large SA : V and every part of it is close to the surface. Diffusion across the membrane is fast enough for its needs.</li>
+                <li>It has chloroplasts like a plant cell, and a gullet and flagellum like an animal-like protozoan. In light it feeds autotrophically; in darkness it absorbs food saprophytically.</li>
+                <li>The cells of <em>Volvox</em> are copies of one another and each can feed, respire and move by itself. A tissue needs cells that share out the jobs and cannot live apart.</li>
               </ol>
             </div>
           </details>
         </div>
       </section>
 
-      <!-- ================= 4. CONCEPTS ================= -->
-      <section class="l-sec" id="concepts">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
-        <h2>Four Forms of Living Cells &amp; <em>Five Levels of Biological Organisation</em></h2>
-        <p class="intro">Master every example, diagram feature, and classification rule tested in WAEC, NECO, and JAMB Biology.</p>
-
-        <h3 id="def-shm">1 · The Four Forms in Which Living Cells Exist</h3>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Form</th><th>Key Organisms &amp; Structural Adaptations</th><th>WAEC / JAMB Highlights</th></tr></thead>
-            <tbody>
-              <tr>
-                <td><strong>1. Single, Free-Living (Independent) Unicellular Organisms</strong></td>
-                <td>
-                  • <strong><em>Amoeba proteus</em>:</strong> Irregular shape; finger-like <strong>pseudopodia</strong> for amoeboid movement &amp; phagocytosis; <strong>contractile vacuole</strong> for osmoregulation; food vacuoles; ectoplasm &amp; endoplasm.<br>
-                  • <strong><em>Paramecium caudatum</em>:</strong> Fixed slipper shape (pellicle); hair-like <strong>cilia</strong> for fast swimming &amp; sweeping bacteria down the <strong>oral groove → cytopharynx (gullet)</strong>; two star-shaped contractile vacuoles; <strong>macronucleus</strong> (metabolism) &amp; <strong>micronucleus</strong> (conjugation); anal pore (cytoproct); trichocysts (defence).<br>
-                  • <strong><em>Euglena viridis</em> (Mixotroph):</strong> Spindle-shaped; <strong>Plant traits:</strong> chloroplasts, pyrenoids, paramylon carbohydrate granules (holophytic/autotrophic in light). <strong>Animal traits:</strong> flexible protein <strong>pellicle</strong> (no cellulose wall), long <strong>flagellum</strong> for locomotion, red <strong>stigma (eyespot)</strong> for positive phototaxis, gullet/reservoir, contractile vacuole, saprophytic/holozoic nutrition in darkness.<br>
-                  • <strong><em>Chlamydomonas</em>:</strong> Unicellular green alga; <strong>cellulose cell wall</strong>, single large <strong>cup-shaped chloroplast</strong>, <strong>pyrenoid</strong> (starch storage), red eyespot, two equal anterior flagella, two apical contractile vacuoles.
-                </td>
-                <td>A single cell performs all 7 life processes (MR NIGER D) independently.</td>
-              </tr>
-              <tr>
-                <td><strong>2. As a Colony</strong></td>
-                <td>
-                  • <strong><em>Volvox aureus</em>:</strong> Hollow mucilaginous sphere of <code>500 – 50,000</code> <em>Chlamydomonas</em>-like cells interconnected by fine <strong>cytoplasmic strands</strong>.<br>
-                  • <strong><em>Pandorina</em> (16 cells) &amp; <em>Eudorina</em> (32 cells):</strong> Simpler colonies where all cells are similar and reproductive.
-                </td>
-                <td>In <em>Volvox</em>, flagella beat in a coordinated wave and cells show <strong>division of labour</strong> between anterior vegetative somatic cells and posterior reproductive <strong>gonidia</strong> (daughter colonies).</td>
-              </tr>
-              <tr>
-                <td><strong>3. As a Filament</strong></td>
-                <td>
-                  • <strong><em>Spirogyra</em>:</strong> Unbranched green algal filament of cylindrical cells joined end-to-end; outer <strong>mucilage sheath</strong> (slimy feel); cellulose cell wall; <strong>spiral ribbon chloroplast</strong> studded with <strong>pyrenoids</strong>; nucleus suspended by cytoplasmic strands above a large central vacuole.<br>
-                  • <strong><em>Oscillatoria</em> &amp; <em>Nostoc</em>:</strong> Filamentous cyanobacteria.
-                </td>
-                <td>Cells divide by mitosis in one plane only and remain attached end-to-end, yet each cell in <em>Spirogyra</em> is physiologically independent.</td>
-              </tr>
-              <tr>
-                <td><strong>4. As Part of a Multicellular Organism</strong></td>
-                <td>
-                  • Specialized plant cells: <strong>palisade mesophyll cell, guard cell, root hair cell, xylem vessel, phloem sieve tube</strong>.<br>
-                  • Specialized animal cells: <strong>red blood cell, motor neurone, spermatozoon, ovum, ciliated epithelial cell, muscle fibre</strong>.
-                </td>
-                <td>Cells differentiate structurally to perform one specific role and cannot survive in isolation.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 id="def-terms">2 · The Five Levels of Biological Organisation</h3>
-        <ol>
-          <li><strong>Level 1 — Cell:</strong> The basic structural and functional unit of life (e.g., <em>Amoeba</em>, guard cell, neurone, spermatozoon, ovum).</li>
-          <li><strong>Level 2 — Tissue:</strong> A group of similar (or coordinated) cells having a common embryonic origin and intercellular substance that perform a specific function.
-            <ul>
-              <li><strong>Plant tissues:</strong> Epidermis, parenchyma, collenchyma, sclerenchyma, xylem, phloem.</li>
-              <li><strong>Animal tissues:</strong> Epithelial, connective (<strong>blood, bone, cartilage</strong>), muscular, nervous.</li>
-              <li><strong>Organisms at the Tissue Level:</strong> Coelenterates / Cnidarians such as <strong><em>Hydra</em></strong>, jellyfish, and sea anemones (diploblastic: ectoderm + endoderm separated by mesoglea, with no true organs).</li>
-            </ul>
-          </li>
-          <li><strong>Level 3 — Organ:</strong> A collection of different tissues grouped together into a distinct structural unit to perform one or more major functions.
-            <ul>
-              <li><strong>Plant organs:</strong> <strong>Onion bulb</strong> (scale-leaf epidermis + fleshy storage parenchyma + xylem/phloem + stem disc), <strong>leaf, root, stem, rhizome (ginger), tuber (yam/Irish potato), flower, fruit, seed</strong>.</li>
-              <li><strong>Animal organs:</strong> <strong>Heart, kidney, eye, brain, stomach, liver, lungs, skin</strong> (largest mammalian organ).</li>
-            </ul>
-          </li>
-          <li><strong>Level 4 — Organ System:</strong> A group of coordinated organs working together to carry out a major physiological process (e.g., <strong>shoot system and root system</strong> in plants; <strong>digestive, circulatory, respiratory, excretory, nervous, reproductive, and skeletal systems</strong> in animals).</li>
-          <li><strong>Level 5 — Multicellular Organism:</strong> A complete living individual made of integrated organ systems (e.g., maize plant, mango tree, Tilapia fish, human being).</li>
-        </ol>
-
-        <h3>3 · Surface-Area-to-Volume Ratio ($\frac{SA}{V}$) &amp; Complexity Trade-Offs</h3>
-        <div class="eq" id="eq-shm" data-hook>SA = 6L^2 &nbsp;&nbsp;·&nbsp;&nbsp; V = L^3 &nbsp;&nbsp;⇒&nbsp;&nbsp; SA ÷ V = 6L^2 ÷ L^3 = 6 ÷ L</div>
-        <div class="eq" id="eq-omega">At L = 1 mm: &nbsp; SA ÷ V = 6 ÷ 1 = 6.0 mm⁻¹ &nbsp;&nbsp;·&nbsp;&nbsp; At L = 6 mm: &nbsp; SA ÷ V = 6 ÷ 6 = 1.0 mm⁻¹</div>
-        <div class="eq" id="eq-vel">Volvox Daughter Colony Amplification: &nbsp; N_cells = 12 × 2500 = 30000 cells</div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up and act out the <strong>4 Forms of Living Cells</strong>! (1) Wave your arms slowly like an <em>Amoeba</em> extending pseudopodia. (2) Spin gently in place while whipping one hand forward like <em>Euglena</em>’s flagellum. (3) Join hands in a circle with an imaginary partner like a <em>Volvox</em> colony. (4) Stand tall with hands on your head and feet together like a cylindrical <em>Spirogyra</em> cell in a filament!</p>
-        </div>
-
-        <h3 id="props">4 · Advantages &amp; Disadvantages of Complexity in Higher Organisms</h3>
-        <div class="tbl-wrap" id="props-table">
-          <table class="tbl">
-            <thead><tr><th>Advantages of Multicellular Complexity</th><th>Disadvantages of Multicellular Complexity</th></tr></thead>
-            <tbody>
-              <tr><td><strong>1. Cellular Differentiation &amp; Division of Labour:</strong> Specialized cells, tissues, and organs perform tasks concurrently without interference.</td><td><strong>1. Loss of Individual Cell Independence:</strong> Differentiated cells (e.g., neurones, RBCs) cannot survive on their own outside the body.</td></tr>
-              <tr><td><strong>2. High Physiological Efficiency:</strong> Specialized structures (lungs, nephrons, palisade layer) operate at peak efficiency.</td><td><strong>2. Slower Rate of Diffusion (Low $\frac{SA}{V}$):</strong> Requires complex, energy-consuming respiratory and circulatory systems.</td></tr>
-              <tr><td><strong>3. Attainment of Large Body Size:</strong> Internal skeletons and vascular tissues support large size.</td><td><strong>3. Slower Regeneration &amp; Reproduction:</strong> Healing damaged organs and sexual reproduction take much longer than binary fission.</td></tr>
-              <tr><td><strong>4. Adaptation to Diverse Habitats &amp; Longer Lifespan:</strong> Homeostasis enables survival across dry land, air, and water; death of one cell does not kill the organism.</td><td><strong>4. High Interdependence Vulnerability:</strong> Failure of one vital organ (e.g., heart or brain) causes death of the entire organism.</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 id="ph-h">Levels of Biological Organisation Explorer (Cell → Organism)</h3>
-        <p>Tap any pin from Level 1 to Level 5 below to inspect plant and animal examples and WAEC classification rules:</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← High SA/V (Unicellular)</div><div>Tissues &amp; Organs (Hydra / Onion Bulb)</div><div>Organ Systems (Mass Transport) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect the five levels of biological organisation.</div>
+      <!-- ================= 3C. MOVEMENT BREAK ================= -->
+      <section class="l-sec" id="movement-break">
+        <span class="phase" style="--pc:#7a9a00"><b>★</b>Active movement break · 45–50 min</span>
+        <h2>Stand up and <em>become the levels</em></h2>
+        <div class="callout big reveal">
+          <p><strong>Five-minute break.</strong> Stand beside your desk. Curl into a tiny ball: you are an <em>Amoeba</em>, one cell with everything close to the surface. Now stretch your arms wide and take giant steps like a cube that keeps growing: your middle is getting far from the outside. Then pair up. One of you is the “heart”, the other the “lungs”, passing an imaginary parcel of oxygen to every classmate in the row. Sit down when the parcel reaches the last person.</p>
         </div>
       </section>
 
-      <!-- ================= 5. 3D PROTIST & HYDRA ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Cell Forms &amp; Hydra Zoom</span>
-        <h2>3D Specimen Stage: <em>Euglena, Volvox Colony, Spirogyra Filament &amp; Tissue-Level Hydra</em></h2>
-        <p class="intro">Switch between the <strong>mixotrophic single cell (<em>Euglena</em>) &amp; hollow colony (<em>Volvox</em>)</strong>, the <strong>unbranched filament (<em>Spirogyra</em>)</strong> with its spiral chloroplast and pyrenoids, and the <strong>diploblastic tissue-level animal (<em>Hydra</em>)</strong>!</p>
+      <!-- ================= 4. CONCEPTS (Make sense) ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Forms, levels and <em>surface area to volume ratio</em></h2>
+        <p class="intro">Now connect the pond survey and the cube bench to what the examiners ask.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>One cell or billions?</b><span class="lv-time">11 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: One cell or billions?" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <h3>1 · The seven forms</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl forms-tbl">
+            <thead><tr><th>Specimen</th><th>Level</th><th>Features</th><th>Nutrition</th></tr></thead>
+            <tbody>
+              <tr><td>Amoeba</td><td>Free-living</td><td>No fixed shape, pseudopodia, food and contractile vacuoles</td><td>Holozoic</td></tr>
+              <tr><td>Paramecium</td><td>Free-living</td><td>Slipper shape, cilia, oral groove, macronucleus and micronucleus</td><td>Holozoic</td></tr>
+              <tr><td>Euglena</td><td>Free-living</td><td>Spindle, flagellum, eyespot, chloroplasts</td><td>Autotrophic in light, saprophytic in darkness</td></tr>
+              <tr><td>Chlamydomonas</td><td>Free-living</td><td>Two flagella, cup-shaped chloroplast, cellulose wall</td><td>Autotrophic</td></tr>
+              <tr><td>Volvox</td><td>Colony</td><td>Hollow sphere of Chlamydomonas-like cells linked by strands</td><td>Autotrophic</td></tr>
+              <tr><td>Spirogyra</td><td>Filament</td><td>Unbranched chain, spiral ribbon chloroplasts</td><td>Autotrophic</td></tr>
+              <tr><td>Hydra</td><td>Tissue level</td><td>Ectoderm and endoderm, cells with different jobs</td><td>Holozoic</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout info" id="colony-vs-tissue">
+          <h4>Colony or tissue?</h4>
+          <p>The cells of <em>Volvox</em> are copies of one another: each can feed, respire and move by itself, so jobs are hardly shared. <em>Spirogyra</em>'s filament works the same way. In <em>Hydra</em> the cells have taken on different jobs (catching food, digesting, covering) and could not survive apart. That sharing of jobs is what makes a tissue.</p>
+        </div>
+
+        <h3>2 · Levels of organisation</h3>
+        <div class="eq nowrap" id="eq-levels" data-math-upgraded="1"><div class="chain"><span>organelle</span><span>cell (<em>Euglena</em>)</span><span>tissue (<em>Hydra</em>, epithelium, blood)</span><span>organ (onion bulb, heart, leaf)</span><span>system (digestive, excretory)</span><span>organism</span></div></div>
+
+        <h3>3 · What Chinedu's body pays, and gains, for being big</h3>
+        <div class="tbl-wrap" id="complexity-table">
+          <table class="tbl">
+            <thead><tr><th>Cost</th><th>Gain</th></tr></thead>
+            <tbody>
+              <tr><td>Water and food must be carried to distant cells (blood and a heart, because SA : V is small)</td><td>Specialised cells each do one job very well</td></tr>
+              <tr><td>It must eat far more than an <em>Amoeba</em></td><td>The body can grow large</td></tr>
+              <tr><td>An injured organ can endanger every cell</td><td>It can live in many places: a market, a hot classroom, a cold air-conditioned clinic</td></tr>
+              <tr><td>None of its cells could live on their own</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4 · Surface area to volume ratio</h3>
+        <div class="eq" id="eq-sav">SA ÷ V = 6L<sup>2</sup> ÷ L<sup>3</sup> = 6 ÷ L</div>
+
+        <h3 id="ph-h">Cube explorer</h3>
+        <p>Tap a cube side to see SA, V, SA : V and how much of the cube stays undyed.</p>
+        <div class="ph-explorer" id="pos-explorer">
+          <h3>Cube side L</h3>
+          <p class="ph-sub">Dye depth 1.0 mm after 30 minutes. Pale centre = undyed.</p>
+          <div class="ph-choices" id="ex-choices"></div>
+          <div class="ph-detail" id="ex-detail" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D zoom</span>
+        <h2>Colony beside tissue, and <em>the level ladder</em></h2>
+        <p class="intro">See a <em>Volvox</em> colony beside a <em>Hydra</em>, look inside <em>Hydra</em>'s two layers, then climb the ladder from organelle to organism.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D interactive models of Euglena, Volvox colony, Spirogyra filament, and Hydra at the tissue level."></canvas>
-            <div class="stage-label"><i></i>3D Cell Forms &amp; Hydra Stage · drag to rotate</div>
+            <canvas id="zoom-canvas" aria-label="3D zoom: a Volvox colony beside a Hydra, Hydra's two cell layers, and an organelle, a cell and a tissue-level organism side by side."></canvas>
+            <div class="stage-label"><i></i>3D zoom · <em>Volvox</em> vs <em>Hydra</em></div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D protist stage couldn't start on this device.</p></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
           </div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Specimen view mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Euglena &amp; Volvox Colony</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Spirogyra (Filament)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Hydra (Tissue Level)</button>
+            <div class="seg" role="group" aria-label="Zoom view">
+              <button type="button" data-mode="colony" aria-pressed="true">Colony vs tissue</button>
+              <button type="button" data-mode="tissue" aria-pressed="false">Inside Hydra</button>
+              <button type="button" data-mode="ladder" aria-pressed="false">Level ladder</button>
             </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Toggle Sunlight (Phototaxis)</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
-            <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#3ee6c4"></i>Level<b data-c="h">Cell/Colony</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>Cells<b data-c="oh">1 / 5,000</b></span>
-              <span class="counter"><i style="--c:#7cc4ff"></i>SA÷V<b data-c="na">6.0 mm⁻¹</b></span>
-              <span class="counter"><i style="--c:#22c55e"></i>Nutrition<b data-c="cl">Mixotrophic</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Osmoreg.<b data-c="w">Contractile Vac.</b></span>
-            </div>
+            <span class="stage-hint" id="zoom-hint"></span>
+          </div>
+        </div>
+
+        <div class="ladder" id="level-ladder">
+          <ol id="ladder-list"></ol>
+          <div class="ladder-bar">
+            <button class="vt-btn zobo" type="button" id="ladder-climb">Climb the ladder</button>
+            <button class="vt-btn" type="button" id="ladder-reset">Reset</button>
           </div>
         </div>
       </section>
@@ -481,85 +479,66 @@
       <section class="l-sec" id="examples">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Every calculation is expanded one mathematical operation at a time in LaTeX with a plain-English explainer note underneath.</p>
+        <p class="intro">Try each problem on paper first, then check the working.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Surface-Area-to-Volume Ratio (SA/V) of Small vs Large Cuboidal Organisms</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>SA : V of a 2 mm cube</h4></div>
           <div class="example-body">
-            <p class="q">Compare a cuboidal unicellular model of side length L₁ = 1 mm with a larger multicellular model of side length L₂ = 5 mm. Calculate for each: (a) total surface area SA = 6L², (b) volume V = L³, and (c) the surface-area-to-volume ratio SA ÷ V.</p>
+            <p class="q">A cube has sides of 2 mm. Find its surface area to volume ratio.</p>
             <ol class="steps-sol">
-              <li><strong>Small Cell (L₁ = 1 mm) — Surface Area, Volume &amp; Ratio:</strong> <code>SA_1 = 6 × 1^2 = 6 × 1 = 6 mm²</code>.</li>
-              <li><strong>Small Cell Volume V₁:</strong> <code>V_1 = 1^3 = 1 mm³</code>.</li>
-              <li><strong>Small Cell SA ÷ V Ratio:</strong> <code>Ratio_1 = 6 ÷ 1 = 6.0 mm⁻¹</code>.</li>
-              <li><strong>Large Organism (L₂ = 5 mm) — Surface Area SA₂:</strong> <code>SA_2 = 6 × 5^2 = 6 × 25 = 150 mm²</code>.</li>
-              <li><strong>Large Organism Volume V₂:</strong> <code>V_2 = 5^3 = 125 mm³</code>.</li>
-              <li><strong>Large Organism SA ÷ V Ratio:</strong> <code>Ratio_2 = 150 ÷ 125 = 1.2 mm⁻¹</code>.</li>
+              <li><strong>Surface area:</strong> <code>SA = 6 × 2<sup>2</sup> = 6 × 4 = 24 mm<sup>2</sup></code>.</li>
+              <li><strong>Volume:</strong> <code>V = 2<sup>3</sup> = 8 mm<sup>3</sup></code>.</li>
+              <li><strong>Ratio:</strong> <code>SA ÷ V = 24 ÷ 8 = 3.0 mm<sup>−1</sup></code>. Check with the shortcut: <code>6 ÷ 2 = 3.0 mm<sup>−1</sup></code>.</li>
             </ol>
-            <div class="answer-line">L₁ = 1 mm gives SA/V = 6.0 mm⁻¹ &nbsp;·&nbsp; L₂ = 5 mm gives SA/V = 1.2 mm⁻¹ (5 times lower!)</div>
+            <div class="answer-line">3.0 mm<sup>−1</sup></div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Colonial Cell Population &amp; Reproductive Gonidia Percentage in Volvox</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Comparing a 1 mm cube with a 6 mm cube</h4></div>
           <div class="example-body">
-            <p class="q">A parent Volvox colony consists of 2500 cells, of which 10 are specialized reproductive gonidia and the rest are flagellated somatic cells. (a) Calculate the percentage of cells in the colony that are somatic. (b) If each of the 10 gonidia divides to form a daughter colony of 2500 cells, how many total cells are produced across all daughter colonies?</p>
+            <p class="q">Compare the SA : V of cubes with sides of 1 mm and 6 mm.</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) Step 1 — Number of somatic cells in parent colony:</strong> <code>N_somatic = 2500 − 10 = 2490 cells</code>.</li>
-              <li><strong>Part (a) Step 2 — Percentage of somatic cells:</strong> <code>%Somatic = (2490 ÷ 2500) × 100 = 0.996 × 100 = 99.6%</code>.</li>
-              <li><strong>Part (b) — Total cells produced across all 10 daughter colonies:</strong> <code>N_total = 10 × 2500 = 25000 cells</code>.</li>
+              <li><strong>Small cube:</strong> <code>6 ÷ 1 = 6.0 mm<sup>−1</sup></code>.</li>
+              <li><strong>Large cube:</strong> <code>6 ÷ 6 = 1.0 mm<sup>−1</sup></code>.</li>
+              <li><strong>Compare:</strong> <code>6.0 ÷ 1.0 = 6</code>. The small cube has six times as much surface for each mm³.</li>
             </ol>
-            <div class="answer-line">(a) 99.6% somatic cells &nbsp;·&nbsp; (b) 25000 cells across 10 daughter colonies</div>
+            <div class="answer-line">6.0 ÷ 1.0 = 6</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Number of Cylindrical Cells in an Unbranched Spirogyra Filament</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Amoeba against a small frog</h4></div>
           <div class="example-body">
-            <p class="q">An unbranched filament of Spirogyra floating in Ogun River pond water measures 45 mm in total length. If each cylindrical cell in the filament has an actual length of 150 µm, calculate the total number of cells joined end-to-end in the filament.</p>
+            <p class="q">Model an <em>Amoeba</em> as a 0.1 mm cube and a small frog's body as a 30 mm cube. How many times larger is the <em>Amoeba</em>'s SA : V?</p>
             <ol class="steps-sol">
-              <li><strong>Step 1 — Convert total filament length from millimetres to micrometres:</strong> <code>L_filament = 45 × 1000 = 45000 µm</code>.</li>
-              <li><strong>Step 2 — Divide total filament length by single cell length:</strong> <code>N_cells = 45000 ÷ 150 = 300 cells</code>.</li>
+              <li><strong>Amoeba:</strong> <code>6 ÷ 0.1 = 60 mm<sup>−1</sup></code>.</li>
+              <li><strong>Frog:</strong> <code>6 ÷ 30 = 0.2 mm<sup>−1</sup></code>.</li>
+              <li><strong>Compare:</strong> <code>60 ÷ 0.2 = 300</code>. Diffusion alone serves the <em>Amoeba</em>; the frog needs blood and a heart.</li>
             </ol>
-            <div class="answer-line">Total number of cells in filament = 300 cells</div>
+            <div class="answer-line">60 ÷ 0.2 = 300</div>
           </div>
         </article>
       </section>
 
       <!-- ================= 7. BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Back to Mile 12: <em>prove why Mama Titi’s onion bulb is a Plant Organ!</em></h2>
-        <p class="intro">Walk through Steps 1, 2, and 3 to connect the surface-area-to-volume scaling law (<code>SA ÷ V = 6 ÷ L</code>) to tissue and organ differentiation in an onion bulb.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the lab: <em>why does Dr Amaka's patient need blood?</em></h2>
+        <p class="intro">Scale a cube up from an <em>Amoeba</em> to a small frog and watch SA : V and the distance to the centre.</p>
 
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Specimen A · Pond Protist (L = 1 mm) <small style="color:var(--muted);font-weight:500">· Single Free-Living Cell</small></h4>
-              <div class="clock-well">
-                <div style="width:32px;height:32px;border-radius:6px;border:2px solid #3ee6c4;background:rgba(62,230,196,.22);display:flex;align-items:center;justify-content:center;font-size:11px;color:#ccfbf1">6:1</div>
-              </div>
-              <div class="vt-count"><span id="time-a">SA/V = 6.00 mm⁻¹ · Direct Diffusion</span><small>no organs needed</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Specimen B · Mama Titi's Onion Bulb <small style="color:var(--muted);font-weight:500" id="len-b-label">· L = 6 mm multicellular bulb</small></h4>
-              <div class="clock-well">
-                <div style="width:76px;height:76px;border-radius:50% 50% 42% 42%;border:3px solid #a855f7;background:rgba(168,85,247,.22);display:flex;align-items:center;justify-content:center;font-size:11px;color:#f3e8ff">Bulb</div>
-              </div>
-              <div class="vt-count"><span id="time-b">Tissue or Organ? Test SA/V first</span><small>inspect internal layers</small></div>
-            </div>
+        <div class="vt" id="bridge-test">
+          <div class="size-row" id="size-row" role="group" aria-label="Choose a body size"></div>
+          <div class="size-out" id="size-out" aria-live="polite"></div>
+          <div class="bridge-q">
+            <p id="bridge-qtext"></p>
+            <div class="qopts" id="bridge-opts"></div>
+            <div class="bridge-fb" id="bridge-fb" role="status" aria-live="polite"></div>
           </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Compute SA/V = 6/L Drop (6.0 → 1.0 mm⁻¹)</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Identify 4 Tissues Inside the Onion Bulb</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Confirm Organ Level Classification</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset analysis</button>
-          </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Compare Specimen A (1 mm Unicellular Protist) with Specimen B (Mama Titi's Onion Bulb). Start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
         </div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 3:</strong> Living cells exist as <strong>single free-living units</strong> (<em>Amoeba, Paramecium, Euglena, Chlamydomonas</em>), <strong>colonies</strong> (<em>Volvox</em>), <strong>filaments</strong> (<em>Spirogyra</em>), or <strong>differentiated cells in multicellular organisms</strong>. Because <strong>SA ÷ V = 6 ÷ L</strong> falls as size grows, multicellular organisms organise <strong>Cells → Tissues → Organs (such as an onion bulb or heart) → Organ Systems</strong> to achieve high efficiency and overcome diffusion limits!</p>
+          <p><strong>The big idea of Lesson 3:</strong> large many-celled organisms divide labour among specialised cells and must move materials around, because SA ÷ V = 6 ÷ L falls as the body grows.</p>
         </div>
       </section>
 
@@ -567,7 +546,7 @@
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
         <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <p class="intro">Choose an option for instant feedback and a full explanation.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
@@ -577,86 +556,54 @@
 
       <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · self-rating</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 3.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal from Lesson 3.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can describe the four forms in which living cells exist with named examples.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can state the plant-like and animal-like features of Euglena viridis.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can distinguish a Volvox colony from a Spirogyra filament.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can classify structures across the 5 levels of organisation (including Hydra and the onion bulb).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can calculate SA = 6L², V = L³, and SA/V = 6/L and state the advantages and disadvantages of complexity.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can name seven specimens and say which form each one shows.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can tell a colony from a tissue.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can describe autotrophic, saprophytic and holozoic nutrition.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can order the six levels of organisation.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can calculate and use SA : V.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
         <div class="aq" data-answer="l03-exit">
-          <div class="aq-top"><h4>In two sentences: why is a whole onion bulb classified as an organ rather than a tissue, and how does a Volvox colony differ from a Spirogyra filament?</h4><span class="marks">2 marks</span></div>
+          <div class="aq-top"><h4>Find the SA : V of a 5 mm cube, and give one reason a large animal needs a transport system.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>An onion bulb is an organ because it comprises several different tissues (scale-leaf epidermis, fleshy storage parenchyma, xylem, and phloem) working together for food storage and vegetative propagation <b>(1)</b>. <em>Volvox</em> is a hollow spherical colony of flagellated cells linked by cytoplasmic bridges with reproductive division of labour, whereas <em>Spirogyra</em> is an unbranched filament of independent cylindrical cells joined end-to-end <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>SA ÷ V = 6 ÷ 5 = 1.2 mm⁻¹ <b>(1)</b>. A large animal has a small SA : V, so its cells are a long way from the surface and diffusion alone is too slow <b>(1)</b>.</p></div>
           </details>
         </div>
       </section>
 
       <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>Forms of Living Cells &amp; Biological Organisation</em></h2>
-        <p class="intro">Complete Part A (onion bulb dissection) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · Reflect and Apply</span>
+        <h2>Assignment: <em>forms of cells and SA : V</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 03.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
+        <h3>Part A · Home investigation</h3>
+        <p>Why does a big piece of yam stay pale inside? Model SA : V with yam cubes and zobo dye (an adult cuts and supervises).</p>
+        <h3>Part B · Written paper (30 marks)</h3>
+        <ul>
+          <li>b1 · Levels of organisation (4 marks)</li>
+          <li>b2 · Colony, filament or tissue? (4 marks)</li>
+          <li>b3 · Nutrition as a property of cells (4 marks)</li>
+          <li>b4 · The price of being complex (4 marks)</li>
+          <li>b5 · Surface area to volume ratio calculation (5 marks)</li>
+          <li>b6 · Why the catfish needs blood (3 marks)</li>
+          <li>b7 · Features to draw for named specimens (4 marks)</li>
+          <li>b8 · Precautions in the pond-water survey (2 marks)</li>
+        </ul>
 
-        <h3>Part A · Home Onion Bulb Hierarchy Audit</h3>
-        <div class="aq" data-answer="l03-a1">
-          <div class="aq-top"><h4>Cut or peel a fresh onion bulb at home. Identify: (1) a part at the tissue level, (2) the whole structure at the organ level, and (3) what you would see under a microscope at the cellular level.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="Your observations across the 3 levels…" aria-label="Part A answer"></textarea>
-          <details class="reveal-box solution">
-            <summary>Sample answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body">
-              <p>1. <strong>Tissue level:</strong> The translucent inner epidermal peel (or the fleshy white storage parenchyma layer).<br>
-              2. <strong>Organ level:</strong> The entire onion bulb (combining outer dry scale leaves, fleshy leaves, vascular bundles, and basal stem disc).<br>
-              3. <strong>Cell level:</strong> Individual brick-shaped onion epidermal cells with cellulose cell walls, nuclei, and central sap vacuoles.</p>
-            </div>
-          </details>
-        </div>
-
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
-        <div class="aq" data-answer="l03-b1">
-          <div class="aq-top"><h4>1. (a) State four plant-like characteristics and four animal-like characteristics of Euglena viridis [8 marks]. (b) State two structural differences between Volvox and Spirogyra [2 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) <strong>Plant-like traits of <em>Euglena</em>:</strong> 1. Possesses green chloroplasts containing chlorophyll <b>(1)</b>. 2. Performs holophytic (autotrophic) photosynthesis in sunlight <b>(1)</b>. 3. Possesses pyrenoids <b>(1)</b>. 4. Stores carbohydrate as paramylon granules <b>(1)</b>.<br>
-            <strong>Animal-like traits of <em>Euglena</em>:</strong> 1. Lacks a cellulose cell wall; bounded by a flexible proteinaceous pellicle <b>(1)</b>. 2. Moves actively using a long whip-like flagellum <b>(1)</b>. 3. Possesses a light-sensitive eyespot (stigma) and gullet/reservoir <b>(1)</b>. 4. Possesses a contractile vacuole for osmoregulation and feeds saprophytically in darkness <b>(1)</b>.<br>
-            (b) <em>Volvox</em> is a spherical motile colony of flagellated cells joined by cytoplasmic strands, whereas <em>Spirogyra</em> is a non-motile unbranched filament of cylindrical cells joined end-to-end <b>(2)</b>.</p>
-          </div></details>
-        </div>
-
-        <div class="aq" data-answer="l03-b2">
-          <div class="aq-top"><h4>2. (a) Classify each of the following into its correct level of biological organisation (Cell, Tissue, Organ, or System): (i) Spermatozoon (ii) Mammalian blood (iii) Onion bulb (iv) Hydra (v) Xylem (vi) Mammalian skin [6 marks]. (b) State two advantages and two disadvantages of complexity in higher organisms [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) (i) Spermatozoon = <strong>Cell</strong> <b>(1)</b>. (ii) Mammalian blood = <strong>Tissue</strong> <b>(1)</b>. (iii) Onion bulb = <strong>Organ</strong> <b>(1)</b>. (iv) <em>Hydra</em> = <strong>Tissue level</strong> <b>(1)</b>. (v) Xylem = <strong>Tissue</strong> <b>(1)</b>. (vi) Mammalian skin = <strong>Organ</strong> <b>(1)</b>.<br>
-            (b) <strong>Advantages:</strong> 1. Division of labour and cell specialization lead to high physiological efficiency <b>(1)</b>. 2. Ability to grow large and survive in diverse terrestrial and aquatic habitats <b>(1)</b>.<br>
-            <strong>Disadvantages:</strong> 1. Individual specialized cells lose independence and cannot survive alone <b>(1)</b>. 2. Lower surface-area-to-volume ratio requires complex transport systems and slower regeneration <b>(1)</b>.</p>
-          </div></details>
-        </div>
-
-        <div class="aq" data-answer="l03-b3">
-          <div class="aq-top"><h4>3. Two cuboidal organisms X and Y have side lengths L_X = 2 mm and L_Y = 8 mm respectively. (a) Calculate the surface area (SA = 6L²), volume (V = L³), and surface-area-to-volume ratio (SA ÷ V) of each organism [6 marks]. (b) Explain using your answers why organism Y cannot rely on simple diffusion across its body surface for oxygen supply [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) For organism X (<code>L = 2 mm</code>): <code>SA_X = 6 × 2^2 = 24 mm²</code> <b>(1)</b>; <code>V_X = 2^3 = 8 mm³</code> <b>(1)</b>; <code>Ratio_X = 24 ÷ 8 = 3.0 mm⁻¹</code> <b>(1)</b>.<br>
-            For organism Y (<code>L = 8 mm</code>): <code>SA_Y = 6 × 8^2 = 384 mm²</code> <b>(1)</b>; <code>V_Y = 8^3 = 512 mm³</code> <b>(1)</b>; <code>Ratio_Y = 384 ÷ 512 = 0.75 mm⁻¹</code> <b>(1)</b>.<br>
-            (b) Organism Y has a four-times lower surface-area-to-volume ratio (<code>0.75 mm⁻¹</code> vs <code>3.0 mm⁻¹</code>) and a long internal diffusion distance (<code>4 mm</code> to the core), so oxygen diffusing through the outer skin is consumed long before reaching the deep internal tissues; hence Y requires a specialized respiratory and circulatory system <b>(4)</b>.</p>
-          </div></details>
-        </div>
-
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../lesson-02/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 2: Eukaryotic Organelles</a>
-          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4 — The Cell &amp; Its Environment (Osmosis &amp; Turgor) →</a>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:32px;padding-top:20px;border-top:1px solid rgba(var(--paper-ink-rgb), .12);">
+          <a class="btn btn-ghost" href="../lesson-02/index.html">← Lesson 2</a>
+          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4 · The Cell and Its Environment →</a>
         </div>
       </section>
     </main>
@@ -667,6 +614,7 @@
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
   <script src="../../assets/js/cell-kit.js"></script>
+  <script src="../../assets/js/agar-cube-bench.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
@@ -676,9 +624,12 @@
   <script src="../../assets/js/study-graph.js"></script>
   <script src="graph.js"></script>
   <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="lesson.js"></script>
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
 </body>
 </html>

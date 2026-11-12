@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: programming-zoom</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;background:#0a141d;color:#e8f1f8;font:13px/1.35 system-ui,-apple-system,sans-serif;overflow-x:hidden}
+  #stage{position:relative;width:100%;height:50vh;min-height:290px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  .row{padding:4px 8px;display:flex;flex-wrap:wrap;gap:5px}
+  button{min-height:34px;padding:0 10px;border-radius:17px;border:1px solid rgba(56,239,125,0.28);background:#16302b;color:#e8f1f8;font:600 11.5px system-ui,sans-serif;cursor:pointer}
+  button.on{background:#1b8a5a;border-color:#38ef7d;color:#fff}
+  #readout{padding:6px 10px 14px;font:11.5px/1.45 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-word;color:#a8dadc}
+</style>
+</head><body>
+<div id="stage"><canvas id="c"></canvas></div>
+<div class="row" id="modes"></div>
+<div class="row" id="ctl"></div>
+<div id="readout"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+  else renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.08;
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0a141d);
+
+  /* Studio environment map matching SceneKit */
+  (function () {
+    var es = new THREE.Scene();
+    es.add(new THREE.Mesh(new THREE.BoxGeometry(20, 20, 20), new THREE.MeshBasicMaterial({ color: 0x0f1c2e, side: THREE.BackSide })));
+    function panel(w, h, c, p, r) {
+      var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide }));
+      m.position.copy(p);
+      if (r) m.rotation.copy(r);
+      es.add(m);
+    }
+    panel(8, 3, new THREE.Color(3.5, 3.8, 4.0), new THREE.Vector3(0, 9.5, 0), new THREE.Euler(Math.PI / 2, 0, 0));
+    panel(2.5, 8, new THREE.Color(2.2, 3.4, 2.8), new THREE.Vector3(-9.5, 2, 2), new THREE.Euler(0, Math.PI / 2, 0));
+    panel(2, 7, new THREE.Color(2.8, 1.8, 0.8), new THREE.Vector3(9.5, 1, -2), new THREE.Euler(0, -Math.PI / 2, 0));
+    var pm = new THREE.PMREMGenerator(renderer);
+    scene.environment = pm.fromScene(es, 0.035).texture;
+    pm.dispose();
+  })();
+
+  var camera = new THREE.PerspectiveCamera(36, 1, 0.05, 80);
+  var controls = new THREE.OrbitControls(camera, cv);
+  controls.enablePan = false;
+  controls.enableDamping = true;
+
+  scene.add(new THREE.HemisphereLight(0xb8e0ff, 0x0f1c24, 0.65));
+  var key = new THREE.DirectionalLight(0xffffff, 1.25);
+  key.position.set(4, 9, 6);
+  scene.add(key);
+  var rim = new THREE.DirectionalLight(0x38ef7d, 0.75);
+  rim.position.set(-5, 6, -6);
+  scene.add(rim);
+
+  var kit = ProgrammingZoom.create({ mode: "translation-pipeline" });
+  scene.add(kit);
+
+  var view = { target: new THREE.Vector3(0, 0.8, 0), dist: 8 }, goal = null, pitch = 0.2, yaw = 0.14;
+  function fitDist(d) {
+    var a = camera.aspect || 1;
+    return d * Math.max(1, Math.min(2.1, 1.25 / a));
+  }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(
+      v.target.x + Math.sin(yaw) * Math.cos(pitch) * d,
+      v.target.y + Math.sin(pitch) * d,
+      v.target.z + Math.cos(yaw) * Math.cos(pitch) * d
+    );
+    controls.target.copy(v.target);
+    camera.lookAt(v.target);
+  }
+  function gotoView(name, now) {
+    var v = kit.viewFor(name);
+    goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist };
+    if (now) {
+      view.target.copy(goal.target);
+      view.dist = goal.dist;
+      applyView(view);
+      goal = null;
+    }
+  }
+  function resize() {
+    var w = host.clientWidth || 360, h = host.clientHeight || 300;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    applyView(view);
+  }
+  new ResizeObserver(resize).observe(host);
+  resize();
+
+  function btn(parent, label, fn, cls) {
+    var b = document.createElement("button");
+    b.textContent = label;
+    if (cls) b.className = cls;
+    b.onclick = function () { fn(b); };
+    parent.appendChild(b);
+    return b;
+  }
+
+  var modesEl = document.getElementById("modes"), ctl = document.getElementById("ctl"), modeBtns = {};
+  ProgrammingZoom.modes.forEach(function (m) {
+    modeBtns[m] = btn(modesEl, m, function () { setMode(m); });
+  });
+
+  function setMode(m) {
+    kit.setMode(m);
+    Object.keys(modeBtns).forEach(function (k) { modeBtns[k].classList.toggle("on", k === m); });
+    ctl.innerHTML = "";
+    if (m === "translation-pipeline") {
+      [0, 1, 2, 3].forEach(function (s) { btn(ctl, "step " + s, function () { kit.setState({ step: s }); }); });
+      btn(ctl, "compiler", function () { kit.setState({ translator: "compiler" }); });
+      btn(ctl, "interpreter", function () { kit.setState({ translator: "interpreter" }); });
+    } else if (m === "decision-tree") {
+      [0, 1, 2, 3].forEach(function (s) { btn(ctl, "step " + s, function () { kit.setState({ step: s }); }); });
+      btn(ctl, "bat 15%", function () { kit.setState({ battery: 15 }); });
+      btn(ctl, "bat 85%", function () { kit.setState({ battery: 85 }); });
+      btn(ctl, "grid off/on", function () { kit.setState({ grid_online: !kit.params().grid_online }); });
+    } else if (m === "loop-jump") {
+      [0, 1, 2, 3].forEach(function (s) { btn(ctl, "step " + s, function () { kit.setState({ step: s }); }); });
+      [1, 2, 5, 6].forEach(function (it) { btn(ctl, "i=" + it, function () { kit.setState({ iter: it }); }); });
+    } else if (m === "memory-offset") {
+      [0, 1, 3, 7, 8].forEach(function (ix) { btn(ctl, "idx " + ix, function () { kit.setState({ index: ix }); }); });
+    } else if (m === "stack-frame") {
+      ["0:idle", "1:push", "2:exec", "3:pop"].forEach(function (lbl, s) {
+        btn(ctl, lbl, function () { kit.setState({ step: s }); });
+      });
+    } else if (m === "silicon-bridge") {
+      [0, 1, 2, 3].forEach(function (tr) { btn(ctl, "tier " + tr, function () { kit.setState({ tier: tr }); }); });
+      btn(ctl, "0x7E", function () { kit.setState({ byteVal: 0x7E, total: 36 }); });
+      btn(ctl, "0x4A", function () { kit.setState({ byteVal: 0x4A, total: 18 }); });
+    }
+    ["all"].concat(Object.keys(kit.parts)).forEach(function (n) {
+      btn(ctl, "view " + n, function () {
+        gotoView(n);
+        kit.highlight(n === "all" ? null : n);
+      });
+    });
+    gotoView("all", true);
+  }
+
+  var ro = document.getElementById("readout"), last = "";
+  function paint() {
+    var r = kit.reading();
+    var s = JSON.stringify(r) + "\ntriangles: " + kit.triangles();
+    if (s !== last) { last = s; ro.textContent = s; }
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      view.target.lerp(goal.target, Math.min(1, dt * 5));
+      view.dist += (goal.dist - view.dist) * Math.min(1, dt * 5);
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01) goal = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    paint();
+  })();
+
+  setMode("translation-pipeline");
+  window.__kit = kit;
+  window.__gotoView = gotoView;
+  window.__setMode = setMode;
+})();
+</script>
+</body></html>

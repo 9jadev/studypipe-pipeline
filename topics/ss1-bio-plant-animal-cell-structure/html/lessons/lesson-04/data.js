@@ -1,181 +1,206 @@
-/* Lesson 04 · The Cell & Its Environment — Diffusion, Osmosis, Turgor, Plasmolysis, Haemolysis & Active Transport — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 04 · The Cell and Its Environment — sort cards, expected practical table, explorer pins, bridge cases and the 12 quiz questions */
 (function () {
   "use strict";
 
   window.L04 = {
-    // ---- 1. Membrane Transport Mechanism Sort (Diffusion, Osmosis/Tonicity, Active/Bulk Transport) ----
+    // ---- 2A. Sort game: which kind of movement? ----
+    bins: {
+      diffusion: "Diffusion",
+      osmosis: "Osmosis",
+      active: "Active transport"
+    },
     items: [
-      { id: "perfume", name: "Spread of perfume vapour or H₂S gas across a quiet classroom", emo: "💨", bin: "shm", why: "Simple Diffusion: Net movement of gas molecules down a concentration gradient without requiring a membrane or ATP." },
-      { id: "alveoli", name: "Exchange of O₂ and CO₂ across mammalian alveoli & leaf stomata", emo: "🫁", bin: "shm", why: "Simple Diffusion: Respiratory gases diffuse passively down partial-pressure gradients across moist surfaces." },
-      { id: "kmno4", name: "Purple KMnO₄ crystal dissolving & spreading through a beaker of water", emo: "🟣", bin: "shm", why: "Simple Diffusion: Solute ions move from high concentration at the crystal to low concentration throughout the liquid." },
-      { id: "ugu-turgor", name: "Wilted ugu leaf becoming crisp and firm in fresh tap water", emo: "🥬", bin: "periodic", why: "Osmosis & Tonicity: Endosmosis into the hypertonic sap vacuole builds turgor pressure against the cellulose cell wall." },
-      { id: "plasmolysis", name: "Shrinkage of Spirogyra or onion protoplasm away from the cell wall in 0.8 M salt", emo: "🥀", bin: "periodic", why: "Osmosis & Tonicity: Exosmosis in a hypertonic solution causes the vacuole to shrink and the plasma membrane to pull away (plasmolysis)." },
-      { id: "haemolysis", name: "Bursting of mammalian red blood cells placed in distilled water", emo: "🩸", bin: "periodic", why: "Osmosis & Tonicity: Haemolysis — water enters by endosmosis and bursts the RBC because animal cells lack a rigid cellulose cell wall." },
-      { id: "yam-osmometer", name: "Rise of sugar solution inside a hollowed living yam tuber cavity in water", emo: "🍠", bin: "periodic", why: "Osmosis & Tonicity: Living yam cells act as a selectively permeable barrier; boiled yam fails because heat denatures membranes." },
-      { id: "crenation", name: "Shrivelling and notching of red blood cells in concentrated 2.0% NaCl brine", emo: "🌵", bin: "periodic", why: "Osmosis & Tonicity: Crenation — exosmosis of water out of the RBC into a hypertonic salt solution shrivels the cell." },
-      { id: "nitrate", name: "Uptake of nitrate (NO₃⁻) & mineral ions by root hairs against a gradient", emo: "🌱", bin: "non", why: "Active / Bulk Transport: Requires carrier proteins, oxygen, and mitochondrial ATP; blocked by cyanide or lack of oxygen." },
-      { id: "nakpump", name: "Sodium–potassium pump (Na⁺/K⁺-ATPase) in human nerve axons", emo: "⚡", bin: "non", why: "Active / Bulk Transport: Hydrolyses ATP to pump 3 Na⁺ out and 2 K⁺ in against their electrochemical gradients." },
-      { id: "glucose-ileum", name: "Complete absorption of glucose into villi of the ileum against a gradient", emo: "🥖", bin: "non", why: "Active / Bulk Transport: Uses ATP-driven sodium co-transport so no digested glucose is wasted in faeces." },
-      { id: "phago", name: "Amoeba or white blood cell engulfing a bacterium by phagocytosis", emo: "🫧", bin: "non", why: "Active / Bulk Transport: Endocytosis (cell eating) uses ATP and cytoskeleton movement to fold the plasma membrane into a vesicle." }
+      { id: "o2", emo: "🫁", name: "Oxygen entering a cheek cell", bin: "diffusion", why: "Oxygen is more crowded outside the cell than inside, so it spreads in down its gradient. No energy is spent." },
+      { id: "perfume", emo: "🌸", name: "Perfume spreading across a room", bin: "diffusion", why: "Perfume particles spread from where they are crowded to where they are few until they are even. That is diffusion, and it is not only in cells." },
+      { id: "co2", emo: "🍃", name: "Carbon dioxide leaving a leaf cell", bin: "diffusion", why: "The gas is more crowded inside the busy leaf cell than outside, so it moves out passively." },
+      { id: "roothair", emo: "🌱", name: "Water entering a root hair from soil", bin: "osmosis", why: "Only water molecules are moving, across a selectively permeable membrane, from the dilute soil water into the more concentrated cell sap." },
+      { id: "ugu", emo: "🥬", name: "Water leaving ugu cells in salty water", bin: "osmosis", why: "The salty water is more concentrated than the cell sap, so water leaves through the membrane. This is osmosis, and it is why the leaf wilts." },
+      { id: "burst", emo: "🩸", name: "A red cell bursting in distilled water", bin: "osmosis", why: "Water rushes into the red cell from the very dilute surroundings until the membrane gives way (haemolysis). It is osmosis, not a burst caused by salt." },
+      { id: "ions", emo: "🌾", name: "Root hairs taking in mineral ions from dilute soil water", bin: "active", why: "The ions are scarcer in the soil than in the root hair, so they move against the gradient. Pumps and ATP from respiration are needed." },
+      { id: "glucose", emo: "🔋", name: "Cells taking up glucose against its gradient using ATP", bin: "active", why: "Moving a substance from low to high concentration costs energy, so it is active transport." },
+      { id: "iodide", emo: "🌊", name: "A seaweed taking in iodide ions from seawater where they are scarcer than inside its cells", bin: "active", why: "Iodide is scarcer outside than inside, yet it still enters: the cell pumps it in and pays with ATP." }
     ],
 
-    // ---- 2. 3D Yam-Strip Osmosis & Tonicity Bench trials (Initial mass m_i = 2.50 g, Isotonic at 0.30 M) ----
-    trials: [
-      { label: "A", L: 0.00, t: "2.95", T: "+18.0", T2: "Turgid (Endosmosis)" },
-      { label: "B", L: 0.15, t: "2.73", T: "+9.2",  T2: "Turgid (Endosmosis)" },
-      { label: "C", L: 0.30, t: "2.50", T: "0.0",   T2: "Isotonic (No Net Flow)" },
-      { label: "D", L: 0.50, t: "2.25", T: "-10.0", T2: "Plasmolysed (Exosmosis)" },
-      { label: "E", L: 0.70, t: "2.05", T: "-18.0", T2: "Plasmolysed (Exosmosis)" }
+    // ---- 2B. Expected results (careful technique), 02-lesson numbers ----
+    expected: [
+      { c: 0.0, m0: 2.50, m1: 2.85, ch: "+0.35", pct: "+14.0" },
+      { c: 0.2, m0: 2.48, m1: 2.60, ch: "+0.12", pct: "+4.8" },
+      { c: 0.4, m0: 2.52, m1: 2.47, ch: "−0.05", pct: "−2.0" },
+      { c: 0.6, m0: 2.50, m1: 2.30, ch: "−0.20", pct: "−8.0" },
+      { c: 0.8, m0: 2.46, m1: 2.16, ch: "−0.30", pct: "−12.2" },
+      { c: 1.0, m0: 2.54, m1: 2.12, ch: "−0.42", pct: "−16.5" }
     ],
-    tOptions: ["2.05", "2.25", "2.50", "2.73", "2.95"],
-    TOptions: ["-18.0", "-10.0", "0.0", "+9.2", "+18.0"],
-    T2Options: ["Turgid (Endosmosis)", "Isotonic (No Net Flow)", "Plasmolysed (Exosmosis)", "Haemolysed (Burst)"],
 
-    // ---- 3. Tonicity & Water Potential Spectrum Explorer pins ----
+    // ---- technique cards: what each error does, with direction (02 sources of error) ----
+    techniques: {
+      careful: { name: "Careful technique", tone: "teal", flag: null },
+      unblotted: { name: "Strip not blotted", tone: "pink", flag: "unblotted" },
+      overBlotted: { name: "Blotted too hard", tone: "amber", flag: "overBlotted" },
+      evaporation: { name: "Left on tile / open tubes", tone: "violet", flag: "evaporation" }
+    },
+    errors: [
+      { key: "unblotted", head: "Surface water left on the strip (poor blotting)", dir: "Final mass too high", text: "A film of solution is weighed with the strip, so a % gain comes out too large and a % loss comes out too small." },
+      { key: "overBlotted", head: "Blotting too hard", dir: "Final mass too low", text: "Sap is squeezed out of the cut cells, so every final mass is a little low." },
+      { key: "evaporation", head: "Strip left on the tile before weighing", dir: "Final mass too low", text: "Water evaporates from the strip while it waits, so its mass is recorded too low." },
+      { key: "evaporation", head: "Evaporation from open tubes over 30 min", dir: "Losses too large, gains too small", text: "Each solution becomes slightly more concentrated, so strips lose more (or gain less) than they should." }
+    ],
+
+    // ---- explorer pins: concentration against what happens (states follow the 02 solutions table) ----
     pins: [
-      { frac: -1.0, label: "Distilled Water (0.00 M)", emo: "💧", x: "Strongly Hypotonic (Ψ_w = 0 kPa)", v: "Plant: Fully Turgid (+18% mass)", a: "RBC: Haemolysis (Bursts!)", ke: "Endosmosis Inward", pe: "Wall Pressure = Osmotic P", note: "Pure water has the highest water potential (0 kPa). Plant cells swell until wall pressure stops further inflow; animal RBCs burst (haemolysis)." },
-      { frac: -0.5, label: "Dilute Sucrose (0.15 M)", emo: "🟢", x: "Moderately Hypotonic", v: "Plant: Turgid (+9.2% mass)", a: "RBC: Swollen sphere", ke: "Net H₂O Inflow", pe: "Vacuole expands", note: "External water potential is still higher than cell sap (0.30 M equivalent), so water enters by endosmosis." },
-      { frac: 0.0,  label: "Isotonic Point (0.30 M / 0.9% NaCl)", emo: "⚖️", x: "Equal Water Potential (ΔΨ_w = 0)", v: "Plant: Incipient Flaccidity (0% Δm)", a: "RBC: Normal Biconcave Disc", ke: "Inflow = Outflow", pe: "Hospital IV Saline (0.9%)", note: "At the isotonic concentration (0.30 M sucrose for yam; 0.9% NaCl for human blood), water enters and leaves at equal rates so mass change is 0.0%." },
-      { frac: 0.5,  label: "Concentrated (0.50 M)", emo: "🟠", x: "Moderately Hypertonic", v: "Plant: Flaccid / Early Plasmolysis (−10%)", a: "RBC: Crenated (Notched)", ke: "Net H₂O Outflow", pe: "Turgor lost (wilting)", note: "External solution has lower water potential than cell sap; water leaves the vacuole by exosmosis and the stem wilts." },
-      { frac: 1.0,  label: "Strong Brine / Syrup (0.70 M)", emo: "🥀", x: "Strongly Hypertonic", v: "Plant: Fully Plasmolysed (−18% mass)", a: "RBC: Severely Crenated", ke: "Protoplasm pulls from wall", pe: "Salting preserves fish/meat", note: "Severe exosmosis shrinks the vacuole and pulls the plasma membrane away from the cellulose wall (plasmolysis) — killing spoilage bacteria on salted fish!" }
+      { c: 0.0, tone: "hypotonic", plant: "turgid", rbc: "swells and bursts (haemolysis)", strip: "firm and swollen", note: "Pure water is far more dilute than the cell sap, so water floods in. The wall stops the plant cell bursting; the red cell has no wall." },
+      { c: 0.2, tone: "hypotonic", plant: "turgid", rbc: "swells, close to bursting", strip: "a little firmer", note: "Still more dilute than the sap, so water still enters, but more slowly: the gain is smaller (+4.8 %)." },
+      { c: 0.4, tone: "hypertonic", plant: "starting to plasmolyse", rbc: "shrinks slightly", strip: "slightly softer", note: "Just past the isotonic point (about 0.34 mol dm⁻³). The solution is now slightly more concentrated than the sap, so a little water leaves." },
+      { c: 0.6, tone: "hypertonic", plant: "plasmolysed", rbc: "shrinks and wrinkles (crenation)", strip: "soft and limp", note: "Water leaves by osmosis. The membrane pulls away from the wall and the strip loses 8 % of its mass." },
+      { c: 0.8, tone: "hypertonic", plant: "plasmolysed", rbc: "crenated", strip: "limp", note: "Even more water leaves. The loss is larger, but the curve flattens because there is less water left to lose." },
+      { c: 1.0, tone: "hypertonic", plant: "plasmolysed", rbc: "badly crenated", strip: "limp and thin", note: "The most concentrated tube gives the biggest loss, about 16.5 %." }
+    ],
+
+    // ---- Bridge: three cases, which way does water move? ----
+    cases: [
+      {
+        id: "ugu", emo: "🥬", title: "Ugu in a bowl of salty water",
+        sub: "Salty water is more concentrated than the cell sap.",
+        right: "out",
+        ok: "Water leaves the ugu cells by osmosis, so the cells plasmolyse and lose turgor. The leaf wilts. The salt did not soak in.",
+        bad: "Look again: the salty water is more concentrated than the cell sap, so water moves from the cells into the bowl."
+      },
+      {
+        id: "water", emo: "💧", title: "Plain water dripped into a vein",
+        sub: "Plain water is more dilute than the inside of a red cell.",
+        right: "in",
+        ok: "Water rushes into the red cells. With no cell wall to resist, they swell and burst (haemolysis). This is why a drip is never plain water.",
+        bad: "Look again: plain water is more dilute than the red cell contents, so water moves into the cells."
+      },
+      {
+        id: "saline", emo: "🩸", title: "A 0.9% saline drip",
+        sub: "0.9 g of salt in every 100 cm³ matches blood plasma.",
+        right: "none",
+        ok: "Water enters and leaves at the same rate, so red cells keep their shape. A 500 cm³ bag holds 4.5 g of salt.",
+        bad: "Look again: 0.9% saline is isotonic with blood, so there is no net movement of water."
+      }
     ]
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
+  // ---- 12 WAEC / NECO / JAMB quiz questions (03-questions.md § Lesson 04) ----
   window.LESSON_QUIZ = [
     {
-      q: "Which statement accurately defines <strong>osmosis</strong>?",
+      q: "Which of the following best describes <strong>active transport</strong>?",
       o: [
-        "The movement of solute ions from a region of low concentration to high concentration using ATP",
-        "The net movement of water (solvent) molecules from a dilute solution (higher water potential) to a more concentrated solution (lower water potential) across a selectively permeable membrane",
-        "The random spreading of perfume molecules through air without a membrane",
-        "The engulfing of solid food particles by pseudopodia"
+        "The overall spreading of particles from where they are crowded to where they are fewer, until they are evenly spread",
+        "The passage of water molecules across a selectively permeable membrane, from the side where water is more plentiful (dilute solution) to the side where it is less plentiful (concentrated solution)",
+        "The pumping of molecules or ions by a cell from where they are scarce to where they are already plentiful, which costs energy (ATP) from respiration",
+        "Movement of dissolved substances through the fully permeable cellulose cell wall without a membrane"
       ],
-      a: 1,
-      e: "<strong>Osmosis</strong> is the net movement of <strong>water molecules</strong> down a water-potential gradient (from a hypotonic/dilute solution to a hypertonic/concentrated solution) across a <strong>selectively permeable membrane</strong>.",
+      a: 2,
+      e: "Active transport moves substances <strong>against</strong> their concentration gradient (from low to high), so the cell must spend energy as ATP from respiration. Option A is diffusion and option B is osmosis; both are passive and use no ATP. Option D is wrong because the cellulose wall does not control entry; the selectively permeable membrane does.",
       src: "WAEC-style"
     },
     {
-      q: "What happens when a <strong>mammalian red blood cell</strong> and a <strong>green plant palisade cell</strong> are both placed in <strong>pure distilled water</strong> for 20 minutes?",
+      q: "Which of these is an example of <strong>active transport</strong> in a living organism?",
       o: [
-        "Both cells swell and burst (haemolyse)",
-        "Both cells shrink and undergo plasmolysis",
-        "The red blood cell swells and bursts (haemolysis) because it lacks a cell wall, whereas the plant cell becomes fully turgid without bursting because its rigid cellulose cell wall exerts opposing wall pressure",
-        "The plant cell bursts while the red blood cell becomes turgid"
+        "Root hair cells of a maize plant taking in nitrate ions from soil water that is more dilute than the cell sap",
+        "Carbon dioxide passing out of a red blood cell into the air spaces of the lungs",
+        "Water entering the root hair of a cassava plant from wet soil",
+        "The smell of fried akara spreading across a kitchen in Ibadan"
       ],
-      a: 2,
-      e: "In hypotonic distilled water, endosmosis occurs in both cells: the <strong>RBC bursts (haemolysis)</strong> due to no cell wall, while the <strong>plant cell becomes turgid</strong> because the <strong>inelastic cellulose wall</strong> resists bursting.",
-      src: "WAEC-style"
-    },
-    {
-      q: "A fresh yam cylinder of initial mass <strong>2.50 g</strong> is immersed in distilled water for 45 minutes, blotted dry, and reweighed at <strong>2.95 g</strong>. Calculate the <strong>percentage change in mass</strong>.",
-      o: ["+0.45%", "+15.3%", "+18.0%", "−18.0%"],
-      a: 2,
-      e: "Mass gain <code>Δm = 2.95 − 2.50 = +0.45 g</code>. Percentage change <code>%Δm = (0.45 ÷ 2.50) × 100 = +18.0%</code>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "In a yam-tuber osmometer experiment, why does the sugar solution level <strong>fail to rise</strong> when a <strong>boiled yam tuber</strong> is used instead of a fresh raw yam tuber?",
-      o: [
-        "Boiling converts the sucrose solution into pure water",
-        "Boiling kills the yam cells and denatures their plasma membranes and tonoplasts, destroying selective permeability so the tissue becomes freely permeable to both sugar and water",
-        "Boiling makes the cellulose cell wall thicker",
-        "Boiling increases the rate of active transport"
-      ],
-      a: 1,
-      e: "Osmosis requires a <strong>living, selectively permeable plasma membrane/tonoplast</strong>; boiling denatures membrane proteins and disrupts the lipid bilayer.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "When a filament of <em>Spirogyra</em> or a strip of purple onion epidermis is immersed in a concentrated <strong>0.8 M salt solution</strong>, the vacuole shrinks and the protoplasm pulls away from the cell wall. This phenomenon is called:",
-      o: [
-        "Haemolysis",
-        "Turgidity",
-        "Plasmolysis",
-        "Crenation"
-      ],
-      a: 2,
-      e: "<strong>Plasmolysis</strong> is the shrinkage of the vacuole and pulling away of the living protoplasm (plasma membrane + cytoplasm) from the rigid cell wall due to <strong>exosmosis</strong> in a hypertonic solution.",
-      src: "JAMB-style"
-    },
-    {
-      q: "How can a <strong>plasmolysed plant cell</strong> be restored to its normal turgid state (<strong>deplasmolysis</strong>) before permanent death occurs?",
-      o: [
-        "By boiling the cell in water for 10 minutes",
-        "By transferring the cell promptly into pure water or a hypotonic solution so water re-enters the vacuole by endosmosis",
-        "By placing the cell in an even stronger salt solution",
-        "By adding respiratory poison (cyanide)"
-      ],
-      a: 1,
-      e: "Prompt transfer into <strong>hypotonic water</strong> causes endosmosis back into the sap vacuole, restoring turgor (<strong>deplasmolysis</strong>).",
+      a: 0,
+      e: "The ions are moving from the dilute soil water (low concentration) into the more concentrated cell sap (high concentration), which is against the gradient, so energy from respiration is needed. Options B and D are diffusion (higher to lower concentration), and option C is osmosis (water moving into the more concentrated cell sap). The commonest wrong choice is C, because it is also &ldquo;uptake by a root&rdquo;, but water uptake is passive.",
       src: "NECO-style"
     },
     {
-      q: "Why does rubbing <strong>common salt (NaCl)</strong> onto fresh Tilapia fish or meat preserve it from bacterial spoilage?",
+      q: "At a research farm in Ibadan, roots of tomato seedlings took up potassium ions from a solution that was more dilute than their cell sap. When a chemical that stops respiration was added, potassium uptake stopped almost at once, but water uptake continued. The best conclusion is that",
       o: [
-        "Salt provides energy for bacterial mitosis",
-        "Salt forms a strongly hypertonic coating that draws water out of spoilage bacteria and fungi by exosmosis, causing plasmolysis and arresting microbial metabolism",
-        "Salt causes bacterial cells to burst by haemolysis",
-        "Salt converts bacterial peptidoglycan into cellulose"
+        "potassium ions enter the root cells by osmosis",
+        "the chemical made the cell membranes fully permeable",
+        "water uptake also needs energy from the mitochondria",
+        "potassium uptake is by active transport, which depends on ATP from respiration, while water enters passively by osmosis"
+      ],
+      a: 3,
+      e: "Uptake against a gradient that stops when respiration is blocked is the classic evidence for active transport: no respiration means no ATP, and no ATP means no pumping. Water uptake carried on, so it does not need ATP; it is osmosis. Option A is wrong because osmosis refers only to water molecules, and option C is contradicted by the data (water uptake did not stop).",
+      src: "JAMB-style"
+    },
+    {
+      q: "At the LUTH teaching lab, Dr Amaka places a drop of human blood in a 3% sodium chloride solution and views it under the microscope after ten minutes. The red blood cells will appear",
+      o: [
+        "swollen and then burst, because water has entered them",
+        "shrunken with crinkled, wrinkled edges (crenation), because water has left them by osmosis",
+        "plasmolysed, with the membrane pulled away from the cell wall",
+        "unchanged, because 3% salt is isotonic with blood"
       ],
       a: 1,
-      e: "Salting creates a <strong>hypertonic environment</strong> that dehydrates and <strong>plasmolyses</strong> spoilage microorganisms by exosmosis.",
+      e: "3% NaCl is far more concentrated than blood plasma (which is isotonic with 0.9% NaCl), so the solution is <strong>hypertonic</strong>. Water leaves the red cells by osmosis and they shrink and crenate. Option C is the main trap: &ldquo;plasmolysis&rdquo; applies to plant cells, where the protoplast pulls away from a cell wall; a red cell has no wall, so the correct term is crenation. Option A describes a hypotonic solution and option D confuses 3% with 0.9%.",
       src: "WAEC-style"
     },
     {
-      q: "Which of the following conditions provides direct experimental evidence that <strong>mineral ion uptake by plant root hair cells</strong> occurs by <strong>active transport</strong> rather than simple diffusion?",
-      o: [
-        "Ion uptake continues normally when the root is boiled",
-        "Ion uptake stops when oxygen is excluded or when a respiratory poison such as potassium cyanide (KCN) is added to inhibit mitochondrial ATP synthesis",
-        "Ions move only from high soil concentration to low root concentration",
-        "Ion uptake requires no carrier proteins"
-      ],
-      a: 1,
-      e: "<strong>Active transport</strong> moves ions against a concentration gradient using <strong>ATP</strong> from aerobic respiration; depriving roots of <strong>$\text{O}_2$</strong> or adding <strong>cyanide</strong> halts ATP production and stops active uptake.",
-      src: "JAMB-style"
-    },
-    {
-      q: "On a graph of <strong>percentage change in mass ($\%\Delta m$)</strong> of yam strips plotted against <strong>external sucrose molarity ($M$)</strong>, what does the concentration where the line crosses the horizontal axis ($\%\Delta m = 0\%$) represent?",
-      o: [
-        "The point of complete haemolysis",
-        "The isotonic concentration equal to the average osmotic concentration (water potential) of the yam cell sap",
-        "The boiling point of the yam cytoplasm",
-        "The maximum turgor pressure of pure water"
-      ],
-      a: 1,
-      e: "When <code>%Δm = 0%</code>, there is no net gain or loss of water, meaning the external sucrose solution is <strong>isotonic</strong> to the yam cell sap.",
+      q: "Chinedu adds a drop of blood to each of three test tubes containing salt solutions P, Q and R. Under the microscope: in P the red cells have burst (haemolysis); in Q they keep their normal disc shape; in R they are shrunken and crenated. Which arrangement shows the solutions in order of <strong>increasing</strong> salt concentration?",
+      o: ["R, Q, P", "Q, P, R", "P, R, Q", "P, Q, R"],
+      a: 3,
+      e: "Bursting in P means water rushed in, so P is the most dilute (hypotonic). Q causes no change, so it is isotonic. Shrinking in R means water left the cells, so R is the most concentrated (hypertonic). Increasing concentration is therefore P → Q → R. Option A is the same order reversed, a common slip by candidates who think &ldquo;burst&rdquo; means &ldquo;too much salt&rdquo;.",
       src: "WAEC Practical"
     },
     {
-      q: "Why must a nurse administer an intravenous (IV) drip using <strong>0.9% normal saline</strong> (isotonic to blood plasma) rather than pure distilled water?",
-      o: [
-        "Pure distilled water is hypotonic to blood plasma and would cause the patient's red blood cells to swell and burst (haemolysis)",
-        "Distilled water is hypertonic and would crenate the red blood cells",
-        "0.9% saline causes plasmolysis of red blood cells",
-        "Distilled water cannot flow through a plastic cannula"
-      ],
+      q: "A yam cube with an initial mass of 4.00 g was left in distilled water for 40 minutes. Its final mass was 4.62 g. What is the percentage change in mass?",
+      o: ["+15.5%", "+13.4%", "+0.62%", "−15.5%"],
       a: 0,
-      e: "Injecting hypotonic distilled water into the bloodstream lowers plasma osmolarity, driving rapid endosmosis and fatal <strong>haemolysis</strong> of red blood cells.",
-      src: "JAMB-style"
+      e: "Divide the change by the <strong>initial</strong> mass: <code>%Δm = (4.62 − 4.00) ÷ 4.00 × 100 = 0.62 ÷ 4.00 × 100 = +15.5%</code>. The cube gained mass because water entered the cells by osmosis from the hypotonic distilled water. Option B divides by the <strong>final</strong> mass (0.62 ÷ 4.62 × 100 = 13.4%), which is the most common error. Option C forgets to divide by the initial mass, and D has the wrong sign.",
+      src: "WAEC-style"
     },
     {
-      q: "A plant cell has an <strong>osmotic potential (solute pressure) of 12 atm</strong> and an inward <strong>turgor (wall) pressure of 12 atm</strong> when fully turgid. What is its net <strong>suction pressure (diffusion pressure deficit, DPD = OP − TP)</strong>?",
-      o: ["24 atm", "12 atm", "0 atm", "144 atm"],
-      a: 2,
-      e: "At full turgidity, inward wall/turgor pressure equals osmotic pressure (<code>TP = OP = 12 atm</code>), so net suction pressure <code>SP = OP − TP = 12 − 12 = 0 atm</code> and net water inflow stops.",
-      src: "JAMB-style"
+      q: "A potato strip from Jos with an initial mass of 3.20 g showed a <strong>−7.5%</strong> change in mass after 30 minutes in a sucrose solution. What was its final mass?",
+      o: ["3.44 g", "2.96 g", "3.13 g", "2.45 g"],
+      a: 1,
+      e: "<code>Δm = −7.5 ÷ 100 × 3.20 = −0.24 g</code>, then <code>m₁ = 3.20 − 0.24 = 2.96 g</code>. The strip lost mass, so the sucrose solution was hypertonic to the cell sap. Option A adds the change instead of subtracting it, option C subtracts 0.075 g instead of 7.5% of 3.20 g, and option D subtracts 0.75 g.",
+      src: "NECO-style"
     },
     {
-      q: "According to Graham's law of diffusion, if Gas X has a relative molecular mass of <strong>4</strong> and Gas Y has a relative molecular mass of <strong>64</strong>, how many times faster does Gas X diffuse than Gas Y at the same temperature?",
+      q: "In a potato-strip experiment, a student forgot to blot the strip taken from the 0.0 mol dm⁻³ tube (distilled water) before its final weighing, although all the other strips were blotted properly. How would this error affect the result for that tube?",
       o: [
-        "2 times faster",
-        "4 times faster",
-        "8 times faster",
-        "16 times faster"
+        "The % gain in mass would be recorded as smaller than its true value",
+        "The % change would become negative",
+        "It would have no effect, because the extra water is outside the cells",
+        "The % gain in mass would be recorded as larger than its true value"
+      ],
+      a: 3,
+      e: "Water clinging to the surface of an unblotted strip is weighed along with the strip, so the final mass is too high. That makes (final − initial) too large, and the calculated % gain is larger than the true gain from osmosis. Option C is the trap: the water is outside the cells, but the balance still weighs it, which is exactly why strips are blotted in the same way before every weighing.",
+      src: "WAEC Practical"
+    },
+    {
+      q: "Cocoyam discs were placed in sucrose solutions. Part of the results is shown below.<br><br><table class=\"tbl\"><thead><tr><th>Concentration (mol dm⁻³)</th><th>0.15</th><th>0.25</th><th>0.35</th><th>0.45</th></tr></thead><tbody><tr><td>% change in mass</td><td>+6.2</td><td>+3.0</td><td>−2.0</td><td>−6.4</td></tr></tbody></table><br>Assuming a straight line between neighbouring points, the concentration that is isotonic with the cocoyam cell sap is about",
+      o: ["0.31 mol dm⁻³", "0.30 mol dm⁻³", "0.29 mol dm⁻³", "0.35 mol dm⁻³"],
+      a: 0,
+      e: "The isotonic point is where % change = 0, between 0.25 (+3.0) and 0.35 (−2.0). Let f be the fraction of the gap: <code>f = 3.0 ÷ (3.0 + 2.0) = 3.0 ÷ 5.0 = 0.60</code>, then the isotonic concentration is <code>c = 0.25 + 0.60 × 0.10 = 0.25 + 0.06 = 0.31 mol dm⁻³</code>. Option B simply takes the midpoint, which ignores that +3.0 is further from zero than −2.0. Option C measures 0.06 back from 0.35 (the wrong end), and option D is the first concentration with a loss, not the zero point.",
+      src: "WAEC Practical"
+    },
+    {
+      q: "A graph of % change in mass (y-axis) against sucrose concentration (x-axis) for cassava strips is a falling line that crosses the x-axis at 0.45 mol dm⁻³. What would happen to a cassava strip placed in a 0.30 mol dm⁻³ sucrose solution?",
+      o: [
+        "It would lose mass, because the solution is hypertonic to the cell sap",
+        "Its mass would not change, because 0.30 mol dm⁻³ is isotonic with the cell sap",
+        "It would gain mass and its cells would become turgid, because the solution is hypotonic to the cell sap",
+        "It would gain mass and its cells would burst, because the solution is hypotonic to the cell sap"
+      ],
+      a: 2,
+      e: "The line crosses 0% at 0.45 mol dm⁻³, so the cell sap is equivalent to 0.45 mol dm⁻³. A 0.30 mol dm⁻³ solution is more dilute (hypotonic), so on the graph it lies to the left of the crossing point, above the axis: water enters by osmosis and the strip gains mass. Option D is the main distractor: plant cells become turgid but do <strong>not</strong> burst, because the cellulose cell wall resists further swelling. Option A has the direction reversed.",
+      src: "JAMB-style"
+    },
+    {
+      q: "At Mile 12 Market, Mama Ngozi's ugu leaves went limp an hour after being washed in a bowl of strong salt water. Coach Danjuma says, &ldquo;The salt soaked into the leaves and made them heavy.&rdquo; Which is the correct explanation?",
+      o: [
+        "Salt particles entered the leaf cells by active transport and crushed the vacuoles",
+        "The salt water was hypertonic to the cell sap, so water left the leaf cells by osmosis; the cells lost turgor and became plasmolysed, so the leaves wilted",
+        "The salt water was hypotonic to the cell sap, so the leaf cells absorbed too much water and burst",
+        "Salt dissolved the cellulose cell walls, so the leaves could no longer stand up"
       ],
       a: 1,
-      e: "Rate of diffusion is inversely proportional to the square root of relative molecular mass: <code>r_X ÷ r_Y = √(M_Y ÷ M_X) = √(64 ÷ 4) = √16 = 4</code>.",
-      src: "JAMB-style"
+      e: "Wilting is caused by <strong>water leaving</strong> the cells, not by salt coming in. The salt water is more concentrated than the cell sap (hypertonic), so water moves out by osmosis through the selectively permeable membrane. The vacuoles shrink, the protoplasts pull away from the walls (plasmolysis), turgor is lost and the leaf droops. Option A repeats Coach Danjuma's misconception that salt moves into the cell; option C has the direction of water movement reversed, and plant cells do not burst.",
+      src: "WAEC-style"
+    },
+    {
+      q: "Dr Amaka needs a 250 cm³ bag of 0.9% saline (0.9 g of sodium chloride in every 100 cm³ of solution) for a dehydrated patient at LUTH. What mass of sodium chloride does the bag contain?",
+      o: ["0.9 g", "22.5 g", "2.25 g", "9.0 g"],
+      a: 2,
+      e: "<code>m = 0.9 ÷ 100 × 250 = 0.009 × 250 = 2.25 g</code>. This concentration is isotonic with blood plasma, so red cells neither gain nor lose water and keep their shape. Option A gives the mass in only 100 cm³, option D is the mass in 1000 cm³ (1 dm³), and option B multiplies by 25 instead of 2.5.",
+      src: "NECO-style"
     }
   ];
 })();

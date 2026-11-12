@@ -1,18 +1,28 @@
 {
   "id": "shm-kinematics-2d",
-  "version": 1,
-  "title": "SHM 2D Visualizer: acceleration/velocity vectors, circular-motion shadow, damping & resonance",
+  "version": 2,
+  "title": "SHM 2D kit (Paper.js): mud-lump wheel projection, reference circle + x/v/a traces, energy, damping traces, resonance with lift-off threshold, pendulum force resolution, A-O-B phase strip",
   "type": "interactive-2d",
   "needs3d": false,
+  "renderer": "paper.js (window.paper)",
+  "global": "ShmKinematics2D",
+  "file": "shm-kinematics-2d.js",
   "subjects": ["Physics"],
-  "concepts": ["simple harmonic motion", "circular motion projection", "velocity and acceleration in SHM", "damping", "resonance", "bartons pendulums"],
+  "concepts": ["simple harmonic motion", "reference circle projection", "x = A sin ωt", "velocity and acceleration in SHM", "a = −ω²x", "energy in SHM", "light/heavy/critical damping", "forced vibration", "resonance", "lift-off threshold g/ω²", "simple pendulum forces", "small-angle approximation"],
   "params": {
-    "mode": { "type": "string", "default": "arrows", "doc": "arrows | circle | va | resonance" },
-    "amplitude_m": { "type": "number", "default": 0.10, "doc": "amplitude A in metres" },
-    "period_s": { "type": "number", "default": 2.0, "doc": "period T in seconds" }
+    "scene": { "type": "string", "default": "wheel", "doc": "wheel | circle | graphs | energy | damping-trace | resonance | pendulum-forces | phase-strip" },
+    "A": { "type": "number", "default": 0.30, "doc": "amplitude in metres (per-scene default)" },
+    "T": { "type": "number", "default": 2.0, "doc": "period in seconds" },
+    "preset": { "type": "string", "default": "lab", "doc": "lab | okada (ω² = 158 s⁻², g line)" },
+    "graphs": { "type": "boolean", "default": false, "doc": "wheel: show x, v, a traces" },
+    "gLine": { "type": "boolean", "default": false, "doc": "circle/graphs: −g line on the a trace" },
+    "k": { "type": "number", "default": 50 }, "m": { "type": "number", "default": 0.5 }, "view": { "type": "string", "default": "both" },
+    "set": { "type": "string", "default": "kinds", "doc": "damping-trace: kinds | shock" }, "forced": { "type": "boolean", "default": false },
+    "speed_kmh": { "type": "number", "default": 18 }, "zeta": { "type": "number", "default": 0.05 }, "load_kg": { "type": "number", "default": 200 },
+    "theta_deg": { "type": "number", "default": 20 }, "mass_g": { "type": "number", "default": 50 }, "l": { "type": "number", "default": 0.5 }
   },
-  "events": {
-    "interacted": "{ mode, action } when student interacts with the scene"
-  },
+  "api": ["setState", "setMode", "reading", "rect", "highlight", "play", "pause", "toggle", "step", "reset", "resize", "refreshTheme", "destroy", "parts", "state"],
+  "events": { "onChange": "callback(reading) on user drag/tap, step or setState; the lesson's bench.js emits CustomEvents" },
+  "legacy": { "version": 1, "file": "kit.js", "global": "StudyPipeKits['shm-kinematics-2d'].mount", "demo": "demo-v1.html", "note": "raw Canvas 2D, kept for old topics" },
   "used_in": ["ss2-phy-simple-harmonic-motion"]
 }

@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: ridge-road-props</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  .st{position:relative;width:100%;height:56vh;min-height:300px}
+  .st canvas{display:block;width:100%;height:100%;touch-action:none}
+  .stage-canvas{position:absolute;inset:0}
+  .story-bubble{display:none}
+  [hidden]{display:none!important}
+  #ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  button{min-height:38px;padding:0 10px;border-radius:19px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  label{display:flex;align-items:center;gap:6px;font-size:12px}
+  input[type=range]{width:120px}
+  #line{padding:4px 10px 12px;font:12px ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+</style>
+</head><body>
+<div id="gal" class="st"><canvas id="c"></canvas></div>
+<div id="ui"></div>
+<div id="line"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/story-scene.js"></script>
+<script src="ridge-road-props.js"></script>
+<script>
+(function () {
+  var K = window.RidgeRoadProps;
+  var QQ = (/[?&]q=(high|low)/.exec(location.search) || [])[1] || "auto", QS = K.quality(QQ);
+  /* ---------------- gallery stage ---------------- */
+  var host = document.getElementById("gal"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x9cc6ea);
+  var camera = new THREE.PerspectiveCamera(38, 1, 0.02, 120);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xd6e6ff, 0x5a3a20, 1.0));
+  var sun = new THREE.DirectionalLight(0xfff1d6, 1.6); sun.position.set(-4, 9, 7); scene.add(sun);
+  var rim = new THREE.DirectionalLight(0x9cd4ff, 0.5); rim.position.set(5, 5, -6); scene.add(rim);
+  var ground = new THREE.Mesh(new THREE.PlaneGeometry(80, 40), new THREE.MeshStandardMaterial({ color: 0x8a8f4a, roughness: 1 }));
+  ground.rotation.x = -Math.PI / 2; scene.add(ground);
+
+  // treadmill road + okada (the L07 bench arrangement)
+  var road = K.road({ length: 16, width: 3.2, tape: true, tapeX: -3.75, tapeZ: -0.9, tufts: QS === "low" ? 60 : 160, quality: QS }); scene.add(road);
+  var okada = K.okada({ crates: 1, leak: true, quality: QS }); scene.add(okada);
+  var sim = K.rideController(okada, road, { mass: 200, damper: "leaking", treadmill: true });
+  // the farm, the shed and the lab rigs laid out along x for close-ups
+  var gate = K.createGate({ quality: QS }); gate.position.set(0, 0, -9); scene.add(gate);
+  var pen = K.createPoultryPen({ quality: QS }); pen.position.set(-4.5, 0, -11); scene.add(pen);
+  var shed = K.createShed({ quality: QS }); shed.position.set(-12, 0, -2); scene.add(shed);
+  var pend = K.createPendulumStand({ l: 0.8, quality: QS }); pend.position.set(12, 0.8, -1.5); scene.add(pend);
+  var spr = K.createSpringStand({ k: 24.5, quality: QS }); spr.position.set(13.2, 0.8, -1.5); scene.add(spr); spr.setLoad(4);
+  var labTop = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.06, 0.9), new THREE.MeshStandardMaterial({ color: 0x2b3446, roughness: 0.4 })); labTop.position.set(12.6, 0.77, -1.5); scene.add(labTop);
+  var barton = K.createBarton({ driverL: 0.60, quality: QS }); barton.position.set(17, 0, -1.5); scene.add(barton); barton.start();
+  var tray = K.createEggTray({ cracked: 4, quality: QS }); tray.position.set(1.2, 0.0, 1.9); scene.add(tray);
+  var all = [road, okada, gate, pen, shed, pend, spr, barton, tray];
+  scene.updateMatrixWorld(true);
+  var hl = K.makeHighlighter(scene);
+
+  var VIEWS = {
+    okada: { t: [0, 0.65, 0], d: 3.4, yaw: 0.5, pitch: 0.16 },
+    side: { t: [0, 0.6, 0], d: 3.0, yaw: 0.0, pitch: 0.05 },
+    rear: { t: [-0.6, 0.55, 0.08], d: 1.25, yaw: 0.35, pitch: 0.12 },
+    crate: { t: [-0.78, 1.0, 0], d: 1.3, yaw: 0.6, pitch: 0.5 },
+    front: { t: [0.45, 0.8, 0], d: 1.6, yaw: 1.2, pitch: 0.18 },
+    engine: { t: [0.05, 0.4, 0.05], d: 1.2, yaw: 0.15, pitch: 0.1 },
+    wheel: { t: [-0.65, 0.31, 0.1], d: 1.3, yaw: 0.05, pitch: 0.12 },
+    ridges: { t: [-2.5, 0.05, 0], d: 4.2, yaw: 0.55, pitch: 0.38 },
+    tray: { t: [1.2, 0.05, 1.9], d: 0.8, yaw: 0.2, pitch: 0.9 },
+    gate: { t: [0, 1.2, -9], d: 8.5, yaw: 0.2, pitch: 0.12 },
+    shed: { t: [-12, 1.1, -2], d: 5.5, yaw: 0.25, pitch: 0.16 },
+    lab: { t: [12.6, 1.3, -1.5], d: 2.4, yaw: 0.1, pitch: 0.1 },
+    barton: { t: [17, 1.3, -1.5], d: 3.8, yaw: 0.0, pitch: 0.06 }
+  };
+  var view = { target: new THREE.Vector3(0, 0.65, 0), dist: 3.4, yaw: 0.5, pitch: 0.16 }, goal = null;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(2.0, 1.1 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(v.yaw) * Math.cos(v.pitch) * d, v.target.y + Math.sin(v.pitch) * d, v.target.z + Math.cos(v.yaw) * Math.cos(v.pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = VIEWS[name]; if (!v) return;
+    goal = { target: new THREE.Vector3().fromArray(v.t), dist: v.d, yaw: v.yaw, pitch: v.pitch };
+    if (instant) { view = goal; goal = null; applyView(view); controls.update(); }
+  }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view); }
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* ---------------- story stage (StoryStage Set 1 + Set 2) ---------------- */
+  var story = null, rr = null, lab = null;
+  function ensureStory() {
+    if (story) return story;
+    var root = document.createElement("div"); root.id = "story"; root.className = "stage-canvas";
+    root.innerHTML = '<div class="stage-canvas"><canvas id="sc"></canvas><div class="story-bubble"></div></div>';
+    host.appendChild(root);
+    story = StoryStage.create({ root: root, canvas: document.getElementById("sc"), bubble: null, beats: [],
+      setup: function (api) {
+        rr = K.dressRoad(api, { tape: true, quality: QS });
+        lab = K.dressLab(api, { quality: QS });
+        var P = StoryStage.person;
+        var zainab = P({ skin: "#6e4630", outfit: "#2f7a3a", wrapper: true, hair: "bun" }); zainab.position.fromArray(rr.spots.zainab); zainab.rotation.y = -0.4; api.props.market.add(zainab);
+        var tunde = P({ skin: "#4a2e1f", outfit: "#f4f6f8", pants: "#b59a62", hair: "short" }); tunde.position.fromArray(rr.spots.tunde); tunde.rotation.y = -0.5; api.props.market.add(tunde);
+        var sule = P({ skin: "#3d2618", outfit: "#e9e1cf", pants: "#e9e1cf", cap: "#7a1b1b" }); sule.position.fromArray(rr.spots.sule); sule.rotation.y = 0.3; api.props.market.add(sule);
+        api.people.zainab = zainab; api.people.tunde = tunde; api.people.sule = sule;
+        api.people.cust1.position.fromArray(rr.spots.dayo); api.people.cust1.rotation.y = -0.3;
+        api.people.cust2.visible = false;
+        var z2 = P({ skin: "#6e4630", outfit: "#2f7a3a", wrapper: true, hair: "bun" }); z2.position.fromArray(lab.spots.zainab); lab.set.add(z2);
+        var t2 = P({ skin: "#4a2e1f", outfit: "#f4f6f8", pants: "#b59a62", hair: "short" }); t2.position.fromArray(lab.spots.tunde); lab.set.add(t2);
+        lab.pendulum.swing(true); lab.spring.bounce(true); lab.barton.start();
+        window.__api = api;
+      },
+      onTick: function (api, dt, t) { rr.update(dt, t); lab.update(dt, t); if (followRide) api.shot.apply(null, rr.followShot(4.6, 1.7)); }
+    });
+    return story;
+  }
+  var followRide = false;
+  var STORY_SHOTS = { set1: "wide", set1Gate: "gate", set1Okada: "okada", set1Stand: "stand", set1Ridges: "ridges", set1Ride: "ride", set1Shed: "shed", set2: "lab", set2Barton: "barton" };
+
+  /* ---------------- state + controls ---------------- */
+  var current = "okada";
+  function setMode(m) {
+    current = m;
+    var isStory = /^set/.test(m);
+    cv.style.visibility = isStory ? "hidden" : "visible";
+    if (document.getElementById("story")) document.getElementById("story").style.visibility = isStory ? "visible" : "hidden";
+    followRide = false;
+    if (isStory) {
+      var s = ensureStory(); if (!s) return;
+      var key = STORY_SHOTS[m], sh = (m.indexOf("set2") === 0 ? lab.shots : rr.shots)[key];
+      s.shot(sh[0], sh[1], true);
+      if (m === "set1Stand") { rr.park(); rr.okada.setCentreStand(true, 1.2); rr.okada.setMud(true); } else rr.okada.setCentreStand(false);
+      if (m === "set1Ride") { rr.mount(s.people.cust1); rr.ride(18, { mass: 200, damper: "leaking" }); followRide = true; }
+      else if (rr.sim.st.mode === "ride") { rr.dismount(); rr.park(); }
+      if (m === "set1Okada") rr.press(0.04);
+      window.dispatchEvent(new Event("resize"));
+    } else { resize(); gotoView(m, true); }
+    document.querySelectorAll("#ui button[data-m]").forEach(function (b) { b.classList.toggle("on", b.dataset.m === m); });
+  }
+  var ui = document.getElementById("ui");
+  function btn(label, fn, cls, m) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; if (m) b.dataset.m = m; b.onclick = function () { fn(b); }; ui.appendChild(b); return b; }
+  [["Okada", "okada"], ["Side", "side"], ["Rear shocks", "rear"], ["Crate", "crate"], ["Front", "front"], ["Engine", "engine"], ["Wheel", "wheel"], ["Ridges", "ridges"], ["Tray", "tray"], ["Gate", "gate"], ["Shed", "shed"], ["Lab rigs", "lab"], ["Barton", "barton"],
+   ["Set 1", "set1"], ["Set 1 gate", "set1Gate"], ["Set 1 okada", "set1Okada"], ["Set 1 stand", "set1Stand"], ["Set 1 ridges", "set1Ridges"], ["Set 1 ride", "set1Ride"], ["Set 1 shed", "set1Shed"], ["Set 2", "set2"], ["Set 2 Barton", "set2Barton"]
+  ].forEach(function (v) { btn(v[0], function () { setMode(v[1]); }, "alt", v[1]); });
+
+  var riding = false, mass = 200, damper = "leaking", mud = false, stand = false, rider = null;
+  var rideBtn = btn("Ride", function (b) { riding = !riding; if (riding) sim.ride(+document.getElementById("kmh").value, { mass: mass, damper: damper }); else sim.park(); b.classList.toggle("on", riding); });
+  btn("Press & release", function () { riding = false; rideBtn.classList.remove("on"); sim.park(); sim.press(0.04); });
+  btn("250 kg", function (b) { mass = mass === 200 ? 250 : 200; sim.set({ mass: mass }); okada.setCrates(mass === 250 ? 3 : 1); b.classList.toggle("on", mass === 250); });
+  btn("Healthy damper", function (b) { damper = damper === "leaking" ? "healthy" : "leaking"; sim.set({ damper: damper }); okada.setLeak(damper === "leaking"); b.classList.toggle("on", damper === "healthy"); });
+  btn("Crack", function () { okada.crack(4); });
+  btn("Mud + stand", function (b) { mud = !mud; okada.setMud(mud); okada.setCentreStand(mud, 1.4); b.classList.toggle("on", mud); });
+  btn("Rider", function (b) { if (rider) { okada.dismount(); scene.remove(rider); rider = null; } else { rider = okada.seatRider(StoryStage.person({ skin: "#4a2e1f", outfit: "#2b6cb0", pants: "#1c2433", hair: "short" })); } b.classList.toggle("on", !!rider); });
+  btn(QS === "low" ? "Detail: low → high" : "Detail: high → low", function () { location.search = "?q=" + (QS === "low" ? "high" : "low"); });
+  btn("Push dampers", function (b) { var on = !b.classList.contains("on"); shed.pushDampers(on); b.classList.toggle("on", on); });
+  var l1 = document.createElement("label"); l1.innerHTML = "km/h <input type=range min=5 max=35 step=1 value=18 id=kmh><span id=kmhv>18</span>"; ui.appendChild(l1);
+  document.getElementById("kmh").oninput = function (e) { document.getElementById("kmhv").textContent = e.target.value; if (riding) sim.set({ kmh: +e.target.value }); };
+  var l2 = document.createElement("label"); l2.innerHTML = "bounce cm <input type=range min=-8 max=8 step=0.1 value=0 id=bnc>"; ui.appendChild(l2);
+  document.getElementById("bnc").oninput = function (e) { riding = false; rideBtn.classList.remove("on"); sim.park(); okada.setBounce(+e.target.value / 100); sim.st.press.A = +e.target.value / 100; sim.st.press.t = 1e6; };
+  var l3 = document.createElement("label"); l3.innerHTML = "Barton driver m <input type=range min=0.3 max=0.9 step=0.15 value=0.6 id=drv>"; ui.appendChild(l3);
+  document.getElementById("drv").oninput = function (e) { barton.setDriverLength(+e.target.value); barton.start(); };
+
+  /* tap a part to pulse it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera);
+    var hit = ray.intersectObjects(all, true)[0];
+    if (hit && hit.object.userData.partId) { hl.highlight(hit.object.userData.partId); console.log("part", hit.object.userData.partId); setTimeout(function () { hl.clear(); }, 700); }
+  });
+
+  var line = document.getElementById("line"), last = "";
+  function f(x, d) { return x == null || !isFinite(x) ? "–" : x.toFixed(d); }
+  function paint() {
+    var r = (current.indexOf("set1") === 0 && rr) ? rr.reading() : sim.reading(), b = barton.reading(), o = okada.reading(), ps = K.model.parked(mass);
+    var s = "quality " + QS + "  ·  " + (r.mode === "ride" ? "RIDE " + f(r.kmh, 0) + " km/h  A " + f(r.A_cm, 1) + " cm → " + f(r.A_target_cm, 1) + " cm  lift-off at " + f(r.th_cm, 1) + " cm  " + (r.lift ? "CRATE LIFTS" : "crate stays") : "PARKED  T0 " + f(r.T0, 3) + " s  20 bounces " + f(r.t20, 1) + " s  sag " + f(r.th_cm, 1) + " cm") +
+      "  [" + r.mass + " kg, " + r.damper + "]  cracks " + r.cracks + "\n" +
+      "okada  bounce " + f(o.bounce_cm, 1) + " cm  crate lift " + f(o.lift * 100, 1) + " cm  crates " + o.crates + "  resonant speed " + f(K.model.resonantSpeed(mass), 1) + " km/h\n" +
+      "Barton driver " + f(b.driverL, 2) + " m  T " + f(b.T, 2) + " s  f " + f(b.fDriver, 2) + " Hz  widest " + b.widestCone + "  amps " + b.amps.map(function (a) { return f(a, 2); }).join(" ") + "\n" +
+      "lab spring " + JSON.stringify(spr.reading(), function (k, v) { return typeof v === "number" ? +v.toFixed(3) : v; }) + "  pendulum T " + f(pend.reading().T, 3) + " s";
+    if (s !== last) { last = s; line.textContent = s; }
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = Math.min(0.05, clock.getDelta()), t = clock.elapsedTime;
+    sim.step(dt);
+    all.forEach(function (o) { if (o.update) o.update(dt, t); });
+    if (cv.style.visibility !== "hidden") {
+      if (goal) {
+        var k = Math.min(1, dt * 4);
+        view.target.lerp(goal.target, k); view.dist += (goal.dist - view.dist) * k; view.yaw += (goal.yaw - view.yaw) * k; view.pitch += (goal.pitch - view.pitch) * k;
+        applyView(view); if (view.target.distanceTo(goal.target) < 0.003) goal = null;
+      }
+      controls.update(); renderer.render(scene, camera);
+    }
+    paint();
+  })();
+  setMode("okada");
+  pend.swing(true); spr.bounce(true);
+  var budget = {};
+  [["okada", okada], ["road16m", road], ["gate", gate], ["pen", pen], ["shed", shed], ["pendulumStand", pend], ["springStand", spr], ["barton", barton]].forEach(function (e) { budget[e[0]] = { tris: K.triangles(e[1]), calls: K.drawCalls(e[1]) }; });
+  console.log("budget", JSON.stringify(budget));
+  window.__kit = K; window.__setMode = setMode; window.__props = { okada: okada, road: road, sim: sim, gate: gate, pen: pen, shed: shed, barton: barton, spr: spr, pend: pend };
+  window.__storyBudget = function () {
+    if (!story) return null;
+    var a = window.__api, ren = story.stage.renderer;
+    return { set1: { tris: K.triangles(rr.set), calls: K.drawCalls(rr.set) }, set2: { tris: K.triangles(lab.set), calls: K.drawCalls(lab.set) }, frame: { calls: ren.info.render.calls, tris: ren.info.render.triangles } };
+  };
+})();
+</script>
+</body></html>

@@ -1,199 +1,137 @@
-/* Lesson 03 · 3D Forms of Living Cells & Tissue-Level Hydra Zoom — Free-Living (Euglena/Amoeba), Colonial (Volvox), Filamentous (Spirogyra) & Tissue-Level (Hydra) */
+/* Lesson 03 · 3D zoom: Volvox colony beside Hydra, inside Hydra's two layers, and an organelle / cell / tissue-level organism ladder */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
   var canvas = document.getElementById("zoom-canvas");
-  if (!root || !canvas || typeof THREE === "undefined") return;
+  if (!root || !canvas || typeof THREE === "undefined" || !window.CellKit) return;
 
-  var toastEl = document.getElementById("zoom-toast");
-  var toastT;
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var toastEl = document.getElementById("zoom-toast"), toastT;
   function toast(m) {
     if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
   }
-
-  var state = {
-    mode: "mix", // "mix" = Euglena & Volvox, "acid" = Spirogyra Filament, "base" = Hydra (Tissue Level)
-    highV: false
+  var hintEl = document.getElementById("zoom-hint");
+  var HINT = {
+    colony: "Volvox: alike cells, each self-sufficient = colony. Hydra: two layers, different jobs = tissue level.",
+    tissue: "Hydra: outer ectoderm (covers, catches food) and inner endoderm (digests). The cells cannot live apart.",
+    ladder: "Organelle (nucleus) → cell (Euglena) → tissue-level organism (Hydra). Then organ, system and organism above."
   };
 
+  var state = { mode: "colony" };
   var highlightPart = null;
   var api = {
-    setMode: setMode,
-    add: toggleLightAndOsmosis,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
+    setMode: setMode, reset: function () { setMode("colony"); },
+    rect: function () { return null; }, highlight: function (p) { highlightPart = p || null; },
+    state: function () { return { mode: state.mode }; }
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.zoom = api;
 
   var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.85, 0),
-    pitch: 0.22,
-    yaw: 0.08,
-    fitWidth: 6.2,
-    distance: 6.0,
-    onFrame: frame
+    root: root, canvas: canvas, fov: 34, target: new THREE.Vector3(0, 0.6, 0), pitch: 0.2, yaw: 0.1,
+    fitWidth: 5.4, distance: 6, minHeight: 340, labelBoost: 1.3, minYaw: -0.8, maxYaw: 0.8, onFrame: frame
   });
 
-  var leftGroup, rightGroup, midGroup, keBar, peBar, totBar, eugApi, volvApi, spiroApi, hydraApi;
+  var volvox, hydra, nucleus, euglena, lbl = [], glow;
+  var objs = {};
 
   if (stage) build();
   wireButtons();
 
+  function lab(text) {
+    var s = CellKit.label(text, { h: 0.26, depthTest: false });
+    stage.rig.add(s); lbl.push(s);
+    return s;
+  }
+
   function build() {
     var scene = stage.rig;
-
-    leftGroup = new THREE.Group();
-    leftGroup.position.set(-1.35, 0.90, 0);
-    scene.add(leftGroup);
-
-    rightGroup = new THREE.Group();
-    rightGroup.position.set(0.15, 0.90, 0);
-    scene.add(rightGroup);
-
-    midGroup = new THREE.Group();
-    midGroup.position.set(-0.55, 0.90, 0);
-    midGroup.visible = false;
-    scene.add(midGroup);
-
-    if (window.CellKit) {
-      eugApi = CellKit.protist({ type: "euglena", scale: 0.76 });
-      leftGroup.add(eugApi.group);
-      var eTag = CellKit.label("Euglena (Mixotrophic Single Cell)", { bg: "rgba(34,197,94,0.92)" });
-      eTag.position.set(0, 0.82, 0);
-      leftGroup.add(eTag);
-
-      volvApi = CellKit.protist({ type: "volvox", scale: 0.76 });
-      rightGroup.add(volvApi.group);
-      var vTag = CellKit.label("Volvox (Hollow Colony · Bridges)", { bg: "rgba(13,156,126,0.92)" });
-      vTag.position.set(0, 0.86, 0);
-      rightGroup.add(vTag);
-
-      spiroApi = CellKit.protist({ type: "spirogyra", scale: 0.82 });
-      midGroup.add(spiroApi.group);
-
-      hydraApi = CellKit.protist({ type: "hydra", scale: 0.82 });
-      hydraApi.group.visible = false;
-      midGroup.add(hydraApi.group);
-    }
-
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.65, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.75, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 30, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.19 * t.userData.aspect, 0.19, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.30, 0x3ee6c4, "SA ÷ V");
-    peBar  = makeBar(1.75, 0xffb23f, "Cell Count");
-    totBar = makeBar(2.20, 0xf43f5e, "Specialis.");
+    volvox = CellKit.protist("volvox"); scene.add(volvox);
+    hydra = CellKit.protist("hydra"); scene.add(hydra);
+    euglena = CellKit.protist("euglena"); scene.add(euglena);
+    nucleus = CellKit.nucleusMesh(0.5); scene.add(nucleus);
+    objs = { volvox: volvox, hydra: hydra, euglena: euglena, nucleus: nucleus };
+    [0, 1, 2].forEach(function () { lab(" "); });
+    glow = SceneKit.glowSprite("rgba(255,178,63,0.92)", 1.4);
+    glow.material.opacity = 0; glow.userData.noFit = true; scene.add(glow);
+    layout(true);
 
     api.rect = function (part) {
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      if (state.mode !== "mix") return stage.rectOf(midGroup, 16);
-      return stage.rectOf([leftGroup, rightGroup], 16);
+      if (part === "ectoderm" && hydra.parts.ectoderm) return stage.rectOf(hydra.parts.ectoderm, 10);
+      if (part === "endoderm" && hydra.parts.endoderm) return stage.rectOf(hydra.parts.endoderm, 10);
+      var o = objs[part];
+      if (o && o.visible) return stage.rectOf(o, 12);
+      return stage.rectOf([volvox, hydra].filter(function (v) { return v.visible; }), 10);
     };
-
     stage.start();
   }
 
-  function setMode(m) {
-    state.mode = m;
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
+  function setLabels(list) {
+    list.forEach(function (it, i) {
+      var s = lbl[i];
+      CellKit.setLabelText(s, it[0], { h: 0.26 });
+      s.position.set(it[1], it[2], 0.1);
+      s.visible = true;
     });
-    if (m === "acid") {
-      leftGroup.visible = false;
-      rightGroup.visible = false;
-      midGroup.visible = true;
-      if (spiroApi) spiroApi.group.visible = true;
-      if (hydraApi) hydraApi.group.visible = false;
-      toast("Spirogyra (Unbranched Filament): Cylindrical cells joined end-to-end with spiral ribbon chloroplasts, pyrenoids & mucilage sheath!");
-    } else if (m === "base") {
-      leftGroup.visible = false;
-      rightGroup.visible = false;
-      midGroup.visible = true;
-      if (spiroApi) spiroApi.group.visible = false;
-      if (hydraApi) hydraApi.group.visible = true;
-      toast("Hydra (Tissue Level): Diploblastic cnidarian with ectoderm and endoderm layers around an enteron, but no true organs!");
+    for (var i = list.length; i < lbl.length; i++) lbl[i].visible = false;
+  }
+
+  function layout(first) {
+    if (!stage) return;
+    var m = state.mode;
+    volvox.visible = m === "colony";
+    nucleus.visible = euglena.visible = m === "ladder";
+    hydra.visible = true;
+    var ecto = hydra.parts.ectoderm && hydra.parts.ectoderm.material;
+    if (ecto) ecto.opacity = m === "tissue" ? 0.22 : 0.6;
+    if (m === "colony") {
+      volvox.scale.setScalar(1.3); volvox.position.set(-1.25, 0.75, 0);
+      hydra.scale.setScalar(1.15); hydra.position.set(1.25, -0.25, 0);
+      setLabels([["Volvox · colony", -1.25, 1.75], ["Hydra · tissue level", 1.25, 1.45]]);
+    } else if (m === "tissue") {
+      hydra.scale.setScalar(1.9); hydra.position.set(0, -0.7, 0);
+      setLabels([["ectoderm (outer)", -1.15, 0.55], ["endoderm (inner)", 1.1, 0.0], ["basal disc", 0, -0.82]]);
     } else {
-      leftGroup.visible = true;
-      rightGroup.visible = true;
-      midGroup.visible = false;
-      toast("Euglena (mixotrophic single cell) & Volvox (hollow colony linked by cytoplasmic strands).");
+      nucleus.scale.setScalar(1.0); nucleus.position.set(-1.9, 0.55, 0);
+      euglena.scale.setScalar(0.85); euglena.position.set(0, 0.55, 0);
+      hydra.scale.setScalar(0.85); hydra.position.set(1.95, 0.0, 0);
+      setLabels([["organelle", -1.9, 1.3], ["cell · Euglena", 0, 1.3], ["tissue level · Hydra", 1.95, 1.3]]);
     }
+    stage.refit();
+    if (!first) stage.recentre();
   }
 
-  function toggleLightAndOsmosis() {
-    state.highV = !state.highV;
-    toast(state.highV ? "Sunlight ON: Euglena swims toward light using its stigma (eyespot) & flagellum while contractile vacuoles pump water!" : "Darkness mode: Euglena switches to saprophytic/holozoic nutrition.");
-  }
-
-  function reset() {
-    state.highV = false;
-    setMode("mix");
-    toast("Stage reset to Euglena & Volvox view.");
+  function setMode(m) {
+    if (["colony", "tissue", "ladder"].indexOf(m) < 0) return;
+    state.mode = m;
+    root.querySelectorAll(".stage-bar [data-mode]").forEach(function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false"); });
+    if (hintEl) hintEl.textContent = HINT[m];
+    layout(false);
+    emit("l3:zoom", { mode: m });
   }
 
   function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
+    root.querySelectorAll(".stage-bar [data-mode]").forEach(function (b) {
       b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
     });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleLightAndOsmosis);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
+    if (hintEl) hintEl.textContent = HINT.colony;
   }
 
+  var tb, tv;
   function frame(dt, t) {
-    if (eugApi && eugApi.tick) eugApi.tick(dt, t);
-    if (volvApi && volvApi.tick) volvApi.tick(dt, t);
-    if (spiroApi && spiroApi.tick) spiroApi.tick(dt, t);
-    if (hydraApi && hydraApi.tick) hydraApi.tick(dt, t);
-
-    var sav = state.mode === "base" ? 2.0 : state.mode === "acid" ? 4.5 : 6.0;
-    var cells = state.mode === "base" ? "100,000" : state.mode === "acid" ? "Chain" : "1 / 5,000";
-    var level = state.mode === "base" ? "Tissue" : state.mode === "acid" ? "Filament" : "Cell/Colony";
-
-    if (keBar) keBar.scale.y = Math.max(0.15, sav / 6.5);
-    if (peBar) peBar.scale.y = state.mode === "base" ? 0.95 : state.mode === "acid" ? 0.55 : 0.40;
-    if (totBar) totBar.scale.y = state.mode === "base" ? 0.85 : state.mode === "acid" ? 0.30 : 0.45;
-
-    var cV = document.querySelector('#zoom-counters [data-c="h"]');
-    var cI = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cR = document.querySelector('#zoom-counters [data-c="na"]');
-    var cT = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cP = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cV) cV.textContent = level;
-    if (cI) cI.textContent = cells;
-    if (cR) cR.textContent = sav.toFixed(1) + " mm⁻¹";
-    if (cT) cT.textContent = state.highV ? "Autotrophic" : "Mixotrophic";
-    if (cP) cP.textContent = "Contractile Vac.";
+    [volvox, hydra, euglena].forEach(function (o) { if (o && o.visible && o.update) o.update(dt, t); });
+    if (nucleus && nucleus.visible) nucleus.rotation.y += dt * 0.35;
+    var target = highlightPart && (highlightPart === "ectoderm" ? hydra.parts.ectoderm : highlightPart === "endoderm" ? hydra.parts.endoderm : objs[highlightPart]);
+    if (target && target.visible === false) target = null;
+    if (glow) {
+      if (target) {
+        tb = tb || new THREE.Box3(); tv = tv || new THREE.Vector3();
+        tb.setFromObject(target); tb.getCenter(glow.position);
+        glow.scale.setScalar(Math.max(1.8, tb.getSize(tv).length() * 0.9));
+      }
+      glow.material.opacity += ((target ? 0.4 + 0.2 * Math.sin(t * 5) : 0) - glow.material.opacity) * Math.min(1, dt * 8);
+    }
   }
 })();

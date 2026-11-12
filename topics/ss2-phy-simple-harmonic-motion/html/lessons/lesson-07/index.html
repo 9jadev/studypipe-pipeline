@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 7 · Forced Vibration and Resonance · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): free, damped and forced vibration, resonance, Barton's pendulums, f = v/d and the resonant speed v = d f₀ — solving the Ridge Road case of the cracked egg crates.">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    /* ---- nav: unit link + lesson switcher ---- */
+    @media (max-width: 480px) { .l7-wide { display: none; } .l7-nav .offline-pill { display: none; } .l7-switch a { min-width: 22px; font-size: 11px; } }
+    /* ---- hero art ---- */
+    .l7-art { position: relative; border-radius: var(--radius-lg); background: var(--ink-900); border: 1px solid var(--line-strong); padding: 14px; box-shadow: var(--shadow-lg); }
+    .l7-art svg { width: 100%; height: auto; max-width: 380px; display: block; margin: 0 auto; }
+    .l7-art .ax { stroke: var(--fg-soft); stroke-width: 2; fill: none; }
+    .l7-art .leak { stroke: var(--crimson); stroke-width: 3; fill: none; }
+    .l7-art .heal { stroke: var(--teal); stroke-width: 3; fill: none; }
+    .l7-art .thr { stroke: var(--amber); stroke-width: 2; stroke-dasharray: 6 5; fill: none; }
+    .l7-art text { font-family: var(--font-mono); font-size: 12px; fill: var(--fg-soft); }
+    .l7-art .t-leak { fill: var(--crimson); } .l7-art .t-heal { fill: var(--teal); } .l7-art .t-thr { fill: var(--amber); }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(var(--paper-rgb), .06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    .l7-comp { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .l7-comp span { font-family: var(--font-mono); font-size: 11px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--line-strong); color: var(--fg-soft); }
+    .l7-comp b { color: var(--teal); }
+    /* ---- compact bench (phone first) ---- */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; margin: 0; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(300px, 86vw, 440px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13.5px; display: block; line-height: 1.2; }
+    #bench-stage .bench-readout div.l7-hot { border-color: rgba(var(--crimson-rgb), .8); background: rgba(var(--crimson-rgb), .16); }
+    #bench-stage .bench-readout div.l7-hot b { color: var(--pink-soft); }
+    #bench-stage .bench-readout div.l7-ok b { color: var(--teal); }
+    #bench-rig { display: grid; grid-template-columns: 1fr 1fr; width: 100%; }
+    .l7-ctl { gap: 8px; padding-top: 10px; padding-bottom: 10px; }
+    .l7-ctl[hidden] { display: none; }
+    .l7-grid5 { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; width: 100%; }
+    .l7-grid5 button { padding: 8px 2px; font-family: var(--font-mono); font-size: 12px; }
+    .l7-grid5 button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); }
+    .l7-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; width: 100%; }
+    .l7-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; }
+    .l7-grid2 button[aria-pressed="true"], .l7-grid3 button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); }
+    .l7-range { display: flex; align-items: center; gap: 10px; width: 100%; font-family: var(--font-mono); font-size: 12.5px; color: var(--fg-soft); }
+    .l7-range strong { color: var(--fg); min-width: 64px; text-align: right; }
+    .l7-range input { flex: 1 1 auto; min-width: 110px; }
+    .l7-hint { width: 100%; margin: 0; font-size: 12.5px; color: var(--fg-soft); }
+    .l7-grid2 .seg, .seg.l7-grid2 { padding: 3px; }
+    .seg.l7-grid2 button { padding: 8px 4px; white-space: nowrap; }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td small, #barton-table td small { display: block; font-size: 11px; color: var(--paper-muted); }
+    #results-table tr.fresh, #barton-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .l7-yes { color: var(--crimson); font-weight: 800; } .l7-no { color: var(--ok-deep); font-weight: 700; }
+    /* ---- speed explorer ---- */
+    .pos-track { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 46px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 92px; }
+    .pos-info b { color: var(--crimson); }
+    /* ---- zoom (Paper.js) ---- */
+    #zoom-stage .stage-canvas { height: clamp(300px, 84vw, 420px); }
+    #zoom-stage .bench-readout { grid-template-columns: repeat(5, minmax(0, 1fr)); padding: 8px 10px 0; gap: 4px; }
+    #zoom-stage .bench-readout div { padding: 5px 4px; }
+    #zoom-stage .bench-readout span { font-size: 9.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #zoom-stage .bench-readout b { font-size: 12.5px; display: block; }
+    #zoom-stage .bench-readout div.l7-hot { border-color: rgba(var(--crimson-rgb), .8); background: rgba(var(--crimson-rgb), .16); }
+    /* ---- model note (overrides the Wonder Wall sticky-note look) ---- */
+    /* ---- bridge ---- */
+    .l7-bridge { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 22px; }
+    .l7-bridge h4 { margin: 0 0 6px; color: var(--fg); }
+    .l7-bridge > p { color: var(--fg-soft); font-size: 14.5px; margin: 0 0 10px; }
+    .l7-runs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .l7-runs button { text-align: left; }
+    .l7-runs button .l7-res { display: block; font-family: var(--font-mono); font-size: 11.5px; font-weight: 600; color: var(--muted); margin-top: 2px; }
+    .l7-runs button.crack { box-shadow: inset 0 0 0 2px var(--crimson); }
+    .l7-runs button.crack .l7-res { color: var(--pink-soft); }
+    .l7-runs button.fine { box-shadow: inset 0 0 0 2px var(--teal); }
+    .l7-runs button.fine .l7-res { color: var(--teal); }
+    .l7-bq { margin-top: 14px; }
+    .l7-bq p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .l7-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l7-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: calc(16px * var(--corner, 1)); border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; text-align: left; }
+    .l7-bq .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .l7-bq .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .l7-bq .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .vt-verdict.bad { background: var(--bad-tint-2); }
+    .vt-verdict p { margin: 0 0 8px; }
+    .l7-tn dt { font-weight: 800; margin-top: 10px; }
+    .l7-tn dd { margin: 2px 0 0; }
+    @media (min-width: 641px) {
+      #method-cards div.method { padding: 10px 14px; }
+      .pos-track { grid-template-columns: repeat(7, minmax(0, 1fr)); }
+      .l7-runs { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l07">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> Unit Overview</a>
+      <span class="l-crumb">Lesson 7 of 7 · <b>Forced Vibration and Resonance</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 7 of 7 (Unit Finale) · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Forced Vibration and <em>Resonance</em></h1>
+        <p class="question reveal">Why does exactly 18 km/h over the ridges cause disaster?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Distinguish <strong>free</strong>, <strong>damped</strong> and <strong>forced</strong> vibration.</span></li>
+          <li><b>02</b><span>Define <strong>resonance</strong> (driving frequency equal to natural frequency, giving maximum amplitude) and demonstrate it with Barton's pendulums.</span></li>
+          <li><b>03</b><span>Calculate a forcing frequency from speed and spacing, <strong>f = v/d</strong>, and a resonant speed, <strong>v = d f₀</strong>.</span></li>
+          <li><b>04</b><span>Explain how <strong>damping</strong> and <strong>load</strong> change the resonance curve and the dangerous speed.</span></li>
+          <li><b>05</b><span>Give useful and harmful examples of resonance and how harmful resonance is prevented.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="l7-comp reveal" aria-label="Competences">
+          <span><b>L1</b> Critical thinking</span><span><b>L2</b> Creativity</span><span><b>L3</b> Safety</span><span><b>L6</b> Leadership &amp; planning</span><span><b>L7</b> Citizenship</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–45</b> Investigate</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–75</b> Apply</span><span><b>75–80</b> Reflect</span>
+        </div>
+        <nav class="l-switch reveal" aria-label="Lessons in this unit">
+          <a class="home" href="../../index.html">Hub</a>
+          <a href="../lesson-01/index.html">L1</a><a href="../lesson-02/index.html">L2</a><a href="../lesson-03/index.html">L3</a><a href="../lesson-04/index.html">L4</a><a href="../lesson-05/index.html">L5</a><a href="../lesson-06/index.html">L6</a><a href="index.html" aria-current="page">L7</a>
+        </nav>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="l7-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 400 250" role="img" aria-label="A resonance curve: amplitude against riding speed, with a tall red peak at 18 km/h for the leaking damper, a low teal hump for the healthy damper and a dashed amber lift-off threshold line.">
+          <path class="ax" d="M40 210 H380 M40 210 V24"/>
+          <path class="thr" d="M88 24 C120 120 170 150 210 158 S330 186 378 192"/>
+          <path class="heal" d="M40 204 C120 200 170 186 200 184 S300 196 378 204"/>
+          <path class="leak" d="M40 205 C140 196 180 170 196 120 C202 70 206 40 210 40 C216 40 220 90 226 140 C240 186 300 202 378 206"/>
+          <text x="214" y="36" class="t-leak">leaking · 10.0 cm</text>
+          <text x="262" y="180" class="t-heal">healthy ≈ 2 cm</text>
+          <text x="96" y="62" class="t-thr">lift-off threshold</text>
+          <text x="196" y="228">18 km/h</text>
+          <text x="300" y="242">speed v →</text>
+          <text x="10" y="20">A</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Useful or harmful?</a></li>
+        <li><a href="#practical">3D practical</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Resonance zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">Case closed</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
+        <h2>Before we start: <em>retrieve Lessons 1 to 6</em></h2>
+        <p class="intro">Four spaced-retrieval cards: the okada's natural frequency, load and frequency, the lift-off rule and damping. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>Three speeds, <em>one disaster</em></h2>
+        <p class="intro">Dayo rides the same ridges at 10, 30 and 18 km/h. Only one speed throws the crates. Then Mrs Okafor shows the same effect with pendulums on a string.</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Dayo rides his okada with egg crates over the concrete ridges of Ridge Road at 10, 30 and 18 km/h; at 18 km/h the rear pumps higher and a crate lifts and cracks. Mrs Okafor then sets Barton's pendulums swinging in the school lab, and Hajia Ramatu asks for the verdict."></canvas>
+            <div class="stage-label"><i></i>3D story · Ridge Road</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 6</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Beat 1 · Dayo (about 10 km/h):</strong> <em>"Slow and steady today."</em> The carrier jolts once at every ridge — small, untidy bumps. The crates stay put.</p>
+            <p><strong>Beat 2 · Dayo (about 30 km/h):</strong> <em>"Now I am flying!"</em> The ridges blur under the wheels and the rear barely moves. The crates are fine.</p>
+            <p><strong>Beat 3 · Dayo (about 18 km/h):</strong> each ridge arrives just as the last bounce comes back. The rear pumps higher and higher, a crate lifts off the carrier and lands with a crack. <em>"Ah! Not again!"</em></p>
+            <p><strong>Beat 4 · Tunde:</strong> <em>"So it's not 'faster is worse' after all. Thirty was smooth, eighteen was a disaster."</em></p>
+            <p><strong>Beat 5 · Mrs Okafor (school lab):</strong> she sets a heavy pendulum swinging on a taut cord that carries light paper-cone pendulums of different lengths. Only the cone as long as the heavy driver swings wide. <em>"Pushes that arrive at a system's own rhythm add up. That has a name: resonance."</em></p>
+            <p><strong>Beat 6 · Hajia Ramatu:</strong> <em>"Then tell Dayo the speed to avoid — and what to fix."</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">The ridges are 2.5 m apart and the okada bounces naturally at 2.0 Hz. Can you predict the dangerous speed before we test it?</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I predict the dangerous speed is…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Faster = worse (Tunde)</button>
+            <button type="button">Each ridge must arrive once per bounce (Zainab)</button>
+            <button type="button">Why does my speed change it with extra crates? (Dayo)</button>
+            <button type="button">Can a building do this too? (Hajia Ramatu)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · sort game</span>
+        <h2>Useful resonance or <em>harmful resonance?</em></h2>
+        <p class="intro">Sort all 10 cards. Drag a card, or tap a card and then tap a bin.</p>
+        <div class="sort" id="l07-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Examples to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="useful" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Useful resonance bin">
+              <h4><i></i>Useful</h4>
+              <small>we want the big response</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="harmful" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Harmful resonance bin">
+              <h4><i></i>Harmful</h4>
+              <small>we must prevent or avoid it</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>Barton's pendulums, then <em>the ridge rig</em></h2>
+        <p class="intro">First watch which paper cone answers the heavy driver. Then ride the okada over 2.5 m ridges and sweep the speed.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Barton's pendulums</h4><p>Driver 0.60 m; Start; wait for steady.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Change the driver</h4><p>Try 0.45 m; note the widest cone.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Ridge rig sweep</h4><p>200 kg, leaking; ride 10 → 30 km/h.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Repeat</h4><p>Healthy damper, then 250 kg leaking.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D bench: either Barton's pendulums — a heavy driver bob and five paper cones of lengths 0.30 to 0.90 m on a taut cord — or a loaded okada with egg crates riding over concrete ridges 2.5 m apart, with a leaking or healthy rear shock absorber and a speedometer."></canvas>
+            <div class="stage-label"><i></i>Barton's pendulums</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the expected results and worked examples below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Apparatus" id="bench-rig">
+              <button type="button" data-rig="barton" aria-pressed="true">Barton's pendulums</button>
+              <button type="button" data-rig="ridge" aria-pressed="false">Ridge rig</button>
+            </div>
+          </div>
+          <div class="stage-bar l7-ctl" id="ctl-barton">
+            <div class="l7-grid5" role="group" aria-label="Driver length in metres" id="barton-len">
+              <button class="vt-btn" type="button" data-l="0.30" aria-pressed="false">0.30</button>
+              <button class="vt-btn" type="button" data-l="0.45" aria-pressed="false">0.45</button>
+              <button class="vt-btn" type="button" data-l="0.60" aria-pressed="true">0.60</button>
+              <button class="vt-btn" type="button" data-l="0.75" aria-pressed="false">0.75</button>
+              <button class="vt-btn" type="button" data-l="0.90" aria-pressed="false">0.90</button>
+            </div>
+            <div class="l7-grid2">
+              <button class="vt-btn zobo" type="button" id="barton-start">Start the driver</button>
+              <button class="vt-btn" type="button" id="barton-reset">Reset</button>
+            </div>
+            <p class="l7-hint" id="barton-hint">Driver length 0.60 m (metres). Tap Start, then wait for the steady state.</p>
+          </div>
+          <div class="stage-bar l7-ctl" id="ctl-ridge" hidden>
+            <label class="l7-range" for="ridge-speed">Speed <strong id="ridge-speed-val">10 km/h</strong>
+              <input type="range" id="ridge-speed" min="5" max="35" step="1" value="10" aria-label="Riding speed in km/h">
+            </label>
+            <div class="l7-grid2">
+              <div class="seg l7-grid2" role="group" aria-label="Load" id="ridge-load">
+                <button type="button" data-mass="200" aria-pressed="true">200 kg</button>
+                <button type="button" data-mass="250" aria-pressed="false">250 kg</button>
+              </div>
+              <div class="seg l7-grid2" role="group" aria-label="Damper" id="ridge-damper">
+                <button type="button" data-leak="1" aria-pressed="true">Leaking</button>
+                <button type="button" data-leak="0" aria-pressed="false">Healthy</button>
+              </div>
+            </div>
+            <div class="l7-grid3">
+              <button class="vt-btn zobo" type="button" id="ridge-ride">Ride</button>
+              <button class="vt-btn" type="button" id="ridge-sweep">Sweep</button>
+              <button class="vt-btn" type="button" id="ridge-reset">Reset</button>
+            </div>
+            <p class="l7-hint" id="ridge-hint">Ride records a row once the bounce is steady.</p>
+          </div>
+        </div>
+
+        <h3>Record your results</h3>
+        <div class="tbl-wrap">
+          <table class="tbl" id="barton-table">
+            <thead><tr><th>Driver l / m</th><th>T / s</th><th>f / Hz</th><th>Widest cone</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>v / km h⁻¹</th><th>v / m s⁻¹</th><th>f = v/d / Hz</th><th>A / cm</th><th>Lift-off?</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="bench-line">Barton: not yet · ridge rows: 0</p>
+
+        <div class="graph-card" id="graph-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Ridge rig · resonance curve</span><h4 id="graph-title">Amplitude A against riding speed v</h4></div>
+            <span class="gc-badge wait" id="graph-badge">no rows yet</span>
+          </div>
+          <div id="graph-av"></div>
+          <p class="gc-note" id="graph-note">Each ride adds a point. The red curve is the leaking damper, the teal curve the healthy one, and the dashed amber curve is the lift-off threshold g/(2πf)² with f = v/d. Lift-off happens where a point rises above the dashed curve.</p>
+        </div>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected results <small>open after you test</small></summary>
+          <div class="reveal-body">
+            <p><strong>Barton's pendulums:</strong> driver 0.60 m (T = 1.55 s, f = 0.64 Hz) → the 0.60 m cone swings widest, its neighbours less, the far ones least. With a 0.45 m driver the 0.45 m cone is widest.</p>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>v / km h⁻¹</th><th>v / m s⁻¹</th><th>f / Hz</th><th>A / cm (200 kg, leaking)</th><th>Lift-off?</th></tr></thead>
+                <tbody>
+                  <tr><td>10</td><td>2.78</td><td>1.11</td><td>1.4</td><td>✗</td></tr>
+                  <tr><td>14</td><td>3.89</td><td>1.56</td><td>2.5</td><td>✗</td></tr>
+                  <tr><td>16</td><td>4.44</td><td>1.78</td><td>4.4</td><td>✗</td></tr>
+                  <tr><td><strong>18</strong></td><td>5.00</td><td>2.00</td><td><strong>10.0</strong></td><td><strong>✓</strong></td></tr>
+                  <tr><td>20</td><td>5.56</td><td>2.22</td><td>3.9</td><td>✗</td></tr>
+                  <tr><td>30</td><td>8.33</td><td>3.33</td><td>0.6</td><td>✗</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p><strong>Healthy damper:</strong> the peak is only about 2.0 cm — never lift-off. <strong>250 kg, leaking:</strong> peak 10.0 cm at 16 km/h, above its 7.8 cm threshold (g/ω₀²) ✓; at 18 km/h only 3.7 cm.</p>
+            <p><strong>Precautions (past tense):</strong> only one cone length (or one setting) was changed at a time · the driver was released through a small angle · the amplitudes were read only after the steady state was reached.</p>
+            <p><strong>Sources of error:</strong> the cord was not taut, which reduced the coupling between driver and cones · draughts disturbed the light paper cones · cones of nearly equal length swung against each other.</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l07-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why did only the equal-length cone swing widely?</li>
+            <li>Why does the forcing frequency f rise with speed?</li>
+            <li>At what forcing frequency was A largest, and how does that compare with f₀?</li>
+            <li>What did the healthy damper do to the peak?</li>
+            <li>Why did the extra load move the peak to a lower speed?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Every cone was pushed at the driver's frequency through the cord, but a pendulum's natural frequency depends on its length (T = 2π√(l/g)). Only the 0.60 m cone had a natural frequency equal to the driving frequency, so only it resonated.</li>
+                <li>The ridges are a fixed 2.5 m apart. The faster the okada goes, the less time it takes to reach the next ridge, so more ridges are met each second: f = v/d grows in step with v.</li>
+                <li>A was largest at f = 2.00 Hz (18 km/h), which equals the okada's natural frequency f₀ = 2.00 Hz: that is resonance.</li>
+                <li>It made the peak much lower (about 2.0 cm instead of 10.0 cm) and broader, at about the same frequency, so the bounce never reached the lift-off threshold.</li>
+                <li>More mass on the same spring lowers f₀ (f₀ ∝ 1/√m), from 2.00 Hz to 1.79 Hz. Resonance needs v = d f₀, so the dangerous speed falls to about 16 km/h.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 45-MIN MOVEMENT BREAK ================= -->
+      <aside class="l-sec" id="movement-break" aria-label="Active movement break" style="background:linear-gradient(135deg,rgba(var(--ok-rgb),.12),rgba(var(--teal-rgb),.08));border-color:rgba(var(--ok-rgb),.35)">
+        <span class="phase" style="--pc:var(--lime)">⚡ Movement break · 45 min · 5 min</span>
+        <h2>The <em>resonance clap</em></h2>
+        <p class="intro">Everybody stand and sway gently from side to side. Your teacher claps <strong>exactly on</strong> your sway rhythm — let each clap nudge you a little further, and feel the sway grow. Now the teacher claps <strong>off</strong> the rhythm: some claps fight the sway and it shrinks. Say together: <strong>"Pushes in step with the natural rhythm build a big amplitude — that is resonance."</strong> Sit down.</p>
+      </aside>
+
+      <!-- ================= 4. MAKE SENSE ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Free, damped, forced — <em>and resonant</em></h2>
+        <p class="intro">Now we put names and formulae on what the cones and the okada showed you.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>Resonance: Solving the Ridge Road Case</b><span class="lv-time">12 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: Resonance: Solving the Ridge Road Case" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <div class="callout reveal" id="kinds-box">
+          <p><strong>Three kinds of vibration.</strong> <em>Free</em> — the system vibrates at its own natural frequency f₀, with no outside push (and, ideally, no losses). <em>Damped</em> — the amplitude dies away because energy is removed each cycle. <em>Forced</em> — an outside periodic push makes the system vibrate at the <strong>driving</strong> frequency, not its own.</p>
+        </div>
+
+        <div class="callout big reveal" id="resonance-box">
+          <p><strong>Resonance:</strong> when the driving frequency equals the natural frequency, each push arrives in step with the motion, energy builds up, and the amplitude becomes greatest. Damping lowers and widens the resonance peak.</p>
+        </div>
+
+        <div class="callout tip reveal" id="ridge-box">
+          <p><strong>Ridge forcing:</strong> a vehicle at speed v meets ridges spaced d apart at a rate <code>f = v/d</code> per second. Resonance happens when v/d = f₀, so the dangerous speed is <code>v = d f₀</code>. Remember to change km/h to m s⁻¹ (÷ 3.6) first.</p>
+        </div>
+
+        <h3>Key equations</h3>
+        <div class="eq" id="eq-chain">f = v/d · v_res = d f₀ · f₀ = (1/2π)√(k/m) · ω²A ≥ g</div>
+
+        <h3 id="def-compare">Comparing the four</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th></th><th>Frequency of vibration</th><th>Amplitude</th><th>Energy source</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Free</strong></td><td>natural f₀</td><td>constant (ideal)</td><td>one starting push</td><td>a plucked ruler</td></tr>
+              <tr><td><strong>Damped</strong></td><td>about f₀</td><td>dies away</td><td>one push, then losses</td><td>okada after one ridge</td></tr>
+              <tr><td><strong>Forced</strong></td><td>driving f</td><td>small if f ≠ f₀</td><td>periodic outside push</td><td>okada at 30 km/h</td></tr>
+              <tr><td><strong>Resonant</strong></td><td>driving f = f₀</td><td>greatest</td><td>pushes in step</td><td>okada at 18 km/h</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="pos-h">Speed explorer</h3>
+        <p>Tap a speed for the 200 kg okada. You get the forcing frequency f = v/d, the ratio f/f₀, the amplitude with each damper, and the lift-off threshold g/ω² using the <strong>driving</strong> ω = 2πf.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a speed pin to test it.</div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 2D Zoom</span>
+        <h2>The resonance curve: <em>A against driving frequency</em></h2>
+        <p class="intro">Drag on the graph or move the speed slider: the dot is the okada's operating point. Slide the damping from leaking to healthy and watch the peak collapse. Switch the load and the peak slides from 2.0 Hz to 1.79 Hz.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="2D graph of amplitude against driving frequency for the okada: a peak at the natural frequency, a live operating-point dot, and a dashed lift-off threshold curve g over two pi f squared."></canvas>
+            
+            <div class="stage-fallback"><p>The zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar l7-ctl">
+            <label class="l7-range" for="zoom-speed">Speed <strong id="zoom-speed-val">18 km/h</strong>
+              <input type="range" id="zoom-speed" min="2" max="36" step="0.5" value="18" aria-label="Riding speed in km/h">
+            </label>
+            <label class="l7-range" for="zoom-zeta">Damping ζ <strong id="zoom-zeta-val">0.05</strong>
+              <input type="range" id="zoom-zeta" min="0.05" max="0.30" step="0.01" value="0.05" aria-label="Damping ratio zeta">
+            </label>
+            <div class="seg l7-grid2" role="group" aria-label="Load" id="zoom-load">
+              <button type="button" data-mass="200" aria-pressed="true">200 kg</button>
+              <button type="button" data-mass="250" aria-pressed="false">250 kg</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 10 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each on paper first, then check every step of the working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>The dangerous speed</h4></div>
+          <div class="example-body">
+            <p class="q">Ridges are <code>2.5 m</code> apart and the loaded okada's natural frequency is <code>2.0 Hz</code>. Find the speed at which resonance occurs, in m s⁻¹ and km/h.</p>
+            <ol class="steps-sol">
+              <li><strong>Resonance condition:</strong> resonance when the forcing frequency equals f₀, and the forcing frequency is <code>f = v/d</code>, so <code>v = d f₀</code>.</li>
+              <li><strong>Substitute:</strong> <code>v = 2.5 × 2.0 = 5.0 m s⁻¹</code></li>
+              <li><strong>Conversion factor:</strong> <code>1 m s⁻¹ = 3.6 km h⁻¹</code></li>
+              <li><strong>Speed in km/h:</strong> <code>v = 5.0 × 3.6 = 18 km h⁻¹</code></li>
+            </ol>
+            <div class="answer-line">v = 5.0 m s⁻¹ = 18 km h⁻¹</div>
+            <p class="note model-note">Story numbers are a teaching model, not real measurements.</p>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Two extra crates</h4></div>
+          <div class="example-body">
+            <p class="q">With <code>250 kg</code> on the same spring (<code>k = 3.16 × 10⁴ N m⁻¹</code>), find the new natural frequency and the dangerous speed.</p>
+            <ol class="steps-sol">
+              <li><strong>Natural frequency:</strong> <code>f₀ = (1/2π)√(k/m) = (1/2π)√(31600 ÷ 250) = (1/2π)√126.4</code></li>
+              <li><strong>Evaluate:</strong> <code>f₀ = 11.24 ÷ 6.283 = 1.79 Hz</code></li>
+              <li><strong>Resonant speed:</strong> <code>v = d f₀ = 2.5 × 1.79 = 4.47 m s⁻¹</code></li>
+              <li><strong>In km/h:</strong> <code>v = 4.47 × 3.6 = 16 km h⁻¹</code></li>
+            </ol>
+            <div class="answer-line">f₀ ≈ 1.79 Hz · v ≈ 16 km h⁻¹</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Barton's pendulums</h4></div>
+          <div class="example-body">
+            <p class="q">The driver of a Barton's set is <code>0.60 m</code> long. Find its frequency and say which paper cone resonates. (g = 9.8 m s⁻²)</p>
+            <ol class="steps-sol">
+              <li><strong>Period:</strong> <code>T = 2π√(0.60 ÷ 9.8) = 2π × 0.2474 = 1.55 s</code></li>
+              <li><strong>Frequency:</strong> <code>f = 1/T = 1 ÷ 1.55 = 0.64 Hz</code></li>
+              <li><strong>Which cone:</strong> the cone with the same natural frequency — the same length, 0.60 m — resonates.</li>
+            </ol>
+            <div class="answer-line">f ≈ 0.64 Hz · the 0.60 m cone</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>A keke on speed bumps</h4></div>
+          <div class="example-body">
+            <p class="q">A keke's suspension has natural frequency <code>1.5 Hz</code>. Speed bumps are <code>4.0 m</code> apart. At what speed would it resonate?</p>
+            <ol class="steps-sol">
+              <li><strong>Resonant speed:</strong> <code>v = d f₀ = 4.0 × 1.5 = 6.0 m s⁻¹</code></li>
+              <li><strong>In km/h:</strong> <code>v = 6.0 × 3.6 = 21.6 km h⁻¹</code></li>
+              <li><strong>Round sensibly:</strong> about 22 km/h.</li>
+            </ol>
+            <div class="answer-line">v ≈ 22 km h⁻¹</div>
+          </div>
+        </article>
+
+        <div id="exam-clinic">
+          <h3>Exam clinic · WAEC Paper 2 style</h3>
+          <p>Two structured items modelled on this unit. Write your answer to unlock the marking guide.</p>
+          <div class="aq" data-answer="l07-clinic-1">
+            <div class="aq-top"><h4>Clinic 1 · Resonance in words</h4><span class="marks">4 marks</span></div>
+            <p>(a) What is meant by <em>resonance</em>? (b) Give one example where resonance is useful and one where it is harmful. (c) State one way the harmful example can be prevented.</p>
+            <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exam clinic 1 answer"></textarea>
+            <details class="reveal-box solution"><summary>Marking guide <small>unlocks after you try</small></summary><div class="reveal-body">
+              <p>(a) Resonance is when a system is driven by a periodic force whose frequency equals the system's natural frequency, so that it vibrates with the greatest amplitude. (2: one for the frequency match, one for maximum amplitude) (b) Useful: tuning a radio, a guitar body, a talking drum, pushing a swing in time. Harmful: a footbridge swaying under marching feet, Dayo's okada on the ridges, a washing machine walking at one spin speed. (1) (c) Matching prevention, e.g. soldiers break step; replace the worn shock absorber (more damping); avoid the dangerous speed; change the mass or stiffness so f₀ moves away from the driving frequency. (1)</p>
+              <p><small><strong>Marking note:</strong> "a big vibration" alone scores zero in (a). In (c) the method must fit the example given.</small></p>
+            </div></details>
+          </div>
+          <div class="aq" data-answer="l07-clinic-2">
+            <div class="aq-top"><h4>Clinic 2 · A loaded danfo on rumble strips</h4><span class="marks">5 marks</span></div>
+            <p>A danfo's rear suspension carries a sprung mass of 1 600 kg on springs of combined spring constant 1.0 × 10⁵ N m⁻¹. Rumble strips on an expressway slip road are 5.0 m apart. (a) Calculate the natural frequency. (b) Find the speed, in km/h, at which the bus resonates on the strips. (c) Passengers and goods add 400 kg. Find the new resonant speed in km/h and comment.</p>
+            <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exam clinic 2 answer"></textarea>
+            <details class="reveal-box solution"><summary>Marking guide <small>unlocks after you try</small></summary><div class="reveal-body">
+              <p>(a) <code>ω = √(k/m) = √(100000 ÷ 1600) = √62.5 = 7.91 rad s⁻¹</code>, so <code>f₀ = 7.91 ÷ 6.283 = 1.26 Hz</code> (1) (b) <code>v = d f₀ = 5.0 × 1.26 = 6.29 m s⁻¹</code> (1), and 6.29 × 3.6 = 22.6 km/h (1) (c) With 2 000 kg, <code>f₀ = √(100000 ÷ 2000) ÷ 6.283 = 7.07 ÷ 6.283 = 1.13 Hz</code>, so v = 5.0 × 1.13 = 5.63 m s⁻¹ = 20.3 km/h (1). More load lowers f₀, so the dangerous speed falls; the driver cannot assume the empty-bus danger speed is still the one to avoid (1).</p>
+              <p><small><strong>Marking note:</strong> error carried forward allowed; forgetting × 3.6 loses one mark once. In (c) the comment must link more mass → lower f₀ → lower dangerous speed.</small></p>
+            </div></details>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 7. BRIDGE: MYSTERY SOLVED ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Solving the mystery</span>
+        <h2>Case closed: <em>the cracked crates of Ridge Road</em></h2>
+        <p class="intro">Run the five test rides on the ridge rig, then answer three questions and give Hajia Ramatu your verdict.</p>
+
+        <div class="l7-bridge vt" id="bridge-card">
+          <h4>Five test rides (200 kg unless stated)</h4>
+          <p>Tap each ride. The result comes from the okada model and the bench above replays it.</p>
+          <div class="l7-runs" id="bridge-runs"></div>
+          <div class="l7-bq" data-q="0"><p>1 · Why do the crates crack at 18 km/h, and not at 30 km/h?</p><div class="opts"></div></div>
+          <div class="l7-bq" data-q="1"><p>2 · With two extra crates (250 kg), the dangerous speed becomes…</p><div class="opts"></div></div>
+          <div class="l7-bq" data-q="2"><p>3 · What should Dayo and Hajia Ramatu do?</p><div class="opts"></div></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
+          </div>
+          <div class="vt-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 7:</strong> resonance happens when the driving frequency matches the natural frequency; damping limits it, and changing mass or stiffness moves it.</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from earlier lessons come at the end.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 7.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can distinguish free, damped and forced vibration.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can define resonance and explain Barton's pendulums.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can compute f = v/d and the resonant speed v = d f₀.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain how damping and load change the danger.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can give useful and harmful examples of resonance.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>Ridges are 3.0 m apart and a vehicle's f₀ = 2.0 Hz. Find the resonant speed.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><code>v = d f₀ = 3.0 × 2.0 = 6.0 m s⁻¹</code> <b>(1)</b>; 6.0 × 3.6 = 21.6 km/h <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home investigation: the swing that grows</h3>
+        <div class="aq" data-answer="l07-a1">
+          <div class="aq-top"><h4>Push a swing in step, twice as often, and at random. Which builds the biggest swing?</h4></div>
+          <p><strong>You need:</strong> a playground or compound swing, a friend to sit on it (a younger child only with an adult present), and a phone stopwatch. Keep the swing low and gentle; stop at once if anyone is uneasy.</p>
+          <ol class="sub">
+            <li>Pull the swing back a little and let it go; time 10 oscillations to find its natural period.</li>
+            <li>Give a gentle push <strong>once per swing</strong>, each time it reaches you and starts to move away. Count 10 pushes and note how high it goes.</li>
+            <li>Let it settle. Now push <strong>twice as often</strong> (each time it passes you, coming or going), for 10 pushes.</li>
+            <li>Let it settle. Now push at a random rhythm for 10 pushes.</li>
+            <li>Describe the amplitude after each set of pushes.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and explanation…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Pushing pattern</th><th>Frequency of pushes</th><th>Amplitude after 10 pushes</th></tr></thead><tbody>
+                <tr><td>Once per swing, in step</td><td>Equal to the natural frequency (about 0.4 Hz)</td><td>Large and still growing</td></tr>
+                <tr><td>Twice as often</td><td>Double the natural frequency</td><td>Small; some pushes slowed the swing down</td></tr>
+                <tr><td>Random rhythm</td><td>Irregular</td><td>Small and uneven</td></tr>
+              </tbody></table></div>
+              <p>A good answer gives the natural period (for example 2.5 s, f₀ ≈ 0.4 Hz) and explains that in-step pushes build the biggest swing because each push adds energy at the right moment (resonance: driving frequency = natural frequency), while pushes at other rhythms sometimes act against the motion and take energy out. A strong answer links this to the ridges pushing Dayo's okada once per bounce at 18 km/h, notes that friction and air resistance (damping) stopped the swing growing for ever, and gives a safety point about keeping the amplitude small.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l07-b1">
+          <div class="aq-top"><h4>1. Kinds of vibration</h4><span class="marks">3 marks</span></div>
+          <p>Define: (a) <em>free</em> vibration; (b) <em>damped</em> vibration; (c) <em>forced</em> vibration.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Vibration of a system at its own natural frequency, with no outside periodic force acting, after it is displaced and released (ideally with constant amplitude). (1) (b) Vibration whose amplitude decreases with time because energy is removed by resistive forces. (1) (c) Vibration of a system caused by an outside periodic force; the system vibrates at the frequency of that driving force. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (c) "at the driving frequency" is needed; "a vibration that is forced" scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b2">
+          <div class="aq-top"><h4>2. Resonance</h4><span class="marks">3 marks</span></div>
+          <p>(a) Define resonance. (b) Give one example where resonance is useful and one where it is harmful.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Resonance occurs when a system is driven by a periodic force whose frequency equals its natural frequency, so that it vibrates with the greatest amplitude. (1) (b) Useful (any one): tuning a radio · the hollow body of a guitar or talking drum amplifying the sound · pushing a swing in time (1). Harmful (any one): a bridge set swaying by marching feet or wind · a vehicle shaking violently at one speed (Dayo's okada) · machinery vibrating dangerously on its mounting (1).</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) both "frequency equals natural frequency" and "greatest amplitude" are needed. "A big vibration" alone scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b3">
+          <div class="aq-top"><h4>3. Barton's pendulums</h4><span class="marks">4 marks</span></div>
+          <p>(a) Describe how Barton's pendulums are set up. (b) Describe what is seen when the driver is set swinging. (c) Explain the observation. (d) State the effect of putting a small weight inside each paper cone.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) A heavy driver pendulum and several light paper-cone pendulums of different lengths hang from the same taut cord; one cone has the same length as the driver. (1) (b) All the cones begin to swing, but the one equal in length to the driver swings with by far the largest amplitude. (1) (c) The driver forces every cone at its own frequency through the cord; only the equal-length cone has a natural frequency equal to the driving frequency, so it resonates. (1) (d) Heavier cones are less affected by air resistance (relatively less damped), so the resonance becomes sharper: the matching cone swings even more widely compared with the others. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (c) the frequency-match idea is essential; "it is the same length" without linking length to natural frequency earns no mark.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b4">
+          <div class="aq-top"><h4>4. The dangerous speed</h4><span class="marks">4 marks</span></div>
+          <p>A vehicle moves at speed v over ridges spaced d apart. (a) Show that it meets the ridges at a frequency f = v/d. (b) Hence write the speed at which it resonates. (c) Calculate this speed for Dayo's okada (d = 2.5 m, f₀ = 2.0 Hz) in m s⁻¹ and km/h.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The time between ridges is the distance between them divided by the speed, d/v; the number met per second is the reciprocal, f = v/d. (1) (b) Resonance when f = f₀, so v = d f₀. (1) (c) <code>v = 2.5 × 2.0 = 5.0 m s⁻¹</code> (1); 5.0 × 3.6 = 18 km/h. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (c) the conversion factor 3.6 must be applied correctly; 5.0 km/h loses the last mark.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b5">
+          <div class="aq-top"><h4>5. The loaded keke</h4><span class="marks">5 marks</span></div>
+          <p>A keke's rear suspension carries a sprung load of 400 kg on springs of combined spring constant 5.0 × 10⁴ N m⁻¹. Speed bumps on its route are 3.0 m apart. (a) Calculate the natural frequency of the suspension. (b) Calculate the speed, in km/h, at which it resonates on the bumps. (c) Three passengers add 100 kg. Find the new natural frequency and the new resonant speed in km/h. (d) Explain why the driver should not simply assume the speed that was dangerous when empty is still the one to avoid.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) ω = √(k/m) = √(50 000 ÷ 400) = √125 = 11.2 rad s⁻¹; <code>f₀ = 11.18 ÷ 6.283 = 1.78 Hz</code>. (1) (b) v = d f₀ = 3.0 × 1.78 = 5.34 m s⁻¹ = 5.34 × 3.6 = 19.2 km/h. (1) (c) f₀ = (1/2π)√(50 000 ÷ 500) = 10 ÷ 6.283 = 1.59 Hz (1); v = 3.0 × 1.59 = 4.77 m s⁻¹ = 17.2 km/h. (1) (d) Extra load lowers the natural frequency, so the resonant speed moves lower; a speed chosen to avoid resonance when empty may now be close to the new dangerous speed. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Error carried forward allowed. Forgetting to change m s⁻¹ to km/h loses one mark only once. In (d) the link "more mass → lower f₀ → lower dangerous speed" is required.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b6">
+          <div class="aq-top"><h4>6. Practical: sweeping the speed</h4><span class="marks">6 marks</span></div>
+          <p>On the ridge rig (load 200 kg, leaking damper, ridges 2.5 m apart) Zainab recorded:</p>
+          <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>v / km h⁻¹</th><th>10</th><th>14</th><th>16</th><th>18</th><th>20</th><th>30</th></tr></thead><tbody><tr><td>A / cm</td><td>1.4</td><td>2.5</td><td>4.4</td><td>10.0</td><td>3.9</td><td>0.6</td></tr></tbody></table></div>
+          <p>(a) Calculate the forcing frequency f for each speed (2 d.p.). (b) Describe the shape of a graph of A against f and state the frequency at the peak. (c) Compare the peak frequency with the okada's natural frequency and name the effect. (d) The crates lift off when A ≥ 6.2 cm. At which recorded speed(s) did lift-off happen? (e) With a healthy damper the largest amplitude was about 2.0 cm. State the effect of the healthy damper on the curve. (f) Why is 30 km/h safe?</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) v in m s⁻¹ is 2.78, 3.89, 4.44, 5.00, 5.56, 8.33; f = v/2.5 = 1.11, 1.56, 1.78, 2.00, 2.22, 3.33 Hz. (1) (b) A rises slowly, then steeply to a sharp peak, and falls away again: the peak is at f = 2.00 Hz. (1) (c) The peak frequency equals the natural frequency f₀ = 2.0 Hz: resonance. (1) (d) Only at 18 km/h (10.0 cm &gt; 6.2 cm). (1) (e) The peak is much lower (about 2.0 cm, never reaching 6.2 cm) and broader, at about the same frequency. (1) (f) At 30 km/h the forcing frequency (3.33 Hz) is far from f₀, so the amplitude is only 0.6 cm. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> All six frequencies are needed in (a). In (c) the word <em>resonance</em> is required. In (e) both "lower" and "broader" (or "never reaches 6.2 cm") are needed.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b7">
+          <div class="aq-top"><h4>7. Synoptic: the whole case</h4><span class="marks">3 marks</span></div>
+          <p>Zainab timed 20 bounces of the parked, loaded okada in 10.0 s; the sprung load is 200 kg. (Take g = 9.8 m s⁻².) (a) Find the period and hence the spring constant. (b) Find the static sag. (c) Explain, using the lift-off rule, why the sag tells you the amplitude at which crates begin to leave the carrier.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>T = 10.0 ÷ 20 = 0.50 s</code>; k = 4π²m/T² = 39.48 × 200 ÷ 0.25 = 3.16 × 10⁴ N m⁻¹. (1) (b) <code>sag = mg/k = 200 × 9.8 ÷ 31600 = 0.062 m</code> = 6.2 cm. (1) (c) Lift-off needs ω²A ≥ g, so A ≥ g/ω² = g × m/k = mg/k: exactly the static sag, 6.2 cm. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) accept 3.2 × 10⁴ N m⁻¹. In (c) the step ω² = k/m must be used; the numerical coincidence alone is not credited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l07-b8">
+          <div class="aq-top"><h4>8. Advice to Dayo</h4><span class="marks">2 marks</span></div>
+          <p>Using your answers, give Dayo and Hajia Ramatu two pieces of advice, each with a physics reason.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) Replace the leaking rear shock absorber: a healthy damper turns bounce energy into heat and keeps the resonant amplitude near 2 cm, well below the 6.2 cm lift-off threshold. (1) (2) Until it is replaced, cross the ridge stretch slowly (about 10 km/h or below), well away from the resonant speeds of 18 km/h (usual load) and 16 km/h (extra crates), so the ridges do not push in step with the bounce. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Advice without a reason scores zero. "Ride faster" alone is not credited: it means passing through the resonant speeds on the way and gives no margin.</small></p>
+          </div></details>
+        </div>
+      </section>
+
+      <!-- ================= TEACHER NOTES ================= -->
+      <section class="l-sec" id="teacher-notes">
+        <span class="phase" style="--pc:var(--muted)">For the teacher</span>
+        <h2>Teacher <em>notes</em></h2>
+        <details class="reveal-box">
+          <summary>Timing, competences and support <small>tap to open</small></summary>
+          <div class="reveal-body">
+            <dl class="l7-tn">
+              <dt>Timing (80 min)</dt><dd>0–5 Do Now · 5–15 Wonder · 15–45 Investigate · <strong>45–50 movement break</strong> ("resonance clap") · 50–65 Make sense · 65–75 Apply · 75–80 Reflect.</dd>
+              <dt>Competences</dt><dd>L1 predict the dangerous speed before testing · L2 talking drum and guitar resonance · L3 safe speeds on ridged roads · L6 a practical delivery plan for Hajia Ramatu · L7 less food waste; designing bridges and roads to avoid resonance.</dd>
+              <dt>Lift-off note</dt><dd>Away from resonance the threshold is g/ω² with the <em>driving</em> ω = 2πv/d (5.0 cm at 20 km/h, 2.2 cm at 30 km/h); at resonance the driving ω equals ω₀ and the threshold equals the static sag, 6.2 cm (7.8 cm for 250 kg).</dd>
+              <dt>Model</dt><dd>The bench uses the base-excitation response A = Y√(1 + (2ζr)²)/√((1 − r²)² + (2ζr)²), r = f/f₀, Y = 1.0 cm, ζ = 0.05 (leaking) or 0.30 (healthy), k chosen so that f₀ = 2.00 Hz at 200 kg (quoted 3.16 × 10⁴ N m⁻¹). Students never need this formula. Story numbers are a teaching model, not real measurements.</dd>
+              <dt>Support / stretch</dt><dd>Support: a speed-conversion card (km/h ÷ 3.6 = m s⁻¹). Stretch: why marching soldiers break step on a bridge.</dd>
+            </dl>
+          </div>
+        </details>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-06/index.html" style="color:var(--paper-ink)">← Lesson 6</a>
+          <a class="btn btn-tour" href="../../index.html">Back to the unit →</a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/ridge-road-props.js"></script>
+  <script src="../../assets/js/mass-spring.js"></script>
+  <script src="../../assets/js/pendulum.js"></script>
+  <script src="../../assets/js/shm-kinematics-2d.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
+</body>
+</html>

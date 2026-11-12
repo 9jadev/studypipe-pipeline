@@ -65,7 +65,33 @@ In `queue.md`: `- [ ] ss1-bio-cell-structure theme: junior-play`.
 colours, fonts and shape, builds `themes/<id>/`, checks contrast, screenshots it on a real lesson and iterates
 with you. Details: `themes/README.md`.
 
-## 4. Batch / overnight
+## 4. Explainer videos
+
+Each lesson can include a narrated, animated explainer video in its Make Sense phase. The `explainer-director` skill writes
+a direction script for you to approve, then a plan where every number is checked. The `explainer-video` skill builds it,
+embeds it in the lesson and tests it on phones and desktop. It follows the unit's theme and speaks through the same voice
+path as the lesson narrator. Choose lessons with `videos:` in `status.md` (`all` by default). See `docs/VIDEOS.md`.
+
+```bash
+node scripts/apply-video.mjs topics/<slug>     # build + embed approved plans from topics/<slug>/06-videos/
+```
+
+## 5. Agent team (subagents)
+
+Instead of one agent doing every step, a **studio-director** delegates to specialists that each focus on one job:
+
+```
+studio-director ─┬─ curriculum-analyst → lesson-architect → exam-setter → accuracy-reviewer (fresh each round)
+                 ├─ unit-renderer (shell, hub, build plan)
+                 ├─ kit-engineer ×K   ┐ in parallel
+                 ├─ lesson-builder ×N ┘ (one per lesson)
+                 ├─ video-director ×V → video-builder ×V (one per lesson, parallel)
+                 └─ qa-inspector → release-packager
+```
+Run it: `agy --agent studio-director` then *"Run topic <slug>"* (or pick **studio-director** in the Antigravity app).
+`run-batch.sh` uses it automatically (`STUDIO_SOLO=1` falls back to one agent). See `docs/AGENT-TEAM.md`.
+
+## 6. Batch / overnight
 
 List topics in `queue.md`, then either tell the agent *"run the queue in batch mode"* or run it headless:
 ```bash
@@ -74,11 +100,12 @@ bash scripts/run-batch.sh
 Results: `[x]` = done and awaiting review, `[!]` = needs you. See `run-log.md` and each topic's `status.md`.
 See `docs/SERVER.md` for running batches on a VPS while your Mac is off.
 
-## 5. What's inside
+## 7. What's inside
 
 | Path | Purpose |
 |---|---|
 | `GEMINI.md` | Studio rules the agent reads every session |
+| `.agents/agents/` | The agent team: `studio-director` + 9 specialist subagents (see `docs/AGENT-TEAM.md`) |
 | `.agents/skills/run-topic` | Conductor: runs the whole pipeline, single topic or queue |
 | `.agents/skills/curriculum-mapper` | 1 · syllabus → objectives, sub-topics, exam emphasis |
 | `.agents/skills/lesson-designer` | 2 · the master lesson (teaching standards + template in `references/`) |
@@ -86,6 +113,7 @@ See `docs/SERVER.md` for running batches on a VPS while your Mac is off.
 | `.agents/skills/content-reviewer` | 4 · strict accuracy/coverage/standards review, PASS/FIX |
 | `.agents/skills/lesson-renderer` | 5 · markdown → offline HTML (lesson shell in `assets/`) |
 | `.agents/skills/theme-designer` | designs/edits visual themes with you; lists and switches them |
+| `.agents/skills/explainer-director`, `explainer-video` | lesson explainer videos: direction script → checked plan → built, embedded, phone-tested video |
 | `.agents/skills/kit-builder` | 6 · new reusable 3D/SVG kits (contract in `references/`) |
 | `.agents/skills/html-qa` | 7 · phone-sized offline test + visual review |
 | `.agents/skills/packager` | 8 · zip + manifest for the app |
@@ -97,7 +125,7 @@ See `docs/SERVER.md` for running batches on a VPS while your Mac is off.
 | `scripts/` | new-topic, QA (Playwright), package, manifest, batch runner |
 | `docs/` | Server guide and the 8-topic demo pack list |
 
-## 6. Making it yours
+## 8. Making it yours
 
 The skills are plain markdown, so edit them as you go. Tighten rules whenever you see the same mistake twice.
 Your existing `sci-sim-3d` and `edu-svg-illustrator` skills can be merged into `kit-builder`

@@ -1,12 +1,197 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8">
+<html lang="en-NG">
+<head>
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kit demo: shm-kinematics-2d</title>
-<style>html,body{margin:0;height:100%;background:#0e1620}#host{width:100vw;height:100vh}</style>
-</head><body>
-<div id="host"></div>
-<script src="kit.js"></script>
+<title>Kit demo: shm-kinematics-2d v2 (Paper.js)</title>
+<!-- Theme tokens (editorial-ink) and bundled fonts: offline, no CDN. -->
+<link rel="stylesheet" href="../../themes/editorial-ink/theme.css">
+<style>
+  @font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 400; font-display: swap; src: url("../../themes/_fonts/jetbrains-mono/jetbrains-mono-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "JetBrains Mono"; font-style: normal; font-weight: 500; font-display: swap; src: url("../../themes/_fonts/jetbrains-mono/jetbrains-mono-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Manrope"; font-style: normal; font-weight: 200 800; font-display: swap; src: url("../../themes/_fonts/manrope/manrope-latin-wght-normal.woff2") format("woff2"); }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--ink-950); color: var(--fg); font-family: var(--font-body); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 12px 12px 40px; }
+  h1 { font-family: var(--font-body); font-size: 16px; margin: 4px 0 2px; }
+  .sub { color: var(--muted); font-size: 12px; margin: 0 0 10px; }
+  .modes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+  .modes button, .ctl button { min-height: 44px; border-radius: calc(10px * var(--corner, 1)); border: 1px solid var(--line-strong); background: var(--ink-800); color: var(--fg-soft); font: 600 12px var(--font-body); cursor: pointer; padding: 0 6px; }
+  .modes button[aria-pressed="true"], .ctl button[aria-pressed="true"] { background: var(--amber); color: var(--on-amber); border-color: var(--amber); }
+  .shk-stage { position: relative; border-radius: var(--radius); overflow: hidden; background: radial-gradient(70% 70% at 50% 30%, var(--ink-700), var(--ink-950)); border: 1px solid var(--line); }
+  .shk-canvas { position: relative; height: clamp(360px, 62vw, 480px); }
+  .shk-canvas canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; touch-action: pan-y; }
+  .shk-read { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; padding: 8px; border-top: 1px solid var(--line); }
+  .shk-read div { background: rgba(var(--ink-950-rgb), .6); border: 1px solid var(--line); border-radius: 8px; padding: 4px 6px; min-width: 0; }
+  .shk-read span { display: block; font-size: 10px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .shk-read b { display: block; font: 600 13px var(--font-mono); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ctl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; padding: 10px 8px; border-top: 1px solid var(--line); background: rgba(var(--ink-950-rgb), .75); }
+  .ctl label { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--fg-soft); grid-column: span 2; }
+  .ctl label b { font-family: var(--font-mono); color: var(--amber); }
+  .ctl input[type=range] { width: 100%; height: 30px; accent-color: var(--amber); }
+  .checks { margin-top: 14px; font: 11.5px/1.5 var(--font-mono); color: var(--fg-soft); background: var(--ink-850); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 10px; overflow-x: auto; }
+  .checks .ok { color: var(--teal); } .checks .bad { color: var(--crimson); }
+  @media (min-width: 720px) { .modes { grid-template-columns: repeat(8, minmax(0, 1fr)); } .ctl { grid-template-columns: repeat(4, minmax(0, 1fr)); } .ctl label { grid-column: span 2; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>shm-kinematics-2d v2 · Paper.js</h1>
+  <p class="sub">Drag or tap on the canvas to move the motion. Every number comes from <code>ShmKinematics2D.model</code>.</p>
+  <div class="modes" id="modes"></div>
+  <div class="shk-stage" id="stage">
+    <div class="shk-canvas"><canvas id="shk-canvas"></canvas></div>
+    <div class="shk-read" id="read"></div>
+    <div class="ctl" id="ctl"></div>
+  </div>
+  <div class="checks" id="checks"></div>
+</div>
+<script src="../_vendor/paper-core.min.js"></script>
+<script src="shm-kinematics-2d.js"></script>
 <script>
-  window.StudyPipeKits["shm-kinematics-2d"].mount(document.getElementById("host"), { mode: "circle" }, { emit: function (n, d) { console.log("event", n, JSON.stringify(d)); } });
+(function () {
+  "use strict";
+  var K = window.ShmKinematics2D, M = K.model, f = K.format;
+  var LABEL = { "wheel": "Wheel", "circle": "Circle", "graphs": "Graphs", "energy": "Energy", "damping-trace": "Damping", "resonance": "Resonance", "pendulum-forces": "Forces", "phase-strip": "Strip" };
+  var kit = K.create({ canvas: document.getElementById("shk-canvas"), scene: (location.hash || "#wheel").slice(1), onChange: showRead });
+  window.SHM_KIT = kit;
+
+  var modes = document.getElementById("modes"), ctl = document.getElementById("ctl"), read = document.getElementById("read");
+  K.scenes.forEach(function (s) {
+    var b = document.createElement("button"); b.textContent = LABEL[s]; b.dataset.scene = s;
+    b.onclick = function () { kit.setState({ scene: s }); location.hash = s; build(); };
+    modes.appendChild(b);
+  });
+
+  function btn(text, fn, pressed) { var b = document.createElement("button"); b.type = "button"; b.textContent = text; if (pressed != null) b.setAttribute("aria-pressed", pressed ? "true" : "false"); b.onclick = function () { fn(b); }; ctl.appendChild(b); return b; }
+  function slider(name, min, max, step, val, fmt, fn) {
+    var l = document.createElement("label"), i = document.createElement("input"), out = document.createElement("b");
+    i.type = "range"; i.min = min; i.max = max; i.step = step; i.value = val; out.textContent = fmt(val);
+    l.appendChild(document.createTextNode(name + " ")); l.appendChild(out); l.appendChild(i);
+    i.oninput = function () { out.textContent = fmt(+i.value); fn(+i.value); };
+    ctl.appendChild(l); return i;
+  }
+  function playBtn() { return btn(kit.isPlaying() ? "Pause" : "Play", function (b) { kit.toggle(); b.textContent = kit.isPlaying() ? "Pause" : "Play"; }); }
+
+  function build() {
+    var s = kit.state(), sc = s.scene;
+    [].forEach.call(modes.children, function (b) { b.setAttribute("aria-pressed", b.dataset.scene === sc ? "true" : "false"); });
+    ctl.innerHTML = "";
+    if (sc === "wheel") {
+      slider("Radius A / m", 0.10, 0.40, 0.01, s.A, function (v) { return v.toFixed(2); }, function (v) { kit.setState({ A: v }); });
+      slider("Period T / s", 1.0, 4.0, 0.1, s.T, function (v) { return v.toFixed(1); }, function (v) { kit.setState({ T: v }); });
+      playBtn();
+      btn("Step 30°", function () { kit.step(30); build(); });
+      btn("Graphs", function (b) { kit.setState({ graphs: !kit.state().graphs }); b.setAttribute("aria-pressed", kit.state().graphs ? "true" : "false"); }, s.graphs);
+      btn("Reset", function () { kit.setState({ A: 0.30, T: 2.0, angle_deg: 0 }); build(); });
+    } else if (sc === "circle" || sc === "graphs") {
+      btn("Lab A 0.30 m", function () { kit.setState({ preset: "lab" }); build(); }, s.preset !== "okada");
+      btn("Okada ω² 158", function () { kit.setState({ preset: "okada" }); build(); }, s.preset === "okada");
+      if (s.preset === "okada") slider("A / cm (g line)", 2, 8, 0.5, s.A * 100, function (v) { return v.toFixed(1); }, function (v) { kit.setState({ A: v / 100 }); });
+      else slider("A / m", 0.10, 0.40, 0.01, s.A, function (v) { return v.toFixed(2); }, function (v) { kit.setState({ A: v }); });
+      btn("g line", function (b) { kit.setState({ gLine: !kit.state().gLine }); b.setAttribute("aria-pressed", kit.state().gLine ? "true" : "false"); }, s.gLine);
+      playBtn();
+    } else if (sc === "energy") {
+      slider("A / m", 0.04, 0.10, 0.01, s.A, function (v) { return v.toFixed(2); }, function (v) { kit.setState({ A: v }); });
+      ["x", "t", "both"].forEach(function (v) { btn("vs " + v, function () { kit.setState({ view: v }); build(); }, s.view === v); });
+      playBtn();
+    } else if (sc === "damping-trace") {
+      btn("Light / critical / heavy", function () { kit.setState({ set: "kinds", forced: false }); build(); }, s.set === "kinds");
+      btn("Shock: healthy / leaking", function () { kit.setState({ set: "shock", forced: false }); build(); }, s.set === "shock" && !s.forced);
+      btn("Ten pushes at f₀", function () { kit.setState({ set: "shock", forced: true }); build(); }, s.set === "shock" && !!s.forced);
+      btn("Replay", function () { kit.setState({ t: 0, playing: true }); });
+    } else if (sc === "resonance") {
+      slider("Speed / km h⁻¹", 2, 36, 0.5, s.speed_kmh, function (v) { return v.toFixed(1); }, function (v) { kit.setState({ speed_kmh: v }); });
+      slider("Damping ζ", 0.05, 0.30, 0.01, s.zeta, function (v) { return v.toFixed(2); }, function (v) { kit.setState({ zeta: v }); });
+      btn("200 kg", function () { kit.setState({ load_kg: 200 }); build(); }, s.load_kg === 200);
+      btn("250 kg", function () { kit.setState({ load_kg: 250 }); build(); }, s.load_kg === 250);
+    } else if (sc === "pendulum-forces") {
+      slider("θ / °", 2, 45, 1, Math.abs(s.theta_deg), function (v) { return v.toFixed(0); }, function (v) { kit.setState({ theta_deg: v, t: 0 }); });
+      btn("50 g wood", function () { kit.setState({ mass_g: 50 }); build(); }, s.mass_g === 50);
+      btn("100 g brass", function () { kit.setState({ mass_g: 100 }); build(); }, s.mass_g === 100);
+      btn(kit.isPlaying() ? "Hold" : "Swing", function (b) { kit.setState({ t: 0, playing: !kit.isPlaying() }); b.textContent = kit.isPlaying() ? "Hold" : "Swing"; });
+    } else if (sc === "phase-strip") {
+      playBtn();
+      btn("Step ¼ cycle", function () { kit.step(90); });
+      btn("Reset", function () { kit.reset(); build(); });
+    }
+    showRead(kit.reading());
+  }
+
+  function showRead(r) {
+    var rows = [];
+    var d = r.display || {};
+    if (/wheel|circle|graphs/.test(r.scene)) rows = [["ωt", d.angle], ["x / m", d.x], ["v / m s⁻¹", d.v], ["a / m s⁻²", d.a]];
+    if (r.scene === "circle" || r.scene === "graphs") { if (r.g_over_w2 < 0.2) rows = [["A / cm", d.A_cm], ["aₘₐₓ", d.a_max], ["g/ω² / cm", d.g_over_w2_cm], ["crate", r.lift ? "lifts" : "stays"]]; }
+    if (r.scene === "energy") rows = [["x / m", d.x], ["PE / J", d.PE], ["KE / J", d.KE], ["PE + KE", f.fx(r.sum, 3)]];
+    if (r.scene === "damping-trace") rows = Object.keys(r.curves).map(function (k) { var c = r.curves[k]; return [k + (c.display ? "" : " ratio/cycle"), c.display || f.fx(c.ratioPerCycle, 2)]; }).concat([["t / s", f.fx(r.tc, 2)]]).slice(0, 4);
+    if (r.scene === "resonance") rows = [["f = v/d", d.f], ["f₀", d.f0], ["A", d.A], ["threshold", d.threshold]];
+    if (r.scene === "pendulum-forces") rows = [["θ", d.theta], ["sin θ", d.sin], ["mg sin θ", d.mg_sin], ["a", d.a]];
+    if (r.scene === "phase-strip") rows = [["fraction", f.fx(r.fraction, 2)], ["x / m", f.fx(r.x, 3)], ["T / s", f.fx(r.T, 2)], ["at", r.at || "—"]];
+    read.innerHTML = rows.map(function (x) { return "<div><span>" + x[0] + "</span><b>" + x[1] + "</b></div>"; }).join("");
+  }
+  setInterval(function () { showRead(kit.reading()); }, 250);
+
+  /* ---------------- physics self-check (model only) ---------------- */
+  var checks = [], ok = true;
+  function chk(name, cond, got) { checks.push({ name: name, pass: !!cond, got: got }); if (!cond) ok = false; }
+  // L03 bench, A 0.30 m, T 2.0 s
+  [[0, "0", "0.942", "0"], [30, "0.150", "0.816", "−1.48"], [60, "0.260", "0.471", "−2.56"], [90, "0.300", "0", "−2.96"]].forEach(function (e) {
+    var s = M.shm(0.30, 2.0, e[0] * Math.PI / 180), got = [f.sf(s.x, 3), f.sf(s.v, 3), f.sf(s.a, 3)].join(" ");
+    chk("L03 " + e[0] + "° x v a = " + e.slice(1).join(" "), got === e.slice(1).join(" "), got);
+  });
+  // phase relations and a always toward O
+  var phaseOK = true, towardO = true, aRatio = true;
+  for (var i = 1; i < 360; i++) {
+    var th = i * Math.PI / 180, s = M.shm(0.30, 2.0, th), s2 = M.shm(0.30, 2.0, th + Math.PI / 2);
+    if (Math.abs(s.v / s.w - s2.x) > 1e-9) phaseOK = false;           // v leads x by a quarter-cycle
+    if (s.x !== 0 && s.a * s.x >= 0) towardO = false;                // a opposite to x
+    if (s.x !== 0 && Math.abs(s.a / s.x + s.w * s.w) > 1e-9) aRatio = false;
+  }
+  chk("v leads x by 90°; a in antiphase", phaseOK, phaseOK);
+  chk("a always towards O (a·x < 0)", towardO, towardO);
+  chk("a/x = −ω² = −9.87 s⁻²", aRatio && f.fx(-Math.PI * Math.PI, 2) === "−9.87", f.fx(-Math.PI * Math.PI, 2));
+  // energy sum constant (k 50, m 0.50, A 0.10)
+  var eMax = 0; for (var j = 0; j <= 100; j++) { var x = -0.1 + 0.2 * j / 100, en = M.energy(50, 0.5, 0.1, x); eMax = Math.max(eMax, Math.abs(en.sum - 0.25)); }
+  chk("PE + KE = 0.250 J everywhere", eMax < 1e-12, eMax);
+  var e6 = M.energy(50, 0.5, 0.1, 0.06);
+  chk("x 0.06 m: PE 0.09, KE 0.16, v 0.80", f.fx(e6.PE, 2) === "0.09" && f.fx(e6.KE, 2) === "0.16" && f.fx(e6.v, 2) === "0.80", [e6.PE, e6.KE, e6.v].map(function (v) { return v.toFixed(3); }).join(" "));
+  // resonance (02-lesson.md story model)
+  var want = [[10, 1.4], [14, 2.5], [16, 4.4], [18, 10.0], [20, 3.9], [30, 0.6]];
+  want.forEach(function (w) { var o = M.okada(w[0], 200, 0.05); chk("200 kg leaking " + w[0] + " km/h → " + w[1] + " cm", M.round(o.A * 100, 1) === w[1], (o.A * 100).toFixed(3)); });
+  var o18 = M.okada(18, 200, 0.05);
+  chk("18 km/h: f 2.00 Hz = f₀ 2.00 Hz, lift-off", f.fx(o18.f, 2) === "2.00" && f.fx(o18.f0, 2) === "2.00" && o18.lift, o18.lift);
+  chk("threshold 6.2 cm at 2.0 Hz", f.fx(M.threshold(2.0) * 100, 1) === "6.2", (M.threshold(2.0) * 100).toFixed(3));
+  chk("threshold at 20 / 30 km/h = 5.0 / 2.2 cm", f.fx(M.okada(20, 200, .05).th * 100, 1) === "5.0" && f.fx(M.okada(30, 200, .05).th * 100, 1) === "2.2", "");
+  var pkL = M.peak(M.okada(18, 200, .05).f0, 0.05), pkH = M.peak(M.okada(18, 200, .05).f0, 0.30);
+  chk("k from f₀ = 2.00 Hz: " + M.OKADA.k.toFixed(0) + " N/m (quoted 3.16 × 10⁴)", Math.abs(M.okada(18, 200, .05).f0 - 2) < 1e-12 && Math.abs(M.OKADA.k / 3.16e4 - 1) < 0.001, M.OKADA.k.toFixed(1));
+  chk("leaking at 18 km/h (f = f₀) = 10.0 cm", f.fx(M.okada(18, 200, .05).A * 100, 1) === "10.0", (M.okada(18, 200, .05).A * 100).toFixed(4) + " (curve max " + (pkL.A * 100).toFixed(3) + ")");
+  chk("healthy peak ≈ 2.0 cm (< 6.2)", M.round(pkH.A * 100, 1) === 2.0, (pkH.A * 100).toFixed(3));
+  var o250 = M.okada(16, 250, 0.05), o250b = M.okada(18, 250, 0.05);
+  chk("250 kg: f₀ 1.79 Hz, 16 km/h 10.0 cm, 18 km/h 3.7 cm, th₀ 7.8 cm", f.fx(o250.f0, 2) === "1.79" && M.round(o250.A * 100, 1) === 10.0 && M.round(o250b.A * 100, 1) === 3.7 && f.fx(o250.th0 * 100, 1) === "7.8", [o250.A, o250b.A].map(function (v) { return (v * 100).toFixed(2); }).join(" "));
+  // okada g-line (L03 zoom & bridge): ω² = 158
+  var w2 = M.OKADA.k / 200;
+  chk("okada a_max: 3 cm 4.7, 8 cm 12.6 m s⁻²; g/ω² = 6.2 cm", f.fx(w2 * 0.03, 1) === "4.7" && f.fx(w2 * 0.08, 1) === "12.6" && f.fx(980 / w2, 1) === "6.2", "");
+  // forced pushes: healthy ≈ 2 cm, leaking climbs past 6.2 cm
+  function lastAmp(z) { var w0 = Math.sqrt(w2), arr = M.forced(z, w0, 0.01, 5, null, 2000), mx = 0; arr.slice(1600).forEach(function (p) { mx = Math.max(mx, Math.abs(p[1])); }); return mx * 100; }
+  var aH = lastAmp(0.30), aL = lastAmp(0.05);
+  chk("ten pushes: healthy ≈ 2 cm, leaking > 6.2 cm", Math.abs(aH - 2) < 0.15 && aL > 6.2, aH.toFixed(2) + " / " + aL.toFixed(2));
+  // damping ratios: critical/heavy never cross zero
+  var cross = false; for (var q = 1; q < 400; q++) { if (M.decay(1, 2 * Math.PI, q / 100) < 0 || M.decay(3, 2 * Math.PI, q / 100) < 0) cross = true; }
+  chk("critical and heavy never overshoot", !cross, !cross);
+  chk("critical returns faster than heavy", M.decay(1, 2 * Math.PI, 1) < M.decay(3, 2 * Math.PI, 1), "");
+  // pendulum: sin θ vs θ, mass cancels
+  var pd = [[5, "0.13"], [10, "0.51"], [20, "2.0"], [30, "4.5"], [45, "10"]];
+  pd.forEach(function (p) { var r = M.pendulum(p[0], 0.05, 0.5); var dp = p[1].indexOf(".") < 0 ? 0 : p[1].split(".")[1].length; chk("θ " + p[0] + "°: (θ − sin θ)/θ = " + p[1] + " %", f.fx(r.diff_pct, dp) === p[1], r.diff_pct.toFixed(3)); });
+  var p50 = M.pendulum(20, 0.05, 0.5), p100 = M.pendulum(20, 0.10, 0.5);
+  chk("50 g → 100 g: forces double, a = g sin θ unchanged", Math.abs(p100.mg_sin / p50.mg_sin - 2) < 1e-12 && p100.a === p50.a, p50.a.toFixed(3));
+  chk("components: mg cos² + sin² = mg", Math.abs(Math.hypot(p50.mg_cos, p50.mg_sin) - p50.mg) < 1e-12, "");
+
+  window.SHM_CHECKS = { pass: ok, checks: checks };
+  document.getElementById("checks").innerHTML = "<b>Physics self-check: " + (ok ? "<span class='ok'>ALL PASS</span>" : "<span class='bad'>FAIL</span>") + "</b><br>" +
+    checks.map(function (c) { return "<span class='" + (c.pass ? "ok" : "bad") + "'>" + (c.pass ? "✓" : "✗") + "</span> " + c.name + (c.got !== "" && c.got !== true ? " <span style='color:var(--muted)'>(" + c.got + ")</span>" : ""); }).join("<br>");
+  build();
+})();
 </script>
-</body></html>
+</body>
+</html>

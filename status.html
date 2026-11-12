@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyPipe Studio — Global Topics Dashboard</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #111827;
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --text-dim: #6b7280;
+      --primary: #6366f1;
+      --accent: #06b6d4;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "JetBrains Mono", Menlo, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-main);
+      padding: 32px 20px;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    h1 { font-size: 22px; font-weight: 700; color: #fff; }
+    p.sub { font-size: 13px; color: var(--text-dim); }
+    .table-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      text-align: left;
+      padding: 12px 16px;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+    .slug-link {
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      font-family: var(--font-mono);
+      font-size: 13px;
+    }
+    .slug-link:hover { color: var(--accent); }
+    .badge {
+      font-size: 10px;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge.done { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge.awaiting-review { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .badge.in-progress { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; }
+    .badge.needs-human { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    .btn-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 12px;
+    }
+    .btn-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>StudyPipe Studio — Topics Control Deck</h1>
+        <p class="sub">Offline 3D Phenomenon-Based Learning Pipeline</p>
+      </div>
+      <div>
+        <span style="font-family: var(--font-mono); font-size: 12px; color: var(--accent);">5 Units Tracked</span>
+      </div>
+    </header>
+
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Topic Slug</th>
+            <th>Pipeline State</th>
+            <th>Progress</th>
+            <th>Outputs &amp; Status Page</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            <tr>
+              <td>
+                <a href="topics/ss1-bio-plant-animal-cell-structure/status.html" class="slug-link">ss1-bio-plant-animal-cell-structure</a>
+              </td>
+              <td>
+                <span class="badge awaiting-review">AWAITING-REVIEW</span>
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--success);">
+                  100%
+                </span>
+              </td>
+              <td>
+                <a href="topics/ss1-bio-plant-animal-cell-structure/status.html" class="btn-link">📊 Status HUD</a>
+                 · <a href="topics/ss1-bio-plant-animal-cell-structure/html/index.html" class="btn-link" target="_blank">📱 Preview</a>
+                 · <a href="exports/ss1-bio-plant-animal-cell-structure.zip" class="btn-link">📦 Zip (1.3 MB)</a>
+              </td>
+            </tr>
+          
+            <tr>
+              <td>
+                <a href="topics/ss2-bio-heart-circulation/status.html" class="slug-link">ss2-bio-heart-circulation</a>
+              </td>
+              <td>
+                <span class="badge awaiting-review">AWAITING-REVIEW</span>
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--success);">
+                  100%
+                </span>
+              </td>
+              <td>
+                <a href="topics/ss2-bio-heart-circulation/status.html" class="btn-link">📊 Status HUD</a>
+                 · <a href="topics/ss2-bio-heart-circulation/html/index.html" class="btn-link" target="_blank">📱 Preview</a>
+                 · <a href="exports/ss2-bio-heart-circulation.zip" class="btn-link">📦 Zip (1.4 MB)</a>
+              </td>
+            </tr>
+          
+            <tr>
+              <td>
+                <a href="topics/ss2-phy-ohms-law-circuits/status.html" class="slug-link">ss2-phy-ohms-law-circuits</a>
+              </td>
+              <td>
+                <span class="badge awaiting-review">AWAITING-REVIEW</span>
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--success);">
+                  100%
+                </span>
+              </td>
+              <td>
+                <a href="topics/ss2-phy-ohms-law-circuits/status.html" class="btn-link">📊 Status HUD</a>
+                 · <a href="topics/ss2-phy-ohms-law-circuits/html/index.html" class="btn-link" target="_blank">📱 Preview</a>
+                 · <a href="exports/ss2-phy-ohms-law-circuits.zip" class="btn-link">📦 Zip (1.3 MB)</a>
+              </td>
+            </tr>
+          
+            <tr>
+              <td>
+                <a href="topics/ss2-phy-refraction-rectangular-block/status.html" class="slug-link">ss2-phy-refraction-rectangular-block</a>
+              </td>
+              <td>
+                <span class="badge in-progress">IN-PROGRESS</span>
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--text-muted);">
+                  0%
+                </span>
+              </td>
+              <td>
+                <a href="topics/ss2-phy-refraction-rectangular-block/status.html" class="btn-link">📊 Status HUD</a>
+                 · <a href="topics/ss2-phy-refraction-rectangular-block/html/index.html" class="btn-link" target="_blank">📱 Preview</a>
+                 · <a href="exports/ss2-phy-refraction-rectangular-block.zip" class="btn-link">📦 Zip (801 KB)</a>
+              </td>
+            </tr>
+          
+            <tr>
+              <td>
+                <a href="topics/ss2-phy-simple-harmonic-motion/status.html" class="slug-link">ss2-phy-simple-harmonic-motion</a>
+              </td>
+              <td>
+                <span class="badge awaiting-review">AWAITING-REVIEW</span>
+              </td>
+              <td>
+                <span style="font-family: var(--font-mono); font-weight: 700; color: var(--success);">
+                  100%
+                </span>
+              </td>
+              <td>
+                <a href="topics/ss2-phy-simple-harmonic-motion/status.html" class="btn-link">📊 Status HUD</a>
+                 · <a href="topics/ss2-phy-simple-harmonic-motion/html/index.html" class="btn-link" target="_blank">📱 Preview</a>
+                 · <a href="exports/ss2-phy-simple-harmonic-motion.zip" class="btn-link">📦 Zip (837 KB)</a>
+              </td>
+            </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

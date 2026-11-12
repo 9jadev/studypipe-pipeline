@@ -1,0 +1,37 @@
+{
+  "file": "/Users/mac/Desktop/StudyContent/studypipe-studio/kits/video/sa-volume-cubes/demo.html",
+  "theme": "plan default",
+  "viewports": {
+    "portrait": {
+      "size": {
+        "width": 360,
+        "height": 740
+      },
+      "shots": 18,
+      "errors": [],
+      "problems": [],
+      "sheet": "/Users/mac/Desktop/StudyContent/studypipe-studio/kits/video/sa-volume-cubes/qa-demo/contact-sheet-portrait.png"
+    },
+    "landscape": {
+      "size": {
+        "width": 740,
+        "height": 360
+      },
+      "shots": 18,
+      "errors": [],
+      "problems": [],
+      "sheet": "/Users/mac/Desktop/StudyContent/studypipe-studio/kits/video/sa-volume-cubes/qa-demo/contact-sheet-landscape.png"
+    },
+    "desktop": {
+      "size": {
+        "width": 1152,
+        "height": 700
+      },
+      "shots": 18,
+      "errors": [],
+      "problems": [],
+      "sheet": "/Users/mac/Desktop/StudyContent/studypipe-studio/kits/video/sa-volume-cubes/qa-demo/contact-sheet-desktop.png"
+    }
+  },
+  "ok": true
+}

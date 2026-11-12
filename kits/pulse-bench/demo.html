@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: pulse-bench</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;min-height:100vh}
+  #stage{position:relative;width:100%;height:56vh;min-height:300px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  #ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  button{min-height:40px;padding:0 11px;border-radius:20px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  #readout{padding:2px 8px 10px}
+  table{border-collapse:collapse;width:100%;font:12px ui-monospace,monospace}
+  th,td{border:1px solid rgba(255,255,255,.18);padding:2px 4px;text-align:right}
+  th{background:rgba(255,255,255,.08)}
+  tr.sel td{background:rgba(255,200,74,.14)}
+  #line{padding:4px 0 6px}
+</style>
+</head><body>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="ui"></div>
+  <div id="readout"><div id="line"></div><table id="tbl"></table></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../heart-circulation/heart-kit.js"></script>
+<script src="pulse-bench.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.05, 60);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.05));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.35); dl.position.set(2, 4, 3.5); scene.add(dl);
+  var fill = new THREE.DirectionalLight(0xbcd6ff, 0.45); fill.position.set(-3, 2, 2); scene.add(fill);
+
+  var kit = PulseBench.create({ onEvent: function (n, d) { console.log("event", n, d && d.rows ? "(reading)" : JSON.stringify(d)); } });
+  scene.add(kit);
+  var hl = PulseBench.makeHighlighter(scene);
+
+  /* camera framing, tweened */
+  var view = { target: new THREE.Vector3(-0.5, 0.55, -0.2), dist: 9.0 }, goal = null, pitch = 0.62, yaw = 0, yawGoal = 0;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(1.8, 0.95 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(yaw) * Math.cos(pitch) * d, v.target.y + Math.sin(pitch) * d, v.target.z + Math.cos(yaw) * Math.cos(pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name) { var v = kit.viewFor(name); yawGoal = camera.aspect < 1.0 ? v.yawPortrait : 0; goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist }; }
+  function resize() {
+    var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view);
+  }
+  new ResizeObserver(resize).observe(host); resize(); if (camera.aspect < 1.0) { yaw = yawGoal = -Math.PI / 2; applyView(view); }
+
+  /* controls */
+  var ui = document.getElementById("ui");
+  function btn(label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; ui.appendChild(b); return b; }
+  btn("Rest count", function () { kit.restCount(); });
+  btn("Exercise 2 min", function () { kit.exercise(); });
+  btn("Count now", function () { kit.countNow(); });
+  btn("Next minute", function () { kit.nextMinute(); });
+  btn("Blood pressure", function () { kit.measureBP(); }, "alt");
+  btn("X-ray", function (b) { var on = !b.classList.contains("on"); kit.setState({ xray: on }); b.classList.toggle("on", on); }, "alt");
+  btn("Speed x4", function (b) { var on = !b.classList.contains("on"); kit.setState({ speed: on ? 4 : 1 }); b.classList.toggle("on", on); }, "alt");
+  btn("Run all", function () { kit.runAll(); }, "alt");
+  ["all", "arm", "wrist", "stopwatch", "step", "heart", "cuff", "manometer"].forEach(function (v) { btn("View " + v, function () { gotoView(v); }, "alt"); });
+  btn("Reset", function () { kit.reset(); }, "alt");
+
+  /* tap a tube / strip to select it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var r = cv.getBoundingClientRect(); ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera); var id = kit.pickPart(ray);
+    if (id) { hl.highlight(id); setTimeout(function () { hl.clear(); }, 700); }
+  });
+
+  /* live readout, computed from the model */
+  var line = document.getElementById("line"), tbl = document.getElementById("tbl"), lastKey = "";
+  function paint() {
+    var r = kit.reading(), key = JSON.stringify([r.phase, r.t_min, r.trueBpm, r.rows.length, r.beats, r.bp]); if (key === lastKey) return; lastKey = key;
+    line.textContent = (r.resting ? "At rest" : r.phase === "exercising" ? "Step-ups…" : "t = " + r.t_min + " min after exercise") + " · heart " + r.trueBpm + " bpm · cycle " + r.cycle_s + " s" +
+      (r.counting ? " · counting " + r.beats : r.count15 != null ? " · last count " + r.count15 + " (" + r.bpm + " bpm)" : "") +
+      " · BP " + (r.bp.measuring ? r.bp.pressure + " mmHg" : r.bp.sys != null ? r.bp.sys + "/" + r.bp.dia : "–");
+    var h = "<tr><th>t (min)</th><th>beats / 15 s</th><th>bpm</th></tr>";
+    h += "<tr><td>rest (mean " + (r.restMean == null ? "–" : r.restMean) + ")</td><td>" + (r.rows.filter(function (x) { return x.phase === "rest"; }).map(function (x) { return x.count15; }).join(", ") || "–") + "</td><td>" + (r.restMean == null ? "–" : Math.round(r.restMean * 4)) + "</td></tr>";
+    r.table.forEach(function (x) { h += "<tr><td>" + x.t_min + "</td><td>" + (x.count15 == null ? "–" : x.count15) + "</td><td>" + (x.bpm == null ? "–" : x.bpm) + "</td></tr>"; });
+    tbl.innerHTML = h;
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      yaw += (yawGoal - yaw) * Math.min(1, dt * 4);
+      view.target.lerp(goal.target, Math.min(1, dt * 4)); view.dist += (goal.dist - view.dist) * Math.min(1, dt * 4);
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01 && Math.abs(yaw - yawGoal) < 0.01) goal = null;
+      controls.update();
+    } else controls.update();
+    renderer.render(scene, camera);
+    paint();
+  })();
+  window.__kit = kit; window.__gotoView = gotoView;
+})();
+</script>
+</body></html>

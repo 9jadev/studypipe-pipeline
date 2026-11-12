@@ -57,3 +57,8 @@ with tokens (`--font-display`, `--font-body`, `--font-mono`, `--font-math`, `--i
 - **Dual-Theme Rhythm:**
   - The **Unit Welcome Hub (`html/index.html`)** uses a sleek dark-ink studio aesthetic with radial glows, interactive 3D Hero Lab, lesson roadmap cards, and interactive explorer panels.
   - Inside each **Lesson (`html/lessons/lesson-0X/index.html`)**, `.l-hero` uses deep dark ink (`--ink-950: #060912`), while `.l-sec` uses warm editorial textbook paper (`--paper: #f5efe4` and `--paper-card: #fffaf2`) for comfortable reading, worked examples, and tables, embedding dark interactive widget panels (`.stage`, `.sort`, `.vt`, `.quiz`, `.donow`) for high-contrast visual focus.
+
+
+## 4. Class-name collisions and bench compactness (found in heart lessons 02/03/06/07)
+- The shared `assets/css/style.css` and `lesson.css` own generic class names: `.lab` (the Welcome Hub's 560 px hero stage), `.stage`, `.hud`, `.hero`, `.tbl`, `.seg`, `.chips`. **Never reuse them for a small lesson element.** Use a lesson-specific name (for example `.blab` for a bench-bar label), and prefix new classes after the lesson topic when in doubt.
+- Keep each bench's controls compact on a phone: group buttons in as few rows as possible, show only readouts the learner needs, and keep everything under the 3D canvas below about 900 px at 360 px width. `scripts/qa.mjs` checks this and warns or blocks.

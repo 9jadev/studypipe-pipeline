@@ -1,0 +1,30 @@
+/* =========================================================
+   StudyPipe · explainer video block inside a lesson (installed by scripts/apply-video.mjs)
+   Uses theme tokens only, so it follows the unit's theme.
+   ========================================================= */
+.lesson-video { margin: 22px 0 28px; padding: 0; border-radius: var(--radius); background: var(--ink-950); box-shadow: 0 0 0 1px var(--line-strong), var(--shadow-lg); overflow: hidden; }
+.lesson-video-cap { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 12px 14px; color: var(--fg-soft); font-size: 14px; }
+.lesson-video-cap b { color: var(--fg); font-weight: 700; }
+.lesson-video-cap .lv-time { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.lesson-video-cap .lv-done { display: none; margin-left: auto; font-family: var(--font-mono); font-size: 12px; color: var(--ok-tint); background: rgba(var(--ok-rgb), .35); padding: 3px 10px; border-radius: 999px; }
+.lesson-video.is-done .lv-done { display: inline-block; }
+.lesson-video-frame { display: block; width: 100%; height: 360px; border: 0; background: var(--ink-950); }
+@media (max-width: 619px) { .lesson-video { margin-left: calc(var(--gutter, 16px) * -0.5); margin-right: calc(var(--gutter, 16px) * -0.5); } .lesson-video-frame { height: 640px; } }
+
+/* While a video is on screen, the floating narrator dock steps aside so it can't cover the video's controls (video-embed.js). */
+.narr-dock { transition: opacity .25s, visibility .25s; }
+body.lv-in-view .narr-dock { opacity: 0; visibility: hidden; pointer-events: none; }
+
+/* Fullscreen takeover (video-embed.js): the iframe covers the whole screen; upright phones get it turned to landscape. */
+html.lv-fs, html.lv-fs body { overflow: hidden !important; overscroll-behavior: none; }
+.lesson-video-frame.lv-fs-frame {
+  position: fixed !important; top: 0 !important; left: 0 !important; right: auto !important; bottom: auto !important;
+  width: 100vw !important; height: 100vh !important; height: 100dvh !important; max-width: none !important;
+  margin: 0 !important; border: 0 !important; border-radius: 0 !important; z-index: 2147483647 !important; background: #000 !important;
+}
+.lesson-video-frame.lv-fs-frame.lv-rot {
+  /* turn 90° clockwise about the top-left corner, then shift right by the screen width: landscape across the whole screen */
+  width: 100vh !important; width: 100dvh !important; height: 100vw !important;
+  left: 100vw !important; transform-origin: 0 0; transform: rotate(90deg);
+}
+html.lv-fs .narr-dock { visibility: hidden !important; }

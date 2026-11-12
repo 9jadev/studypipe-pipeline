@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 2 · Making Decisions: Conditional Logic, Boolean Operators &amp; Branching · StudyPipe</title>
+  <meta name="description" content="StudyPipe Computer Studies (SS1): relational operators, boolean truth tables (AND, OR, NOT), IF-ELIF-ELSE branching structures, and flowchart decision trees at the Ikogosi Solar Microgrid.">
+  <meta name="theme-color" content="#04140f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='32,8 56,32 32,56 8,32' fill='%2310b981'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(320px, 92vw, 430px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    @media (min-width: 560px) { #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13.5px; display: block; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+    #bench-mode { width: 100%; } #bench-mode button { flex: 1; font-size: 12px; }
+    .l2-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .l2-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 58px; }
+    .chip-btn { min-height: 36px; padding: 4px 10px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12px; cursor: pointer; font-family: var(--font-mono); }
+    .chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .l2-slider { display: flex; align-items: center; gap: 10px; width: 100%; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+    .l2-slider input { flex: 1; }
+    .l2-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .l2-actions .vt-btn { flex: 1; min-width: 115px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-soft); }
+
+    /* results table (one compact row per reading) */
+    #results-table td .rc-sub { display: block; font-size: 11px; color: var(--paper-muted); margin-top: 2px; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 0.9fr 1fr 1.2fr 0.9fr; padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 0.9fr 1fr 1.2fr 0.9fr; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12.5px; }
+      #results-table th { font-size: 10.5px; }
+      #results-table td::before { content: none; }
+    }
+
+    /* JAMB / NEPA Branching Pin Explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 50px; padding: 6px 4px; font-weight: 700; font-size: 12px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--crimson); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 12.5px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .l2-bq { margin-top: 14px; }
+    .l2-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; }
+    .l2-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l2-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; }
+    .l2-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .l2-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .l2-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .l2-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .l2-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l02">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 6 Lessons</a>
+      <span class="l-crumb">Lesson 2 of 6 · <b>Making Decisions &amp; Branching</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Computer Studies · Lesson 2 of 6 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Making Decisions: <em>Conditional Logic &amp; Branching</em></h1>
+        <p class="question reveal">How does an automated solar microgrid or ATM decide what action to take when sensor conditions change?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Construct boolean expressions using <strong>relational operators</strong> (<code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>).</span></li>
+          <li><b>02</b><span>Evaluate compound conditions using <strong>logical operators</strong> (<code>AND</code>, <code>OR</code>, <code>NOT</code>) and truth tables.</span></li>
+          <li><b>03</b><span>Implement single-alternative (<code>IF</code>), dual-alternative (<code>IF-ELSE</code>), and multi-alternative (<code>IF-ELIF-ELSE</code>) branching structures.</span></li>
+          <li><b>04</b><span>Draw <strong>flowchart decision diamonds</strong> with mutually exclusive labeled <code>True</code> / <code>False</code> exit branches.</span></li>
+          <li><b>05</b><span>Debug conditional logic errors in automated switching systems like the Ikogosi generator failover.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Movement break</span><span><b>45–60</b> Make sense</span><span><b>60–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <polygon points="160,28 248,96 160,164 72,96" fill="none" stroke="rgba(var(--teal-rgb),.7)" stroke-width="2.5"/>
+          <text x="160" y="92" fill="var(--amber)" font-family="var(--font-mono)" font-size="14" text-anchor="middle">battery &lt; 20</text>
+          <text x="160" y="112" fill="var(--fg)" font-family="var(--font-mono)" font-size="13" text-anchor="middle">and not grid</text>
+          <text x="64" y="198" fill="var(--teal)" font-family="var(--font-mono)" font-size="12" text-anchor="middle">True → GEN ON</text>
+          <text x="256" y="198" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="12" text-anchor="middle">False → STANDBY</text>
+          <line x1="110" y1="136" x2="64" y2="180" stroke="var(--teal)" stroke-width="2"/>
+          <line x1="210" y1="136" x2="256" y2="180" stroke="var(--fg-soft)" stroke-width="2"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">True or False?</a></li>
+        <li><a href="#practical">Logic switchboard</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Decision tree</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- 0. DO NOW -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up from Lesson 1</em></h2>
+        <p class="intro">Four quick cards on booleans, assignment vs equality, string types, and translators. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- 1. STORY -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The silent generator at <em>Ikogosi Station</em></h2>
+        <p class="intro">Heavy rain clouds blanket Ikogosi-Ekiti and the solar battery bank drops to 18%, yet the diesel backup generator stays completely silent. Why did the control script lock out emergency power?</p>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Ikogosi Solar Microgrid during a rainstorm, battery at 18%, silent backup diesel generator, and Amina, Tari, and Chief Babatunde inspecting line 14 of generator_control.py."></canvas>
+            <div class="stage-label"><i></i>3D story · Ikogosi Microgrid, Ekiti</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Storm over Ikogosi:</strong> Dark rain clouds gather over Ikogosi; the microgrid battery voltage sinks to <code>18%</code>.</p>
+            <p><strong>Scene 2 · Tari:</strong> notices the diesel backup generator remains silent despite the critically low battery level. <em>“Battery is at 18%! Why hasn't the backup generator cranked?”</em></p>
+            <p><strong>Scene 3 · Amina:</strong> opens <code>generator_control.py</code> on the SCADA terminal and inspects line 14: <code>if battery_level &lt; 20 and grid_power_active == True: start_generator()</code>.</p>
+            <p><strong>Scene 4 · Tari:</strong> gasps: <em>“It only starts if the grid power is active! But in a blackout, the main grid is down!”</em></p>
+            <p><strong>Scene 5 · Chief Babatunde:</strong> notes that the emergency clinic vaccine fridge lights are flickering. <em>“We must invert that grid condition immediately so the generator starts when the battery is low AND the grid is offline!”</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2. WONDER WALL -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">How does a single logical word (<code>AND</code> vs <code>OR</code> vs <code>NOT</code>) change whether an emergency machine starts or stays off? Pin your idea.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think changing AND to AND NOT fixes it because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">AND needs both parts True at once (Amina)</button>
+            <button type="button">NOT flips False (grid down) into True (Tari)</button>
+            <button type="button">Using OR would run the generator all day! (Babatunde)</button>
+            <button type="button">== compares values while = assigns them (Idris)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3. SORT -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Evaluates to <em>True or False?</em></h2>
+        <p class="intro">Sort each of the 8 boolean expressions into its truth bin. Drag a card, or tap a card then tap a bin. Remember operator precedence: relational comparisons first, then <code>not</code>, then <code>and</code>, then <code>or</code>.</p>
+        <div class="sort" id="bool-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="true_bin" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Evaluates to True bin">
+              <h4><i></i>Evaluates to True</h4><small>condition is satisfied (1)</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="false_bin" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Evaluates to False bin">
+              <h4><i></i>Evaluates to False</h4><small>condition fails (0)</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3B. PRACTICAL -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The logic switchboard: <em>test the generator relay</em></h2>
+        <p class="intro">Set the battery level and mains grid switch, choose the gate wiring mode, and record 5 truth-table readings to prove when the generator relay energizes.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Set battery &amp; grid sensors</h4><p>Dial battery % and toggle mains grid online/offline.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Select gate wiring</h4><p>Compare Buggy AND, Fixed AND NOT, and OR.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Test relay &amp; record</h4><p>Log five sensor combinations into the truth table.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Verify blackout safety</h4><p>Confirm relay turns ON only when battery &lt; 20% and grid is OFF.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Logic Switchboard: battery percentage dial, mains grid breaker toggle, 3D ANSI AND, OR, and NOT logic gates, glowing signal traces, relay contactor, and diesel generator unit."></canvas>
+            <div class="stage-label"><i></i>3D logic switchboard · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D switchboard couldn't start on this device. Use the controls and truth table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Logic gate wiring mode" id="bench-mode">
+              <button type="button" data-mode="fixed" aria-pressed="true">Fixed (AND NOT)</button>
+              <button type="button" data-mode="buggy" aria-pressed="false">Buggy (AND)</button>
+              <button type="button" data-mode="or_mode" aria-pressed="false">OR gate</button>
+            </div>
+          </div>
+          <div class="stage-bar l2-chips" id="bench-inputs" role="group" aria-label="Sensor inputs">
+            <span class="lab-t">Battery</span>
+            <button class="chip-btn" type="button" data-bat="18" aria-pressed="true">18%</button>
+            <button class="chip-btn" type="button" data-bat="45" aria-pressed="false">45%</button>
+            <button class="chip-btn" type="button" data-bat="12" aria-pressed="false">12%</button>
+            <span class="lab-t" style="margin-left:6px">Grid</span>
+            <button class="chip-btn" type="button" data-grid="false" aria-pressed="true">Offline (False)</button>
+            <button class="chip-btn" type="button" data-grid="true" aria-pressed="false">Online (True)</button>
+          </div>
+          <div class="stage-bar l2-actions">
+            <button class="vt-btn zobo" type="button" id="bench-take">Test relay</button>
+            <button class="vt-btn" type="button" id="bench-step">Next combo</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 trials</span>
+          </div>
+        </div>
+
+        <h3>Record your truth-table trials</h3>
+        <p>Each trial tests a battery level and grid status and logs whether the generator relay energizes (<code>ON</code> or <code>OFF</code>).</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Trial</th><th>Battery</th><th>Grid Online</th><th>Relay Output</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="results-line">Trials recorded: 0</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected truth-table trials <small>open after you record yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Battery</th><th>Grid Online</th><th><code>battery &lt; 20</code></th><th><code>not grid_online</code></th><th>Relay (<code>AND NOT</code>)</th></tr></thead>
+                <tbody>
+                  <tr><td>18%</td><td>False (Offline)</td><td>True</td><td>True</td><td><strong>True (ON)</strong></td></tr>
+                  <tr><td>18%</td><td>True (Online)</td><td>True</td><td>False</td><td>False (OFF)</td></tr>
+                  <tr><td>45%</td><td>False (Offline)</td><td>False</td><td>True</td><td>False (OFF)</td></tr>
+                  <tr><td>45%</td><td>True (Online)</td><td>False</td><td>False</td><td>False (OFF)</td></tr>
+                  <tr><td>12%</td><td>False (Offline)</td><td>True</td><td>True</td><td><strong>True (ON)</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">Fixed condition: <code>if battery_level &lt; 20 and not grid_online: start_generator()</code></div>
+            <p>Notice how the buggy expression <code>battery_level &lt; 20 and grid_online</code> only turns ON when the grid is already online — leaving the clinic in darkness during an actual power outage!</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l02-prac-q">
+          <div class="aq-top"><h4>Answer these three questions from your switchboard trials, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Write the exact boolean expression needed to start the backup generator safely during a blackout when the battery is below 20%.</li>
+            <li>What happens if an engineer mistakenly uses <code>or</code> instead of <code>and</code> in <code>battery &lt; 20 or not grid_online</code> when the battery is 85% full during a blackout?</li>
+            <li>Why does <code>not grid_online</code> evaluate to <code>True</code> during a power outage?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li><code>battery &lt; 20 and not grid_online</code> (or <code>battery &lt; 20 and grid_online == False</code>).</li>
+                <li>Because <code>not grid_online</code> is <code>True</code> during a blackout, the <code>or</code> gate outputs <code>True</code> immediately even though the solar battery is healthy at 85%, wasting diesel fuel unnecessarily.</li>
+                <li>During a power outage, <code>grid_online</code> is <code>False</code>. The unary logical operator <code>not</code> inverts <code>False</code> into <code>True</code>.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 4. CONCEPTS -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Relational operators, truth tables and <em>branching</em></h2>
+        <p class="intro">Connect your switchboard trials to the formal definitions, truth tables, and flowchart conventions tested in WAEC, NECO, and JAMB Computer Studies.</p>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (40 min mark, 5 minutes):</strong> Stand up for "Human Logic Gates"! Raise your left hand for Input A and right hand for Input B (hand up = <code>True</code>, hand down = <code>False</code>). When the caller says <code>A AND B</code>, jump only if <em>both</em> hands are up. When they say <code>NOT A</code>, crouch if your left hand is up. Shake it out and sit down!</p>
+        </div>
+
+        <h3 id="def-operators">1. Relational &amp; Logical Operators</h3>
+        <p><strong>Relational operators</strong> compare two values and return a boolean result (<code>True</code> or <code>False</code>). <strong>Logical operators</strong> (<code>and</code>, <code>or</code>, <code>not</code>) combine or invert boolean values. In operator precedence, relational comparisons run first, then <code>not</code>, then <code>and</code>, and finally <code>or</code>.</p>
+
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Operator</th><th>Meaning</th><th>Example (<code>x = 18, grid = False</code>)</th><th>Result</th></tr></thead>
+            <tbody>
+              <tr><td><code>==</code></td><td>Strictly equal to (comparison, not <code>=</code> assignment)</td><td><code>x == 20</code></td><td><code>False</code></td></tr>
+              <tr><td><code>!=</code></td><td>Not equal to</td><td><code>x != 20</code></td><td><code>True</code></td></tr>
+              <tr><td><code>&lt;</code> / <code>&gt;</code></td><td>Less than / Greater than</td><td><code>x &lt; 20</code></td><td><code>True</code></td></tr>
+              <tr><td><code>&lt;=</code> / <code>&gt;=</code></td><td>Less than or equal / Greater than or equal</td><td><code>x &gt;= 18</code></td><td><code>True</code></td></tr>
+              <tr><td><code>not</code></td><td>Logical inversion (flips truth value)</td><td><code>not grid</code></td><td><code>True</code></td></tr>
+              <tr><td><code>and</code></td><td>Logical conjunction (True only if <em>both</em> are True)</td><td><code>(x &lt; 20) and (not grid)</code></td><td><code>True</code></td></tr>
+              <tr><td><code>or</code></td><td>Logical disjunction (True if <em>at least one</em> is True)</td><td><code>(x &gt; 50) or (not grid)</code></td><td><code>True</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>2. Complete Truth Tables &amp; Boolean Algebra</h3>
+        <p>In digital logic, <code>True</code> corresponds to binary <code>1</code> (high voltage) and <code>False</code> to binary <code>0</code> (low voltage). Here is the step-by-step boolean evaluation for our microgrid trigger and two exam archetypes:</p>
+
+        <div class="math-steps" id="bool-math">
+          <div class="sp-math" data-latex="Y = (15 > 10) \text{ AND } (4 == 9)"></div>
+          <div class="m-step-note"><span>Evaluate relational comparisons inside parentheses first: <code>15 &gt; 10</code> is <code>True</code>, while <code>4 == 9</code> is <code>False</code>.</span></div>
+          <div class="sp-math" data-latex="Y = \text{True} \text{ AND } \text{False} = \boxed{\text{False}}"></div>
+          <div class="m-step-note"><span>An <code>AND</code> conjunction requires both inputs to be <code>True</code>; since the second is <code>False</code>, the result is <code>False</code>.</span></div>
+          <div class="sp-math" data-latex="Z = \text{NOT } (8 > 10 \text{ OR } 12 < 15) = \text{NOT } (\text{False} \text{ OR } \text{True}) = \text{NOT } (\text{True}) = \boxed{\text{False}}"></div>
+          <div class="m-step-note"><span>Inside the parentheses, <code>False OR True</code> yields <code>True</code>; applying <code>NOT</code> inverts <code>True</code> to <code>False</code>.</span></div>
+        </div>
+
+        <div class="callout big reveal" id="eq-branch">
+          <p><strong>Branching structures &amp; flowchart diamonds:</strong> A <strong>flowchart decision point</strong> is drawn as a <strong>Diamond (Rhombus)</strong> with at least two mutually exclusive labeled exit arrows (<code>True</code>/<code>False</code> or <code>Yes</code>/<code>No</code>). In a multi-way <code>if-elif-else</code> ladder, Python checks conditions top-to-bottom: once the <strong>first</strong> matching branch executes, all remaining <code>elif</code> and <code>else</code> blocks are skipped!</p>
+        </div>
+
+        <h3 id="pos-h">3. Multi-way Branching Explorer (JAMB &amp; NEPA Tariff Bands)</h3>
+        <p>Tap a candidate score or household supply pin below to trace which branch of an <code>if-elif-else</code> ladder executes and why the remaining branches are skipped.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to trace the <code>if-elif-else</code> decision path.</div>
+        </div>
+      </section>
+
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the flowchart: <em>3D decision tree visualizer</em></h2>
+        <p class="intro">Watch how an execution token travels through nested decision diamonds. Step through the 4 stages and toggle the battery and grid sensors to see the active branch light up in 3D.</p>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D Decision Tree: root diamond testing battery < 20, secondary diamond testing not grid_online, True/False glowing branch tubes, and terminal action blocks for generator start vs solar standby."></canvas>
+            <div class="stage-label"><i></i>3D decision tree · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D decision tree couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="stage-bar l2-chips" id="zoom-steps" role="group" aria-label="Decision tree step">
+            <span class="lab-t">Stage</span>
+            <button class="chip-btn" type="button" data-step="0" aria-pressed="true">0 · Sensors</button>
+            <button class="chip-btn" type="button" data-step="1" aria-pressed="false">1 · Diamond 1</button>
+            <button class="chip-btn" type="button" data-step="2" aria-pressed="false">2 · Diamond 2</button>
+            <button class="chip-btn" type="button" data-step="3" aria-pressed="false">3 · Action</button>
+          </div>
+          <div class="stage-bar l2-chips" id="zoom-scenarios" role="group" aria-label="Sensor scenario">
+            <span class="lab-t">Scenario</span>
+            <button class="chip-btn" type="button" data-bat="15" data-grid="false" aria-pressed="true">15% · Grid OFF (Start Gen)</button>
+            <button class="chip-btn" type="button" data-bat="15" data-grid="true" aria-pressed="false">15% · Grid ON (Solar Standby)</button>
+            <button class="chip-btn" type="button" data-bat="85" data-grid="false" aria-pressed="false">85% · Grid OFF (Solar Standby)</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Trace each conditional program line by line, then inspect the interactive code tracer and atomic math breakdown.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2.1</span><h4>ATM Cash Withdrawal Validation (Multi-way <code>if-elif-else</code>)</h4></div>
+          <div class="example-body">
+            <p class="q">An ATM holds a customer's <code>account_balance = 25000</code> (₦25,000), <code>requested_amount = 10000</code> (₦10,000), and <code>daily_limit = 20000</code> (₦20,000). Trace the validation branches and compute the remaining balance.</p>
+            <div class="study-code-snippet"
+                 data-title="atm_dispenser.py"
+                 data-lang="python"
+                 data-notes='{"1": "Store initial customer balance of ₦25,000.", "2": "Customer requests ₦10,000 cash withdrawal.", "3": "Bank daily ATM withdrawal limit is ₦20,000.", "5": "Test 1: Is 10000 > 25000? Evaluates to False — skip block.", "7": "Test 2: Is 10000 > 20000? Evaluates to False — skip block.", "9": "Else catch-all: both error checks were False, so approve withdrawal.", "10": "Subtract 10000 from 25000 → account_balance becomes 15000.", "11": "Output dispensed cash amount: Dispensing N10000.", "12": "Output updated balance: Remaining Balance: N15000."}'
+                 data-output="Dispensing N10000&#10;Remaining Balance: N15000">
+              <code>account_balance = 25000
+requested_amount = 10000
+daily_limit = 20000
+
+if requested_amount > account_balance:
+    print("Error: Insufficient funds.")
+elif requested_amount > daily_limit:
+    print("Error: Exceeds daily withdrawal limit.")
+else:
+    account_balance -= requested_amount
+    print("Dispensing N" + str(requested_amount))
+    print("Remaining Balance: N" + str(account_balance))</code>
+            </div>
+            <div class="math-steps" style="margin-top:12px;">
+              <div class="sp-math" data-latex="\text{Test 1: } 10000 > 25000 \implies \text{False}"></div>
+              <div class="m-step-note">First <code>if</code> condition compares requested amount against account balance; since ₦10,000 is not greater than ₦25,000, this branch is skipped.</div>
+              <div class="sp-math" data-latex="\text{Test 2: } 10000 > 20000 \implies \text{False}"></div>
+              <div class="m-step-note">The <code>elif</code> condition checks the daily limit; since ₦10,000 does not exceed ₦20,000, this branch is also skipped.</div>
+              <div class="sp-math" data-latex="\text{balance}_{\text{new}} = 25000 - 10000 = \boxed{15000}"></div>
+              <div class="m-step-note">The <code>else</code> block executes, deducting ₦10,000 to leave a final balance of ₦15,000.</div>
+            </div>
+            <ol class="steps-sol">
+              <li><strong>Check funds (line 5):</strong> <code>10000 &gt; 25000</code> is <code>False</code>, so the insufficient-funds branch is skipped.</li>
+              <li><strong>Check daily limit (line 7):</strong> <code>10000 &gt; 20000</code> is <code>False</code>, so the daily-limit branch is skipped.</li>
+              <li><strong>Execute <code>else</code> branch (lines 9–12):</strong> <code>account_balance = 25000 - 10000 = 15000</code>; prints <code>Dispensing N10000</code> and <code>Remaining Balance: N15000</code>.</li>
+            </ol>
+            <div class="answer-line">Dispensing N10000 · Remaining Balance: N15000</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2.2</span><h4>NEPA / Disco Electricity Band Tariff Selection</h4></div>
+          <div class="example-body">
+            <p class="q">An electricity distribution company classifies feeders into tariff bands based on daily supply hours (<code>hours_per_day</code>): Band A (<code>&gt;= 20</code> hrs), Band B (<code>&gt;= 16</code> hrs), Band C (<code>&gt;= 12</code> hrs), and Band D (<code>&lt; 12</code> hrs). Trace the output when <code>hours_per_day = 18</code>.</p>
+            <div class="study-code-snippet"
+                 data-title="nepa_band.py"
+                 data-lang="python"
+                 data-notes='{"1": "Feeder supply recorded at 18 hours per day.", "3": "Is 18 >= 20? Evaluates to False — move to first elif.", "5": "Is 18 >= 16? Evaluates to True! Assign Band B and skip remaining branches.", "7": "Skipped because elif on line 5 already matched (even though 18 >= 12 is True).", "9": "Skipped catch-all else block.", "11": "Print selected tariff band: Band B (Standard 16-19 hrs)."}'
+                 data-output="Tariff Category: Band B (Standard 16-19 hrs)">
+              <code>hours_per_day = 18
+
+if hours_per_day >= 20:
+    band = "Band A (Premium 20+ hrs)"
+elif hours_per_day >= 16:
+    band = "Band B (Standard 16-19 hrs)"
+elif hours_per_day >= 12:
+    band = "Band C (Basic 12-15 hrs)"
+else:
+    band = "Band D (Lifeline <12 hrs)"
+print("Tariff Category: " + band)</code>
+            </div>
+            <ol class="steps-sol">
+              <li><strong>Test Band A (line 3):</strong> <code>18 &gt;= 20</code> evaluates to <code>False</code>.</li>
+              <li><strong>Test Band B (line 5):</strong> <code>18 &gt;= 16</code> evaluates to <code>True</code>, so <code>band = "Band B (Standard 16-19 hrs)"</code> is assigned.</li>
+              <li><strong>Mutual exclusion (lines 7–10):</strong> Even though <code>18 &gt;= 12</code> is also true, Python skips all remaining <code>elif</code> and <code>else</code> branches once the first match succeeds.</li>
+            </ol>
+            <div class="answer-line">Tariff Category: Band B (Standard 16-19 hrs)</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 7. BRIDGE -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Ikogosi: <em>repair <code>generator_control.py</code></em></h2>
+        <p class="intro">Complete the three debugging steps below to fix line 14 of the Ikogosi microgrid controller and restore backup power to the health clinic.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 2:</strong> Automated machines make decisions by evaluating relational comparisons into <code>True</code> or <code>False</code>, combining them with <code>AND</code>, <code>OR</code>, and <code>NOT</code>, and routing execution down mutually exclusive <code>if-elif-else</code> branches.</p>
+        </div>
+      </section>
+
+      <!-- 8. QUIZ -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation (12 Lesson 2 questions + 2 spaced-retrieval review questions from Lesson 1).</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- 9. REFLECT -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 2.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can write boolean expressions using relational operators (<code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can evaluate compound conditions using <code>AND</code>, <code>OR</code>, <code>NOT</code> and construct truth tables.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can trace <code>IF</code>, <code>IF-ELSE</code>, and multi-way <code>IF-ELIF-ELSE</code> branching structures.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can draw flowchart decision diamonds with labeled <code>True</code> / <code>False</code> exit branches.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can debug faulty boolean conditions in automated control scripts.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l02-exit">
+          <div class="aq-top"><h4>If <code>temp = 9.5</code> and <code>power_ok = False</code>, evaluate <code>(temp &gt; 8.0) and (not power_ok)</code> step by step.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your step-by-step evaluation…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><code>temp &gt; 8.0</code> is <code>9.5 &gt; 8.0 = True</code> <b>(1)</b>. <code>not power_ok</code> is <code>not False = True</code>. Therefore <code>True and True = True</code> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and write down everything you remember, then tick each item below.</p>
+        </div>
+      </section>
+
+      <!-- 10. ASSIGNMENT -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Conditional Logic &amp; Branching</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B from 03-questions.md § Lesson 02</strong>. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
+
+        <h3>Part A · Practical Home Investigation (Decision Tree Mapping)</h3>
+        <div class="aq" data-answer="l02-a1">
+          <div class="aq-top"><h4>Create a decision flowchart for an everyday Nigerian automated transaction (e.g., an ATM withdrawing ₦20,000, or a mobile USSD airtime purchase <code>*312#</code>). Map at least three decision diamonds ("Is PIN correct?", "Is Balance &gt;= Requested?", "Is Daily Limit Exceeded?") with labeled Yes/No branches.</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="Describe your flowchart nodes, decision diamonds, and Yes/No branches…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer &amp; marking scheme <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Start (Oval) → Input PIN &amp; Amount (Parallelogram) → <strong>Diamond 1:</strong> <code>PIN == Stored_PIN?</code> (No → Output "Invalid PIN" → End; Yes → Diamond 2) → <strong>Diamond 2:</strong> <code>Balance &gt;= Amount?</code> (No → Output "Insufficient Funds" → End; Yes → Diamond 3) → <strong>Diamond 3:</strong> <code>Amount &lt;= Daily_Limit?</code> (No → Output "Limit Exceeded" → End; Yes → Process <code>Balance = Balance - Amount</code> → Output "Dispense Cash" → End). Award <b>(2)</b> for standard symbols, <b>(2)</b> for mutually exclusive Yes/No labels, <b>(1)</b> for Start/End ovals.</p></div>
+          </details>
+        </div>
+
+        <h3>Part B · 30-Mark Written Examination Paper</h3>
+        <div class="aq" data-answer="l02-b1">
+          <div class="aq-top"><h4>b1. Distinguish between single-alternative (<code>IF</code>), dual-alternative (<code>IF-ELSE</code>), and multiple-alternative (<code>IF-ELIF-ELSE</code>) branching structures.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Single-alternative… Dual-alternative… Multiple-alternative…" aria-label="b1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Single-alternative executes a code block only if a condition is true, doing nothing otherwise <b>(1)</b>. Dual-alternative provides two mutually exclusive paths: one for true, another for false <b>(1)</b>. Multiple-alternative tests a sequence of conditions in order until one matches, with an optional catch-all <code>else</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b2">
+          <div class="aq-top"><h4>b2. Construct a complete truth table for the logical expression: Y = A AND (NOT B).</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(A=0, B=0) -> … (A=0, B=1) -> … (A=1, B=0) -> … (A=1, B=1) -> …" aria-label="b2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Row 1: A=0, B=0, NOT B=1 → Y = 0 AND 1 = <b>0 (1)</b>.<br>Row 2: A=0, B=1, NOT B=0 → Y = 0 AND 0 = <b>0 (1)</b>.<br>Row 3: A=1, B=0, NOT B=1 → Y = 1 AND 1 = <b>1 (1)</b>.<br>Row 4: A=1, B=1, NOT B=0 → Y = 1 AND 0 = <b>0 (1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b3">
+          <div class="aq-top"><h4>b3. Identify the bug in this Python snippet and write the corrected version: <code>temperature = 38.5; if temperature = 37.0: print("Normal")</code></h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Bug: … Corrected code: …" aria-label="b3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>The bug is using the single assignment operator <code>=</code> instead of the equality comparison operator <code>==</code> in the <code>if</code> condition <b>(2)</b>. Corrected code: <code>if temperature == 37.0: print("Normal")</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b4">
+          <div class="aq-top"><h4>b4. Write a Python conditional structure that takes a student's JAMB score and prints <code>"Eligible"</code> if score &gt;= 200, <code>"Pre-Degree"</code> if between 160 and 199, and <code>"Not Eligible"</code> if below 160.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="score = int(input(...)) …" aria-label="b4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <pre><code>score = int(input("Enter score: ")) # (1)
+if score >= 200:
+    print("Eligible")               # (1)
+elif score >= 160:
+    print("Pre-Degree")             # (1)
+else:
+    print("Not Eligible")           # (1)</code></pre>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b5">
+          <div class="aq-top"><h4>b5. Describe or sketch the flowchart for the JAMB score eligibility algorithm specified in question b4.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Start oval -> Input parallelogram -> …" aria-label="b5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Terminal Start oval <b>(1)</b> → Input parallelogram <code>Read score</code> <b>(1)</b> → Decision diamond <code>score &gt;= 200?</code> (True → Output <code>"Eligible"</code>; False → second diamond) <b>(1)</b> → Decision diamond <code>score &gt;= 160?</code> (True → Output <code>"Pre-Degree"</code>; False → Output <code>"Not Eligible"</code>) → Terminal End oval <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b6">
+          <div class="aq-top"><h4>b6. What is short-circuit evaluation in boolean expressions? Illustrate with <code>False and (x / 0 == 1)</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Short-circuit evaluation means…" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Short-circuit evaluation occurs when a programming language evaluates a compound boolean expression from left to right and stops as soon as the final truth outcome is guaranteed <b>(2)</b>. In <code>False and (x / 0 == 1)</code>, because the first operand is <code>False</code>, the <code>AND</code> expression must be <code>False</code>; the second operand <code>x / 0</code> is never evaluated, preventing a division-by-zero runtime crash <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b7">
+          <div class="aq-top"><h4>b7. Differentiate between relational operators and logical operators, giving two examples of each.</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="Relational operators… Logical operators…" aria-label="b7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Relational operators compare two values (e.g., <code>&gt;</code>, <code>==</code>, <code>&lt;=</code>) to produce a boolean truth value <b>(1.5)</b>. Logical operators combine or invert boolean truth values (e.g., <code>AND</code>, <code>OR</code>, <code>NOT</code>) <b>(1.5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l02-b8">
+          <div class="aq-top"><h4>b8. Why must nested <code>if</code> statements be indented properly in modern languages like Python?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="Indentation in Python…" aria-label="b8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>In Python, indentation defines code block scope and hierarchy rather than curly braces <b>(1.5)</b>. Incorrect indentation causes an <code>IndentationError</code> or a logic bug where statements execute under the wrong condition <b>(1.5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 1: Languages &amp; Variables</a>
+          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3 — Counter &amp; Conditional Loops →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/programming-bench.js"></script>
+  <script src="../../assets/js/programming-zoom.js"></script>
+  <script src="../../assets/js/microgrid-props.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+</body>
+</html>

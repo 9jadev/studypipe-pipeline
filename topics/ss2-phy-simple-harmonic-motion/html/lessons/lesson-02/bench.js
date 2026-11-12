@@ -1,434 +1,280 @@
-/* Lesson 01 · 3D Simple Pendulum Practical Bench — retort stand, split cork, metre rule, fiducial mark, stopwatch */
+/* Lesson 02 · 3D spiral-spring bench (window.StudyScenes.bench)
+   MassSpringKit v2: `hooke` (add 50 g slotted masses, read the pointer) then `period` (pull, release, time 20),
+   plus the parked `okada` (200 / 250 kg, press & release, time 20 bounces). Every number on this page comes from
+   kit.reading() / MassSpringKit.model — nothing is typed in. Emits l2:bench (reading + rows), l2:bench-done, l2:bench-reset. */
 (function () {
   "use strict";
   var root = document.getElementById("bench-stage");
   var canvas = document.getElementById("bench-canvas");
-  if (!root || !canvas || !window.L01 || typeof THREE === "undefined") return;
+  var D = window.L02;
+  if (!root || !canvas || !D) return;
 
-  var DATA = window.L01;
-  var toastEl = document.getElementById("bench-toast");
-  var hint = document.getElementById("bench-hint");
-  var toastT;
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var $ = function (s) { return document.querySelector(s); };
+  var $$ = function (s) { return Array.prototype.slice.call(document.querySelectorAll(s)); };
+  var toastEl = $("#bench-toast"), toastT;
   function toast(m) {
     if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3400);
   }
 
-  var state = {
-    cond: "std", // "std" (50g, 6°), "heavy" (100g, 6°), "wide" (50g, 10°)
-    trialIdx: 2, // default 0.80 m
-    timed: {},
-    running: false,
-    simElapsed: 0,
-    targetSwings: 20
-  };
+  if (typeof THREE === "undefined" || !window.MassSpringKit) {
+    /* fallback: kit missing — never throw; the table, expected results and worked examples still work */
+    toast("The 3D spring bench is not available on this device. Use the expected results below.");
+    root.classList.add("no-webgl");
+    return;
+  }
 
-  var highlightPart = null;
+  var M = MassSpringKit.model;
+  var small = root.clientWidth < 560;
+  var state = { rig: "lab", mode: "hooke", okMass: 200 };
+  var rows = {};          // keyed by mass (g): { m, F, x_cm, t, T, T2 } — one compact row per load
+  var okRows = {};        // keyed by okada mass: { mass, t, T, f0 }
+  var doneSent = false;
+
+  var kit = MassSpringKit.create({ mode: "hooke", m: 0.05, k: D.k, labels: !small, onEvent: onKitEvent });
+
+  var stage = window.SceneKit && SceneKit.createStage({
+    root: root, canvas: canvas, fov: 32, pitch: 0.1, yaw: 0.3, autoFit: false, portraitPitch: 0.06,
+    minYaw: -0.9, maxYaw: 0.9, onFrame: frame
+  });
+  if (stage) { stage.rig.add(kit); frameKit(stage, kit, false); stage.start(); }
+  function frame(dt, t) { kit.update(dt, t); }
+  function refit() { setTimeout(function () { frameKit(stage, kit, state.rig === "okada"); }, 30); }
+  if (window.ResizeObserver && stage) new ResizeObserver(function () { refit(); }).observe(canvas.parentElement);
+
+  /* framing from the kit's own viewFor("all") (the stand and bench top would otherwise shrink the spring) */
+  function frameKit(st, k, wide) {
+    if (!st) return;
+    var v = k.viewFor("all"), span = v.dist * 2 * Math.tan(20 * Math.PI / 180) / 1.25;
+    st.target.set(v.target[0], v.target[1], v.target[2]);
+    st.fitHeight = span * (wide ? 0.62 : 1.06);
+    st.fitWidth = span * (wide ? 1.08 : 0.5);
+    st.zoom = 1;
+    if (st.resize) st.resize();
+  }
+
+
+  // ---------- DOM ----------
+  var readoutEl = $("#bench-readout"), hintEl = $("#bench-hint");
+  var tbody = $("#results-table tbody"), okBody = $("#okada-table tbody"), rowsLine = $("#rows-line");
+  var rigBtns = $$("#bench-rig [data-rig]"), modeBtns = $$("#bench-mode [data-mode]");
+  var labCtl = $("#bench-lab"), okCtl = $("#bench-okada"), modeBar = $("#bench-mode");
+  var cards = ["m1", "m2", "m3", "m4"].map(function (id) { return document.getElementById(id); });
+
+  function gKey(m) { return String(Math.round(m * 1000)); }
+  function hookeRow(m) {
+    var h = M.hooke(m, D.k, D.g);
+    var r = rows[gKey(m)] || (rows[gKey(m)] = { m: m });
+    r.F = h.F; r.Fs = h.F.toPrecision(3); r.x = h.x; r.x_cm = h.display.x_cm; r.pointer = h.display.pointer_cm;
+    return r;
+  }
+  function list() { return Object.keys(rows).map(function (k) { return rows[k]; }).sort(function (a, b) { return a.m - b.m; }); }
+  function timedCount() { return list().filter(function (r) { return r.t != null; }).length; }
+
+  function cardState() {
+    var n = list().length, tc = timedCount(), done, now;
+    if (tc >= 5) { done = 4; now = -1; }
+    else if (tc >= 1) { done = 2; now = 2; }
+    else if (n >= 2) { done = 1; now = state.mode === "period" ? 2 : 1; }
+    else { done = 0; now = n ? 1 : 0; }
+    cards.forEach(function (c, i) { if (!c) return; c.classList.toggle("done", i < done); c.classList.toggle("now", i === now); });
+  }
+
+  function tile(lbl, val, hot) { return '<div' + (hot ? ' class="hot"' : "") + '><span>' + lbl + '</span><b>' + val + "</b></div>"; }
+  function paintReadout() {
+    if (!readoutEl) return;
+    var r = kit.reading();
+    if (state.rig === "okada") {
+      var w = r.watch || { t: 0 };
+      readoutEl.innerHTML = tile("load / kg", String(state.okMass)) + tile("t / s", (w.t || 0).toFixed(1), w.running) +
+        tile("T₀ / s", r.display ? r.display.T : "–") + tile("f₀ / Hz", r.display ? r.display.f0 : "–");
+      return;
+    }
+    var h = M.hooke(kit.getState().m, D.k, D.g);
+    var wt = r.watch ? r.watch.t : 0, timed = r.watch && r.watch.timed;
+    readoutEl.innerHTML = tile("m / kg", h.display.m) + tile("x / cm", h.display.x_cm) +
+      tile("t / s", state.mode === "period" ? (wt || 0).toFixed(2) : "–", r.watch && r.watch.running) +
+      tile("T / s", state.mode === "period" && timed ? r.display.T : "–");
+  }
+
+  function paintTable() {
+    if (tbody) {
+      tbody.innerHTML = "";
+      list().forEach(function (r) {
+        var tr = document.createElement("tr");
+        if (Math.abs(r.m - kit.getState().m) < 1e-6 && state.rig === "lab") tr.className = "fresh";
+        tr.innerHTML = "<td>" + r.m.toFixed(3) + "</td><td>" + r.Fs + "</td><td>" + r.x_cm + "</td>" +
+          "<td>" + (r.t != null ? r.t : "–") + "</td><td>" + (r.T != null ? r.T : "–") + "</td><td>" + (r.T2 != null ? r.T2 : "–") + "</td>";
+        tbody.appendChild(tr);
+      });
+    }
+    if (okBody) {
+      okBody.innerHTML = "";
+      D.okadaMasses.forEach(function (mk) {
+        var o = okRows[mk]; if (!o) return;
+        var tr = document.createElement("tr");
+        tr.innerHTML = "<td>" + mk + "</td><td>" + o.t + "</td><td>" + o.T + "</td><td>" + o.f0 + "</td>";
+        okBody.appendChild(tr);
+      });
+      var wrap = $("#okada-wrap"); if (wrap) wrap.hidden = !Object.keys(okRows).length;
+    }
+    if (rowsLine) rowsLine.textContent = "Loads read: " + list().length + " of 5 · timed: " + timedCount() + " of 5";
+    cardState();
+  }
+
+  function detail() {
+    var r = kit.reading();
+    r.rig = state.rig; r.rows = list().map(function (x) { return { m: x.m, F: x.F, x: x.x, t: x.t != null ? +x.t : null, T: x.T != null ? +x.T : null, T2: x.T2 != null ? +x.T2 : null }; });
+    r.okada = Object.keys(okRows).map(function (k) { return okRows[k]; });
+    return r;
+  }
+  function publish() { paintTable(); paintReadout(); emit("l2:bench", detail()); }
+
+  function paintBtns() {
+    rigBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-rig") === state.rig)); });
+    modeBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-mode") === state.mode)); });
+    if (labCtl) labCtl.hidden = state.rig !== "lab";
+    if (okCtl) okCtl.hidden = state.rig !== "okada";
+    if (modeBar) modeBar.hidden = state.rig !== "lab";
+    var m = kit.getState().m;
+    var add = $("#bench-add"), rem = $("#bench-remove");
+    if (add) add.disabled = state.rig !== "lab" || m >= 0.25 - 1e-6;
+    if (rem) rem.disabled = state.rig !== "lab" || m <= 0.05 + 1e-6;
+    $$("#bench-okada [data-mass]").forEach(function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-mass") === state.okMass)); });
+  }
+
+  // ---------- kit events ----------
+  function onKitEvent(name, d) {
+    if (name === "mass") {
+      if (state.rig !== "lab") return;
+      var r = hookeRow(d.m);
+      hint("Load " + r.m.toFixed(3) + " kg: pointer " + r.pointer + " cm, x = " + r.x_cm + " cm.");
+      publish(); paintBtns();
+    } else if (name === "timed") {
+      if (state.rig === "okada") {
+        var o = kit.reading();
+        okRows[state.okMass] = { mass: state.okMass, t: o.display.t, T: o.display.T, f0: o.display.f0 };
+        toast("20 bounces with " + state.okMass + " kg: " + o.display.t + " s, so T₀ = " + o.display.T + " s.");
+        hint("Okada " + state.okMass + " kg: 20 bounces in " + o.display.t + " s.");
+        publish(); return;
+      }
+      var rd = kit.reading(), row = hookeRow(rd.m);
+      row.t = rd.display.t; row.T = rd.display.T; row.T2 = rd.display.T2;
+      toast("20 oscillations: " + rd.display.t + " s, so T = " + rd.display.T + " s.");
+      hint("Timed " + rd.m.toFixed(3) + " kg. " + (timedCount() < 5 ? "Add 50 g and time the next load." : "All five loads timed."));
+      publish();
+      if (timedCount() >= 5 && !doneSent) {
+        doneSent = true;
+        toast("Five loads timed. The two graphs below each give k.");
+        emit("l2:bench-done", { count: 5 });
+      }
+    } else if (name === "press") {
+      hint("Okada " + state.okMass + " kg pressed and released. Press Time 20.");
+    }
+  }
+  function hint(t) { if (hintEl) hintEl.textContent = t; }
+
+  // ---------- controls ----------
+  function setRig(rig) {
+    if (rig === state.rig) return;
+    state.rig = rig;
+    if (rig === "okada") kit.setState({ mode: "okada", view: "bench", parked: true, mass: state.okMass });
+    else kit.setState({ mode: state.mode });
+    paintBtns(); paintReadout(); refit();
+    hint(rig === "okada" ? "Okada parked with " + state.okMass + " kg. Press, then Time 20." : "Lab spring, k = 24.5 N m⁻¹.");
+  }
+  function setMode(mode) {
+    if (mode === "okada") { setRig("okada"); return; }
+    if (state.rig !== "lab") setRig("lab");
+    if (mode === state.mode) return;
+    state.mode = mode;
+    kit.setState({ mode: mode });
+    paintBtns(); paintReadout();
+    hint(mode === "hooke" ? "Hooke: add 50 g at a time and read the pointer." : "Time it: Pull & release, then Time 20.");
+  }
+  function addMass() { if (state.rig !== "lab") setRig("lab"); kit.addMass(0.05); paintBtns(); }
+  function removeMass() { if (state.rig !== "lab") setRig("lab"); kit.removeMass(0.05); paintBtns(); }
+  function release() {
+    if (state.rig === "okada") { kit.press(0.03); return; }
+    if (state.mode !== "period") setMode("period");
+    kit.release(0.02);
+    hint("Released from 2 cm below. Press Time 20.");
+  }
+  function time20() {
+    if (state.rig === "okada") { kit.press(0.03); kit.timeN(20); hint("Timing 20 bounces…"); return; }
+    if (state.mode !== "period") setMode("period");
+    if (!kit.reading().released) kit.release(0.02);
+    kit.timeN(20);
+    hint("Timing 20 oscillations from the equilibrium pass…");
+  }
+  function okLoad(mass) {
+    state.okMass = +mass;
+    if (state.rig !== "okada") setRig("okada");
+    kit.setState({ mass: state.okMass, parked: true });
+    paintBtns(); paintReadout();
+    hint("Okada with " + state.okMass + " kg (" + (state.okMass === 250 ? "two extra crates" : "the usual load") + "). Press, then Time 20.");
+  }
+  function resetAll() {
+    rows = {}; okRows = {}; doneSent = false;
+    state.rig = "lab"; state.mode = "hooke"; state.okMass = 200;
+    kit.setState({ mode: "hooke", mass: 200 });
+    kit.reset();
+    kit.setState({ m: 0.05 });
+    hookeRow(0.05);
+    paintBtns(); publish(); refit();
+    hint("Empty hanger (50 g) on the spring. Add 50 g at a time.");
+    emit("l2:bench-reset", {});
+  }
+
+  rigBtns.forEach(function (b) { b.addEventListener("click", function () { setRig(b.getAttribute("data-rig")); }); });
+  modeBtns.forEach(function (b) { b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); }); });
+  $$("#bench-okada [data-mass]").forEach(function (b) { b.addEventListener("click", function () { okLoad(b.getAttribute("data-mass")); }); });
+  [["#bench-add", addMass], ["#bench-remove", removeMass], ["#bench-release", release], ["#bench-time", time20],
+   ["#bench-press", release], ["#bench-oktime", time20], ["#bench-reset", resetAll]].forEach(function (p) {
+    var el = $(p[0]); if (el) el.addEventListener("click", p[1]);
+  });
+
+  // tapping the 3D model names a part
+  if (stage) {
+    var down = null, ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+    canvas.addEventListener("pointerdown", function (e) { down = { x: e.clientX, y: e.clientY }; });
+    canvas.addEventListener("pointerup", function (e) {
+      if (!down || Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) { down = null; return; }
+      down = null;
+      var r = canvas.getBoundingClientRect();
+      ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      ray.setFromCamera(ndc, stage.camera);
+      var id = kit.pickPart(ray);
+      if (id) { toast(id.replace(/-/g, " ")); kit.highlight(id); setTimeout(function () { kit.clearHighlight(); }, 1200); }
+    });
+  }
+
+  // ---------- scene API (narrator, bridge, explorer) ----------
   var api = {
-    setCond: setCond,
-    test: test,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; },
-    state: function () { return { cond: state.cond, timedCount: Object.keys(state.timed).length }; }
+    setMode: setMode,
+    rig: setRig,
+    addMass: addMass, removeMass: removeMass, release: release, time: time20, okLoad: okLoad,
+    reset: resetAll,
+    setMass: function (m) { if (state.rig !== "lab") setRig("lab"); kit.setState({ m: m }); paintBtns(); },
+    okadaRun: function (mass) { okLoad(mass); kit.press(0.03); kit.timeN(20); hint("Timing 20 bounces with " + mass + " kg…"); },
+    highlight: function (p) { if (!p) kit.clearHighlight(); else kit.highlight(p); },
+    rect: function (p) {
+      if (!stage) return null;
+      if (!p || p === "bench") return stage.rectOf(kit, 12);
+      var o = kit.parts && kit.parts[p];
+      return stage.rectOf(o || kit, 10);
+    },
+    reading: function () { return kit.reading(); },
+    rows: list,
+    kit: kit, stage: stage, state: state
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.bench = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 1.15, 0),
-    pitch: 0.22,
-    yaw: 0.12,
-    fitWidth: 4.8,
-    distance: 5.2,
-    minYaw: -0.8,
-    maxYaw: 0.8,
-    onFrame: frame
-  });
-
-  var pivotGroup, stringMesh, bobGroup, bobMesh, clampGroup, fiducialGroup, rulerGroup, standGroup, hudSprite, glowRing, bobGlow;
-  var PIVOT_Y = 2.25;
-  var SCALE_M_TO_WORLD = 1.45; // 1.00 m = 1.45 world units
-
-  if (stage) build();
-  wireButtons();
-  paintHint();
-
-  function build() {
-    var scene = stage.rig;
-
-    // 1. Laboratory wooden bench top + white base tile
-    var bench = new THREE.Mesh(
-      new THREE.BoxGeometry(6.4, 0.24, 3.4),
-      new THREE.MeshStandardMaterial({ color: 0x2a2018, roughness: 0.72 })
-    );
-    bench.position.y = -0.12;
-    scene.add(bench);
-
-    var tile = new THREE.Mesh(
-      new THREE.BoxGeometry(2.6, 0.03, 1.8),
-      new THREE.MeshStandardMaterial({ color: 0xf5f2eb, roughness: 0.45 })
-    );
-    tile.position.set(0, 0.015, 0);
-    scene.add(tile);
-
-    // 2. Heavy iron retort stand
-    standGroup = new THREE.Group();
-    var metalMat = new THREE.MeshStandardMaterial({ color: 0x475569, roughness: 0.35, metalness: 0.78 });
-    var basePlate = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.06, 0.85), new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.5, metalness: 0.6 }));
-    basePlate.position.set(-0.65, 0.04, -0.35);
-    standGroup.add(basePlate);
-
-    var rod = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 2.45, 20), metalMat);
-    rod.position.set(-0.65, 1.25, -0.35);
-    standGroup.add(rod);
-
-    var bosshead = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.12, 0.14), metalMat);
-    bosshead.position.set(-0.65, PIVOT_Y, -0.35);
-    standGroup.add(bosshead);
-
-    var crossArm = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.82, 16), metalMat);
-    crossArm.rotation.z = Math.PI / 2;
-    crossArm.position.set(-0.30, PIVOT_Y, -0.18);
-    standGroup.add(crossArm);
-
-    var forwardArm = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.42, 16), metalMat);
-    forwardArm.rotation.x = Math.PI / 2;
-    forwardArm.position.set(0, PIVOT_Y, -0.18);
-    standGroup.add(forwardArm);
-    scene.add(standGroup);
-
-    // 3. Split cork clamp at (0, PIVOT_Y, 0)
-    clampGroup = new THREE.Group();
-    clampGroup.position.set(0, PIVOT_Y, 0);
-    var corkMat = new THREE.MeshStandardMaterial({ color: 0xb45309, roughness: 0.85 });
-    var corkL = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.14, 0.12), corkMat);
-    corkL.position.set(-0.048, 0.04, 0);
-    var corkR = new THREE.Mesh(new THREE.BoxGeometry(0.09, 0.14, 0.12), corkMat);
-    corkR.position.set(0.048, 0.04, 0);
-    clampGroup.add(corkL, corkR);
-
-    var corkTag = SceneKit.labelTexture("Split cork clamp", { size: 34, bg: "rgba(10,15,29,0.85)" });
-    var corkSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: corkTag, transparent: true, depthWrite: false }));
-    corkSpr.scale.set(0.22 * corkTag.userData.aspect, 0.22, 1);
-    corkSpr.position.set(0.58, 0.08, 0.1);
-    clampGroup.add(corkSpr);
-    scene.add(clampGroup);
-
-    // 4. Vertical metre rule beside the pendulum
-    rulerGroup = new THREE.Group();
-    rulerGroup.position.set(-1.18, 0.03, 0);
-    var rulerTex = makeRulerTexture();
-    var rulerMat = new THREE.MeshStandardMaterial({ map: rulerTex, roughness: 0.55 });
-    var rulerMesh = new THREE.Mesh(new THREE.BoxGeometry(0.18, 1.25 * SCALE_M_TO_WORLD, 0.03), rulerMat);
-    rulerMesh.position.y = PIVOT_Y - (1.25 * SCALE_M_TO_WORLD) / 2;
-    rulerGroup.add(rulerMesh);
-
-    var rTag = SceneKit.labelTexture("Metre rule (L)", { size: 34, bg: "rgba(10,15,29,0.85)" });
-    var rSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: rTag, transparent: true, depthWrite: false }));
-    rSpr.scale.set(0.22 * rTag.userData.aspect, 0.22, 1);
-    rSpr.position.set(-0.35, 1.35, 0.1);
-    rulerGroup.add(rSpr);
-    scene.add(rulerGroup);
-
-    // 5. Fiducial reference pointer at equilibrium (x = 0)
-    fiducialGroup = new THREE.Group();
-    fiducialGroup.position.set(0, 0.03, -0.22);
-    var fidBase = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.14, 0.05, 20), metalMat);
-    fidBase.position.y = 0.025;
-    fiducialGroup.add(fidBase);
-    var fidStem = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.65, 12), metalMat);
-    fidStem.position.y = 0.35;
-    fiducialGroup.add(fidStem);
-    var fidCone = new THREE.Mesh(
-      new THREE.ConeGeometry(0.065, 0.22, 20),
-      new THREE.MeshStandardMaterial({ color: 0x3ee6c4, emissive: 0x0d9c7e, emissiveIntensity: 0.4, roughness: 0.3 })
-    );
-    fidCone.position.set(0, 0.72, 0.12);
-    fiducialGroup.add(fidCone);
-
-    var fTag = SceneKit.labelTexture("Fiducial mark (x = 0)", { size: 34, bg: "rgba(13,156,126,0.92)" });
-    var fSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: fTag, transparent: true, depthWrite: false }));
-    fSpr.scale.set(0.22 * fTag.userData.aspect, 0.22, 1);
-    fSpr.position.set(0, 0.25, 0.38);
-    fiducialGroup.add(fSpr);
-    scene.add(fiducialGroup);
-
-    // 6. Swinging Pendulum Pivot + Thread + Brass Bob
-    pivotGroup = new THREE.Group();
-    pivotGroup.position.set(0, PIVOT_Y, 0);
-    scene.add(pivotGroup);
-
-    var strGeo = new THREE.CylinderGeometry(0.008, 0.008, 1, 10);
-    strGeo.translate(0, -0.5, 0);
-    stringMesh = new THREE.Mesh(strGeo, new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.4 }));
-    pivotGroup.add(stringMesh);
-
-    bobGroup = new THREE.Group();
-    var brassMat = new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.18, metalness: 0.88, envMapIntensity: 1.5 });
-    bobMesh = new THREE.Mesh(new THREE.SphereGeometry(0.135, 32, 24), brassMat);
-    bobGroup.add(bobMesh);
-    var hook = new THREE.Mesh(new THREE.TorusGeometry(0.03, 0.008, 10, 20), brassMat);
-    hook.position.y = 0.135;
-    bobGroup.add(hook);
-
-    // Invisible larger tap hitbox on bob
-    var hit = new THREE.Mesh(new THREE.SphereGeometry(0.32, 12, 10), new THREE.MeshBasicMaterial({ visible: false }));
-    bobGroup.add(hit);
-    bobGroup.userData.hit = hit;
-    pivotGroup.add(bobGroup);
-
-    // 7. Live Stopwatch HUD Sprite
-    hudSprite = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, depthWrite: false }));
-    hudSprite.position.set(1.38, 1.55, 0.1);
-    scene.add(hudSprite);
-
-    // 8. Narrator Highlight Glows
-    glowRing = new THREE.Mesh(
-      new THREE.RingGeometry(0.22, 0.32, 48),
-      new THREE.MeshBasicMaterial({ color: 0xffb23f, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, blending: THREE.AdditiveBlending })
-    );
-    glowRing.rotation.x = -Math.PI / 2;
-    glowRing.position.y = 0.04;
-    scene.add(glowRing);
-
-    bobGlow = SceneKit.glowSprite("rgba(255,178,63,0.92)", 0.75);
-    bobGlow.material.opacity = 0;
-    scene.add(bobGlow);
-
-    applyTrialGeometry();
-    updateHudSprite("Ready · Tap a length to time 20 swings");
-
-    canvas.addEventListener("click", function (e) {
-      var hitObj = stage.pick(e, [bobGroup.userData.hit]);
-      if (hitObj) test(state.trialIdx);
-    });
-
-    api.rect = function (part) {
-      if (part === "bob") return stage.rectOf(bobGroup, 14);
-      if (part === "clamp") return stage.rectOf(clampGroup, 12);
-      if (part === "fiducial") return stage.rectOf(fiducialGroup, 12);
-      if (part === "ruler") return stage.rectOf(rulerGroup, 10);
-      if (part === "stand") return stage.rectOf(standGroup, 8);
-      return stage.rectOf(pivotGroup, 10);
-    };
-
-    stage.start();
-  }
-
-  function makeRulerTexture() {
-    var c = document.createElement("canvas");
-    c.width = 128;
-    c.height = 512;
-    var g = c.getContext("2d");
-    g.fillStyle = "#f6d379";
-    g.fillRect(0, 0, 128, 512);
-    g.fillStyle = "#1b1813";
-    g.font = "bold 20px JetBrains Mono, monospace";
-    for (var cm = 0; cm <= 120; cm += 10) {
-      var y = (cm / 125) * 512;
-      g.fillRect(80, y, 48, 3);
-      if (cm > 0) g.fillText((cm / 100).toFixed(1) + "m", 8, y + 7);
-    }
-    for (var m5 = 5; m5 <= 120; m5 += 10) {
-      var y5 = (m5 / 125) * 512;
-      g.fillRect(98, y5, 30, 2);
-    }
-    var tex = new THREE.CanvasTexture(c);
-    tex.encoding = THREE.sRGBEncoding;
-    return tex;
-  }
-
-  function updateHudSprite(statusLine) {
-    if (!hudSprite) return;
-    var tr = DATA.trials[state.trialIdx];
-    var c = document.createElement("canvas");
-    c.width = 460;
-    c.height = 240;
-    var g = c.getContext("2d");
-    g.fillStyle = "rgba(10,15,29,0.9)";
-    g.strokeStyle = "rgba(62,230,196,0.65)";
-    g.lineWidth = 4;
-    g.beginPath();
-    if (g.roundRect) g.roundRect(4, 4, 452, 232, 22);
-    else g.rect(4, 4, 452, 232);
-    g.fill();
-    g.stroke();
-
-    g.fillStyle = "#3ee6c4";
-    g.font = "600 22px JetBrains Mono, monospace";
-    var condTxt = state.cond === "heavy" ? "100 g · 6°" : state.cond === "wide" ? "50 g · 10°" : "50 g · 6°";
-    g.fillText("TRIAL " + tr.label + " · L = " + tr.L.toFixed(2) + " m (" + condTxt + ")", 24, 42);
-
-    var T_num = +tr.T;
-    var shownSwings = state.running ? Math.min(20, Math.floor(state.simElapsed / T_num)) : (state.timed[state.trialIdx] ? 20 : 0);
-    var shownTime = state.running ? state.simElapsed.toFixed(2) : (state.timed[state.trialIdx] ? tr.t : "0.00");
-
-    g.fillStyle = "#f5efe4";
-    g.font = "700 44px JetBrains Mono, monospace";
-    g.fillText("t = " + shownTime + " s", 24, 102);
-
-    g.fillStyle = "#ffb23f";
-    g.font = "600 26px JetBrains Mono, monospace";
-    g.fillText("Swings: " + shownSwings + " / 20   T = " + (state.timed[state.trialIdx] && !state.running ? tr.T + " s" : "—"), 24, 152);
-
-    g.fillStyle = "#a5b0c9";
-    g.font = "500 21px Manrope, sans-serif";
-    g.fillText(statusLine || "", 24, 202);
-
-    var tex = new THREE.CanvasTexture(c);
-    tex.encoding = THREE.sRGBEncoding;
-    if (hudSprite.material.map) hudSprite.material.map.dispose();
-    hudSprite.material.map = tex;
-    hudSprite.material.needsUpdate = true;
-    hudSprite.scale.set(1.55, 1.55 * (240 / 460), 1);
-  }
-
-  function applyTrialGeometry() {
-    if (!stringMesh || !bobGroup) return;
-    var tr = DATA.trials[state.trialIdx];
-    var worldLen = tr.L * SCALE_M_TO_WORLD;
-    stringMesh.scale.y = worldLen;
-    bobGroup.position.y = -worldLen;
-
-    // Bob visual size/colour reflects 50g brass vs 100g lead-brass
-    if (state.cond === "heavy") {
-      bobMesh.scale.setScalar(1.22);
-      bobMesh.material.color.setHex(0x94a3b8);
-    } else {
-      bobMesh.scale.setScalar(1.0);
-      bobMesh.material.color.setHex(0xffb23f);
-    }
-  }
-
-  function setCond(cond) {
-    if (!cond) return;
-    state.cond = cond;
-    root.querySelectorAll("#bench-cond [data-cond]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-cond") === cond ? "true" : "false");
-    });
-    applyTrialGeometry();
-    var msg = cond === "heavy"
-      ? "Switched to 100 g heavy bob. Time a trial to see if T changes!"
-      : cond === "wide"
-        ? "Release angle set to 10° (still small). Watch if T changes!"
-        : "Standard 50 g brass bob at 6° release angle.";
-    toast(msg);
-    updateHudSprite(msg.slice(0, 38));
-  }
-
-  function test(idx) {
-    if (idx < 0 || idx >= DATA.trials.length) return;
-    state.trialIdx = idx;
-    applyTrialGeometry();
-    var tr = DATA.trials[idx];
-    state.running = true;
-    state.simElapsed = 0;
-
-    if (!stage) {
-      finishTrial(idx);
-      return;
-    }
-    toast("Timing 20 oscillations for Trial " + tr.label + " (L = " + tr.L.toFixed(2) + " m)…");
-  }
-
-  function finishTrial(idx) {
-    state.running = false;
-    state.timed[idx] = true;
-    var tr = DATA.trials[idx];
-    updateHudSprite("Done! T = " + tr.T + " s · T² = " + tr.T2 + " s²");
-    toast("Trial " + tr.label + " (L = " + tr.L.toFixed(2) + " m): t = " + tr.t + " s → T = " + tr.T + " s, T² = " + tr.T2 + " s²");
-    paintHint();
-
-    var n = Object.keys(state.timed).length;
-    document.dispatchEvent(new CustomEvent("l1:bench", { detail: { trial: idx, count: n, cond: state.cond } }));
-    if (n >= 4) {
-      document.dispatchEvent(new CustomEvent("l1:bench-done", { detail: { count: n } }));
-    }
-  }
-
-  function reset() {
-    state.timed = {};
-    state.running = false;
-    state.simElapsed = 0;
-    state.trialIdx = 2;
-    applyTrialGeometry();
-    paintHint();
-    updateHudSprite("Reset · Ready to time 20 swings");
-    toast("Stopwatch reset. Pick a length L to begin.");
-  }
-
-  function paintHint() {
-    var n = Object.keys(state.timed).length;
-    if (hint) hint.innerHTML = "Timed <b>" + n + " of 5</b> lengths";
-    root.querySelectorAll("#bench-trials [data-trial]").forEach(function (b) {
-      var k = +b.getAttribute("data-trial");
-      b.setAttribute("aria-pressed", state.timed[k] ? "true" : "false");
-    });
-  }
-
-  function wireButtons() {
-    root.querySelectorAll("#bench-cond [data-cond]").forEach(function (b) {
-      b.addEventListener("click", function () { setCond(b.getAttribute("data-cond")); });
-    });
-    root.querySelectorAll("#bench-trials [data-trial]").forEach(function (b) {
-      b.addEventListener("click", function () { test(+b.getAttribute("data-trial")); });
-    });
-    var r = document.getElementById("bench-reset");
-    if (r) r.addEventListener("click", reset);
-  }
-
-  var hudTick = 0;
-  function frame(dt, t) {
-    if (!pivotGroup) return;
-    var tr = DATA.trials[state.trialIdx];
-    var T_num = +tr.T;
-    var omega = (2 * Math.PI) / T_num;
-    var maxAngleRad = (state.cond === "wide" ? 10 : 6) * (Math.PI / 180) * 2.2; // slightly amplified visually so 6° vs 10° is clear
-
-    if (state.running) {
-      // Fast-forward 20 oscillations in ~2.2 real seconds so the student sees crisp swings without waiting 40s
-      var speedUp = (+tr.t) / 2.2;
-      state.simElapsed += dt * speedUp;
-      var angle = maxAngleRad * Math.cos(omega * state.simElapsed);
-      pivotGroup.rotation.z = angle;
-
-      hudTick += dt;
-      if (hudTick > 0.09) {
-        hudTick = 0;
-        updateHudSprite("Timing 20 swings at 15× speed…");
-      }
-      if (state.simElapsed >= +tr.t) {
-        finishTrial(state.trialIdx);
-      }
-    } else {
-      // Gentle continuous harmonic swing at the real physical period T!
-      pivotGroup.rotation.z = maxAngleRad * Math.sin(omega * t);
-    }
-
-    // Narrator highlight glow
-    var pulse = 0.45 + 0.25 * Math.sin(t * 5);
-    var worldBob = new THREE.Vector3();
-    bobGroup.getWorldPosition(worldBob);
-    bobGlow.position.copy(worldBob);
-
-    var showBobGlow = highlightPart === "bob";
-    bobGlow.material.opacity += ((showBobGlow ? pulse : 0) - bobGlow.material.opacity) * Math.min(1, dt * 8);
-
-    if (highlightPart === "fiducial") {
-      glowRing.position.set(0, 0.05, -0.1);
-      glowRing.material.opacity = pulse;
-    } else if (highlightPart === "ruler") {
-      glowRing.position.set(-1.18, 0.05, 0);
-      glowRing.material.opacity = pulse;
-    } else {
-      glowRing.material.opacity *= 0.85;
-    }
-  }
+  hookeRow(0.05);
+  paintBtns(); publish();
+  hint("Empty hanger (50 g) on the spring. Add 50 g at a time.");
+  setInterval(paintReadout, 250);
 })();

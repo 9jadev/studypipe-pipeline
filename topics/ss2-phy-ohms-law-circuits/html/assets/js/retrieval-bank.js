@@ -1,184 +1,255 @@
 /* ==========================================================
-   StudyPipe — Spaced Retrieval Bank for Ohm's Law & Current Electricity (L1–L5)
-   Used by LessonKit across lessons/lesson-01 .. lesson-05
+   StudyPipe — Spaced Retrieval Bank · Ohm's Law & Current Electricity (L1–L5)
+   Read by LessonKit in lessons/lesson-01 .. lesson-05 (classic script, offline).
+   donow  : the 4 Do Now cards of each lesson in 02-lesson.md (from: 0 = prerequisite,
+            from: N = Lesson N; sec = the section id in that earlier lesson the "Revisit" link opens)
+   quiz   : 2 original review MCQs from earlier lessons (l02 onward), appended after the lesson's own quiz
+   recall : blank-page recall prompt + the key points to tick off (02-lesson.md § 5 Recall)
    ========================================================== */
 window.RETRIEVAL_BANK = {
   l01: {
-    title: "Ohm's Law, Metallic Conduction & Wire Resistivity",
+    title: "Current, P.D., Ohm's Law and the Resistance of Wires",
     donow: [
       {
-        from: 0, sec: "concepts", where: "Electric Charge & Current",
-        q: "Define electric current I in terms of charge Q and time t, and state its SI unit.",
-        a: "Electric current is the <strong>rate of flow of electric charge</strong> (<strong>I = Q ÷ t</strong>), measured in <strong>amperes (A)</strong>, where 1 A = 1 C s<sup>−1</sup>."
+        from: 0, sec: "concepts", where: "Charge and current",
+        q: "What is measured in coulombs, and what does one ampere mean?",
+        a: "Electric <strong>charge</strong> is measured in coulombs (C); one <strong>ampere</strong> is one coulomb passing a point each second (1 A = 1 C s⁻¹)."
       },
       {
-        from: 0, sec: "concepts", where: "Potential Difference",
-        q: "What is meant by a potential difference of 12.0 V between two points in a circuit?",
-        a: "It means <strong>12.0 joules of electrical energy</strong> are converted to other forms for every <strong>1 coulomb of charge</strong> passing between the two points (<strong>V = W ÷ Q</strong>)."
+        from: 0, sec: "examples", where: "Unit conversion",
+        q: "Convert 3.0 minutes to seconds and 0.50 mm to metres.",
+        a: "3.0 min = <strong>180 s</strong>; 0.50 mm = 0.50 × 10⁻³ m = <strong>5.0 × 10⁻⁴ m</strong>."
       },
       {
-        from: 0, sec: "practical", where: "Meter Placement",
-        q: "How must an ammeter and a voltmeter be connected relative to a resistor in an Ohm's law circuit?",
-        a: "Connect the <strong>ammeter in series</strong> with the resistor (low resistance) and the <strong>voltmeter in parallel</strong> across the resistor (high resistance)."
+        from: 0, sec: "examples", where: "Area of a circle",
+        q: "Find the area of a circle of diameter 0.40 mm.",
+        a: "A = πd²/4 = π(4.0 × 10⁻⁴)²/4 = <strong>1.26 × 10⁻⁷ m²</strong>."
       },
       {
-        from: 0, sec: "practical", where: "Area of a Round Wire",
-        q: "Write the formula for the cross-sectional area A of a cylindrical wire of diameter d.",
-        a: "Since radius r = d ÷ 2, cross-sectional area is <strong>A = πr<sup>2</sup> = πd<sup>2</sup> ÷ 4</strong>."
+        from: 0, sec: "practical", where: "Reading meters",
+        q: "Why do we read a meter with the eye square to the scale?",
+        a: "To avoid <strong>parallax error</strong>, which otherwise makes the reading systematically too high or too low."
       }
     ],
+    quiz: [],
     recall: {
-      prompt: "Without looking back at the notes, tick off every core idea from Lesson 1 you can state from memory:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 1, then tick each point below that you wrote, even in your own words:",
       points: [
-        "Ohm's law states that current I through a metallic conductor is directly proportional to potential difference V across its ends (V = IR), provided temperature and other physical conditions remain constant.",
-        "Heating a metallic conductor increases lattice ion vibrations, causing more frequent electron collisions and increasing resistance R.",
-        "Electrical resistance of a uniform wire is R = ρL ÷ A = 4ρL ÷ (πd²), so R ∝ L ÷ d².",
-        "In a WAEC Ohm's law practical, the slope of V (vertical) against I (horizontal) equals the resistance R of the wire.",
-        "The plug key must be removed immediately after each reading so the constantan wire does not heat up and change resistance."
+        "Current is the rate of flow of charge: I = Q/t, in amperes.",
+        "P.d. is the electrical energy changed per coulomb between two points: V = W/Q, in volts.",
+        "Ohm's law: at steady temperature and physical state, I is proportional to V, so V = IR with R constant.",
+        "Resistance of a uniform wire: R = ρL/A with A = πd²/4, so R ∝ L/d².",
+        "The slope of a V–I graph (V vertical, I horizontal) is the resistance R.",
+        "Ohmic conductor: straight V–I line through the origin. Non-ohmic (filament lamp, diode, electrolyte): a curve."
       ]
     }
   },
 
   l02: {
-    title: "EMF, Terminal P.D., Lost Volts & Internal Resistance",
+    title: "EMF, Terminal P.D., Lost Volts and Internal Resistance",
     donow: [
       {
-        from: 1, sec: "concepts", where: "Ohm's Law",
-        q: "State Ohm's law and the essential physical condition that must be kept constant.",
-        a: "The current I through a metallic conductor is directly proportional to the potential difference V across its ends (<strong>V = IR</strong>), provided <strong>temperature and other physical conditions remain constant</strong>."
+        from: 1, sec: "concepts", where: "Ohm's law",
+        q: "State Ohm's law.",
+        a: "At steady temperature, the current through a conductor is proportional to the p.d. across it, so <strong>V = IR</strong> with R constant."
       },
       {
-        from: 1, sec: "concepts", where: "Wire Diameter Scaling",
-        q: "Wire B has the same length and material as Wire A, but twice the diameter (dB = 2dA). If Wire A has resistance 16.0 Ω, what is the resistance of Wire B?",
-        a: "Since <strong>R ∝ 1 ÷ d²</strong>, doubling diameter divides resistance by 2² = 4: <strong>RB = 16.0 ÷ 4 = 4.0 Ω</strong>."
+        from: 1, sec: "practical", where: "Slope of a V–I graph",
+        q: "A V–I graph's slope is 3.0 V ÷ 1.5 A. What does it give?",
+        a: "The resistance, <strong>R = 2.0 Ω</strong>."
       },
       {
-        from: 1, sec: "examples", where: "Charge & Current",
-        q: "A resistor of 6.0 Ω is connected across a 9.0 V p.d. for 2.0 minutes. Calculate the current I and total charge Q.",
-        a: "<strong>I = V ÷ R = 9.0 ÷ 6.0 = 1.5 A</strong>. Time t = 120 s, so <strong>Q = It = 1.5 × 120 = 180 C</strong>."
+        from: 1, sec: "practical", where: "The ammeter",
+        q: "What does an ammeter read, and where is it connected?",
+        a: "The current; in <strong>series</strong>."
       },
       {
-        from: 1, sec: "practical", where: "WAEC Precaution",
-        q: "Why do we open the plug key between readings during an Ohm's law experiment?",
-        a: "To prevent continuous current from <strong>heating the resistance wire</strong>, which would raise its temperature and resistance."
+        from: 1, sec: "practical", where: "The voltmeter",
+        q: "What does a voltmeter read, and where is it connected?",
+        a: "The potential difference; in <strong>parallel</strong> across the component."
+      }
+    ],
+    quiz: [
+      {
+        from: 1,
+        q: "A soldering-iron element of resistance 2.5 Ω carries a current of 4.0 A. What is the p.d. across it?",
+        o: ["1.6 V", "6.5 V", "10 V", "0.63 V"],
+        a: 2,
+        e: "V = IR = 4.0 × 2.5 = 10 V. Dividing (4.0 ÷ 2.5 = 1.6) or adding (6.5) mixes up the formula."
+      },
+      {
+        from: 1,
+        q: "Two wires of the same metal and length: wire Y has three times the diameter of wire X. What is R_Y ÷ R_X?",
+        o: ["3", "1/3", "9", "1/9"],
+        a: 3,
+        e: "R ∝ 1/d². Three times the diameter gives nine times the area, so the resistance falls to one ninth."
       }
     ],
     recall: {
-      prompt: "Without scrolling up, write down the core EMF and internal resistance equations from Lesson 2 and tick what you remembered:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 2, then tick each point below that you wrote:",
       points: [
-        "Electromotive force (E) is the total energy supplied per coulomb by the source (open-circuit voltage when I = 0).",
-        "Complete circuit equation: E = V + v = IR + Ir = I(R + r).",
-        "Terminal potential difference V = E − Ir, where v = Ir is the 'lost volts' dropped across the internal resistance r.",
-        "For two load readings on the same cell: E = I₁(R₁ + r) = I₂(R₂ + r), so r = (I₂R₂ − I₁R₁) ÷ (I₁ − I₂).",
-        "Plotting terminal p.d. V against current I gives a straight line V = −rI + E with vertical intercept E and gradient −r."
+        "EMF (E) is the total energy the source gives each coulomb driven round the whole circuit; it is the open-circuit reading (I = 0).",
+        "Terminal p.d. is what is left for the external circuit: V = E − Ir = IR.",
+        "Lost volts Ir are spent on the internal resistance r inside the cell.",
+        "Full-circuit relation: E = I(R + r).",
+        "Two-readings method: E = I₁(R₁ + r) = I₂(R₂ + r), then solve for r and E.",
+        "On a V–I graph for a cell, the vertical intercept is E and the gradient is −r."
       ]
     }
   },
 
   l03: {
-    title: "Series & Parallel Networks, Cell Arrays, Power & Efficiency",
+    title: "Series and Parallel Networks, Cell Arrays, Power and Efficiency",
     donow: [
       {
-        from: 2, sec: "concepts", where: "Terminal P.D. & Lost Volts",
-        q: "A 12.0 V battery with internal resistance r = 1.2 Ω delivers 3.0 A to a starter load. Calculate the lost volts v and terminal p.d. V.",
-        a: "Lost volts <strong>v = Ir = 3.0 × 1.2 = 3.6 V</strong>. Terminal p.d. <strong>V = E − Ir = 12.0 − 3.6 = 8.4 V</strong>."
+        from: 2, sec: "concepts", where: "Terminal p.d.",
+        q: "What does V = E − Ir give?",
+        a: "The <strong>terminal p.d.</strong>, what is left after the lost volts."
       },
       {
-        from: 2, sec: "examples", where: "Two Readings Method",
-        q: "A cell supplies 0.80 A to a 4.0 Ω resistor and 0.50 A to a 7.0 Ω resistor. Find its internal resistance r.",
-        a: "Using I₁(R₁ + r) = I₂(R₂ + r): <strong>0.80(4.0 + r) = 0.50(7.0 + r) ⇒ 3.2 + 0.8r = 3.5 + 0.5r ⇒ r = 1.0 Ω</strong>."
+        from: 1, sec: "concepts", where: "Electrical power",
+        q: "Write the three forms of electrical power.",
+        a: "<strong>P = IV = I²R = V²/R</strong>."
       },
       {
-        from: 2, sec: "concepts", where: "V–I Graph of a Cell",
-        q: "When terminal voltage V is plotted on the vertical axis against current I on the horizontal axis, what do the vertical intercept and gradient represent?",
-        a: "The vertical intercept represents the <strong>EMF (E)</strong>, and the gradient equals <strong>−r</strong> (negative of internal resistance)."
+        from: 0, sec: "concepts", where: "Series resistors",
+        q: "Two 6 Ω resistors in series: what is the total?",
+        a: "<strong>12 Ω</strong>."
       },
       {
-        from: 1, sec: "concepts", where: "Resistivity Formula",
-        q: "State the formula relating resistance R, resistivity ρ, length L, and cross-sectional area A.",
-        a: "<strong>R = ρL ÷ A</strong> (or <strong>ρ = RA ÷ L</strong>, measured in Ω m)."
+        from: 2, sec: "concepts", where: "Power lost inside a cell",
+        q: "What is the power lost inside a cell carrying current I?",
+        a: "<strong>I²r</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 2,
+        q: "A cell of EMF 9.0 V and internal resistance 0.50 Ω drives 2.0 A through a load. What is its terminal p.d.?",
+        o: ["9.0 V", "8.0 V", "10 V", "4.5 V"],
+        a: 1,
+        e: "Lost volts Ir = 2.0 × 0.50 = 1.0 V, so V = E − Ir = 9.0 − 1.0 = 8.0 V. Adding the lost volts (10 V) is the classic slip."
+      },
+      {
+        from: 2,
+        q: "A voltmeter reads 3.0 V across a cell on open circuit. Why does this equal the EMF?",
+        o: ["The cell has no internal resistance", "No current flows, so there are no lost volts", "The voltmeter has zero resistance", "The EMF is always 3.0 V"],
+        a: 1,
+        e: "With the key open, I = 0, so Ir = 0 and V = E. The cell still has its internal resistance; it just has no current through it."
       }
     ],
     recall: {
-      prompt: "Close your notes and recall the core rules for series/parallel networks, cell arrays, and cell efficiency:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 3, then tick each point below that you wrote:",
       points: [
-        "Resistors in series carry the same current I and add directly: R_eq = R₁ + R₂ + …",
-        "Resistors in parallel share the same p.d. V and split current inversely with resistance: 1/R_eq = 1/R₁ + 1/R₂ (or R₁R₂/(R₁ + R₂) for two branches).",
-        "Identical cells in series (aiding) have E_eq = nE and r_eq = nr; identical cells in parallel keep ONE cell's EMF (E_eq = E) while dividing internal resistance (r_eq = r ÷ n).",
-        "Electrical power P = IV = I²R = V² ÷ R (in watts, W) and electrical energy W = IVt (in joules, J).",
-        "Cell efficiency η = (R ÷ (R + r)) × 100% = (V ÷ E) × 100%."
+        "Series resistors: same current, p.d.s add, R = R₁ + R₂ + …",
+        "Parallel resistors: same p.d., currents add, 1/R = 1/R₁ + 1/R₂ + …; for two, R = R₁R₂/(R₁ + R₂).",
+        "n identical cells in series: E_t = nE, r_t = nr. n identical cells in parallel: E_t = E, r_t = r/n.",
+        "Power three ways: P = IV = I²R = V²/R; energy W = Pt, and 1 kWh = 3.6 × 10⁶ J.",
+        "Efficiency η = R/(R + r) = V/E; load power peaks at R = r, where η is only 50 %."
       ]
     }
   },
 
   l04: {
-    title: "Galvanometer Conversion — Ammeter Shunts & Voltmeter Multipliers",
+    title: "Galvanometer Conversion: Ammeter Shunts and Voltmeter Multipliers",
     donow: [
       {
-        from: 3, sec: "concepts", where: "Parallel Cells Trap",
-        q: "Four identical cells each of EMF 1.5 V and internal resistance 2.0 Ω are connected in parallel. What are the combined EMF and combined internal resistance?",
-        a: "Combined EMF <strong>E_eq = 1.5 V</strong> (same as one cell!), and combined internal resistance <strong>r_eq = 2.0 ÷ 4 = 0.50 Ω</strong>."
+        from: 3, sec: "concepts", where: "Parallel branches",
+        q: "In a parallel pair, what is equal across both?",
+        a: "The <strong>potential difference</strong>."
       },
       {
-        from: 3, sec: "examples", where: "Cell Efficiency",
-        q: "A cell of internal resistance 0.50 Ω is connected across an external resistor of 4.50 Ω. Calculate the efficiency η of the cell.",
-        a: "<strong>η = [R ÷ (R + r)] × 100% = [4.50 ÷ (4.50 + 0.50)] × 100% = 90%</strong>."
+        from: 1, sec: "concepts", where: "V = IR",
+        q: "Find V across 18 Ω carrying 15 mA.",
+        a: "V = 0.015 × 18 = <strong>0.27 V</strong>."
       },
       {
-        from: 3, sec: "concepts", where: "Current Divider",
-        q: "A total current of 3.0 A enters a parallel pair of 4.0 Ω and 8.0 Ω resistors. How much current flows through the 4.0 Ω branch?",
-        a: "By the current divider rule, the smaller resistor takes the larger share: <strong>I₄ = 3.0 × [8.0 ÷ (4.0 + 8.0)] = 2.0 A</strong>."
+        from: 3, sec: "concepts", where: "Series parts",
+        q: "In series, what is the same through both parts?",
+        a: "The <strong>current</strong>."
       },
       {
-        from: 2, sec: "concepts", where: "Complete Circuit Law",
-        q: "Write the formula for the current I delivered by a cell of EMF E and internal resistance r to an external load R.",
-        a: "<strong>I = E ÷ (R + r)</strong>."
+        from: 0, sec: "examples", where: "Milliamperes",
+        q: "Convert 8 mA to amperes.",
+        a: "8 mA = <strong>0.008 A</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 3,
+        q: "Resistors of 4.0 Ω and 12 Ω are joined in parallel. What is their combined resistance?",
+        o: ["16 Ω", "8.0 Ω", "3.0 Ω", "0.33 Ω"],
+        a: 2,
+        e: "R = (4.0 × 12)/(4.0 + 12) = 48/16 = 3.0 Ω, less than the smaller branch, as a parallel pair always is. 0.33 is 1/R, not R."
+      },
+      {
+        from: 3,
+        q: "Three identical cells, each 1.5 V with internal resistance 0.9 Ω, are joined in parallel. What are the EMF and internal resistance of the group?",
+        o: ["4.5 V and 2.7 Ω", "1.5 V and 0.3 Ω", "4.5 V and 0.3 Ω", "1.5 V and 2.7 Ω"],
+        a: 1,
+        e: "Identical cells in parallel keep one cell's EMF (1.5 V), and the internal resistance falls to r/n = 0.9 ÷ 3 = 0.3 Ω."
       }
     ],
     recall: {
-      prompt: "Without looking back, recall how to convert a galvanometer into an ammeter or a voltmeter:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 4, then tick each point below that you wrote:",
       points: [
-        "To convert a galvanometer (I_g, R_g) into an ammeter reading up to I, connect a low-resistance shunt R_s in PARALLEL.",
-        "Shunt equation from equal parallel voltage: I_g R_g = (I − I_g) R_s ⇒ R_s = (I_g R_g) ÷ (I − I_g).",
-        "To convert a galvanometer (I_g, R_g) into a voltmeter reading up to V, connect a high-resistance multiplier R_m in SERIES.",
-        "Multiplier equation: V = I_g(R_g + R_m) ⇒ R_m = (V ÷ I_g) − R_g.",
-        "Exam trap: total resistance of the converted voltmeter is V ÷ I_g, whereas the added series multiplier is (V ÷ I_g) − R_g."
+        "Ammeter: a small shunt R_s in parallel with the coil, R_s = I_g R_g/(I − I_g); the meter goes in series and has low resistance.",
+        "Voltmeter: a large multiplier R_m in series with the coil, R_m = V/I_g − R_g; the meter goes in parallel and has high resistance.",
+        "R_total = V/I_g is the whole voltmeter; the resistor you add is R_total − R_g.",
+        "The coil itself only ever carries its full-scale current I_g; the shunt carries the rest, I − I_g."
       ]
     }
   },
 
   l05: {
-    title: "Null-Balance Precision — Metre Bridge, Potentiometer & WAEC Practicals",
+    title: "Null Methods: Metre Bridge, Potentiometer and WAEC Practicals",
     donow: [
       {
-        from: 4, sec: "concepts", where: "Ammeter Shunt",
-        q: "A galvanometer of resistance 19.8 Ω gives full-scale deflection at 10 mA (0.010 A). What shunt resistance R_s converts it into a 0–1.0 A ammeter?",
-        a: "<strong>R_s = (I_g R_g) ÷ (I − I_g) = (0.010 × 19.8) ÷ (1.0 − 0.010) = 0.198 ÷ 0.990 = 0.20 Ω</strong> in parallel."
+        from: 2, sec: "concepts", where: "Voltmeter under load",
+        q: "Why does a loaded voltmeter read less than the EMF?",
+        a: "It reads <strong>E − Ir</strong>: current flows, so lost volts appear inside the cell."
       },
       {
-        from: 4, sec: "concepts", where: "Voltmeter Multiplier",
-        q: "A galvanometer of resistance 25 Ω has full-scale deflection current 8.0 mA (0.008 A). What series multiplier R_m converts it to read up to 40 V?",
-        a: "Total resistance = 40 ÷ 0.008 = 5000 Ω. Added series multiplier <strong>R_m = 5000 − 25 = 4975 Ω</strong>."
+        from: 1, sec: "concepts", where: "Resistance of a wire",
+        q: "For a wire, R is proportional to what?",
+        a: "<strong>R ∝ L/d²</strong>: length over diameter squared."
       },
       {
-        from: 3, sec: "concepts", where: "Parallel Cells",
-        q: "Why do auto-electricians connect two 12 V batteries in parallel when jump-starting a heavy diesel engine?",
-        a: "Because parallel connection keeps the voltage at <strong>12 V</strong> while <strong>halving the internal resistance (r/2)</strong>, allowing much larger cranking current."
+        from: 4, sec: "concepts", where: "Ideal voltmeter",
+        q: "An ideal voltmeter draws how much current?",
+        a: "<strong>Almost none</strong>, because its resistance is very high."
       },
       {
-        from: 2, sec: "concepts", where: "Open-Circuit EMF",
-        q: "Under what condition does the terminal potential difference V across a cell equal its true EMF E?",
-        a: "When the cell is on <strong>open circuit (current I = 0 A)</strong> so that lost volts Ir = 0."
+        // review minor 4: kept as real retrieval (L03) instead of new L05 content
+        from: 3, sec: "concepts", where: "Current in a parallel pair",
+        q: "A 3.0 Ω and a 6.0 Ω resistor are in parallel. Which one carries the larger current, and why?",
+        a: "The <strong>3.0 Ω</strong> one: both share the same p.d., so I = V/R is larger where R is smaller (twice the current of the 6.0 Ω)."
+      }
+    ],
+    quiz: [
+      {
+        from: 4,
+        q: "A galvanometer of coil resistance 50 Ω gives full-scale deflection at 2.0 mA. What multiplier makes it a 10 V voltmeter?",
+        o: ["5 000 Ω", "4 950 Ω", "5 050 Ω", "0.020 Ω"],
+        a: 1,
+        e: "R_total = V/I_g = 10 ÷ 0.0020 = 5 000 Ω, so R_m = 5 000 − 50 = 4 950 Ω in series. 5 000 Ω is the whole meter, not the resistor you add."
+      },
+      {
+        from: 4,
+        q: "Why must an ammeter's shunt have a very small resistance?",
+        o: ["So most of the line current bypasses the coil", "So the coil carries all the current", "So the meter has a high resistance", "So it can be joined in parallel with the circuit"],
+        a: 0,
+        e: "The shunt sits in parallel with the coil and takes most of the current, leaving only I_g for the coil; the finished ammeter has a low resistance and goes in series."
       }
     ],
     recall: {
-      prompt: "Without scrolling up, write down the core metre bridge, potentiometer, and WAEC Paper 3 practical rules from Lesson 5:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 5, then tick each point below that you wrote:",
       points: [
-        "Metre bridge balance equation on a 100 cm uniform wire: R_left ÷ R_right = l ÷ (100 − l).",
-        "In the WAEC two-wire metre bridge practical, the gradient s of R₂ against R₁ equals (d₁ ÷ d₂)², so √s = d₁ ÷ d₂.",
-        "Potentiometer cell comparison: E₁ ÷ E₂ = l₁ ÷ l₂; internal resistance r = R(l₁ − l₂) ÷ l₂.",
-        "A potentiometer measures true EMF because at the null balance point (I_g = 0), zero current is drawn from the test cell so no volts are lost across r.",
-        "WAEC Paper 3 precautions must be written in the past tense (e.g., 'I tapped the jockey lightly on the wire instead of scraping it', 'I ensured tight and clean electrical connections')."
+        "Metre bridge balance: R/S = l/(100 − l), so an unknown R = R_x(100 − l)/l.",
+        "Potentiometer: V = kl along a uniform wire; comparing cells, E₁/E₂ = l₁/l₂.",
+        "Internal resistance by potentiometer: r = R(l₁ − l₂)/l₂.",
+        "Null = no current drawn from the test cell, so no lost volts: the potentiometer reads the true EMF.",
+        "Driver share: V_wire = E₀ R_wire/(R_wire + R_series); the whole driver EMF is not across the wire."
       ]
     }
   }

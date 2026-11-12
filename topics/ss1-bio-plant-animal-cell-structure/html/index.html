@@ -1,19 +1,21 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-NG">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Plant &amp; Animal Cell Structure, Organisation &amp; Microscopy — StudyPipe SS1 Biology</title>
-  <meta name="description" content="An interactive 5-lesson 3D biology unit on Cell Theory, Prokaryotic vs Eukaryotic Cells, Organelles, Forms of Living Cells, Levels of Organisation, Osmosis/Turgidity/Haemolysis, and WAEC Paper 3 Microscopy &amp; Drawing." />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>The Cell: Plant and Animal Cells — StudyPipe SS1 Biology</title>
+  <meta name="description" content="A five-lesson interactive 3D biology unit on plant and animal cells: microscopes and the cell theory, organelles, forms of cells and levels of organisation, diffusion and osmosis, and the WAEC Paper 3 slide and drawing clinic." />
+  <meta name="theme-color" content="#060912">
   <link rel="stylesheet" href="assets/css/fonts.css" />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/hub.css" />
   <link rel="stylesheet" href="assets/css/narrator.css" />
   <link rel="stylesheet" href="assets/css/math.css" />
+  <link rel="stylesheet" href="./assets/css/code.css">
   <link rel="stylesheet" href="assets/css/theme.css">
 </head>
 <body>
 
-  <!-- Ambient background -->
   <div class="ambient" aria-hidden="true">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
@@ -21,26 +23,25 @@
     <div class="grid-mask"></div>
   </div>
 
-  <!-- Top bar -->
   <header class="nav">
     <div class="container nav-inner">
       <a href="#top" class="brand">
-        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 34 34" width="34" height="34"><rect x="1" y="1" width="32" height="32" rx="10" fill="#0f1a2e" stroke="#3ee6c4" stroke-opacity=".55"/><ellipse cx="17" cy="17" rx="11" ry="8.5" fill="none" stroke="#3ee6c4" stroke-width="2"/><circle cx="19.5" cy="15.5" r="3.6" fill="#ffb23f"/><circle cx="11.5" cy="19" r="1.5" fill="#a3e635"/></svg></span>
+        <span class="brand-mark" aria-hidden="true"></span>
         <span class="brand-text">
           <strong>StudyPipe</strong>
-          <small>SS1 Biology · Cell Structure &amp; Microscopy</small>
+          <small>SS1 Biology · The Cell</small>
         </span>
       </a>
       <nav class="nav-links" aria-label="Page sections">
         <a href="#mystery">The Mystery</a>
         <a href="#journey">5 Lessons</a>
-        <a href="#explorer">Cell Explorer</a>
+        <a href="#explorer">Explorer</a>
         <a href="#master">What You'll Master</a>
         <a href="#method">How We Learn</a>
       </nav>
       <div class="nav-pill">
         <span class="dot"></span>
-        Offline ready · Nigerian voice
+        Offline ready · en-NG Voice
       </div>
     </div>
   </header>
@@ -55,119 +56,119 @@
           <span class="sep">·</span>
           <span>WAEC · NECO · JAMB</span>
           <span class="sep">·</span>
-          <span>Paper 3 Practical Core</span>
+          <span>Paper 3 Practical</span>
         </div>
 
         <h1 class="hero-title" data-hook>
-          Plant &amp; Animal <span class="accent-serif">Cell</span>
-          <span class="accent-grad">Structure</span>
+          The Cell: <span class="accent-serif">Life’s Smallest</span>
+          <span class="accent-grad">Unit</span>
         </h1>
 
         <p class="hero-lede">
-          Pure water makes a wilted <em>ugu</em> leaf firm again, but the same water bursts red blood cells.
-          Find out why, then master every organelle and the WAEC Paper 3 microscope practical.
+          Why do Mama Ngozi’s ugu leaves stay crisp under clean water but wilt in salty water, and why would
+          a doctor at LUTH never drip plain water into a patient’s vein? Look inside plant and animal cells,
+          watch water move across their membranes, and learn to draw and measure cells the way a WAEC
+          examiner marks them.
         </p>
 
         <div class="hero-actions">
           <button type="button" class="btn btn-primary" data-tour>
-            <span>Start guided tour</span>
+            <span>Start guided tour (en-NG)</span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
           </button>
-          <a href="lessons/lesson-01/index.html" class="btn btn-ghost" data-continue>
-            Begin Lesson 1 →
-          </a>
+          <a href="lessons/lesson-01/index.html" class="btn btn-ghost">Begin Lesson 1 →</a>
         </div>
 
         <dl class="hero-meta">
-          <div>
-            <dt>Scope</dt>
-            <dd>5 lessons · ~6.5 hrs</dd>
-          </div>
-          <div>
-            <dt>Practicals</dt>
-            <dd>WAEC Paper 3 Slides &amp; Drawings</dd>
-          </div>
-          <div>
-            <dt>Interactive</dt>
-            <dd>3D cell models + worked solutions</dd>
-          </div>
-          <div>
-            <dt>Aligned with</dt>
-            <dd>WAEC · NECO · JAMB</dd>
-          </div>
+          <div><dt>Scope</dt><dd>5 lessons · ~6 h 40 min</dd></div>
+          <div><dt>Interactive</dt><dd>5 3D labs + 5 3D zooms</dd></div>
+          <div><dt>Practice</dt><dd>60 quiz questions + 5 × 30-mark papers</dd></div>
+          <div><dt>Practical</dt><dd>Paper 3 drawing clinic</dd></div>
         </dl>
       </div>
 
-      <!-- 3D interactive stage -->
+      <!-- 3D Hero Lab (window.StudyLab, cell-bio kit) -->
       <div class="hero-stage">
         <div class="stage-frame" id="lab">
           <div class="stage-topbar">
             <div class="stage-dots"><span></span><span></span><span></span></div>
-            <div class="stage-title">LIVE 3D LAB · PLANT CELL VS ANIMAL CELL &amp; TONICITY STAGE</div>
-            <div class="stage-hint">Drag to rotate · Scroll to zoom</div>
+            <div class="stage-title">LIVE 3D LAB · CELLS, MICROSCOPE &amp; OSMOSIS</div>
+            <div class="stage-hint">Drag to turn · Tap a part</div>
           </div>
 
           <div class="canvas-wrap">
-            <canvas id="lab-canvas" aria-label="Interactive 3D Plant Cell, Animal Cell, and Red Blood Cell tonicity comparison stage"></canvas>
-
-            <div class="endpoint-toast" id="endpoint-toast" role="status" aria-live="polite" hidden>
-              <strong>Osmosis Test:</strong> Plant Cell = <strong>Turgid</strong> · Red Blood Cell = <strong>Haemolysis</strong>
+            <canvas id="lab-canvas" aria-label="Interactive 3D model of a plant cell and an animal cell, a compound microscope, and cells in different solutions"></canvas>
+            <canvas id="lab-fov" class="lab-fov" width="208" height="208" aria-label="What you see through the eyepiece" hidden></canvas>
+            <div id="lab-fov-cap" class="lab-fov-cap" hidden>Eyepiece view</div>
+            <div class="lab-nogl" id="lab-fallback" hidden>
+              <p>This phone cannot draw the 3D lab, but every lesson still works. Use the buttons below to read the results.</p>
             </div>
-
-            <div class="stage-legend">
-              <span><i class="sw sw-plant"></i>Plant Cell (Cellulose Wall, Chloroplasts, Vacuole)</span>
-              <span><i class="sw sw-animal"></i>Animal Cell &amp; RBC (Flexible Membrane, Centrioles)</span>
+            <div class="endpoint-toast" id="endpoint-toast" role="status" aria-live="polite"></div>
+            <div class="stage-legend" id="lab-legend">
+              <span><i class="sw sw-plant"></i>Plant (ugu leaf) cell</span>
+              <span><i class="sw sw-animal"></i>Animal (cheek) cell</span>
             </div>
           </div>
 
-          <!-- HUD controls -->
           <div class="hud">
-            <div class="hud-readouts">
-              <div class="hud-cell">
-                <span class="hud-k">External Medium</span>
-                <span class="hud-v"><strong id="val-medium">Isotonic (normal) medium</strong></span>
-              </div>
-              <div class="hud-cell">
-                <span class="hud-k">Plant Cell Response</span>
-                <span class="hud-v" id="val-plant">Plant: wall + chloroplasts + central vacuole</span>
-              </div>
-              <div class="hud-cell">
-                <span class="hud-k">Animal Cell / RBC Response</span>
-                <span class="hud-v status-end" id="val-animal">Animal: flexible membrane + centrioles</span>
-              </div>
+            <div class="lab-modes" role="tablist" aria-label="Lab mode">
+              <button type="button" class="btn-chip" role="tab" data-mode="cells" aria-selected="true">Cells</button>
+              <button type="button" class="btn-chip" role="tab" data-mode="microscope" aria-selected="false">Microscope</button>
+              <button type="button" class="btn-chip" role="tab" data-mode="osmosis" aria-selected="false">Osmosis</button>
             </div>
 
-            <div class="hud-controls">
-              <button type="button" class="btn-chip btn-chip-primary" id="btn-water">
-                💧 Pure Water (Turgid vs Haemolysis)
-              </button>
-              <button type="button" class="btn-chip" id="btn-salt">
-                🧂 Strong Salt (Plasmolysis vs Crenation)
-              </button>
-              <button type="button" class="btn-chip btn-chip-muted" id="btn-reset">
-                ↺ Reset Twin Cells
-              </button>
+            <div class="hud-readouts" id="lab-readouts">
+              <div class="hud-cell"><span class="hud-k" id="hud-k1">Mode</span><span class="hud-v" id="hud-v1">Plant beside animal</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k2">Selected part</span><span class="hud-v" id="hud-v2">Tap an organelle</span></div>
+              <div class="hud-cell"><span class="hud-k" id="hud-k3">Membranes</span><span class="hud-v" id="hud-v3">—</span></div>
             </div>
+
+            <div class="lab-ctrl" id="ctrl-cells" data-for="cells">
+              <button type="button" class="btn-chip" data-pick="nucleus">Nucleus</button>
+              <button type="button" class="btn-chip" data-pick="chloroplast">Chloroplast</button>
+              <button type="button" class="btn-chip" data-pick="wall">Cell wall</button>
+              <button type="button" class="btn-chip" data-pick="centrioles">Centrioles</button>
+            </div>
+            <div class="lab-ctrl" id="ctrl-microscope" data-for="microscope" hidden>
+              <button type="button" class="btn-chip" data-objective="0" aria-pressed="true">×4 objective</button>
+              <button type="button" class="btn-chip" data-objective="1" aria-pressed="false">×10 objective</button>
+              <button type="button" class="btn-chip" data-objective="2" aria-pressed="false">×40 objective</button>
+            </div>
+            <div class="lab-ctrl" id="ctrl-osmosis" data-for="osmosis" hidden>
+              <button type="button" class="btn-chip" data-solution="water" aria-pressed="false">Pure water</button>
+              <button type="button" class="btn-chip" data-solution="saline" aria-pressed="true">0.9% saline</button>
+              <button type="button" class="btn-chip" data-solution="salt" aria-pressed="false">Salty water</button>
+            </div>
+
+            <p class="lab-info" id="lab-info" aria-live="polite">
+              Tap any part of either cell (or a button) to see its name, how many membranes wrap it, and its job.
+            </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Marquee strip -->
+    <!-- Marquee: 12 key terms -->
     <div class="marquee" aria-hidden="true">
       <div class="marquee-track">
-        <span>CELL THEORY: HOOKE · DUJARDIN · SCHLEIDEN · SCHWANN · VIRCHOW</span><span>·</span>
-        <span>MAGNIFICATION M = I ÷ A</span><span>·</span>
-        <span>MICROSCOPE M(TOTAL) = M(EYEPIECE) × M(OBJECTIVE)</span><span>·</span>
-        <span>DOUBLE MEMBRANE: NUCLEUS · MITOCHONDRION · CHLOROPLAST</span><span>·</span>
-        <span>NO MEMBRANE: RIBOSOME · CENTRIOLES</span><span>·</span>
-        <span>PLANT ONLY: CELLULOSE WALL · CHLOROPLAST · SAP VACUOLE</span><span>·</span>
-        <span>EUGLENA: MIXOTROPHIC (PLANT &amp; ANIMAL FEATURES)</span><span>·</span>
-        <span>COLONY (VOLVOX) &amp; FILAMENT (SPIROGYRA) ≠ TISSUE (HYDRA)</span><span>·</span>
-        <span>SA/V RATIO = 6 ÷ L</span><span>·</span>
-        <span>HYPOTONIC: TURGIDITY VS HAEMOLYSIS</span><span>·</span>
-        <span>HYPERTONIC: PLASMOLYSIS VS CRENATION</span><span>·</span>
-        <span>PAPER 3: ONION BULB HAS ZERO CHLOROPLASTS</span><span>·</span>
+        <span>CELL THEORY</span><span>·</span>
+        <span>ORGANELLE</span><span>·</span>
+        <span>M = EYEPIECE × OBJECTIVE</span><span>·</span>
+        <span>NUCLEUS</span><span>·</span>
+        <span>MITOCHONDRION</span><span>·</span>
+        <span>CHLOROPLAST</span><span>·</span>
+        <span>CELLULOSE WALL</span><span>·</span>
+        <span>SELECTIVELY PERMEABLE</span><span>·</span>
+        <span>VOLVOX COLONY</span><span>·</span>
+        <span>SA : V = 6/L</span><span>·</span>
+        <span>OSMOSIS</span><span>·</span>
+        <span>ISOTONIC 0.9% SALINE</span><span>·</span>
+        <span>CELL THEORY</span><span>·</span>
+        <span>ORGANELLE</span><span>·</span>
+        <span>M = EYEPIECE × OBJECTIVE</span><span>·</span>
+        <span>NUCLEUS</span><span>·</span>
+        <span>MITOCHONDRION</span><span>·</span>
+        <span>CHLOROPLAST</span><span>·</span>
       </div>
     </div>
 
@@ -175,90 +176,75 @@
     <section id="mystery" class="section container">
       <div class="section-head">
         <span class="sec-num">01 / The Phenomenon</span>
-        <h2 class="section-title" data-hook>Start with a real Lagos market &amp; hospital lab puzzle.</h2>
+        <h2 class="section-title" data-hook>A limp ugu leaf and a hospital drip share one secret.</h2>
         <p class="section-sub">
-          Every lesson in this unit connects to an investigation stretching from Mama Nkechi’s vegetable stall at
-          Mile 12 Market to Dr Halima’s Cytology &amp; Haematology Laboratory at LUTH Idi-Araba, Lagos.
+          Every lesson in this unit adds one clue to the same case, from Mama Ngozi’s stall at Mile 12 Market
+          to Dr Amaka’s teaching laboratory at LUTH.
         </p>
       </div>
 
       <div class="mystery-card reveal">
         <div class="mystery-narrative">
-          <span class="pill pill-amber">The Unit Mystery · Mile 12 Market &amp; LUTH Idi-Araba</span>
-          <h3>Why does pure water rescue a wilted Nigerian <em>ugu</em> leaf, yet shatter every human red blood cell on a slide?</h3>
+          <span class="pill pill-amber">The Unit Mystery · Mile 12 Market &amp; LUTH</span>
+          <h3>The Wilting Ugu and the Saline Drip</h3>
           <p>
-            At Mile 12 Market in Lagos, <strong>Mama Nkechi</strong> sprinkles cool borehole water over wilted
-            fluted pumpkin (<em>Telfairia occidentalis</em> / <em>ugu</em>) leaves that have been sitting in the
-            hot afternoon sun. Within thirty minutes, every leaf blade stands crisp, green, and firm again —
-            and not a single plant cell bursts.
+            At Mile 12 Market, <strong>Mama Ngozi</strong> keeps her ugu leaves crisp with a sprinkle of clean water.
+            One hot afternoon her nephew washes a basket in a bowl of <strong>salty water</strong> “to keep flies off”.
+            Within an hour, the leaves hang limp.
           </p>
           <p>
-            Yet across town at the LUTH Diagnostic Lab in Idi-Araba, a student intern accidentally dilutes a
-            patient’s blood smear with pure distilled water instead of <code>0.9%</code> saline. Under the
-            <code>×400</code> microscope, <strong>Zainab</strong> and <strong>Kelechi</strong> watch in shock as
-            every red blood cell swells into a sphere and bursts open (<strong>haemolysis</strong>). And when
-            Kelechi later draws an iodine-stained <strong>onion bulb epidermis</strong> for his WAEC Paper 3 mock
-            exam and labels “chloroplasts” and “mitochondria”, Chief Examiner <strong>Dr Halima</strong> deducts
-            marks immediately.
+            The same evening at LUTH, <strong>Dr Amaka</strong> refuses to drip plain water into a dehydrated patient’s
+            vein. She asks for <strong>0.9% saline</strong> instead. <strong>Chinedu</strong>, the SS1 student who helps at
+            the stall, wants to know what links a limp leaf to a hospital drip. <strong>Coach Danjuma</strong> is sure:
+            “The salt soaks into the leaves and makes them heavy. And water can’t hurt anybody.”
           </p>
           <p class="mystery-question">
-            What structural armour protects a plant cell in pure water? How do double-membrane, single-membrane,
-            and non-membranous organelles divide cellular work? Why can microscopic <em>Amoeba</em> breathe by
-            simple diffusion while humans need lungs and a heart? And why does an underground onion bulb have
-            zero chloroplasts?
+            Is Coach Danjuma right? Why would salty water wilt a leaf, why could plain water harm a patient who
+            needs water, and why must the saline be exactly 0.9%?
           </p>
+          <ul class="clues">
+            <li><b>Clue 1</b>The leaf wilts, but it does not burst.</li>
+            <li><b>Clue 2</b>The patient needs water, yet plain water is refused.</li>
+            <li><b>Clue 3</b>The saline is exactly 0.9%, no more and no less.</li>
+            <li><b>Clue 4</b>Under a microscope, both the leaf and the blood are made of cells.</li>
+          </ul>
         </div>
 
         <aside class="case-card">
           <div class="case-head">
-            <span>CASE FILE #CELL-05</span>
+            <span>CASE FILE #CELL-01</span>
             <span class="case-status">OPEN</span>
           </div>
           <dl class="case-grid">
-            <div>
-              <dt>Setting</dt>
-              <dd>Mile 12 Vegetable Market, Ogun River Pond &amp; LUTH Cytology Lab (Lagos)</dd>
-            </div>
-            <div>
-              <dt>Specimens tested</dt>
-              <dd><em>Ugu</em> leaf, onion bulb epidermis, human cheek &amp; red blood cells, <em>Euglena</em>, <em>Spirogyra</em>, <em>Volvox</em></dd>
-            </div>
-            <div>
-              <dt>Observed anomaly</dt>
-              <dd>Distilled water makes plant cells <strong>turgid</strong> ($\Psi_w = 0$) but causes animal RBCs to burst (<strong>haemolysis</strong>)</dd>
-            </div>
-            <div>
-              <dt>Your mission</dt>
-              <dd>Master all 5 lessons, 6 calculation archetypes, and the 9 WAEC Chief Examiner drawing rules</dd>
-            </div>
+            <div><dt>Settings</dt><dd>Mama Ngozi’s ugu stall, Mile 12 Market, Lagos · LUTH teaching laboratory</dd></div>
+            <div><dt>Evidence</dt><dd>Limp ugu leaves after a salty wash · a drip that must be 0.9% saline</dd></div>
+            <div><dt>Suspect claim</dt><dd>“Salt soaks into the leaves” (Coach Danjuma)</dd></div>
+            <div><dt>Your mission</dt><dd>See the cells, open them up, measure water moving, then prove it at the Paper 3 bench</dd></div>
           </dl>
-          <div class="case-foot">
-            Opened in <strong>Lesson 1</strong> · Water puzzle cracked in <strong>Lesson 4</strong> · Closed in <strong>Lesson 5</strong>
-          </div>
+          <div class="case-foot">Opened in <strong>Lesson 1</strong> · Solved in <strong>Lesson 4</strong> · Proved in <strong>Lesson 5</strong></div>
         </aside>
       </div>
 
-      <!-- Exam weight strip -->
       <div class="stats reveal">
         <div class="stat">
-          <div class="stat-num">P2 + P3</div>
+          <div class="stat-num">Regularly</div>
           <div class="stat-label">
-            <strong>Tested in theory and practical papers</strong>
-            <span>Organelles, levels of organisation, osmosis, specimen drawing and magnification come up in both written and practical papers</span>
+            <strong>in WAEC Papers 1, 2 and 3</strong>
+            <span>Cell structure, plant vs animal tables and osmosis keep coming back in objectives, theory and practicals</span>
           </div>
         </div>
         <div class="stat">
-          <div class="stat-num">6</div>
+          <div class="stat-num">Paper 3</div>
           <div class="stat-label">
-            <strong>Calculation types to master</strong>
-            <span>Drawing magnification $M = I/A$, actual size in $\mu\text{m}$, microscope power, $\text{SA/V}$ ratio, $\%\Delta m$ osmometry &amp; water potential $\Psi_w$</span>
+            <strong>Onion and cheek cell slides</strong>
+            <span>Preparing, drawing and stating observable differences is a recurring practical</span>
           </div>
         </div>
         <div class="stat">
-          <div class="stat-num">9</div>
+          <div class="stat-num">JAMB</div>
           <div class="stat-label">
-            <strong>Drawing rules for Paper 3</strong>
-            <span>Exact rules for biological line drawings, horizontal guidelines, singular labels, observable differences, and magnification</span>
+            <strong>Topic 1 of the syllabus</strong>
+            <span>Living organisms: cells, their structures and the levels of organisation</span>
           </div>
         </div>
       </div>
@@ -268,178 +254,154 @@
     <section id="journey" class="section container">
       <div class="section-head">
         <span class="sec-num">02 / Your Learning Journey</span>
-        <h2 class="section-title" data-hook>Five progressive lessons. Complete syllabus mastery.</h2>
+        <h2 class="section-title" data-hook>Five lessons, one case, from a cork slice to a saline drip.</h2>
         <p class="section-sub">
-          Each 80-minute lesson opens with a <em>Do Now</em> spaced-retrieval warm-up and guides you through a
-          3D Nigerian story, an interactive 3D lab bench with live graphs, a 3D close-up model, step-by-step
-          worked examples, and WAEC/NECO/JAMB practice.
+          Each lesson takes about 80 minutes with a movement break, opens with a <em>Do Now</em> warm-up, and walks you
+          through a 3D story, a 3D practical bench, a 3D zoom inside the cell, worked examples and a WAEC-style quiz.
         </p>
       </div>
 
       <div class="lessons">
-
-        <!-- Lesson 1 -->
         <article class="lesson reveal is-live" data-lesson="1">
           <div class="lesson-num">01</div>
           <div class="lesson-body">
             <div class="lesson-top">
-              <h3><a href="lessons/lesson-01/index.html">Discovery of the Cell, Cell Theory &amp; Prokaryotes vs Eukaryotes</a></h3>
+              <h3><a href="lessons/lesson-01/index.html">Discovering the Cell: Microscopes, Cell Theory and Prokaryotes vs Eukaryotes</a></h3>
               <span class="lesson-time">80 min · Live</span>
             </div>
             <p>
-              Experience the history of cytology as interactive 3D scenes — from <strong>Robert Hooke (1665)</strong>
-              and <strong>Leeuwenhoek (1674)</strong> to <strong>Félix Dujardin (1835)</strong>,
-              <strong>Schleiden &amp; Schwann (1838–1839)</strong>, and <strong>Rudolf Virchow (1855)</strong>.
-              Compare prokaryotic bacteria with eukaryotic cells, explain why viruses sit outside the Cell Theory,
-              and solve microscope and drawing magnification problems ($M = I \div A$).
+              Put cork, onion peel and a blood smear under a 3D compound microscope, work out total magnification
+              (<code>eyepiece × objective</code>), measure a cell in micrometres, and meet the scientists behind the cell theory.
             </p>
             <div class="lesson-tags">
-              <span>3D History Scenes</span>
-              <span>3D Microscope Magnification Lab</span>
-              <span>3D Bacterium vs Eukaryote Zoom</span>
+              <span>Do Now: JSS science</span>
+              <span>3D Microscope Bench</span>
+              <span>3D Bacterium vs Plant Cell Zoom</span>
               <span>Start lesson →</span>
             </div>
           </div>
         </article>
 
-        <!-- Lesson 2 -->
         <article class="lesson reveal is-live" data-lesson="2">
           <div class="lesson-num">02</div>
           <div class="lesson-body">
             <div class="lesson-top">
-              <h3><a href="lessons/lesson-02/index.html">Inside the Eukaryotic Cell — Organelles &amp; Plant vs Animal Cells</a></h3>
+              <h3><a href="lessons/lesson-02/index.html">Inside the Cell: Organelles, Plant vs Animal Cells</a></h3>
               <span class="lesson-time">80 min · Live</span>
             </div>
             <p>
-              Dissect a 3D Plant Palisade Cell and a 3D Animal Liver Cell organelle by organelle. Master the
-              exam-favourite membrane-count classification (<strong>double membrane</strong>: nucleus,
-              mitochondrion, chloroplast; <strong>single membrane</strong>: ER, Golgi, lysosome, vacuole/tonoplast;
-              <strong>no membrane</strong>: ribosome, centrioles), plastid types, and structured comparison tables
-              for Plant vs Animal cells and Cell Wall vs Cell Membrane.
+              Dissect a 3D plant cell and animal cell organelle by organelle, sort them by how many membranes they have,
+              and find what an ugu cell has that a blood cell lacks: a cellulose wall and a big sap vacuole.
             </p>
             <div class="lesson-tags">
               <span>Do Now from L1</span>
-              <span>3D Organelle Dissector Bench</span>
-              <span>3D Cristae &amp; Grana Zoom</span>
+              <span>3D Organelle Dissector</span>
+              <span>3D Mitochondrion &amp; Chloroplast Zoom</span>
               <span>Start lesson →</span>
             </div>
           </div>
         </article>
 
-        <!-- Lesson 3 -->
         <article class="lesson reveal is-live" data-lesson="3">
           <div class="lesson-num">03</div>
           <div class="lesson-body">
             <div class="lesson-top">
-              <h3><a href="lessons/lesson-03/index.html">Forms of Living Cells &amp; Levels of Biological Organisation</a></h3>
+              <h3><a href="lessons/lesson-03/index.html">Forms of Cells and Levels of Organisation</a></h3>
               <span class="lesson-time">80 min · Live</span>
             </div>
             <p>
-              Embark on a 3D pond micro-safari to inspect free-living single cells (<em>Amoeba</em>,
-              <em>Paramecium</em>, mixotrophic <em>Euglena</em>, <em>Chlamydomonas</em>), colonies
-              (<em>Volvox</em>), filaments (<em>Spirogyra</em>), and true tissues (<em>Hydra</em>). Trace the
-              hierarchy $\text{Organelle} \rightarrow \text{Cell} \rightarrow \text{Tissue} \rightarrow \text{Organ (onion bulb, rhizome)} \rightarrow \text{System} \rightarrow \text{Organism}$
-              and prove with $\text{SA/V} = 6 \div L$ why large organisms need transport systems.
+              Survey a jar of drain water for <em>Amoeba</em>, <em>Euglena</em> and <em>Volvox</em>, tell a colony from a tissue,
+              climb from organelle to organism, and use <code>SA : V = 6/L</code> to see why big bodies need blood.
             </p>
             <div class="lesson-tags">
               <span>Do Now from L1–L2</span>
-              <span>3D Pond Safari &amp; SA/V Lab</span>
-              <span>3D Hierarchy &amp; Diffusion Zoom</span>
+              <span>3D Pond Survey &amp; Cube Bench</span>
+              <span>3D Volvox vs Hydra Zoom</span>
               <span>Start lesson →</span>
             </div>
           </div>
         </article>
 
-        <!-- Lesson 4 -->
         <article class="lesson reveal is-live" data-lesson="4">
           <div class="lesson-num">04</div>
           <div class="lesson-body">
             <div class="lesson-top">
-              <h3><a href="lessons/lesson-04/index.html">The Cell &amp; Its Environment — Diffusion, Osmosis, Turgor &amp; Haemolysis</a></h3>
+              <h3><a href="lessons/lesson-04/index.html">The Cell and Its Environment: Diffusion, Osmosis and Active Transport</a></h3>
               <span class="lesson-time">80 min · Live</span>
             </div>
             <p>
-              Crack the Mile 12 <em>ugu</em> leaf and LUTH blood smear puzzle. Contrast passive diffusion,
-              osmosis, and ATP-driven active transport. Test 3D plant cells and red blood cells across hypotonic,
-              isotonic, and hypertonic media (<strong>turgidity</strong>, <strong>plasmolysis</strong>, <strong>flaccidity</strong>, <strong>haemolysis</strong>,
-              <strong>crenation</strong>), plot the yam osmometry $\%\Delta m$ curve to find the isotonic point, and calculate
-              water potential ($\Psi_w = \Psi_s + \Psi_p$).
+              Run the potato-strip practical in six sucrose solutions, calculate % change in mass, read the isotonic point
+              off your graph, and finally solve the wilting ugu and the 0.9% saline drip.
             </p>
             <div class="lesson-tags">
-              <span>Do Now from L1–L3</span>
-              <span>3D Osmosis &amp; Osmometry Lab</span>
-              <span>3D Aquaporin &amp; ATP Pump Zoom</span>
+              <span>Do Now from L2–L3</span>
+              <span>3D Potato-Strip Osmometer</span>
+              <span>3D Turgid · Plasmolysed · Haemolysis Zoom</span>
               <span>Start lesson →</span>
             </div>
           </div>
         </article>
 
-        <!-- Lesson 5 -->
         <article class="lesson reveal is-live" data-lesson="5">
           <div class="lesson-num">05</div>
           <div class="lesson-body">
             <div class="lesson-top">
-              <h3><a href="lessons/lesson-05/index.html">WAEC Paper 3 Practical — Wet-Mount Microscopy &amp; Biological Drawing Clinic</a></h3>
+              <h3><a href="lessons/lesson-05/index.html">WAEC Paper 3 Clinic: Slides, Biological Drawing and Magnification</a></h3>
               <span class="lesson-time">80 min · Live</span>
             </div>
             <p>
-              Prepare bubble-free wet mounts of <strong>Specimen A (iodine-stained onion epidermis)</strong> and
-              <strong>Specimen B (methylene-blue-stained human cheek cells)</strong> using the $45^\circ$
-              coverslip technique. Distinguish true light-microscope <strong>observable differences</strong> from
-              textbook theory, apply all <strong>9 WAEC Chief Examiner Biological Drawing Rules</strong>, and
-              solve field-of-view and magnification problems.
+              Prepare an iodine-stained onion slide and a methylene-blue cheek slide, audit two drawings against the nine
+              examiner rules, and calculate drawing magnification like a Paper 3 candidate who scores full marks.
             </p>
             <div class="lesson-tags">
               <span>Do Now from L1–L4</span>
-              <span>3D Wet-Mount &amp; Drawing Inspector</span>
-              <span>WAEC Paper 3 Drawing Clinic</span>
+              <span>3D Slide-Preparation Bench</span>
+              <span>3D What-You-Can-Really-See Zoom</span>
               <span>Start lesson →</span>
             </div>
           </div>
         </article>
-
       </div>
 
       <div class="thread-note reveal">
         <span class="thread-icon" aria-hidden="true">↻</span>
         <p>
-          <strong>Built-in spaced retrieval:</strong> Every lesson opens with a <em>Do Now</em> flashcard deck
-          pulling key organelle facts, formulas, and Chief Examiner traps from earlier lessons so nothing is
-          forgotten by Lesson 5.
+          <strong>Built-in spaced retrieval:</strong> every lesson opens with a <em>Do Now</em> warm-up that pulls key ideas
+          from earlier lessons, so nothing is forgotten by the Paper 3 clinic.
         </p>
       </div>
     </section>
 
-    <!-- ======================== 03 · INTERACTIVE CELL EXPLORER ======================== -->
+    <!-- ======================== 03 · EXPLORER ======================== -->
     <section id="explorer" class="section container">
       <div class="section-head">
         <span class="sec-num">03 / Interactive Sneak Preview</span>
-        <h2 class="section-title" data-hook>Explore the four quantitative curves of Cytology &amp; Osmosis.</h2>
+        <h2 class="section-title" data-hook>Four graphs that explain the whole unit.</h2>
         <p class="section-sub">
-          Tap each tab below and drag the slider to see how magnification, tissue osmometry, turgor water
-          potential, and surface-area-to-volume scaling behave across Lessons 1 to 5.
+          Tap a tab, then slide along the graph. You will meet every one of these again, with your own data, in Lessons 1 to 4.
         </p>
       </div>
 
       <div class="explorer reveal">
-        <div class="combo-tabs" role="tablist" aria-label="Cell biology quantitative curves" id="combo-tabs">
-          <button type="button" class="combo-tab is-active" role="tab" aria-selected="true" id="tab-magnification" aria-controls="combo-panel" data-combo="magnification">
-            Microscope Magnification (I = M × A)
-          </button>
-          <button type="button" class="combo-tab" role="tab" aria-selected="false" id="tab-osmometry" aria-controls="combo-panel" data-combo="osmometry">
-            Yam Osmometry (%Δm vs M)
-          </button>
-          <button type="button" class="combo-tab" role="tab" aria-selected="false" id="tab-tonicity" aria-controls="combo-panel" data-combo="tonicity">
-            Water Potential (Ψ<sub>w</sub> = Ψ<sub>s</sub> + Ψ<sub>p</sub>)
-          </button>
-          <button type="button" class="combo-tab" role="tab" aria-selected="false" id="tab-sav" aria-controls="combo-panel" data-combo="sav">
-            SA/V Scaling (6 ÷ L)
-          </button>
+        <div class="combo-tabs" role="tablist" aria-label="Cell biology graphs" id="combo-tabs">
+          <button type="button" class="combo-tab is-active" role="tab" aria-selected="true" data-combo="magnification">Magnification</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="sav">Surface area : volume</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="osmosis">Osmosis</button>
+          <button type="button" class="combo-tab" role="tab" aria-selected="false" data-combo="levels">Levels of organisation</button>
         </div>
 
-        <div class="combo-body" id="combo-panel" role="tabpanel" aria-labelledby="tab-magnification">
+        <div class="combo-body">
           <div class="combo-chart">
-            <div id="combo-graph"></div>
+            <svg id="combo-svg" viewBox="0 0 440 270" role="img" aria-labelledby="combo-title">
+              <g id="combo-grid"></g>
+              <rect id="combo-zone" x="0" y="0" width="0" height="0"></rect>
+              <g id="combo-extra"></g>
+              <path id="combo-curve" d="M 0 0"></path>
+              <g id="combo-points"></g>
+              <line id="combo-dropx" class="cx-drop" x1="0" y1="0" x2="0" y2="0"></line>
+              <line id="combo-dropy" class="cx-drop" x1="0" y1="0" x2="0" y2="0"></line>
+              <circle id="combo-marker" cx="0" cy="0" r="7"></circle>
+            </svg>
             <label class="combo-slide">
               <span id="combo-slide-label">Slide along the graph</span>
               <input type="range" id="combo-slider" min="0" max="1000" value="500" aria-describedby="combo-read" />
@@ -448,26 +410,16 @@
           </div>
 
           <div class="combo-info">
-            <h3 id="combo-title">Microscope &amp; Drawing Magnification (M = I ÷ A)</h3>
-            <p class="combo-example" id="combo-example">WAEC Paper 3 Onion Epidermal Cell (Actual length A = 60 μm = 0.06 mm)</p>
-
+            <h3 id="combo-title">Magnification of one onion cell</h3>
+            <p class="combo-example" id="combo-example">A 0.05 mm (50 µm) onion cell viewed from ×40 up to ×400</p>
             <dl class="combo-dl">
-              <div>
-                <dt>Governing Equation</dt>
-                <dd id="combo-jump">M = I ÷ A &nbsp;·&nbsp; M<sub>total</sub> = M<sub>eyepiece</sub> × M<sub>objective</sub></dd>
-              </div>
-              <div>
-                <dt>Graph Slope &amp; Intercept</dt>
-                <dd id="combo-eq">Straight line through (0, 0) · Slope = ΔI / ΔM = Actual Size A</dd>
-              </div>
-              <div>
-                <dt>Key Exam Rule</dt>
-                <dd><span class="combo-pill ind-both" id="combo-ind">Convert I and A to the SAME unit first (1 cm = 10 mm = 10,000 μm)</span></dd>
-              </div>
+              <div><dt>The rule</dt><dd id="combo-jump">Image size = actual size × magnification</dd></div>
+              <div><dt>Shape of the graph</dt><dd id="combo-eq">Straight line through the origin</dd></div>
+              <div><dt>Exam point</dt><dd><span class="combo-pill ind-both" id="combo-ind">The image grows; the cell does not</span></dd></div>
             </dl>
-
             <p class="combo-why" id="combo-why">
-              For any specimen of fixed actual length A, the apparent image length I grows linearly with magnification M (I = M × A). Always write magnification with a multiplication sign (e.g. ×400) and never attach length units (cm or mm) to M.
+              Turning to a stronger objective makes the image bigger, but the onion cell itself stays 50 µm wide. That is why
+              actual size = image size ÷ magnification always gives the same answer.
             </p>
           </div>
         </div>
@@ -480,96 +432,124 @@
         <span class="sec-num">04 / Learning Outcomes</span>
         <h2 class="section-title" data-hook>What you will master by the end of Lesson 5.</h2>
         <p class="section-sub">
-          Every concept is explored in 3D, and every calculation is broken into steps with a plain-English note under each one.
+          Every skill is practised on a 3D bench and tested with WAEC, NECO and JAMB-style questions.
         </p>
       </div>
 
       <div class="outcomes reveal">
         <div class="outcome">
           <span class="outcome-idx">01</span>
-          <h3>Trace Cell Theory &amp; Prokaryotes vs Eukaryotes</h3>
-          <p>Outline the discoveries of Hooke, Leeuwenhoek, Dujardin, Schleiden, Schwann, and Virchow, and contrast bacterial cells with eukaryotic cells.</p>
+          <h3>Tell the story of the cell</h3>
+          <p>State the cell theory and what Hooke, Dujardin, Schleiden and Schwann each found; define a cell and an organelle.</p>
         </div>
         <div class="outcome">
           <span class="outcome-idx">02</span>
-          <h3>Identify Organelles &amp; Membrane Counts</h3>
-          <p>Distinguish double-membrane (nucleus, mitochondrion, chloroplast), single-membrane (ER, Golgi, lysosome, vacuole), and non-membranous (ribosome, centriole) structures.</p>
+          <h3>Measure like a microscopist</h3>
+          <p>Calculate total magnification, drawing magnification and actual size, converting between mm and µm.</p>
         </div>
         <div class="outcome">
           <span class="outcome-idx">03</span>
-          <h3>Compare Plant vs Animal Cells &amp; Walls</h3>
-          <p>Construct full WAEC comparison tables for Plant vs Animal cells (wall, chloroplast, vacuole, centrioles, starch vs glycogen) and Cell Wall vs Cell Membrane.</p>
+          <h3>Know every organelle</h3>
+          <p>Give the structure and job of each cell part and sort organelles by double, single or no membrane.</p>
         </div>
         <div class="outcome">
           <span class="outcome-idx">04</span>
-          <h3>Distinguish Cell Forms &amp; Organisation Levels</h3>
-          <p>Compare free-living protists (<em>Amoeba, Paramecium, Euglena, Chlamydomonas</em>), colonies (<em>Volvox</em>), filaments (<em>Spirogyra</em>), tissues (<em>Hydra</em>), and organs (onion bulb).</p>
+          <h3>Compare in matched tables</h3>
+          <p>Plant vs animal cell, cell wall vs cell membrane, prokaryote vs eukaryote: one feature per row, both columns filled.</p>
         </div>
         <div class="outcome">
           <span class="outcome-idx">05</span>
-          <h3>Predict Osmosis, Turgor, Plasmolysis &amp; Haemolysis</h3>
-          <p>Explain why hypotonic water causes turgidity in plants but haemolysis in RBCs, find isotonic molarity from $\%\Delta m$ graphs, and apply $\Psi_w = \Psi_s + \Psi_p$.</p>
+          <h3>Read the forms of life</h3>
+          <p>Free-living, colonial, filamentous and tissue-level forms; colony vs tissue; autotrophic, holozoic and saprophytic cells.</p>
         </div>
         <div class="outcome">
           <span class="outcome-idx">06</span>
-          <h3>Ace WAEC Paper 3 Microscopy &amp; Drawings</h3>
-          <p>Prepare stained onion and cheek slides without air bubbles, state true observable differences, obey all 9 Chief Examiner drawing rules, and compute $M = I \div A$.</p>
+          <h3>Climb the levels</h3>
+          <p>Order organelle → cell → tissue → organ → system → organism and explain the cost of being big with <code>SA : V = 6/L</code>.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">07</span>
+          <h3>Predict where water goes</h3>
+          <p>Explain diffusion, osmosis and active transport; predict turgor, plasmolysis, haemolysis and crenation; find the isotonic point.</p>
+        </div>
+        <div class="outcome">
+          <span class="outcome-idx">08</span>
+          <h3>Ace the Paper 3 slide</h3>
+          <p>Prepare onion and cheek slides, draw them to examiner standard and state differences you can actually see.</p>
         </div>
       </div>
 
-      <!-- 6 Calculation Archetypes -->
       <div class="subblock reveal" id="archetypes">
         <div class="subblock-head">
-          <h3>The 6 calculation types</h3>
-          <p>Every numerical problem in WAEC, NECO, and JAMB Cell Biology follows one of these six patterns:</p>
+          <h3>The 6 calculation archetypes</h3>
+          <p>Almost every number question on cells in WAEC, NECO and JAMB is one of these six. Each step has a note under it.</p>
         </div>
 
         <div class="archetypes">
           <div class="arch">
-            <span class="arch-tag">Type 1 · Lesson 1 &amp; 5</span>
-            <h4>Drawing Magnification ($M = I \div A$)</h4>
-            <p>Convert drawing size $I$ and actual specimen size $A$ to the same unit, then divide: <code>M = I ÷ A = 9.0 cm ÷ 1.5 cm = ×6</code>.</p>
+            <span class="arch-tag">Type 1 · Lesson 1</span>
+            <h4>Total magnification</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="M = M_{\text{eyepiece}} \times M_{\text{objective}}">M = M(eyepiece) × M(objective)</span><span class="note">The two lenses work one after the other, so their powers multiply. Never add them.</span></li>
+              <li><span class="tex" data-tex="M = 10 \times 40 = \times 400">M = 10 × 40 = ×400</span><span class="note">A ×10 eyepiece with the ×40 objective gives ×400.</span></li>
+            </ol>
           </div>
           <div class="arch">
-            <span class="arch-tag">Type 2 · Lesson 1 &amp; 5</span>
-            <h4>Actual Cell Size in Micrometres ($\mu\text{m}$)</h4>
-            <p>Convert image size in $\text{mm}$ to $\mu\text{m}$ ($\times 1000$) and divide by $M$: <code>A = I ÷ M = 24000 μm ÷ 400 = 60 μm</code>.</p>
+            <span class="arch-tag">Type 2 · Lesson 1</span>
+            <h4>Cell width from the field of view</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\text{width} = \frac{\text{field diameter}}{\text{cells across}}">width = field diameter ÷ cells across</span><span class="note">Count how many cells sit side by side across the circle of light.</span></li>
+              <li><span class="tex" data-tex="\text{width} = \frac{0.40\text{ mm}}{8} = 0.050\text{ mm}">width = 0.40 mm ÷ 8 = 0.050 mm</span><span class="note">8 onion cells fill a 0.40 mm field at ×400.</span></li>
+              <li><span class="tex" data-tex="0.050\text{ mm} \times 1000 = 50\ \mu\text{m}">0.050 mm × 1000 = 50 µm</span><span class="note">Multiply by 1000 to change millimetres into micrometres.</span></li>
+            </ol>
           </div>
           <div class="arch">
-            <span class="arch-tag">Type 3 · Lesson 1 &amp; 2</span>
-            <h4>Compound Microscope &amp; ATP Scaling</h4>
-            <p>Multiply lens powers <code>M<sub>total</sub> = M<sub>e</sub> × M<sub>o</sub> = 10 × 40 = ×400</code>; scale cristae surface area and ATP output per second.</p>
+            <span class="arch-tag">Type 3 · Lesson 1</span>
+            <h4>Actual size from an image</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\text{actual} = \frac{\text{image}}{M}">actual = image ÷ M</span><span class="note">Divide the size in the picture by how many times it was magnified.</span></li>
+              <li><span class="tex" data-tex="\text{actual} = \frac{24\text{ mm}}{400} = 0.060\text{ mm}">actual = 24 mm ÷ 400 = 0.060 mm</span><span class="note">A cheek cell 24 mm long in a ×400 photograph.</span></li>
+              <li><span class="tex" data-tex="0.060\text{ mm} \times 1000 = 60\ \mu\text{m}">0.060 mm × 1000 = 60 µm</span><span class="note">Cells are usually quoted in micrometres.</span></li>
+            </ol>
           </div>
           <div class="arch">
-            <span class="arch-tag">Type 4 · Lesson 3</span>
-            <h4>Surface-Area-to-Volume Ratio ($\text{SA/V}$)</h4>
-            <p>For a cube of side $L$, $\text{SA} = 6L^2$ and $V = L^3$, so <code>SA/V = 6 ÷ L = 6 ÷ 0.1 mm = 60 mm⁻¹</code>.</p>
+            <span class="arch-tag">Type 4 · Lessons 1 &amp; 5</span>
+            <h4>Drawing magnification</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="M = \frac{\text{drawing length}}{\text{actual length}}">M = drawing length ÷ actual length</span><span class="note">Put both lengths in the same unit before you divide.</span></li>
+              <li><span class="tex" data-tex="M = \frac{50\text{ mm}}{0.25\text{ mm}} = \times 200">M = 50 mm ÷ 0.25 mm = ×200</span><span class="note">The units cancel, so a magnification has no unit: write ×200.</span></li>
+            </ol>
           </div>
           <div class="arch">
-            <span class="arch-tag">Type 5 · Lesson 4</span>
-            <h4>Tissue Osmometry Percentage Mass Change</h4>
-            <p>Use initial mass $m_i$ and final mass $m_f$: <code>%Δm = ((m<sub>f</sub> − m<sub>i</sub>) ÷ m<sub>i</sub>) × 100 = ((4.60 − 4.00) ÷ 4.00) × 100 = +15.0%</code>.</p>
+            <span class="arch-tag">Type 5 · Lesson 3</span>
+            <h4>Surface area : volume of a cube</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\frac{\text{SA}}{V} = \frac{6L^{2}}{L^{3}} = \frac{6}{L}">SA ÷ V = 6L² ÷ L³ = 6/L</span><span class="note">A cube has 6 square faces of area L²; its volume is L³.</span></li>
+              <li><span class="tex" data-tex="\frac{6}{L} = \frac{6}{2\text{ mm}} = 3.0\text{ mm}^{-1}">6/L = 6 ÷ 2 mm = 3.0 mm⁻¹</span><span class="note">Double the side and the ratio halves: big bodies have little surface for their size.</span></li>
+            </ol>
           </div>
           <div class="arch">
             <span class="arch-tag">Type 6 · Lesson 4</span>
-            <h4>Plant Cell Water Potential ($\Psi_w$)</h4>
-            <p>Combine negative solute potential $\Psi_s$ and positive turgor pressure $\Psi_p$: <code>Ψ<sub>w</sub> = Ψ<sub>s</sub> + Ψ<sub>p</sub> = −650 + 450 = −200 kPa</code>.</p>
+            <h4>Percentage change in mass</h4>
+            <ol class="arch-steps">
+              <li><span class="tex" data-tex="\%\ \text{change} = \frac{\text{final} - \text{initial}}{\text{initial}} \times 100">% change = (final − initial) ÷ initial × 100</span><span class="note">Always divide by the starting mass, because strips start at different masses.</span></li>
+              <li><span class="tex" data-tex="\frac{2.85 - 2.50}{2.50} \times 100 = +14.0\%">(2.85 − 2.50) ÷ 2.50 × 100 = +14.0%</span><span class="note">A gain means water entered the potato by osmosis (pure water, hypotonic).</span></li>
+            </ol>
           </div>
         </div>
 
         <div class="formula-strip">
-          <div class="formula-pill"><code>M = I ÷ A</code><span>Biological drawing magnification</span></div>
-          <div class="formula-pill"><code>M<sub>total</sub> = M<sub>e</sub> × M<sub>o</sub></code><span>Compound microscope magnification</span></div>
-          <div class="formula-pill"><code>SA / V = 6 ÷ L</code><span>Surface-area-to-volume ratio</span></div>
-          <div class="formula-pill"><code>Ψ<sub>w</sub> = Ψ<sub>s</sub> + Ψ<sub>p</sub></code><span>Plant cell water potential</span></div>
+          <div class="formula-pill"><code>M = eyepiece × objective</code><span>Microscope</span></div>
+          <div class="formula-pill"><code>actual = image ÷ M</code><span>Real size</span></div>
+          <div class="formula-pill"><code>SA : V = 6/L</code><span>Why big bodies need blood</span></div>
+          <div class="formula-pill"><code>% change = Δm ÷ m₀ × 100</code><span>Potato osmometer</span></div>
         </div>
       </div>
 
-      <!-- 3 Common Myths -->
       <div class="subblock reveal" id="myths">
         <div class="subblock-head">
-          <h3>Three exam traps we’ll bust</h3>
-          <p>Tap each card to flip it and see the biological truth:</p>
+          <h3>Three myths we will bust</h3>
+          <p>Tap each card to flip it and see the biology:</p>
         </div>
 
         <div class="myths">
@@ -577,14 +557,12 @@
             <div class="myth-inner">
               <div class="myth-face myth-front">
                 <span class="myth-badge">MYTH 01</span>
-                <h4>“Plant cells have a cell wall instead of a cell membrane, and chloroplasts replace mitochondria.”</h4>
-                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+                <h4>“Robert Hooke discovered living cells.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
               </div>
               <div class="myth-face myth-back">
                 <span class="myth-badge myth-badge-true">TRUTH</span>
-                <p>
-                  <strong>Plant cells have both.</strong> Every plant cell has a selectively permeable <strong>plasma membrane</strong> pressed inside its rigid <strong>cellulose cell wall</strong>, and it needs <strong>mitochondria</strong> 24 hours a day to respire glucose into <strong>ATP</strong>.
-                </p>
+                <p>Hooke’s cork was <strong>dead</strong>. He saw only the <strong>empty walls</strong> and named the spaces “cells”. Dujardin later described the living jelly inside.</p>
               </div>
             </div>
           </button>
@@ -593,14 +571,12 @@
             <div class="myth-inner">
               <div class="myth-face myth-front">
                 <span class="myth-badge">MYTH 02</span>
-                <h4>“Always draw and label green chloroplasts when viewing an onion bulb epidermis slide in WAEC Paper 3.”</h4>
-                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+                <h4>“The cell wall is a membrane that controls what enters.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
               </div>
               <div class="myth-face myth-back">
                 <span class="myth-badge myth-badge-true">TRUTH</span>
-                <p>
-                  <strong>Onion bulb cells have no chloroplasts.</strong> The fleshy onion bulb grows <strong>underground without sunlight</strong> to store food, so its epidermal cells contain no chloroplasts. Labelling chloroplasts on an onion bulb drawing loses marks in Paper 3.
-                </p>
+                <p>The wall is <strong>fully permeable cellulose</strong>, not a membrane. The <strong>cell membrane</strong> inside it is the selective barrier.</p>
               </div>
             </div>
           </button>
@@ -609,14 +585,12 @@
             <div class="myth-inner">
               <div class="myth-face myth-front">
                 <span class="myth-badge">MYTH 03</span>
-                <h4>“Spirogyra filaments and Volvox colonies are tissues because they consist of many cells joined together.”</h4>
-                <span class="myth-flip-hint">Tap to reveal truth ↻</span>
+                <h4>“Every plant cell has chloroplasts, so label them on your onion drawing.”</h4>
+                <span class="myth-flip-hint">Tap to reveal the truth ↻</span>
               </div>
               <div class="myth-face myth-back">
                 <span class="myth-badge myth-badge-true">TRUTH</span>
-                <p>
-                  <strong>Colonies and filaments are not tissues.</strong> In <em>Volvox</em> and <em>Spirogyra</em>, the cells are structurally identical and physiologically independent. In a true <strong>tissue</strong> (like <em>Hydra</em> ectoderm), cells are <strong>specialised and interdependent</strong>.
-                </p>
+                <p>Onion bulb scales grow <strong>underground, without light</strong>, so their cells have <strong>no chloroplasts</strong>. Never label one on an onion drawing.</p>
               </div>
             </div>
           </button>
@@ -628,63 +602,61 @@
     <section id="method" class="section container">
       <div class="section-head">
         <span class="sec-num">05 / How Every Lesson Works</span>
-        <h2 class="section-title" data-hook>Phenomenon-first, active 3D inquiry.</h2>
+        <h2 class="section-title" data-hook>See it first, then explain it.</h2>
         <p class="section-sub">
-          Every lesson follows the same five-step inquiry loop so you observe the living specimen in 3D before memorising any definition.
+          After a short Do Now warm-up, every lesson follows the same five-step inquiry loop, with a movement break
+          at 45 minutes, so you test an idea before you memorise it.
         </p>
       </div>
 
       <ol class="loop reveal">
         <li>
           <span class="loop-step">1 · Wonder</span>
-          <h4>Watch the 3D Nigerian story &amp; pin your prediction</h4>
-          <p>See Zainab, Kelechi, Mama Nkechi, and Dr Halima confront a real cellular puzzle and record your initial hypothesis.</p>
+          <h4>Watch the 3D story and pin your prediction</h4>
+          <p>Mama Ngozi, Chinedu, Coach Danjuma and Dr Amaka meet a real puzzle. Post your guess on the Wonder Wall.</p>
         </li>
         <li>
           <span class="loop-step">2 · Investigate</span>
-          <h4>Operate the 3D Virtual Microscope &amp; Cytology Bench</h4>
-          <p>Switch objective lenses, dissect 3D organelles, test pond protists, run tonicity chambers, and plot live graphs.</p>
+          <h4>Work the 3D practical bench</h4>
+          <p>Change objectives, tap organelles, cut cubes or weigh potato strips yourself and record the results.</p>
         </li>
         <li>
           <span class="loop-step">3 · Make sense</span>
-          <h4>Zoom into 3D Ultrastructure &amp; Comparison Tables</h4>
-          <p>Inspect mitochondrial cristae, chloroplast grana, and phospholipid bilayers alongside WAEC comparison tables.</p>
+          <h4>Zoom inside the cell</h4>
+          <p>See membranes, organelles and water molecules up close, then build the rules and tables from what you saw.</p>
         </li>
         <li>
           <span class="loop-step">4 · Apply</span>
-          <h4>Worked examples, bridge challenge &amp; WAEC/JAMB quiz</h4>
-          <p>Follow each calculation step by step, with a plain-English note under every line, then test yourself on 12 questions per lesson.</p>
+          <h4>Worked examples, the Bridge and a quiz</h4>
+          <p>Three step-by-step calculations, a case-solving challenge and 12 exam-style questions every lesson.</p>
         </li>
         <li>
           <span class="loop-step">5 · Reflect</span>
-          <h4>Rate your confidence &amp; unlock 30-mark model solutions</h4>
-          <p>Rate yourself 1–4 on each goal, complete the blank-page recall, and tackle the 30-mark structured assignment.</p>
+          <h4>Rate yourself and unlock solutions</h4>
+          <p>Rate each goal 1–4, do the blank-page recall, then try the 30-mark paper before opening the model answers.</p>
         </li>
       </ol>
 
       <div class="kit reveal" id="kit">
-        <h3>What’s inside every single lesson</h3>
+        <h3>What’s inside every lesson</h3>
         <div class="kit-grid">
-          <div><strong>↻ Spaced Do Now</strong><span>4 retrieval flashcards from earlier lessons</span></div>
-          <div><strong>🎬 3D Story Scene</strong><span>Animated Nigerian market &amp; lab characters</span></div>
-          <div><strong>🔬 3D Virtual Biology Lab</strong><span>Interactive bench with a live graph</span></div>
-          <div><strong>🧬 3D Ultrastructure Zoom</strong><span>Cristae, grana, nucleoid &amp; bilayer models</span></div>
-          <div><strong>📐 Step-by-step solutions</strong><span>Every line of working explained</span></div>
-          <div><strong>🎙 Nigerian narrator</strong><span>Read-along guided tour in a Nigerian voice</span></div>
+          <div><strong>↻ Spaced Do Now</strong><span>4 warm-up cards from earlier lessons</span></div>
+          <div><strong>3D Story Scene</strong><span>The market stall and the LUTH lab, with the four characters</span></div>
+          <div><strong>3D Practical Bench</strong><span>Microscope, dissector, pond survey, potato strips or slides</span></div>
+          <div><strong>3D Concept Zoom</strong><span>Inside a cell, a mitochondrion or a bursting red cell</span></div>
+          <div><strong>Worked Examples</strong><span>Every step written out with a note under each line</span></div>
+          <div><strong>Nigerian Narrator</strong><span>A spoken, spotlighted tour in Nigerian English</span></div>
         </div>
       </div>
 
-      <!-- Finale CTA -->
       <div class="finale reveal">
         <div class="finale-copy">
           <span class="pill pill-teal">Ready when you are</span>
-          <h2>Let’s step from Mile 12 Market into the 3D Cytology Lab.</h2>
-          <p>Start with Lesson 1 to explore the discovery of the cell, Cell Theory pioneers, prokaryotic vs eukaryotic cells, and magnification calculations.</p>
+          <h2>Let’s look at an ugu leaf the way a scientist does.</h2>
+          <p>Start with Lesson 1: switch on the microscope, meet the cell theory and measure your first cell in micrometres.</p>
         </div>
         <div class="finale-actions">
-          <a href="lessons/lesson-01/index.html" class="btn btn-primary btn-lg">
-            Start Lesson 1: Cell Theory &amp; Microscopy →
-          </a>
+          <a href="lessons/lesson-01/index.html" class="btn btn-primary btn-lg">Start Lesson 1: Discovering the Cell →</a>
         </div>
       </div>
     </section>
@@ -692,58 +664,18 @@
   </main>
 
   <footer class="footer container">
-    <p>StudyPipe · SS1 Biology · Plant &amp; Animal Cell Structure, Organisation &amp; Microscopy · 100% Offline Edition</p>
+    <p>StudyPipe · SS1 Biology · Plant and Animal Cells · 100% Offline Edition</p>
   </footer>
 
-  <script>
-    window.WELCOME_COMBOS = {
-      "magnification": {
-        title: "Microscope & Drawing Magnification (M = I ÷ A)",
-        example: "WAEC Paper 3 Onion Epidermal Cell (Actual length A = 60 μm = 0.06 mm)",
-        jump: "M = I ÷ A · M_total = M_eyepiece × M_objective",
-        eq: "Straight line through (0, 0) · Slope = ΔI / ΔM = Actual Size A",
-        ind: "Convert I and A to the SAME unit first (1 cm = 10 mm = 10,000 μm)",
-        indClass: "ind-both",
-        why: "For any specimen of fixed actual length A, the apparent image length I grows linearly with magnification M (I = M × A). Always write magnification with a multiplication sign (e.g. ×400) and never attach length units (cm or mm) to M."
-      },
-      "osmometry": {
-        title: "Plant Tissue Osmometry Curve (%Δm vs Sucrose Molarity)",
-        example: "Yam or potato cylinders immersed in 0.0 M to 0.8 M sucrose solutions",
-        jump: "%Δm = ((m_f − m_i) ÷ m_i) × 100%",
-        eq: "Horizontal intercept (%Δm = 0%) gives the Isotonic Concentration (0.30 M)",
-        ind: "Below 0.30 M: gains water (turgid) · Above 0.30 M: loses water (plasmolysed)",
-        indClass: "ind-pp",
-        why: "In hypotonic solutions (< 0.30 M), water enters the yam vacuoles by osmosis and mass increases (+%Δm). In hypertonic solutions (> 0.30 M), water leaves by osmosis and mass decreases (−%Δm). Where the line crosses 0%, the external molarity equals the cell sap molarity."
-      },
-      "tonicity": {
-        title: "Plant Cell Water Potential & Turgor Equilibrium (Ψ_w = Ψ_s + Ψ_p)",
-        example: "Wilted ugu leaf mesophyll cell recovering in pure borehole water",
-        jump: "Ψ_w = Ψ_s + Ψ_p (Full turgidity when Ψ_p = −Ψ_s so Ψ_w = 0 kPa)",
-        eq: "Upward linear rise of Ψ_w as wall turgor pressure Ψ_p builds up",
-        ind: "Rigid cellulose wall prevents bursting; animal RBCs have no wall, so they burst",
-        indClass: "ind-both",
-        why: "As water enters a plant cell by osmosis, the central vacuole swells and pushes the protoplasm against the inelastic cellulose cell wall. The outward turgor pressure Ψ_p rises (the wall pushes back inward with equal wall pressure) until it balances the negative solute potential Ψ_s (Ψ_w = 0 kPa), stopping further net water entry."
-      },
-      "sav": {
-        title: "Surface-Area-to-Volume Ratio Scaling (SA/V = 6 ÷ L)",
-        example: "Why microscopic Amoeba (L = 0.1 mm) needs no lungs while a mammal does",
-        jump: "SA = 6L² · V = L³ ⇒ SA / V = 6 ÷ L",
-        eq: "Hyperbolic drop as organism size L increases",
-        ind: "Small L = huge SA/V (diffusion suffices) · Large L = tiny SA/V (organs needed)",
-        indClass: "ind-mo",
-        why: "When an organism's linear size L increases 100-fold, its surface area grows by 10,000× but its volume grows by 1,000,000×. So SA/V drops 100-fold, forcing multicellular animals to evolve specialised respiratory and circulatory systems."
-      }
-    };
-  </script>
-  <!-- light UI scripts first so tabs, cards and the narrator work before the 676 KB 3D engine is parsed -->
-  <script src="assets/js/study-graph.js"></script>
-  <script src="assets/js/welcome.js"></script>
-  <script src="assets/js/math-kit.js"></script>
-  <script src="assets/js/welcome-narration.js"></script>
-  <script src="assets/js/narrator.js"></script>
   <script src="assets/js/three.min.js"></script>
   <script src="assets/js/scene-kit.js"></script>
   <script src="assets/js/cell-kit.js"></script>
   <script src="assets/js/welcome-lab.js"></script>
+  <script src="assets/js/welcome-explorer.js"></script>
+  <script src="assets/js/welcome.js"></script>
+  <script src="assets/js/welcome-narration.js"></script>
+  <script src="assets/js/narrator.js"></script>
+  <script src="assets/js/math-kit.js"></script>
+  <script src="./assets/js/code-kit.js"></script>
 </body>
 </html>

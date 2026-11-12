@@ -64,6 +64,7 @@ topics/<slug>/html/
 2. Copy the shared shell & engine into `topics/<slug>/html/assets/`:
    - Copy `.agents/skills/lesson-renderer/assets/lesson-shell/assets/` → `topics/<slug>/html/assets/` (`css/`, `js/scene-kit.js`, `js/study-graph.js`, `js/lesson-kit.js`, `js/story-scene.js`, `js/narrator.js`, `js/welcome.js`). Fonts are not in the shell; they come with the theme.
    - Copy `kits/_vendor/three-bundle.min.js` → `topics/<slug>/html/assets/js/three.min.js`.
+   - Copy `kits/_vendor/paper-core.min.js` → `topics/<slug>/html/assets/js/paper-core.min.js`.
    - Theme: read `theme:` from `topics/<slug>/status.md`. If it is missing, use the `queue.md` line's `theme:` or `themes/default.txt` (interactive mode: run-topic has already asked the human).
 3. Build the **Unit Welcome Hub (`topics/<slug>/html/index.html`)** + `assets/js/welcome-lab.js` + `assets/js/welcome-narration.js`:
    - Top `.nav` with unit brand, anchor links (`#mystery`, `#journey`, `#explorer`, `#master`, `#method`), and `Offline ready` pill.
@@ -71,7 +72,7 @@ topics/<slug>/html/
    - `.marquee` scrolling key terms.
    - `#mystery` Unit Case File + `.stats` exam weight cards.
    - `#journey` Lesson Roadmap cards (`<article class="lesson reveal is-live">`) linking to `lessons/lesson-01/index.html` through `lessons/lesson-0N/index.html`.
-   - `#explorer` interactive concept tab switcher (`window.WELCOME_COMBOS`) + SVG curve (`#combo-curve`).
+   - `#explorer` interactive concept tab switcher (`window.WELCOME_COMBOS`) + 2D Paper.js animated curve (`#combo-canvas` / `#combo-curve`).
    - `#master` outcomes grid + `#archetypes` calculation cards + `.formula-strip` + `#myths` 3D flip cards.
    - `#method` 5-step inquiry loop + `#kit` summary + `.finale` CTA to `lessons/lesson-01/index.html`.
 4. Build the shared **Spaced Retrieval Bank (`topics/<slug>/html/assets/js/retrieval-bank.js`)**:
@@ -81,7 +82,16 @@ topics/<slug>/html/
    - Inside `lessons/lesson-0X/index.html`, reference shared assets via `../../assets/css/*.css` (`fonts.css`, `style.css`, `lesson.css`, `narrator.css`, `math.css`) and `../../assets/js/*.js` (`three.min.js`, `scene-kit.js`, `story-scene.js`, `lesson-kit.js`, `retrieval-bank.js`, `narrator.js`, `math-kit.js`), and link the top nav & footer prev/next buttons to `../../index.html` and sibling lessons (`../lesson-0Y/index.html`).
    - Run `node scripts/apply-math.mjs topics/<slug>` to ensure `math.css` and `math-kit.js` (`window.StudyMath`) are installed and linked across the Welcome Hub and all lessons so every formula, worked example, quiz explanation, Do Now answer, and assignment solution renders in LaTeX with all calculation steps expanded and an explainer note underneath every line.
 6. **Apply the theme:** `node scripts/apply-theme.mjs topics/<slug>` (after every page exists, and again whenever pages are added). It installs `fonts.css` + fonts + `theme.css`, links `theme.css` last on every page, and tokenises any literal colours. Write topic-specific CSS with tokens (`var(--paper-card)`, `rgba(var(--ok-rgb), .1)`, `var(--font-mono)`) so it follows any theme.
+6b. **Explainer videos** (step 5v) are added later by `node scripts/apply-video.mjs topics/<slug>`. It installs `assets/video/`, `assets/js/video-embed.js` and `assets/css/lesson-video.css`, and embeds each video at the start of the lesson's Make Sense section. Keep a `<span class="phase">…Make sense…</span>` label and an `<h2>` in that section so it can be found, and keep `StudyNarrator.pause()` in `narrator.js`.
 7. Run `node scripts/qa.mjs topics/<slug>` to verify the Unit Welcome Hub and all `lessons/lesson-0X/index.html` pages pass offline, theme (theme.css linked, theme fonts load), 3D canvas, StudyMath LaTeX step-by-step calculation, and narrator checks.
+
+## Keep the bench compact (phone first) — and never reuse a shared class name
+
+The human's standing feedback on the first biology units was *"the 3D kits are too stretched… I like what it did there, but it should be much more concise."* `scripts/qa.mjs` now enforces this; build it right the first time.
+
+- **Shared class names are reserved.** `assets/css/style.css` and `lesson.css` own `.lab` (the Welcome Hub's **560 px** hero stage), `.stage`, `.hud`, `.hero`, `.tbl`, `.seg`, `.chips`. Reusing one for a small lesson element silently inherits its size: a two-word `<span class="lab">MODE</span>` became 560 px tall and stretched four heart lessons. Use a lesson-specific name (e.g. `.blab` for a bench-bar label).
+- **Budget at 360 px:** every control bar (`.stage-bar`, `.bench-mode`, `.seg`, `.chips`, `.bench-readout`) under **260 px**; everything below the canvas inside `#bench-stage` under **~600 px**; the whole `#practical` section under **~2300 px**. QA blocks on empty space inside a bar and warns past these numbers.
+- **The shape that works** (reference: `topics/ss2-bio-heart-circulation/html/lessons/lesson-03/`): method cards as a number badge + heading + one line of ≤ 9 words (tight list on phones, 2×2 grid on desktop) · a readout of only the tiles the learner needs, fitting **one row** with short values that cannot overflow · one control block — full-width segmented control, then equal-size buttons in an even grid, then small toggles in one row with the hint line under them, and no wordy caption above each row · a results table of **one compact row per trial**, with long text as a smaller second line that expands on tap, never four stacked cards of dashes.
 
 ## Labs must plot what they measure (graphs + phone readability)
 - Every 3D practical bench that produces readings gets a **live graph card** (`.graph-card`) under it, built with `assets/js/study-graph.js` in a per-lesson `graph.js` that listens to CustomEvents dispatched by `bench.js`. Plot the graph WAEC actually asks for (V–I with gradient = R; V–I for a cell with intercept E and gradient −r; P/η against load R; I_g against jockey position, etc.), with ticks, units, best-fit line and a slope triangle, plus a dynamic note explaining the takeaway. Reference: `topics/ss2-phy-ohms-law-circuits/html/lessons/lesson-01/graph.js`.

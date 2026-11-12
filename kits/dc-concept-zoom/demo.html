@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: dc-concept-zoom</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #stage{position:relative;width:100%;height:52vh;min-height:300px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  .row{padding:4px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  button{min-height:38px;padding:0 11px;border-radius:19px;border:0;background:#35505f;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  label{display:flex;align-items:center;gap:6px;font-size:12.5px}
+  input[type=range]{width:150px}
+  #readout{padding:4px 10px 12px;font:12px/1.5 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-word}
+</style>
+</head><body>
+<div id="stage"><canvas id="c"></canvas></div>
+<div class="row" id="modes"></div>
+<div class="row" id="ctl"></div>
+<div id="readout"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="dc-concept-zoom.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  if ("outputColorSpace" in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace; else renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  /* same studio environment map as SceneKit (lessons mount this kit on a SceneKit stage) */
+  (function () {
+    var es = new THREE.Scene();
+    es.add(new THREE.Mesh(new THREE.BoxGeometry(20, 20, 20), new THREE.MeshBasicMaterial({ color: 0x141b30, side: THREE.BackSide })));
+    function panel(w, h, c, p, r) { var m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide })); m.position.copy(p); if (r) m.rotation.copy(r); es.add(m); }
+    panel(8, 3, new THREE.Color(4, 4, 4.2), new THREE.Vector3(0, 9.5, 0), new THREE.Euler(Math.PI / 2, 0, 0));
+    panel(2.5, 8, new THREE.Color(3, 3.1, 3.4), new THREE.Vector3(-9.5, 2, 2), new THREE.Euler(0, Math.PI / 2, 0));
+    panel(2, 7, new THREE.Color(3.2, 0.6, 1.6), new THREE.Vector3(9.5, 1, -2), new THREE.Euler(0, -Math.PI / 2, 0));
+    panel(6, 1.5, new THREE.Color(2.6, 1.6, 0.5), new THREE.Vector3(0, 1, -9.5), null);
+    panel(5, 4, new THREE.Color(0.9, 1.6, 2.6), new THREE.Vector3(3, 3, 9.5), new THREE.Euler(0, Math.PI, 0));
+    var pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.035).texture; pm.dispose();
+  })();
+  var camera = new THREE.PerspectiveCamera(36, 1, 0.05, 80);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xc4d6ff, 0x1a0f1e, 0.6));
+  var key = new THREE.DirectionalLight(0xffffff, 1.2); key.position.set(4, 9, 6); scene.add(key);
+  var rim = new THREE.DirectionalLight(0x7cc4ff, 0.8); rim.position.set(-5, 6, -6); scene.add(rim);
+
+  var kit = DcConceptZoom.create({ mode: "lattice", onEvent: function (n, d) { if (n !== "state") console.log("event", n, JSON.stringify(d)); } });
+  scene.add(kit);
+
+  var view = { target: new THREE.Vector3(0, 1, 0), dist: 8 }, goal = null, pitch = 0.16, yaw = 0.12;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(2.1, 1.25 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x + Math.sin(yaw) * Math.cos(pitch) * d, v.target.y + Math.sin(pitch) * d, v.target.z + Math.cos(yaw) * Math.cos(pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, now) {
+    var v = kit.viewFor(name); goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist };
+    if (now) { view.target.copy(goal.target); view.dist = goal.dist; applyView(view); goal = null; }
+  }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view); }
+  new ResizeObserver(resize).observe(host); resize();
+
+  function btn(parent, label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; parent.appendChild(b); return b; }
+  function slider(parent, label, min, max, step, val, fn) {
+    var l = document.createElement("label"), i = document.createElement("input"), s = document.createElement("span");
+    i.type = "range"; i.min = min; i.max = max; i.step = step; i.value = val; s.textContent = label;
+    i.oninput = function () { fn(+i.value); }; l.appendChild(s); l.appendChild(i); parent.appendChild(l); return i;
+  }
+  var modesEl = document.getElementById("modes"), ctl = document.getElementById("ctl"), modeBtns = {};
+  ["lattice", "cell", "node", "coil", "ramp"].forEach(function (m) { modeBtns[m] = btn(modesEl, m, function () { setMode(m); }); });
+  btn(modesEl, "labels", function (b) { var on = !b.classList.contains("on"); b.classList.toggle("on", on); kit.setState({ labels: !on }); });
+  function setMode(m) {
+    kit.setMode(m); Object.keys(modeBtns).forEach(function (k) { modeBtns[k].classList.toggle("on", k === m); });
+    ctl.innerHTML = ""; var p = kit.params();
+    if (m === "lattice") {
+      [0.30, 0.60, 1.20].forEach(function (d) { btn(ctl, "d " + d.toFixed(2) + " mm", function () { kit.setState({ d_mm: d }); }); });
+      slider(ctl, "T °C", 20, 200, 10, p.T_C, function (v) { kit.setState({ T_C: v }); });
+    } else if (m === "cell") {
+      btn(ctl, "key open/closed", function () { kit.setState({ closed: !kit.params().closed }); });
+      btn(ctl, "Emeka 12 V", function () { kit.setState({ E: 12.0, r: 1.2, R: 2.8 }); });
+      btn(ctl, "bench 6 V", function () { kit.setState({ E: 6.0, r: 1.5, R: 10.5 }); });
+      slider(ctl, "R Ω", 0.5, 20, 0.5, p.R, function (v) { kit.setState({ R: v }); });
+    } else if (m === "node") {
+      slider(ctl, "R₁ Ω", 1, 20, 1, p.R1, function (v) { kit.setState({ R1: v }); });
+      slider(ctl, "R₂ Ω", 1, 20, 1, p.R2, function (v) { kit.setState({ R2: v }); });
+      btn(ctl, "WE1 (14 V, Rs 3)", function () { kit.setState({ E: 14.0, r: 1.0, R1: 6.0, R2: 12.0, Rs: 3.0 }); });
+      btn(ctl, "reset", function () { kit.reset(); });
+    } else if (m === "coil") {
+      btn(ctl, "ammeter 3 A", function () { kit.setState({ conversion: "ammeter", target: 3.0 }); });
+      btn(ctl, "voltmeter 40 V", function () { kit.setState({ conversion: "voltmeter", target: 40 }); });
+      btn(ctl, "bare 15 mA", function () { kit.setState({ conversion: "none" }); });
+      slider(ctl, "input ×FS", 0, 1.1, 0.01, p.input, function (v) { kit.setState({ input: v }); });
+    } else if (m === "ramp") {
+      slider(ctl, "l cm", 0, 100, 0.5, p.l, function (v) { kit.setState({ l: v }); });
+      btn(ctl, "find balance", function () { kit.findBalance(); });
+      btn(ctl, "L05 1.50 V", function () { kit.setState({ k: 0.0200, E_cell: 1.50, l: 40 }); });
+      btn(ctl, "Emeka 12 V", function () { kit.setState({ k: 0.150, E_cell: 12.0, l: 40 }); });
+    }
+    ["all"].concat(Object.keys(kit.parts).slice(0, 6)).forEach(function (n) { btn(ctl, "view " + n, function () { gotoView(n); kit.highlight(n === "all" ? null : n); }); });
+    gotoView("all", true);
+  }
+
+  var ro = document.getElementById("readout"), last = "";
+  function paint() {
+    var r = kit.reading(), s = JSON.stringify(r, function (k, v) { return k === "raw" ? undefined : v; }).replace(/,"/g, ', "');
+    s += "\ntriangles " + kit.triangles();
+    if (s !== last) { last = s; ro.textContent = s; }
+  }
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      view.target.lerp(goal.target, Math.min(1, dt * 4)); view.dist += (goal.dist - view.dist) * Math.min(1, dt * 4); applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01) goal = null;
+    }
+    controls.update(); renderer.render(scene, camera); paint();
+  })();
+  setMode("lattice");
+  window.__kit = kit; window.__gotoView = gotoView; window.__setMode = setMode;
+})();
+</script>
+</body></html>

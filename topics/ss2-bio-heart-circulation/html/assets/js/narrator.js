@@ -73,6 +73,7 @@
         '<div class="narr-body">' +
           '<div class="narr-chapter"><span class="title">Welcome</span><span class="count"></span></div>' +
           '<p class="narr-caption" aria-live="polite"></p>' +
+          '<p class="narr-novoice" hidden>No voice on this device, so the narrator shows captions only. Open the gear for voice settings.</p>' +
           '<div class="narr-wait"><i></i><span class="wait-text">Your turn!</span></div>' +
         '</div>' +
         '<div class="narr-win">' +
@@ -181,12 +182,19 @@
       ? (hasNG ? "Nigerian English (en-NG) voice active · offline voices marked." : "Nigerian English (en-NG) prioritised · install en-NG in device TTS settings for local accent.")
       : "No voice found on this device. Captions will play on their own.";
   }
+  function showNoVoice(on) {
+    var n = dock.querySelector(".narr-novoice");
+    if (n) n.hidden = !on;
+  }
   if (speechOK) {
     loadVoices();
-    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
-    else synth.onvoiceschanged = loadVoices;
+    showNoVoice(!voices.length);
+    var onVoices = function () { loadVoices(); showNoVoice(!voices.length); };
+    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", onVoices);
+    else synth.onvoiceschanged = onVoices;
   } else {
     el.note.textContent = "This browser can't speak aloud. Captions will play on their own.";
+    showNoVoice(true);
   }
   el.voice.addEventListener("change", function () {
     voice = voices.filter(function (v) { return v.name === el.voice.value; })[0] || voice;
@@ -796,6 +804,8 @@
   window.StudyNarrator = {
     start: function () { setMini(false); go(0, 0, true); },
     goTo: function (ch, st) { setMini(false); go(ch, st || 0, true); },
+    pause: function () { stopSpeech(); setPlaying(false); },
+    isPlaying: function () { return !!state.playing; },
     close: close, minimize: minimize, expand: expand, burst: burst
   };
 })();

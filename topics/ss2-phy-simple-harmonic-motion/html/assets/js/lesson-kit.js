@@ -324,5 +324,40 @@
     });
   });
 
+  // ---------- phone tables: stamp each cell with its column heading so CSS can stack rows as cards ----------
+  function labelTable(t) {
+    var SUBS = { "0": "₀", "1": "₁", "2": "₂", "3": "₃", "4": "₄", "5": "₅", "6": "₆", "7": "₇", "8": "₈", "9": "₉", a: "ₐ", e: "ₑ", h: "ₕ", i: "ᵢ", j: "ⱼ", k: "ₖ", l: "ₗ", m: "ₘ", n: "ₙ", o: "ₒ", p: "ₚ", r: "ᵣ", s: "ₛ", t: "ₜ", u: "ᵤ", v: "ᵥ", x: "ₓ" };
+    function headText(th) {
+      // keep subscripts readable in the CSS attr() label: R<sub>s</sub> → Rₛ (falls back to R_g when no glyph exists)
+      var c = th.cloneNode(true);
+      Array.prototype.forEach.call(c.querySelectorAll("sub"), function (sb) {
+        var tx = sb.textContent, out = "";
+        for (var k = 0; k < tx.length; k++) { if (!SUBS[tx[k]]) { out = "_" + tx; break; } out += SUBS[tx[k]]; }
+        sb.replaceWith(document.createTextNode(out));
+      });
+      return c.textContent.replace(/\s+/g, " ").trim();
+    }
+    var heads = Array.prototype.map.call(t.querySelectorAll("thead th"), headText);
+    if (!heads.length) return;
+    t.classList.add("cards");
+    t.querySelectorAll("tbody tr").forEach(function (tr) {
+      Array.prototype.forEach.call(tr.children, function (td, i) {
+        var span = +(td.getAttribute("colspan") || 1);
+        if (heads[i] && !td.hasAttribute("data-label") && span === 1) td.setAttribute("data-label", heads[i]);
+        // mixed inline content would become separate flex items in the stacked layout: wrap it once
+        if (td.childNodes.length > 1 && !td.querySelector("select, input, textarea, button")) {
+          var wrap = document.createElement("span");
+          wrap.className = "td-v";
+          while (td.firstChild) wrap.appendChild(td.firstChild);
+          td.appendChild(wrap);
+        }
+      });
+    });
+  }
+  document.querySelectorAll("table.tbl, table.lab-table").forEach(function (t) {
+    labelTable(t);
+    if (window.MutationObserver) new MutationObserver(function () { labelTable(t); }).observe(t, { childList: true, subtree: true });
+  });
+
   window.LessonKit = { Store: Store, toast: toast, emit: emit };
 })();

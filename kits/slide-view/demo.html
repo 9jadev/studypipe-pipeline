@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: slide-view</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef7;font:14px/1.35 system-ui,sans-serif}
+  #wrap{max-width:640px;margin:0 auto;padding:6px 8px 10px;box-sizing:border-box}
+  #host{width:100%;height:62vh;min-height:340px;position:relative;border-radius:10px;overflow:hidden;background:radial-gradient(circle at 50% 40%,#22344a,#0e1620)}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  .row{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+  button{flex:1 1 auto;min-width:56px;min-height:40px;border:1px solid #3a5272;background:#1a2a40;color:#e8eef7;border-radius:8px;font:inherit}
+  button[aria-pressed=true]{background:#2f6fb0;border-color:#7fb4ec}
+  #read{margin-top:8px;padding:8px 10px;border-radius:8px;background:#142235;font-size:13px;white-space:pre-wrap}
+  #read b{color:#ffd166}
+</style></head><body>
+<div id="wrap">
+  <div id="host"><canvas id="c"></canvas></div>
+  <div class="row" id="m"><button data-m="40" aria-pressed="false">&times;40</button><button data-m="100" aria-pressed="false">&times;100</button><button data-m="400" aria-pressed="true">&times;400</button></div>
+  <div class="row"><button data-s="onion" aria-pressed="true">Onion (iodine)</button><button data-s="cheek" aria-pressed="false">Cheek (methylene blue)</button><button id="tb" aria-pressed="true">Textbook</button></div>
+  <div id="read"></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="slide-view.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("host"), canvas = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene();
+  scene.add(new THREE.HemisphereLight(0xdbe8ff, 0x2a1a22, 0.9));
+  var key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(3, 6, 8); scene.add(key);
+  var camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+  var kit = SlideViewKit.create({ M: 400, specimen: "onion", onEvent: function (n, d) { console.log("event", n, d.id || d.M); } });
+  scene.add(kit);
+  var readEl = document.getElementById("read");
+  function showReading(tap) {
+    var r = kit.reading();
+    var t = "<b>" + (r.specimen === "onion" ? "Onion epidermis, iodine" : "Cheek cells, methylene blue") + " &middot; total &times;" + r.M + "</b>\nField " + r.field_mm + " mm &middot; " + r.cells_across + " cells across &middot; cell width " + r.cellWidth_um + " &micro;m\nVisible: " + r.visibleCount + " &nbsp; Hidden: " + r.hiddenCount;
+    if (tap) t += "\n<b>" + tap.name + ":</b> " + (tap.visible ? "visible. " : "not visible (" + tap.reason + "). ") + tap.why;
+    readEl.innerHTML = t;
+  }
+  var fitCur = null;
+  function fit() {
+    var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h;
+    var f = kit.layout(w / h), vf = camera.fov * Math.PI / 180;
+    var d = Math.max((f.h / 2) / Math.tan(vf / 2), (f.w / 2) / (Math.tan(vf / 2) * camera.aspect)) * 1.04;
+    camera.position.set(f.target[0], f.target[1], f.target[2] + d); camera.lookAt(f.target[0], f.target[1], f.target[2]); camera.updateProjectionMatrix();
+  }
+  window.addEventListener("resize", fit); fit(); showReading();
+  function press(group, btn) { document.querySelectorAll(group + " button").forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); }); }
+  document.querySelectorAll("#m button").forEach(function (b) { b.onclick = function () { press("#m", b); kit.setState({ M: +b.dataset.m }); showReading(); }; });
+  document.querySelectorAll("button[data-s]").forEach(function (b) { b.onclick = function () { document.querySelectorAll("button[data-s]").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); }); kit.setState({ specimen: b.dataset.s }); showReading(); }; });
+  var tb = document.getElementById("tb"); tb.onclick = function () { var on = tb.getAttribute("aria-pressed") !== "true"; tb.setAttribute("aria-pressed", on); kit.setState({ showTextbook: on }); fit(); };
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  canvas.addEventListener("pointerup", function (e) {
+    var r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera);
+    var ids = kit.userData.itemIds, objs = ids.map(function (i) { return kit.parts[i]; }).filter(function (o) { return o.visible; });
+    var hit = ray.intersectObjects(objs, true)[0]; if (hit) { var id = hit.object.userData.partId, it = kit.pickItem(id); if (it) showReading(it); }
+  });
+  var clock = new THREE.Clock();
+  (function frame() { requestAnimationFrame(frame); kit.update(clock.getDelta(), clock.elapsedTime); renderer.render(scene, camera); })();
+  window.__kit = kit; window.__fit = fit;
+})();
+</script>
+</body></html>

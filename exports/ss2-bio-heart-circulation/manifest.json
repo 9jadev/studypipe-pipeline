@@ -1,0 +1,633 @@
+{
+  "format": "studypipe-unit/2",
+  "slug": "ss2-bio-heart-circulation",
+  "title": "The Human Heart and Blood Circulation",
+  "subject": "Biology",
+  "class": "SS2",
+  "exams": [
+    "WAEC",
+    "NECO",
+    "JAMB"
+  ],
+  "lang": "en-NG",
+  "version": 3,
+  "kits": [
+    "StoryStage",
+    "SceneKit",
+    "LessonKit",
+    "StudyNarrator"
+  ],
+  "entry": "index.html",
+  "lessons": [
+    "lessons/lesson-01/index.html",
+    "lessons/lesson-02/index.html",
+    "lessons/lesson-03/index.html",
+    "lessons/lesson-04/index.html",
+    "lessons/lesson-05/index.html",
+    "lessons/lesson-06/index.html",
+    "lessons/lesson-07/index.html"
+  ],
+  "built_at": "2026-11-08T01:36:06.930Z",
+  "files": [
+    {
+      "path": "assets/css/fonts.css",
+      "bytes": 1531,
+      "sha256": "a2e8b5e89fc28843c36130511b1d510f29b5ebc5744acb5d715dcda7d40f589e"
+    },
+    {
+      "path": "assets/css/hub.css",
+      "bytes": 4697,
+      "sha256": "40e0752049e675d829b9c53d7f9cdedd726c5ef96b2f38100558de53a9ef0ad7"
+    },
+    {
+      "path": "assets/css/lesson-video.css",
+      "bytes": 2601,
+      "sha256": "8ff1d122e9a89e2d253dc762fd66df7c421c5225801a46a383138565b369311f"
+    },
+    {
+      "path": "assets/css/lesson.css",
+      "bytes": 140737,
+      "sha256": "9f438eaf7163682b6be152a070628aacc196a56f36d7ffee646128f94a5d6ec6"
+    },
+    {
+      "path": "assets/css/math.css",
+      "bytes": 8946,
+      "sha256": "e45550e6605801339d5a62966f52749f07d311080b15c949087b0e134eb47296"
+    },
+    {
+      "path": "assets/css/narrator.css",
+      "bytes": 15178,
+      "sha256": "c0437d9808492b28710e214b9c150595dfc9c10f65ac1cc122e2d5ea6c48701d"
+    },
+    {
+      "path": "assets/css/style.css",
+      "bytes": 69263,
+      "sha256": "5e3f89635824d59161d2f085cdd01a51f47c5e886dc7261efc52aa4a47ea37a4"
+    },
+    {
+      "path": "assets/css/theme.css",
+      "bytes": 3174,
+      "sha256": "5285976f20db7836de11be26e59be50d37a63af47dd6aeec1d880a55fb0f8af3"
+    },
+    {
+      "path": "assets/fonts/OFL-fraunces.txt",
+      "bytes": 4504,
+      "sha256": "cd3384cafac6f2bddc3955273958a2e029f97027c8037ac539ef5744a77b579e"
+    },
+    {
+      "path": "assets/fonts/OFL-jetbrains-mono.txt",
+      "bytes": 4524,
+      "sha256": "403581b69dac5cff4079205e01c6b467e56af449ecbd7247693ddb1baafa005b"
+    },
+    {
+      "path": "assets/fonts/OFL-manrope.txt",
+      "bytes": 4383,
+      "sha256": "d826ab6583b12c26807d8716a545bdbbb672df04f48608a364ba9efdbe501c30"
+    },
+    {
+      "path": "assets/fonts/fraunces-latin-full-italic.woff2",
+      "bytes": 149720,
+      "sha256": "04a14ea380db53a35a3ec651934b21061234685bb604d30aac82663b5d9e539b"
+    },
+    {
+      "path": "assets/fonts/fraunces-latin-full-normal.woff2",
+      "bytes": 121016,
+      "sha256": "7e744849028e2219e2aa1bc467dc4032980dc4487c9c3da3010081cd72d3b103"
+    },
+    {
+      "path": "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
+      "bytes": 21168,
+      "sha256": "14425ba9c695763c1547f48a206b7aa60350a33ae23de09f0407877f3fcd89eb"
+    },
+    {
+      "path": "assets/fonts/jetbrains-mono-latin-500-normal.woff2",
+      "bytes": 21832,
+      "sha256": "cb182feeed4d798ff6961d3c79f7026279448fca0676438aaecb21f3fc39553a"
+    },
+    {
+      "path": "assets/fonts/manrope-latin-wght-normal.woff2",
+      "bytes": 24836,
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+    },
+    {
+      "path": "assets/js/abo-typing-bench.js",
+      "bytes": 77687,
+      "sha256": "e03feafa817e7f8aee6f1d4c01fabd904a616317192e9e6e0455b3f045b1ee07"
+    },
+    {
+      "path": "assets/js/agar-cube-bench.js",
+      "bytes": 41854,
+      "sha256": "705659f8b56d9e2596073b6b2e11ab328fed201ffd29826d04757bbf0a3a9424"
+    },
+    {
+      "path": "assets/js/blood-count-bench.js",
+      "bytes": 49206,
+      "sha256": "65fe3597761511eaea46d06deaa4a18cf51f9e5519329006507c9887474da260"
+    },
+    {
+      "path": "assets/js/body-circuit.js",
+      "bytes": 73487,
+      "sha256": "29642dce0250a849a2732b93bfa5c8b76faf0bd7a9ab21c6a579fd00caf18c28"
+    },
+    {
+      "path": "assets/js/dissection-bench.js",
+      "bytes": 34760,
+      "sha256": "aabce83a732c251819ee8d1bc4f8779055eecb82ef160c13407180eea33c979b"
+    },
+    {
+      "path": "assets/js/heart-kit.js",
+      "bytes": 93741,
+      "sha256": "9da344ac2466e523bdc65e221f37b8927b51d7719bd83199ba97146fad5c748f"
+    },
+    {
+      "path": "assets/js/lesson-kit.js",
+      "bytes": 19547,
+      "sha256": "a672289908e109db2a91a6fb1995fa9e2f04c89f1b2aaf77c8c44c9954bd2675"
+    },
+    {
+      "path": "assets/js/math-kit.js",
+      "bytes": 45859,
+      "sha256": "58b1cbcc5060cad0bb0f1c7d66d04528a745dd83f2494e7145425c009a1fd241"
+    },
+    {
+      "path": "assets/js/narrator.js",
+      "bytes": 40292,
+      "sha256": "0e0c6fa3cb1d5e0231706441ee62ca172d17f057021a93a3f583f3b0d6baa999"
+    },
+    {
+      "path": "assets/js/pulse-bench.js",
+      "bytes": 53671,
+      "sha256": "9abbc8e4ba059271cd55dffb1c8f5d98e9e74327ccd58b75968ec5dbd914f95e"
+    },
+    {
+      "path": "assets/js/retrieval-bank.js",
+      "bytes": 21792,
+      "sha256": "b779ce3f045e21a858f9315b4f5c6adc87c8b034533d9d503b72608fcb8a13c9"
+    },
+    {
+      "path": "assets/js/scene-kit.js",
+      "bytes": 19765,
+      "sha256": "dbd193bc6ed354777a9159cb681ef09f82791e5a0e9df07d0cf0841ebf1f349e"
+    },
+    {
+      "path": "assets/js/sort-dnd.js",
+      "bytes": 6867,
+      "sha256": "0fce4994506a83b9c91d12dd14c4572d2b59eafc51b1e5be48058f8637ce0af8"
+    },
+    {
+      "path": "assets/js/story-scene.js",
+      "bytes": 31322,
+      "sha256": "cde505b04627ed65ff2e94d39161b8e636f3a71156beb4425659f0fe7a50e7f7"
+    },
+    {
+      "path": "assets/js/study-graph.js",
+      "bytes": 17310,
+      "sha256": "c4f62926dbfadc18d36718b891105483bcc28a075d3e5e3ad4e244af50ea8878"
+    },
+    {
+      "path": "assets/js/three.min.js",
+      "bytes": 676543,
+      "sha256": "cf6be2bae980413af6a1aaacf079bc08feccdbfa788b62ccec7d6f8f0729eac9"
+    },
+    {
+      "path": "assets/js/vessel-slide-bench.js",
+      "bytes": 48839,
+      "sha256": "567e697b1575d9cd7693c9b9b8d63217157de27864f5036f5e0cbc7b479d876b"
+    },
+    {
+      "path": "assets/js/video-embed.js",
+      "bytes": 11351,
+      "sha256": "3ddb9bf03e051312d302105de5e16ea6388d47369ac19f5492206d37dd09517c"
+    },
+    {
+      "path": "assets/js/welcome-explorer.js",
+      "bytes": 13968,
+      "sha256": "0e53462fe9cef99980ef52cf8f15237a289b6746d2ae8fbd9663cec0f1ab41ea"
+    },
+    {
+      "path": "assets/js/welcome-lab.js",
+      "bytes": 25941,
+      "sha256": "002e5b207581fc3ba1f2664ae17542de764dabd239b2622dc263b708801acc13"
+    },
+    {
+      "path": "assets/js/welcome-narration.js",
+      "bytes": 13789,
+      "sha256": "a05598aa5bb2b24c42b9407538850e580d12a3dd4c1f8d040207c3dd736294ae"
+    },
+    {
+      "path": "assets/js/welcome.js",
+      "bytes": 4255,
+      "sha256": "173e7639e87cc95fcd6f0dbb8efb6a99e82b7a04b45e9e7a101c950b53432d06"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_AMS-Regular.woff2",
+      "bytes": 28076,
+      "sha256": "0cdd387c9590a1a9f9794560022dbb59654a7d86f187aa0c81495ad42d3a7308"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Caligraphic-Bold.woff2",
+      "bytes": 6912,
+      "sha256": "de7701e42cf1f4cf0b766c03fb27977207eee2f4fd5d76fa82188406da43ea4c"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Caligraphic-Regular.woff2",
+      "bytes": 6908,
+      "sha256": "5d53e70ad607c2352162dec9e0923fb54ecdafaccbf604cd8dcf7d00facb989b"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Fraktur-Bold.woff2",
+      "bytes": 11348,
+      "sha256": "74444efd593c005e3f4573b44524704c0af0a937fe911cca9e94068d0d140d3f"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Fraktur-Regular.woff2",
+      "bytes": 11316,
+      "sha256": "51814d270d06ff0255dba0799994fa4d8c84d11f09951d47595f4abb1f3602dc"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Main-Bold.woff2",
+      "bytes": 25324,
+      "sha256": "0f60d1b897938ec918c8ce073092411baf9438f6739465693ff18b0f9d20b021"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Main-BoldItalic.woff2",
+      "bytes": 16780,
+      "sha256": "99cd42a3c072d918f2f44984a807cf7aa16e13545fd0875fc07c6c65f99e715b"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Main-Italic.woff2",
+      "bytes": 16988,
+      "sha256": "97479ca6cce906abc961ecac96faa5f9ca2e61b8e7670d475826bcdee9a7c267"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Main-Regular.woff2",
+      "bytes": 26272,
+      "sha256": "c2342cd8b869e01752a9321dc17213fc40d4d04c79688c1d43f2cf316abd7866"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Math-BoldItalic.woff2",
+      "bytes": 16400,
+      "sha256": "dc47344dbb6cb5b655c8460d561f4df5f501b90c804ad3c6cec65fe322351ab1"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Math-Italic.woff2",
+      "bytes": 16440,
+      "sha256": "7af58c5ec8f132a2ddde9027c6d7814decce4d3b822a11192a42a20e2e973264"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_SansSerif-Bold.woff2",
+      "bytes": 12216,
+      "sha256": "e99ae51144bf1232efcc1bfe5add36262c6866b0faab24fa75740e1b98577a62"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_SansSerif-Italic.woff2",
+      "bytes": 12028,
+      "sha256": "00b26ac825e2095056396e0553b8ac26d3f8ad158c3826e28b4c45b385c4714a"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_SansSerif-Regular.woff2",
+      "bytes": 10344,
+      "sha256": "68e8c73ef42afd3ccec58bf0fba302cce448938e7fc020a5e31f8a952eee1342"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Script-Regular.woff2",
+      "bytes": 9644,
+      "sha256": "036d4e95149b69ff9bcc0cd55771efeb25ffa3947293e69acd78d5ac328c684b"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Size1-Regular.woff2",
+      "bytes": 5468,
+      "sha256": "6b47c40166b6dbe21a5dfca7718413f2147fd2399be1ba605d8ad39cedf25dfe"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Size2-Regular.woff2",
+      "bytes": 5208,
+      "sha256": "d04c54219f9eaec6d4d4fd42dfb28785975a4794d6b2fc71e566b9cd6db842dd"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Size3-Regular.woff2",
+      "bytes": 3624,
+      "sha256": "73d591271b1604960cb10bb90fee021670af7297017e0e98480b332d11f51995"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Size4-Regular.woff2",
+      "bytes": 4928,
+      "sha256": "a4af7d414440a1c1790825cfb700cf9cf43b0f2c4b04f0ebc523011ad9853ec0"
+    },
+    {
+      "path": "assets/video/katex/fonts/KaTeX_Typewriter-Regular.woff2",
+      "bytes": 13568,
+      "sha256": "71d517d67827787cfabdf186914cc3358eda539e37931941f2b2fd4a21f68c0b"
+    },
+    {
+      "path": "assets/video/katex/katex.min.css",
+      "bytes": 21201,
+      "sha256": "f0dbfcc2940b4d788c805c1a1e117e898d2814b0f1a52bf16640543216e0964d"
+    },
+    {
+      "path": "assets/video/kits/blood.js",
+      "bytes": 15775,
+      "sha256": "e83e520a7a7ef8d4c7ca3944b898972177d2c388860b9a8e229d3010a91d8d48"
+    },
+    {
+      "path": "assets/video/kits/capillary-bed.js",
+      "bytes": 11839,
+      "sha256": "d89880907ec128b9e7f0d0141d9357ace0b94429a711c50bf412f759d3566d45"
+    },
+    {
+      "path": "assets/video/kits/heart.js",
+      "bytes": 12928,
+      "sha256": "599f5611fe21b446264890e529847a5eb9f8a2a3891a519389294b9971e489a7"
+    },
+    {
+      "path": "assets/video/player.css",
+      "bytes": 21721,
+      "sha256": "379d27bf318c20889d503e527964ce9a8a456d40f247858f21b4401140d64427"
+    },
+    {
+      "path": "assets/video/video-runtime.js",
+      "bytes": 71885,
+      "sha256": "8c0b780ba8d19e15c0f57865ed9a2256f671f2b3d03e37623d065a9f65a26d5b"
+    },
+    {
+      "path": "index.html",
+      "bytes": 37510,
+      "sha256": "0c4e9d825674a26f8b64cc5709bd0da9caa25cf748c0a39994192bf9e6bbbd80"
+    },
+    {
+      "path": "lessons/lesson-01/bench.js",
+      "bytes": 10366,
+      "sha256": "30475bc34fa9836c9da5aa4a8592f719dc6838f8e4e7d4726380497fb4ce57fe"
+    },
+    {
+      "path": "lessons/lesson-01/data.js",
+      "bytes": 14700,
+      "sha256": "4d6072400d2368bfea8fbc2fc8664aaec91e22f3e9640cd747e3ca446819b74c"
+    },
+    {
+      "path": "lessons/lesson-01/graph.js",
+      "bytes": 4325,
+      "sha256": "b1bcc6eb0b16526613fd12dd97d6110f3134344eeb12a01e2a4e56b48559e21a"
+    },
+    {
+      "path": "lessons/lesson-01/index.html",
+      "bytes": 68101,
+      "sha256": "0f1b15036f326ab4f4ee4949aa538ab6c02d23c85c31ec6869aa0e53a1c24d00"
+    },
+    {
+      "path": "lessons/lesson-01/lesson.js",
+      "bytes": 13105,
+      "sha256": "a05f9d813faf6b031c52bce7341c898571d265f1722f840a2385365818142d45"
+    },
+    {
+      "path": "lessons/lesson-01/narration.js",
+      "bytes": 11716,
+      "sha256": "d8bd06015faaa1373b68d8e52fc343816bb23a2de4b41af993682f7fe53c8353"
+    },
+    {
+      "path": "lessons/lesson-01/story.js",
+      "bytes": 9711,
+      "sha256": "d7eedc3e492e319c513e21c378292612b080bb4da2dd95828d8ff5b20f03f910"
+    },
+    {
+      "path": "lessons/lesson-01/zoom.js",
+      "bytes": 4229,
+      "sha256": "42e275a54e191941e6d15e17ce696ef9047ed793ae0a40e96600050a6a5fffbe"
+    },
+    {
+      "path": "lessons/lesson-02/bench.js",
+      "bytes": 12031,
+      "sha256": "e844e44b0f57ff304bfc2666f61ab93dee8eff66ec59f5928b514bca5d4dcada"
+    },
+    {
+      "path": "lessons/lesson-02/data.js",
+      "bytes": 12345,
+      "sha256": "35044fd1323b315e0e38c74c7eabfd9e2a4ebca15e77907e678e654053971576"
+    },
+    {
+      "path": "lessons/lesson-02/index.html",
+      "bytes": 61070,
+      "sha256": "d45fe151b4c08e9895e87117df7f1587b13eef3f72bfd7df665b9dd1b841d0f0"
+    },
+    {
+      "path": "lessons/lesson-02/lesson.js",
+      "bytes": 8979,
+      "sha256": "4ef22de8f2627c9469defb9ef08e9a3a7b7fc9312f98d0859cf8839e37d15d6f"
+    },
+    {
+      "path": "lessons/lesson-02/narration.js",
+      "bytes": 12839,
+      "sha256": "ead177177f65ad453d4bc26bbfcbfd5c3f531e1ba05789e1a2014cace923901e"
+    },
+    {
+      "path": "lessons/lesson-02/story.js",
+      "bytes": 7707,
+      "sha256": "45fcba99137f6f37fc4ac3634d5df5d63149e4019e7e25149aaf877014b8ebe1"
+    },
+    {
+      "path": "lessons/lesson-02/zoom.js",
+      "bytes": 6015,
+      "sha256": "1b0cf9cd22e9c5e8f9ba7fdbf9d61e2af0efc5b28cf5a2636fc1884c25f01873"
+    },
+    {
+      "path": "lessons/lesson-03/bench.js",
+      "bytes": 15236,
+      "sha256": "e26246d8a96c4394c7fe03c405da36660dbb5183b7257b8ba6388cd845008b1a"
+    },
+    {
+      "path": "lessons/lesson-03/data.js",
+      "bytes": 12649,
+      "sha256": "e4dc589039dec8e5d8da12a6473bbeebf3717c2849a61158310ffaea70c21a26"
+    },
+    {
+      "path": "lessons/lesson-03/index.html",
+      "bytes": 65899,
+      "sha256": "aa5775451b8f5bd6eb56366aa3a49acfc8ff67a570f219069dd11d16972f9d34"
+    },
+    {
+      "path": "lessons/lesson-03/lesson.js",
+      "bytes": 8460,
+      "sha256": "2343d3d015a553f66277fd175419e536d2e00fdcfc3d25169d592b9936fc33b6"
+    },
+    {
+      "path": "lessons/lesson-03/narration.js",
+      "bytes": 12390,
+      "sha256": "387c90af908850732b7c152627cf360392eb29bc02b82c4d643a470f5eee67fa"
+    },
+    {
+      "path": "lessons/lesson-03/story.js",
+      "bytes": 8001,
+      "sha256": "1af1dadc36dcce9635e210ae53dbdb450979ab4aa262146fbf717d838c93b76b"
+    },
+    {
+      "path": "lessons/lesson-03/zoom.js",
+      "bytes": 6617,
+      "sha256": "a0eabf1403a448064c6bc166d6e907b3d5cfbc9c1f982008471bb998c3dd2b2e"
+    },
+    {
+      "path": "lessons/lesson-04/bench.js",
+      "bytes": 13192,
+      "sha256": "d95e2375b15a826f39e8813bcb775984aef6477e592331423873a1c39ab99e0e"
+    },
+    {
+      "path": "lessons/lesson-04/data.js",
+      "bytes": 12053,
+      "sha256": "041c4948196590b6a9fd347536b414608e9dd1cb3516d85e26f9bba302329fd5"
+    },
+    {
+      "path": "lessons/lesson-04/graph.js",
+      "bytes": 5058,
+      "sha256": "746e5a8d30e2287424b4486992b20d6b92fecf0d48f3d8eb28d5c6ca9e0f7188"
+    },
+    {
+      "path": "lessons/lesson-04/index.html",
+      "bytes": 65521,
+      "sha256": "d80b1af97c14f1d101bb2bacf28a4f71b6386e2d0808cbef25882896aba6043c"
+    },
+    {
+      "path": "lessons/lesson-04/lesson.js",
+      "bytes": 9750,
+      "sha256": "8738be77c676a35f8088d556af8e524e8ec5bfe8061297cbedeeb185ec6a2a24"
+    },
+    {
+      "path": "lessons/lesson-04/narration.js",
+      "bytes": 13323,
+      "sha256": "c2613f1d95a57bbedb36d480354651dc0a3553ece7be54f99e5e3f642b054640"
+    },
+    {
+      "path": "lessons/lesson-04/story.js",
+      "bytes": 7123,
+      "sha256": "a45bdb7c309813bb8f2baff6a6aaaf3cd30d8cd768f100205ae5eba5b2a21683"
+    },
+    {
+      "path": "lessons/lesson-04/video.html",
+      "bytes": 117886,
+      "sha256": "5bac1dc5acce1062c213cda5511b5f53fb309ce2b5333e9537a5d6102509f5fc"
+    },
+    {
+      "path": "lessons/lesson-04/zoom.js",
+      "bytes": 7332,
+      "sha256": "8efc7a9805188be21613b3f00fb6a6e7211df9f9dbca2d7bf75c7761edfe35f2"
+    },
+    {
+      "path": "lessons/lesson-05/bench.js",
+      "bytes": 17591,
+      "sha256": "1455c9a565f0c2bdf7b204df75f41638a204c3eca4f8a749abf1bfef36c0bde0"
+    },
+    {
+      "path": "lessons/lesson-05/data.js",
+      "bytes": 17265,
+      "sha256": "b1870ecf8dcec69116dcf40f55e8e8356fac7110aac12b371b1d0bb50bbc4a5d"
+    },
+    {
+      "path": "lessons/lesson-05/graph.js",
+      "bytes": 6436,
+      "sha256": "5c9e1b4b102811715fca70020d9e84e7622544d9954f18a12a1ef2476d4c96a1"
+    },
+    {
+      "path": "lessons/lesson-05/index.html",
+      "bytes": 78484,
+      "sha256": "d3f27f3fc8891ce3b0c9df13b622b6d581b19631b6ade13e565d8bf27960bf9d"
+    },
+    {
+      "path": "lessons/lesson-05/lesson.js",
+      "bytes": 14141,
+      "sha256": "d48339bca2c7dd5e8a8b16e6fc95c9383c5e6e22408c239330176f41560d9c45"
+    },
+    {
+      "path": "lessons/lesson-05/narration.js",
+      "bytes": 13254,
+      "sha256": "13a630e04d9222673e6e74e95b4f1101f753056ca7ff791673f2f0b2bda6d5b2"
+    },
+    {
+      "path": "lessons/lesson-05/story.js",
+      "bytes": 7619,
+      "sha256": "556d6812a1d6e87899aa7950eaeab78aa7b3690dfa7a2997f9b1bce1f5ac29d7"
+    },
+    {
+      "path": "lessons/lesson-05/video.html",
+      "bytes": 110627,
+      "sha256": "d8f27de066cde97d1a0bae796bbc259cb83349c87775f53c75bead372a9d91b1"
+    },
+    {
+      "path": "lessons/lesson-05/zoom.js",
+      "bytes": 4566,
+      "sha256": "ad42c9739c4c6007e1b54b77b75e615196871d61153315aa43c5969ea1cb5176"
+    },
+    {
+      "path": "lessons/lesson-06/bench.js",
+      "bytes": 12105,
+      "sha256": "c42469e5952766e81aba101fc9017f2938cf1aff5ab68f4114fe4bc60e3a8681"
+    },
+    {
+      "path": "lessons/lesson-06/data.js",
+      "bytes": 13633,
+      "sha256": "27303d1e923af051a891ccb0e6a486ba9aa8d4801d22187cc2c23c572abca40c"
+    },
+    {
+      "path": "lessons/lesson-06/index.html",
+      "bytes": 65807,
+      "sha256": "ac9d0d42e5a7b0e0fe29e941d940919d8230363bac24360504d1914b70c938f3"
+    },
+    {
+      "path": "lessons/lesson-06/lesson.js",
+      "bytes": 9760,
+      "sha256": "ad819204a20f56f16838e6610bd7284b64291b35588224031f88fb42bbaf3d64"
+    },
+    {
+      "path": "lessons/lesson-06/narration.js",
+      "bytes": 13896,
+      "sha256": "b6bb80833505ee16cd915cfe1ea08651e6139ac3ccb5a89af266658283c0cdd6"
+    },
+    {
+      "path": "lessons/lesson-06/story.js",
+      "bytes": 10293,
+      "sha256": "67cd8b19e6eaef0a5a7540a49dcd55012d40f553f2dc2a84eb923e669773ecc5"
+    },
+    {
+      "path": "lessons/lesson-06/video.html",
+      "bytes": 104977,
+      "sha256": "e4c5a8cd267cbdaa4471ba955fb839d746be826a021593af8b6e2f1c128613e2"
+    },
+    {
+      "path": "lessons/lesson-06/zoom.js",
+      "bytes": 6517,
+      "sha256": "3cdccf2710f0984855115fc44ea83d95e518bb56691483eaf41be1d52b6e693c"
+    },
+    {
+      "path": "lessons/lesson-07/bench.js",
+      "bytes": 14592,
+      "sha256": "61266f94fd60d8558616fc748536390e87b92499feda94185c8a7c18d8063c6b"
+    },
+    {
+      "path": "lessons/lesson-07/data.js",
+      "bytes": 15092,
+      "sha256": "da67ee91b2d137d0d36d7cb6f2ed87585d4fb8a483274c74c71bd4a264801ddd"
+    },
+    {
+      "path": "lessons/lesson-07/index.html",
+      "bytes": 69856,
+      "sha256": "eae23e44d4a6ce21ed3886c5222ae4bf31a1f08896f8bb2a97429c9290868cd0"
+    },
+    {
+      "path": "lessons/lesson-07/lesson.js",
+      "bytes": 12449,
+      "sha256": "94e07a621da387175fea3e97c3997af51ca292f4cb1fe0639b1e22e97184031c"
+    },
+    {
+      "path": "lessons/lesson-07/narration.js",
+      "bytes": 14359,
+      "sha256": "1acfb0b866f3a999faeded5388a9b98284871a13dd40781d80d18ec408993f3b"
+    },
+    {
+      "path": "lessons/lesson-07/story.js",
+      "bytes": 7928,
+      "sha256": "7addad364aa6207eefd2731f50a25e01a491d53a4d1836d383f1d5563f81b7d0"
+    },
+    {
+      "path": "lessons/lesson-07/zoom.js",
+      "bytes": 9635,
+      "sha256": "f1e21342d812e45d0e9c0f7c2f498efa452117ffd57782d56b554239f02d5e8d"
+    }
+  ]
+}

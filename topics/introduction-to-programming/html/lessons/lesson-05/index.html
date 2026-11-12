@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 5 · Modular Architecture: Functions, Scope &amp; Reusability · StudyPipe</title>
+  <meta name="description" content="StudyPipe Computer Studies &amp; Programming (SS1): modular functions, DRY principle, formal parameters vs actual arguments, return values, local vs global variable scope, and call-stack frames.">
+  <meta name="theme-color" content="#04140f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='18' width='44' height='28' rx='6' fill='%233ee6c4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--teal-rgb, 62, 230, 196), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(310px, 88vw, 420px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    @media (min-width: 560px) { #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13.5px; display: block; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+    .l5-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .l5-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 58px; }
+    .chip-btn { min-height: 36px; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12px; cursor: pointer; }
+    .chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .l5-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .l5-actions .vt-btn { flex: 1; min-width: 110px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-soft); }
+
+    /* results table (one compact row per reading) */
+    #results-table td .rc-sub { display: block; font-size: 11px; color: var(--paper-muted); margin-top: 2px; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 1.1fr 1.4fr 1fr 1.1fr; padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 1.1fr 1.4fr 1fr 1.1fr; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12.5px; }
+      #results-table th { font-size: 10.5px; }
+      #results-table td::before { content: none; }
+    }
+
+    /* scope & tariff pin explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 50px; padding: 6px 4px; font-weight: 700; font-size: 11.5px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--crimson); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 12.5px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .l5-bq { margin-top: 14px; }
+    .l5-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; }
+    .l5-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l5-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; }
+    .l5-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .l5-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .l5-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .l5-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .l5-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l05">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 6 Lessons</a>
+      <span class="l-crumb">Lesson 5 of 6 · <b>Modular Architecture: Functions &amp; Scope</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Computer Studies · Lesson 5 of 6 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Modular Architecture: <em>Functions, Scope &amp; Reusability</em></h1>
+        <p class="question reveal">How do developers build complex software systems without repeating the same calculations dozens of times?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Define a <strong>function (subroutine)</strong> and explain the software engineering principle of <strong>DRY</strong> (Don't Repeat Yourself).</span></li>
+          <li><b>02</b><span>Differentiate between <strong>function definition</strong>, <strong>parameters (arguments)</strong>, and <strong>return values</strong>.</span></li>
+          <li><b>03</b><span>Explain and trace the difference between <strong>local variable scope</strong> and <strong>global variable scope</strong>.</span></li>
+          <li><b>04</b><span>Design modular functions that accept inputs, perform processing, and return validated outputs.</span></li>
+          <li><b>05</b><span>Refactor repetitive, error-prone procedural code into structured, modular routines.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Movement break</span><span><b>45–60</b> Make sense</span><span><b>60–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="24" y="28" width="272" height="184" rx="14" fill="none" stroke="rgba(62,230,196,.45)" stroke-width="2.2"/>
+          <text x="160" y="74" fill="var(--amber)" font-family="var(--font-mono)" font-size="16" text-anchor="middle">def calculate_nepa_bill(units):</text>
+          <rect x="46" y="92" width="228" height="62" rx="10" fill="rgba(56,189,248,.12)" stroke="rgba(56,189,248,.45)" stroke-dasharray="4 3"/>
+          <text x="160" y="118" fill="var(--fg)" font-family="var(--font-mono)" font-size="13" text-anchor="middle">Local Scope Frame (Isolated)</text>
+          <text x="160" y="140" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="12" text-anchor="middle">energy + VAT (7.5%) + ₦1,500</text>
+          <text x="160" y="186" fill="var(--teal, #3ee6c4)" font-family="var(--font-mono)" font-size="15" text-anchor="middle">return round(total_bill, 2)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Function anatomy</a></li>
+        <li><a href="#practical">Function Factory</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Stack frame zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- 0. DO NOW -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up your toolkit</em></h2>
+        <p class="intro">Four quick retrieval cards from Lessons 1, 3, and 4 on zero-based array bounds, <code>len()</code>, infinite loops, and string concatenation. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- 1. STORY -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The smart meter billing discrepancy at <em>Ikogosi</em></h2>
+        <p class="intro">Village elders gather outside the microgrid station: households consuming the exact same 85 kWh are receiving conflicting electricity bills, and the station's daily revenue total keeps resetting. Why?</p>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story at the Ikogosi Microgrid Control Station: Chief Babatunde, Amina, Tari, and Engr. Idris investigating why copy-pasted tariff blocks in billing.py caused 5% vs 7.5% VAT discrepancies and overwrote the global revenue counter."></canvas>
+            <div class="stage-label"><i></i>3D story · Ikogosi Microgrid Station</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Chief Babatunde:</strong> <em>“Amina, Tari! Households on the same street used 85 units of power, yet their smart meters deducted different bills!”</em></p>
+            <p><strong>Scene 2 · Amina:</strong> opens <code>billing.py</code> on the SCADA terminal. <em>“The exact same 15-line tariff calculation is copy-pasted 12 different times across the file.”</em></p>
+            <p><strong>Scene 3 · Tari:</strong> points at the screen. <em>“In one copy, the VAT rate is set to 7.5% (giving ₦7,713.50), but in three other copies, an old rate of 5% was left untouched!”</em></p>
+            <p><strong>Scene 4 · Amina:</strong> <em>“And look at the variable conflict: a variable named <code>total</code> inside a calculation ran in global scope and overwrote the global <code>total_revenue</code> variable!”</em></p>
+            <p><strong>Scene 5 · Amina:</strong> <em>“We need a single, clean function with isolated local scope. If we update the function once, all 250 meters will be fixed instantly!”</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2. WONDER WALL -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">How does packaging code into independent functions protect variables from interfering with each other? Pin your hypothesis.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think functions protect variables because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">Variables inside a function stay private to that function (Amina)</button>
+            <button type="button">One function means we only update VAT in one place (Tari)</button>
+            <button type="button">Local memory is erased when the function finishes (Idris)</button>
+            <button type="button">Return sends back just the final answer, not the temporary variables (Babatunde)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3. SORT -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Anatomy of a <em>function</em></h2>
+        <p class="intro">Categorize each of the 8 Python code components into its structural role. Drag a card, or tap a card then tap a bin.</p>
+        <div class="sort" id="fn-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="header" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Function Header and Parameters bin">
+              <h4><i></i>Function Header / Parameters</h4><small>def keyword, name &amp; formal inputs</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="body" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Function Body and Local Logic bin">
+              <h4><i></i>Function Body / Local Logic</h4><small>isolated local calculations</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="ret" style="--bc:var(--violet)" tabindex="0" role="button" aria-label="Return Statement and Caller bin">
+              <h4><i></i>Return Statement / Caller</h4><small>returns output or invokes function</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3B. PRACTICAL -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The Modular Function Factory: <em>call, isolate &amp; return</em></h2>
+        <p class="intro">Feed household kilowatt-hour arguments into <code>calculate_nepa_bill(units, tariff_rate=68.0, vat_rate=0.075)</code> with <code>fixed_charge = 1500.0</code>. Watch local variables compute inside the One-Way Glass dome while the global revenue pillar stays untouched.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Pass argument into hopper</h4><p>Select 85, 120, 210, or 45 kWh input units.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Step inside local chamber</h4><p>Watch local energy_cost and vat_amount compute.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Verify global isolation</h4><p>Confirm global revenue pillar stays untouched.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Return final bill</h4><p>Send total_bill down the chute for 3+ meters.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Modular Function Factory bench: parameter input hopper, translucent One-Way Glass local scope dome with spinning local variable orbs, return value chute, and isolated global revenue pillar."></canvas>
+            <div class="stage-label"><i></i>3D Function Factory · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the controls, table and worked examples below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar l5-chips" id="bench-units" role="group" aria-label="Input argument units (kWh)">
+            <span class="lab-t">units</span>
+            <button class="chip-btn" type="button" data-units="85" aria-pressed="true">85 kWh</button>
+            <button class="chip-btn" type="button" data-units="120" aria-pressed="false">120 kWh</button>
+            <button class="chip-btn" type="button" data-units="210" aria-pressed="false">210 kWh</button>
+            <button class="chip-btn" type="button" data-units="45" aria-pressed="false">45 kWh</button>
+          </div>
+          <div class="stage-bar l5-chips" id="bench-phase" role="group" aria-label="Execution stage">
+            <span class="lab-t">Scope view</span>
+            <button class="chip-btn" type="button" data-stage="input" aria-pressed="false">1 · Hopper In</button>
+            <button class="chip-btn" type="button" data-stage="local" aria-pressed="false">2 · Step Inside</button>
+            <button class="chip-btn" type="button" data-stage="return" aria-pressed="true">3 · Return Out</button>
+          </div>
+          <div class="stage-bar l5-actions">
+            <button class="vt-btn zobo" type="button" id="bench-take">Call &amp; Return Bill</button>
+            <button class="vt-btn" type="button" id="bench-step">Next Preset</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 3+ calls</span>
+          </div>
+        </div>
+
+        <h3>Record your function calls</h3>
+        <p>Each call to <code>calculate_nepa_bill()</code> logs the argument, isolated local calculations, returned bill, and global scope state. Record at least three household calls.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Call</th><th>Local Energy + VAT</th><th>Return Value</th><th>Global Scope</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="results-line">Function calls recorded: 0</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected function call table <small>open after you record yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Input <code>units</code></th><th>Local <code>energy_cost</code></th><th>Local <code>vat_amount</code> (7.5%)</th><th>Return <code>total_bill</code> (+₦1,500)</th><th>Global Scope</th></tr></thead>
+                <tbody>
+                  <tr><td>85 kWh</td><td>₦5,780.00</td><td>₦433.50</td><td><b>₦7,713.50</b></td><td>Untouched (₦50,000.00)</td></tr>
+                  <tr><td>120 kWh</td><td>₦8,160.00</td><td>₦612.00</td><td><b>₦10,272.00</b></td><td>Untouched (₦50,000.00)</td></tr>
+                  <tr><td>210 kWh</td><td>₦14,280.00</td><td>₦1,071.00</td><td><b>₦16,851.00</b></td><td>Untouched (₦50,000.00)</td></tr>
+                  <tr><td>45 kWh</td><td>₦3,060.00</td><td>₦229.50</td><td><b>₦4,789.50</b></td><td>Untouched (₦50,000.00)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">total_bill = (units × 68.0) + (units × 68.0 × 0.075) + 1500.0</div>
+            <p>Inside the function dome, <code>energy_cost</code>, <code>vat_amount</code>, and <code>total_bill</code> are created in a temporary local stack frame and destroyed as soon as <code>return</code> executes.</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l05-prac-q">
+          <div class="aq-top"><h4>Answer these three questions from your Function Factory observations, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why did modifying local variables inside <code>calculate_nepa_bill()</code> have zero effect on the global revenue pillar?</li>
+            <li>What happens if the main program outside the function tries to execute <code>print(vat_amount)</code> after the function returns?</li>
+            <li>If the federal VAT rate changes from 7.5% to 8.0%, how many lines of code must Amina update in the modular version compared to the 12-block copy-pasted version?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Variables assigned inside a function have <strong>local scope</strong>. They live in a separate stack frame in RAM and cannot overwrite global variables outside the function.</li>
+                <li>Python raises a <code>NameError: name 'vat_amount' is not defined</code> because the local stack frame is popped and destroyed the moment the function returns.</li>
+                <li>She updates just <strong>1 line</strong> (the default parameter or formula inside <code>calculate_nepa_bill</code>) instead of hunting through 12 separate copy-pasted blocks.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 4. CONCEPTS -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Functions, scope and <em>modular architecture</em></h2>
+        <p class="intro">Connect what you saw in the Function Factory to the formal software engineering definitions tested in WAEC, NECO, and JAMB.</p>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (40 min mark, 5 minutes):</strong> stand up! Hold your hands out wide like a function hopper receiving arguments ("Call!"). Pull your elbows in tight to your chest to compute in isolated local scope ("Process!"). Now push one hand forward to hand back the result ("Return!") and relax your arms ("Stack frame freed!"). Repeat twice, then sit down.</p>
+        </div>
+
+        <h3 id="def-dry">1. Functions &amp; the DRY Principle</h3>
+        <p>A <strong>function</strong> (or <strong>subroutine</strong>) is a self-contained, named block of code designed to perform a specific task and return a result. Packaging repeated logic into functions enforces the software engineering principle of <strong>DRY (Don't Repeat Yourself)</strong>: every piece of business logic should have a single, unambiguous representation in the codebase.</p>
+        <p>In Python, a function is declared with the <code>def</code> keyword, followed by the function identifier, formal parameters in parentheses, a colon <code>:</code>, and an indented code block. In QBASIC, modular subroutines are declared with <code>FUNCTION ... END FUNCTION</code> or <code>SUB ... END SUB</code>.</p>
+
+        <div class="callout big reveal" id="eq-scope">
+          <p><strong>The "One-Way Glass" Law of Variable Scope:</strong> Code <em>inside</em> a function can look outward and read global constants, but code <em>outside</em> in the main program cannot peek through the glass to read or tamper with local variables inside the function. When a local variable has the same name as a global variable, the local variable <strong>shadows</strong> (hides) the global one inside the function without altering the global variable outside.</p>
+        </div>
+
+        <div class="eq" id="eq-sig" data-hook>def name(param1, param2=default): &nbsp;→&nbsp; local body &nbsp;→&nbsp; return value &nbsp;<span class="st">(or None if omitted)</span></div>
+
+        <h3>2. Key Modular Programming Terms Compared</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Concept</th><th>Role &amp; Lifetime in Memory</th><th>Python Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Formal Parameter</strong></td><td>Placeholder variable listed in the function definition header; receives input when called.</td><td><code>units</code> in <code>def calc(units):</code></td></tr>
+              <tr><td><strong>Actual Argument</strong></td><td>Concrete value passed into the function call at runtime.</td><td><code>85</code> in <code>calc(85)</code></td></tr>
+              <tr><td><strong>Default Parameter</strong></td><td>Fallback value used automatically when the caller omits that argument.</td><td><code>vat_rate=0.075</code></td></tr>
+              <tr><td><strong>Local Scope</strong></td><td>Created inside the function's call-stack frame when called; destroyed immediately on <code>return</code>.</td><td><code>energy_cost = units * 68.0</code></td></tr>
+              <tr><td><strong>Global Scope</strong></td><td>Declared outside all functions; persists in RAM for the entire duration of the script.</td><td><code>TARIFF = 68.0</code> at top of file</td></tr>
+              <tr><td><strong>Return Statement</strong></td><td>Immediately exits the function and hands the computed value back to the caller (returns <code>None</code> if omitted).</td><td><code>return round(total_bill, 2)</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="pos-h">3. One-Way Scope &amp; Tariff Pin Explorer</h3>
+        <p>Tap any Ikogosi meter pin below to trace how a single function definition processes different actual arguments inside isolated stack frames.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a meter pin to inspect its local stack frame and return value.</div>
+        </div>
+      </section>
+
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside RAM: <em>call-stack frame lifetime</em></h2>
+        <p class="intro">Step through the 4 lifecycle phases of a function call on the CPU call stack. Watch the blue local stack frame allocate above the green Global Scope base, compute behind the One-Way Scope Glass, emit the golden return orb, and pop cleanly from memory.</p>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D Call Stack Zoom: permanent green Global Scope base platform, elevator Stack Frame enclosed in translucent One-Way Scope Glass holding four local variable modules, and a curved golden return chute."></canvas>
+            <div class="stage-label"><i></i>3D Call Stack · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="stage-bar l5-chips" id="zoom-steps" role="group" aria-label="Call stack lifecycle phase">
+            <span class="lab-t">Phase</span>
+            <button class="chip-btn" type="button" data-step="0" aria-pressed="true">0 · Idle</button>
+            <button class="chip-btn" type="button" data-step="1" aria-pressed="false">1 · Push Frame</button>
+            <button class="chip-btn" type="button" data-step="2" aria-pressed="false">2 · Execute Local</button>
+            <button class="chip-btn" type="button" data-step="3" aria-pressed="false">3 · Return &amp; Pop</button>
+          </div>
+          <div class="stage-bar l5-chips" id="zoom-units" role="group" aria-label="Argument units">
+            <span class="lab-t">Arg units</span>
+            <button class="chip-btn" type="button" data-units="85" aria-pressed="true">85 kWh</button>
+            <button class="chip-btn" type="button" data-units="120" aria-pressed="false">120 kWh</button>
+            <button class="chip-btn" type="button" data-units="210" aria-pressed="false">210 kWh</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Trace each Python function and its atomic mathematical derivation. Use the interactive <strong>Step Forward</strong> button on the code cards to watch local variables appear and disappear on the call stack.</p>
+
+        <!-- Example 5.1 -->
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 5.1</span><h4>Modular Microgrid Tariff Calculator (<code>calculate_nepa_bill</code>)</h4></div>
+          <div class="example-body">
+            <p class="q">Write a modular Python function <code>calculate_nepa_bill(units, tariff_rate=68.0, vat_rate=0.075)</code> with a fixed maintenance charge of <code>₦1,500.00</code>. Call it for Meter 101 (<code>85</code> units) and Meter 102 (<code>210</code> units) and compute the exact outputs.</p>
+
+            <div class="study-code-snippet"
+                 data-title="tariff_calculator.py"
+                 data-lang="python"
+                 data-notes='{"1":"Function header with formal parameter units and two default parameters (68.0 and 0.075).","2":"Local variable energy_cost multiplies units by tariff_rate.","3":"Local variable vat_amount computes 7.5% VAT on energy_cost.","4":"Local constant fixed_charge set to 1500.0 Naira.","5":"Local variable total_bill sums the three components inside the stack frame.","6":"Returns total_bill rounded to 2 decimal places and pops the local stack frame.","8":"First call: passes actual argument 85; receives 7713.5 in household_1.","9":"Second call: passes actual argument 210; receives 16851.0 in household_2.","10":"Converts float 7713.5 to str and prints Meter 101 bill.","11":"Converts float 16851.0 to str and prints Meter 102 bill."}'
+                 data-trace='[{"line":8,"vars":{"call":"calculate_nepa_bill(85)","scope":"Global"}},{"line":1,"vars":{"units":"85","tariff_rate":"68.0","vat_rate":"0.075","scope":"Local Frame #1"}},{"line":2,"vars":{"units":"85","energy_cost":"5780.0","scope":"Local Frame #1"}},{"line":3,"vars":{"energy_cost":"5780.0","vat_amount":"433.5","scope":"Local Frame #1"}},{"line":4,"vars":{"vat_amount":"433.5","fixed_charge":"1500.0","scope":"Local Frame #1"}},{"line":5,"vars":{"total_bill":"7713.5","scope":"Local Frame #1"}},{"line":6,"vars":{"return":"7713.5","scope":"Frame #1 Popped"}},{"line":9,"vars":{"household_1":"7713.5","call":"calculate_nepa_bill(210)","scope":"Global"}},{"line":1,"vars":{"units":"210","tariff_rate":"68.0","vat_rate":"0.075","scope":"Local Frame #2"}},{"line":5,"vars":{"energy_cost":"14280.0","vat_amount":"1071.0","total_bill":"16851.0","scope":"Local Frame #2"}},{"line":6,"vars":{"return":"16851.0","scope":"Frame #2 Popped"}},{"line":11,"vars":{"household_1":"7713.5","household_2":"16851.0","scope":"Global"}}]'
+                 data-output="Meter 101 Bill: N7713.5&#10;Meter 102 Bill: N16851.0">
+              <code>
+def calculate_nepa_bill(units, tariff_rate=68.0, vat_rate=0.075):
+    energy_cost = units * tariff_rate
+    vat_amount = energy_cost * vat_rate
+    fixed_charge = 1500.0
+    total_bill = energy_cost + vat_amount + fixed_charge
+    return round(total_bill, 2)
+
+household_1 = calculate_nepa_bill(85)
+household_2 = calculate_nepa_bill(210)
+print("Meter 101 Bill: N" + str(household_1))
+print("Meter 102 Bill: N" + str(household_2))
+              </code>
+            </div>
+
+            <ol class="steps-sol">
+              <li><strong>Call 1 (<code>units = 85</code>):</strong> <code>energy_cost = 85 × 68.0 = 5780.0</code>; <code>vat_amount = 5780.0 × 0.075 = 433.50</code>; <code>total_bill = 5780.0 + 433.50 + 1500.0 = 7713.50</code>.</li>
+              <li><strong>Call 2 (<code>units = 210</code>):</strong> <code>energy_cost = 210 × 68.0 = 14280.0</code>; <code>vat_amount = 14280.0 × 0.075 = 1071.0</code>; <code>total_bill = 14280.0 + 1071.0 + 1500.0 = 16851.00</code>.</li>
+            </ol>
+
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{energy}\_\text{cost}_{1} = 85 \times 68.0 = 5780.00"></div></div>
+                <p class="m-step-note">Multiply 85 kWh by the default tariff rate of ₦68.00 per kWh inside Call Frame #1.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{vat}\_\text{amount}_{1} = 5780.00 \times 0.075 = 433.50"></div></div>
+                <p class="m-step-note">Multiply the local energy cost by the 7.5% (0.075) default VAT rate.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{total}\_\text{bill}_{1} = 5780.00 + 433.50 + 1500.00 = \boxed{\text{₦}7,713.50}"></div></div>
+                <p class="m-step-note">Add the ₦1,500.00 fixed charge and return ₦7,713.50 to <code>household_1</code>.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{energy}\_\text{cost}_{2} = 210 \times 68.0 = 14280.00"></div></div>
+                <p class="m-step-note">Second call allocates a fresh local stack frame with <code>units = 210</code>.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{vat}\_\text{amount}_{2} = 14280.00 \times 0.075 = 1071.00"></div></div>
+                <p class="m-step-note">Compute 7.5% VAT on ₦14,280.00 inside Call Frame #2.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{total}\_\text{bill}_{2} = 14280.00 + 1071.00 + 1500.00 = \boxed{\text{₦}16,851.00}"></div></div>
+                <p class="m-step-note">Add the ₦1,500.00 fixed charge and return ₦16,851.00 to <code>household_2</code>.</p>
+              </div>
+            </div>
+            <div class="answer-line">household_1 = ₦7,713.50 · household_2 = ₦16,851.00</div>
+          </div>
+        </article>
+
+        <!-- Example 5.2 -->
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 5.2</span><h4>Clinic Telemetry Temperature Conversion (<code>celsius_to_fahrenheit</code> &amp; <code>fahrenheit_to_celsius</code>)</h4></div>
+          <div class="example-body">
+            <p class="q">Dr. Folake's clinic telemetry board uses two modular conversion functions: <code>celsius_to_fahrenheit(c)</code> using <span class="sp-math" data-latex="F = (C \times \frac{9}{5}) + 32"></span> for patient fever checks (<span class="sp-math" data-latex="C = 37.0^\circ\text{C}"></span>), and <code>fahrenheit_to_celsius(deg_f)</code> using <span class="sp-math" data-latex="C = (F - 32) \times \frac{5}{9}"></span> for the vaccine fridge sensor (<span class="sp-math" data-latex="F = 39.2^\circ\text{F}"></span>). Trace both calls.</p>
+
+            <div class="study-code-snippet"
+                 data-title="clinic_telemetry.py"
+                 data-lang="python"
+                 data-notes='{"1":"Defines Celsius-to-Fahrenheit function accepting formal parameter c.","2":"Computes local f using (c * 9 / 5) + 32.","3":"Returns f rounded to 1 decimal place and exits local scope.","5":"Defines Fahrenheit-to-Celsius function accepting deg_f.","6":"Subtracts 32.0 first (parentheses), then multiplies by 5.0 / 9.0.","7":"Returns deg_c rounded to 1 decimal place.","9":"Calls celsius_to_fahrenheit(37.0) -> prints 98.6 F.","10":"Calls fahrenheit_to_celsius(39.2) -> prints 4.0 C."}'
+                 data-trace='[{"line":9,"vars":{"call":"celsius_to_fahrenheit(37.0)"}},{"line":2,"vars":{"c":"37.0","f":"98.6","scope":"Local (c_to_f)"}},{"line":3,"vars":{"return":"98.6"}},{"line":10,"vars":{"call":"fahrenheit_to_celsius(39.2)"}},{"line":6,"vars":{"deg_f":"39.2","deg_c":"4.0","scope":"Local (f_to_c)"}},{"line":7,"vars":{"return":"4.0"}}]'
+                 data-output="Patient Normal: 98.6 F&#10;Clinic Fridge: 4.0 C">
+              <code>
+def celsius_to_fahrenheit(c):
+    f = (c * 9 / 5) + 32
+    return round(f, 1)
+
+def fahrenheit_to_celsius(deg_f):
+    deg_c = (deg_f - 32.0) * (5.0 / 9.0)
+    return round(deg_c, 1)
+
+print("Patient Normal: " + str(celsius_to_fahrenheit(37.0)) + " F")
+print("Clinic Fridge: " + str(fahrenheit_to_celsius(39.2)) + " C")
+              </code>
+            </div>
+
+            <ol class="steps-sol">
+              <li><strong>Patient sensor (<code>c = 37.0</code>):</strong> <code>37.0 × 9 / 5 = 66.6</code>, then <code>66.6 + 32 = 98.6 °F</code>.</li>
+              <li><strong>Vaccine fridge (<code>deg_f = 39.2</code>):</strong> <code>39.2 − 32.0 = 7.2</code>, then <code>7.2 × (5 / 9) = 4.0 °C</code>.</li>
+            </ol>
+
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="F = \left(37.0 \times \frac{9}{5}\right) + 32 = 66.6 + 32 = \boxed{98.6^\circ\text{F}}"></div></div>
+                <p class="m-step-note">Inside <code>celsius_to_fahrenheit(37.0)</code>, <span class="sp-math" data-latex="37.0 \times 1.8 = 66.6"></span>, plus <span class="sp-math" data-latex="32"></span> gives <span class="sp-math" data-latex="98.6^\circ\text{F}"></span>.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="C = (39.2 - 32.0) \times \frac{5}{9} = 7.2 \times \frac{5}{9} = \boxed{4.0^\circ\text{C}}"></div></div>
+                <p class="m-step-note">Inside <code>fahrenheit_to_celsius(39.2)</code>, parentheses evaluate <span class="sp-math" data-latex="39.2 - 32.0 = 7.2"></span> first, then <span class="sp-math" data-latex="\times \frac{5}{9} = 4.0^\circ\text{C}"></span>.</p>
+              </div>
+            </div>
+            <div class="answer-line">celsius_to_fahrenheit(37.0) → 98.6 °F · fahrenheit_to_celsius(39.2) → 4.0 °C</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 7. BRIDGE -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Ikogosi: <em>refactor billing.py</em></h2>
+        <p class="intro">Help Amina and Tari replace the 12 copy-pasted tariff blocks in <code>billing.py</code> with one clean modular function so all 250 smart meters deduct the exact bill without corrupting global revenue.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 5:</strong> packaging repeated logic into a single parameterized function enforces <strong>DRY (Don't Repeat Yourself)</strong> so one update fixes every caller, while the function's <strong>local call-stack frame</strong> acts like one-way glass — isolating internal variables from accidentally overwriting global program state.</p>
+        </div>
+      </section>
+
+      <!-- 8. QUIZ -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB</em></h2>
+        <p class="intro">12 original exam-style questions on functions, DRY, parameters, return values, variable scope, and the call stack (plus 2 spaced-retrieval review questions).</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- 9. REFLECT -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning objective of Lesson 5.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can define a function (subroutine) and explain the DRY (Don't Repeat Yourself) principle.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can distinguish between formal parameters in a function header, actual arguments in a call, and return values.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can trace local vs global variable scope and explain why local variables do not overwrite globals.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can write modular Python functions with default parameters and explicit return statements.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can refactor repetitive procedural code into clean, reusable functions.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l05-exit">
+          <div class="aq-top"><h4>What exact output is printed by: <code>x = 50; def test(x): x = x + 10; return x; print(test(x)); print(x)</code>? Explain why.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>First line prints <code>60</code> (inside <code>test</code>, local <code>x = 50 + 10 = 60</code> is returned) <b>(1)</b>. Second line prints <code>50</code> because the global variable <code>x</code> outside the function was never modified by the local parameter <code>x</code> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and write down everything you remember from Lesson 5: <strong>def · DRY · formal parameter vs actual argument · return (and None) · local vs global scope · call stack frame</strong>.</p>
+        </div>
+      </section>
+
+      <!-- 10. ASSIGNMENT -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Modular Architecture — Functions, Scope &amp; Reusability</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B from 03-questions.md § Lesson 05</strong>. Type your attempt in each box first to unlock the model solution and marking scheme.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
+
+        <h3>Part A · Practical Home Investigation (Modular Tariff Blueprint)</h3>
+        <div class="aq" data-answer="l05-part-a">
+          <div class="aq-top"><h4>Design a modular algorithm on paper (or in Python) that calculates the total monthly electricity bill for a household by decomposing the problem into three separate functions: (1) <code>calculate_energy_cost(units, rate)</code>, (2) <code>calculate_vat(energy_cost, vat_rate)</code>, and (3) <code>generate_final_bill(units, rate, fixed_charge)</code> which calls the first two functions and adds the fixed charge.</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="Write your three modular functions here…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model solution &amp; marking guidance <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <pre><code>def calculate_energy_cost(units, rate):
+    return units * rate
+
+def calculate_vat(energy_cost, vat_rate=0.075):
+    return energy_cost * vat_rate
+
+def generate_final_bill(units, rate, fixed_charge=1500.0):
+    energy = calculate_energy_cost(units, rate)
+    vat = calculate_vat(energy, 0.075)
+    return round(energy + vat + fixed_charge, 2)</code></pre>
+              <p><strong>Marking Guidance:</strong> Award <b>2 marks</b> for clear function signatures (`def` + parameters), <b>2 marks</b> for proper parameter passing and `return` usage, and <b>1 mark</b> for modular composition (`generate_final_bill` calling the helper functions).</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · 30-Mark Written Examination Paper</h3>
+
+        <div class="aq" data-answer="l05-b1">
+          <div class="aq-top"><h4>b1. Define <em>modular programming</em> and state three benefits of using functions in software development.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Definition and 3 benefits…" aria-label="b1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Modular programming is a software design technique that separates program functionality into independent, interchangeable modules or functions <b>(1)</b>.<br>Benefits: (1) Reusability (DRY principle) <b>(1)</b>; (2) Easier debugging and isolated testing <b>(1)</b>; (3) Improved code readability and maintainability <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b2">
+          <div class="aq-top"><h4>b2. Differentiate between <em>formal parameters</em> and <em>actual arguments</em> with a code example.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Explanation and code example…" aria-label="b2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Formal parameters are the placeholder variable names listed in the function definition header <b>(1)</b>. Actual arguments are the concrete values passed into the function when calling it <b>(1)</b>.</p>
+            <pre><code>def greet(name):       # 'name' is the formal parameter (1)
+    print("Hello", name)
+
+greet("Amina")         # '"Amina"' is the actual argument (1)</code></pre>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b3">
+          <div class="aq-top"><h4>b3. Explain the difference between <em>local scope</em> and <em>global scope</em>, and describe what happens when a local variable has the same name as a global variable.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Local vs global scope and shadowing…" aria-label="b3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Global scope variables are declared outside functions and are accessible throughout the program <b>(1)</b>. Local scope variables are created inside a function and are accessible only while that function executes <b>(1)</b>. When a local variable shares the name of a global variable, the local variable <em>shadows</em> (takes precedence over) the global variable within the function, without modifying the global variable's value outside <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b4">
+          <div class="aq-top"><h4>b4. Write a Python function <code>celsius_to_fahrenheit(c)</code> that converts temperature using <span class="sp-math" data-latex="F = (C \times \frac{9}{5}) + 32"></span> and returns the result rounded to 1 decimal place. Include a test call with <span class="sp-math" data-latex="C = 37.0"></span>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="def celsius_to_fahrenheit(c): …" aria-label="b4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <pre><code>def celsius_to_fahrenheit(c):              # (1)
+    f = (c * 9 / 5) + 32                   # (1)
+    return round(f, 1)                     # (1)
+
+print(celsius_to_fahrenheit(37.0))         # Output: 98.6 (1)</code></pre>
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="F = \left(37.0 \times \frac{9}{5}\right) + 32 = 66.6 + 32 = \boxed{98.6^\circ\text{F}}"></div></div>
+                <p class="m-step-note">Evaluating <span class="sp-math" data-latex="37.0 \times 9 \div 5"></span> yields <span class="sp-math" data-latex="66.6"></span>, and adding <span class="sp-math" data-latex="32"></span> gives <span class="sp-math" data-latex="98.6^\circ\text{F}"></span>.</p>
+              </div>
+            </div>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b5">
+          <div class="aq-top"><h4>b5. Trace this code and state its exact output: <code>x = 10; def modify(x): x = x + 5; return x; print(modify(x)); print(x)</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Trace and exact two-line output…" aria-label="b5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Inside <code>modify(10)</code>, local <code>x = 10 + 5 = 15</code>, which is returned <b>(1)</b>. First print outputs <code>15</code> <b>(1)</b>. The global variable <code>x</code> remains unchanged at <code>10</code> <b>(1)</b>. Second print outputs <code>10</code> <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b6">
+          <div class="aq-top"><h4>b6. What is a <em>fruitful function</em> compared to a <em>void (procedure) function</em>? Give one example of each.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Fruitful vs void function + examples…" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>A fruitful function computes and returns a specific value to the caller via a <code>return</code> statement (e.g. <code>len("Ikogosi")</code> returns <code>7</code>) <b>(2)</b>. A void function (procedure) performs an action (such as printing to screen or writing to a file) without returning a value (e.g. <code>print("Hello")</code>) <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b7">
+          <div class="aq-top"><h4>b7. What does the <code>return</code> statement do besides passing a value back to the caller?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="What else does return do?…" aria-label="b7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>It immediately terminates function execution, popping the local stack frame and returning control back to the exact point where the function was called <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b8">
+          <div class="aq-top"><h4>b8. Why is relying heavily on global variables considered poor programming practice?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="Three reasons against heavy global variable use…" aria-label="b8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>It creates hidden dependencies between routines, makes code difficult to debug because any part of the program can unexpectedly overwrite the global variable, and makes functions harder to test or reuse in other programs <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);">
+          <a class="btn btn-ghost" href="../lesson-04/index.html" style="color:var(--paper-ink);border-color:var(--paper-line);">← Lesson 4: Arrays &amp; Indexing</a>
+          <a class="btn btn-tour" href="../lesson-06/index.html">Next: Lesson 6 — Silicon Roots &amp; Exam Clinic →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/programming-bench.js"></script>
+  <script src="../../assets/js/programming-zoom.js"></script>
+  <script src="../../assets/js/microgrid-props.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script>
+    (function () {
+      if (!window.StudyMath || !window.StudyMath.tex) return;
+      document.querySelectorAll('.sp-math[data-latex]').forEach(function (el) {
+        if (el.innerHTML.trim()) return;
+        var tex = el.getAttribute('data-latex');
+        if (tex) el.outerHTML = window.StudyMath.tex(tex, el.tagName === 'DIV');
+      });
+    })();
+  </script>
+</body>
+</html>

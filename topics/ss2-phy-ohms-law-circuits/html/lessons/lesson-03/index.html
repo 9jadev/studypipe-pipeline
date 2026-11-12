@@ -3,51 +3,123 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 3 · Series &amp; Parallel Networks, Cell Arrays, Power &amp; Efficiency · StudyPipe</title>
-  <meta name="description" content="StudyPipe Physics (SS2): Series and Parallel Resistor Networks, Current Divider Rule, Identical Cells in Series and Parallel, Electrical Power, and Circuit Efficiency.">
+  <title>Lesson 3 · Networks, Cells, Power &amp; Efficiency · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): combine resistors in series and parallel, join cells in arrays, and work out electrical power, the kilowatt-hour and source efficiency with the P–R and η–R curves.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='20' width='44' height='24' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='24' width='44' height='16' rx='5' fill='%23d98a00'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+    .hero-art {
+      position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--amber-rgb), .22), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #3ee6c4 0%, #ffb23f 35%, #f43f5e 70%, #2fb344 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .hs-t { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+    .hs-m { fill: var(--amber); font-family: var(--font-mono); font-size: 10.5px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* ---- compact bench (phone first) ---- */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; margin: 0; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(340px, 96vw, 440px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 15px; white-space: normal; display: block; line-height: 1.2; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+    .bench-ctl, .bench-util { padding: 8px 12px; gap: 8px; }
+    #bench-arr { flex: 1 1 100%; } #bench-arr button { flex: 1; }
+    .bench-loads { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; flex: 1 1 100%; }
+    .bench-loads .vt-btn { padding: 8px 2px; font-size: 12.5px; min-height: 40px; }
+    .bench-util .util-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; width: 100%; }
+    .bench-util .vt-btn { padding: 8px 4px; font-size: 13px; min-height: 40px; }
+    .bench-util .stage-hint { margin: 0; width: 100%; font-size: 12.5px; }
+    #practical .intro { font-size: .95rem; line-height: 1.45; margin: 6px 0 0; }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    .sheet-note b { color: var(--paper-ink); }
+
+    /* ---- graph card toggle ---- */
+    #graph-card .gc-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    #graph-mode { display: inline-flex; gap: 4px; }
+    #graph-mode button { min-height: 34px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; font-size: 12.5px; cursor: pointer; }
+    #graph-mode button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+
+    /* ---- zoom counters ---- */
+    #zoom-stage .stage-canvas { height: clamp(320px, 92vw, 420px); }
+    #zoom-ratio { display: inline-flex; gap: 4px; }
+
+    /* ---- load explorer ---- */
+    .pos-track { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 48px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 84px; }
+    .pos-info b { color: var(--amber); }
+
+    /* ---- bridge ---- */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; min-width: 0; }
+      #results-table tr { display: grid; grid-template-columns: minmax(0, 1fr) 46px 54px 54px; column-gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table tbody tr:last-child { border-bottom: 0; }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 13px; }
+      #results-table th { font-size: 10px; background: none; }
+      #results-table thead tr { padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table td::before { content: none; }
+      #results-table td.setup-cell { grid-row: 1; grid-column: 1; }
+      #results-table td.setup-cell strong { font-weight: 700; display: block; font-size: 12.5px; }
+      #results-table td.setup-cell .why { grid-row: 2; grid-column: 1 / -1; font-size: 11px; line-height: 1.3; color: var(--paper-muted); display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+      #results-table tr.open td.setup-cell .why { -webkit-line-clamp: unset; }
+      #results-table td[data-c] { align-self: center; text-align: center; font-variant-numeric: tabular-nums; }
+      #results-table tbody tr.fresh { background: rgba(var(--amber-rgb), .12); }
     }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
+    @media (min-width: 641px) {
+      .bench-loads { grid-template-columns: repeat(5, auto); flex: 0 1 auto; }
+      #bench-arr { flex: 0 0 auto; }
+      .bench-ctl { justify-content: space-between; align-items: center; }
+      .bench-util .util-row { display: flex; width: auto; }
+      .bench-util .stage-hint { width: auto; margin-left: auto; }
+      #bench-stage .stage-canvas { height: clamp(340px, 48vw, 480px); }
+      #method-cards div.method { padding: 10px 14px; }
     }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
+    @media (max-width: 560px) {
+      .pos-track { gap: 4px; }
+      .pos-pin { font-size: 12px; }
+      .stage-bar .seg button { padding: 8px 10px; font-size: 12.5px; }
     }
-    /* Lesson 03 bench: notebook-trial buttons */
-    .l3-trials { margin-bottom: 16px; }
-    .l3-trials-lab { display: block; font-size: 12.5px; font-weight: 600; color: var(--fg-soft); margin-bottom: 6px; }
-    .l3-trials .seg { display: flex; }
-    .l3-trials .seg button { padding: 8px 10px; font-size: 12.5px; min-height: 36px; }
-    .ctl[hidden] { display: none; }
-    /* keep physics symbols in their true case (η, r, R are not interchangeable) */
-    #bench .ro small, #pr-card .gc-stat span, #zoom-readout span { text-transform: none; letter-spacing: .03em; }
-    #results-table .lab-table.cards td::before { text-transform: none; font-size: 11.5px; letter-spacing: .02em; }
+    #results-table td.empty { color: var(--paper-faint); }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
   <link rel="stylesheet" href="../../assets/css/theme.css">
 </head>
 <body class="lesson-page" data-lesson="l03">
@@ -57,7 +129,7 @@
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
       <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 3 of 5 · <b>Series/Parallel Networks, Cells &amp; Power</b></span>
+      <span class="l-crumb">Lesson 3 of 5 · <b>Networks, Cells, Power &amp; Efficiency</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -66,15 +138,15 @@
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Physics · Lesson 3 of 5 · 50 minutes</span>
-        <h1 class="display reveal" data-hook>Series &amp; Parallel Networks, Cell Arrays, <em>Power &amp; Efficiency</em></h1>
-        <p class="question reveal">Why do three 2.0 V cells connected in parallel spin a heavy DC water pump twice as fast as the exact same three cells connected in series?</p>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 3 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Networks, Cell Arrays, <em>Power &amp; Efficiency</em></h1>
+        <p class="question reveal">Series or parallel for the shop's backup cells, and why does a worn battery run hot?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Calculate equivalent resistance for <strong>series (R<sub>eq</sub> = R<sub>1</sub> + R<sub>2</sub>)</strong>, <strong>parallel (1/R<sub>eq</sub> = 1/R<sub>1</sub> + 1/R<sub>2</sub>)</strong>, and composite series-parallel networks.</span></li>
-          <li><b>02</b><span>Apply the <strong>current-divider rule</strong> <strong>I<sub>1</sub> = I<sub>total</sub> × R<sub>2</sub> ÷ (R<sub>1</sub> + R<sub>2</sub>)</strong> to split main current across parallel branches.</span></li>
-          <li><b>03</b><span>Determine <strong>E<sub>eq</sub></strong> and <strong>r<sub>eq</sub></strong> for identical cells in <strong>series (nE, nr)</strong> and in <strong>parallel (E, r ÷ n)</strong>.</span></li>
-          <li><b>04</b><span>Calculate electrical power <strong>P = IV = I<sup>2</sup>R = V<sup>2</sup> ÷ R</strong> and energy <strong>E = IVt</strong> in series and parallel appliances.</span></li>
-          <li><b>05</b><span>Compute circuit efficiency <strong>η = [R ÷ (R + r)] × 100%</strong> and explain why <strong>R = r</strong> gives maximum power transfer.</span></li>
+          <li><b>01</b><span>Combine resistors in <strong>series</strong> (R = ΣR) and <strong>parallel</strong> (¹⁄R = Σ ¹⁄R) and reduce a mixed network.</span></li>
+          <li><b>02</b><span>Find <strong>branch currents</strong> and potential drops in a series–parallel network.</span></li>
+          <li><b>03</b><span>Combine <strong>cells</strong> in series (Eₜ = nE, rₜ = nr) and identical cells in parallel (Eₜ = E, rₜ = r/n).</span></li>
+          <li><b>04</b><span>Calculate electrical energy and <strong>power</strong> (P = IV = I²R = V²/R), and read a light bill in kilowatt-hours.</span></li>
+          <li><b>05</b><span>Calculate source <strong>efficiency</strong> η = R/(R + r) = V/E and read the P–R and η–R curves.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -83,30 +155,27 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–45</b> Investigate</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
 
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 400 260" role="img" aria-label="Circuit: a cell drives 4 A into 4 ohm and 12 ohm resistors in parallel; 3 A flows through 4 ohm and 1 A through 12 ohm">
-          <g fill="none" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M60 118 V50 H170"/><path d="M60 142 V215 H330 V150"/>
-            <path d="M170 50 V150"/><path d="M330 50 V150"/>
-            <path d="M170 50 H210 M290 50 H330"/><path d="M170 150 H210 M290 150 H330"/>
-          </g>
-          <line x1="38" y1="118" x2="82" y2="118" stroke="#f8fafc" stroke-width="3"/>
-          <line x1="49" y1="142" x2="71" y2="142" stroke="#f8fafc" stroke-width="6"/>
-          <text x="92" y="136" fill="#cbd5e1" font-family="JetBrains Mono, monospace" font-size="13">E</text>
-          <rect x="210" y="36" width="80" height="28" rx="6" fill="#0f172a" stroke="#3ee6c4" stroke-width="2.5"/>
-          <text x="250" y="55" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">4 Ω</text>
-          <rect x="210" y="136" width="80" height="28" rx="6" fill="#0f172a" stroke="#ffb23f" stroke-width="2.5"/>
-          <text x="250" y="155" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">12 Ω</text>
-          <text x="110" y="40" fill="#f8fafc" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">I = 4 A →</text>
-          <text x="250" y="26" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">I₁ = 3 A</text>
-          <text x="250" y="186" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="13" text-anchor="middle">I₂ = 1 A</text>
-          <text x="200" y="248" fill="#f5efe4" font-family="Manrope, sans-serif" font-size="14" text-anchor="middle">Smaller resistor → bigger share of current</text>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <!-- P–R curve rising to a peak at R = r, then falling -->
+          <line x1="40" y1="200" x2="300" y2="200" stroke="rgba(245,239,228,.5)" stroke-width="2"/>
+          <line x1="40" y1="200" x2="40" y2="30" stroke="rgba(245,239,228,.5)" stroke-width="2"/>
+          <path d="M40 200 C70 70 90 60 110 60 C150 60 210 150 300 182" fill="none" stroke="var(--amber)" stroke-width="3"/>
+          <path d="M40 200 C120 120 200 85 300 70" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="5 5"/>
+          <circle cx="110" cy="60" r="4" fill="var(--amber)"/>
+          <line x1="110" y1="60" x2="110" y2="200" stroke="var(--sky)" stroke-width="1.5" stroke-dasharray="3 4"/>
+          <text class="hs-m" x="118" y="52">P peaks at R = r</text>
+          <text class="hs-t" x="250" y="60">η → 100%</text>
+          <text class="hs-t" x="150" y="222">load R →</text>
         </svg>
       </div>
     </div>
@@ -118,10 +187,10 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Concept sort</a></li>
-        <li><a href="#practical">3D practical</a></li>
-        <li><a href="#concepts">Network &amp; Cells</a></li>
-        <li><a href="#neutralise">Junction zoom</a></li>
+        <li><a href="#sort">Series or parallel?</a></li>
+        <li><a href="#practical">Cell-array bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Node zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -133,538 +202,545 @@
     </nav>
 
     <main class="l-main" id="main">
-
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
-        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>retrieve Lessons 1 &amp; 2 from memory</em></h2>
-        <p class="intro">Four quick spaced-retrieval flashcards on terminal p.d., lost volts, V–I graph gradient, and wire diameter scaling. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 1 and 2</em></h2>
+        <p class="intro">Four quick cards on terminal p.d., power and series resistors. Answer each in your head <strong>before</strong> you reveal it.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
         </div>
       </section>
 
-      <!-- ================= 1. WONDER: STORY ================= -->
+      <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The phenomenon</span>
-        <h2>Tunde’s Surulere <em>Solar-Inverter Battery Bank Puzzle</em></h2>
-        <p class="intro">Solar technician <strong>Tunde</strong> and his apprentice <strong>Damilola</strong> are testing three aged 2.0 V solar cells (each with internal resistance <em>r = 1.5 Ω</em>) on a heavy low-resistance DC pump (<em>R = 0.3 Ω</em>). Step through the 3 beats.</p>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>Three backup cells at <em>Nkechi Auto-Electric, Aba</em></h2>
+        <p class="intro">Emeka wants a backup pump for his shop. He has three cells — should he join them in a line, or side by side? And why is the old battery hot?</p>
 
-        <div class="story-wrap" id="story-stage">
-          <canvas id="story-canvas" aria-label="3D animation of Tunde and Damilola comparing 3 cells in series versus 3 cells in parallel"></canvas>
-          <div class="story-overlay">
-            <span class="story-badge" data-story-badge>Series: E_eq = 6.0 V, r_eq = 4.5 Ω</span>
-            <div class="story-bubbles" data-story-bubbles></div>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Nkechi's auto-electric workshop on Ngwa Road, Aba, with a keke, a worn battery, jumper cables and three backup cells. Emeka, Tobe, Chinedu and Engr. Nkechi discuss series and parallel wiring."></canvas>
+            <div class="stage-label"><i></i>3D story · Nkechi Auto-Electric, Ngwa Rd, Aba</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
           </div>
-          <div class="story-caption">
-            <div class="story-caption-text">
-              <strong data-story-title>Beat 1 · Series Cells Choke on a Heavy Pump Load!</strong>
-              <p data-story-sub>Loading scene…</p>
-            </div>
-            <div class="story-controls">
-              <button class="btn btn-ghost btn-sm" type="button" data-story-prev aria-label="Previous beat">← Prev</button>
-              <div class="story-dots" role="tablist" aria-label="Story beats">
-                <button type="button" class="on" data-beat="0" aria-label="Beat 1"></button>
-                <button type="button" data-beat="1" aria-label="Beat 2"></button>
-                <button type="button" data-beat="2" aria-label="Beat 3"></button>
-              </div>
-              <button class="btn btn-primary btn-sm" type="button" data-story-next>Next →</button>
-            </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Emeka:</strong> <em>“My shop needs a backup pump. Should I join these three cells in a line, or side by side?”</em></p>
+            <p><strong>Scene 2 · Tobe:</strong> <em>“Side by side gives more voltage, obviously.”</em> Chinedu frowns.</p>
+            <p><strong>Scene 3 · Engr. Nkechi:</strong> <em>“A low-resistance pump pulls a big current. Series gives more voltage but more internal resistance; parallel keeps the voltage but shares the current and lowers r.”</em></p>
+            <p><strong>Scene 4 · Chinedu:</strong> he notices the worn battery is hot after the test. <em>“Why does it warm up so much?”</em></p>
+            <p><strong>Scene 5 · Engr. Nkechi:</strong> <em>“Because I²r is burned inside it. Let's measure which arrangement wastes least and runs coolest.”</em></p>
+          </div>
+        </details>
       </section>
 
-      <!-- ================= 1B. WONDER WALL ================= -->
+      <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:var(--amber)"><b>1b</b>Wonder Wall · Student questions</span>
-        <h2>What are you <em>wondering</em> about series &amp; parallel circuits?</h2>
-        <p class="intro">Add your own curiosity to the class Wonder Wall before we test networks on the 3D bench.</p>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">For a pump that needs a big current, which cell arrangement delivers the most useful power? Pin your idea before we test it.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="140" placeholder="e.g. Why does adding a resistor in parallel REDUCE total resistance?" aria-label="Add your prediction or question">
-            <button class="btn btn-primary btn-sm" type="submit">Pin to the wall</button>
+            <input type="text" maxlength="160" placeholder="I think the best arrangement is… because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
-          <div class="seed-qs" aria-label="Example questions">
-            <button type="button">Why does parallel R decrease?</button>
-            <button type="button">When do series cells beat parallel?</button>
-            <button type="button">Which bulb glows brighter in parallel?</button>
-            <button type="button">Why does R = r give peak power?</button>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">Series, more voltage (Tobe)</button>
+            <button type="button">Parallel, more current (Amara)</button>
+            <button type="button">It depends on the pump's resistance (Chinedu)</button>
+            <button type="button">They're all the same (Ngozi)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 2. INVESTIGATE: SORT ================= -->
+      <!-- ================= 3. SORT ================= -->
       <section class="l-sec" id="sort">
         <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
-        <h2>Sort the 10 rules: <em>Series, Parallel, or Power &amp; Efficiency?</em></h2>
-        <p class="intro">Classify each relationship into <strong>Series Network &amp; Series Cells</strong>, <strong>Parallel Network &amp; Parallel Cells</strong>, or <strong>Electrical Power &amp; Efficiency</strong>.</p>
+        <h2>Series or parallel <em>behaviour?</em></h2>
+        <p class="intro">Drag each card into the bin where it belongs. Some statements are true of <strong>series</strong>, some of <strong>parallel</strong>, and some of <strong>either</strong> circuit.</p>
 
-        <div class="sort-board" id="kitchen-sort">
-          <div>
-            <div class="sort-tray-label">Unclassified Circuit Cards (10) · tap or drag into a bin</div>
-            <div class="sort-tray" id="sort-tray" role="region" aria-label="Items to classify"></div>
+        <div class="sort" id="net-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="series" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Series bin">
+              <h4><i></i>Series</h4>
+              <small>one path, one current</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="parallel" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Parallel bin">
+              <h4><i></i>Parallel</h4>
+              <small>shared p.d., split current</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="either" style="--bc:var(--violet)" tabindex="0" role="button" aria-label="Either or both bin">
+              <h4><i></i>Either / both</h4>
+              <small>true of any circuit</small>
+              <div class="drop"></div>
+            </div>
           </div>
-
-          <div class="sort-bins">
-            <div class="bin" data-bin="shm" tabindex="0" role="region" aria-label="Series Network and Series Cells bin">
-              <h4><span class="dot" style="background:var(--teal)"></span>Series Network &amp; Cells <small>I same · R₁+R₂ · nE, nr</small></h4>
-              <div class="drop"></div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
             </div>
-            <div class="bin" data-bin="periodic" tabindex="0" role="region" aria-label="Parallel Network and Parallel Cells bin">
-              <h4><span class="dot" style="background:var(--amber)"></span>Parallel Network &amp; Cells <small>V same · R₁R₂/(R₁+R₂) · E, r/n</small></h4>
-              <div class="drop"></div>
-            </div>
-            <div class="bin" data-bin="non" tabindex="0" role="region" aria-label="Electrical Power and Efficiency bin">
-              <h4><span class="dot" style="background:var(--pink)"></span>Power &amp; Efficiency <small>P = I²R = V²/R · η = R/(R+r)</small></h4>
-              <div class="drop"></div>
-            </div>
-          </div>
-
-          <div class="sort-actions">
-            <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
-            <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Reset</button>
             <span class="sort-score" id="sort-score" aria-live="polite"></span>
           </div>
-          <div class="feedback" id="sort-feedback" role="status" aria-live="polite"></div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 2B. 3D PRACTICAL BENCH ================= -->
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2b</b>Investigate · Activity 2 · 3D Practical</span>
-        <h2>3D Network &amp; <em>Cell Array Builder Bench</em></h2>
-        <p class="intro">Switch between <strong>Series (R<sub>1</sub> + R<sub>2</sub>)</strong>, <strong>Parallel (R<sub>1</sub> ∥ R<sub>2</sub>)</strong>, and <strong>Combo (R<sub>3</sub> + R<sub>1</sub> ∥ R<sub>2</sub>)</strong>, and test <strong>Single Cell</strong>, <strong>3 Series Cells</strong>, or <strong>3 Parallel Cells</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The cell-array bench: <em>power &amp; efficiency</em></h2>
+        <p class="intro">The single cell is <strong>E = 5.0 V, r = 0.5 Ω</strong>. Record four loads to plot the P–R and η–R curves, then switch in the three backup cells (1.5 V, 2.0 Ω each) to compare series with parallel on the 1.0 Ω pump.</p>
 
-        <div class="bench" id="bench">
-          <div class="bench-stage" id="bench-stage">
-            <canvas id="bench-canvas" aria-label="3D Resistor Network and Cell Array Builder Bench"></canvas>
-            <div class="bench-overlay-top">
-              <span class="bench-chip" id="bench-instruction">3 in parallel · 2.0 V, r 0.5 Ω · R = 3.0 Ω</span>
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Build the network</h4><p>Pick the cell and load.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Read I, P and η</h4><p>Measure the load power and efficiency.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Series vs parallel</h4><p>Switch the three cells and compare.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Vary the load</h4><p>Four loads draw the two curves.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D cell-array bench: lead-acid cells, an ammeter and voltmeter at a junction node, and load resistors, wired for series or parallel cell arrangements."></canvas>
+            <div class="stage-label"><i></i>3D cell-array bench · drag to rotate</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the buttons, the table and the graph below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar bench-ctl">
+            <div class="seg" role="group" aria-label="Cell arrangement" id="bench-arr">
+              <button type="button" data-arr="single" aria-pressed="true">Single cell (5 V)</button>
+              <button type="button" data-arr="series" aria-pressed="false">3 cells — series</button>
+              <button type="button" data-arr="parallel" aria-pressed="false">3 cells — parallel</button>
+            </div>
+            <div class="bench-loads" id="bench-loads" role="group" aria-label="Load resistance (single cell)">
+              <button class="vt-btn" type="button" data-load="0.1">0.1 Ω</button>
+              <button class="vt-btn" type="button" data-load="0.5">0.5 Ω</button>
+              <button class="vt-btn" type="button" data-load="1">1.0 Ω</button>
+              <button class="vt-btn" type="button" data-load="2">2.0 Ω</button>
+              <button class="vt-btn" type="button" data-load="4">4.0 Ω</button>
             </div>
           </div>
-
-          <div class="bench-panel">
-            <div class="l3-trials">
-              <span class="l3-trials-lab">Set up a notebook trial</span>
-              <div class="seg" role="group" aria-label="Load a lab-notebook trial onto the bench" id="bench-trials">
-                <button type="button" data-trial="t1" aria-pressed="false">T1 Series R</button>
-                <button type="button" data-trial="t2" aria-pressed="false">T2 Parallel R</button>
-                <button type="button" data-trial="t3" aria-pressed="false">T3 Combo</button>
-                <button type="button" data-trial="t4" aria-pressed="false">T4 Series cells</button>
-                <button type="button" data-trial="t5" aria-pressed="false">T5 Parallel cells</button>
-                <button type="button" data-trial="t6" aria-pressed="false">T6 Starter 0.3 Ω</button>
-              </div>
+          <div class="stage-bar bench-util">
+            <div class="util-row">
+              <button class="vt-btn zobo" type="button" id="bench-measure">Measure current setup</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
             </div>
-            <div class="ctl-grid">
-              <div class="ctl">
-                <label for="ctl-topology">Resistor Topology</label>
-                <select id="ctl-topology" style="width:100%;padding:8px;border-radius:8px;background:#0f172a;color:#f8fafc;border:1px solid rgba(255,255,255,.16);font-family:var(--sans)">
-                  <option value="parallel" selected>Parallel (R₁ ∥ R₂)</option>
-                  <option value="series">Series (R₁ + R₂)</option>
-                  <option value="combo">Combo: 3 Ω + (R₁ ∥ R₂)</option>
-                  <option value="load">Single load resistor R</option>
-                </select>
-              </div>
-              <div class="ctl">
-                <label for="ctl-cells">Supply (cells are 2.0 V, 1.5 Ω each)</label>
-                <select id="ctl-cells" style="width:100%;padding:8px;border-radius:8px;background:#0f172a;color:#f8fafc;border:1px solid rgba(255,255,255,.16);font-family:var(--sans)">
-                  <option value="parallel3" selected>3 Cells in Parallel (E=2V, r=0.5Ω)</option>
-                  <option value="series3">3 Cells in Series (E=6V, r=4.5Ω)</option>
-                  <option value="single">1 Single Cell (E=2V, r=1.5Ω)</option>
-                  <option value="acc12">12 V accumulator (r ≈ 0)</option>
-                  <option value="bat14">14 V battery (r = 1.0 Ω)</option>
-                </select>
-              </div>
-              <div class="ctl" data-ctl-net>
-                <label for="ctl-r1">Branch Resistor R₁: <strong id="ctl-r1-val">4.0 Ω</strong></label>
-                <input type="range" id="ctl-r1" min="2.0" max="12.0" step="1.0" value="4.0">
-              </div>
-              <div class="ctl" data-ctl-net>
-                <label for="ctl-r2">Branch Resistor R₂: <strong id="ctl-r2-val">12.0 Ω</strong></label>
-                <input type="range" id="ctl-r2" min="2.0" max="16.0" step="1.0" value="12.0">
-              </div>
-              <div class="ctl" data-ctl-load hidden>
-                <label for="ctl-rl">Load resistor R: <strong id="ctl-rl-val">1.5 Ω</strong></label>
-                <input type="range" id="ctl-rl" min="0.3" max="6.0" step="0.1" value="1.5">
-              </div>
-            </div>
-
-            <div class="readout-bar" aria-live="polite">
-              <div class="ro"><small>Total resistance R_eq</small><strong id="ro-req">3.00 Ω</strong></div>
-              <div class="ro"><small>Cell group: E_eq / r_eq</small><strong id="ro-cell">2.0 V / 0.50 Ω</strong></div>
-              <div class="ro"><small>Main current I</small><strong id="ro-imain">0.57 A</strong></div>
-              <div class="ro"><small>Branch currents I₁, I₂</small><strong id="ro-branch">0.43 A, 0.14 A</strong></div>
-              <div class="ro"><small>Terminal p.d. V</small><strong id="ro-v">1.71 V</strong></div>
-              <div class="ro"><small>Load power P = I²R</small><strong id="ro-p">0.98 W</strong></div>
-              <div class="ro"><small>Lost in cells I²r</small><strong id="ro-lost">0.16 W</strong></div>
-              <div class="ro"><small>Efficiency η</small><strong id="ro-eff">85.7 %</strong></div>
-            </div>
-
-            <div class="bench-btns">
-              <button class="btn btn-primary btn-sm" type="button" id="bench-key">🔑 Open key (break circuit)</button>
-              <button class="btn btn-ghost btn-sm" type="button" id="bench-record">📝 Log reading</button>
-            </div>
+            <span class="stage-hint" id="bench-hint">Tap each load to record P and η (do 4)</span>
           </div>
         </div>
 
-<div class="graph-card" id="pr-card">
+        <!-- ================= GRAPH ================= -->
+        <div class="graph-card" id="graph-card">
           <div class="gc-head">
-            <div><span class="gc-kicker">Live graph · follows the bench</span><h4 id="pr-title">Load power P against load resistance R</h4></div>
-            <span class="gc-badge wait" id="pr-badge">0 logged</span>
-          </div>
-          <div class="gc-tabs" role="group" aria-label="Choose graph">
-            <button type="button" data-prtab="P" aria-pressed="true">Load power P vs R</button>
-            <button type="button" data-prtab="eff" aria-pressed="false">Efficiency η vs R</button>
-          </div>
-          <div id="pr-graph"></div>
-          <div class="gc-stats" id="pr-stats"></div>
-          <p class="gc-note" id="pr-note"></p>
-        </div>
-
-        <div class="symbol-key" aria-label="What the symbols mean">
-          <h4>What the symbols mean on this bench</h4>
-          <dl>
-            <div><dt>R<sub>1</sub>, R<sub>2</sub>, R<sub>3</sub></dt><dd>the individual resistors</dd></div>
-            <div><dt>R<sub>eq</sub></dt><dd>equivalent (total) resistance of the resistor network</dd></div>
-            <div><dt>E</dt><dd>EMF of one cell (here 2.0 V)</dd></div>
-            <div><dt>r</dt><dd>internal resistance of one cell (here 1.5 Ω)</dd></div>
-            <div><dt>E<sub>eq</sub></dt><dd>EMF of the whole group of cells</dd></div>
-            <div><dt>r<sub>eq</sub></dt><dd>internal resistance of the whole group of cells</dd></div>
-            <div><dt>I</dt><dd>main current leaving the cells</dd></div>
-            <div><dt>I<sub>1</sub>, I<sub>2</sub></dt><dd>currents in branch 1 and branch 2</dd></div>
-            <div><dt>P</dt><dd>power, in watts (joules per second)</dd></div>
-            <div><dt>η</dt><dd>efficiency: the % of the cells’ energy that is used in the load</dd></div>
-          </dl>
-        </div>
-
-        <div class="table-wrap" id="results-table">
-          <div class="table-head">
-            <h3>Lab Notebook · 6 Network, Cell Array &amp; Efficiency Trials</h3>
-            <div class="table-actions">
-              <button class="btn btn-ghost btn-sm" type="button" id="table-fill">Fill from bench</button>
-              <button class="btn btn-primary btn-sm" type="button" id="table-check">Check my table</button>
-              <button class="btn btn-ghost btn-sm" type="button" id="table-reset">Clear</button>
-              <span class="sort-score" id="table-score" aria-live="polite"></span>
+            <div><span class="gc-kicker">Live graph · plots as you record</span><h4>Load power and efficiency against load R</h4></div>
+            <div class="seg" id="graph-mode" role="group" aria-label="Which curve">
+              <button type="button" data-g="power" aria-pressed="true">Power P–R</button>
+              <button type="button" data-g="eff" aria-pressed="false">Efficiency η–R</button>
             </div>
+            <span class="gc-badge wait" id="load-badge">0 points</span>
           </div>
-          <div class="table-scroll">
-            <table class="lab-table">
-              <thead>
-                <tr>
-                  <th>Circuit Configuration</th>
-                  <th>Equivalent R<sub>eq</sub></th>
-                  <th>Load Power P</th>
-                  <th>Efficiency η</th>
-                  <th>Key Insight</th>
-                </tr>
-              </thead>
-              <tbody id="results-body"></tbody>
-            </table>
+          <div id="load-graph"></div>
+          <p class="gc-note" id="load-note"></p>
+        </div>
+
+        <h3>Record your trials</h3>
+        <p>Four single-cell loads, then the series and parallel arrays. Tap a row to see its working.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr><th>Setup</th><th>R<sub>eq</sub> / Ω</th><th>I / A</th><th>P / W</th><th>η / %</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="route-line">Trials recorded: <b>0 of 4 loads</b> · arrays: <b>0 of 2</b></p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected results &amp; curves <small>open after you measure</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>R / Ω</th><th>I / A</th><th>P = I²R / W</th><th>η = R/(R+r) / %</th></tr></thead>
+                <tbody>
+                  <tr><td>0.1</td><td>8.33</td><td>6.94</td><td>16.7</td></tr>
+                  <tr><td>0.5</td><td>5.00</td><td>12.5</td><td>50.0</td></tr>
+                  <tr><td>1.0</td><td>3.33</td><td>11.1</td><td>66.7</td></tr>
+                  <tr><td>2.0</td><td>2.00</td><td>8.00</td><td>80.0</td></tr>
+                  <tr><td>4.0</td><td>1.11</td><td>4.94</td><td>88.9</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">P = E²R/(R + r)² peaks at R = r = 0.5 Ω (P = 12.5 W); η = R/(R + r) climbs towards 100 %.</div>
+            <p><strong>Cell arrays (1.5 V, r = 2.0 Ω each, 1.0 Ω pump):</strong> parallel I = 1.5/(1.0 + 0.667) = <strong>0.90 A</strong>; series I = 4.5/(1.0 + 6.0) = <strong>0.64 A</strong>. The P–R and η–R graphs are <strong>smooth curves, never straight lines</strong>.</p>
           </div>
-          <div class="feedback" id="table-feedback" role="status" aria-live="polite"></div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l03-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>For a low-resistance pump, which cell arrangement gives more current, and why?</li>
+            <li>Why is a parallel combination's resistance smaller than any one branch?</li>
+            <li>At what load is the output power greatest?</li>
+            <li>Why does maximum power not mean maximum efficiency?</li>
+            <li>Why does a worn (high-r) battery run hot and waste power?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Parallel. For a low-resistance load the internal resistance dominates, and identical cells in parallel give rₜ = r/n, so the current I = E/(R + r/n) is larger than the series current E_t/(R + nr).</li>
+                <li>Adding a branch gives the charge an extra path, so for the same p.d. more total current flows; since R = V/I, a larger current at the same p.d. means a smaller combined resistance — smaller than any single branch.</li>
+                <li>At R = r, where the load power P = E²R/(R + r)² reaches its single peak (here 12.5 W at R = 0.5 Ω).</li>
+                <li>At R = r the efficiency η = R/(R + r) is only 50 %, so half the power is wasted inside the cell. High efficiency needs R ≫ r, where the output power is small. The two are not maximised together.</li>
+                <li>A worn battery has a large internal resistance r, so under load it dissipates a big I²r inside itself as heat, which both warms it and lowers its efficiency R/(R + r).</li>
+              </ol>
+            </div>
+          </details>
         </div>
       </section>
 
-      <!-- ================= 45-MIN ACTIVE BREAK ================= -->
-      <aside class="l-sec" id="movement-break" aria-label="Active movement break" style="background:linear-gradient(135deg,rgba(62,230,196,.1),rgba(255,178,63,.08));border-color:rgba(62,230,196,.35)">
-        <span class="phase" style="--pc:var(--lime)">⚡ Active Break · 2 min</span>
-        <h2>Stretch &amp; Act Out the <em>Inverse Current Divider</em>!</h2>
-        <p class="intro">Stand up! Hold your left arm out narrow (high resistance <strong>12 Ω</strong>) and your right arm wide open (low resistance <strong>4 Ω</strong>). Move your right hand <strong>3 times faster</strong> than your left hand — because in parallel, the smaller resistor carries the larger current (<strong>I<sub>1</sub> : I<sub>2</sub> = R<sub>2</sub> : R<sub>1</sub></strong>)!</p>
-      </aside>
-
-      <!-- ================= 3. MAKE SENSE ================= -->
+      <!-- ================= 4. CONCEPTS (MAKE SENSE) ================= -->
       <section class="l-sec" id="concepts">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · Core concepts</span>
-        <h2>Resistor Networks, Cell Arrays, <em>Power &amp; Efficiency</em></h2>
-        <p class="intro">Master these four high-yield equation groups for WAEC, NECO, and JAMB:</p>
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Networks, cell arrays, <em>power &amp; efficiency</em></h2>
+        <p class="intro">Now connect what you measured to the equations WAEC, NECO and JAMB expect.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>Networks, Cell Arrays, Power &amp; Efficiency</b><span class="lv-time">12 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: Networks, Cell Arrays, Power &amp; Efficiency" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
 
-<div class="symbol-key" aria-label="What the symbols mean">
-          <h4>What the symbols mean</h4>
-          <dl>
-            <div><dt>R<sub>1</sub>, R<sub>2</sub>, R<sub>3</sub></dt><dd>the individual resistors</dd></div>
-            <div><dt>R<sub>eq</sub></dt><dd>equivalent (total) resistance of the resistor network</dd></div>
-            <div><dt>E</dt><dd>EMF of one cell (here 2.0 V)</dd></div>
-            <div><dt>r</dt><dd>internal resistance of one cell (here 1.5 Ω)</dd></div>
-            <div><dt>E<sub>eq</sub></dt><dd>EMF of the whole group of cells</dd></div>
-            <div><dt>r<sub>eq</sub></dt><dd>internal resistance of the whole group of cells</dd></div>
-            <div><dt>I</dt><dd>main current leaving the cells</dd></div>
-            <div><dt>I<sub>1</sub>, I<sub>2</sub></dt><dd>currents in branch 1 and branch 2</dd></div>
-            <div><dt>P</dt><dd>power, in watts (joules per second)</dd></div>
-            <div><dt>η</dt><dd>efficiency: the % of the cells’ energy that is used in the load</dd></div>
-          </dl>
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up. Walk slowly in a single file loop around your seat — that is a <strong>series</strong> path, one route for everyone. Now split into two lanes side by side and walk — that is <strong>parallel</strong>, the current sharing between branches. Do it twice, shake out your hands and sit down.</p>
         </div>
 
-        <div class="concept-grid">
-          <article class="concept-card">
-            <span class="tag" style="--c:var(--teal)">1 · Combining resistors</span>
-            <h3>Series adds up, parallel shares out</h3>
-            <p>In <strong>series</strong> there is only one path, so the <strong>same current</strong> flows through every resistor and their voltages add up. In <strong>parallel</strong> every branch joins the same two junctions, so each branch has the <strong>same voltage</strong> and their currents add up.</p>
-            <div class="fx"><span class="lbl">Series</span>R<sub>eq</sub> = R<sub>1</sub> + R<sub>2</sub> + R<sub>3</sub></div>
-            <div class="fx"><span class="lbl">Parallel</span>1/R<sub>eq</sub> = 1/R<sub>1</sub> + 1/R<sub>2</sub> + 1/R<sub>3</sub></div>
-            <div class="fx"><span class="lbl">Two only</span>R<sub>eq</sub> = R<sub>1</sub>R<sub>2</sub> ÷ (R<sub>1</sub> + R<sub>2</sub>)</div>
-            <p class="eg"><b>Example</b>4 Ω and 12 Ω in series give 16 Ω. In parallel they give 48 ÷ 16 = 3 Ω.</p>
-            <p class="trap"><b>Exam trap</b>After adding the 1/R values, flip the answer to get R<sub>eq</sub>. Quick check: a parallel R<sub>eq</sub> is always <em>smaller</em> than the smallest branch.</p>
-          </article>
-          <article class="concept-card">
-            <span class="tag" style="--c:var(--amber)">2 · Current divider</span>
-            <h3>The smaller resistor takes the bigger current</h3>
-            <p>When the main current <em>I</em> reaches a parallel junction, it splits. Each branch gets a share in <strong>inverse</strong> proportion to its resistance, so the branch with less resistance carries more current.</p>
-            <div class="fx"><span class="lbl">Branch 1</span>I<sub>1</sub> = I × R<sub>2</sub> ÷ (R<sub>1</sub> + R<sub>2</sub>)</div>
-            <div class="fx"><span class="lbl">Branch 2</span>I<sub>2</sub> = I × R<sub>1</sub> ÷ (R<sub>1</sub> + R<sub>2</sub>)</div>
-            <p class="eg"><b>Example</b>4 A enters 4 Ω ∥ 12 Ω. I<sub>4Ω</sub> = 4 × 12/16 = 3 A and I<sub>12Ω</sub> = 4 × 4/16 = 1 A. Check: 3 + 1 = 4 A ✓</p>
-            <p class="trap"><b>Exam trap</b>To find the current in R<sub>1</sub>, the <em>other</em> resistor (R<sub>2</sub>) goes on top. Always check that the branch currents add back up to I.</p>
-          </article>
-          <article class="concept-card">
-            <span class="tag" style="--c:var(--violet)">3 · Cell arrays</span>
-            <h3>Series cells add EMF; parallel cells cut r</h3>
-            <p>For <strong>n identical cells</strong>, each with EMF <em>E</em> and internal resistance <em>r</em>, work out the equivalent cell first, then use I = E<sub>eq</sub> ÷ (R + r<sub>eq</sub>).</p>
-            <div class="fx"><span class="lbl">Series</span>E<sub>eq</sub> = nE <span class="arr">·</span> r<sub>eq</sub> = nr</div>
-            <div class="fx"><span class="lbl">Parallel</span>E<sub>eq</sub> = E <span class="arr">·</span> r<sub>eq</sub> = r ÷ n</div>
-            <p class="use"><b>Use it when</b>Series cells suit a <strong>large</strong> load R (it needs more voltage). Parallel cells suit a <strong>small</strong> load R, like a pump or starter motor, where a large r would waste most of the energy.</p>
-            <p class="trap"><b>Exam trap</b>Parallel cells do <strong>not</strong> add EMF. Four 1.5 V cells in parallel still give 1.5 V.</p>
-          </article>
-          <article class="concept-card">
-            <span class="tag" style="--c:var(--pink)">4 · Power &amp; efficiency</span>
-            <h3>Choose the power formula by what is shared</h3>
-            <p>Power is the rate of energy transfer, measured in watts (J/s). Efficiency compares the useful power in the load with the total power the cell supplies.</p>
-            <div class="fx"><span class="lbl">Power</span>P = IV = I²R = V² ÷ R</div>
-            <div class="fx"><span class="lbl">Efficiency</span>η = [R ÷ (R + r)] × 100%</div>
-            <p class="use"><b>Use it when</b>In series (same I), use P = I²R: the <strong>bigger</strong> R gets more power. In parallel (same V), use P = V²/R: the <strong>smaller</strong> R gets more power. The load gets maximum power when R = r, but η is then only 50%.</p>
-            <p class="trap"><b>Exam trap</b>Energy = P × t needs t in seconds: 5 minutes = 300 s.</p>
-          </article>
+        <div class="callout reveal" id="series-rules">
+          <p><strong>Series:</strong> one path, so the current is the same everywhere; the p.d.s add; <code>R = R₁ + R₂ + …</code>. <strong>Parallel:</strong> the branches share the same p.d.; the currents add (<code>I = I₁ + I₂ + …</code>); <code>¹⁄R = ¹⁄R₁ + ¹⁄R₂ + …</code>, and for two branches <code>R = R₁R₂/(R₁ + R₂)</code>.</p>
         </div>
 
-        <div class="study-summary">
-          <h3>Quick revision: series vs parallel</h3>
-          <p>Cover one column and test yourself before an exam.</p>
-          <div class="tbl-wrap">
-            <table class="tbl">
-              <thead><tr><th></th><th>Series</th><th>Parallel</th></tr></thead>
-              <tbody>
-                <tr><td>Current</td><td>Same through every part</td><td>Splits between branches: I = I<sub>1</sub> + I<sub>2</sub></td></tr>
-                <tr><td>Voltage</td><td>Shared: V = V<sub>1</sub> + V<sub>2</sub></td><td>Same across every branch</td></tr>
-                <tr><td>Equivalent R</td><td>R<sub>1</sub> + R<sub>2</sub> (bigger than any one)</td><td>R<sub>1</sub>R<sub>2</sub> ÷ (R<sub>1</sub> + R<sub>2</sub>) (smaller than any one)</td></tr>
-                <tr><td>More power / brighter</td><td>The <strong>larger</strong> R (P = I²R)</td><td>The <strong>smaller</strong> R (P = V²/R)</td></tr>
-                <tr><td>n identical cells</td><td>E<sub>eq</sub> = nE, r<sub>eq</sub> = nr</td><td>E<sub>eq</sub> = E, r<sub>eq</sub> = r ÷ n</td></tr>
-                <tr><td>Cells best for</td><td>High-resistance loads</td><td>Low-resistance, high-current loads</td></tr>
-              </tbody>
-            </table>
-          </div>
+        <div class="callout big reveal" id="cell-arrays">
+          <p><strong>Cell arrays:</strong> <code>n</code> identical cells in <strong>series</strong> give <code>Eₜ = nE</code> and <code>rₜ = nr</code> (more voltage, more internal resistance). <code>n</code> identical cells in <strong>parallel</strong> give <code>Eₜ = E</code> and <code>rₜ = r/n</code> (same voltage, less internal resistance, more current for a low-R load). <strong>These parallel rules (Eₜ = E, rₜ = r/n) hold only for <em>identical</em> cells.</strong> For n identical cells, <strong>parallel delivers more current than series exactly when R &lt; r</strong>.</p>
         </div>
 
-        <div class="ph-explorer" style="margin-top:26px">
-          <h3>Topology &amp; efficiency explorer</h3>
-          <p class="ph-sub">Tap a card to see what each number means.</p>
-          <div class="ph-choices" id="ph-track" role="group" aria-label="Network topology examples"></div>
-          <div class="ph-detail" id="ph-detail" aria-live="polite"></div>
+        <h3>Equations</h3>
+        <div class="eq" id="eq-net">R<sub>series</sub> = ΣR &nbsp;·&nbsp; ¹⁄R<sub>parallel</sub> = Σ ¹⁄R</div>
+        <div class="eq" id="eq-power">W = IVt = I²Rt = (V²/R)t &nbsp;·&nbsp; P = IV = I²R = V²/R</div>
+        <div class="eq" id="eq-eta">η = R/(R + r) = V/E &nbsp;(× 100 %)</div>
+
+        <div class="callout info reveal" id="kwh">
+          <p><strong>The kilowatt-hour on the light bill:</strong> one "unit" on a NEPA/PHCN prepaid meter is <code>1 kWh</code>, a unit of <strong>energy</strong>, not power. <code>1 kWh = 1 kW × 1 h = 1 000 W × 3 600 s = 3.6 × 10⁶ J</code>. A <code>750 W</code> freezer running for <code>8.0 h</code> uses <code>E = Pt = 0.75 kW × 8.0 h = 6.0 kWh</code> (six units) <code>= 2.16 × 10⁷ J</code>.</p>
+        </div>
+
+        <h3 id="props-h">Series vs parallel compared</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Quantity</th><th>In series</th><th>In parallel</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Current</strong></td><td>same through every part</td><td>splits between branches</td></tr>
+              <tr><td><strong>P.d.</strong></td><td>adds up</td><td>same across every branch</td></tr>
+              <tr><td><strong>Total R</strong></td><td>larger (R = ΣR)</td><td>smaller (less than any branch)</td></tr>
+              <tr><td><strong>Cells' EMF</strong></td><td>adds (Eₜ = nE)</td><td>unchanged (Eₜ = E)</td></tr>
+              <tr><td><strong>Cells' r</strong></td><td>adds (rₜ = nr)</td><td>falls (rₜ = r/n)</td></tr>
+              <tr><td><strong>Best use</strong></td><td>high voltage</td><td>high current (low-R load)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="pos-h">Load explorer</h3>
+        <p>Tap a load pin for the fixed cell (E = 5.0 V, r = 0.5 Ω). Read the current, the load power and the efficiency, and watch the power peak at R = r.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to read I, P and η at that load.</div>
         </div>
       </section>
 
-      <!-- ================= 3B. CONCEPT ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3b</b>Make sense · 3D Junction &amp; Efficiency Zoom</span>
-        <h2>Inside a Parallel Junction &amp; <em>Power Efficiency Split</em></h2>
-        <p class="intro">Watch electrons split at a parallel Y-junction (left) and compare the green <strong>Useful Load Power (I<sup>2</sup>R)</strong> pillar against the red <strong>Internal Heat Loss (I<sup>2</sup>r)</strong> pillar (right).</p>
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Zoom in: <em>current splits at the node, power splits in the bar</em></h2>
+        <p class="intro">Charge beads reach a junction and split between the branches — more take the smaller resistance (I₁ : I₂ = R₂ : R₁) — then rejoin. The power bar shows total power <code>EI</code> dividing into useful <code>I²R</code> and wasted <code>I²r</code>.</p>
 
-        <div class="zoom-box">
-          <div class="zoom-stage" id="zoom-stage">
-            <canvas id="zoom-canvas" aria-label="3D Parallel Current Junction and Efficiency Pillars"></canvas>
-            <div class="zoom-status" id="zoom-status">12 V, r ≈ 0, on 4 Ω ∥ 12 Ω · η ≈ 100 %</div>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom of a parallel junction: charge beads splitting between two wire-wound resistor branches by their resistance and rejoining, with a power-partition bar."></canvas>
+            <div class="stage-label"><i></i>3D node zoom · drag to rotate</div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
           </div>
-          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
-          <div class="zoom-bar" role="group" aria-label="Junction and efficiency modes">
-            <button class="pill on" type="button" data-zmode="parallel-4-12">🔀 4 Ω ∥ 12 Ω (3 : 1 Current Split)</button>
-            <button class="pill" type="button" data-zmode="series-cells">🔴 3 Series Cells (η = 25%)</button>
-            <button class="pill" type="button" data-zmode="parallel-cells">🟢 3 Parallel Cells (η = 75%)</button>
-            <button class="pill" type="button" data-zmode="max-power">🎯 Matched Load R = r (η = 50%)</button>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Branch ratio" id="zoom-ratio">
+              <button type="button" data-ratio="61" aria-pressed="true">6 Ω ∥ 12 Ω</button>
+              <button type="button" data-ratio="equal" aria-pressed="false">6 Ω ∥ 6 Ω</button>
+            </div>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+            <div class="counters" id="zoom-counters">
+              <span class="counter"><i style="--c:var(--amber)"></i>I (A)<b data-c="i">–</b></span>
+              <span class="counter"><i style="--c:var(--teal)"></i>I₁ (A)<b data-c="i1">–</b></span>
+              <span class="counter"><i style="--c:var(--sky)"></i>I₂ (A)<b data-c="i2">–</b></span>
+              <span class="counter"><i style="--c:var(--lime)"></i>EI (W)<b data-c="pt">–</b></span>
+              <span class="counter"><i style="--c:var(--violet)"></i>I²R (W)<b data-c="pr">–</b></span>
+              <span class="counter"><i style="--c:var(--crimson)"></i>I²r (W)<b data-c="pi">–</b></span>
+            </div>
           </div>
         </div>
       </section>
 
-      <!-- ================= 4. APPLY: WORKED EXAMPLES ================= -->
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
       <section class="l-sec" id="examples">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
-        <h2>Step-by-step <em>WAEC, NECO &amp; JAMB calculations</em></h2>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 10 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each on paper first, then check the working.</p>
 
-        <div class="ex-list">
-          <details class="ex-card" open>
-            <summary><span class="ex-num">01</span><span><strong>Series-Parallel Composite Network &amp; Current Divider</strong> (WAEC / JAMB Standard)</span><em>I_4Ω = 1.50 A</em></summary>
-            <div class="ex-body">
-              <p><strong>Question:</strong> A battery of EMF <code>14.0 V</code> and internal resistance <code>r = 1.0 Ω</code> is connected in series with a <code>3.0 Ω</code> resistor and a parallel combination of <code>4.0 Ω</code> and <code>12.0 Ω</code> resistors. Calculate: (a) the total external resistance, (b) the main current from the battery, and (c) the current flowing through the <code>4.0 Ω</code> resistor.</p>
-              <ol class="steps">
-                <li><strong>Parallel pair equivalent resistance:</strong> <code>R<sub>p</sub> = (4.0 × 12.0) ÷ (4.0 + 12.0) = 48 ÷ 16 = 3.0 Ω</code></li>
-                <li><strong>Total external resistance:</strong> <code>R<sub>ext</sub> = 3.0 Ω + 3.0 Ω = 6.0 Ω</code></li>
-                <li><strong>Main circuit current:</strong> <code>I<sub>main</sub> = E ÷ (R<sub>ext</sub> + r) = 14.0 ÷ (6.0 + 1.0) = 14.0 ÷ 7.0 = 2.00 A</code></li>
-                <li><strong>Current in the 4.0 Ω branch (Current Divider):</strong> <code>I<sub>4Ω</sub> = I<sub>main</sub> × [12.0 ÷ (4.0 + 12.0)] = 2.00 × (12 ÷ 16) = 1.50 A</code>. (The 12 Ω branch takes the remaining <code class="inl">0.50 A</code>.)</li>
-              </ol>
-            </div>
-          </details>
-
-          <details class="ex-card">
-            <summary><span class="ex-num">02</span><span><strong>Identical Cells in Series vs Parallel on a Heavy Load</strong> (JAMB Favourite)</span><em>2.50 A vs 1.25 A</em></summary>
-            <div class="ex-body">
-              <p><strong>Question:</strong> Three identical cells, each of EMF <code>2.0 V</code> and internal resistance <code>1.5 Ω</code>, are used to drive a low-resistance DC motor of resistance <code>R = 0.30 Ω</code>. Compare the current delivered when the cells are connected (a) in series, and (b) in parallel.</p>
-              <ol class="steps">
-                <li><strong>(a) In Series:</strong> <code>E<sub>eq</sub> = 3 × 2.0 = 6.0 V</code> and <code>r<sub>eq</sub> = 3 × 1.5 = 4.5 Ω</code><br><code>I<sub>series</sub> = 6.0 ÷ (0.30 + 4.5) = 6.0 ÷ 4.8 = 1.25 A</code></li>
-                <li><strong>(b) In Parallel:</strong> <code class="inl">E<sub>eq</sub> = 2.0 V</code> and <code>r<sub>eq</sub> = 1.5 ÷ 3 = 0.50 Ω</code><br><code>I<sub>parallel</sub> = 2.0 ÷ (0.30 + 0.50) = 2.0 ÷ 0.80 = 2.50 A</code> (exactly twice the current!).</li>
-              </ol>
-            </div>
-          </details>
-
-          <details class="ex-card">
-            <summary><span class="ex-num">03</span><span><strong>Circuit Efficiency &amp; Power Dissipated</strong> (WAEC / NECO)</span><em>η = 75.0%</em></summary>
-            <div class="ex-body">
-              <p><strong>Question:</strong> A battery of EMF <code>12.0 V</code> and internal resistance <code>1.0 Ω</code> is connected across an external resistor of <code>3.0 Ω</code>. Calculate (a) the power delivered to the external load, (b) the power wasted inside the battery, and (c) the efficiency of the battery.</p>
-              <ol class="steps">
-                <li><strong>Current:</strong> <code>I = 12.0 ÷ (3.0 + 1.0) = 3.0 A</code></li>
-                <li><strong>Useful load power:</strong> <code>P<sub>load</sub> = I<sup>2</sup>R = 3.0<sup>2</sup> × 3.0 = 27.0 W</code></li>
-                <li><strong>Internal wasted power:</strong> <code>P<sub>lost</sub> = I<sup>2</sup>r = 3.0<sup>2</sup> × 1.0 = 9.0 W</code></li>
-                <li><strong>Efficiency:</strong> <code>η = [R ÷ (R + r)] × 100% = (3.0 ÷ 4.0) × 100% = 75.0%</code></li>
-              </ol>
-            </div>
-          </details>
-
-          <details class="ex-card">
-            <summary><span class="ex-num">04</span><span><strong>Power Ratio in Series vs Parallel Resistors</strong> (JAMB Speed Question)</span><em>1 : 3 vs 3 : 1</em></summary>
-            <div class="ex-body">
-              <p><strong>Question:</strong> Two resistors of <code>4 Ω</code> and <code>12 Ω</code> are connected (a) in series, and (b) in parallel across a constant-voltage source. Find the ratio of power dissipated <code>P<sub>4Ω</sub> : P<sub>12Ω</sub></code> in each case.</p>
-              <ol class="steps">
-                <li><strong>(a) In Series (same I):</strong> Use <code class="inl">P = I<sup>2</sup>R</code> → <code>P<sub>4Ω</sub> : P<sub>12Ω</sub> = 4 : 12 = 1 : 3</code></li>
-                <li><strong>(b) In Parallel (same V):</strong> Use <code class="inl">P = V<sup>2</sup> ÷ R</code> → <code>P<sub>4Ω</sub> : P<sub>12Ω</sub> = (1/4) : (1/12) = 3 : 1</code></li>
-              </ol>
-            </div>
-          </details>
-        </div>
-      </section>
-
-      <!-- ================= 4B. BRIDGE: PARALLEL CELLS CHALLENGE ================= -->
-      <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4b</b>Apply · The Parallel-Cell Trap</span>
-        <h2>Can you avoid the <em>JAMB Parallel-Cell Trap</em>?</h2>
-        <p class="intro"><strong>Challenge:</strong> Four identical cells, each of EMF <strong>1.5 V</strong> and internal resistance <strong>2.0 Ω</strong>, are connected in <strong>PARALLEL</strong> across an external resistor of <strong>3.5 Ω</strong>. What current flows through the 3.5 Ω resistor?</p>
-
-        <div class="vinegar-box" id="vinegar-test">
-          <div class="clock-card">
-            <div class="clock-well">
-              <svg viewBox="0 0 180 105" width="170" height="100" aria-hidden="true">
-                <rect x="14" y="18" width="152" height="68" rx="10" fill="#0f172a" stroke="rgba(255,255,255,0.2)"/>
-                <circle id="v-drop" cx="38" cy="34" r="7" fill="#3ee6c4" style="transition:transform .4s ease"/>
-                <rect id="v-flask-liquid" x="26" y="62" width="128" height="12" rx="6" fill="#3ee6c4"/>
-                <text id="v-flask-label" x="90" y="46" fill="#f8fafc" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700" text-anchor="middle">4 Cells ∥ → R = 3.5 Ω</text>
-              </svg>
-            </div>
-            <p style="margin:6px 0 12px;font-size:.9rem;color:#cbd5e1">4 cells (each <code>E = 1.5 V, r = 2.0 Ω</code>) in parallel across <code>R = 3.5 Ω</code>. Pick load current <strong>I</strong>:</p>
-            <div class="pill-row" role="group" aria-label="Load current options">
-              <button class="pill" type="button" data-v="0.522">I = 0.522 A</button>
-              <button class="pill" type="button" data-v="0.375">I = 0.375 A</button>
-              <button class="pill" type="button" data-v="1.000">I = 1.000 A</button>
-              <button class="pill" type="button" data-v="0.158">I = 0.158 A</button>
-            </div>
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>A mixed network</h4></div>
+          <div class="example-body">
+            <p class="q">A battery of EMF 14.0 V and internal resistance 1.0 Ω feeds a 3.0 Ω resistor in series with a parallel pair of 6.0 Ω and 12.0 Ω. Find the total current and the current in the 6.0 Ω branch.</p>
+            <ol class="steps-sol">
+              <li><strong>Parallel pair:</strong> <code>R_p = (6.0 × 12.0)/(6.0 + 12.0) = 72/18 = 4.0 Ω</code>.</li>
+              <li><strong>External total:</strong> <code>R_ext = 3.0 + 4.0 = 7.0 Ω</code>.</li>
+              <li><strong>Total current:</strong> <code>I = E/(R_ext + r) = 14.0/(7.0 + 1.0) = 14.0/8.0 = 1.75 A</code>.</li>
+              <li><strong>Branch current:</strong> <code>V_p = I × R_p = 1.75 × 4.0 = 7.0 V</code>, so <code>I₆ = V_p/6.0 = 7.0/6.0 = 1.17 A</code>.</li>
+            </ol>
+            <div class="answer-line">I = 1.75 A · I₆ = 1.17 A</div>
           </div>
-          <div class="feedback" id="vinegar-result" role="status" aria-live="polite"></div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Cell arrays compared</h4></div>
+          <div class="example-body">
+            <p class="q">Four identical cells, each 1.5 V with r = 2.0 Ω, feed a 1.0 Ω pump. Compare the current when they are all in parallel with when they are all in series. (Emeka's story has three cells; here we use four.)</p>
+            <ol class="steps-sol">
+              <li><strong>Parallel:</strong> <code>Eₜ = 1.5 V, rₜ = r/n = 2.0/4 = 0.5 Ω</code>; <code>I = 1.5/(1.0 + 0.5) = 1.5/1.5 = 1.0 A</code>.</li>
+              <li><strong>Series:</strong> <code>Eₜ = 4 × 1.5 = 6.0 V, rₜ = 4 × 2.0 = 8.0 Ω</code>; <code>I = 6.0/(1.0 + 8.0) = 6.0/9.0 = 0.67 A</code>.</li>
+              <li><strong>Compare:</strong> <code>1.0 A &gt; 0.67 A</code>, so for this low-resistance pump the <strong>parallel</strong> array delivers the larger current (R &lt; r).</li>
+            </ol>
+            <div class="answer-line">Parallel 1.0 A · series 0.67 A · parallel wins here</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Power and efficiency</h4></div>
+          <div class="example-body">
+            <p class="q">A cell of EMF 5.0 V and internal resistance 0.5 Ω drives a 4.5 Ω load. Find the power delivered to the load and the efficiency.</p>
+            <ol class="steps-sol">
+              <li><strong>Current:</strong> <code>I = E/(R + r) = 5.0/(4.5 + 0.5) = 5.0/5.0 = 1.0 A</code>.</li>
+              <li><strong>Power:</strong> load <code>P = I²R = 1.0² × 4.5 = 4.5 W</code>; total <code>EI = 5.0 × 1.0 = 5.0 W</code>.</li>
+              <li><strong>Efficiency:</strong> <code>η = P/EI × 100 = 4.5/5.0 × 100 = 90 %</code> (check: <code>R/(R + r) = 4.5/5.0 = 90 %</code>).</li>
+            </ol>
+            <div class="answer-line">P = 4.5 W · η = 90 %</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the shop: <em>advise Emeka</em></h2>
+        <p class="intro">His pump has a low resistance (1.0 Ω) and he has three identical 1.5 V, 2.0 Ω cells. Answer the two questions, then give your verdict.</p>
+
+        <div class="bridge-card" id="bridge-card">
+          <h4>Series or parallel for the pump?</h4>
+          <div class="bridge-q" data-q="arr"><p>1 · Which arrangement drives the larger current through the low-resistance pump?</p><div class="opts"><button type="button" data-v="series">All in series</button><button type="button" data-v="parallel">All in parallel</button></div></div>
+          <div class="bridge-q" data-q="cond"><p>2 · Identical cells in parallel beat series exactly when the load R is…</p><div class="opts"><button type="button" data-v="less">less than r</button><button type="button" data-v="greater">greater than r</button></div></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
+          </div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 3:</strong> series stacks voltage, parallel shares current; maximum power transfer happens at <code>R = r</code>, but high efficiency needs <code>R ≫ r</code>. A worn battery's larger <code>r</code> burns more <code>I²r</code> inside, so it runs hot and wastes power.</p>
         </div>
       </section>
 
-      <!-- ================= 5. QUIZ ================= -->
+      <!-- ================= 8. QUIZ ================= -->
       <section class="l-sec" id="quiz">
-        <span class="phase" style="--pc:var(--lime)"><b>5</b>Assess · 12-Question Exam Checkpoint</span>
-        <h2>Test your mastery of <em>Lesson 3 (+ Spaced Retrieval)</em></h2>
-        <p class="intro">12 original WAEC/NECO/JAMB questions plus spaced retrieval from Lessons 1 &amp; 2.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 2 come at the end.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
         </div>
       </section>
 
-      <!-- ================= 5B. REFLECT ================= -->
+      <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:var(--lime)"><b>5b</b>Reflect · Metacognition &amp; Competences</span>
-        <h2>Rate your confidence <em>(1 to 4)</em></h2>
-        <p class="intro">Honest self-assessment builds stronger exam readiness (Transversal Competences <strong>L1, L2, L4</strong>).</p>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 3.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can calculate equivalent resistance for series, parallel, and composite circuits.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can apply the current-divider formula I₁ = I_total × R₂/(R₁ + R₂).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can find E_eq and r_eq for identical cells in series (nE, nr) and parallel (E, r/n).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can compute power P = IV = I²R = V²/R in series and parallel branches.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can calculate efficiency η = [R / (R + r)] × 100%.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can combine resistors in series and in parallel.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can find branch currents in a mixed network.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can combine cells in series and in parallel.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can calculate power three ways (IV, I²R, V²/R).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can calculate and interpret efficiency.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>A rechargeable lantern battery of internal resistance 0.60 Ω feeds a 5.4 Ω LED panel. Find its efficiency.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><code>η = R/(R + r) × 100 = 5.4/(5.4 + 0.60) × 100 = 5.4/6.0 × 100 = 90 %</code> <b>(2)</b>.</p></div>
+          </details>
         </div>
       </section>
 
-      <!-- ================= 5C. ASSIGNMENT ================= -->
+      <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--lime)"><b>5c</b>Assignment · Locked Marking Scheme</span>
-        <h2>Written &amp; Practical <em>Take-Home Tasks (30 Marks)</em></h2>
-        <p class="intro">Write your full working (min. 40 characters) in each box to unlock the official WAEC/NECO marking scheme.</p>
-
-        <div class="assign-list">
-          <div class="assign-card" data-assign="a1">
-            <div class="assign-head">
-              <span class="assign-mark">10 Marks</span>
-              <h3>Task 1 · Series-Parallel Network &amp; Current Divider</h3>
-            </div>
-            <p>A battery of EMF <code>18 V</code> and internal resistance <code>1.0 Ω</code> is connected in series with a <code>4.0 Ω</code> resistor and a parallel combination of <code>6.0 Ω</code> and <code>12.0 Ω</code> resistors. Calculate: (a) the equivalent external resistance [3], (b) the main current from the battery [3], and (c) the current and power dissipated in the <code>6.0 Ω</code> resistor [4].</p>
-            <textarea class="assign-input" rows="4" placeholder="Type your step-by-step working here (at least 40 characters) to unlock the marking scheme…"></textarea>
-            <div class="assign-actions">
-              <button class="btn btn-primary btn-sm" type="button" data-unlock>Unlock marking scheme</button>
-              <small class="assign-hint">Requires ≥ 40 characters of genuine working</small>
-            </div>
-            <div class="assign-solution" hidden>
-              <h4>Official Marking Scheme (10 Marks)</h4>
-              <ul>
-                <li><strong>(a) Equivalent external resistance [3 marks]:</strong><br>Parallel pair: <code>R<sub>p</sub> = (6.0 × 12.0) ÷ (6.0 + 12.0) = 72 ÷ 18 = 4.0 Ω</code> [2].<br>Total external resistance: <code>R<sub>ext</sub> = 4.0 + 4.0 = 8.0 Ω</code> [1].</li>
-                <li><strong>(b) Main current [3 marks]:</strong><br><code>I = E ÷ (R<sub>ext</sub> + r) = 18 ÷ (8.0 + 1.0) = 18 ÷ 9.0 = 2.0 A</code> [3].</li>
-                <li><strong>(c) Current &amp; power in 6.0 Ω resistor [4 marks]:</strong><br><code>I<sub>6Ω</sub> = I × [12 ÷ (6 + 12)] = 2.0 × (12 ÷ 18) = 1.33 A (4/3 A)</code> [2].<br><code>P<sub>6Ω</sub> = I<sub>6Ω</sub><sup>2</sup> × 6.0 = (4/3)<sup>2</sup> × 6 = 10.67 W</code> [2].</li>
-              </ul>
-            </div>
-          </div>
-
-          <div class="assign-card" data-assign="a2">
-            <div class="assign-head">
-              <span class="assign-mark">10 Marks</span>
-              <h3>Task 2 · Series vs Parallel Cell Banks &amp; Efficiency</h3>
-            </div>
-            <p>Four identical cells, each of EMF <code>1.5 V</code> and internal resistance <code>2.0 Ω</code>, are connected in parallel across a <code>1.5 Ω</code> load. Calculate: (a) the equivalent EMF and internal resistance of the battery bank [4], (b) the load current and terminal voltage [3], and (c) the electrical efficiency of the circuit [3].</p>
-            <textarea class="assign-input" rows="4" placeholder="Type your calculation for E_eq, r_eq, I, V, and efficiency η here…"></textarea>
-            <div class="assign-actions">
-              <button class="btn btn-primary btn-sm" type="button" data-unlock>Unlock marking scheme</button>
-              <small class="assign-hint">Requires ≥ 40 characters of genuine working</small>
-            </div>
-            <div class="assign-solution" hidden>
-              <h4>Official Marking Scheme (10 Marks)</h4>
-              <ul>
-                <li><strong>(a) Battery bank parameters [4 marks]:</strong><br>In parallel, <code>E<sub>eq</sub> = E = 1.5 V</code> [2] and <code>r<sub>eq</sub> = r ÷ 4 = 2.0 ÷ 4 = 0.50 Ω</code> [2].</li>
-                <li><strong>(b) Current and terminal voltage [3 marks]:</strong><br><code>I = 1.5 ÷ (1.5 + 0.50) = 1.5 ÷ 2.0 = 0.75 A</code> [2].<br><code>V = I R = 0.75 × 1.5 = 1.125 V (1.13 V)</code> [1].</li>
-                <li><strong>(c) Efficiency [3 marks]:</strong><br><code>η = [R ÷ (R + r<sub>eq</sub>)] × 100% = (1.5 ÷ 2.0) × 100% = 75.0%</code> [3].</li>
-              </ul>
-            </div>
-          </div>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 03. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
 
-        <div class="next-lesson-cta" style="margin-top:32px;padding:24px;border-radius:var(--r-lg);background:linear-gradient(135deg,rgba(62,230,196,.14),rgba(168,85,247,.12));border:1px solid var(--line-strong);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
-          <div>
-            <span class="eyebrow">Up Next · Lesson 4 of 5</span>
-            <h3 style="margin:4px 0">Galvanometer Conversion — Ammeter Shunts &amp; Voltmeter Multipliers</h3>
-            <p style="margin:0;color:var(--muted)">How do we turn a delicate 10 mA moving-coil galvanometer into a 5.0 A heavy ammeter or a 15.0 V voltmeter?</p>
-          </div>
-          <a class="btn btn-primary" href="../lesson-04/index.html">Continue to Lesson 4 →</a>
+        <h3>Part A · Home investigation: two bulbs, two ways</h3>
+        <div class="aq" data-answer="l03-a1">
+          <div class="aq-top"><h4>Which arrangement shines brighter and drains the cells faster?</h4></div>
+          <p><strong>You need:</strong> two identical small torch bulbs (2.5 V or 3.8 V), two new AA cells, a two-cell holder (or tape the cells inside a paper tube), four short stripped wires, cellotape and a clock. <strong>Use only torch cells. Never use mains electricity, and never join the cell terminals with a bare wire.</strong></p>
+          <ol class="sub">
+            <li>Join the two cells in series (about 3 V). Connect one bulb alone and rate its brightness from 0 (off) to 5 (very bright).</li>
+            <li>Connect the two bulbs in series across the cells and rate each bulb.</li>
+            <li>Connect the two bulbs in parallel (each joined directly across the cells) and rate each bulb.</li>
+            <li>In the parallel set-up, unscrew one bulb and note what happens to the other. Repeat for the series set-up.</li>
+            <li>Leave each set-up on for 10 minutes, then feel the cells gently and note whether they are cool or warm. Disconnect when you finish.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Arrangement</th><th>Brightness (0–5)</th><th>Remove one bulb</th><th>Cells after 10 min</th></tr></thead><tbody>
+                <tr><td>One bulb alone</td><td>3</td><td>(not tested)</td><td>cool</td></tr>
+                <tr><td>Two in series</td><td>1</td><td>other bulb goes off</td><td>cool</td></tr>
+                <tr><td>Two in parallel</td><td>3</td><td>other bulb stays lit</td><td>slightly warm</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows that in series the bulbs share the cells' p.d., so each gets about half and glows dimly; in parallel each gets the full p.d. and glows as brightly as a single bulb, but the cells supply about twice the current and run down faster (P = IV). Removing one bulb breaks the only series path but leaves the other parallel branch complete, which is why house and workshop lamps are wired in parallel. The cells feel warm in the parallel test because the larger current wastes more power inside them as I²r, like Emeka's hot battery. One limitation with its direction: brightness judged by eye is subjective, and the cells' internal resistance rises as they warm, so ratings taken late in the parallel run come out too low.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l03-b1">
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <p>Define each term: (a) <em>electrical power</em>; (b) <em>the kilowatt-hour</em>; (c) <em>the efficiency of a cell</em> in a circuit.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Electrical power is the rate at which electrical energy is changed into other forms, measured in watts (1 W = 1 J s⁻¹). (1) (b) The kilowatt-hour is the energy used when a 1 kW device works for one hour; it equals 3.6 × 10⁶ J. (1) (c) The efficiency of a cell is the fraction (or percentage) of the total power it supplies that reaches the external load: η = useful power ÷ total power = R/(R + r). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) "energy" alone, without "rate" or "per second", scores zero. In (b) calling the kilowatt-hour a unit of <em>power</em> is the commonest error and scores zero; it is a unit of energy. In (c) the answer must compare useful (load) power with total power.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b2">
+          <div class="aq-top"><h4>2. Why Parallel?</h4><span class="marks">3 marks</span></div>
+          <p>(a) Explain why the combined resistance of two resistors in parallel is smaller than either resistor alone. (b) Give two reasons why the lamps in Engr. Nkechi's workshop are wired in parallel rather than in series.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) A second branch gives the charge an extra path, so for the same p.d. more total current flows; since R = V/I, a larger current at the same p.d. means a smaller combined resistance. (1) (b) Each lamp receives the full supply p.d., so every lamp works at its rated brightness. (1) If one lamp fails or is switched off, the other branches stay complete and remain lit. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) a bare formula without the idea of an extra path or larger current scores zero. In (b) "it uses less current" is not credited: parallel lamps draw <em>more</em> total current. The two reasons must be different.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b3">
+          <div class="aq-top"><h4>3. Deriving the Parallel Rule</h4><span class="marks">4 marks</span></div>
+          <p>(a) Two resistors R₁ and R₂ are connected in parallel across a p.d. V. Starting from the behaviour of current and p.d. in parallel, derive the expression for their combined resistance R. (b) Show that two equal resistors, each R₀, in parallel have a combined resistance R₀/2.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Both resistors have the same p.d. V. (1) The supply current divides at the junction, so I = I₁ + I₂. (1) Substituting I = V/R, I₁ = V/R₁ and I₂ = V/R₂ gives V/R = V/R₁ + V/R₂; dividing by V, 1/R = 1/R₁ + 1/R₂. (1) (b) 1/R = 1/R₀ + 1/R₀ = 2/R₀, so R = R₀/2. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Writing "the current is the same in each branch" is wrong and loses a mark. In (b), "half because there are two" with no working is not credited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b4">
+          <div class="aq-top"><h4>4. Solving a Mixed Network</h4><span class="marks">5 marks</span></div>
+          <p>A battery of EMF 24.0 V and internal resistance 1.0 Ω is connected to a 5.0 Ω resistor in series with a parallel pair of 6.0 Ω and 3.0 Ω. Calculate: (a) the combined resistance of the parallel pair; (b) the current drawn from the battery; (c) the terminal p.d.; (d) the p.d. across the parallel pair; (e) the current in the 3.0 Ω resistor.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) R_p = (6.0 × 3.0)/(6.0 + 3.0) = 18/9.0 = 2.0 Ω. (1) (b) R = 5.0 + 2.0 = 7.0 Ω; I = E/(R + r) = 24.0/(7.0 + 1.0) = 3.0 A. (1) (c) V = E − Ir = 24.0 − 3.0 × 1.0 = 21 V (check: IR = 3.0 × 7.0 = 21 V). (1) (d) V_p = I × R_p = 3.0 × 2.0 = 6.0 V. (1) (e) I₃ = V_p/3.0 = 6.0/3.0 = 2.0 A. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Leaving out the 1.0 Ω internal resistance in (b) gives 3.4 A and loses that mark. Giving 24.0 V as the terminal p.d. in (c) is the voltmeter-reads-EMF trap and scores zero. Units required on every answer.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b5">
+          <div class="aq-top"><h4>5. Series or Parallel for the Pump?</h4><span class="marks">5 marks</span></div>
+          <p>Six identical cells, each 1.5 V with r = 0.60 Ω, drive a pump of resistance 0.50 Ω. (a) Find the current with all six in series. (b) Find the current with all six in parallel. (c) State which Emeka should choose, supporting it with the power delivered to the pump in each case.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Series: Eₜ = 6 × 1.5 = 9.0 V, rₜ = 6 × 0.60 = 3.6 Ω. (1) I = 9.0/(0.50 + 3.6) = 9.0/4.1 = 2.2 A. (1) (b) Parallel: Eₜ = 1.5 V, rₜ = 0.60/6 = 0.10 Ω. (1) I = 1.5/(0.50 + 0.10) = 1.5/0.60 = 2.5 A. (1) (c) Parallel: pump power I²R = 2.5² × 0.50 = 3.1 W, against 2.2² × 0.50 = 2.4 W in series, so parallel delivers more current and more useful power to this low-resistance pump. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Writing Eₜ = 9.0 V for the parallel case, or rₜ = 3.6 Ω for it, is the classic mix-up and loses that step. Ignoring internal resistance (18 A in series) scores zero. In (c) the choice must be backed by numbers.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b6">
+          <div class="aq-top"><h4>6. Practical: The Load-Power Curve</h4><span class="marks">5 marks</span></div>
+          <p>A cell of EMF 3.0 V and internal resistance 2.0 Ω is connected to a series of load resistors. For R = 0.5, 1.0, 2.0, 4.0, 8.0 Ω the currents are 1.20, 1.00, 0.75, ?, 0.30 A and the powers 0.72, 1.00, 1.13, ?, 0.72 W. (a) Find the missing current and power at R = 4.0 Ω. (b) Describe the line drawn through a graph of P (vertical) against R. (c) State the R at which P is greatest and what it shows. (d) State the efficiency at that load.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) I = E/(R + r) = 3.0/(4.0 + 2.0) = 0.50 A. (1) P = I²R = 0.50² × 4.0 = 1.00 W. (1) (b) A smooth curve that rises to a single peak and then falls, drawn freehand through the points, <strong>not</strong> a straight line of best fit. (1) (c) P is greatest at R = 2.0 Ω; maximum power is delivered when the load equals the internal resistance, confirming r = 2.0 Ω. (1) (d) η = R/(R + r) = 2.0/4.0 × 100 % = 50 %. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> A ruled straight line, or dot-to-dot, loses (b) because power against load is not linear. In (c) the reason (R = r for maximum power) is required. 100 % in (d) confuses maximum power with maximum efficiency and scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b7">
+          <div class="aq-top"><h4>7. Practical: Precautions and Errors</h4><span class="marks">3 marks</span></div>
+          <p>(a) State two precautions taken while measuring load power and efficiency on the cell-array bench. (b) During a long run the cells polarised (reaction products built up at their plates). State and explain the effect on the efficiency values recorded for the later loads.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any two, in the past tense: the key was opened between readings so the cells did not polarise (1); the same cells were used throughout so only the arrangement or load changed (1); the connections were cleaned and tightened (1); parallax error was avoided by reading each meter square to its scale (1). (Maximum 2.) (b) The later efficiency values were too low, because polarisation raised the internal resistance r, so a larger share of the power was wasted inside the cells and R/(R + r) fell. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Precautions written as commands or in the future tense lose the marks. "Avoid errors" is not a precaution. In (b) the direction (too low) and the reason (rise in r) are both needed.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l03-b8">
+          <div class="aq-top"><h4>8. Why Emeka's Battery Runs Hot</h4><span class="marks">2 marks</span></div>
+          <p>Emeka's worn battery has EMF 12.0 V and internal resistance 1.2 Ω and drives his 2.8 Ω starter. (a) Calculate the efficiency of the battery in this circuit. (b) A new battery of the same EMF has an internal resistance of only 0.10 Ω. Explain, in terms of power, why the worn battery runs hotter.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) η = R/(R + r) = 2.8/(2.8 + 1.2) × 100 % = 2.8/4.0 × 100 % = 70 %. (1) (b) The worn battery's larger internal resistance turns a much bigger share of its power into heat inside itself (I²r): about 30 % heats the battery, against only about 3 % for the new one (0.10/2.9). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) using r/(R + r) gives the wasted 30 % and scores zero. In (b) the answer must link the higher temperature to energy dissipated <em>inside</em> the battery as I²r; "the battery is old" is not credited.</small></p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-02/index.html" style="color:var(--paper-ink)">← Lesson 2</a>
+          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4, galvanometer conversion →</a>
         </div>
       </section>
-
     </main>
   </div>
 
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
-  <script src="../../assets/js/apparatus-kit.js"></script>
-  <script src="../../assets/js/notation.js"></script>
+  <script src="../../assets/js/dc-circuit-bench.js"></script>
+  <script src="../../assets/js/dc-concept-zoom.js"></script>
+  <script src="../../assets/js/auto-workshop-props.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="../../assets/js/story-scene.js"></script>
   <script src="story.js"></script>
   <script src="bench.js"></script>
@@ -675,5 +751,7 @@
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
 </body>
 </html>

@@ -1,176 +1,154 @@
-/* Lesson 05 · Composition of Blood, Clotting Cascade, ABO/Rhesus Blood Groups & WAEC Paper 3 Heart Practical — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 05 · Arteries, Veins, Capillaries, Tissue Fluid and Lymph: content data, capillary pressure model, vessel readings, and the 12 WAEC/NECO/JAMB quiz questions */
 (function () {
   "use strict";
 
+  // ---- The capillary pressure model (02-lesson: approximate textbook teaching values; tissue-side pressures taken as near zero) ----
+  // Pc falls evenly along the capillary, so Pc against position is a straight line; the protein pull (pi c) is flat.
+  var POSITIONS = [0, 0.25, 0.5, 0.75, 1];
+  var MODES = {
+    normal:  { label: "Normal leg", pa: 36, pv: 16, pi: 25 },
+    congest: { label: "Mama Bisi's congested leg", pa: 36, pv: 30, pi: 25 },
+    kwash:   { label: "Low plasma protein (kwashiorkor)", pa: 36, pv: 16, pi: 15 },
+    blocked: { label: "Blocked lymph (filariasis)", pa: 36, pv: 16, pi: 25 }
+  };
+  function mode(m) { return MODES[m] || MODES.normal; }
+  function pc(x, m) { var k = mode(m); return k.pa - (k.pa - k.pv) * x; }
+  function nfp(x, m) { return pc(x, m) - mode(m).pi; }
+  // fraction of the way along where Pc = pi c (NFP = 0); null when it never happens inside the capillary
+  function zero(m) {
+    var k = mode(m), z = (k.pa - k.pi) / (k.pa - k.pv);
+    return z >= 0 && z <= 1 ? z : null;
+  }
+  function sgn(n) { return n > 0 ? "+" + n : n < 0 ? "−" + Math.abs(n) : "0"; }
+  function dir(n) { return n > 0 ? "out" : n < 0 ? "in" : "balanced"; }
+  function dirText(n) { return n > 0 ? "out of the capillary" : n < 0 ? "into the capillary" : "no net movement"; }
+
+  // ---- Vessel slide (VesselSlideBench teaching values) ----
+  var VESSEL = {
+    artery: { wall: 0.90, lumen: 2.2 },
+    vein: { wall: 0.40, lumen: 4.0 }
+  };
+  function ratio(v) { return VESSEL[v].wall / VESSEL[v].lumen; }
+
   window.L05 = {
-    // ---- 1. Haematology, Clotting & Paper 3 Sort items (12 cards across 3 bins) ----
+    POSITIONS: POSITIONS, MODES: MODES, VESSEL: VESSEL,
+    mode: mode, pc: pc, nfp: nfp, zero: zero, sgn: sgn, dir: dir, dirText: dirText, ratio: ratio,
+    PI: 25,
+
+    // ---- 2A. Sort: artery, vein or capillary? ----
+    bins: { artery: "Artery", vein: "Vein", capillary: "Capillary" },
     items: [
-      { id: "plasma-55", name: "Plasma (~55% of blood volume): straw-coloured fluid carrying glucose, amino acids, urea, hormones & HCO₃⁻", emo: "🧪", bin: "shm", why: "Plasma, RBCs & WBCs: Liquid matrix of mammalian blood (~90% water, ~10% dissolved solutes and plasma proteins)." },
-      { id: "rbc-biconcave", name: "Erythrocytes (RBCs): biconcave discs with NO nucleus at maturity, packed with haemoglobin", emo: "🔴", bin: "shm", why: "Plasma, RBCs & WBCs: Losing the nucleus and mitochondria maximises internal space for iron-containing haemoglobin and increases SA:V ratio." },
-      { id: "phagocyte", name: "Phagocytes (neutrophils/monocytes): lobed nucleus; engulf and digest bacteria by phagocytosis", emo: "🦠", bin: "shm", why: "Plasma, RBCs & WBCs: Non-specific white blood cells that squeeze through capillary pores (diapedesis) to engulf pathogens." },
-      { id: "lymphocyte", name: "Lymphocytes: large rounded nucleus; secrete specific antibodies and antitoxins for immunity", emo: "🛡️", bin: "shm", why: "Plasma, RBCs & WBCs: Adaptive white blood cells formed in bone marrow and lymph nodes." },
-      { id: "platelets", name: "Platelets (thrombocytes): non-nucleated cell fragments that release thromboplastin when a vessel is cut", emo: "🩹", bin: "periodic", why: "Platelets & Clotting Cascade: Ruptured platelets and damaged tissue release thromboplastin (thrombokinase) to start coagulation." },
-      { id: "prothrombin", name: "Thromboplastin + Ca²⁺ ions convert inactive prothrombin (made in liver with Vitamin K) into active thrombin", emo: "⚡", bin: "periodic", why: "Platelets & Clotting Cascade: Calcium ions (Ca²⁺) and hepatic Vitamin K are essential cofactors for thrombin activation." },
-      { id: "fibrin-mesh", name: "Active thrombin converts soluble plasma fibrinogen into insoluble fibrin threads that trap RBCs", emo: "🕸️", bin: "periodic", why: "Platelets & Clotting Cascade: Insoluble fibrin fibres weave a meshwork clot (thrombus) that seals the wound." },
-      { id: "serum-def", name: "Serum: pale-yellow fluid remaining after fibrinogen and clotting factors are removed in a clot", emo: "💧", bin: "periodic", why: "Platelets & Clotting Cascade: Serum = Blood Plasma − Fibrinogen." },
-      { id: "group-o", name: "Blood Group O (Universal Donor of packed RBCs): lacks both Antigen A and Antigen B on red cell membranes", emo: "🅾️", bin: "non", why: "ABO/Rhesus & WAEC Paper 3: Because Group O RBCs have neither A nor B surface antigens, recipient anti-A or anti-B antibodies cannot clump them." },
-      { id: "group-ab", name: "Blood Group AB (Universal Recipient): lacks both anti-A and anti-B antibodies in blood plasma", emo: "🆎", bin: "non", why: "ABO/Rhesus & WAEC Paper 3: Having no anti-A or anti-B plasma antibodies allows Group AB to receive packed RBCs from A, B, AB, or O." },
-      { id: "rhesus-hdn", name: "Erythroblastosis fetalis: Rh⁻ mother sensitised by first Rh⁺ baby makes anti-D antibodies attacking later Rh⁺ fetus", emo: "🤰", bin: "non", why: "ABO/Rhesus & WAEC Paper 3: Maternal anti-D IgG antibodies cross the placenta unless prevented by anti-D (RhoGAM) injection." },
-      { id: "paper3-rules", name: "WAEC Paper 3 Heart Drawing: sharp HB pencil, zero shading, horizontal uncrossed label lines & M = Drawing ÷ Actual", emo: "✏️", bin: "non", why: "ABO/Rhesus & WAEC Paper 3: WAEC Chief Examiners strictly penalise shading, sketchy lines, crossed label lines, and missing magnification." }
+      { id: "thick", name: "Thick wall, much muscle and elastic tissue", emo: "💪", bin: "artery", why: "A thick, elastic, muscular wall takes the surge from the ventricle and springs back. That is an artery." },
+      { id: "valves", name: "Pocket valves along its length", emo: "🚪", bin: "vein", why: "Pocket valves let blood move only towards the heart. Veins carry blood at low pressure, so they need them." },
+      { id: "onecell", name: "Wall only one cell thick", emo: "🔬", bin: "capillary", why: "A single flat layer of cells gives the shortest path for exchange." },
+      { id: "spurt", name: "Blood spurts out bright red when cut", emo: "🩸", bin: "artery", why: "High pressure and usually oxygen-rich blood: a cut artery spurts in time with the heartbeat." },
+      { id: "steady", name: "Dark red blood flows out steadily when cut", emo: "💧", bin: "vein", why: "Low pressure and a steady flow: a cut vein oozes dark red blood. It only looks blue through the skin." },
+      { id: "single", name: "Red cells squeeze through one at a time", emo: "🔴", bin: "capillary", why: "The lumen is about one red cell wide, so cells pass in single file close to the wall." },
+      { id: "narrow", name: "Narrow lumen, high pressure, a pulse", emo: "💓", bin: "artery", why: "A narrow lumen and high pressure; the wall bulges and springs back with every beat, felt as the pulse." },
+      { id: "wide", name: "Wide lumen, low pressure, no pulse", emo: "📏", bin: "vein", why: "A wide lumen carries slow, steady, low-pressure flow. No pulse is felt." },
+      { id: "exchange", name: "Site of exchange with the tissues", emo: "↔️", bin: "capillary", why: "Oxygen, glucose and wastes cross the thin capillary wall here, not in arteries or veins." },
+      { id: "away", name: "Carries blood away from the heart", emo: "➡️", bin: "artery", why: "Arteries are named by direction: away from the heart." },
+      { id: "pulmvein", name: "Pulmonary vein", emo: "🫁", bin: "vein", why: "A vein carries blood towards the heart. The pulmonary vein brings oxygen-rich blood from the lungs to the left atrium, yet it is still a vein." }
     ],
 
-    // ---- 2. 3D Haematology & Oxygen Capacity Bench trials ([Hb] in g/100 mL, C_O2 = 1.34 × [Hb] mL O2/100 mL) ----
-    trials: [
-      { label: "A", L: 8.0,  t: "10.7", T: "536",  T2: "×1.2" },
-      { label: "B", L: 10.0, t: "13.4", T: "670",  T2: "×1.3" },
-      { label: "C", L: 12.0, t: "16.1", T: "804",  T2: "×1.4" },
-      { label: "D", L: 15.0, t: "20.1", T: "1005", T2: "×1.5" },
-      { label: "E", L: 18.0, t: "24.1", T: "1206", T2: "×1.7" }
-    ],
-    tOptions: ["10.7", "13.4", "16.1", "20.1", "24.1"],
-    TOptions: ["536", "670", "804", "1005", "1206"],
-    T2Options: ["×1.2", "×1.3", "×1.4", "×1.5", "×1.7"],
+    // ---- 2B. Bench: table answer choices (the expected values are computed from the model) ----
+    nfpOptions: ["+36", "+11", "+6", "+1", "−4", "−9", "−11", "61"],
+    dirOptions: ["out of the capillary", "into the capillary", "no net movement"],
 
-    // ---- 3. Haematology, Clotting, ABO & WAEC Paper 3 Explorer pins ----
-    pins: [
-      { frac: -1.0, label: "1 · Blood Plasma (55%) vs Serum", emo: "🧪", x: "90% Water + 10% Solutes", v: "Albumin, Globulins, Fibrinogen", a: "CO₂ as HCO₃⁻ (70–85%)", ke: "Serum = Plasma − Fibrinogen", pe: "Nutrients, Urea, Hormones & Heat", note: "Straw-coloured plasma transports digested food (glucose, amino acids), excretory urea, hormones, heat, and ~70–85% of CO₂ as bicarbonate ions (HCO₃⁻). Serum is plasma left after fibrinogen clots." },
-      { frac: -0.5, label: "2 · Erythrocytes (RBCs) & Leucocytes (WBCs)", emo: "🔴", x: "RBC ~5M/mm³ · WBC ~7,000/mm³", v: "Biconcave · Enucleated (Mammals)", a: "C_O2 = 1.34 × [Hb] mL/dL", ke: "Phagocytes (Lobed Nucleus)", pe: "Lymphocytes (Antibodies)", note: "Mature mammalian RBCs lack a nucleus and mitochondria to pack haemoglobin (Hb + 4O₂ ⇌ HbO₈) and lived ~120 days before destruction in liver/spleen. Nucleated WBCs defend via phagocytosis and antibodies." },
-      { frac: 0.0,  label: "3 · Platelets & 4-Step Clotting Cascade", emo: "🕸️", x: "250,000–400,000/mm³ · Ca²⁺ + Vit K", v: "Thromboplastin (Thrombokinase)", a: "Prothrombin → Thrombin", ke: "Fibrinogen → Fibrin Mesh", pe: "Heparin Prevents Intravascular Clots", note: "At a cut vessel, platelets release thromboplastin, which uses Ca²⁺ ions to convert prothrombin (made in liver using Vitamin K) into thrombin. Thrombin converts soluble fibrinogen into insoluble fibrin threads." },
-      { frac: 0.5,  label: "4 · ABO Cross-Matching, Rhesus & Sickle-Cell", emo: "🧬", x: "Group O = Donor · AB = Recipient", v: "Antigens on RBC vs Antibodies in Plasma", a: "Rh⁻ Mother + Rh⁺ Fetus", ke: "Erythroblastosis Fetalis", pe: "Sickle-Cell (Hb^S Hb^S) & Haemophilia", note: "Agglutination occurs if donor RBC antigens meet matching recipient antibodies. Group O lacks A & B antigens (Universal Donor); Group AB lacks anti-A & anti-B antibodies (Universal Recipient)." },
-      { frac: 1.0,  label: "5 · WAEC Paper 3 Heart Dissection & 9 Drawing Rules", emo: "✏️", x: "M = Drawing (120 mm) ÷ Actual (80 mm) = ×1.5", v: "Diagonal Coronary Sulcus (Ventral)", a: "LV Wall 3× Thicker than RV", ke: "Sharp HB Pencil · Zero Shading", pe: "Horizontal Uncrossed Label Lines", note: "In WAEC Paper 3, orient the heart by the diagonal coronary groove, pinch the 3× thicker left ventricle, draw 8–12 cm long with single sharp lines, zero shading, horizontal ruled labels, and state magnification M = ×1.5." }
+    // ---- 3. Explorer pins (position along the capillary) ----
+    pins: POSITIONS,
+
+    // ---- 3. Zoom (HeartKit.capillaryBed modes) ----
+    zooms: {
+      normal: { note: "Normal: fluid is pressed out at the arterial end, most is drawn back at the venous end, and a small surplus drains into the lymph capillary (it is then called lymph)." },
+      congest: { note: "Congested (Mama Bisi): venous-end pressure is 30 mmHg, so NFP stays positive all along the capillary. Fluid keeps leaving, little returns, and the tissue swells." },
+      kwash: { note: "Low plasma protein: the protein pull is weak (15 mmHg), so almost nothing is drawn back in and the tissue swells (oedema)." },
+      blocked: { note: "Blocked lymph: pressures are normal, but the surplus cannot drain because filarial worms block the lymph vessel. The limb swells (elephantiasis)." }
+    },
+
+    // ---- 3. Pressure along the circuit (approximate teaching values, mmHg) ----
+    circuit: [
+      { x: 0, p: 100, name: "aorta" },
+      { x: 1, p: 95, name: "large arteries" },
+      { x: 2, p: 85, name: "small arteries" },
+      { x: 3, p: 60, name: "arterioles (largest fall)" },
+      { x: 4, p: 35, name: "capillary, arterial end" },
+      { x: 5, p: 15, name: "capillary, venous end" },
+      { x: 6, p: 8, name: "veins" },
+      { x: 7, p: 2, name: "venae cavae" }
+    ],
+
+    // ---- 4. Bridge: three reasoning steps for Case 2 (Mama Bisi) ----
+    bridge: [
+      {
+        q: "After hours of standing, the leaky valves in Mama Bisi's veins let blood pool and the venous-end capillary pressure Pc rises from 16 to 30 mmHg. With the protein pull at 25 mmHg, what is the NFP at the venous end now?",
+        o: ["−9 mmHg: fluid is still drawn back in", "+5 mmHg: fluid is still pushed out", "+55 mmHg: fluid is pushed out very fast"],
+        a: 1,
+        why: "30 − 25 = +5 mmHg. A positive NFP means fluid leaves, so the venous end no longer reabsorbs."
+      },
+      {
+        q: "What does a positive NFP along the whole capillary do to the amount of tissue fluid, compared with the lymph vessels' ability to drain it?",
+        o: ["Fluid builds up faster than lymph can remove it", "The lymph vessels drain it all, so nothing changes", "The capillary wall becomes thinner"],
+        a: 0,
+        why: "There is no reabsorption zone, so the whole surplus goes to the lymph capillaries, which cannot keep up. The fluid collects: oedema."
+      },
+      {
+        q: "Baba Sule says: “Too much water in the blood. Stop drinking water!” Which verdict is correct?",
+        o: ["He is right: less water means less tissue fluid", "He is wrong: the cause is high venous pressure from pooled blood, so raise her feet and keep the calf muscles working", "He is wrong: the cause is a lack of salt"],
+        a: 1,
+        why: "Drinking water was not the cause. Standing still with leaky valves raised the venous pressure. Raising the feet and walking about to work the muscle pump help, and her high blood pressure needs treatment."
+      }
     ]
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
   window.LESSON_QUIZ = [
-    {
-      q: "Which structural feature of mature mammalian <strong>erythrocytes (red blood cells)</strong> directly increases the internal volume available for packing haemoglobin molecules?",
-      o: [
-        "Presence of a large multi-lobed nucleus",
-        "Absence of a nucleus and mitochondria at maturity, combined with a biconcave disc shape",
-        "Presence of a rigid cellulose cell wall",
-        "Ability to perform amoeboid movement across capillary walls"
-      ],
-      a: 1,
-      e: "During maturation in the red bone marrow, mammalian erythrocytes extrude their <strong>nucleus and mitochondria</strong> so over 95% of cell dry weight is occupied by oxygen-carrying <strong>haemoglobin</strong>, while the <strong>biconcave shape</strong> maximises surface-area-to-volume ratio.",
-      src: "WAEC-style"
-    },
-    {
-      q: "The majority (approximately <strong>70%–85%</strong>) of carbon dioxide (<strong>CO₂</strong>) produced by respiring tissues is transported in mammalian blood as:",
-      o: [
-        "Carboxyhaemoglobin inside platelets",
-        "Hydrogen carbonate (bicarbonate, HCO₃⁻) ions carried mainly in the blood plasma",
-        "Insoluble calcium carbonate crystals in lymph nodes",
-        "Oxyhaemoglobin inside lymphocytes"
-      ],
-      a: 1,
-      e: "Carbonic anhydrase inside erythrocytes catalyses <code>CO₂ + H₂O ⇌ H₂CO₃ ⇌ H⁺ + HCO₃⁻</code>; the <strong>bicarbonate ions (HCO₃⁻)</strong> diffuse into the plasma to transport 70–85% of blood CO₂ to the lungs.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Given that <strong>1 g of haemoglobin binds 1.34 mL of O₂</strong> at full saturation, calculate the total volume of oxygen carried by <strong>5.0 L (50 dL)</strong> of arterial blood in a healthy student with <strong>[Hb] = 15.0 g per 100 mL (1 dL)</strong>:",
-      o: ["20.1 mL O₂", "536 mL O₂", "1,005 mL O₂", "1,500 mL O₂"],
+    { q: "Which row correctly matches a blood vessel with two of its features?",
+      o: ["Artery: wide lumen; pocket valves all along its length","Vein: thick muscular wall; a pulse can be felt in it","Capillary: wall only one cell thick; site of exchange with body cells","Artery: low pressure; slow, steady flow"],
       a: 2,
-      e: "Oxygen capacity per 100 mL (1 dL): <code>C_O2 = 1.34 × 15.0 = 20.1 mL O₂/dL</code>. In <code>5.0 L = 50 dL</code> of blood, total oxygen = <code>20.1 × 50 = 1,005 mL O₂</code>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Which mineral ion and fat-soluble vitamin are both essential for the conversion of <strong>prothrombin to active thrombin</strong> during mammalian blood clotting?",
-      o: [
-        "Sodium ions (Na⁺) and Vitamin C",
-        "Calcium ions (Ca²⁺) and Vitamin K",
-        "Iron(II) ions (Fe²⁺) and Vitamin A",
-        "Potassium ions (K⁺) and Vitamin D"
-      ],
-      a: 1,
-      e: "<strong>Vitamin K</strong> is required by the liver to synthesise <strong>prothrombin</strong>, and <strong>calcium ions (Ca²⁺)</strong> are required as a cofactor for <strong>thromboplastin (thrombokinase)</strong> to convert prothrombin into active <strong>thrombin</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "In the final enzymatic step of blood coagulation, active <strong>thrombin</strong> directly catalyses the conversion of:",
-      o: [
-        "Insoluble fibrin into soluble prothrombin",
-        "Soluble plasma fibrinogen into insoluble fibrin threads that form a meshwork clot",
-        "Platelets into red blood cells",
-        "Thromboplastin into heparin"
-      ],
-      a: 1,
-      e: "<strong>Thrombin</strong> cleaves soluble plasma <strong>fibrinogen</strong> into sticky, insoluble <strong>fibrin</strong> fibres that trap blood cells to seal the wound.",
-      src: "WAEC-style"
-    },
-    {
-      q: "How does <strong>blood serum</strong> differ chemically from <strong>blood plasma</strong>?",
-      o: [
-        "Serum contains red blood cells whereas plasma does not",
-        "Serum lacks fibrinogen and consumed clotting factors, whereas plasma contains fibrinogen (Serum = Plasma − Fibrinogen)",
-        "Plasma lacks water whereas serum is 100% water",
-        "Serum contains platelets whereas plasma lacks antibodies"
-      ],
-      a: 1,
-      e: "When blood clots, soluble <strong>fibrinogen</strong> is converted into insoluble fibrin and removed with the clot, leaving pale-yellow <strong>serum</strong>.",
-      src: "NECO-style"
-    },
-    {
-      q: "Why is an individual with <strong>Blood Group O Rhesus-negative (O⁻)</strong> referred to as the <strong>Universal Donor</strong> of packed red blood cells?",
-      o: [
-        "Their plasma contains neither anti-A nor anti-B antibodies",
-        "Their red blood cell membranes lack Antigen A, Antigen B, and Rhesus D antigen, so recipient plasma antibodies cannot agglutinate them",
-        "Their red blood cells contain nuclei that destroy recipient antibodies",
-        "Their blood clots immediately inside any vein"
-      ],
-      a: 1,
-      e: "Transfusion clumping (<strong>agglutination</strong>) occurs when recipient antibodies attack donor RBC antigens. Because <strong>Group O⁻ red cells have no A, B, or Rh-D surface antigens</strong>, they are safe against anti-A, anti-B, and anti-D.",
-      src: "WAEC-style"
-    },
-    {
-      q: "If a recipient of <strong>Blood Group B</strong> is accidentally transfused with red blood cells from a donor of <strong>Blood Group A</strong>, what life-threatening reaction occurs?",
-      o: [
-        "Anti-A antibodies present in the Group B recipient's plasma bind to Antigen A on the donor red cells, causing agglutination (clumping) and haemolysis",
-        "The donor red blood cells transform into lymphocytes",
-        "The recipient's platelets dissolve into glucose",
-        "No reaction occurs because Group A and Group B are identical"
-      ],
+      e: "A capillary wall is a single layer of flat cells, which gives a very short path for substances moving between blood and cells, so capillaries are where exchange takes place. Option A gives an artery two vein features (wide lumen, valves). Option B gives a vein two artery features (thick muscle, pulse). Option D gives an artery the low pressure and steady flow of a vein; arterial blood moves fast and in surges." },
+    { q: "Which statement about the pulmonary vein is correct?",
+      o: ["It carries oxygenated blood from the lungs to the left atrium.","It carries deoxygenated blood from the lungs to the right atrium.","It carries deoxygenated blood from the right ventricle to the lungs.","It carries oxygenated blood from the left ventricle to the body."],
       a: 0,
-      e: "A <strong>Group B</strong> individual naturally has <strong>anti-A antibodies</strong> in plasma, which cross-link <strong>Antigen A</strong> on the donor Group A red cells, causing fatal intravascular <strong>agglutination</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "<strong>Erythroblastosis fetalis</strong> (haemolytic disease of the newborn) is a clinical risk when:",
-      o: [
-        "A Rhesus-positive (Rh⁺) mother carries a Rhesus-negative (Rh⁻) fetus",
-        "A Rhesus-negative (Rh⁻) mother carries a second or subsequent Rhesus-positive (Rh⁺) fetus after prior sensitisation",
-        "Both parents are Rhesus-negative (Rh⁻)",
-        "Both parents belong to Blood Group O⁻"
-      ],
+      e: "A vein is named by its direction, towards the heart; the pulmonary vein brings blood that has just picked up oxygen in the lungs back to the left atrium, so it is the vein that carries oxygen-rich blood. Option B follows the \"veins carry deoxygenated blood\" myth and sends it to the wrong side. Option C describes the pulmonary artery. Option D describes the aorta." },
+    { q: "Near the venous end of a capillary, the blood pressure (Pc) is 19 mmHg and the osmotic pull of the plasma proteins (πc) is 25 mmHg. What is the net filtration pressure (NFP), and which way does fluid move?",
+      o: ["+6 mmHg; out of the capillary","+44 mmHg; out of the capillary","−6 mmHg; out of the capillary","−6 mmHg; into the capillary"],
+      a: 3,
+      e: "NFP = Pc − πc = 19 − 25 = −6 mmHg. A negative value means the inward protein pull wins, so fluid is drawn back into the capillary by osmosis (reabsorption). Option A subtracts the wrong way round (25 − 19). Option B adds the two pressures instead of subtracting. Option C has the correct number but reads a negative NFP as outward movement." },
+    { q: "Mama Bisi stands at her stall all day, yet blood in her feet still returns upwards to her heart. Which pair of features makes this possible?",
+      o: ["Suction from the heart alone, pulling blood up the veins","Pocket valves in the veins and the squeezing of veins by contracting leg muscles","Thick elastic walls in the veins that recoil after each beat","High pressure left over from the arteries, so veins need no valves"],
       a: 1,
-      e: "Fetal Rh⁺ red cells entering an <strong>Rh⁻ mother's blood</strong> during a first Rh⁺ birth sensitise her to produce <strong>anti-D IgG antibodies</strong>, which cross the placenta in subsequent Rh⁺ pregnancies and destroy fetal RBCs.",
-      src: "WAEC-style"
-    },
-    {
-      q: "A couple who both carry the <strong>sickle-cell trait (genotype Hb^A Hb^S)</strong> are expecting a child. What is the probability that the child will inherit <strong>sickle-cell anaemia (Hb^S Hb^S)</strong>?",
-      o: ["0%", "25% (1/4)", "50% (1/2)", "75% (3/4)"],
+      e: "When leg muscles contract they squeeze the veins between them; the pocket valves open only towards the heart, so the blood can only be pushed upwards, and they shut if it starts to fall back. This muscle pump is why walking about helps her. Option A overstates the heart's pull, which cannot lift blood from the feet by itself. Option C describes an artery wall, not a vein. Option D is wrong because most of the pressure is lost in the arterioles and capillaries, which is exactly why veins need valves." },
+    { q: "After a long day of standing, the pressure at the venous end of Mama Bisi's ankle capillaries rises to 31 mmHg, while πc stays at 25 mmHg. What is the most likely result?",
+      o: ["Fluid is reabsorbed faster than normal, so her ankles shrink.","NFP at the venous end becomes −6 mmHg, so fluid is drawn back in.","Plasma proteins leave the capillary, so her blood becomes thicker.","NFP stays outward (+6 mmHg) along the whole capillary, so fluid collects in the tissues."],
+      a: 3,
+      e: "Venous-end NFP = 31 − 25 = +6 mmHg; since the arterial end is even higher, fluid is pushed out along the whole length and there is no reabsorption zone. The surplus outruns the lymph capillaries and builds up as oedema, the thumb dent Dr Aisha found. Option A reverses the effect. Option B makes a sign slip (subtracting 31 from 25). Option C is wrong because the large plasma proteins stay inside a normal capillary; the problem is pressure, not leaking proteins." },
+    { q: "Blood leaves the aorta (cross-section 3.0 cm²) at 30 cm s⁻¹. All the capillaries together have a cross-section of 3000 cm². Using flow = area × speed, what is the speed of blood in the capillaries?",
+      o: ["0.030 cm s⁻¹","0.30 cm s⁻¹","30 000 cm s⁻¹","90 cm s⁻¹"],
+      a: 0,
+      e: "Flow Q = A × v = 3.0 × 30 = 90 cm³ s⁻¹. The same flow passes through the capillaries, so v = Q/A = 90 ÷ 3000 = 0.030 cm s⁻¹, a thousand times slower than in the aorta, which gives time for exchange. Option B is a ×10 slip. Option C turns the area ratio upside down (3000/3 × 30), making capillary blood faster instead of slower. Option D stops at the flow (in cm³ s⁻¹) and reports it as a speed." },
+    { q: "How does tissue fluid differ from the blood plasma it comes from?",
+      o: ["It contains more red blood cells than plasma.","It contains more plasma proteins than plasma.","It contains no red cells and very few plasma proteins.","It is identical to plasma, only found outside the vessels."],
+      a: 2,
+      e: "Only water and small dissolved substances (oxygen, glucose, amino acids, salts) are squeezed out through the gaps in the capillary wall; red cells and most of the large protein molecules are too big and stay in the blood. Option A is wrong because red cells never leave a healthy capillary. Option B reverses the protein difference. Option D is the \"plasma, tissue fluid and lymph are the same\" myth." },
+    { q: "Why does fluid leave a capillary near its arterial end?",
+      o: ["The osmotic pull of the plasma proteins is greater than the blood pressure there.","The blood pressure there is greater than the osmotic pull of the plasma proteins.","The cells of the capillary wall actively pump the fluid out.","The lymph capillaries suck the fluid out of the blood."],
       a: 1,
-      e: "From <code>Hb^A Hb^S × Hb^A Hb^S</code>, the offspring genotypic ratio is <code>1 Hb^A Hb^A : 2 Hb^A Hb^S : 1 Hb^S Hb^S</code>, giving <code>1/4 = 25%</code> probability of <code>Hb^S Hb^S</code>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "In a WAEC Paper 3 Biology practical, a student measures an actual dissected goat heart as <strong>80 mm</strong> long and makes a biological drawing that measures <strong>120 mm</strong> long. What is the correct magnification to record beside the title?",
-      o: ["×0.67", "×1.5", "×40", "×9,600 mm"],
+      e: "Near the arterial end, Pc is still high and outweighs πc, so NFP is positive and fluid is pressed out between the wall cells (filtration). Option A describes the venous end, where fluid returns. Option C invents active pumping; the movement is driven by pressure. Option D is wrong because lymph capillaries only collect the surplus fluid that is already in the tissue spaces." },
+    { q: "Where does lymph rejoin the blood?",
+      o: ["In the subclavian veins near the neck","In the hepatic portal vein","Directly in the right atrium","In the renal vein"],
+      a: 0,
+      e: "Lymph collects into the thoracic duct and the right lymphatic duct, which empty into the subclavian veins under the collarbones. Option B confuses lymph with the gut-to-liver blood route from Lesson 03. Option C is wrong because no lymph vessel opens straight into the heart. Option D is a vein from the kidney and plays no part in lymph return." },
+    { q: "A child with kwashiorkor has very little protein in the blood. Suppose πc falls to 15 mmHg, while Pc still falls from 36 to 16 mmHg along a capillary. Why does the child's body swell?",
+      o: ["πc rises, so extra fluid is drawn back into the capillaries.","Pc falls to zero, so no fluid can leave the capillaries.","Red cells leak out of the capillaries into the tissues.","πc is lower, so NFP at the venous end is +1 mmHg and fluid is no longer drawn back in."],
+      a: 3,
+      e: "With less protein, the inward pull is weaker. Venous-end NFP = 16 − 15 = +1 mmHg, still outward, so there is no reabsorption anywhere along the capillary; the arterial end even rises to 36 − 15 = +21 mmHg. Fluid builds up faster than lymph can remove it, giving oedema. Option A reverses the change in πc. Option B is wrong because the child's blood pressure is unchanged. Option C is wrong because red cells cannot pass a capillary wall; the swelling is fluid, not blood. (The 15 mmHg is an illustrative teaching value.)" },
+    { q: "A learner measured the wall of an artery on a slide using an eyepiece graticule, but the vessel had been cut at a slant, so it looked oval. How did this affect his reading of wall thickness?",
+      o: ["It was too low, because a slanted cut makes the wall look thinner.","It was too high, because the cut passed through the wall at an angle and showed it longer than its true thickness.","It had no effect, because the graticule had been calibrated.","It was too high, because the vessel had collapsed during preparation."],
       a: 1,
-      e: "Magnification <code>M = Length of Drawing ÷ Actual Length of Specimen = 120 mm ÷ 80 mm = ×1.5</code> (no units, preceded by <code>×</code>).",
-      src: "WAEC-style"
-    },
-    {
-      q: "Which of the following practices causes an automatic loss of marks in a <strong>WAEC/NECO Paper 3 biological drawing</strong> of the mammalian heart?",
-      o: [
-        "Drawing with a sharp HB pencil using single, continuous, unshaded lines",
-        "Artistic shading or stippling of the ventricular wall and crossing freehand label lines with arrowheads",
-        "Using a ruler to draw horizontal, parallel, uncrossed guide lines that touch the structures",
-        "Writing the full title, view, and magnification below the drawing"
-      ],
-      a: 1,
-      e: "WAEC Chief Examiner reports repeatedly penalise <strong>shading/stippling, woolly/sketchy lines, arrowheads on label lines, and crossed guide lines</strong>.",
-      src: "WAEC-style"
-    }
+      e: "A cut that is not at right angles slices the wall obliquely, so the wall seen on the slide is longer than its real thickness and the reading is too high. Option A gives the wrong direction. Option C confuses two separate things: calibration fixes the size of each division, but cannot correct a wall that was cut at a slant. Option D names a different error, which affects the width of a vein's lumen (making it too low), not an artery's wall." },
+    { q: "Which of the following is NOT a function of the lymphatic system?",
+      o: ["Returning surplus tissue fluid and leaked proteins to the blood","Carrying absorbed fat from the lacteals of the ileum","Pumping lymph around the body with a heart of its own","Filtering bacteria in lymph nodes and making lymphocytes"],
+      a: 2,
+      e: "The lymphatic system has no pump; lymph is squeezed along by skeletal muscles and breathing movements, and valves stop it flowing back. Options A, B and D are all genuine functions: returning fluid prevents oedema, lacteals carry fats from digested food, and lymph nodes (which swell during infection) trap germs and produce lymphocytes." }
   ];
 })();

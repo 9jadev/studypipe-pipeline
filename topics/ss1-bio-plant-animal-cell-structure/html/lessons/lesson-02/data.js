@@ -1,186 +1,291 @@
-/* Lesson 02 · Inside the Eukaryotic Cell — Organelles & Plant vs Animal Cells — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 02 · Inside the Cell: Organelles, Plant vs Animal Cells — content data, organelle model and 12 exam-style quiz questions */
 (function () {
   "use strict";
 
+  /* ---------------------------------------------------------------
+     Structural model of every part on the dissector.
+     env   = the membranes that wrap the part (so membranes = env.length, never typed)
+     size_um = a size taken from this unit's worked examples (null where the lesson gives none)
+     contrast = what a school slide gives you: "stain" (iodine / methylene blue takes up), "colour" (natural green),
+                "outline" (seen only as an edge or a clear space), "none" (nothing makes it show)
+     On a school light microscope a detail is seen only if it is resolved (size_um >= LIMIT_UM or no size given)
+     AND something makes it show (contrast is not "none"). This is the model behind the "school slide?" column.
+     --------------------------------------------------------------- */
+  var LIMIT_UM = 0.2;
+
+  var ORG = {
+    wall: {
+      name: "Cell wall", short: "Cell wall",
+      env: [], envNote: "None: it is cellulose, not a membrane",
+      where: "plant", whereTxt: "Plant only",
+      structure: "A stiff outer case of cellulose fibres outside the cell membrane.",
+      job: "Holds the plant cell's shape and stops it bursting. It lets almost anything through (fully permeable).",
+      size_um: null, contrast: "outline", slideNote: "its thick double outline shows clearly on an onion or cork slide",
+      sort: "none"
+    },
+    membrane: {
+      name: "Cell membrane", short: "Cell membrane",
+      env: ["plasma"], envNote: "It is itself one membrane",
+      where: "both", whereTxt: "Plant and animal",
+      structure: "A thin living skin of lipid and protein just inside the wall (plant) or around the whole cell (animal).",
+      job: "Chooses what enters and leaves the cell (selectively permeable).",
+      size_um: null, contrast: "outline", slideNote: "you see only the edge of the cell, never the membrane itself"
+    },
+    nucleus: {
+      name: "Nucleus", short: "Nucleus",
+      env: ["outer", "inner"], envNote: "Two membranes with pores (the nuclear envelope)",
+      where: "both", whereTxt: "Plant and animal",
+      structure: "A round body wrapped in two membranes with pores; holds the nucleolus and chromatin.",
+      job: "Directs the cell and carries its inherited instructions.",
+      size_um: 10, contrast: "stain", slideNote: "iodine and methylene blue stain it, so it is the easiest organelle to label",
+      sort: "double"
+    },
+    mitochondrion: {
+      name: "Mitochondrion", short: "Mitochondrion",
+      env: ["outer", "inner"], envNote: "Two membranes; the inner one is folded into cristae",
+      where: "both", whereTxt: "Plant and animal",
+      structure: "A rod or oval with two membranes. The inner membrane folds into cristae around the matrix.",
+      job: "The power station: releases energy (ATP) in aerobic respiration.",
+      size_um: 1, contrast: "none", slideNote: "it is bigger than the 0.2 µm limit, but no school stain colours it",
+      sort: "double"
+    },
+    chloroplast: {
+      name: "Chloroplast", short: "Chloroplast",
+      env: ["outer", "inner"], envNote: "Two membranes around a stroma",
+      where: "plant", whereTxt: "Green plant cells only",
+      structure: "Two membranes around a stroma that holds stacks of grana containing chlorophyll.",
+      job: "Captures light to make food (photosynthesis).",
+      size_um: 5, contrast: "colour", slideNote: "chlorophyll makes it naturally green in a leaf cell (onion bulb cells have none)",
+      sort: "double"
+    },
+    vacuole: {
+      name: "Sap vacuole", short: "Sap vacuole",
+      env: ["tonoplast"], envNote: "One membrane, the tonoplast",
+      where: "both", whereTxt: "Plant: one large, central. Animal: small, short-lived",
+      structure: "In plants one large space of cell sap lined by the tonoplast; in animals small and temporary.",
+      job: "Keeps the plant cell firm. In freshwater protozoa such as Amoeba a contractile vacuole pumps out excess water.",
+      size_um: null, contrast: "outline", slideNote: "a large clear space pushes the nucleus to the side in a plant cell",
+      sort: "single"
+    },
+    er: {
+      name: "Endoplasmic reticulum", short: "Rough ER",
+      env: ["single"], envNote: "One membrane",
+      where: "both", whereTxt: "Plant and animal",
+      structure: "A network of flattened membrane channels, rough where ribosomes stud it.",
+      job: "Carries materials through the cell; rough ER takes in new proteins made on its ribosomes.",
+      size_um: null, contrast: "none", slideNote: "its fine membranes are not stained and are lost in the cytoplasm",
+      sort: "single"
+    },
+    golgi: {
+      name: "Golgi body", short: "Golgi body",
+      env: ["single"], envNote: "One membrane",
+      where: "both", whereTxt: "Plant and animal",
+      structure: "A pile of flat membrane pouches with swollen ends.",
+      job: "Sorts, packs and sends out the cell's products, and buds off lysosomes.",
+      size_um: null, contrast: "none", slideNote: "it is not stained, so it cannot be told apart from the cytoplasm",
+      sort: "single"
+    },
+    ribosome: {
+      name: "Ribosome", short: "Ribosomes",
+      env: [], envNote: "No membrane at all",
+      where: "both", whereTxt: "All cells, even bacteria",
+      structure: "A tiny grain of RNA and protein with no membrane; some float free, some stud the rough ER.",
+      job: "Assembles proteins.",
+      size_um: 0.025, contrast: "none", slideNote: "it is about 8 times below the 0.2 µm limit of a light microscope",
+      sort: "none"
+    },
+    lysosome: {
+      name: "Lysosome", short: "Lysosome",
+      env: ["single"], envNote: "One membrane",
+      where: "animal", whereTxt: "Common in animal cells, rare in plants",
+      structure: "A small bag wrapped in one membrane, full of digestive enzymes.",
+      job: "Breaks down worn-out parts and engulfed material.",
+      size_um: null, contrast: "none", slideNote: "it is small, unstained and invisible on a school slide",
+      sort: "single"
+    },
+    centrioles: {
+      name: "Centrioles", short: "Centrioles",
+      env: [], envNote: "No membrane",
+      where: "animal", whereTxt: "Animal (flowering plants lack them)",
+      structure: "A pair of tiny hollow rods lying at right angles near the nucleus.",
+      job: "Build the spindle when an animal cell divides.",
+      size_um: null, contrast: "none", slideNote: "they are too small and unstained to see on a school slide",
+      sort: "none"
+    },
+    vacuoleA: {
+      name: "Small vacuole", short: "Small vacuole",
+      env: ["single"], envNote: "One membrane",
+      where: "animal", whereTxt: "Animal: small, short-lived",
+      structure: "A small temporary bubble in the cytoplasm.",
+      job: "A short-term store. Animal cells have no large sap vacuole.",
+      size_um: null, contrast: "none", slideNote: "too small to notice on a cheek-cell slide",
+      count: "vacuole"
+    },
+    glycogen: {
+      name: "Glycogen granules", short: "Glycogen",
+      env: [], envNote: "No membrane",
+      where: "animal", whereTxt: "Animal only",
+      structure: "Tiny granules of stored carbohydrate in the cytoplasm.",
+      job: "Stored food in animal cells (plant cells store starch instead).",
+      size_um: null, contrast: "none", slideNote: "tiny and unstained",
+      count: null
+    }
+  };
+
+  // the 11 parts of the dissector that count towards the "8 organelles" target
+  var PARTS = ["wall", "membrane", "nucleus", "mitochondrion", "chloroplast", "vacuole", "er", "golgi", "ribosome", "lysosome", "centrioles"];
+
+  function modelFor(key) {
+    var o = ORG[key];
+    var membranes = o.env.length;
+    var resolved = o.size_um == null ? true : o.size_um >= LIMIT_UM;
+    var shows = o.contrast !== "none";
+    var visible = resolved && shows;
+    var why;
+    if (o.size_um != null && !resolved) why = "No: " + o.slideNote + ".";
+    else if (!shows) why = "No: " + o.slideNote + ".";
+    else why = "Yes: " + o.slideNote + ".";
+    return {
+      key: key, name: o.name, short: o.short, membranes: membranes, envNote: o.envNote,
+      where: o.where, whereTxt: o.whereTxt, structure: o.structure, job: o.job,
+      slideVisible: visible, slideWhy: why, size_um: o.size_um
+    };
+  }
+
   window.L02 = {
-    // ---- 1. Organelle Classification Sort (Plant-Only, Shared Eukaryotic, Animal-Typical) ----
+    LIMIT_UM: LIMIT_UM,
+    ORG: ORG,
+    PARTS: PARTS,
+    modelFor: modelFor,
+
+    // ---- 2A sort: how many membranes? (10 items) ----
     items: [
-      { id: "cellwall", name: "Rigid non-living cellulose cell wall with plasmodesmata", emo: "🧱", bin: "shm", why: "Plant-Only Feature: Secreted outside the plasma membrane; made of β-glucose cellulose microfibrils that prevent bursting." },
-      { id: "chloroplast", name: "Double-membrane chloroplast with thylakoid grana & stroma", emo: "🌿", bin: "shm", why: "Plant-Only Feature: Contains chlorophyll to trap solar energy and synthesise glucose during photosynthesis." },
-      { id: "vacuole", name: "Large permanent central sap vacuole bounded by a tonoplast", emo: "💧", bin: "shm", why: "Plant-Only Feature: Occupies up to 80% of mature plant cell volume, storing cell sap and maintaining turgor pressure." },
-      { id: "starch", name: "Polysaccharide food reserve stored as insoluble starch grains", emo: "🌾", bin: "shm", why: "Plant-Only Feature: Plants polymerise excess glucose into amylose and amylopectin starch grains inside plastids." },
-      { id: "nucleus", name: "Double-membrane nucleus containing chromatin & nucleolus", emo: "🎯", bin: "periodic", why: "Shared Eukaryotic Organelle: Present in both plant and animal cells; controls cell activities and makes ribosomal RNA." },
-      { id: "mito", name: "Mitochondrion with folded inner cristae & 70S ribosomes", emo: "⚡", bin: "periodic", why: "Shared Eukaryotic Organelle: Both plant and animal cells require mitochondria for aerobic respiration (ATP synthesis)." },
-      { id: "rer", name: "Rough endoplasmic reticulum (RER) studded with 80S ribosomes", emo: "🧵", bin: "periodic", why: "Shared Eukaryotic Organelle: Synthesises and transports proteins toward the Golgi apparatus in both plants and animals." },
-      { id: "golgi", name: "Golgi apparatus (dictyosome) modifying & packaging vesicles", emo: "📦", bin: "periodic", why: "Shared Eukaryotic Organelle: Modifies, sorts, and packages glycoproteins and cell-wall pectins into secretory vesicles." },
-      { id: "centriole", name: "Paired cylindrical centrioles (9+0 microtubule triplets) in centrosome", emo: "🎡", bin: "non", why: "Animal-Typical Feature: Present in animal cells to organise spindle fibres during mitosis; absent in higher flowering plants." },
-      { id: "lysosome", name: "Lysosomes (" + "suicide bags" + ") rich in acidic hydrolytic enzymes", emo: "🧪", bin: "non", why: "Animal-Typical Feature: Digest worn-out organelles (autophagy) and engulfed pathogens; plant vacuoles perform this role." },
-      { id: "glycogen", name: "Carbohydrate food reserve stored as cytoplasmic glycogen granules", emo: "🥩", bin: "non", why: "Animal-Typical Feature: Animals and fungi store excess glucose as highly branched glycogen granules rather than starch." },
-      { id: "irregular", name: "Flexible outer plasma membrane only (irregular, changeable shape)", emo: "🫧", bin: "non", why: "Animal-Typical Feature: Lacking a rigid cellulose wall, animal cells have a flexible boundary and burst in pure water." }
+      { id: "nucleus", name: "Nucleus", emo: "🧬", bin: "double", why: "The nuclear envelope is two membranes with pores." },
+      { id: "mito", name: "Mitochondrion", emo: "🔋", bin: "double", why: "An outer membrane plus an inner membrane folded into cristae." },
+      { id: "chloro", name: "Chloroplast", emo: "🌿", bin: "double", why: "Two membranes around the stroma and its grana." },
+      { id: "lyso", name: "Lysosome", emo: "🧪", bin: "single", why: "A single membrane around digestive enzymes." },
+      { id: "vac", name: "Vacuole with tonoplast", emo: "💧", bin: "single", why: "The sap vacuole is bounded by one membrane, the tonoplast." },
+      { id: "er", name: "Endoplasmic reticulum", emo: "🕸️", bin: "single", why: "A network of channels made of one membrane." },
+      { id: "golgi", name: "Golgi body", emo: "📚", bin: "single", why: "A pile of flat pouches, each made of one membrane." },
+      { id: "ribo", name: "Ribosome", emo: "⚫", bin: "none", why: "A grain of RNA and protein with no membrane, so even bacteria have them." },
+      { id: "centri", name: "Centrioles", emo: "🥢", bin: "none", why: "Hollow protein rods with no membrane." },
+      { id: "wall", name: "Cell wall", emo: "🧱", bin: "none", why: "It is not a membrane at all: it is cellulose." }
     ],
+    binLabels: { double: "Double membrane (2)", single: "Single membrane (1)", none: "No membrane (0)" },
 
-    // ---- 2. 3D Organelle & Mitochondrial Cristae Energetics Bench trials (ATP Rate = 0.45 × Cristae Index) ----
-    trials: [
-      { label: "A", L: 100, t: "Adipose (Fat)",   T: "45.0",  T2: "0.45" },
-      { label: "B", L: 200, t: "Cheek Epithelium", T: "90.0",  T2: "0.45" },
-      { label: "C", L: 300, t: "Leaf Palisade",    T: "135.0", T2: "0.45" },
-      { label: "D", L: 400, t: "Liver Hepatocyte", T: "180.0", T2: "0.45" },
-      { label: "E", L: 500, t: "Flight Muscle",    T: "225.0", T2: "0.45" }
-    ],
-    tOptions: ["Adipose (Fat)", "Cheek Epithelium", "Leaf Palisade", "Liver Hepatocyte", "Flight Muscle"],
-    TOptions: ["45.0", "90.0", "135.0", "180.0", "225.0"],
-    T2Options: ["0.25", "0.45", "0.75", "1.10", "1.50"],
+    // ---- explorer pins: how many membranes? (computed from the model above) ----
+    pins: [0, 1, 2].map(function (n) {
+      var list = [];
+      Object.keys(ORG).forEach(function (k) {
+        var o = ORG[k];
+        if (o.sort === undefined) return; // only the ten items from the sort game
+        if (o.env.length === n) list.push(k);
+      });
+      return { n: n, list: list };
+    }),
 
-    // ---- 3. Endomembrane Secretory Pathway & Organelle Explorer pins ----
-    pins: [
-      { frac: -1.0, label: "1. Nucleus & Nucleolus", emo: "🟣", x: "Double envelope + Nuclear pores", v: "DNA → mRNA transcription", a: "Nucleolus builds rRNA subunits", ke: "Control Centre", pe: "Chromatin (DNA + Histones)", note: "Genetic instructions in DNA are transcribed into messenger RNA (mRNA), which exits through nuclear pores into the cytoplasm." },
-      { frac: -0.5, label: "2. Rough ER & 80S Ribosomes", emo: "🔵", x: "Cisternae studded with 80S ribosomes", v: "mRNA → Polypeptide synthesis", a: "Folds proteins inside ER lumen", ke: "Protein Factory", pe: "Buds transport vesicles", note: "Ribosomes on the Rough ER translate mRNA into polypeptide chains, which fold inside the ER lumen and bud off in transport vesicles." },
-      { frac: 0.0,  label: "3. Smooth ER & Lipids", emo: "🟢", x: "Tubular membranes (no ribosomes)", v: "Phospholipid & steroid synthesis", a: "Detoxifies drugs in liver cells", ke: "Lipid Builder", pe: "Stores Ca²⁺ in muscle", note: "Smooth ER synthesises membrane phospholipids, steroid hormones (testosterone/oestrogen), and detoxifies poisons in liver hepatocytes." },
-      { frac: 0.5,  label: "4. Golgi Apparatus", emo: "🟠", x: "Cis face → Cisternae → Trans face", v: "Glycosylation & sorting", a: "Forms secretory vesicles & lysosomes", ke: "Post Office", pe: "Builds acrosome & cell plate", note: "Transport vesicles fuse at the cis face; the Golgi attaches carbohydrate tags (glycoproteins) and pinches off secretory vesicles at the trans face." },
-      { frac: 1.0,  label: "5. Mitochondria & Chloroplasts", emo: "⚡", x: "Semi-autonomous double-membrane", v: "Circular DNA + 70S ribosomes", a: "Cristae (ATP) & Grana (Glucose)", ke: "Energy Converters", pe: "Endosymbiotic origin", note: "Both mitochondria and chloroplasts possess their own circular DNA and 70S ribosomes, dividing by binary fission inside the eukaryotic cell!" }
+    // ---- table rows: plant / animal presence ----
+    // P / A: "yes" present, "no" absent, "small" small or rare
+    rows: [
+      { k: "wall", P: "yes", A: "no" },
+      { k: "membrane", P: "yes", A: "yes" },
+      { k: "nucleus", P: "yes", A: "yes" },
+      { k: "mitochondrion", P: "yes", A: "yes" },
+      { k: "chloroplast", P: "yes", A: "no" },
+      { k: "vacuole", P: "yes", A: "small" },
+      { k: "er", P: "yes", A: "yes" },
+      { k: "golgi", P: "yes", A: "yes" },
+      { k: "ribosome", P: "yes", A: "yes" },
+      { k: "lysosome", P: "small", A: "yes" },
+      { k: "centrioles", P: "no", A: "yes" }
     ]
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
+  // ---- 12 exam-style quiz questions (03-questions.md, Lesson 02, Part 1) ----
   window.LESSON_QUIZ = [
     {
-      q: "Which eukaryotic organelle is known as the <strong>'powerhouse of the cell'</strong> because it is the site of the Krebs cycle and oxidative phosphorylation (aerobic ATP synthesis)?",
-      o: [
-        "Golgi apparatus",
-        "Mitochondrion",
-        "Lysosome",
-        "Smooth endoplasmic reticulum"
-      ],
-      a: 1,
-      e: "The <strong>mitochondrion</strong> carries out aerobic cellular respiration, oxidising pyruvate to generate <strong>36–38 ATP</strong> per glucose molecule.",
-      src: "WAEC-style"
-    },
-    {
-      q: "How does the <strong>inner membrane of a mitochondrion</strong> structurally adapt the organelle for rapid ATP synthesis?",
-      o: [
-        "It is completely smooth and impermeable to all ions",
-        "It is folded into numerous shelf-like cristae that greatly increase the surface area for electron-transport chains and ATP synthase enzymes",
-        "It contains chlorophyll pigments stacked into grana",
-        "It is made of rigid non-living cellulose microfibrils"
-      ],
-      a: 1,
-      e: "Infoldings called <strong>cristae</strong> multiply the inner-membrane surface area so thousands of ATP synthase complexes can operate simultaneously.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Why are <strong>mitochondria and chloroplasts</strong> described as <strong>semi-autonomous organelles</strong>?",
-      o: [
-        "They can survive indefinitely in boiling distilled water outside the cell",
-        "They possess their own circular DNA, 70S ribosomes, and double membranes, allowing them to synthesise some of their own proteins and divide by binary fission",
-        "They lack any nucleic acids or enzymes",
-        "They are bounded by a single peptidoglycan wall"
-      ],
-      a: 1,
-      e: "Both mitochondria and chloroplasts contain <strong>circular naked DNA</strong> and <strong>70S ribosomes</strong>, supporting the endosymbiotic theory.",
-      src: "JAMB-style"
-    },
-    {
-      q: "What is the primary function of the <strong>nucleolus</strong> located inside the eukaryotic nucleus?",
-      o: [
-        "Synthesis of ribosomal RNA (rRNA) and assembly of ribosome subunits",
-        "Digestion of worn-out organelles by hydrolytic enzymes",
-        "Storage of starch grains in root tubers",
-        "Pumping sodium ions out of the cell"
-      ],
+      q: "Coach Danjuma trains sprinters at the Teslim Balogun Stadium. A thigh-muscle cell of one of his athletes contracts many times a minute during a race. Which organelle would you expect to find in unusually large numbers in this cell?",
+      o: ["Mitochondria", "Lysosomes", "Centrioles", "Chloroplasts"],
       a: 0,
-      e: "The dense, non-membranous <strong>nucleolus</strong> transcribes ribosomal RNA (<strong>rRNA</strong>) and combines it with proteins to assemble ribosomal subunits.",
-      src: "WAEC-style"
+      e: "Muscle contraction needs a constant supply of energy. Mitochondria carry out aerobic respiration and release that energy as ATP, so very active cells such as muscle cells are packed with them. Lysosomes hold digestive enzymes for breaking down worn-out parts; they do not supply energy. Chloroplasts are never found in animal cells.",
+      src: "WAEC-style · Apply"
     },
     {
-      q: "Which sequence correctly traces the <strong>secretory pathway</strong> of a digestive enzyme (protein) from synthesis to exocytosis?",
-      o: [
-        "Lysosome → Nucleus → Smooth ER → Mitochondrion",
-        "80S Ribosome on Rough ER → Transport Vesicle → Golgi Apparatus → Secretory Vesicle → Plasma Membrane",
-        "Chloroplast → Tonoplast → Cell Wall → Centriole",
-        "Golgi Apparatus → Nucleolus → Rough ER → Vacuole"
-      ],
-      a: 1,
-      e: "Secreted proteins are synthesised on <strong>Rough ER ribosomes</strong>, carried in <strong>transport vesicles</strong> to the <strong>Golgi apparatus</strong> for modification/packaging, and exported via <strong>secretory vesicles</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Which organelle is referred to as the <strong>'suicide bag'</strong> of an animal cell because rupture of its single membrane releases acidic hydrolytic enzymes that digest the cell (autolysis)?",
-      o: [
-        "Ribosome",
-        "Centriole",
-        "Lysosome",
-        "Peroxisome"
-      ],
+      q: "Which of the following cell structures is NOT bounded by any membrane?",
+      o: ["Lysosome", "Mitochondrion", "Ribosome", "Golgi body"],
       a: 2,
-      e: "<strong>Lysosomes</strong> contain acid hydrolases (proteases, lipases, nucleases) that perform intracellular digestion, autophagy, and autolysis (e.g., reabsorption of a tadpole's tail during metamorphosis).",
-      src: "WAEC-style"
+      e: "A ribosome is a tiny granule of RNA and protein with no membrane at all, which is why ribosomes are found even in prokaryotes. The lysosome and Golgi body each have one membrane; the mitochondrion has two (an outer membrane and an inner one folded into cristae).",
+      src: "JAMB-style · Remember"
     },
     {
-      q: "A student wants to distinguish a <strong>green palisade mesophyll cell</strong> from a <strong>human cheek epithelial cell</strong> under a microscope. Which trio of structures is present ONLY in the palisade cell?",
-      o: [
-        "Plasma membrane, cytoplasm, and nucleus",
-        "Mitochondria, 80S ribosomes, and Golgi body",
-        "Cellulose cell wall, chloroplasts, and a large permanent central sap vacuole bounded by a tonoplast",
-        "Centrioles, lysosomes, and glycogen granules"
-      ],
+      q: "In which of the following pairs is EACH organelle bounded by a double membrane?",
+      o: ["Nucleus and lysosome", "Mitochondrion and endoplasmic reticulum", "Chloroplast and ribosome", "Nucleus and chloroplast"],
+      a: 3,
+      e: "The nucleus (nuclear envelope with pores), the mitochondrion and the chloroplast are the three double-membrane organelles. Option A fails because the lysosome has a single membrane; B fails because the ER is single-membraned; C fails because the ribosome has no membrane.",
+      src: "NECO-style · Understand"
+    },
+    {
+      q: "At Mama Ngozi's stall, Chinedu drew up this comparison table for his homework. Which row contains an error?",
+      o: ["Cell wall: plant cell present | animal cell absent", "Food stored as: plant cell starch | animal cell glycogen", "Position of nucleus: plant cell central | animal cell at the side", "Centrioles: plant cell absent | animal cell present"],
       a: 2,
-      e: "Plant cells possess a <strong>cellulose cell wall</strong>, <strong>chloroplasts</strong> (in green tissues), and a <strong>large central sap vacuole</strong> bounded by a <strong>tonoplast</strong>.",
-      src: "NECO-style"
+      e: "The row is reversed. In a mature plant cell the large central sap vacuole pushes the nucleus and cytoplasm to the side; in an animal cell the nucleus is usually central. Rows A, B and D are all correct. Row D is a common worry, but centrioles are absent from flowering-plant cells and present in animal cells.",
+      src: "WAEC-style · Analyse"
     },
     {
-      q: "In which specific part of the <strong>chloroplast</strong> do the <strong>light-dependent reactions</strong> (photolysis of water) and the <strong>light-independent reactions</strong> (Calvin cycle carbon fixation) take place respectively?",
-      o: [
-        "Light stage in the stroma; dark stage in the outer membrane",
-        "Light stage in the thylakoid membranes (grana); dark stage in the aqueous stroma",
-        "Light stage in the cristae; dark stage in the matrix",
-        "Light stage in the tonoplast; dark stage in the nucleoplasm"
-      ],
+      q: "Mama Ngozi's nephew soaked ugu leaves in salty water. The salt solution passed straight through the outer layer of each leaf cell and reached the layer beneath it. Which statement correctly explains this?",
+      o: ["The cell membrane is fully permeable, while the cell wall is selectively permeable.", "The cellulose cell wall is fully permeable; it is the cell membrane beneath it that controls entry and exit.", "The cell wall is made of lipoprotein, which dissolves in salt water.", "The tonoplast lies outside the cell wall and lets salt in."],
       a: 1,
-      e: "Chlorophyll is embedded in the <strong>thylakoid membranes (grana)</strong> for the light stage, while RuBisCO enzymes for the Calvin cycle are dissolved in the <strong>stroma</strong>.",
-      src: "JAMB-style"
+      e: "The cell wall is non-living cellulose with large gaps, so it is fully permeable and is not a membrane. The living lipoprotein cell membrane is selectively permeable and is the real “gatekeeper”. Option A reverses the two; C gives the wall the wrong chemical make-up; D puts the tonoplast in the wrong place (it surrounds the sap vacuole, deep inside the cell).",
+      src: "WAEC-style · Understand"
     },
     {
-      q: "Excess glucose is stored as insoluble <strong>starch grains</strong> in plant cells, whereas in animal liver and muscle cells it is stored as:",
-      o: [
-        "Cellulose microfibrils",
-        "Chitin fibres",
-        "Glycogen granules",
-        "Pectin lamellae"
-      ],
+      q: "A cell in the pancreas makes a digestive enzyme (a protein) and releases it out of the cell. Which sequence correctly traces the enzyme from where it is made to where it leaves?",
+      o: ["Nucleus → ribosome → lysosome → cell membrane", "Ribosome → rough endoplasmic reticulum → Golgi body → cell membrane", "Golgi body → rough endoplasmic reticulum → ribosome → cell membrane", "Ribosome → mitochondrion → Golgi body → cell wall"],
+      a: 1,
+      e: "Proteins are built on ribosomes attached to the rough ER, carried along the ER channels, sent in vesicles to the Golgi body to be modified and packaged, and released when the vesicle fuses with the cell membrane. Option C runs the route backwards. The nucleus holds the instructions but does not make the protein, and an animal cell has no cell wall (option D).",
+      src: "NECO-style · Apply"
+    },
+    {
+      q: "Dr Amaka examines electron micrographs of a cell from a salivary gland, which secretes large amounts of the enzyme amylase. Which pair of organelles would be most abundant in this cell?",
+      o: ["Rough endoplasmic reticulum and Golgi bodies", "Chloroplasts and sap vacuoles", "Centrioles and lysosomes", "Smooth endoplasmic reticulum and chloroplasts"],
+      a: 0,
+      e: "Amylase is a protein made for export, so a secretory cell needs lots of rough ER (ribosomes making and transporting protein) and many Golgi bodies (packaging and secreting it). Centrioles work in cell division, and lysosomes digest worn-out parts, so neither is linked to secretion. Chloroplasts are not found in human cells.",
+      src: "JAMB-style · Analyse"
+    },
+    {
+      q: "An electron micrograph at a magnification of ×40 000 shows a chloroplast with an image length of 200 mm. What is the actual length of the chloroplast?",
+      o: ["0.5 µm", "50 µm", "5 mm", "5 µm"],
+      a: 3,
+      e: "Actual size = image size ÷ magnification = 200 mm ÷ 40 000 = 0.005 mm. Convert: 0.005 mm × 1000 = 5 µm. Option C is 0.005 mm wrongly written as 5 mm (the mm-to-µm conversion was skipped, so it is 1000 times too large); option B is a ×10 slip (50 µm) and option A a ÷10 slip (0.5 µm). Always change mm to µm (× 1000) after dividing.",
+      src: "WAEC-style · Apply"
+    },
+    {
+      q: "Chinedu's school microscope has a ×10 eyepiece and a ×10 objective. A mitochondrion in a cheek cell is 0.8 µm wide. The unaided eye can just make out a detail of about 0.1 mm. What is the width of the mitochondrion's image, and can he see it?",
+      o: ["8 µm; visible", "0.08 mm; not visible", "0.8 mm; visible", "0.008 mm; not visible"],
+      a: 1,
+      e: "Total magnification = eyepiece × objective = 10 × 10 = ×100. Image size = actual size × magnification = 0.8 µm × 100 = 80 µm. Convert: 80 µm ÷ 1000 = 0.08 mm. Since 0.08 mm is less than 0.1 mm, the image is too small to see. Option A (and D, which is the same 8 µm written in mm) uses only one lens, 0.8 × 10, instead of the total magnification 10 × 10 = ×100; option C slips a factor of ten in the conversion.",
+      src: "WAEC Practical · Apply"
+    },
+    {
+      q: "Chinedu says, “If I keep turning to higher-power lenses on the school light microscope, I will eventually see ribosomes.” Which statement best explains why he is wrong?",
+      o: ["Ribosomes are found only in prokaryotes, not in the cells used on school slides.", "Ribosomes are destroyed by the stain used on slides.", "Ribosomes are hidden behind the cell wall in every cell.", "A light microscope cannot separate details smaller than about 0.2 µm, and a ribosome (about 0.025 µm) is about 8 times smaller than that limit."],
+      a: 3,
+      e: "Magnifying a blurred image only makes a bigger blur. The limit is resolving power: about 0.2 µm for a light microscope, and 0.2 µm ÷ 0.025 µm = 8, so a ribosome is about eight times below the limit. An electron microscope is needed. Option A is false because ribosomes are found in both prokaryotes and eukaryotes. Option C is false because animal cells have no wall and the wall is not opaque anyway.",
+      src: "JAMB-style · Analyse"
+    },
+    {
+      q: "An organelle has a double membrane and contains stacks called grana surrounded by a fluid stroma. Which option names the organelle and its function correctly?",
+      o: ["Mitochondrion; aerobic respiration", "Golgi body; packaging and secretion", "Chloroplast; photosynthesis", "Nucleus; control of cell activities"],
       a: 2,
-      e: "Animals and fungi store excess carbohydrate as cytoplasmic <strong>glycogen granules</strong>; plants store carbohydrate as <strong>starch</strong>.",
-      src: "WAEC-style"
+      e: "Grana (stacks of thylakoids holding chlorophyll) in a stroma are found only in the chloroplast, which carries out photosynthesis. The mitochondrion also has two membranes, but its inner membrane is folded into cristae around a matrix, not grana in a stroma.",
+      src: "WAEC-style · Remember"
     },
     {
-      q: "Which plastid type is responsible for the bright red, orange, and yellow colours of ripe tomato fruits, carrot roots, and flower petals?",
-      o: [
-        "Amyloplast (leucoplast)",
-        "Chromoplast",
-        "Chloroplast",
-        "Elaioplast"
-      ],
-      a: 1,
-      e: "<strong>Chromoplasts</strong> contain carotenoid pigments (carotene and xanthophyll) that give ripe fruits and petals bright colours to attract pollinators and seed dispersers.",
-      src: "JAMB-style"
-    },
-    {
-      q: "When <strong>15 molecules of glucose</strong> are completely oxidised via aerobic respiration inside a cell's mitochondria (yielding 38 ATP per glucose), how many more ATP molecules are produced than if the same 15 glucose molecules underwent anaerobic glycolysis in the cytoplasm (2 ATP per glucose)?",
-      o: ["30 ATP", "36 ATP", "540 ATP", "570 ATP"],
-      a: 2,
-      e: "Aerobic ATP = <code>15 × 38 = 570 ATP</code>. Anaerobic ATP = <code>15 × 2 = 30 ATP</code>. Net gain from mitochondria = <code>570 − 30 = 540 ATP</code>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "Microscopic cytoplasmic channels that pass through pits in adjacent plant cell walls, linking the living cytoplasm of neighbouring cells into a continuous <strong>symplast</strong>, are called:",
-      o: [
-        "Cristae",
-        "Plasmodesmata",
-        "Centrioles",
-        "Microvilli"
-      ],
-      a: 1,
-      e: "<strong>Plasmodesmata</strong> (singular: plasmodesma) are fine cytoplasmic strands threading through pores in the cellulose cell wall and middle lamella.",
-      src: "NECO-style"
+      q: "Which of the following statements about cell structures is correct?",
+      o: ["The tonoplast is a single membrane that surrounds the sap vacuole of a plant cell.", "Ribosomes are surrounded by a double membrane.", "The cell wall is a selectively permeable lipoprotein membrane.", "Cilia and flagella arise from mitochondria."],
+      a: 0,
+      e: "The large central vacuole of a plant cell is bounded by one membrane, the tonoplast. Ribosomes have no membrane (B); the cell wall is cellulose, fully permeable and not a membrane (C). Cilia and flagella arise from basal bodies, not mitochondria (D). Several online keys print D, but it is wrong.",
+      src: "NECO-style · Understand"
     }
   ];
 })();

@@ -3,42 +3,155 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 5 · Composition of Blood, Clotting Cascade, ABO/Rhesus Groups &amp; WAEC Paper 3 Heart Practical · StudyPipe</title>
-  <meta name="description" content="StudyPipe Biology (SS2): Blood Plasma vs Serum, Erythrocytes, Leucocytes (Phagocytes &amp; Lymphocytes), Platelets, 4-Step Blood Clotting Cascade, ABO &amp; Rhesus Blood Groups, Sickle-Cell Anaemia, and WAEC Paper 3 Mammalian Heart Dissection &amp; Drawing Rules.">
+  <title>Lesson 5 · Arteries, Veins, Capillaries, Tissue Fluid and Lymph · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): compare arteries, veins and capillaries on a calibrated slide, probe capillary pressure, work out net filtration pressure, and explain tissue fluid, lymph and oedema.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fb7185'/%3E%3Cstop offset='1' stop-color='%2322c55e'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23d22e56'/%3E%3Cpath d='M32 50C14 38 12 26 20 20c5-4 10-1 12 4 2-5 7-8 12-4 8 6 6 18-12 30z' fill='%23fffaf2'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(251,113,133,.18), rgba(62,230,196,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
-    }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #fbbf24 0%, #e11d48 25%, #f59e0b 50%, #38bdf8 75%, #22c55e 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-    }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(251,113,133,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
+    /* Lesson 05 only: tokens, never literal colours or font names */
+    .tt-line { font-family: var(--font-mono); font-size: 12px; line-height: 1.6; color: var(--on-ink-soft); margin: 14px 0 0; }
+    .tt-line b { color: var(--amber); font-weight: 600; }
+    .l05-art { position: relative; border-radius: var(--radius-lg); border: 1px solid var(--line-strong); background: radial-gradient(circle at 50% 20%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900); box-shadow: var(--shadow-lg); padding: 14px; display: flex; align-items: center; justify-content: center; }
+    .l05-art svg { width: 100%; max-width: 330px; height: auto; display: block; }
+    .l05-art .t { font-family: var(--font-mono); font-size: 11px; fill: var(--fg-soft); }
+    #sort .bins { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    #sort .bin { min-height: 150px; padding: 12px; }
+    #sort .sort-item { font-size: 13.5px; }
+    @media (max-width: 560px) { #sort .bins { grid-template-columns: 1fr; } #sort .bin { min-height: 96px; } }
+    .prac-note { margin: 10px 0 0; font-size: 14px; color: var(--paper-muted); }
+    .st-title { font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--crimson); margin: 22px 0 8px; }
+    .bench-ctl { display: grid; gap: 10px; width: 100%; }
+    .bench-ctl .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .bench-ctl .lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); min-width: 64px; }
+    .bench-ctl[hidden], .bench-ctl .row[hidden] { display: none; }
+    .bench-clock { font-family: var(--font-mono); font-size: 12.5px; color: var(--fg-soft); }
+    .bench-clock b { color: var(--amber); }
+    .bench-ctl input[type=range] { flex: 1 1 160px; min-width: 120px; accent-color: var(--amber); }
+    .tbl select { max-width: 100%; font: inherit; font-family: var(--font-mono); font-size: 13px; padding: 6px 8px; border-radius: calc(8px * var(--corner, 1)); border: 1px solid var(--paper-line); background: var(--paper-card); color: var(--paper-ink); }
+    .tbl td.ok { background: rgba(var(--ok-rgb), .14); }
+    .tbl td.no { background: rgba(var(--crimson-rgb), .12); }
+    .tbl td.pend { color: var(--paper-faint); }
+    .l05-parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 14px 0 0; }
+    .l05-parts div { background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: calc(14px * var(--corner, 1)); padding: 12px 14px; font-size: 14px; }
+    .l05-parts b { display: block; font-family: var(--font-display); font-size: 1.05rem; color: var(--crimson); }
+    @media (max-width: 560px) { .l05-parts { grid-template-columns: 1fr; } }
+    .l05-track { position: relative; height: 22px; border-radius: 999px; margin: 46px 10px 8px; background: linear-gradient(90deg, rgba(var(--crimson-rgb), .85), rgba(var(--warn-rgb), .8) 55%, rgba(var(--ok-rgb), .85)); box-shadow: inset 0 2px 5px rgba(var(--ink-950-rgb), .35); }
+    .l05-pin { position: absolute; top: 50%; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: var(--fg); box-shadow: 0 0 0 3px rgba(var(--ink-950-rgb), .35); transition: transform .2s; }
+    .l05-pin:hover, .l05-pin.on { transform: scale(1.35); box-shadow: 0 0 0 3px var(--amber); }
+    .l05-pin span { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); white-space: nowrap; font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); pointer-events: none; }
+    .l05-ends { display: flex; justify-content: space-between; gap: 10px; margin: 4px 4px 0; font-family: var(--font-mono); font-size: 10.5px; color: var(--muted); }
+    .l05-bars { display: grid; gap: 8px; margin: 16px 0 0; }
+    .l05-bar { display: grid; grid-template-columns: 74px 1fr 64px; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+    .l05-bar .rail { position: relative; height: 16px; border-radius: 999px; background: rgba(var(--ink-950-rgb), .3); overflow: hidden; }
+    .l05-bar .fill { position: absolute; top: 0; bottom: 0; left: 0; width: 0; border-radius: 999px; transition: width .3s; background: var(--crimson); }
+    .l05-bar .fill.pi { background: var(--teal); }
+    .l05-bar .fill.out { background: var(--amber); }
+    .l05-bar .fill.in { background: var(--sky); }
+    .l05-bar b { color: var(--fg); text-align: right; }
+    .l05-arrow { text-align: center; margin: 10px 0 0; font-family: var(--font-mono); font-size: 13px; color: var(--fg); }
+    .l05-arrow .ar { display: inline-block; font-size: 22px; line-height: 1; margin-right: 6px; color: var(--amber); vertical-align: middle; }
+    .l05-arrow .ar.in { color: var(--sky); }
+    #bench-readout { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; padding: 12px 10px 0; }
+    #bench-readout div { padding: 7px 7px; }
+    #bench-readout span { font-size: 9px; letter-spacing: 0; }
+    #bench-readout b { font-size: 12.5px; }
+    #station-pick button, #v-tech button, #bed-mode button, #zoom-seg button { padding: 8px 9px; font-size: 13px; }
+    .l05-bridge { margin-top: 20px; display: grid; gap: 14px; }
+    .l05-bq { background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 16px 18px; }
+    .l05-bq h4 { margin: 0 0 10px; font-size: 15.5px; line-height: 1.5; }
+    .l05-bq .opts { display: grid; gap: 8px; }
+    .l05-bq .opts button { text-align: left; border: 1.5px solid var(--paper-line); background: var(--paper); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); padding: 10px 14px; font: inherit; font-size: 14.5px; line-height: 1.45; cursor: pointer; }
+    .l05-bq .opts button:disabled { cursor: default; }
+    .l05-bq .opts button.correct { border-color: var(--ok); background: rgba(var(--ok-rgb), .12); }
+    .l05-bq .opts button.incorrect { border-color: var(--crimson); background: rgba(var(--crimson-rgb), .1); }
+    .l05-bq .why { display: none; margin: 10px 0 0; font-size: 14px; color: var(--paper-text); }
+    .l05-bq .why.on { display: block; }
+    .l05-verdict { display: none; padding: 16px 18px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .1); border-left: 4px solid var(--ok); font-size: 15.5px; }
+    .l05-verdict.on { display: block; }
+    .aq-q p { margin: 6px 0 0; font-size: 15px; }
+    .aq-q ol, .aq-q ul { margin: 8px 0 0; padding-left: 22px; }
+    .l05-pager { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--paper-line); flex-wrap: wrap; }
+    .l05-steps { margin: 0; padding-left: 22px; }
+
+    /* ---- compact bench: phone first (360px), desktop keeps the roomy flex rows ---- */
+    #method-cards, #method-cards-2 { gap: 6px; margin-top: 8px; }
+    #method-cards div.method, #method-cards-2 div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover, #method-cards-2 div.method:hover { transform: none; }
+    #method-cards div.method b, #method-cards-2 div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4, #method-cards-2 div.method h4 { font-size: 14px; }
+    #method-cards div.method p, #method-cards-2 div.method p { font-size: 12.5px; line-height: 1.35; }
+    .st-title { margin: 14px 0 4px; }
+    #practical .intro { font-size: .95rem; line-height: 1.45; margin: 6px 0 0; }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-bar { padding: 10px 12px; gap: 8px; }
+    #bench-stage .bench-ctl { gap: 6px; }
+    #bench-stage .l05r-stat { justify-content: space-between; }
+    @media (max-width: 640px) {
+      #bench-stage .stage-canvas { height: clamp(360px, 100vw, 440px); }
+      #bench-stage .stage-bar { padding: 8px 10px; gap: 6px; }
+      #bench-stage .bench-ctl { gap: 5px; }
+      #bench-stage .bench-ctl .lbl { display: none; }
+      #bench-stage .l05r-g2, #bench-stage .l05r-g3 { display: grid; gap: 5px; }
+      #bench-stage .l05r-g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #bench-stage .l05r-g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      #bench-stage .l05r-g2 .vt-btn, #bench-stage .l05r-g3 .vt-btn { padding: 6px 4px; font-size: 11.5px; line-height: 1.2; min-height: 36px; }
+      #bench-stage #station-pick { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; padding: 3px; gap: 3px; }
+      #bench-stage #station-pick button { padding: 6px 4px; font-size: 12px; line-height: 1.2; min-height: 34px; }
+      #bench-stage #v-tech, #bench-stage #bed-mode { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); width: 100%; padding: 3px; gap: 3px; }
+      #bench-stage #v-tech button, #bench-stage #bed-mode button { padding: 5px 2px; font-size: 10px; line-height: 1.1; min-height: 32px; }
+      #bench-stage .l05r-probe { flex-wrap: nowrap; }
+      #bench-stage .l05r-probe .vt-btn { padding: 6px 10px; font-size: 11.5px; min-height: 36px; white-space: nowrap; }
+      #bench-stage .bench-clock { font-size: 11px; }
+      #bench-stage .l05r-stat .vt-btn { padding: 6px 12px; font-size: 11.5px; min-height: 32px; }
+      #bench-stage .stage-hint { font-size: 11.5px; line-height: 1.3; margin: 0; }
+      #bench-readout { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; padding: 8px 10px 0; }
+      #bench-readout div { padding: 5px 4px; }
+      #bench-readout span { line-height: 1.15; overflow-wrap: anywhere; }
+      #bench-readout b { font-size: 12px; }
+      /* station 1 sheet: keep it a real 4-column table instead of three stacked cards */
+      #vessel-table { display: table; min-width: 0; }
+      #vessel-table thead { display: table-header-group; }
+      #vessel-table tbody { display: table-row-group; }
+      #vessel-table tr { display: table-row; }
+      #vessel-table thead { position: static; width: auto; height: auto; overflow: visible; clip: auto; }
+      #vessel-table th, #vessel-table td { display: table-cell; padding: 7px 6px; font-size: 12px; border-bottom: 1px solid var(--paper-line); text-align: left; }
+      #vessel-table th { font-size: 9.5px; letter-spacing: .02em; line-height: 1.25; }
+      #vessel-table td::before { content: none; }
+      #vessel-table td .td-v { display: inline; }
+      #vessel-table tr:last-child td { border-bottom: 0; }
+      /* station 2 sheet: one compact block per position — readings on top, the two choices under them */
+      #results-table.cards tr { grid-template-columns: 58px minmax(0, 1fr) minmax(0, 1fr); column-gap: 6px; row-gap: 3px; padding: 7px 8px; align-items: center; }
+      #results-table.cards td { display: block; padding: 0; font-size: 13px; min-height: 0; }
+      #results-table.cards td::before { display: block; flex: none; content: attr(data-label); font-family: var(--font-mono); font-size: 9px; line-height: 1.25; color: var(--paper-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      #results-table.cards td:nth-child(1) { grid-row: 1 / span 2; grid-column: 1; font-size: 15px; padding-bottom: 0; }
+      #results-table.cards td:nth-child(2) { grid-row: 1; grid-column: 2; }
+      #results-table.cards td:nth-child(3) { grid-row: 1; grid-column: 3; }
+      #results-table.cards td:nth-child(4) { grid-row: 2; grid-column: 2; }
+      #results-table.cards td:nth-child(5) { grid-row: 2; grid-column: 3; }
+      #results-table.cards td > select { flex: none; width: 100%; min-height: 34px; font-size: 11px; padding: 4px 5px; }
+      #results-table.cards td.ok, #results-table.cards td.no { margin: 0; padding: 0 3px; }
+      /* make sense zoom bar */
+      #zoom-stage .stage-bar { padding: 8px 10px; gap: 6px; }
+      #zoom-seg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); width: 100%; padding: 3px; gap: 3px; }
+      #zoom-seg button { padding: 6px 4px; font-size: 11.5px; line-height: 1.2; min-height: 34px; }
+      #zoom-next { width: 100%; padding: 7px 10px; font-size: 12.5px; min-height: 36px; }
+      #zoom-counters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: 4px; }
+      #zoom-counters .counter { padding: 5px 6px; font-size: 9.5px; line-height: 1.25; text-align: center; }
+      #zoom-counters .counter i { margin-right: 3px; }
+      #zoom-counters .counter b { display: block; margin-left: 0; font-size: 11px; }
+      #graph-card .gc-head { gap: 6px; }
+      #graph-card h4 { font-size: 1rem; }
+      #practical .tbl-wrap { margin-top: 10px; }
     }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
   <link rel="stylesheet" href="../../assets/css/theme.css">
 </head>
 <body class="lesson-page" data-lesson="l05">
@@ -47,8 +160,8 @@
 
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
-      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 5 of 5 · <b>Blood Cells, Clotting, ABO &amp; Paper 3</b></span>
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> The unit hub</a>
+      <span class="l-crumb">Lesson 5 of 7 · <b>Vessels, tissue fluid and lymph</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -57,15 +170,15 @@
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Biology · Lesson 5 of 5 · 80 minutes</span>
-        <h1 class="display reveal" data-hook>Composition of Blood, <em>Clotting Cascade</em>, ABO/Rhesus Groups &amp; WAEC Paper 3 Practical</h1>
-        <p class="question reveal">Why do mature mammalian red blood cells lack a nucleus, how does soluble fibrinogen turn into a solid fibrin clot at a cut, and how do you dissect and draw a mammalian heart for full marks in WAEC Paper 3?</p>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 5 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Arteries, veins, capillaries, <em>tissue fluid and lymph</em></h1>
+        <p class="question reveal">Why do Mama Bisi's ankles swell after a day of standing?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Compare the structure, origin, lifespan, and functions of <strong>plasma (55%), serum, erythrocytes (RBCs), leucocytes (phagocytes &amp; lymphocytes), and platelets (thrombocytes)</strong>, and state <strong>8 functions of blood</strong>.</span></li>
-          <li><b>02</b><span>Calculate arterial <strong>oxygen-carrying capacity (C<sub>O₂</sub> = 1.34 × [Hb])</strong> and distinguish <strong>oxyhaemoglobin</strong>, <strong>carbaminohaemoglobin</strong>, <strong>bicarbonate (HCO<sub>3</sub><sup>−</sup>)</strong>, and toxic <strong>carboxyhaemoglobin (CO)</strong>.</span></li>
-          <li><b>03</b><span>Write the <strong>4-step enzymatic blood clotting cascade</strong> (<strong>thromboplastin / thrombokinase</strong>, <strong>Ca<sup>2+</sup> ions</strong>, hepatic <strong>Vitamin K</strong>, <strong>prothrombin → thrombin</strong>, <strong>fibrinogen → insoluble fibrin</strong>).</span></li>
-          <li><b>04</b><span>Construct the <strong>ABO &amp; Rhesus blood group compatibility table</strong> (<strong>Universal Donor O<sup>−</sup></strong>, <strong>Universal Recipient AB<sup>+</sup></strong>, <strong>erythroblastosis fetalis</strong>) and solve <strong>sickle-cell (Hb<sup>A</sup>Hb<sup>S</sup>)</strong> crosses.</span></li>
-          <li><b>05</b><span>Apply the <strong>9 WAEC Paper 3 biological drawing rules</strong> to a dissected mammalian heart specimen and calculate <strong>magnification (M = Drawing ÷ Actual)</strong>.</span></li>
+          <li><b>01</b><span>Compare <strong>arteries, veins and capillaries</strong> in a matched table and link each feature to its job.</span></li>
+          <li><b>02</b><span>Explain how <strong>vein valves and muscle squeezing</strong> return blood against gravity.</span></li>
+          <li><b>03</b><span>Explain how <strong>tissue fluid</strong> forms and returns, using net filtration pressure (NFP = P<sub>c</sub> − π<sub>c</sub>).</span></li>
+          <li><b>04</b><span>Use <strong>flow = area × speed</strong> to explain why blood is slowest in capillaries.</span></li>
+          <li><b>05</b><span>Describe the <strong>lymphatic system</strong> and compare blood, tissue fluid and lymph.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -74,31 +187,30 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <p class="tt-line reveal" id="timetable"><b>0–5</b> Do Now · <b>5–15</b> Wonder · <b>15–40</b> Investigate (25 min) · <b>40–45</b> tidy-up and share results · <b>45–50</b> movement break · <b>50–65</b> Make Sense · <b>65–80</b> Apply and Reflect</p>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
 
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <circle cx="64" cy="96" r="32" fill="rgba(225,29,72,0.22)" stroke="#e11d48" stroke-width="8"/>
-          <circle cx="64" cy="96" r="11" fill="rgba(6,9,18,0.65)" stroke="#fb7185" stroke-width="2"/>
-          <text x="64" y="148" fill="#fb7185" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">RBC · No Nucleus</text>
-
-          <circle cx="162" cy="96" r="32" fill="rgba(245,158,11,0.16)" stroke="#fbbf24" stroke-width="3"/>
-          <line x1="136" y1="80" x2="188" y2="112" stroke="#fde047" stroke-width="2"/>
-          <line x1="136" y1="112" x2="188" y2="80" stroke="#fde047" stroke-width="2"/>
-          <line x1="162" y1="66" x2="162" y2="126" stroke="#fde047" stroke-width="2"/>
-          <text x="162" y="148" fill="#fbbf24" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Fibrin Clot + Ca²⁺</text>
-
-          <circle cx="258" cy="96" r="32" fill="rgba(34,197,94,0.16)" stroke="#22c55e" stroke-width="3"/>
-          <text x="258" y="94" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">PAPER 3</text>
-          <text x="258" y="108" fill="#bbf7d0" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">120÷80=×1.5</text>
-          <text x="258" y="148" fill="#22c55e" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">Zero Shading!</text>
-
-          <text x="160" y="194" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">Group O⁻ = Universal Donor · Group AB⁺ = Universal Recipient</text>
-          <text x="160" y="232" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">C_O₂ = 1.34 × [Hb] &nbsp;·&nbsp; M = I ÷ O</text>
+      <div class="l05-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 250" role="img">
+          <!-- artery cross-section: thick wall, narrow lumen -->
+          <circle cx="82" cy="78" r="50" style="fill:rgba(var(--crimson-rgb),.35);stroke:var(--crimson);stroke-width:2"/>
+          <circle cx="82" cy="78" r="37" style="fill:rgba(var(--crimson-rgb),.6)"/>
+          <circle cx="82" cy="78" r="19" style="fill:var(--ink-900);stroke:var(--fg-soft);stroke-width:1.5"/>
+          <text class="t" x="82" y="148" text-anchor="middle">artery: thick wall, narrow lumen</text>
+          <!-- vein cross-section: thin wall, wide lumen -->
+          <circle cx="238" cy="78" r="50" style="fill:rgba(var(--sky-rgb),.2);stroke:var(--sky);stroke-width:2"/>
+          <circle cx="238" cy="78" r="44" style="fill:var(--ink-900);stroke:var(--fg-soft);stroke-width:1.5"/>
+          <text class="t" x="238" y="148" text-anchor="middle">vein: thin wall, wide lumen</text>
+          <!-- capillary with red cells and fluid droplets -->
+          <path d="M20 200h290" style="stroke:var(--fg-soft);stroke-width:12;stroke-linecap:round;opacity:.35"/>
+          <ellipse cx="70" cy="200" rx="9" ry="5" style="fill:var(--crimson)"/><ellipse cx="130" cy="200" rx="9" ry="5" style="fill:var(--crimson)"/><ellipse cx="190" cy="200" rx="9" ry="5" style="fill:var(--crimson)"/><ellipse cx="250" cy="200" rx="9" ry="5" style="fill:var(--crimson)"/>
+          <circle cx="70" cy="180" r="3" style="fill:var(--sky)"/><circle cx="100" cy="174" r="3" style="fill:var(--sky)"/>
+          <circle cx="250" cy="221" r="3" style="fill:var(--sky)"/><circle cx="280" cy="226" r="3" style="fill:var(--sky)"/>
+          <text class="t" x="165" y="244" text-anchor="middle" style="fill:var(--amber)">capillary: fluid out at one end, back at the other</text>
         </svg>
       </div>
     </div>
@@ -110,10 +222,10 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Blood &amp; Paper 3 sort</a></li>
-        <li><a href="#practical">3D blood &amp; Paper 3 bench</a></li>
-        <li><a href="#concepts">Blood, clotting &amp; ABO</a></li>
-        <li><a href="#neutralise">3D smear &amp; heart zoom</a></li>
+        <li><a href="#sort">Vessel sort</a></li>
+        <li><a href="#practical">Two-station bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Capillary zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -129,25 +241,25 @@
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
         <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>cumulative retrieval across Lessons 1–4</em></h2>
-        <p class="intro">Four spaced-retrieval flashcards linking SA:V scaling, the four heart valves, cardiac output, and Starling capillary ultrafiltration. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <h2>Before we start: <em>wake up your toolkit</em></h2>
+        <p class="intro">Four quick questions on the heart wall, the portal vein, the pulse and blood pressure. Answer each in your head <strong>before</strong> you reveal the answer.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--paper-rgb),.3)">Try again</button>
         </div>
       </section>
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>At LUTH Haematology Lab &amp; WAEC Paper 3 Hall: <em>Blood Cells, Clotting, ABO Matching &amp; Dissection</em></h2>
-        <p class="intro">Tunde, Amaka, Nurse Chidinma, and Dr Bamidele inspect centrifuged plasma and blood cells, trace the 4-step fibrin clotting cascade, cross-match ABO and Rhesus blood groups, and prepare a full-mark WAEC Paper 3 dissected heart drawing.</p>
+        <span class="phase" style="--pc:var(--warn)"><b>1</b>Wonder · The case · 8 min</span>
+        <h2>The second clue at the <em>Oja Oba health-day tent</em></h2>
+        <p class="intro">Mama Bisi props her feet on a stool, and Dr Aisha presses her ankle. The dent stays. That is clue number two in the unit mystery.</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Tunde, Amaka, Nurse Chidinma, and Dr Bamidele at LUTH Haematology Lab and WAEC Paper 3 Dissection Hall."></canvas>
-            <div class="stage-label"><i></i>3D story · LUTH Blood Bank → WAEC Paper 3 Hall</div>
+            <canvas aria-label="Animated 3D story: Mama Bisi props her swollen ankles on a stool at the Oja Oba health-day tent while Dr Aisha presses a dent into her skin and Baba Sule says to stop drinking water; then in the lab Dr Aisha zooms into a single capillary."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba health-day tent → Dr Aisha's teaching lab</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -157,38 +269,37 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Plasma (55%) vs Blood Cells (45%):</strong> Nurse Chidinma shows a centrifuged blood sample: 55% straw-coloured liquid plasma on top and 45% cellular elements (erythrocytes, leucocytes, and platelets) below.</p>
-            <p><strong>Scene 2 · Enucleated Biconcave RBCs &amp; Nucleated WBCs:</strong> Tunde observes that mature mammalian erythrocytes lack a nucleus and mitochondria so they can pack millions of haemoglobin molecules, while phagocytes have lobed nuclei and lymphocytes secrete antibodies.</p>
-            <p><strong>Scene 3 · 4-Step Blood Clotting Cascade:</strong> Amaka traces how ruptured platelets release <strong>thromboplastin</strong>, which uses <strong>Ca<sup>2+</sup> ions</strong> and hepatic <strong>Vitamin K</strong> to convert inactive <strong>prothrombin</strong> into active <strong>thrombin</strong>, turning soluble <strong>fibrinogen</strong> into an insoluble <strong>fibrin meshwork clot</strong> (leaving <strong>serum</strong> behind).</p>
-            <p><strong>Scene 4 · ABO &amp; Rhesus Cross-Matching:</strong> Nurse Chidinma explains that <strong>Group O<sup>−</sup></strong> red cells lack A, B, and Rh-D antigens (<strong>Universal Donor</strong>), whereas <strong>Group AB<sup>+</sup></strong> plasma lacks anti-A and anti-B antibodies (<strong>Universal Recipient</strong>).</p>
-            <p><strong>Scene 5 · WAEC Paper 3 Heart Dissection:</strong> Tunde and Amaka orient an 80 mm goat heart by the diagonal coronary groove, pinch the 3× thicker left ventricle, and draw it at 120 mm for <code>M = 120 ÷ 80 = ×1.5</code> magnification with zero shading.</p>
-            <p><strong>Scene 6 · 3D Haematology &amp; Paper 3 Bench:</strong> Dr Bamidele invites the students to measure oxygen capacity <code>C_O₂ = 1.34 × [Hb]</code> across five haemoglobin concentrations.</p>
+            <p><strong>Scene 1 · The tent:</strong> Mama Bisi props her feet on a stool. Dr Aisha presses her thumb into the ankle and the dent stays. Blue, knotted veins wind up her calves.</p>
+            <p><strong>Scene 2 · Mama Bisi:</strong> <em>“In the morning they are fine. By evening my sandals are tight.”</em></p>
+            <p><strong>Scene 3 · Baba Sule:</strong> <em>“Too much water in the blood. Stop drinking water!”</em></p>
+            <p><strong>Scene 4 · The lab:</strong> Dr Aisha zooms into a single capillary between leg muscle cells. <em>“The answer lies in a tube one cell thick, and in two pressures fighting inside it.”</em></p>
+            <p><strong>Scene 5 · The benches:</strong> She invites you to the vessel bench and the capillary bench.</p>
           </div>
         </details>
       </section>
 
       <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:var(--warn)"><b>1</b>Wonder · Your predictions</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">Why do mature mammalian red blood cells lack a nucleus, why doesn't blood clot inside healthy intact blood vessels, and why is shading penalised in WAEC Paper 3? Pin your prediction below.</p>
+        <p class="intro">If blood stays inside vessels, where does the fluid in a swollen ankle come from? Pin your prediction before we test it on the benches.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that mature mammalian red blood cells lack a nucleus because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I predict that the fluid comes from… because…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Why do mature mammalian RBCs lack a nucleus?</button>
-            <button type="button">How do Ca²⁺, Vitamin K, and thrombin form a fibrin clot?</button>
-            <button type="button">Why is Group O⁻ the Universal Donor of packed RBCs?</button>
-            <button type="button">How do you calculate magnification M in WAEC Paper 3?</button>
+            <button type="button">It leaks out of the blood vessels? (Yemi)</button>
+            <button type="button">Gravity pulls it down (Aliyu)</button>
+            <button type="button">Her veins are weak (Chinwe)</button>
+            <button type="button">She drinks too much water (Baba Sule)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
@@ -196,26 +307,26 @@
 
       <!-- ================= 3. SORT GAME ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
-        <h2>Blood Cells, Clotting Cascade &amp; <em>ABO / Paper 3 Sort</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Plasma, RBCs &amp; WBCs</strong>, <strong>Platelets &amp; Clotting Cascade</strong>, and <strong>ABO/Rhesus &amp; WAEC Paper 3</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · sort game</span>
+        <h2>Artery, vein or <em>capillary?</em></h2>
+        <p class="intro">Sort all 11 clues into the three bins: <strong>artery</strong>, <strong>vein</strong> and <strong>capillary</strong>. Drag a card, or tap a card and then tap a bin.</p>
 
-        <div class="sort" id="kitchen-sort">
-          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+        <div class="sort" id="vessel-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Clues to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#fb7185" tabindex="0" role="button" aria-label="Plasma, RBCs and WBCs bin">
-              <h4><i></i>Plasma, RBCs &amp; WBCs</h4>
-              <small>plasma 55% · biconcave Hb · immunity</small>
+            <div class="bin" data-bin="artery" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Artery bin">
+              <h4><i></i>Artery</h4>
+              <small>away from the heart</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#fbbf24" tabindex="0" role="button" aria-label="Platelets and Clotting Cascade bin">
-              <h4><i></i>Platelets &amp; Clotting Cascade</h4>
-              <small>thromboplastin · Ca²⁺ · fibrin · serum</small>
+            <div class="bin" data-bin="vein" style="--bc:var(--sky)" tabindex="0" role="button" aria-label="Vein bin">
+              <h4><i></i>Vein</h4>
+              <small>towards the heart</small>
               <div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#22c55e" tabindex="0" role="button" aria-label="ABO/Rhesus and WAEC Paper 3 bin">
-              <h4><i></i>ABO/Rhesus &amp; Paper 3</h4>
-              <small>O⁻ donor · AB⁺ recipient · M = I ÷ O</small>
+            <div class="bin" data-bin="capillary" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Capillary bin">
+              <h4><i></i>Capillary</h4>
+              <small>joins arterioles to venules</small>
               <div class="drop"></div>
             </div>
           </div>
@@ -232,68 +343,120 @@
 
       <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
-        <h2>3D Haematology, Fibrin Clot &amp; Paper 3 Bench: <em>Measuring C<sub>O₂</sub> = 1.34 × [Hb] &amp; Magnification M</em></h2>
-        <p class="intro">Test five haemoglobin concentrations (<code>8.0, 10.0, 12.0, 15.0, 18.0 g/100 mL</code>) and five WAEC Paper 3 drawing lengths (<code>96, 104, 112, 120, 136 mm</code> for an <code>80 mm</code> dissected goat heart). Plot <strong>Oxygen Capacity C<sub>O₂</sub> = 1.34 × [Hb] (mL O₂/100 mL)</strong> and calculate <strong>Magnification M = Drawing ÷ Actual</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>Two stations: <em>vessel slides and the pressure probe</em></h2>
+        <p class="intro">Station 1 is a prepared slide of an artery and a vein, viewed at low power with an eyepiece graticule that you must calibrate against a stage micrometre. Station 2 is a capillary bed with a pressure probe that slides from the arterial end to the venous end. Switch between them with the station buttons.</p>
 
-        <div class="callout warn" id="safety-box">
-          <p><strong>Haemoglobin Oxygen Binding &amp; Carbon Monoxide (CO) Hazard:</strong> Each <code>1.0 g</code> of haemoglobin binds <code>1.34 mL</code> of oxygen at 100% arterial saturation: $\text{Hb} + 4\text{O}_2 \rightleftharpoons \text{HbO}_8$. Never run a petrol generator or charcoal stove indoors — <strong>carbon monoxide (CO)</strong> binds to haemoglobin ~200× more tightly than $\text{O}_2$ to form irreversible <strong>carboxyhaemoglobin</strong>, starving the brain and heart of oxygen!</p>
+        <div class="callout safety" id="safety-box">
+          <p><strong>Safety, as in a real lab:</strong> prepared slides are held by their edges and the coverslip is never pressed. Microscope stage and lens are not touched with wet fingers. Here the bench is a simulation, so you can focus on reading the results.</p>
         </div>
 
+        <h3 class="st-title">STATION 1 · VESSEL SLIDES</h3>
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Test anaemic blood (8.0 g/dL)</h4><p>Tap Trial A (<code>[Hb] = 8.0 g/100 mL</code>): oxygen capacity is only <code>10.7 mL O₂/100 mL</code> (<code>536 mL</code> in 5 L of blood).</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Test healthy blood (15.0 g/dL)</h4><p>Tap Trial D (<code>[Hb] = 15.0 g/100 mL</code>): oxygen capacity is <code>20.1 mL O₂/100 mL</code> (<code>1,005 mL</code> in 5 L) and a <code>120 mm</code> drawing of an <code>80 mm</code> heart gives <code>×1.5</code>!</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Trigger the Fibrin Clot</h4><p>Switch condition to <strong>Fibrin Clot Active</strong> to watch golden insoluble fibrin threads trap erythrocytes on the 3D blood smear.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Plot &amp; record all 5 trials</h4><p>Record Trials A–E and complete the WAEC oxygen capacity and Paper 3 magnification table below.</p></div>
+          <div class="method" id="m1"><b>01</b><h4>View both vessels</h4><p>Artery and vein side by side, low power.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Calibrate the graticule</h4><p>Match the graticule to the stage micrometre.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Measure wall and lumen</h4><p>Narrowest lumen, at right angles to the wall.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Find a capillary</h4><p>One-cell wall, lumen one red cell wide.</p></div>
+        </div>
+
+        <h3 class="st-title">STATION 2 · CAPILLARY PRESSURE PROBE</h3>
+        <div class="methods" id="method-cards-2">
+          <div class="method" id="s2m1"><b>01</b><h4>Start at the arterial end</h4><p>Set the probe to position 0.00.</p></div>
+          <div class="method" id="s2m2"><b>02</b><h4>Read the pressure</h4><p>Read P<sub>c</sub>; π<sub>c</sub> stays at 25 mmHg.</p></div>
+          <div class="method" id="s2m3"><b>03</b><h4>Slide along and record</h4><p>Record P<sub>c</sub> at 0.25, 0.50, 0.75 and 1.00.</p></div>
+          <div class="method" id="s2m4"><b>04</b><h4>Work out NFP</h4><p>NFP = P<sub>c</sub> − π<sub>c</sub>; find where it is zero.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Stained Blood Smear and Fibrin Clot bench alongside a WAEC Paper 3 Dissected Mammalian Heart specimen."></canvas>
-            <div class="stage-label"><i></i>Blood smear &amp; Paper 3 heart</div>
+            <canvas id="bench-canvas" aria-label="3D bench with two stations. Station 1: a prepared artery and vein slide with an eyepiece view, graticule and stage micrometre. Station 2: a capillary bed in leg muscle with a pressure probe that slides from the arterial end to the venous end."></canvas>
+            <div class="stage-label"><i></i>3D two-station bench · drag to rotate</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D Haematology Bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the tables below and the expected results.</p></div>
           </div>
           <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Blood smear condition" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Unclotted Blood (100% Sat)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Fibrin Clot Active (Ca²⁺ + Thrombin)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Sickle / Hypoxia Crisis (60%)</button>
+            <div class="bench-ctl">
+              <div class="row"><span class="lbl">STATION</span>
+                <div class="seg" role="group" aria-label="Station" id="station-pick">
+                  <button type="button" data-station="1" aria-pressed="true">1 · Vessel slides</button>
+                  <button type="button" data-station="2" aria-pressed="false">2 · Pressure probe</button>
+                </div>
+              </div>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · 8.0 g/dL</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · 10.0 g/dL</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · 12.0 g/dL</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · 15.0 g/dL</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · 18.0 g/dL</button>
-              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <div class="bench-ctl" id="st1-ctl">
+              <div class="row l05r-g2"><span class="lbl">STEPS</span>
+                <button class="vt-btn zobo" type="button" id="v-view">1 · View slide</button>
+                <button class="vt-btn zobo" type="button" id="v-cal">2 · Calibrate</button>
+              </div>
+              <div class="row l05r-g3"><span class="lbl">MEASURE</span>
+                <button class="vt-btn zobo" type="button" id="v-art" aria-label="Measure the artery">3 · Artery</button>
+                <button class="vt-btn zobo" type="button" id="v-vein" aria-label="Measure the vein">3 · Vein</button>
+                <button class="vt-btn zobo" type="button" id="v-cap" aria-label="Find the capillary">4 · Capillary</button>
+              </div>
+              <div class="row l05r-seg"><span class="lbl">TECHNIQUE</span>
+                <div class="seg" role="group" aria-label="Technique" id="v-tech">
+                  <button type="button" data-tech="ok" aria-pressed="true" title="Careful technique">Careful</button>
+                  <button type="button" data-tech="slant" aria-pressed="false" title="Slanted cut through the vessel">Slant cut</button>
+                  <button type="button" data-tech="collapsed" aria-pressed="false" title="Collapsed vein">Collapsed</button>
+                  <button type="button" data-tech="nocal" aria-pressed="false" title="Graticule not calibrated">No calib.</button>
+                </div>
+              </div>
+              <div class="row l05r-stat"><span class="bench-clock" id="v-status">Measured <b>0</b>/2 · calibrated <b>no</b></span><button class="vt-btn" type="button" id="v-reset" aria-label="Reset station 1">Reset</button></div>
             </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 haemoglobin &amp; Paper 3 trials</span>
+            <div class="bench-ctl" id="st2-ctl" hidden>
+              <div class="row l05r-probe"><span class="lbl">PROBE</span>
+                <input type="range" id="probe-range" min="0" max="1" step="0.25" value="0" aria-label="Probe position along the capillary, 0 arterial end to 1 venous end">
+                <button class="vt-btn zobo" type="button" id="probe-record" aria-label="Record the capillary pressure at this position">Record Pc</button>
+              </div>
+              <div class="row l05r-seg"><span class="lbl">MODE</span>
+                <div class="seg" role="group" aria-label="Capillary bed mode" id="bed-mode">
+                  <button type="button" data-mode="normal" aria-pressed="true">Normal</button>
+                  <button type="button" data-mode="congest" aria-pressed="false">Congested</button>
+                  <button type="button" data-mode="kwash" aria-pressed="false" title="Low plasma protein">Low protein</button>
+                  <button type="button" data-mode="blocked" aria-pressed="false" title="Lymph drainage blocked">Lymph blocked</button>
+                </div>
+              </div>
+              <div class="row l05r-stat"><span class="bench-clock" id="p-status">Recorded <b>0</b>/5 points</span><button class="vt-btn" type="button" id="p-reset" aria-label="Reset station 2">Reset</button></div>
+            </div>
+            <div class="bench-ctl"><div class="row"><span class="stage-hint" id="bench-hint">Station 1: view the slide, then calibrate</span></div></div>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
+        <div class="graph-card" id="graph-card">
           <div class="gc-head">
-            <div><span class="gc-kicker">Live graph · slope = 1.34 mL O₂ per g Hb</span><h4>Arterial Oxygen Capacity C<sub>O₂</sub> (mL O₂/100 mL) against Haemoglobin [Hb] (g/100 mL)</h4></div>
-            <span class="gc-badge wait" id="vi-badge">0 points</span>
+            <div><span class="gc-kicker">Live graph · plots as you record</span><h4>Capillary blood pressure P<sub>c</sub> against position along the capillary</h4></div>
+            <span class="gc-badge wait" id="pc-badge">0 points</span>
           </div>
-          <div id="vi-graph"></div>
-          <div class="gc-stats" id="vi-stats"></div>
-          <p class="gc-note" id="vi-note"></p>
+          <div id="pc-graph"></div>
+          <div class="gc-stats" id="pc-stats"></div>
+          <p class="gc-note" id="pc-note"></p>
         </div>
 
-        <h3>Record your Haematology &amp; WAEC Paper 3 Magnification readings</h3>
-        <p>As you test Trials A–E on the 3D Bench, select the matching <strong>Oxygen Capacity C<sub>O₂</sub> (mL O₂/100 mL)</strong>, <strong>Total O₂ in 5.0 L of Blood (mL)</strong>, and <strong>Paper 3 Drawing Magnification M (for an 80 mm specimen)</strong> below.</p>
+        <h3>Record your results: station 1</h3>
+        <p>When you measure a vessel on the bench, its calibrated wall thickness and lumen width appear below.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="vessel-table">
+            <thead><tr><th>Vessel</th><th>Wall thickness (mm)</th><th>Lumen width (mm)</th><th>Wall ÷ lumen</th></tr></thead>
+            <tbody>
+              <tr data-v="artery"><td><b>Artery</b></td><td class="pend" data-f="wall">?</td><td class="pend" data-f="lumen">?</td><td class="pend" data-f="ratio">?</td></tr>
+              <tr data-v="vein"><td><b>Vein</b></td><td class="pend" data-f="wall">?</td><td class="pend" data-f="lumen">?</td><td class="pend" data-f="ratio">?</td></tr>
+              <tr data-v="capillary"><td><b>Capillary</b></td><td>one flat cell</td><td>about one red cell wide</td><td>–</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Record your results: station 2</h3>
+        <p>Each recorded point fills in the position, P<sub>c</sub> and π<sub>c</sub>. Choose the <strong>NFP</strong> and the <strong>direction</strong> for each row, then check your table.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
             <thead>
               <tr>
-                <th>Trial</th>
-                <th>Haemoglobin [Hb] (g/100 mL)</th>
-                <th>O₂ Capacity C<sub>O₂</sub> (mL/100 mL)</th>
-                <th>Total O₂ in 5.0 L (mL)</th>
-                <th>Paper 3 Magnification M (80 mm heart)</th>
+                <th>Position along capillary</th>
+                <th>P<sub>c</sub> (mmHg)</th>
+                <th>π<sub>c</sub> (mmHg)</th>
+                <th>NFP = P<sub>c</sub> − π<sub>c</sub> (mmHg)</th>
+                <th>Direction</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -305,327 +468,369 @@
         </div>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table &amp; calculations <small>open after recording yours</small></summary>
+          <summary>Expected results, precautions and sources of error <small>open after you record yours</small></summary>
           <div class="reveal-body">
+            <p><strong>Station 1 expected (real sizes after graticule calibration):</strong> artery wall 0.90 mm, lumen 2.2 mm · vein wall 0.40 mm, lumen 4.0 mm · capillary wall one flat cell, lumen about one red cell wide.</p>
+            <p><strong>Station 2 expected (skeletal-muscle bed; approximate textbook teaching values, with tissue-side pressures taken as near zero):</strong></p>
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>[Hb] (g/100 mL)</th><th>C<sub>O₂</sub> = 1.34 × [Hb] (mL/100 mL)</th><th>Total O₂ in 5.0 L (50 dL) (mL)</th><th>Drawing ÷ 80 mm → M</th></tr></thead>
-                <tbody>
-                  <tr><td>A (Anaemic)</td><td>8.0</td><td>10.7</td><td>536</td><td>96 mm ÷ 80 mm = ×1.2</td></tr>
-                  <tr><td>B</td><td>10.0</td><td>13.4</td><td>670</td><td>104 mm ÷ 80 mm = ×1.3</td></tr>
-                  <tr><td>C</td><td>12.0</td><td>16.1</td><td>804</td><td>112 mm ÷ 80 mm = ×1.4</td></tr>
-                  <tr><td>D (Healthy Normal)</td><td>15.0</td><td>20.1</td><td>1005</td><td>120 mm ÷ 80 mm = ×1.5</td></tr>
-                  <tr><td>E (High-Altitude / Athlete)</td><td>18.0</td><td>24.1</td><td>1206</td><td>136 mm ÷ 80 mm = ×1.7</td></tr>
-                </tbody>
+                <thead><tr><th>Position</th><th>P<sub>c</sub> (mmHg)</th><th>π<sub>c</sub> (mmHg)</th><th>NFP (mmHg)</th><th>Direction</th></tr></thead>
+                <tbody id="expected-body"></tbody>
               </table>
             </div>
-            <p><strong>Key Equations:</strong></p>
-            <div class="eq light">C_O2 = 1.34 × 15.0 = 20.1 mL O₂/100 mL &nbsp;·&nbsp; M = 120 mm ÷ 80 mm = ×1.5</div>
+            <p>In this teaching model P<sub>c</sub> falls evenly along the capillary, so the five points lie on a <strong>straight line</strong>, and NFP reaches zero 55% of the way along.</p>
+            <p><strong>Precautions (past tense):</strong> the graticule was calibrated before any measurement · the slide was viewed on low power before high power · each vessel was measured across its narrowest diameter, at right angles to the wall · the readings were repeated in two places on each vessel.</p>
+            <p><strong>Sources of error, with direction:</strong> a vessel cut at a slant appeared oval, so its wall read <strong>too high</strong> · a vein collapsed during slide preparation, so its lumen read <strong>too low</strong> · forgetting to calibrate (treating one graticule division as a fixed size) made every measurement <strong>too high or too low</strong> by the same factor (systematic).</p>
           </div>
         </details>
 
-        <h3>Practical Analysis Questions</h3>
+        <h3>Practical analysis questions</h3>
         <div class="aq" data-answer="l05-prac-q">
-          <div class="aq-top"><h4>Answer these three WAEC haematology &amp; Paper 3 questions, then compare with the model answers.</h4></div>
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>Why do mature mammalian red blood cells have a shorter lifespan (~120 days) than most nucleated body cells?</li>
-            <li>Why does adding <strong>sodium citrate</strong> or <strong>potassium oxalate</strong> to freshly drawn blood in a test tube prevent the blood from clotting?</li>
-            <li>How do you distinguish the <strong>left ventricle</strong> from the <strong>right ventricle</strong> on an unlabelled dissected mammalian heart specimen in WAEC Paper 3?</li>
+            <li>Why does the artery wall need so much elastic tissue?</li>
+            <li>Why do veins need valves but arteries (beyond the heart) do not?</li>
+            <li>At which end of the capillary does fluid leave, and why?</li>
+            <li>What would happen to NFP at the venous end if P<sub>c</sub> there rose to 30 mmHg?</li>
+            <li>Why are red cells and most plasma proteins kept inside?</li>
           </ol>
           <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>Because mature mammalian erythrocytes <strong>lack a nucleus and ribosomes</strong>, they cannot synthesise new proteins or repair worn-out enzymes and membranes, so they wear out after ~120 days and are broken down in the liver and spleen.</li>
-                <li>Citrate and oxalate ions bind (chelate) free <strong>calcium ions ($\text{Ca}^{2+}$)</strong> in the plasma; without $\text{Ca}^{2+}$, thromboplastin cannot convert prothrombin into active thrombin.</li>
-                <li>The <strong>left ventricle</strong> forms the pointed apex of the heart and has a muscular wall (<em>myocardium</em>) that is <strong>~3 times thicker</strong> and firmer when pinched than the thinner, crescent-shaped right ventricular wall.</li>
+                <li>It takes the surge of blood from the ventricle and then springs back, which smooths the flow and keeps blood moving between beats (felt as the pulse).</li>
+                <li>Veins carry blood at low pressure, often against gravity, so pocket valves stop it falling back. Arteries carry high-pressure blood pushed by the heart, so they need none.</li>
+                <li>The arterial end, because P<sub>c</sub> (36 mmHg) is greater than π<sub>c</sub> (25 mmHg), so NFP is positive and fluid is pressed out.</li>
+                <li>NFP would be 30 − 25 = +5 mmHg: still outward, so fluid would no longer be drawn back at that end.</li>
+                <li>They are too big to squeeze through the gaps between the wall cells, so only water and small dissolved substances leave.</li>
               </ol>
             </div>
           </details>
+        </div>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 minutes in):</strong> stand up and do 15 slow heel raises, rising on your toes and lowering again. Feel your calf muscles squeeze the veins between them: that is the muscle pump that pushes blood up your legs past the valves. Anyone with a leg or balance problem can flex the ankles while seated.</p>
         </div>
       </section>
 
       <!-- ================= 4. CONCEPTS ================= -->
       <section class="l-sec" id="concepts">
         <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
-        <h2>Composition of Blood, <em>4-Step Clotting Cascade</em>, ABO/Rhesus Groups &amp; WAEC Paper 3</h2>
-        <p class="intro">Let’s bring together the cellular and liquid components of mammalian blood, the enzymatic clotting mechanism, ABO and Rhesus transfusion genetics, and the 9 WAEC Paper 3 biological drawing rules.</p>
+        <h2>Vessels, <em>tissue fluid and lymph</em></h2>
+        <p class="intro">Your two stations explain Dr Aisha's second clue. Let us name what you saw.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>Why Mama Bisi's Ankles Swell</b><span class="lv-time">9 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: Why Mama Bisi's Ankles Swell" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
 
-        <h3 id="def-shm">1 · Composition of Mammalian Blood &amp; Comparison of Blood Cells</h3>
-        <p>An average adult human has <strong>4.5–5.5 litres of blood</strong> (~8% of body mass, pH <code>7.35–7.45</code>), consisting of:</p>
-        <ul>
-          <li><strong>Blood Plasma (~55% by volume):</strong> Pale straw-coloured alkaline fluid composed of <strong>~90% water</strong> and <strong>~10% dissolved substances</strong> — plasma proteins (<strong>albumin</strong> for colloid osmotic pressure $\pi_c$, <strong>globulins/antibodies</strong> for immunity, and <strong>fibrinogen + prothrombin</strong> for clotting), digested nutrients (glucose, amino acids, fatty acids, vitamins), mineral ions ($\text{Na}^+, \text{K}^+, \text{Ca}^{2+}, \text{Cl}^-, \text{HCO}_3^-$), excretory wastes (urea, uric acid, creatinine), hormones, and dissolved gases. <strong>Serum</strong> is plasma from which fibrinogen and clotting factors have been removed ($\text{Serum} = \text{Plasma} - \text{Fibrinogen}$).</li>
-          <li><strong>Cellular Elements / Corpuscles (~45% by volume):</strong> Erythrocytes (red blood cells), leucocytes (white blood cells: granulocytes/phagocytes and agranulocytes/lymphocytes &amp; monocytes), and thrombocytes (platelets).</li>
-        </ul>
-        <div class="tbl-wrap">
-          <table class="tbl">
-            <thead><tr><th>Feature</th><th>Erythrocytes (Red Blood Cells)</th><th>Leucocytes (White Blood Cells)</th><th>Platelets (Thrombocytes)</th></tr></thead>
-            <tbody>
-              <tr><td><strong>Shape &amp; Size</strong></td><td>Small <strong>biconcave discs</strong> (~7.5 µm diameter; thin centre, thick rim)</td><td>Larger (~10–20 µm); irregular/amoeboid (<strong>phagocytes</strong>) or spherical (<strong>lymphocytes</strong>)</td><td>Tiny irregular cytoplasmic fragments (~2–3 µm)</td></tr>
-              <tr><td><strong>Nucleus at Maturity</strong></td><td><strong>Absent in mature mammals</strong> (<em>present</em> in fishes, amphibians, reptiles &amp; birds)</td><td><strong>Present</strong> — multi-lobed in phagocytes (neutrophils); large round/bean-shaped in lymphocytes</td><td><strong>Absent</strong> (pinched off from giant bone-marrow megakaryocytes)</td></tr>
-              <tr><td><strong>Haemoglobin</strong></td><td><strong>Present</strong> (iron-containing red respiratory pigment)</td><td><strong>Absent</strong> (colourless)</td><td><strong>Absent</strong> (colourless)</td></tr>
-              <tr><td><strong>Number per mm³</strong></td><td><strong>~4.5–5.5 million / mm³</strong> (higher at high altitude)</td><td><strong>~5,000–10,000 / mm³</strong> (rises sharply during infection)</td><td><strong>~250,000–400,000 / mm³</strong></td></tr>
-              <tr><td><strong>Site of Formation</strong></td><td><strong>Red bone marrow</strong> of ribs, sternum, vertebrae (fetal liver &amp; spleen)</td><td>Red bone marrow, <strong>lymph nodes</strong>, spleen, and thymus</td><td>Red bone marrow (from megakaryocytes)</td></tr>
-              <tr><td><strong>Lifespan &amp; Destruction</strong></td><td><strong>~120 days</strong>; broken down in <strong>liver and spleen</strong> (iron recycled; haem → bile pigments bilirubin/biliverdin)</td><td>A few days (fighting bacteria) to many years (memory lymphocytes)</td><td><strong>~5–9 days</strong>; destroyed in spleen</td></tr>
-              <tr><td><strong>Primary Function</strong></td><td>Transport of $\text{O}_2$ as <strong>oxyhaemoglobin ($\text{HbO}_8$)</strong> and part of $\text{CO}_2$</td><td><strong>Phagocytes</strong> engulf bacteria by phagocytosis; <strong>lymphocytes</strong> secrete specific antibodies &amp; antitoxins</td><td>Release <strong>thromboplastin (thrombokinase)</strong> to initiate blood clotting</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <h3 id="def-terms">2 · Eight Functions of Blood &amp; The 4-Step Blood Clotting Cascade</h3>
-        <p><strong>Eight Core Functions of Mammalian Blood:</strong> (1) <strong>Oxygen transport</strong> from lung alveoli to tissues as unstable <strong>oxyhaemoglobin</strong> ($\text{Hb} + 4\text{O}_2 \rightleftharpoons \text{HbO}_8$); (2) <strong>Carbon dioxide transport</strong> from tissues to lungs — <strong>70–85% as bicarbonate ions ($\text{HCO}_3^-$)</strong> in plasma, 10–20% as <strong>carbaminohaemoglobin</strong>, and 5–7% dissolved in plasma; (3) <strong>Transport of digested food</strong> (glucose, amino acids, vitamins) from ileum villi to the liver via the hepatic portal vein; (4) <strong>Transport of excretory wastes</strong> (urea from liver to kidneys); (5) <strong>Transport of hormones</strong> from endocrine glands to target organs; (6) <strong>Regulation of body temperature</strong> by distributing heat from liver and muscles to the skin; (7) <strong>Defence against infection</strong> via phagocytes and lymphocyte antibodies/antitoxins; and (8) <strong>Blood clotting (haemostasis)</strong> to prevent blood loss and pathogen entry.</p>
-
-        <p><strong>The 4-Step Enzymatic Clotting Cascade:</strong></p>
-        <ol>
-          <li><strong>Step 1 — Release of Thromboplastin:</strong> When a blood vessel is cut, platelets adhere to exposed collagen fibres, rupture, and together with damaged tissue cells release the enzyme/activator <strong>thromboplastin (thrombokinase)</strong>.</li>
-          <li><strong>Step 2 — Conversion of Prothrombin to Thrombin:</strong> In the presence of dissolved <strong>calcium ions ($\text{Ca}^{2+}$)</strong>, thromboplastin catalyses the conversion of inactive plasma <strong>prothrombin</strong> (synthesised in the liver using <strong>Vitamin K</strong>) into the active enzyme <strong>thrombin</strong>.</li>
-          <li><strong>Step 3 — Conversion of Fibrinogen to Fibrin:</strong> Active <strong>thrombin</strong> converts soluble plasma protein <strong>fibrinogen</strong> into sticky, insoluble threads of <strong>fibrin</strong>.</li>
-          <li><strong>Step 4 — Clot Formation &amp; Serum:</strong> The insoluble <strong>fibrin meshwork</strong> traps red blood cells and platelets to form a solid <strong>clot (thrombus)</strong> that dries into a scab, sealing the wound and leaving pale-yellow <strong>serum</strong> ($\text{Plasma} - \text{Fibrinogen}$). Inside intact vessels, smooth endothelium and the natural anticoagulant <strong>heparin</strong> prevent unwanted clotting.</li>
-        </ol>
-
-        <h3>3 · Governing Equations: Oxygen Capacity, Clotting &amp; Paper 3 Magnification</h3>
-        <div class="eq" id="eq-shm" data-hook>C_O2 = 1.34 × [Hb] &nbsp;⇒&nbsp; At [Hb] = 15 g/100 mL, C_O2 = 20.1 mL O₂/100 mL (1,005 mL in 5 L)</div>
-        <div class="eq" id="eq-omega">Prothrombin --(Thromboplastin + Ca²⁺ + Vit K)--&gt; Thrombin &nbsp;⇒&nbsp; Fibrinogen --(Thrombin)--&gt; Fibrin Clot</div>
-        <div class="eq" id="eq-vel">M = Length of Drawing ÷ Actual Length of Specimen = 120 mm ÷ 80 mm = ×1.5</div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up and act out the 4-step clotting cascade with your hands! <strong>Clap</strong> your hands like platelets sticking to a cut vessel and releasing <em>thromboplastin</em>; <strong>roll</strong> your forearms as $\text{Ca}^{2+}$ and Vitamin K turn <em>prothrombin</em> into <em>thrombin</em>; then <strong>interlace your fingers tightly</strong> as soluble <em>fibrinogen</em> locks into an insoluble <em>fibrin mesh</em>!</p>
-        </div>
-
-        <h3 id="props">4 · ABO &amp; Rhesus Blood Groups, Genetics &amp; WAEC Paper 3 Rules</h3>
-        <p><strong>ABO Blood Group Compatibility:</strong> Red blood cell membranes carry <strong>Antigens (agglutinogens A and B)</strong> while blood plasma contains naturally occurring <strong>Antibodies (agglutinins anti-a and anti-b)</strong>. <strong>Agglutination (fatal clumping)</strong> occurs whenever donor RBC antigens react with matching antibodies in the recipient’s plasma:</p>
+        <h3>Artery, vein and capillary: nine differences</h3>
         <div class="tbl-wrap" id="props-table">
           <table class="tbl">
-            <thead><tr><th>Blood Group</th><th>Genotypes</th><th>Antigen on Donor RBCs</th><th>Antibody in Plasma</th><th>Can Donate Packed RBCs To</th><th>Can Receive Packed RBCs From</th></tr></thead>
+            <thead><tr><th>Feature</th><th>Artery</th><th>Vein</th><th>Capillary</th></tr></thead>
             <tbody>
-              <tr><td><strong>Group A</strong></td><td>$I^A I^A$ or $I^A I^O$</td><td>Antigen A</td><td>Anti-B (b)</td><td>A, AB</td><td>A, O</td></tr>
-              <tr><td><strong>Group B</strong></td><td>$I^B I^B$ or $I^B I^O$</td><td>Antigen B</td><td>Anti-A (a)</td><td>B, AB</td><td>B, O</td></tr>
-              <tr><td><strong>Group AB</strong> <em>(Universal Recipient)</em></td><td>$I^A I^B$ (codominant)</td><td>Both Antigen A &amp; B</td><td><strong>None</strong> (no anti-A or anti-B)</td><td>AB only</td><td><strong>A, B, AB, O (All groups)</strong></td></tr>
-              <tr><td><strong>Group O</strong> <em>(Universal Donor)</em></td><td>$I^O I^O$ (recessive)</td><td><strong>None</strong> (no A or B antigen)</td><td>Both Anti-A &amp; Anti-B</td><td><strong>A, B, AB, O (All groups)</strong></td><td>O only</td></tr>
+              <tr><td><strong>Direction</strong></td><td>From the heart</td><td>To the heart</td><td>Joins arterioles to venules</td></tr>
+              <tr><td><strong>Usual blood</strong></td><td>Oxygen-rich, apart from the pulmonary artery</td><td>Oxygen-poor, apart from the pulmonary veins</td><td>Gives up oxygen here</td></tr>
+              <tr><td><strong>Wall</strong></td><td>Thick, muscular, elastic</td><td>Thinner, less muscle and elastic tissue</td><td>A single layer of flat cells</td></tr>
+              <tr><td><strong>Lumen</strong></td><td>Narrow</td><td>Wide</td><td>About one red cell wide</td></tr>
+              <tr><td><strong>Valves</strong></td><td>None, except at the heart exits</td><td>Pocket valves</td><td>None</td></tr>
+              <tr><td><strong>Pressure</strong></td><td>High, pulsing</td><td>Low, no pulse</td><td>Falling, low</td></tr>
+              <tr><td><strong>Speed</strong></td><td>Fast, in surges</td><td>Slow, steady</td><td>Slowest</td></tr>
+              <tr><td><strong>Position</strong></td><td>Mostly deep</td><td>Many near the surface</td><td>In every tissue</td></tr>
+              <tr><td><strong>Cut vessel</strong></td><td>Bright red and spurting</td><td>Dark red, steady stream</td><td>Slow ooze</td></tr>
             </tbody>
           </table>
         </div>
-        <ul>
-          <li><strong>Rhesus ($\text{Rh}$) Factor &amp; Erythroblastosis Fetalis:</strong> Individuals with the D antigen on their RBCs are <strong>$\text{Rh}^+$</strong>; those without it are <strong>$\text{Rh}^-$</strong>. If an <strong>$\text{Rh}^-$ mother</strong> carries an <strong>$\text{Rh}^+$ fetus</strong> (fathered by an $\text{Rh}^+$ man), fetal $\text{Rh}^+$ RBCs crossing into her blood at delivery sensitise her to produce <strong>anti-D antibodies</strong>. In a second or subsequent $\text{Rh}^+$ pregnancy, maternal anti-D IgG antibodies cross the placenta and haemolyse fetal RBCs (<strong>erythroblastosis fetalis / haemolytic disease of the newborn</strong>), prevented by injecting the mother with <strong>anti-D immunoglobulin (RhoGAM)</strong> within 72 hours of birth.</li>
-          <li><strong>Sickle-Cell Anaemia ($Hb^S Hb^S$), Haemophilia &amp; Leukaemia:</strong> In <strong>sickle-cell anaemia</strong> (autosomal recessive mutation replacing glutamic acid with valine in $\beta$-globin), low oxygen tension causes RBCs to crystallise into rigid sickles that block capillaries and haemolyse early. <strong>Haemophilia</strong> is an X-linked recessive bleeding disorder lacking clotting factor VIII or IX. <strong>Leukaemia</strong> is cancerous overproduction of immature white blood cells in the bone marrow.</li>
-          <li><strong>9 Mandatory WAEC Paper 3 Heart Drawing Rules:</strong> (1) Use a <strong>sharp HB pencil</strong> with single, continuous outlines; (2) Draw large (<strong>8–12 cm long</strong>); (3) <strong>Zero shading, zero stippling, zero colouring</strong>; (4) Show accurate proportions (<strong>left ventricular wall ~3× thicker than right ventricular wall</strong>, identified externally by the diagonal coronary sulcus); (5) Use a <strong>ruler for all label guide lines</strong>; (6) Keep guide lines <strong>horizontal, parallel, and never crossing</strong>; (7) Guide lines must <strong>touch the exact structure with no arrowheads</strong>; (8) Write labels horizontally; (9) Write the <strong>full Title, View, and Magnification ($M = \text{Drawing} \div \text{Actual}$)</strong> below the drawing.</li>
-        </ul>
+        <p class="prac-note">Deoxygenated blood is dark red. Veins only look blue through the skin.</p>
 
-        <h3 id="ph-h">Haematology, Clotting, ABO &amp; Paper 3 Explorer</h3>
-        <p>Tap any pin below to review plasma vs serum, RBC/WBC counts, the 4-step clotting cascade, ABO/Rhesus rules, and WAEC Paper 3 dissection:</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Plasma &amp; Blood Cells</div><div>4-Step Fibrin Clot</div><div>ABO/Rh &amp; Paper 3 →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect blood components, clotting cofactors, ABO compatibility, and Paper 3 rules.</div>
+        <h3>Three adaptations</h3>
+        <div class="callout reveal" id="adaptations">
+          <p><strong>Arteries:</strong> elastic, muscular walls take the surge from the ventricle and spring back, which keeps blood moving (felt as the pulse). <strong>Veins:</strong> pocket valves let blood move only towards the heart, and contracting leg muscles squeeze the veins between them (the muscle pump). <strong>Capillaries:</strong> walls one cell thick give a short diffusion path; their huge number gives a vast surface; slow flow gives time for exchange.</p>
+        </div>
+
+        <h3>How tissue fluid forms and returns</h3>
+        <div class="callout big reveal" id="tissue-fluid">
+          <p><strong>Tissue fluid:</strong> near the start of a capillary (its arterial end), the pressure of the blood (P<sub>c</sub>) is greater than the inward pull of plasma proteins (π<sub>c</sub>), so water with dissolved oxygen, glucose, amino acids and salts is squeezed out between the cells as <em>tissue fluid</em>; red cells and large proteins stay behind. Cells absorb what they need and add carbon dioxide and wastes. At the venous end P<sub>c</sub> has fallen below π<sub>c</sub>, so most of the fluid is drawn back in by osmosis. The rest seeps into lymph capillaries, which are closed at one end; once inside, it is known as <em>lymph</em>.</p>
+        </div>
+        <div class="eq" id="eq-nfp">NFP = P<sub>c</sub> − π<sub>c</sub> &nbsp;&nbsp;<span class="st">tissue-side pressures treated as near zero</span></div>
+        <div class="eq" id="eq-flow">Q = A × v, so v = Q ÷ A &nbsp;&nbsp;<span class="st">the same flow over a far larger total area moves far more slowly</span></div>
+
+        <h3>The lymphatic system</h3>
+        <div class="tbl-wrap" id="lymph-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Lymphatic system</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Route</strong></td><td>Lymph capillaries → larger lymphatics fitted with valves → nodes along the way → the thoracic duct (left) or right lymphatic duct → subclavian veins near the neck</td></tr>
+              <tr><td><strong>Movement</strong></td><td>No pump. Skeletal muscles and breathing squeeze it along; valves stop backflow</td></tr>
+              <tr><td><strong>Jobs</strong></td><td>Returns surplus tissue fluid and leaked proteins to the blood · carries fat absorbed by the lacteals of the ileum · lymph nodes filter out bacteria and debris and make lymphocytes (they swell when fighting infection) · the spleen, tonsils and thymus are also lymphoid organs</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Blood, tissue fluid and lymph compared</h3>
+        <div class="tbl-wrap" id="fluids-table">
+          <table class="tbl">
+            <thead><tr><th>Feature</th><th>Blood</th><th>Tissue fluid</th><th>Lymph</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Red cells</strong></td><td>Yes</td><td>None</td><td>None</td></tr>
+              <tr><td><strong>Plasma proteins</strong></td><td>Many</td><td>Very few</td><td>Few</td></tr>
+              <tr><td><strong>White cells</strong></td><td>Plenty</td><td>A scattering</td><td>Rich in lymphocytes</td></tr>
+              <tr><td><strong>Fat</strong></td><td>Little</td><td>Little</td><td>Rich after a fatty meal</td></tr>
+              <tr><td><strong>Found in</strong></td><td>Heart and blood vessels</td><td>The spaces around cells</td><td>Lymphatic vessels and nodes</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Pressure along the circuit</h3>
+        <div class="graph-card" id="circuit-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Approximate teaching values · smooth curve</span><h4>Mean blood pressure from the aorta to the venae cavae</h4></div>
+            <span class="gc-badge" id="circuit-badge">8 points</span>
+          </div>
+          <div id="circuit-graph"></div>
+          <p class="gc-note" id="circuit-note"></p>
+        </div>
+
+        <h3>Capillary probe explorer</h3>
+        <p>Tap a pin to read P<sub>c</sub>, π<sub>c</sub> and NFP at that point. The bars show their sizes and the arrow shows which way fluid moves. Then switch to Mama Bisi's congested leg and repeat.</p>
+        <div class="ph-explorer" id="pos-explorer">
+          <div class="seg" role="group" aria-label="Leg" id="pos-mode" style="margin-bottom:6px">
+            <button type="button" data-mode="normal" aria-pressed="true">Normal leg</button>
+            <button type="button" data-mode="congest" aria-pressed="false">Mama Bisi's congested leg</button>
+          </div>
+          <div class="l05-track" id="pos-track"></div>
+          <div class="l05-ends" id="pos-nums"><span>← arterial end</span><span>venous end →</span></div>
+          <div class="l05-bars" id="pos-bars" aria-hidden="true"></div>
+          <div class="l05-arrow" id="pos-arrow" aria-hidden="true"></div>
+          <div class="ph-info" id="pos-info" aria-live="polite">Tap a pin to inspect a point.</div>
         </div>
       </section>
 
-      <!-- ================= 5. 3D BLOOD SMEAR & PAPER 3 ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Blood Smear, Fibrin Clot &amp; Paper 3 Heart Zoom</span>
-        <h2>Inside the microscope &amp; dissecting tray: <em>RBCs, WBCs, Fibrin Mesh &amp; Dissected Heart</em></h2>
-        <p class="intro">Rotate the 3D models below! Inspect the <strong>enucleated biconcave red blood cells, lobed-nucleus phagocyte, round-nucleus lymphocyte, and platelets</strong>, toggle the <strong>golden fibrin clot mesh</strong>, or switch to the <strong>WAEC Paper 3 Dissected Heart</strong>.</p>
+      <!-- ================= 5. CAPILLARY ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D zoom</span>
+        <h2>Inside the capillary bed: <em>normal, congested, low protein, blocked</em></h2>
+        <p class="intro">Watch fluid leave at the arterial end and return at the venous end. Switch the mode and read the two NFP counters.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D stained blood smear with biconcave erythrocytes, phagocyte, lymphocyte, platelets, and fibrin clot alongside a dissected mammalian heart."></canvas>
-            <div class="stage-label"><i></i>Smear &amp; specimen heart</div>
+            <canvas id="zoom-canvas" aria-label="3D capillary bed: a capillary of red cells and plasma proteins between muscle cells, with fluid droplets leaving at the arterial end, returning at the venous end, and a surplus draining into a blind-ended lymph capillary. Modes show congested, low-protein and blocked-lymph swelling."></canvas>
+            <div class="stage-label"><i></i>3D capillary zoom · drag to rotate</div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D blood smear and Paper 3 stage couldn't start on this device.</p></div>
+            <div class="stage-fallback"><p>The 3D capillary zoom couldn't start on this device. Read the callout in Make Sense instead.</p></div>
           </div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Zoom view mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Smear + Paper 3 Heart</button>
-              <button type="button" data-mode="acid" aria-pressed="false">3D Blood Smear &amp; Clot</button>
-              <button type="button" data-mode="base" aria-pressed="false">WAEC Paper 3 Heart</button>
+            <div class="seg" role="group" aria-label="Capillary bed mode" id="zoom-seg">
+              <button type="button" data-mode="normal" aria-pressed="true">Normal</button>
+              <button type="button" data-mode="congest" aria-pressed="false">Congested</button>
+              <button type="button" data-mode="kwash" aria-pressed="false">Low protein</button>
+              <button type="button" data-mode="blocked" aria-pressed="false">Lymph blocked</button>
             </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Toggle Fibrin Clot Mesh (Ca²⁺ + Thrombin)</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <button class="vt-btn zobo" type="button" id="zoom-next">Next mode ▶</button>
             <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#3ee6c4"></i>RBC Count<b data-c="h">5M RBC/mm³</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>Clot State<b data-c="oh">Fibrinogen</b></span>
-              <span class="counter"><i style="--c:#7cc4ff"></i>Fluid<b data-c="na">Plasma 55%</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Donor/Recip<b data-c="cl">O⁻ / AB⁺</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>Paper 3<b data-c="w">M = ×1.5</b></span>
+              <span class="counter"><i style="--c:var(--crimson)"></i>NFP arterial end<b data-c="nfpA">+11</b></span>
+              <span class="counter"><i style="--c:var(--sky)"></i>NFP venous end<b data-c="nfpV">−9</b></span>
+              <span class="counter"><i style="--c:var(--amber)"></i>Result<b data-c="res">fluid returns</b></span>
             </div>
           </div>
         </div>
+        <p class="prac-note" id="zoom-note" aria-live="polite"></p>
       </section>
 
       <!-- ================= 6. WORKED EXAMPLES ================= -->
       <section class="l-sec" id="examples">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Every calculation is broken down one atomic mathematical step at a time with a plain-English explainer note underneath.</p>
+        <p class="intro">Attempt each problem on paper first, then check the working one line at a time.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Haemoglobin Oxygen-Carrying Capacity in 5.0 L of Healthy vs Anaemic Blood</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>NFP at both ends of a skeletal-muscle capillary</h4></div>
           <div class="example-body">
-            <p class="q">Given that 1.0 g of haemoglobin binds 1.34 mL of oxygen at 100% arterial saturation, calculate: (a) the oxygen-carrying capacity C<sub>O₂</sub> per 100 mL (1 dL) of blood for a healthy student with [Hb] = 15.0 g/100 mL, (b) the total volume of oxygen carried in 5.0 L (50 dL) of the student's arterial blood, and (c) the total oxygen in 5.0 L (50 dL) for an anaemic patient with [Hb] = 8.0 g/100 mL.</p>
+            <p class="q">P<sub>c</sub> is 36 mmHg at the arterial end and 16 mmHg at the venous end; π<sub>c</sub> is 25 mmHg along the whole length. Find NFP at each end and where it becomes zero.</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) — Multiply 1.34 mL O₂/g by healthy haemoglobin concentration (15.0 g/100 mL):</strong> <code>C_O2 = 1.34 × 15.0 = 20.1 mL O2/100 mL</code>.</li>
-              <li><strong>Part (b) — Multiply C<sub>O₂</sub> (20.1 mL/dL) by 50 dL (5.0 L of blood):</strong> <code>V_healthy = 20.1 × 50 = 1005 mL O2</code>.</li>
-              <li><strong>Part (c) — Multiply 1.34 × 8.0 × 50 dL for the anaemic patient:</strong> <code>V_anaemic = 10.72 × 50 = 536 mL O2</code>.</li>
+              <li><strong>Formula:</strong> <code>NFP = Pc − πc</code>.</li>
+              <li><strong>Arterial end:</strong> <code>36 − 25 = +11 mmHg</code> (outward: filtration).</li>
+              <li><strong>Venous end:</strong> <code>16 − 25 = −9 mmHg</code> (inward: reabsorption).</li>
+              <li><strong>Zero point:</strong> Pc must equal 25, a fall of <code>36 − 25 = 11</code> out of <code>36 − 16 = 20</code>; <code>11 ÷ 20 = 0.55</code>.</li>
             </ol>
-            <div class="answer-line">(a) Healthy C<sub>O₂</sub> = 20.1 mL O₂/100 mL &nbsp;·&nbsp; (b) Healthy Total O₂ = 1,005 mL &nbsp;·&nbsp; (c) Anaemic Total O₂ = 536 mL</div>
+            <div class="answer-line">+11 mmHg out, −9 mmHg in; filtration turns to reabsorption 55% of the way along</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Sickle-Cell Trait Genetic Cross (Hb<sup>A</sup>Hb<sup>S</sup> × Hb<sup>A</sup>Hb<sup>S</sup>)</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Why capillary blood is so slow</h4></div>
           <div class="example-body">
-            <p class="q">A man and a woman who are both healthy carriers of the sickle-cell trait (genotype Hb<sup>A</sup>Hb<sup>S</sup>) marry. Out of 4 children, calculate: (a) the percentage probability that a child will have sickle-cell anaemia (Hb<sup>S</sup>Hb<sup>S</sup>), and (b) the percentage probability that a child will be a carrier (Hb<sup>A</sup>Hb<sup>S</sup>).</p>
+            <p class="q">Blood leaves the aorta (cross-section 2.4 cm²) at 35 cm s⁻¹. All capillaries together have a cross-section of about 2400 cm². Find the speed in the capillaries.</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) — Divide 1 homozygous Hb<sup>S</sup>Hb<sup>S</sup> outcome by 4 total Punnett square outcomes:</strong> <code>P_SS = (1 ÷ 4) × 100 = 25%</code>.</li>
-              <li><strong>Part (b) — Divide 2 heterozygous Hb<sup>A</sup>Hb<sup>S</sup> outcomes by 4 total outcomes:</strong> <code>P_AS = (2 ÷ 4) × 100 = 50%</code>.</li>
+              <li><strong>Flow:</strong> <code>Q = A₁ × v₁ = 2.4 × 35 = 84 cm³ s⁻¹</code>.</li>
+              <li><strong>Check it is sensible:</strong> <code>84 × 60 = 5040 cm³ min⁻¹ ≈ 5.0 dm³ min⁻¹</code>, a resting cardiac output.</li>
+              <li><strong>Capillary speed:</strong> <code>v₂ = Q ÷ A₂ = 84 ÷ 2400 = 0.035 cm s⁻¹</code> (0.35 mm s⁻¹).</li>
+              <li><strong>Compare:</strong> <code>35 ÷ 0.035 = 1000</code>.</li>
             </ol>
-            <div class="answer-line">(a) Sickle-Cell Anaemia (Hb<sup>S</sup>Hb<sup>S</sup>) = 25% (1/4) &nbsp;·&nbsp; (b) Carrier Trait (Hb<sup>A</sup>Hb<sup>S</sup>) = 50% (1/2)</div>
+            <div class="answer-line">About 0.035 cm s⁻¹, about a thousand times slower than in the aorta, which gives time for exchange (textbooks quote about 0.03 cm s⁻¹)</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>WAEC Paper 3 Mammalian Heart Biological Drawing Magnification</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Mama Bisi's leg</h4></div>
           <div class="example-body">
-            <p class="q">During a WAEC Biology Paper 3 practical examination, Amaka measures her dissected goat heart specimen as O = 80 mm (8.0 cm) in length and makes an unshaded HB-pencil drawing of length I = 120 mm (12.0 cm). Calculate the linear magnification M of her biological drawing.</p>
+            <p class="q">After hours of standing, with faulty vein valves, P<sub>c</sub> at the venous end of her ankle capillaries rises to 30 mmHg (arterial end still 36). π<sub>c</sub> is 25 mmHg.</p>
             <ol class="steps-sol">
-              <li><strong>Divide the drawing length I (120 mm) by the actual specimen length O (80 mm):</strong> <code>M = 120 ÷ 80 = 1.5</code>.</li>
+              <li><strong>Arterial end:</strong> <code>36 − 25 = +11 mmHg</code> (out).</li>
+              <li><strong>Venous end:</strong> <code>30 − 25 = +5 mmHg</code> (still out).</li>
+              <li><strong>Conclusion:</strong> NFP is positive along the whole capillary, so there is no reabsorption zone; all the extra fluid must leave by lymph, which cannot keep up.</li>
             </ol>
-            <div class="answer-line">Linear Magnification M = ×1.5 (written beside the title with no units)</div>
+            <div class="answer-line">Fluid collects in the tissues: oedema</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>Lymph flow</h4></div>
+          <div class="example-body">
+            <p class="q">About 20 dm³ of fluid is filtered from capillaries each day (outside the kidneys) and about 17 dm³ is reabsorbed (approximate textbook values). Find the lymph flow in cm³ per hour.</p>
+            <ol class="steps-sol">
+              <li><strong>Left over:</strong> <code>20 − 17 = 3 dm³ per day</code>.</li>
+              <li><strong>Convert:</strong> <code>3 dm³ = 3000 cm³</code>.</li>
+              <li><strong>Per hour:</strong> <code>3000 ÷ 24 = 125 cm³ h⁻¹</code>.</li>
+            </ol>
+            <div class="answer-line">About 125 cm³ h⁻¹ (15% of what is filtered)</div>
           </div>
         </article>
       </section>
 
       <!-- ================= 7. BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Unit Mystery Finale: <em>verify oxygen transport, ABO/clotting safety &amp; WAEC Paper 3 magnification!</em></h2>
-        <p class="intro">Run Steps 1, 2, and 3 to complete the 5-lesson Human Heart and Blood Circulation unit investigation.</p>
-
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Blood Cells, Clotting &amp; ABO <small style="color:var(--muted);font-weight:500">· C_O₂ = 1.34 × [Hb]</small></h4>
-              <div class="clock-well">
-                <div style="padding:8px 14px;border-radius:10px;border:2px solid #fb7185;background:rgba(225,29,72,.18);font-weight:700;color:#fecdd3">1,005 mL O₂ · O⁻ / AB⁺</div>
-              </div>
-              <div class="vt-count"><span id="time-a">Enucleated RBCs + 4-step fibrin clot</span><small>Ca²⁺ + Vitamin K + Thrombin</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>WAEC Paper 3 Heart Practical <small style="color:var(--muted);font-weight:500" id="len-b-label">· O₂ Capacity, ABO/Clotting &amp; Paper 3</small></h4>
-              <div class="clock-well">
-                <div style="padding:8px 14px;border-radius:10px;border:2px solid #22c55e;background:rgba(34,197,94,.18);font-weight:700;color:#bbf7d0">120 mm ÷ 80 mm = ×1.5</div>
-              </div>
-              <div class="vt-count"><span id="time-b">[Hb] = 15 g/dL · Specimen = 80 mm · Drawing = 120 mm</span><small>run Steps 1–3 below!</small></div>
-            </div>
-          </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · O₂ Capacity in 5.0 L (1.34 × 15 × 50)</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Verify Clotting &amp; ABO Cross-Match</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Calculate Paper 3 Magnification (120 ÷ 80)</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset finale solver</button>
-          </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Given [Hb] = 15.0 g/100 mL (in 5.0 L blood) and a 120 mm drawing of an 80 mm dissected goat heart, start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
-        </div>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to <em>Mama Bisi's ankles</em></h2>
+        <p class="intro">Switch the capillary zoom from normal to congested and compare the NFP arrows. Then answer the three steps in order.</p>
+        <div class="l05-bridge" id="bridge-steps"></div>
+        <div class="l05-verdict" id="bridge-verdict" aria-live="polite"></div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 5:</strong> Mammalian blood combines <strong>55% liquid plasma</strong> (transporting nutrients, urea, hormones, heat, and $\text{CO}_2$ as $\text{HCO}_3^-$) with <strong>enucleated biconcave erythrocytes</strong> ($\text{O}_2$ as $\text{HbO}_8$), <strong>phagocytes and lymphocytes</strong> (immunity), and <strong>platelets</strong> (which trigger $\text{thromboplastin} \rightarrow \text{thrombin} \rightarrow \text{fibrin}$ clotting with $\text{Ca}^{2+}$ and Vitamin K) — while safe transfusions obey <strong>ABO/Rhesus antigen–antibody rules</strong> and <strong>WAEC Paper 3 drawings</strong> demand sharp unshaded lines, horizontal labels, and exact magnification $M = \text{Drawing} \div \text{Actual}$!</p>
+          <p><strong>The big idea of Lesson 5:</strong> tissue fluid forms where blood pressure beats protein pull, returns where it does not, and lymph mops up the rest.</p>
         </div>
       </section>
 
       <!-- ================= 8. QUIZ ================= -->
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
-        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <h2>Quick quiz: <em>12 WAEC, NECO and JAMB-style questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation of every option.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(var(--paper-rgb),.3)">Retry quiz</button>
         </div>
       </section>
 
       <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 10 min</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 5.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal from Lesson 5.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can compare plasma, serum, erythrocytes, phagocytes, lymphocytes, and platelets and state 8 functions of blood.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can calculate haemoglobin oxygen-carrying capacity (C_O₂ = 1.34 × [Hb]) and explain CO poisoning.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can write the 4-step enzymatic clotting cascade including thromboplastin, Ca²⁺, Vitamin K, thrombin, and fibrin.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can construct the ABO blood group table, explain Rhesus erythroblastosis fetalis, and solve sickle-cell crosses.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can apply all 9 WAEC Paper 3 biological drawing rules to a dissected mammalian heart and calculate magnification M.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can tabulate five artery–vein differences.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain vein return against gravity.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain tissue fluid formation with NFP.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can explain why capillary flow is slow.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can compare blood, tissue fluid and lymph.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1" aria-pressed="false">1</button><button type="button" data-v="2" data-r="2" aria-pressed="false">2</button><button type="button" data-v="3" data-r="3" aria-pressed="false">3</button><button type="button" data-v="4" data-r="4" aria-pressed="false">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
-        <div class="aq" data-answer="l05-exit">
-          <div class="aq-top"><h4>In two sentences: write the 4-step enzymatic blood clotting cascade, and explain why Blood Group O⁻ is the Universal Donor while Blood Group AB⁺ is the Universal Recipient.</h4><span class="marks">2 marks</span></div>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>P<sub>c</sub> = 34 mmHg and π<sub>c</sub> = 25 mmHg at one point. Find NFP and the direction fluid moves.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>When a blood vessel is damaged, ruptured platelets release <strong>thromboplastin</strong>, which in the presence of <strong>$\text{Ca}^{2+}$ ions</strong> converts inactive <strong>prothrombin</strong> (synthesised in the liver using Vitamin K) into active <strong>thrombin</strong>; thrombin then converts soluble plasma <strong>fibrinogen</strong> into insoluble <strong>fibrin threads</strong> that trap red blood cells to form a clot <b>(1)</b>. Group $\text{O}^-$ red blood cells lack A, B, and Rh-D surface antigens so recipient plasma antibodies cannot agglutinate them (Universal Donor), whereas Group $\text{AB}^+$ plasma lacks anti-A, anti-B, and anti-D antibodies so it does not clump donor red cells of any group (Universal Recipient) <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>NFP = 34 − 25 = +9 mmHg <b>(1)</b>. The sign is positive, so fluid moves out of the capillary <b>(1)</b>.</p></div>
           </details>
         </div>
       </section>
 
       <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>Blood Cells, Clotting, ABO/Rhesus Genetics &amp; WAEC Paper 3 Heart Practical</em></h2>
-        <p class="intro">Complete Part A (WAEC Paper 3 dissected heart drawing &amp; magnification task) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min at home</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 05. Write your own attempt first to unlock each model solution.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
 
-        <h3>Part A · WAEC Paper 3 Dissected Mammalian Heart Drawing &amp; Magnification</h3>
+        <h3>Part A · Home investigation: Which way do the valves in your veins let blood go?</h3>
         <div class="aq" data-answer="l05-a1">
-          <div class="aq-top"><h4>In your practical notebook, make a large (10–12 cm long), unshaded HB-pencil diagram of the longitudinal section of the mammalian heart showing 8 labelled parts. If the actual dissected goat heart is 80 mm long and your drawing is 120 mm long, calculate the magnification M and state four WAEC Paper 3 drawing errors that lose marks.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="Magnification calculation and 4 penalised Paper 3 errors…" aria-label="Part A answer"></textarea>
+          <div class="aq-top"><h4>Which way do the valves in your veins let blood go?</h4><span class="marks">Home investigation</span></div>
+          <div class="aq-q"><p>You will use the veins on the back of your hand and forearm to show that vein valves let blood flow only towards the heart, and you will time how fast a vein refills.</p><p><em>You need:</em> your own arm (or a family member's), a phone stopwatch, a ballpoint pen that writes on skin (or a small piece of masking tape), a chair, your notebook and pencil.</p><p><em>Safety:</em> Press gently: you only need enough pressure to flatten the vein. Stop if anything hurts or tingles. Do not tie anything tightly round the arm. Wash off any pen marks afterwards.</p><p><em>Steps:</em></p><ol><li>Sit down and let one arm hang straight down beside the chair for 1 minute, so the veins on the back of the hand and the forearm stand out. Look along a straight vein for small knots or bulges; mark each one lightly with the pen. These are often the sites of valves.</li><li>Press one fingertip firmly on the vein just below a bulge (the hand side). Keep pressing, and with a second finger stroke the blood in the vein away from the first finger towards the elbow (towards the heart), then lift the second finger only. Note whether the emptied stretch of vein stays flat.</li><li>Now lift the first finger and start the stopwatch. Time how long the flat stretch takes to fill again. Repeat three times and take the mean.</li><li>Repeat Step 2, but this time try to stroke the blood the other way, from the elbow side towards the hand (away from the heart). Note what you feel and see.</li><li>Repeat Steps 2–3 with the arm raised above the shoulder for 1 minute first. Record the refill time.</li></ol></div>
+          <textarea class="l-textarea" placeholder="Record your observations, your table and a short conclusion…" aria-label="Part A answer"></textarea>
           <details class="reveal-box solution">
-            <summary>Sample answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body">
-              <p>Magnification formula: <code>M = Length of Drawing ÷ Actual Length of Specimen = 120 mm ÷ 80 mm = ×1.5</code>.<br>
-              Four penalised WAEC Paper 3 errors: 1. Shading, stippling, or colouring the drawing; 2. Sketchy/woolly pencil outlines instead of single continuous lines; 3. Freehand or crossed label guide lines with arrowheads; 4. Failing to draw the left ventricular wall ~3× thicker than the right ventricular wall.</p>
-            </div>
+            <summary>Sample results and what a good answer shows <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><em>Sample results table:</em></p><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Test</th><th>Observation</th><th>Refill time (s, mean of 3)</th><th>Meaning</th></tr></thead><tbody><tr><td>Stroke towards the elbow, first finger held</td><td>Stretch of vein stays flat</td><td>n/a</td><td>A valve stops blood falling back into the emptied stretch</td></tr><tr><td>First finger lifted (arm hanging)</td><td>Vein fills from the hand side</td><td>1.5</td><td>Blood flows towards the heart</td></tr><tr><td>Stroke towards the hand</td><td>Blood will not move past the bulge; vein swells behind the finger</td><td>n/a</td><td>Valve shuts against blood moving away from the heart</td></tr><tr><td>First finger lifted (arm raised)</td><td>Vein fills slowly or stays flat</td><td>4.0</td><td>Blood must now flow against gravity, so refilling is slower</td></tr></tbody></table></div><p><em>What a good answer shows:</em> the learner concludes that the valves are pocket valves that open only towards the heart and shut when blood tries to flow back, which is why the stroked stretch stays empty and why blood cannot be pushed towards the hand; the bulges are explained as valve sites; the slower refill with the arm raised is linked to blood returning against gravity, and then to Mama Bisi's legs: when she stands still for hours there is no muscle pump, and if her valves leak, blood pools in her lower legs; the learner suggests at least one practical remedy (raising the feet, walking about to work the calf muscles); the results are in a ruled table with units and means.</p></div>
           </details>
         </div>
 
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <h3>Part B · Written paper (30 marks)</h3>
+
         <div class="aq" data-answer="l05-b1">
-          <div class="aq-top"><h4>1. (a) Construct a table comparing mammalian erythrocytes, leucocytes, and platelets under: (i) shape, (ii) presence of nucleus at maturity, (iii) site of production, and (iv) primary function [6 marks]. (b) Given that 1.0 g of haemoglobin binds 1.34 mL O₂, calculate the difference in total oxygen carried in 5.0 L (50 dL) of blood between an athlete with [Hb] = 16.0 g/100 mL and an anaemic patient with [Hb] = 9.0 g/100 mL [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) <strong>Erythrocytes:</strong> Biconcave discs; no nucleus at maturity; formed in red bone marrow; transport O₂ as oxyhaemoglobin <b>(2)</b>. <strong>Leucocytes:</strong> Amoeboid (phagocytes) or spherical (lymphocytes); nucleated (lobed or large round nucleus); formed in bone marrow and lymph nodes; engulf bacteria and secrete antibodies <b>(2)</b>. <strong>Platelets:</strong> Tiny irregular cell fragments; no nucleus; pinched off from bone-marrow megakaryocytes; release thromboplastin to initiate clotting <b>(2)</b>.<br>
-            (b) Athlete C<sub>O₂</sub>: <code>C_ath = 1.34 × 16.0 = 21.44 mL/dL</code>; in 50 dL: <code>V_ath = 21.44 × 50 = 1072 mL O2</code> <b>(1.5)</b>. Anaemic C<sub>O₂</sub>: <code>C_ana = 1.34 × 9.0 = 12.06 mL/dL</code>; in 50 dL: <code>V_ana = 12.06 × 50 = 603 mL O2</code> <b>(1.5)</b>. Difference: <code>ΔV = 1072 − 603 = 469 mL O2</code> <b>(1)</b>.</p>
-          </div></details>
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <div class="aq-q"><p>Define each of the following: (a) tissue fluid; (b) lymph; (c) oedema.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) Tissue fluid is the watery liquid, pressed out of the blood in capillaries, that surrounds and bathes body cells; it carries dissolved food and oxygen to them and wastes away from them, but holds no red cells and very little protein (1). (b) Lymph is the surplus tissue fluid that has drained into the lymph capillaries and is carried in the lymphatic vessels back towards the blood (1). (c) Oedema is the swelling of a body part caused by tissue fluid building up between the cells faster than it is removed (1). Equivalent wordings that keep the key ideas are credited.</p><p><strong>Mark scheme note:</strong> "Tissue fluid is blood outside the vessels" scores zero: it has no red cells. For (b), the answer must say the fluid is inside lymph vessels. For (c), "swelling" alone, without the cause, is not credited.</p></div></details>
         </div>
 
         <div class="aq" data-answer="l05-b2">
-          <div class="aq-top"><h4>2. (a) Describe the four sequential steps of mammalian blood clotting, stating the exact role of platelets, thromboplastin, calcium ions (Ca²⁺), Vitamin K, prothrombin, thrombin, and fibrinogen [6 marks]. (b) Distinguish between blood plasma and blood serum, and state two reasons why blood does not clot inside healthy intact blood vessels [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) 1. Damaged tissue cells and ruptured <strong>platelets</strong> at a wound release the activator <strong>thromboplastin (thrombokinase)</strong> <b>(1.5)</b>. 2. In the presence of <strong>calcium ions (Ca²⁺)</strong>, thromboplastin converts inactive plasma <strong>prothrombin</strong> (synthesised in the liver using <strong>Vitamin K</strong>) into active enzyme <strong>thrombin</strong> <b>(1.5)</b>. 3. Thrombin catalyses the conversion of soluble plasma <strong>fibrinogen</strong> into insoluble threads of <strong>fibrin</strong> <b>(1.5)</b>. 4. The fibrin mesh traps red blood cells to form a clot (scab) that seals the wound <b>(1.5)</b>.<br>
-            (b) <strong>Plasma</strong> contains soluble fibrinogen and clotting factors, whereas <strong>serum</strong> is plasma minus fibrinogen and clotting factors after coagulation (<code>Serum = Plasma − Fibrinogen</code>) <b>(2)</b>. Blood does not clot in intact vessels because: (i) smooth endothelial lining prevents platelet adherence/rupture, and (ii) mast cells/basophils secrete the natural anticoagulant <strong>heparin</strong> <b>(2)</b>.</p>
-          </div></details>
+          <div class="aq-top"><h4>2. Arteries and veins</h4><span class="marks">5 marks</span></div>
+          <div class="aq-q"><p>Baba Sule says, "An artery is just a vein with red blood in it." In a table, give <strong>five</strong> ways in which an artery differs from a vein.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Feature</th><th>Artery</th><th>Vein</th></tr></thead><tbody><tr><td>Direction of flow</td><td>Away from the heart</td><td>Towards the heart (1)</td></tr><tr><td>Wall</td><td>Thick, with much muscle and elastic tissue</td><td>Thinner, with less muscle and elastic tissue (1)</td></tr><tr><td>Lumen</td><td>Narrow</td><td>Wide (1)</td></tr><tr><td>Valves</td><td>None along its length (only at the heart exits)</td><td>Pocket valves along its length (1)</td></tr><tr><td>Pressure and pulse</td><td>High pressure, a pulse is felt</td><td>Low pressure, no pulse (1)</td></tr></tbody></table></div><p>Accept also: blood usually oxygenated (except the pulmonary artery) | usually deoxygenated (except the pulmonary veins); fast flow in surges | slow, steady flow; mostly deep | many near the surface; cut vessel spurts bright red blood | cut vessel gives a steady dark red flow. Any five, 1 mark each.</p><p><strong>Mark scheme note:</strong> A row with only one column filled, or "thick | thin" with no feature named, scores zero. "Arteries carry oxygenated blood, veins carry deoxygenated blood" without naming the pulmonary exceptions is not credited.</p></div></details>
         </div>
 
         <div class="aq" data-answer="l05-b3">
-          <div class="aq-top"><h4>3. (a) Explain why transfusing Blood Group A red blood cells into a Blood Group B patient causes agglutination, whereas Blood Group O⁻ red cells can be transfused safely [4 marks]. (b) Explain how Rhesus incompatibility causes <em>erythroblastosis fetalis</em> and how it is prevented clinically [3 marks]. (c) Two sickle-cell trait carriers (Hb<sup>A</sup>Hb<sup>S</sup>) marry; show by a genetic cross the probability that their child will have sickle-cell anaemia (Hb<sup>S</sup>Hb<sup>S</sup>) [3 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) A Group B recipient has <strong>anti-A antibodies</strong> in plasma that bind specifically to <strong>Antigen A</strong> on the donor Group A RBCs, causing fatal clumping (agglutination) <b>(2)</b>. Group O⁻ RBCs have <strong>no A, B, or Rh-D surface antigens</strong>, so anti-A and anti-B antibodies cannot clump them <b>(2)</b>.<br>
-            (b) When an <strong>Rh⁻ mother</strong> carries a first <strong>Rh⁺ fetus</strong>, fetal Rh⁺ RBCs entering her blood at birth sensitise her immune system to make <strong>anti-D IgG antibodies</strong>; in a subsequent Rh⁺ pregnancy, anti-D crosses the placenta and haemolyses fetal RBCs <b>(2)</b>. Prevented by injecting the mother with <strong>anti-D immunoglobulin (RhoGAM)</strong> within 72 hours of delivery <b>(1)</b>.<br>
-            (c) Parental cross: <code>Hb^A Hb^S × Hb^A Hb^S</code> → Gametes: <code>Hb^A, Hb^S</code> × <code>Hb^A, Hb^S</code> → Offspring: <code>1 Hb^A Hb^A : 2 Hb^A Hb^S : 1 Hb^S Hb^S</code>. Probability of sickle-cell anaemia (<code>Hb^S Hb^S</code>) = <code>1 ÷ 4 = 0.25 = 25%</code> <b>(3)</b>.</p>
-          </div></details>
+          <div class="aq-top"><h4>3. Capillary adaptations</h4><span class="marks">3 marks</span></div>
+          <div class="aq-q"><p>State <strong>three</strong> ways in which capillaries are suited to the exchange of materials with body cells, explaining each.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> Any three (1 each, feature and reason together): the wall is only one cell thick, so the diffusion path between blood and cells is very short · there are huge numbers of capillaries, giving a very large total surface area for exchange · blood flows very slowly through them, giving time for exchange · they are so narrow that red cells pass in single file close to the wall, which shortens the path for oxygen · they reach close to every living cell, so no cell is far from a supply.</p><p><strong>Mark scheme note:</strong> A feature without its reason scores zero ("they are thin" alone). Do not credit "capillaries have valves" or "capillaries have thick walls to withstand pressure".</p></div></details>
         </div>
 
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../lesson-04/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 4: Blood Vessels, Capillaries &amp; Lymph</a>
-          <a class="btn btn-tour" href="../../index.html">🎓 Unit Complete — Return to Welcome Hub →</a>
+        <div class="aq" data-answer="l05-b4">
+          <div class="aq-top"><h4>4. Formation and return of tissue fluid</h4><span class="marks">4 marks</span></div>
+          <div class="aq-q"><p>Describe how tissue fluid is formed at a capillary bed and how it returns to the blood.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> At the arterial end, the blood pressure is greater than the osmotic pull of the plasma proteins, so water and small dissolved substances such as glucose, amino acids, oxygen and salts are forced out between the wall cells (1). Red cells and most plasma proteins are too large to pass and stay in the blood (1). At the venous end, the blood pressure has fallen below the protein pull, so most of the fluid, now carrying carbon dioxide and wastes from the cells, is drawn back into the capillary by osmosis (1). The fluid left over seeps into lymph capillaries, which are closed at one end, and is returned to the blood as lymph (1).</p><p><strong>Mark scheme note:</strong> Each mark point is separate: a candidate who only says "pressure forces fluid out and osmosis brings it back" scores 2 at most. "Red cells leave the capillary" loses the second mark.</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b5">
+          <div class="aq-top"><h4>5. Calculation: net filtration pressure</h4><span class="marks">6 marks</span></div>
+          <div class="aq-q"><p>In a capillary of the gut wall, Pc falls evenly from 32 mmHg at the arterial end to 14 mmHg at the venous end. The osmotic pressure of the plasma proteins (πc) is 26 mmHg all along. Take NFP = Pc − πc.<br>(a) Calculate NFP at the arterial end and state the direction of fluid movement. (1 mark)<br>(b) Calculate NFP at the venous end and state the direction of fluid movement. (1 mark)<br>(c) Calculate what fraction of the way along the capillary NFP becomes zero. (2 marks)<br>(d) In someone whose vein valves leak, like Mama Bisi, the venous-end pressure rises to 28 mmHg. Calculate the new venous-end NFP and explain the effect on the tissues. (2 marks)</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) 32 − 26 = +6 mmHg; fluid moves out of the capillary (1). (b) 14 − 26 = −12 mmHg; fluid moves into the capillary (1). (c) NFP is zero when Pc = 26 mmHg, a fall of 32 − 26 = 6 mmHg out of a total fall of 32 − 14 = 18 mmHg (1); 6/18 = 1/3, so one third (0.33) of the way along (1). (d) 28 − 26 = +2 mmHg (1). NFP is now positive at both ends, so fluid leaves along the whole capillary and none is reabsorbed; the extra fluid builds up faster than lymph can drain it, so the tissue swells (oedema) (1).</p><p><strong>Mark scheme note:</strong> A value without its direction loses the mark in (a) and (b). In (c), the first mark is for the two pressure falls, the second for the fraction; "18 out of 32" is a common slip and scores zero. In (d), the second mark needs the link to no reabsorption, not just "the leg swells".</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b6">
+          <div class="aq-top"><h4>6. Practical: measuring vessels</h4><span class="marks">4 marks</span></div>
+          <div class="aq-q"><p>A learner viewed a slide of an artery and a vein at low power. After calibration, one eyepiece graticule division equalled 0.025 mm on the slide. His readings were:</p><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Vessel</th><th>Wall thickness (divisions)</th><th>Lumen width (divisions)</th></tr></thead><tbody><tr><td>Artery</td><td>32</td><td>96</td></tr><tr><td>Vein</td><td>14</td><td>152</td></tr></tbody></table></div><p>(a) Convert all four readings to millimetres. (2 marks)<br>(b) Calculate the wall thickness ÷ lumen width for each vessel, and explain what the difference shows about the job of each vessel. (1 mark)<br>(c) The vein had partly collapsed while the slide was being made. State the effect on its lumen reading. (1 mark)</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) Artery: wall 32 × 0.025 = 0.80 mm, lumen 96 × 0.025 = 2.4 mm (1). Vein: wall 14 × 0.025 = 0.35 mm, lumen 152 × 0.025 = 3.8 mm (1). (b) Artery 0.80/2.4 = 0.33; vein 0.35/3.8 = 0.092; the artery has a far thicker wall for its size, to withstand and smooth out the high, pulsing pressure from the ventricle, while the vein's wide lumen and thin wall suit slow, low-pressure flow back to the heart (1). (c) The lumen of the vein read too low, because the collapsed walls had moved closer together (1).</p><p><strong>Mark scheme note:</strong> In (a), each mark needs both readings for that vessel, with mm units. In (b), the ratios alone without an explanation score zero. In (c), "the reading was wrong" with no direction scores zero.</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b7">
+          <div class="aq-top"><h4>7. The lymphatic system</h4><span class="marks">3 marks</span></div>
+          <div class="aq-q"><p>(a) Trace the path of lymph from a lymph capillary until it rejoins the blood. (1 mark)<br>(b) Explain how lymph keeps moving although the lymphatic system has no pump. (1 mark)<br>(c) State <strong>one</strong> function of the lymphatic system other than returning tissue fluid to the blood. (1 mark)</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> (a) Lymph capillary → larger lymph vessels with valves, passing through lymph nodes → thoracic duct (or right lymphatic duct) → subclavian vein near the neck (1). (b) Contracting skeletal muscles and breathing movements squeeze the lymph vessels, and their valves let lymph move only one way, towards the neck (1). (c) Any one: carries fats absorbed by the lacteals of the ileum · lymph nodes filter out bacteria and debris · lymph nodes make lymphocytes, which help fight infection (1).</p><p><strong>Mark scheme note:</strong> In (a), ending the route "in the heart" or "in the kidney" scores zero. In (b), "the heart pumps it" is the commonest wrong answer.</p></div></details>
+        </div>
+
+        <div class="aq" data-answer="l05-b8">
+          <div class="aq-top"><h4>8. Precautions</h4><span class="marks">2 marks</span></div>
+          <div class="aq-q"><p>State <strong>two</strong> precautions that were taken when measuring the vessels on the slide with the eyepiece graticule.</p></div>
+          <textarea class="l-textarea" placeholder="Write your answer here, then compare with the model solution." aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution and mark scheme <small>unlocks after you try</small></summary><div class="reveal-body"><p><strong>Model solution:</strong> Any two (1 each): the graticule was calibrated against a stage micrometer before any reading was taken · the slide was viewed under low power before high power · each vessel was measured across its narrowest diameter, at right angles to the wall · each measurement was repeated in two places and the mean was used.</p><p><strong>Mark scheme note:</strong> Precautions must be in the past tense; "calibrate the graticule" (an instruction) loses the mark. "The microscope was handled carefully" is too vague to score.</p></div></details>
+        </div>
+
+        <div class="l05-pager">
+          <a class="btn btn-ghost" href="../lesson-04/index.html" style="color:var(--paper-ink);border-color:var(--paper-line)">← Lesson 4, the beating heart</a>
+          <a class="btn btn-tour" href="../lesson-06/index.html">Next: Lesson 6, blood →</a>
         </div>
       </section>
     </main>
@@ -636,6 +841,7 @@
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
   <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/vessel-slide-bench.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
@@ -645,9 +851,12 @@
   <script src="../../assets/js/study-graph.js"></script>
   <script src="graph.js"></script>
   <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="lesson.js"></script>
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
 </body>
 </html>

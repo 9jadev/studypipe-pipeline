@@ -3,40 +3,96 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 1 · Ohm's Law, Metallic Conduction &amp; Wire Resistivity · StudyPipe</title>
-  <meta name="description" content="StudyPipe Physics (SS2): Ohm's Law, Metallic Conduction, Wire Resistivity (R = 4ρL/πd²), and the WAEC Paper 3 V–I Practical.">
+  <title>Lesson 1 · Current, P.D. &amp; Ohm's Law · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): current, potential difference, Ohm's law and the resistance of wires (R = ρL/A), with a 3D V–I bench, a drift-lattice zoom and the WAEC Paper 3 practical.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='10' y='22' width='44' height='20' rx='6' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='24' width='44' height='16' rx='5' fill='%233ee6c4'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(320px, 92vw, 430px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 14px; display: block; line-height: 1.2; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+    #bench-comp { width: 100%; } #bench-comp button { flex: 1; }
+    .ohm-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .ohm-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 58px; }
+    .chip-btn { min-height: 38px; padding: 5px 11px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12.5px; cursor: pointer; }
+    .chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .ohm-rheo { display: flex; align-items: center; gap: 10px; width: 100%; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+    .ohm-rheo input { flex: 1; }
+    .ohm-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .ohm-actions .vt-btn { flex: 1; min-width: 120px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+
+    /* results table (one compact row per reading) */
+    #results-table td .rc-sub { display: block; font-size: 11px; color: var(--paper-muted); margin-top: 2px; cursor: pointer; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 13px; }
+      #results-table th { font-size: 10.5px; }
+      #results-table td::before { content: none; }
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #2fb344 0%, #3ee6c4 25%, #ffb23f 50%, #f97316 75%, #ff3d8b 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-    }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(62,230,196,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-    }
+
+    /* wire-dimension explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 50px; padding: 6px 4px; font-weight: 700; font-size: 12px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--crimson); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 13px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .ohm-bq { margin-top: 14px; }
+    .ohm-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; }
+    .ohm-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ohm-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; }
+    .ohm-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .ohm-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .ohm-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .ohm-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .ohm-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
   <link rel="stylesheet" href="../../assets/css/theme.css">
@@ -48,24 +104,23 @@
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
       <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 1 of 5 · <b>Ohm's Law &amp; Wire Resistivity</b></span>
+      <span class="l-crumb">Lesson 1 of 5 · <b>Current, P.D. &amp; Ohm's Law</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
 
-  <!-- ================= HERO ================= -->
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Physics · Lesson 1 of 5 · 50 minutes</span>
-        <h1 class="display reveal" data-hook>Ohm’s Law, Metallic Conduction &amp; <em>Wire Resistivity</em></h1>
-        <p class="question reveal">Why does a thin constantan wire choke current and heat up, while a thick copper cable of the exact same length lets current surge freely?</p>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 1 of 5 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Current, P.D. &amp; <em>Ohm's Law</em></h1>
+        <p class="question reveal">Why does the thin lamp wire glow while the thick starter cable barely warms, and how do we measure a resistance?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>State <strong>Ohm’s law (V = IR)</strong> and explain why <strong>temperature</strong> and other physical conditions must remain constant.</span></li>
-          <li><b>02</b><span>Distinguish <strong>ohmic conductors</strong> (constantan, manganin, copper at constant T) from <strong>non-ohmic devices</strong> (tungsten filament lamp, semiconductor diode).</span></li>
-          <li><b>03</b><span>Apply the resistivity equation <strong>R = ρL ÷ A = 4ρL ÷ (πd<sup>2</sup>)</strong> to solve length and diameter ratio problems.</span></li>
-          <li><b>04</b><span>Run the <strong>WAEC Paper 3 Ohm’s Law Practical</strong>, connecting the ammeter in series and voltmeter in parallel, and find resistance <strong>R</strong> from the slope of a <strong>V–I graph</strong>.</span></li>
-          <li><b>05</b><span>State acceptable <strong>past-tense WAEC electricity precautions</strong> and explain why the plug key is removed between readings.</span></li>
+          <li><b>01</b><span>Define <strong>current</strong> (I = Q/t) and <strong>potential difference</strong> (V = W/Q) and give their SI units.</span></li>
+          <li><b>02</b><span>State <strong>Ohm's law</strong> and its condition, and use <strong>V = IR</strong>.</span></li>
+          <li><b>03</b><span>Tell <strong>ohmic</strong> from <strong>non-ohmic</strong> from the shape of a V–I graph.</span></li>
+          <li><b>04</b><span>Find a wire's resistance from <strong>R = ρL/A</strong> and <strong>R ∝ L/d²</strong>.</span></li>
+          <li><b>05</b><span>Read a resistance from the <strong>slope of a V–I graph</strong> and state the practical's precautions.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -74,23 +129,20 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–45</b> Investigate</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
-
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <!-- Schematic V=IR & Wire Cross Section -->
-          <rect x="36" y="42" width="248" height="176" rx="14" fill="none" stroke="rgba(62,230,196,0.45)" stroke-width="2.2"/>
-          <rect x="108" y="28" width="104" height="28" rx="6" fill="#1e293b" stroke="#ffb23f" stroke-width="2"/>
-          <text x="160" y="46" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">R = ρL / A</text>
-          <circle cx="160" cy="118" r="22" fill="#0f172a" stroke="#3ee6c4" stroke-width="2"/>
-          <text x="160" y="122" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">V (parallel)</text>
-          <circle cx="284" cy="130" r="20" fill="#0f172a" stroke="#3ee6c4" stroke-width="2"/>
-          <text x="284" y="134" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">A</text>
-          <text x="160" y="202" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="14" text-anchor="middle">V = I × R</text>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="30" y="36" width="260" height="168" rx="14" fill="none" stroke="rgba(var(--crimson-rgb),.5)" stroke-width="2.2"/>
+          <text x="160" y="96" fill="var(--amber)" font-family="var(--font-mono)" font-size="26" text-anchor="middle">V = I R</text>
+          <text x="160" y="140" fill="var(--fg)" font-family="var(--font-mono)" font-size="15" text-anchor="middle">R = ρL / A</text>
+          <text x="160" y="176" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="13" text-anchor="middle">slope of V–I = R</text>
         </svg>
       </div>
     </div>
@@ -102,10 +154,10 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Conductor sort</a></li>
-        <li><a href="#practical">3D practical</a></li>
-        <li><a href="#concepts">Ohm's law &amp; ρ</a></li>
-        <li><a href="#neutralise">Lattice zoom</a></li>
+        <li><a href="#sort">Ohmic or not?</a></li>
+        <li><a href="#practical">V–I bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Lattice zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -117,29 +169,27 @@
     </nav>
 
     <main class="l-main" id="main">
-
-      <!-- ================= 0. DO NOW ================= -->
+      <!-- 0. DO NOW -->
       <section class="l-sec" id="donow">
-        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>wake up your electricity toolkit</em></h2>
-        <p class="intro">Four foundational building blocks on electric charge, potential difference, meter placement, and circular cross-sectional area. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up your toolkit</em></h2>
+        <p class="intro">Four quick cards on charge, current, unit conversion and reading a meter. Answer each in your head <strong>before</strong> you reveal it.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
         </div>
       </section>
 
-      <!-- ================= 1. STORY ================= -->
+      <!-- 1. STORY -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>A jumper-cable puzzle at <em>Chinedu’s Workshop, Aba</em></h2>
-        <p class="intro">On Ngwa Road in Aba, apprentice Kelechi tests two one-metre metal cables across the same 2.0 V cell — and discovers that wire thickness and temperature change everything.</p>
-
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>A hot wire at <em>Nkechi's workshop</em></h2>
+        <p class="intro">On Ngwa Road in Aba, Emeka's keke headlamp dims, and two jumper cables that carried the same current feel very different: the thin one is hot, the thick one cool. Why?</p>
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Kelechi and Oga Chinedu at the Aba workshop comparing thick copper and thin constantan wires, then Engr. Nkechi at the WAEC Physics Lab."></canvas>
-            <div class="stage-label"><i></i>3D story · Aba Workshop → WAEC Physics Lab</div>
+            <canvas aria-label="Animated 3D story: Emeka's keke, Chinedu touching a hot thin cable and a cool thick cable, Tobe at his battery stall, and Engr. Nkechi setting up the test bench in her Aba auto-electric workshop."></canvas>
+            <div class="stage-label"><i></i>3D story · Ngwa Road, Aba</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -149,66 +199,57 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
-
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Ngwa Road, Aba:</strong> Kelechi holds up a thin constantan wire: <em>“Oga Chinedu! Why did this thin wire get hot and barely light the test lamp, while the thick copper jumper cable made it glow brightly?”</em></p>
-            <p><strong>Scene 2 · Papa Nnamdi's assumption:</strong> <em>“Both wires are 1.00 m long and connected across the same 2.0 V cell! Shouldn't any one-metre metal wire carry the exact same current?”</em></p>
-            <p><strong>Scene 3 · Oga Chinedu's explanation:</strong> <em>“No! Current I depends on resistance R (I = V/R), and resistance depends on the material's resistivity ρ, the length L, and the circular cross-sectional area A = πd²/4.”</em></p>
-            <p><strong>Scene 4 · Rig A vs Rig B:</strong> Side by side, Rig A (thick cable, double diameter) has four times the cross-sectional area and one-quarter the resistance of Rig B.</p>
-            <p><strong>Scene 5 · The heating trap:</strong> Chinedu warns: <em>“And if you leave the switch closed so the wire heats up, its lattice ions vibrate harder and its resistance rises!”</em></p>
-            <p><strong>Scene 6 · WAEC Physics Lab:</strong> Engr. Nkechi sets up an accumulator, brass plug key, rheostat, series ammeter, and parallel voltmeter across a constantan coil to plot V against I.</p>
+            <p><strong>Scene 1 · Emeka:</strong> <em>“My keke starts fine, but once I switch on the headlamp and rev, the light goes weak.”</em></p>
+            <p><strong>Scene 2 · Chinedu:</strong> touches the two cables after a test run. <em>“The thin one is hot, the thick one is cool. Same current went through both. Why is only the thin one hot?”</em></p>
+            <p><strong>Scene 3 · Tobe:</strong> <em>“The thin wire is just bad quality. Throw it away.”</em> Chinedu is not sure.</p>
+            <p><strong>Scene 4 · Nkechi:</strong> holds up a coil of resistance wire and a filament bulb. <em>“Current, voltage and resistance decide everything here. Before we judge any wire, we measure.”</em></p>
+            <p><strong>Scene 5 · Nkechi:</strong> sets a cell, key, ammeter, voltmeter and rheostat on the bench. <em>“Change the voltage, read the current, and let the graph tell us the resistance.”</em></p>
           </div>
         </details>
       </section>
 
-      <!-- ================= 2. WONDER WALL ================= -->
+      <!-- 2. WONDER WALL -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">How do wire diameter, length, and temperature affect electrical resistance? Pin your prediction before we test it on the 3D bench.</p>
+        <p class="intro">Before we measure: what makes one wire heat up more than another carrying the same current? Pin your idea.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that doubling the diameter of a wire will… because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I think the thin wire heats more because…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
-          <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Does doubling diameter halve R or quarter R?</button>
-            <button type="button">Why does heating a metal increase its resistance?</button>
-            <button type="button">Why is the voltmeter connected in parallel?</button>
-            <button type="button">Why must we remove the plug key between readings?</button>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">Thin wires have more resistance? (Chinedu)</button>
+            <button type="button">Longer wires too? (Amara)</button>
+            <button type="button">Maybe the metal matters (Ngozi)</button>
+            <button type="button">All copper is the same, resistance is nonsense (Tobe)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 3. SORT GAME ================= -->
+      <!-- 3. SORT -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 8 min</span>
-        <h2>Ohmic vs Non-Ohmic &amp; <em>WAEC Circuit Rules</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Ohmic Conductors</strong> (linear V–I at constant temperature), <strong>Non-Ohmic Devices</strong> (curved I–V), and <strong>Mandatory WAEC Circuit Rules &amp; Precautions</strong>.</p>
-
-        <div class="sort" id="kitchen-sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Ohmic <em>or not?</em></h2>
+        <p class="intro">Sort each card into its bin. Drag it, or tap it then tap a bin. Ohmic things give a straight V–I line through the origin; non-ohmic ones curve; some barely conduct.</p>
+        <div class="sort" id="ohm-sort">
           <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Ohmic Conductors bin">
-              <h4><i></i>Ohmic Conductors</h4>
-              <small>V ∝ I at constant T (linear)</small>
-              <div class="drop"></div>
+            <div class="bin" data-bin="ohmic" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Ohmic bin">
+              <h4><i></i>Ohmic</h4><small>straight V–I through the origin</small><div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Non-Ohmic Devices bin">
-              <h4><i></i>Non-Ohmic Devices</h4>
-              <small>R changes with V, I or T</small>
-              <div class="drop"></div>
+            <div class="bin" data-bin="nonohmic" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Non-ohmic bin">
+              <h4><i></i>Non-ohmic</h4><small>V–I curves</small><div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="WAEC Circuit Rules bin">
-              <h4><i></i>WAEC Circuit Rules</h4>
-              <small>meter placement &amp; precautions</small>
-              <div class="drop"></div>
+            <div class="bin" data-bin="insulator" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Barely conducts bin">
+              <h4><i></i>Barely conducts</h4><small>insulator-ish</small><div class="drop"></div>
             </div>
           </div>
           <div class="sort-bar">
@@ -222,376 +263,348 @@
         </div>
       </section>
 
-      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <!-- 3B. PRACTICAL -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
-        <h2>WAEC Paper 3 Practical: <em>Verifying Ohm’s Law (V–I Graph)</em></h2>
-        <p class="intro">Step up to Engr. Nkechi’s circuit bench. We use a sliding rheostat to set five currents <strong>I</strong> from <code>0.25 A</code> to <code>1.25 A</code> through a standard constantan coil, measure the potential difference <strong>V</strong> across it, and open the plug key immediately after each reading.</p>
-
-        <div class="callout warn" id="safety-box">
-          <p><strong>WAEC Paper 3 Examiner Rules:</strong> Connect the <strong>ammeter in series</strong> with the constantan wire and the <strong>voltmeter in parallel</strong> across its ends. <strong>Remove the plug key immediately after each reading</strong> so the wire does not heat up and change its resistance.</p>
-        </div>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 30 min</span>
+        <h2>The V–I bench: <em>measure a resistance</em></h2>
+        <p class="intro">Ammeter in series, voltmeter across the wire. Step the rheostat, take five readings, and read the resistance from the slope of the V–I graph.</p>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Tighten &amp; clean terminals</h4><p>Ensure all brass terminals are clean and tight so stray contact resistance does not corrupt readings.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Ammeter in series, Voltmeter in parallel</h4><p>Wire the low-resistance ammeter in the main loop and the high-resistance voltmeter across the constantan coil.</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Adjust rheostat &amp; read perpendicular</h4><p>Slide the rheostat to set current <code>I</code>, reading both meters at eye level to avoid parallax error.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Open key K between readings</h4><p>Remove the brass plug key right after recording each <code>(I, V)</code> pair so the wire stays at constant room temperature.</p></div>
+          <div class="method now" id="m1"><b>01</b><h4>Build the circuit</h4><p>Cell, key, ammeter in series, voltmeter across the wire.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Close key, record I and V</h4><p>Set the rheostat, read the pair, open the key again.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Repeat for five settings</h4><p>Spread the readings across the range.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Plot V against I</h4><p>The slope of the best-fit line is the resistance.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Ohm's Law practical bench with accumulator, brass plug key, sliding rheostat, series ammeter, parallel voltmeter, and constantan resistance wire."></canvas>
-            <div class="stage-label"><i></i>3D Ohm's Law Bench · drag to rotate · tap trials A–E</div>
-            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D circuit bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <canvas id="bench-canvas" aria-label="3D Ohm's law bench: a lead-acid cell, plug key, sliding rheostat, series ammeter, parallel voltmeter and a constantan test wire, with current beads flowing round the loop."></canvas>
+            <div class="stage-label"><i></i>3D V–I bench · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the controls, table and worked examples below.</p></div>
           </div>
           <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Wire condition" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Constantan d₀ (R = 2.20 Ω)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Double Diameter 2d₀ (¼ R)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Key Left Closed (Heated!)</button>
+            <div class="seg" role="group" aria-label="Component under test" id="bench-comp">
+              <button type="button" data-comp="constantan" aria-pressed="true">Constantan</button>
+              <button type="button" data-comp="copper" aria-pressed="false">Copper</button>
+              <button type="button" data-comp="lamp" aria-pressed="false">Filament lamp</button>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · 0.25 A</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · 0.50 A</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · 0.75 A</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · 1.00 A</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · 1.25 A</button>
-              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
-            </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 readings</span>
+          </div>
+          <div class="stage-bar ohm-chips" id="bench-d" role="group" aria-label="Wire diameter">
+            <span class="lab-t">d / mm</span>
+            <button class="chip-btn" type="button" data-d="0.30" aria-pressed="true">0.30</button>
+            <button class="chip-btn" type="button" data-d="0.60" aria-pressed="false">0.60</button>
+            <button class="chip-btn" type="button" data-d="1.20" aria-pressed="false">1.20</button>
+          </div>
+          <div class="stage-bar ohm-chips" id="bench-l" role="group" aria-label="Wire length">
+            <span class="lab-t">L / cm</span>
+            <button class="chip-btn" type="button" data-l="20" aria-pressed="false">20</button>
+            <button class="chip-btn" type="button" data-l="40" aria-pressed="true">40</button>
+            <button class="chip-btn" type="button" data-l="60" aria-pressed="false">60</button>
+            <button class="chip-btn" type="button" data-l="80" aria-pressed="false">80</button>
+            <button class="chip-btn" type="button" data-l="100" aria-pressed="false">100</button>
+          </div>
+          <div class="stage-bar">
+            <label class="ohm-rheo">Rheostat
+              <input type="range" id="bench-rheo" min="0" max="4" step="1" value="2" aria-label="Rheostat setting (steps the current from 0.20 to 1.00 A)">
+            </label>
+          </div>
+          <div class="stage-bar ohm-actions">
+            <button class="vt-btn zobo" type="button" id="bench-take">Take reading</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 on the constantan</span>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
+        <div class="graph-card" id="graph-card">
           <div class="gc-head">
             <div><span class="gc-kicker">Live graph · plots as you record</span><h4>Potential difference V against current I</h4></div>
             <span class="gc-badge wait" id="vi-badge">0 points</span>
           </div>
           <div id="vi-graph"></div>
-          <div class="gc-stats" id="vi-stats"></div>
           <p class="gc-note" id="vi-note"></p>
         </div>
 
-        <h3>Record your WAEC V–I readings</h3>
-        <p>As you test Trials A–E on the 3D bench, select the matching current <strong>I (A)</strong>, potential difference <strong>V (V)</strong>, and calculated resistance <strong>R = V ÷ I (Ω)</strong> below.</p>
+        <h3>Record your readings</h3>
+        <p>Each reading fills a row. Do five on the constantan wire.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
-            <thead>
-              <tr>
-                <th>Trial</th>
-                <th>Target I (A)</th>
-                <th>Measured Current I (A)</th>
-                <th>Potential Diff. V (V)</th>
-                <th>Resistance R = V ÷ I (Ω)</th>
-              </tr>
-            </thead>
+            <thead><tr><th>Reading</th><th>I / A</th><th>V / V</th><th>V÷I / Ω</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
-        <div class="sort-bar">
-          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
-          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
-        </div>
+        <p class="sheet-note" id="results-line">Readings recorded: 0</p>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table &amp; V–I graph slope calculation <small>open after recording yours</small></summary>
+          <summary>Expected table &amp; graph <small>open after you record yours</small></summary>
           <div class="reveal-body">
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>I (A)</th><th>V (V)</th><th>R = V ÷ I (Ω)</th></tr></thead>
+                <thead><tr><th>I / A</th><th>V / V</th><th>V÷I / Ω</th></tr></thead>
                 <tbody>
-                  <tr><td>A</td><td>0.25</td><td>0.55</td><td>2.20</td></tr>
-                  <tr><td>B</td><td>0.50</td><td>1.10</td><td>2.20</td></tr>
-                  <tr><td>C</td><td>0.75</td><td>1.65</td><td>2.20</td></tr>
-                  <tr><td>D</td><td>1.00</td><td>2.20</td><td>2.20</td></tr>
-                  <tr><td>E</td><td>1.25</td><td>2.75</td><td>2.20</td></tr>
+                  <tr><td>0.20</td><td>0.55</td><td>2.77</td></tr>
+                  <tr><td>0.40</td><td>1.11</td><td>2.77</td></tr>
+                  <tr><td>0.60</td><td>1.66</td><td>2.77</td></tr>
+                  <tr><td>0.80</td><td>2.22</td><td>2.77</td></tr>
+                  <tr><td>1.00</td><td>2.77</td><td>2.77</td></tr>
                 </tbody>
               </table>
             </div>
-            <p><strong>Slope of V (vertical) against I (horizontal):</strong></p>
-            <div class="eq light">Slope S = ΔV ÷ ΔI = (2.75 − 0.55) ÷ (1.25 − 0.25) = 2.20 ÷ 1.00 = 2.20 Ω = R</div>
+            <div class="eq light">Slope = ΔV ÷ ΔI = (2.77 − 0.55) ÷ (1.00 − 0.20) = 2.22 ÷ 0.80 = 2.77 Ω = R</div>
+            <p>The constantan line is straight through the origin, so the wire is ohmic. The <strong>filament lamp</strong> instead gives a curve that bends upwards, because its resistance rises as it heats.</p>
           </div>
         </details>
 
-        <h3>Practical Analysis Questions</h3>
+        <h3>Practical analysis questions</h3>
         <div class="aq" data-answer="l01-prac-q">
-          <div class="aq-top"><h4>Answer these three WAEC Paper 3 analysis questions, then compare with the model answers.</h4></div>
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>Why does the ratio <code>V ÷ I</code> stay constant at <code>2.20 Ω</code> when the plug key is removed between readings, but drift upward if the key is left closed?</li>
-            <li>What happens to the resistance of the constantan wire if you replace it with another constantan wire of the same length but <strong>twice the diameter</strong>?</li>
-            <li>State two acceptable <strong>past-tense precautions</strong> taken during this experiment.</li>
+            <li>Why does the wire give a straight line but the lamp a curve?</li>
+            <li>Why must the plug key be opened between readings?</li>
+            <li>How does the slope of the graph give the resistance?</li>
+            <li>If the wire's length is doubled, what happens to the slope?</li>
+            <li>If its diameter is doubled, what happens to the resistance?</li>
           </ol>
           <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>Removing the key prevents Joule heating (<code>I²Rt</code>) so temperature stays constant and Ohm's law holds. Leaving the key closed heats the wire, increasing lattice vibrations and raising resistance <code>R</code>.</li>
-                <li>Doubling diameter <code>d</code> quadruples cross-sectional area <code>A = πd²/4</code>, so resistance drops to <strong>one-quarter</strong> (<code>2.20 ÷ 4 = 0.55 Ω</code>).</li>
-                <li>1. <em>“I ensured tight and clean electrical connections at all brass terminals.”</em><br>2. <em>“I removed the plug key immediately after taking each reading so the resistance wire did not heat up.”</em></li>
+                <li>The wire keeps a constant resistance at steady temperature, so V ÷ I is constant and the graph is straight. The lamp's filament heats as the current rises, its resistance grows, and the V–I graph curves.</li>
+                <li>So the current does not heat the wire and change its resistance; a warm wire would push the later points up and make the slope too high.</li>
+                <li>Because V = IR, a graph of V (vertical) against I (horizontal) has gradient ΔV ÷ ΔI = R, read from a large triangle on the best-fit line.</li>
+                <li>R ∝ L, so doubling the length doubles the resistance, and the slope of the V–I line doubles.</li>
+                <li>A = πd²/4, so doubling the diameter quadruples the area and the resistance falls to one quarter.</li>
               </ol>
             </div>
           </details>
         </div>
       </section>
 
-      <!-- ================= 4. CONCEPTS ================= -->
+      <!-- 4. CONCEPTS -->
       <section class="l-sec" id="concepts">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 12 min</span>
-        <h2>Ohm’s Law, Resistivity &amp; <em>Wire Dimensions</em></h2>
-        <p class="intro">Let’s connect your 3D bench observations to the exact equations tested in WAEC, NECO, and JAMB Physics.</p>
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Current, p.d. and <em>resistance</em></h2>
+        <p class="intro">Now connect what you measured to the definitions and equations WAEC, NECO and JAMB expect.</p>
 
-        <h3 id="def-shm">1 · Ohm’s Law</h3>
-        <p><strong>Ohm’s law</strong> states that the electric current <strong>I</strong> flowing through a metallic conductor is directly proportional to the potential difference <strong>V</strong> across its ends, <strong>provided temperature and other physical conditions (such as mechanical strain) remain constant</strong>:</p>
-        <div class="eq" id="eq-shm" data-hook>V ∝ I &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; V = IR &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">or</span>&nbsp;&nbsp;&nbsp;&nbsp; R = V ÷ I &nbsp;<span class="st">(in ohms, Ω)</span></div>
-
-        <h3 id="def-terms">2 · Factors Affecting Resistance &amp; Resistivity (ρ)</h3>
-        <p>For a uniform cylindrical wire at constant temperature, electrical resistance <strong>R</strong>:</p>
-        <ul>
-          <li>is <strong>directly proportional to its length L</strong> (<code>R ∝ L</code> — a longer wire offers a longer path of lattice collisions);</li>
-          <li>is <strong>inversely proportional to its cross-sectional area A</strong> (<code>R ∝ 1/A</code> — a wider wire acts like a multi-lane highway);</li>
-          <li>depends on the nature of the material (its <strong>electrical resistivity ρ</strong>, measured in <strong>ohm-metres, Ω m</strong>);</li>
-          <li>increases with <strong>temperature T</strong> for pure metals (and decreases with temperature for semiconductors and electrolytes).</li>
-        </ul>
-        <div class="eq" id="eq-omega">R = ρL ÷ A = 4ρL ÷ (πd<sup>2</sup>) &nbsp;&nbsp;<span class="st">since circular area A = πr<sup>2</sup> = πd<sup>2</sup> ÷ 4</span></div>
-        <div class="eq" id="eq-vel">Ratio form for two wires of the same material: &nbsp; R<sub>1</sub> ÷ R<sub>2</sub> = (L<sub>1</sub> ÷ L<sub>2</sub>) × (d<sub>2</sub> ÷ d<sub>1</sub>)<sup>2</sup></div>
-        <div class="eq" id="eq-pend">Electrical conductivity: &nbsp; σ = 1 ÷ ρ &nbsp;&nbsp;<span class="st">(SI unit: Ω<sup>−1</sup> m<sup>−1</sup> or S m<sup>−1</sup>)</span></div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up beside your desk! Walk smoothly in place to represent electrons drifting through a cool <code>300 K</code> wire. Now shake your shoulders rapidly like hot <code>2200 K</code> lattice ions — notice how much harder it is for electrons to pass through without colliding!</p>
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up. Walk slowly on the spot to be an electron drifting through a cool wire. Now shake your shoulders fast, like hot lattice ions — feel how much harder it is to pass through without colliding. Do it twice, then sit down.</p>
         </div>
 
-        <h3 id="props">Ohmic vs Non-Ohmic Conductors Compared</h3>
+        <h3 id="def-current">Definitions</h3>
+        <p><strong>Current</strong> is the rate at which charge flows past a point, <strong>I = Q/t</strong> (amperes). <strong>Potential difference</strong> between two points is the electrical energy changed to other forms per coulomb that passes, <strong>V = W/Q</strong> (volts). <strong>Resistance</strong> is a component's opposition to current, <strong>R = V/I</strong> (ohms).</p>
+
+        <div class="callout big reveal" id="eq-ohm">
+          <p><strong>Ohm's law:</strong> for a metallic conductor kept at a steady temperature and physical condition, the current through it is directly proportional to the p.d. across it, so <strong>V/I is constant</strong> and equals its resistance R. A filament lamp, a diode or an electrolyte do not keep this ratio constant, so they are <strong>non-ohmic</strong>.</p>
+        </div>
+
+        <div class="eq" id="eq-rho" data-hook>I = Q/t &nbsp;·&nbsp; V = IR &nbsp;·&nbsp; R = ρL/A &nbsp;<span class="st">with A = πd²/4, so R ∝ L/d²</span> &nbsp;·&nbsp; P = IV = I²R = V²/R</div>
+
+        <h3>What changes a wire's resistance</h3>
         <div class="tbl-wrap" id="props-table">
           <table class="tbl">
-            <thead><tr><th>Conductor Type</th><th>Examples</th><th>V–I Graph Shape</th><th>Why?</th></tr></thead>
+            <thead><tr><th>Factor</th><th>Effect on R</th></tr></thead>
             <tbody>
-              <tr><td><strong>Ohmic Conductor</strong></td><td>Constantan, manganin, copper at constant T</td><td><strong>Straight line</strong> through the origin <code>(0, 0)</code></td><td>Resistance <code>R = V/I</code> stays constant at constant temperature.</td></tr>
-              <tr><td><strong>Filament Lamp (Non-Ohmic)</strong></td><td>Tungsten torch or car headlamp bulb</td><td>Curves upward as <code>I</code> increases (slope <code>ΔV/ΔI</code> steepens)</td><td>Higher current heats the filament (&gt; 2000 °C), increasing lattice vibrations and raising <code>R</code>.</td></tr>
-              <tr><td><strong>Semiconductor Diode (Non-Ohmic)</strong></td><td>Silicon p–n junction diode, LED</td><td>Near-zero current in reverse bias; steep rise above threshold in forward bias</td><td>Depletion barrier conducts mainly in one direction.</td></tr>
-              <tr><td><strong>Thermistor (Non-Ohmic)</strong></td><td>NTC semiconductor sensor</td><td>Resistance drops sharply as temperature rises</td><td>Thermal energy frees many more charge carriers per unit volume.</td></tr>
+              <tr><td>Length <strong>L</strong></td><td>↑ L → ↑ R (directly proportional)</td></tr>
+              <tr><td>Cross-section <strong>A</strong></td><td>↑ A → ↓ R (inversely proportional)</td></tr>
+              <tr><td>Diameter <strong>d</strong></td><td>↑ d → ↓ R as 1/d²</td></tr>
+              <tr><td>Material <strong>ρ</strong></td><td>copper low, nichrome high</td></tr>
+              <tr><td>Temperature</td><td>metal: ↑ T → ↑ R; semiconductor/thermistor: ↑ T → ↓ R</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 id="ph-h">Wire Dimension &amp; Resistivity Explorer</h3>
-        <p>Tap any pin below to see how changing length <strong>L</strong> and diameter <strong>d</strong> scales the resistance of a constantan wire (reference: <code>L₀ = 1.00 m, d₀ = 0.40 mm, R₀ = 4.00 Ω</code>):</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Low Resistance (Short &amp; Thick)</div><div>Reference (R₀ = 4.0 Ω)</div><div>High Resistance (Long &amp; Thin) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin to inspect how L and d control resistance R.</div>
+        <h3 id="pos-h">Wire-dimension explorer</h3>
+        <p>Tap a pin. Fix the material (constantan) and see how length <strong>L</strong> and diameter <strong>d</strong> change the area A and the resistance R.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to inspect how L and d control R.</div>
         </div>
       </section>
 
-      <!-- ================= 5. LATTICE ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Atomic Lattice Zoom</span>
-        <h2>Inside the metal wire: <em>electron drift &amp; thermal lattice collisions</em></h2>
-        <p class="intro">Watch the <strong>cyan free electrons</strong> drift through the 3D crystal lattice of <strong>amber positive metal ions</strong>. Switch between a cool constantan wire, a white-hot tungsten filament, and a double-diameter cable!</p>
-
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the metal: <em>electron drift &amp; collisions</em></h2>
+        <p class="intro">Free electrons drift against the current and collide with the vibrating positive ions. A thin wire crowds them and heats more; a thick wire lets them through; raising the temperature raises the resistance.</p>
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D atomic lattice zoom showing free electrons drifting past vibrating positive metal ions, with live bars for current, resistance, and temperature."></canvas>
-            <div class="stage-label"><i></i>3D Atomic Lattice Zoom · Electrons (cyan) vs Metal Ions (amber)</div>
-            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D lattice zoom couldn't start on this device.</p></div>
+            <canvas id="zoom-canvas" aria-label="3D lattice zoom: free electrons drifting against the conventional current and colliding with vibrating positive metal ions, with a thin and a thick wire and a temperature control."></canvas>
+            <div class="stage-label"><i></i>3D lattice · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="stage-bar ohm-chips" id="zoom-d" role="group" aria-label="Wire diameter">
+            <span class="lab-t">d / mm</span>
+            <button class="chip-btn" type="button" data-d="0.30" aria-pressed="true">0.30 (thin)</button>
+            <button class="chip-btn" type="button" data-d="1.20" aria-pressed="false">1.20 (thick)</button>
           </div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Lattice view mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Constantan (300 K)</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Hot Filament (2200 K)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Double Diameter (2d)</button>
-            </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Double Voltage V (2.2 → 4.4 V)</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset lattice</button>
-            <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#7cc4ff"></i>V (V)<b data-c="h">2.20</b></span>
-              <span class="counter"><i style="--c:#3ee6c4"></i>I (A)<b data-c="oh">1.00</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>R (Ω)<b data-c="na">2.20</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Temp (K)<b data-c="cl">300</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>Power (W)<b data-c="w">2.2</b></span>
-            </div>
+            <label class="ohm-rheo">Temp
+              <input type="range" id="zoom-t" min="20" max="200" step="10" value="20" aria-label="Wire temperature in degrees Celsius">
+              <b id="zoom-t-val">20 °C</b>
+            </label>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
           </div>
         </div>
       </section>
 
-      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <!-- 6. WORKED EXAMPLES -->
       <section class="l-sec" id="examples">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 10 min</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Attempt each problem on paper first, then check the step-by-step WAEC/JAMB working.</p>
+        <p class="intro">Try each on paper first, then check the working.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Ohm’s law, current &amp; total electric charge flow</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Current, power and charge</h4></div>
           <div class="example-body">
-            <p class="q">A constantan coil of resistance 8.0 Ω is connected across a steady potential difference of 12.0 V for 2.5 minutes. Calculate: (a) the current flowing through the coil, and (b) the total quantity of electric charge that passes through a cross-section of the coil in that time.</p>
+            <p class="q">A workshop pressing-iron element of resistance 48 Ω runs from the 240 V mains. Find (a) the current, (b) its power, and (c) the charge that flows in 2.0 minutes.</p>
             <ol class="steps-sol">
-              <li><strong>Current I from Ohm’s law:</strong> <code>I = V ÷ R = 12.0 ÷ 8.0 = 1.50 A</code>.</li>
-              <li><strong>Convert time to SI unit (seconds):</strong> <code>t = 2.5 × 60 = 150 s</code>.</li>
-              <li><strong>Total charge Q:</strong> <code>Q = I × t = 1.50 × 150 = 225 C</code>.</li>
+              <li><strong>Current:</strong> <code>I = V/R = 240 ÷ 48 = 5.0 A</code>.</li>
+              <li><strong>Power:</strong> <code>P = IV = 5.0 × 240 = 1 200 W = 1.2 kW</code>.</li>
+              <li><strong>Charge:</strong> <code>t = 2.0 min = 120 s</code>, so <code>Q = It = 5.0 × 120 = 600 C</code>.</li>
             </ol>
-            <div class="answer-line">(a) I = 1.50 A &nbsp;·&nbsp; (b) Q = 225 C</div>
+            <div class="answer-line">I = 5.0 A · P = 1.2 kW · Q = 600 C</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Calculating resistivity ρ and diameter scaling</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Resistivity, then a second wire</h4></div>
           <div class="example-body">
-            <p class="q">A uniform resistance wire of length 1.50 m and diameter 0.40 mm has a resistance of 3.60 Ω. Calculate: (a) the resistivity ρ of the alloy, and (b) the resistance of a second wire of the same alloy having length 3.00 m and diameter 0.80 mm. (Take π = 3.142)</p>
+            <p class="q">A nichrome heating wire is 2.00 m long with area 5.0 × 10⁻⁷ m², and a V–I test gives it a resistance of 4.40 Ω. (a) Find the resistivity. (b) A second wire of the same material is 3.00 m long but twice the diameter; find its resistance.</p>
             <ol class="steps-sol">
-              <li><strong>Convert diameter to metres &amp; find area A:</strong> <code>d = 0.40 mm = 4.0 × 10⁻⁴ m</code>. Area <code>A = πd² ÷ 4 = 3.142 × (4.0 × 10⁻⁴)² ÷ 4 = 1.257 × 10⁻⁷ m²</code>.</li>
-              <li><strong>Resistivity ρ:</strong> <code>ρ = RA ÷ L = (3.60 × 1.257 × 10⁻⁷) ÷ 1.50 = 3.02 × 10⁻⁷ Ω m</code>.</li>
-              <li><strong>Second wire resistance R₂:</strong> using <code>R₂ ÷ R₁ = (L₂ ÷ L₁) × (d₁ ÷ d₂)² = (3.00 ÷ 1.50) × (0.40 ÷ 0.80)² = 2 × (0.5)² = 0.50</code>. Therefore <code>R₂ = 0.50 × 3.60 = 1.80 Ω</code>.</li>
+              <li><strong>Resistivity:</strong> <code>ρ = RA/L = (4.40 × 5.0 × 10⁻⁷) ÷ 2.00</code>.</li>
+              <li><code>= (2.20 × 10⁻⁶) ÷ 2.00 = 1.1 × 10⁻⁶ Ω m</code>.</li>
+              <li><strong>Second wire:</strong> twice the diameter is four times the area, so <code>R₂ = R₁ × (L₂/L₁) × (d₁/d₂)² = 4.40 × (3.00/2.00) × (1/2)²</code>.</li>
+              <li><code>= 4.40 × 1.50 × 0.25 = 1.65 Ω</code>.</li>
             </ol>
-            <div class="answer-line">(a) ρ = 3.02 × 10<sup>−7</sup> Ω m &nbsp;·&nbsp; (b) R<sub>2</sub> = 1.80 Ω</div>
+            <div class="answer-line">ρ = 1.1 × 10⁻⁶ Ω m · R₂ = 1.65 Ω</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>WAEC Paper 3 V–I graph slope &amp; precautions</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Resistance from a V–I graph</h4></div>
           <div class="example-body">
-            <p class="q">In an Ohm’s law practical, a candidate plots potential difference V (vertical axis) against current I (horizontal axis). Two widely separated points on the line of best fit are (0.25 A, 0.55 V) and (1.15 A, 2.53 V). Determine the resistance R of the wire from the slope and state two acceptable precautions.</p>
+            <p class="q">A V–I graph for a wire passes through (0.20 A, 0.44 V) and (1.00 A, 2.20 V) on its line of best fit. Find the resistance.</p>
             <ol class="steps-sol">
-              <li><strong>Slope S = ΔV ÷ ΔI:</strong> <code>S = (2.53 − 0.55) ÷ (1.15 − 0.25) = 1.98 ÷ 0.90 = 2.20 Ω</code>.</li>
-              <li><strong>Precautions (past tense):</strong> (i) <em>“I removed the plug key immediately after each reading so the wire did not heat up.”</em> (ii) <em>“I ensured tight and clean electrical connections at all terminals.”</em></li>
+              <li>Choose two well-separated points on the line.</li>
+              <li><code>ΔV = 2.20 − 0.44 = 1.76 V</code>; <code>ΔI = 1.00 − 0.20 = 0.80 A</code>.</li>
+              <li><code>R = slope = ΔV/ΔI = 1.76 ÷ 0.80 = 2.20 Ω</code>.</li>
             </ol>
-            <div class="answer-line">Resistance R = Slope = 2.20 Ω</div>
+            <div class="answer-line">R = 2.20 Ω (straight line through the origin, so the wire is ohmic)</div>
           </div>
         </article>
       </section>
 
-      <!-- ================= 7. BRIDGE ================= -->
+      <!-- 7. BRIDGE -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Back to Aba: <em>upgrade Kelechi’s jumper cable!</em></h2>
-        <p class="intro">Apply <code>R = 4ρL ÷ (πd²)</code> step by step to transform Rig B from a high-resistance thin constantan wire into a low-resistance heavy-duty copper jumper lead.</p>
-
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Rig A · Heavy-Duty Reference <small style="color:var(--muted);font-weight:500">· L = 0.50 m, d = 0.80 mm</small></h4>
-              <div class="clock-well">
-                <div style="width:80%;height:18px;border-radius:9px;background:linear-gradient(90deg,#d97706,#fbbf24);box-shadow:0 0 18px rgba(251,191,36,.6)"></div>
-              </div>
-              <div class="vt-count"><span id="time-a">R = 0.50 Ω · I = 4.00 A</span><small>bright lamp / strong crank</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Rig B · Kelechi's Test Lead <small style="color:var(--muted);font-weight:500" id="len-b-label">· L = 1.00 m, d = 0.40 mm</small></h4>
-              <div class="clock-well">
-                <div style="width:80%;height:8px;border-radius:4px;background:#94a3b8"></div>
-              </div>
-              <div class="vt-count"><span id="time-b">R = 4.00 Ω · I = 0.50 A</span><small>choked current!</small></div>
-            </div>
-          </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Double Diameter d (0.40 → 0.80 mm)</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Halve Length L (1.00 → 0.50 m)</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Switch Alloy to Pure Copper</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset cables</button>
-          </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Rig A delivers 4.00 A, while Rig B chokes at 0.50 A. Start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Aba: <em>settle Tobe's claim</em></h2>
+        <p class="intro">Test Emeka's two cables — thin (d = 0.30 mm) and thick (d = 1.20 mm), same material and length. Answer the three steps.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
         </div>
-
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 1:</strong> Ohm’s law (<code>V = IR</code>) holds only when temperature is kept constant so lattice vibrations do not rise. Meanwhile, wire geometry controls resistance through <strong>R = 4ρL ÷ (πd²)</strong> — doubling diameter cuts resistance to <strong>one-quarter</strong>!</p>
+          <p><strong>The big idea of Lesson 1:</strong> resistance grows with length and material but falls as the square of the diameter. The hot wire is the thin one, not a "bad" one — and Ohm's law only holds while the temperature stays steady.</p>
         </div>
       </section>
 
-      <!-- ================= 8. QUIZ ================= -->
+      <!-- 8. QUIZ -->
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
-        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
         </div>
       </section>
 
-      <!-- ================= 9. REFLECT ================= -->
+      <!-- 9. REFLECT -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 1.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 1.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can state Ohm's law (V = IR) and explain why temperature must remain constant.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can distinguish ohmic conductors from non-ohmic filament lamps and diodes.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can use R = ρL/A = 4ρL/(πd²) to calculate resistivity and diameter ratios.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can find resistance R from the slope of a WAEC V–I practical graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can state acceptable past-tense WAEC electricity precautions.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can define current and p.d. with their units.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can state Ohm's law and its condition.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can tell ohmic from non-ohmic from a V–I graph.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can find a wire's resistance from R = ρL/A and R ∝ L/d².</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can read a resistance from a graph's slope.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
         <div class="aq" data-answer="l01-exit">
-          <div class="aq-top"><h4>In two sentences: why does doubling the diameter of a wire divide its resistance by 4 instead of 2, and why must the plug key be opened between readings in an Ohm's law practical?</h4><span class="marks">2 marks</span></div>
+          <div class="aq-top"><h4>A 1.5 m, 0.50 mm² wire has resistance 3.0 Ω. Find its resistivity.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>Cross-sectional area is proportional to diameter squared (<code>A = πd²/4</code>), so doubling <code>d</code> quadruples <code>A</code> and divides <code>R = ρL/A</code> by 4 <b>(1)</b>. Opening the plug key between readings prevents continuous current from heating the wire and increasing its resistance <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p><code>ρ = RA/L = (3.0 × 0.50 × 10⁻⁶) ÷ 1.5 = 1.0 × 10⁻⁶ Ω m</code> <b>(2)</b>.</p></div>
           </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and write down everything you remember, then tick each: <strong>I = Q/t · V = W/Q</strong> · Ohm's law and its condition · <strong>R = ρL/A</strong>, A = πd²/4, R ∝ L/d² · the slope of V–I is R · ohmic vs non-ohmic shapes.</p>
         </div>
       </section>
 
-      <!-- ================= 10. ASSIGNMENT ================= -->
+      <!-- 10. ASSIGNMENT -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>Ohm’s Law &amp; Resistivity</em></h2>
-        <p class="intro">Complete Part A (home cable audit) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
-        <div class="assign-head no-print">
-          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
-        </div>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Ohm's Law &amp; Resistivity</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B from 03-questions.md § Lesson 01</strong>. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
 
-        <h3>Part A · Home Appliance Cable Audit</h3>
+        <h3>Part A · Home investigation</h3>
         <div class="aq" data-answer="l01-a1">
-          <div class="aq-top"><h4>Compare the flexible power cord of a high-power pressing iron or electric kettle (≈ 1500–2000 W) with a phone charger cable. Why must the pressing iron cord use much thicker copper cores? Explain using R = ρL/A and Joule heating I²R.</h4><span class="marks">Practical task</span></div>
+          <div class="aq-top"><h4>Pencil-line resistors: shade a narrow and a wide graphite strip of the same length, measure the resistance with a multimeter at 2, 4, 6, 8 and 10 cm, and plot R against L for both. What do the two lines show?</h4><span class="marks">Practical task</span></div>
           <textarea class="l-textarea" placeholder="Your observation and explanation…" aria-label="Part A answer"></textarea>
           <details class="reveal-box solution">
             <summary>Sample answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>A pressing iron draws a large current (<code>8–10 A</code>). Using a thick copper core (large cross-sectional area <code>A</code>) keeps cable resistance <code>R = ρL/A</code> very low so the cord does not overheat (<code>P = I²R</code>) or melt its insulation.</p></div>
+            <div class="reveal-body"><p>For each strip, R rises in proportion to length, so R against L is roughly a straight line through the origin (R ∝ L). The wide strip, with about three times the area, has about one third of the narrow strip's resistance at each length (R ∝ 1/A). Like Emeka's thin jumper cable, the narrow strip has the smaller cross-section, the larger resistance, and heats more at the same current.</p></div>
           </details>
         </div>
 
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <h3>Part B · Written paper (30 marks)</h3>
         <div class="aq" data-answer="l01-b1">
-          <div class="aq-top"><h4>1. (a) State Ohm's law. (b) Explain using the free-electron lattice model why a tungsten filament lamp disobeys Ohm's law at high voltages. (c) A constantan wire of length 2.00 m and diameter 0.50 mm carries a current of 0.40 A when connected across a 1.60 V cell. Calculate its resistance and resistivity.</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
+          <div class="aq-top"><h4>b1. Define (a) electric current; (b) potential difference between two points; (c) resistance of a conductor.</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="b1 answer"></textarea>
           <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Current <code>I</code> through a metallic conductor is directly proportional to potential difference <code>V</code> across its ends, provided temperature and other physical conditions remain constant <b>(2)</b>.<br>
-            (b) At high voltage and current, the tungsten filament heats up; positive lattice ions vibrate with larger amplitude, colliding more frequently with drifting electrons and increasing resistance <code>R</code> <b>(3)</b>.<br>
-            (c) <code>R = V ÷ I = 1.60 ÷ 0.40 = 4.00 Ω</code> <b>(2)</b>. Area <code>A = πd²/4 = 3.142 × (5.0 × 10⁻⁴)² ÷ 4 = 1.964 × 10⁻⁷ m²</code> <b>(1)</b>. Resistivity <code>ρ = RA ÷ L = (4.00 × 1.964 × 10⁻⁷) ÷ 2.00 = 3.93 × 10⁻⁷ Ω m</code> <b>(2)</b>.</p>
+            <p>(a) Current is the rate at which charge flows past a point, I = Q/t; unit the ampere. <b>(1)</b><br>(b) The p.d. between two points is the electrical energy changed to other forms per coulomb that moves between them, V = W/Q; unit the volt. <b>(1)</b><br>(c) Resistance is the ratio of the p.d. across a conductor to the current through it, R = V/I; unit the ohm. <b>(1)</b></p>
           </div></details>
         </div>
 
-        <div class="aq" data-answer="l01-b2">
-          <div class="aq-top"><h4>2. Two wires P and Q made of the same alloy have lengths in the ratio 3 : 1 and diameters in the ratio 2 : 1. If the resistance of wire P is 6.0 Ω, calculate the resistance of wire Q.</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="Your calculation…" aria-label="Question 2 answer"></textarea>
+        <div class="aq" data-answer="l01-b4">
+          <div class="aq-top"><h4>b4. A uniform wire has resistivity ρ, length L and diameter d. (a) Show that R = 4ρL/(πd²). (b) Hence show that twice the diameter gives one quarter of the resistance.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="b4 answer"></textarea>
           <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>Using <code>R = 4ρL ÷ (πd²)</code>, for the same alloy (same <code>ρ</code>): <code>R_P ÷ R_Q = (L_P ÷ L_Q) × (d_Q ÷ d_P)²</code> <b>(4)</b>.<br>
-            Substitute <code>L_P/L_Q = 3/1</code> and <code>d_Q/d_P = 1/2</code>: <code>6.0 ÷ R_Q = 3 × (1/2)² = 3/4 = 0.75</code> <b>(4)</b>.<br>
-            Therefore <code>R_Q = 6.0 ÷ 0.75 = 8.0 Ω</code> <b>(2)</b>.</p>
+            <p>(a) The cross-section is a circle, A = π(d/2)² = πd²/4. <b>(1)</b> Substituting into R = ρL/A gives R = ρL ÷ (πd²/4) = 4ρL/(πd²). <b>(1)</b><br>(b) With d₂ = 2d, the area is π(2d)²/4 = 4 × πd²/4, four times as large. <b>(1)</b> So R₂ = 4ρL/(π(2d)²) = 4ρL/(4πd²) = R/4. <b>(1)</b></p>
           </div></details>
         </div>
 
-        <div class="aq" data-answer="l01-b3">
-          <div class="aq-top"><h4>3. In a WAEC Paper 3 Ohm's law practical, a student records (I = 0.20 A, V = 0.44 V) and (I = 1.00 A, V = 2.20 V). (a) Calculate the gradient of the V–I graph and state what physical quantity it represents. (b) State two acceptable precautions in the past tense.</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 3 answer"></textarea>
+        <div class="aq" data-answer="l01-b5">
+          <div class="aq-top"><h4>b5. A bench heater needs a 6.0 Ω coil of constantan (ρ = 4.9 × 10⁻⁷ Ω m), diameter 0.50 mm, across 12.0 V. Find (a) the area, (b) the length, (c) the current, (d) the power, (e) the charge in 2.5 min.</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (e) …" aria-label="b5 answer"></textarea>
           <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Gradient <code>S = (2.20 − 0.44) ÷ (1.00 − 0.20) = 1.76 ÷ 0.80 = 2.20 Ω</code> <b>(4)</b>. It represents the electrical resistance <code>R</code> of the conductor <b>(2)</b>.<br>
-            (b) 1. <em>“I ensured tight and clean electrical connections at all terminals.”</em> <b>(2)</b><br>
-            2. <em>“I removed the plug key immediately after each reading to prevent heating of the resistance wire.”</em> <b>(2)</b></p>
+            <p>(a) A = πd²/4 = π × (5.0 × 10⁻⁴)² ÷ 4 = 1.96 × 10⁻⁷ m². <b>(1)</b><br>(b) L = RA/ρ = (6.0 × 1.96 × 10⁻⁷) ÷ (4.9 × 10⁻⁷) = 2.40 m. <b>(1)</b><br>(c) I = V/R = 12.0 ÷ 6.0 = 2.0 A. <b>(1)</b><br>(d) P = IV = 2.0 × 12.0 = 24 W. <b>(1)</b><br>(e) t = 150 s; Q = It = 2.0 × 150 = 300 C. <b>(1)</b></p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l01-b6">
+          <div class="aq-top"><h4>b6. A wire of length 0.80 m and diameter 0.30 mm gives: I/A 0.10, 0.20, 0.30, 0.40, 0.50 and V/V 0.36, 0.71, 1.09, 1.43, 1.80. (a) Which axis is V? (b) How does the graph show it is ohmic? (c) Find R from a large triangle. (d) Find the resistivity.</h4><span class="marks">6 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) … (d) …" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) V on the vertical axis, I on the horizontal. <b>(1)</b><br>(b) The points lie on a straight line through the origin, so V ∝ I (V/I constant). <b>(1)</b><br>(c) Using (0.05 A, 0.18 V) and (0.50 A, 1.80 V): slope = (1.80 − 0.18) ÷ (0.50 − 0.05) = 1.62 ÷ 0.45 <b>(1)</b> → R = 3.6 Ω. <b>(1)</b><br>(d) A = πd²/4 = π × (3.0 × 10⁻⁴)² ÷ 4 = 7.07 × 10⁻⁸ m². <b>(1)</b> ρ = RA/L = (3.6 × 7.07 × 10⁻⁸) ÷ 0.80 = 3.2 × 10⁻⁷ Ω m. <b>(1)</b></p>
           </div></details>
         </div>
 
         <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
           <a class="btn btn-ghost" href="../../index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Unit Welcome Hub</a>
-          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 — EMF, Lost Volts &amp; Internal Resistance →</a>
+          <a class="btn btn-tour" href="../lesson-02/index.html">Next: Lesson 2 — EMF &amp; Internal Resistance →</a>
         </div>
       </section>
     </main>
@@ -601,9 +614,13 @@
 
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/dc-circuit-bench.js"></script>
+  <script src="../../assets/js/dc-concept-zoom.js"></script>
+  <script src="../../assets/js/auto-workshop-props.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="../../assets/js/story-scene.js"></script>
   <script src="story.js"></script>
   <script src="bench.js"></script>
@@ -614,5 +631,6 @@
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
 </body>
 </html>

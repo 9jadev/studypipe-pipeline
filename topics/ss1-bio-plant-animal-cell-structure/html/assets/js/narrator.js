@@ -73,6 +73,7 @@
         '<div class="narr-body">' +
           '<div class="narr-chapter"><span class="title">Welcome</span><span class="count"></span></div>' +
           '<p class="narr-caption" aria-live="polite"></p>' +
+          '<p class="narr-novoice" hidden>No voice on this device, so the narrator shows captions only. Open the gear for voice settings.</p>' +
           '<div class="narr-wait"><i></i><span class="wait-text">Your turn!</span></div>' +
         '</div>' +
         '<div class="narr-win">' +
@@ -181,12 +182,19 @@
       ? (hasNG ? "Nigerian English (en-NG) voice active · offline voices marked." : "Nigerian English (en-NG) prioritised · install en-NG in device TTS settings for local accent.")
       : "No voice found on this device. Captions will play on their own.";
   }
+  function showNoVoice(on) {
+    var n = dock.querySelector(".narr-novoice");
+    if (n) n.hidden = !on;
+  }
   if (speechOK) {
     loadVoices();
-    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", loadVoices);
-    else synth.onvoiceschanged = loadVoices;
+    showNoVoice(!voices.length);
+    var onVoices = function () { loadVoices(); showNoVoice(!voices.length); };
+    if (typeof synth.addEventListener === "function") synth.addEventListener("voiceschanged", onVoices);
+    else synth.onvoiceschanged = onVoices;
   } else {
     el.note.textContent = "This browser can't speak aloud. Captions will play on their own.";
+    showNoVoice(true);
   }
   el.voice.addEventListener("change", function () {
     voice = voices.filter(function (v) { return v.name === el.voice.value; })[0] || voice;
@@ -693,20 +701,18 @@
     for (var i = 0; i < (n || 18); i++) {
       var edge = Math.random();
       var px = r.left + Math.random() * r.width, py = r.top + Math.random() * r.height;
-      py = r.top - 10; // top edge only, so sparkles never land on the letters
-      if (edge < 0.15) px = r.left; else if (edge > 0.85) px = r.left + r.width;
+      if (edge < 0.25) py = r.top; else if (edge < 0.5) py = r.top + r.height; else if (edge < 0.75) px = r.left; else px = r.left + r.width;
       var ang = Math.atan2(py - cy, px - cx), dist = 30 + Math.random() * 70;
-      // never fly downward into the text that follows the target
-      spawn(px + sx, py + sy, { dx: Math.cos(ang) * dist, dy: -Math.abs(Math.sin(ang) * dist), dur: 0.9 + Math.random() * 0.7 });
+      spawn(px + sx, py + sy, { dx: Math.cos(ang) * dist, dy: Math.sin(ang) * dist, dur: 0.9 + Math.random() * 0.7 });
     }
   }
   function twinkleOn(node) {
     var b = node.getBoundingClientRect();
     var sx = window.scrollX || window.pageXOffset, sy = window.scrollY || window.pageYOffset;
     for (var i = 0; i < 3; i++) {
-      // keep twinkles just outside the text box so they never sit on top of letters
-      var x = b.left + Math.random() * b.width;
-      var y = b.top - 14; // above the heading only: below it sits body text
+      var x = b.left + (Math.random() < 0.5 ? -6 : b.width + 6) * (Math.random() < 0.3 ? 0.5 : 1);
+      x = b.left + Math.random() * b.width;
+      var y = b.top + (Math.random() < 0.5 ? 0 : b.height);
       spawn(x + sx, y + sy, { twinkle: true, size: 10 + Math.random() * 10, dur: 1.4 + Math.random() * 0.6 });
     }
   }
@@ -723,7 +729,7 @@
           if (!seen.has(e.target)) {
             seen.add(e.target);
             setTimeout(function () {
-              burst(e.target.getBoundingClientRect(), 10);
+              burst(e.target.getBoundingClientRect(), 16);
               e.target.classList.remove("hook-glint"); void e.target.offsetWidth; e.target.classList.add("hook-glint");
             }, 500);
           }
@@ -798,6 +804,8 @@
   window.StudyNarrator = {
     start: function () { setMini(false); go(0, 0, true); },
     goTo: function (ch, st) { setMini(false); go(ch, st || 0, true); },
+    pause: function () { stopSpeech(); setPlaying(false); },
+    isPlaying: function () { return !!state.playing; },
     close: close, minimize: minimize, expand: expand, burst: burst
   };
 })();

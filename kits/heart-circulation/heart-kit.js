@@ -1,5 +1,5 @@
 /* =========================================================
-   StudyPipe · HeartKit v2 — anatomical 3D cardiovascular & haematology builders
+   StudyPipe · HeartKit v2.1 — anatomical 3D cardiovascular & haematology builders
    Classic script (no modules), 100% offline, uses window.THREE (+ window.SceneKit for labels).
 
    Every builder returns a THREE.Group g with:
@@ -16,8 +16,12 @@
        g.userData.phase (0..1), g.userData.beat = { aSys, vSys, avOpen, slOpen }
    circuitCompare(o) setState({ mode: "double"|"single"|"incomplete"|"open"|"both" })
    cube(o)           setState({ L (mm), spread })
-   valve(o)          setState({ open: 0..1 | "open"|"closed"|"systole", cusps: 2|3 })
-   vessels(o)        setState({ focus: "artery"|"vein"|"capillary"|null })
+   valve(o)          setState({ open: 0..1 | "open"|"closed"|"systole", cusps: 2|3, chordaeCut: bool })
+                     (v2.1) chordaeCut: cords snap, flaps evert into the atrium and a leak jet streams back when closed;
+                     g.userData.leak (0..1) reports the jet strength
+   vessels(o)        setState({ focus: "artery"|"vein"|"capillary"|null })  (v2.1: implemented, spotlight + dim the rest)
+   bloodSmear(o)     setState({ clot, sickle, hb, citrate })  (v2.1) citrate: Ca2+ removed, platelets still gather,
+                     fibrin fails to form (a few short broken stubs), cells are not drawn in
    capillaryBed(o)   setState({ mode: "normal"|"kwash"|"congest"|"blocked", probe: 0..1|null, nfp })
    bloodSmear(o)     setState({ clot, sickle, hb })  · setClot(bool)
    ========================================================= */
@@ -1222,6 +1226,7 @@
       bloodMat.color.setHex(n === 3 ? 0x5b7cff : 0xff5a66);
       bloodMat.emissive.setHex(n === 3 ? 0x1d3bb3 : 0xa30d1d);
     }
+    var cutK = 0;   // v2.1: 0 intact cords .. 1 cords cut (flaps evert when closed)
     function cuspPoint(cu, s, tt, open, out) {
       var th = cu.m + (s * 2 - 1) * cu.hw * (1 - 0.32 * open * tt);
       var rx = Math.cos(th) * R, rz = Math.sin(th) * R;
@@ -1230,7 +1235,7 @@
       var dist = R * Math.abs(th - cu.m) / cu.hw;
       var cx = Math.cos(lineAng) * dist, cz = Math.sin(lineAng) * dist;
       var px = rx + (cx - rx) * tt, pz = rz + (cz - rz) * tt;
-      var py = RY + 0.07 * Math.sin(Math.PI * tt);
+      var py = RY + 0.07 * Math.sin(Math.PI * tt) + cutK * (1 - open) * 0.34 * tt * tt;
       // open: hanging down along the ventricle wall
       var orad = R * (1 - 0.12 * tt) * (1 - 0.1 * Math.cos((s * 2 - 1) * Math.PI / 2));
       var ox = Math.cos(th) * orad, oz = Math.sin(th) * orad, oy = RY - 0.52 * tt * (0.75 + 0.25 * Math.sin(s * Math.PI));
@@ -1246,8 +1251,20 @@
       bm.userData = { x: Math.cos(a) * rr, z: Math.sin(a) * rr, y: RY + 0.5 - br() * 1.2, spin: br() * 6 };
       g.add(bm); blood.push(bm);
     }
-    var state = { cusps: o.cusps || 2, mode: "auto", open: o.open != null ? +o.open : 0.5 };
+    var state = { cusps: o.cusps || 2, mode: "auto", open: o.open != null ? +o.open : 0.5, cut: !!o.chordaeCut };
     build(state.cusps);
+    // v2.1 leak jet: red cells streaming back up into the atrium when the cords are cut and the valve is shut
+    var jetMat = new THREE.MeshStandardMaterial({ color: 0xff3b4a, roughness: 0.3, emissive: 0xff2030, emissiveIntensity: 0.7, transparent: true, opacity: 0 });
+    var jet = [], jg = new THREE.SphereGeometry(0.03, 8, 6), jr = rng(23);
+    var jetGroup = new THREE.Group(); g.add(jetGroup);
+    for (var jk = 0; jk < 16; jk++) {
+      var jm = new THREE.Mesh(jg, jetMat);
+      jm.userData = { u: jr(), a: jr() * TAU, r: jr(), sp: 0.7 + jr() * 0.5 };
+      jetGroup.add(jm); jet.push(jm);
+    }
+    parts.leakJet = jetGroup;
+    var cutLabel = o.labels === false ? null : label("cords cut: flaps blown back", { h: 0.07, bg: "rgba(190,24,45,0.92)" });
+    if (cutLabel) { cutLabel.position.set(0, RY + 0.78, 0.3); cutLabel.visible = false; g.add(cutLabel); }
 
     g.userData.parts = parts;
     g.setCusps = function (n) { state.cusps = n === 3 ? 3 : 2; build(state.cusps); };
@@ -1256,6 +1273,7 @@
       if (typeof st === "string") { state.mode = st; return; }
       if (typeof st === "number") { state.mode = "manual"; state.open = st; return; }
       if (st.cusps != null && st.cusps !== state.cusps) g.setCusps(st.cusps);
+      if (st.chordaeCut != null) state.cut = !!st.chordaeCut;
       if (st.open != null) {
         if (typeof st.open === "number") { state.mode = "manual"; state.open = Math.max(0, Math.min(1, st.open)); }
         else state.mode = st.open ? "open" : "closed";
@@ -1267,6 +1285,7 @@
       var target = state.mode === "open" ? 1 : state.mode === "closed" ? 0 : state.mode === "manual" ? state.open : (Math.sin(t * 3) > 0 ? 1 : 0);
       curOpen += (target - curOpen) * Math.min(1, dt * 10);
       var op = curOpen;
+      cutK += ((state.cut ? 1 : 0) - cutK) * Math.min(1, dt * 5);
       cusps.forEach(function (cu) {
         var pos = cu.mesh.geometry.attributes.position;
         for (var i = 0; i <= NS; i++) for (var j = 0; j <= NT; j++) {
@@ -1279,7 +1298,32 @@
       });
       chords.forEach(function (c) {
         cuspPoint(c.cusp, c.s, 1, op, tv);
-        between(c.mesh, tv, c.pap.tip);
+        if (state.cut) {
+          // snapped cord: short stub on the papillary muscle, loose end on the flap
+          tw.copy(tv).sub(c.pap.tip).multiplyScalar(0.18).add(c.pap.tip);
+          between(c.mesh, c.pap.tip, tw);
+          if (!c.stub) {
+            c.stub = new THREE.Mesh(c.mesh.geometry, chordMat); chordGroup.add(c.stub);
+          }
+          c.stub.visible = true;
+          tw.copy(tv); tw.y -= 0.1 * (1 - op) + 0.04;
+          between(c.stub, tv, tw);
+        } else {
+          if (c.stub) c.stub.visible = false;
+          between(c.mesh, tv, c.pap.tip);
+        }
+      });
+      // leak jet (shut valve + cut cords)
+      var leak = state.cut ? Math.max(0, 1 - op * 2) * cutK : 0;
+      g.userData.leak = leak;
+      jetMat.opacity = 0.9 * leak;
+      jetGroup.visible = leak > 0.02;
+      if (cutLabel) cutLabel.visible = cutK > 0.5;
+      jet.forEach(function (m) {
+        var d = m.userData;
+        d.u += dt * d.sp * 0.9; if (d.u > 1) d.u -= 1;
+        var spread = 0.03 + 0.2 * d.u * d.r;
+        m.position.set(Math.cos(d.a) * spread, RY - 0.25 + d.u * 0.95, Math.sin(d.a) * spread);
       });
       chordMat.emissiveIntensity = 0.3 + 0.6 * (1 - op);
       blood.forEach(function (b) {
@@ -1395,11 +1439,59 @@
       g.add(a, a2, v, v2, c, c2);
     }
 
+    // v2.1 focus: spotlight ring + pop-out on the chosen vessel, the others dim
+    var groups = { artery: art, vein: vein, capillary: cap }, fmats = {}, seenM = [];
+    Object.keys(groups).forEach(function (k) {
+      fmats[k] = [];
+      groups[k].traverse(function (m) {
+        var ms = m.material ? (Array.isArray(m.material) ? m.material : [m.material]) : [];
+        ms.forEach(function (mt) {
+          if (seenM.indexOf(mt) >= 0) return;
+          seenM.push(mt);
+          fmats[k].push({ m: mt, op: mt.opacity, tr: mt.transparent, dw: mt.depthWrite });
+        });
+      });
+    });
+    var spot = new THREE.Mesh(new THREE.TorusGeometry(0.46, 0.014, 8, 56), glowMat(0xffb23f, 0.9));
+    spot.position.z = 0.14; spot.visible = false; g.add(spot);
+    parts.spotlight = spot;
+    var fstate = { focus: null }, fk = { artery: 0, vein: 0, capillary: 0 }, fdim = { artery: 1, vein: 1, capillary: 1 };
+    var baseScale = { artery: art.scale.clone(), vein: vein.scale.clone(), capillary: cap.scale.clone() };
     g.userData.parts = parts;
-    g.userData.setState = function () {};
+    g.userData.setState = function (st) {
+      if (!st) return;
+      if (typeof st === "string") st = { focus: st };
+      if ("focus" in st) fstate.focus = (st.focus && groups[st.focus]) ? st.focus : null;
+    };
+    g.userData.focus = null;
     g.userData.update = function (dt, t) {
+      var dd = Math.min(dt || 0.016, 0.05);
+      Object.keys(groups).forEach(function (k) {
+        var on = fstate.focus === k, dim = fstate.focus && !on ? 0.3 : 1;
+        fk[k] += ((on ? 1 : 0) - fk[k]) * Math.min(1, dd * 8);
+        var nd = fdim[k] + (dim - fdim[k]) * Math.min(1, dd * 8);
+        if (Math.abs(nd - fdim[k]) > 0.002 || (dim === 1 && fdim[k] !== 1)) {
+          fdim[k] = Math.abs(1 - nd) < 0.01 ? 1 : nd;
+          fmats[k].forEach(function (e) {
+            if (fdim[k] === 1) { e.m.opacity = e.op; e.m.transparent = e.tr; e.m.depthWrite = e.dw; }
+            else { e.m.transparent = true; e.m.opacity = e.op * fdim[k]; e.m.depthWrite = false; }
+            e.m.needsUpdate = true;
+          });
+        }
+      });
+      g.userData.focus = fstate.focus;
+      var fg = fstate.focus && groups[fstate.focus];
+      spot.visible = !!fg;
+      if (fg) {
+        spot.position.x = fg.position.x; spot.position.y = fg.position.y;
+        var sp = 1 + 0.06 * Math.sin(t * 5); spot.scale.set(sp, sp * (fstate.focus === "capillary" ? 0.5 : 1), 1);
+        spot.rotation.z = t * 0.5;
+        spot.scale.x *= fstate.focus === "capillary" ? 1.9 : 1;
+      }
       var pulse = 1 + 0.045 * Math.max(0, Math.sin(t * 6));
-      art.scale.set(pulse, pulse, 1);
+      art.scale.set(pulse * (1 + 0.18 * fk.artery), pulse * (1 + 0.18 * fk.artery), 1);
+      vein.scale.set(baseScale.vein.x * (1 + 0.18 * fk.vein), baseScale.vein.y * (1 + 0.18 * fk.vein), 1);
+      cap.scale.setScalar(1 + 0.18 * fk.capillary);
       // vein valve: open while blood moves toward the heart, closes when it tries to flow back
       var open = Math.sin(t * 1.6) > -0.2 ? 1 : 0;
       vCusps.forEach(function (c) {
@@ -1699,9 +1791,24 @@
         var s = label(L[0], { h: 0.085, bg: L[3] }); s.position.set(L[1], L[2], 0.2); g.add(s);
       });
     }
-    var state = { clot: !!o.clot, sickle: false, hb: 15, k: o.clot ? 1 : 0 };
+    // v2.1 citrate: Ca2+ removed -> platelets gather but fibrin never forms (only short broken stubs)
+    var stubGroup = new THREE.Group(), stubMat = std(0xfde68a, 0.5, { transparent: true, opacity: 0.55 });
+    for (var sb = 0; sb < 7; sb++) {
+      var sa = sb * 0.9 + 0.3, sr = 0.55 + 0.1 * (sb % 3);
+      var sp0 = new V3(Math.cos(sa) * sr, Math.sin(sa) * sr, 0.07), sp1 = sp0.clone().add(new V3(Math.cos(sa + 1.2) * 0.07, Math.sin(sa + 1.2) * 0.07, 0));
+      stubGroup.add(tube([sp0, sp0.clone().lerp(sp1, 0.5).add(new V3(0.008, -0.008, 0.01)), sp1], 0.0045, stubMat, 8, 4));
+    }
+    stubGroup.visible = false; g.add(stubGroup);
+    parts.fibrinStubs = stubGroup;
+    var cLabel = o.labels === false ? null : label("citrate: no Ca2+, no fibrin", { h: 0.075, bg: "rgba(30,64,175,0.92)" });
+    if (cLabel) { cLabel.position.set(0, -0.82, 0.2); cLabel.visible = false; g.add(cLabel); }
+    var state = { clot: !!o.clot, sickle: false, hb: 15, k: o.clot ? 1 : 0, citrate: !!o.citrate, kp: o.clot ? 1 : 0 };
+    if (state.citrate) state.k = 0;
     function apply() {
-      fibrinGroup.visible = state.clot;
+      var form = state.clot && !state.citrate;
+      fibrinGroup.visible = form;
+      stubGroup.visible = state.clot && state.citrate;
+      if (cLabel) cLabel.visible = state.citrate && state.clot;
       rbcs.forEach(function (c) {
         var s = state.sickle && c.userData.sickle;
         c.userData.disc.visible = !s; c.userData.pal.visible = !s; c.userData.sk.visible = s;
@@ -1716,11 +1823,13 @@
       if (st.clot != null) state.clot = !!st.clot;
       if (st.sickle != null) state.sickle = !!st.sickle;
       if (st.hb != null) state.hb = +st.hb;
+      if (st.citrate != null) state.citrate = !!st.citrate;
       apply();
     };
     g.userData.update = function (dt, t) {
       dt = Math.min(dt || 0.016, 0.05);
-      state.k += ((state.clot ? 1 : 0) - state.k) * Math.min(1, dt * 2);
+      state.k += ((state.clot && !state.citrate ? 1 : 0) - state.k) * Math.min(1, dt * 2);
+      state.kp += ((state.clot ? 1 : 0) - state.kp) * Math.min(1, dt * 2);
       rbcs.forEach(function (c, i) {
         var h = c.userData.home;
         var jx = Math.sin(t * 0.7 + c.userData.ph) * 0.012, jy = Math.cos(t * 0.6 + c.userData.ph) * 0.012;
@@ -1730,7 +1839,7 @@
       });
       plats.forEach(function (p, i) {
         var h = p.userData.home;
-        p.position.set(h.x * (1 - 0.7 * state.k), h.y * (1 - 0.7 * state.k), 0.03);
+        p.position.set(h.x * (1 - 0.7 * state.kp), h.y * (1 - 0.7 * state.kp), 0.03);
       });
       neut.position.x = -0.42 + Math.sin(t * 0.4) * 0.02;
     };
@@ -1762,6 +1871,6 @@
     heart: heart, circuitCompare: circuitCompare, cube: cube, valve: valve,
     vessels: vessels, capillaryBed: capillaryBed, bloodSmear: bloodSmear,
     makeHighlighter: makeHighlighter, rbcGeo: rbcGeo,
-    version: 2
+    version: 2.1
   };
 })();

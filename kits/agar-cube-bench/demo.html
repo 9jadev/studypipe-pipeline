@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: agar-cube-bench</title>
+<style>
+  html,body{margin:0;height:100%;background:#0e1620;color:#e8eef6;font:14px/1.35 sans-serif}
+  .wrap{display:flex;flex-direction:column;height:100%}
+  #stage{position:relative;flex:1;min-height:300px}
+  #cv{width:100%;height:100%;display:block}
+  .bar{padding:8px;display:flex;flex-wrap:wrap;gap:6px;background:#16212e}
+  button{background:#26384d;color:#fff;border:0;border-radius:6px;padding:8px 10px;font-size:14px;min-height:36px}
+  button.on{background:#e04a8f}
+  #out{padding:6px 10px;background:#101a26;font-family:monospace;font-size:12px}
+</style>
+</head><body>
+<div class="wrap">
+  <div id="stage"><canvas id="cv"></canvas></div>
+  <div id="out"></div>
+  <div class="bar" id="ls"></div>
+  <div class="bar" id="ctl"></div>
+  <div class="bar" id="err"></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../../.agents/skills/lesson-renderer/assets/lesson-shell/assets/js/scene-kit.js"></script>
+<script src="agar-cube-bench.js"></script>
+<script>
+(function () {
+  var mode = /mode=dye/.test(location.search) ? "dye" : "acid";
+  var kit = null;
+  var stage = SceneKit.createStage({ root: document.getElementById("stage"), canvas: document.getElementById("cv"),
+    target: new THREE.Vector3(0.3, 0.7, 0.3), distance: 11.5, pitch: 0.5, yaw: 0.35, autoFit: false,
+    onFrame: function (dt, t) { if (kit) { kit.update(dt, t); showReading(); } } });
+  if (!stage) return;
+  var out = document.getElementById("out"), ls = document.getElementById("ls"), ctl = document.getElementById("ctl"), err = document.getElementById("err");
+  function btn(parent, text, fn, on) {
+    var b = document.createElement("button"); b.textContent = text; if (on) b.className = "on";
+    b.onclick = function () { fn(b); }; parent.appendChild(b); return b;
+  }
+  function showReading() {
+    var r = kit.reading();
+    out.textContent = mode === "acid"
+      ? "L=" + r.L_mm + " mm  SA:V=" + r.ratio.toFixed(2) + "  acid depth=" + r.depth_mm.toFixed(2) + " mm  pink core=" + r.core_mm.toFixed(1) +
+        " mm  pink vol=" + Math.round(r.pinkVolume) + " mm3  colourless=" + r.pctColourless.toFixed(1) + "%  t=" + r.t_min.toFixed(1) + " min"
+      : "L=" + r.L_mm + " mm  SA=" + r.SA + " mm2  V=" + r.V + " mm3  SA:V=" + r.ratio.toFixed(2) +
+        "  dye depth=" + r.depth_mm.toFixed(2) + " mm  undyed=" + (r.undyedFraction * 100).toFixed(1) + "%";
+  }
+  function setup() {
+    if (kit) { stage.rig.remove(kit); }
+    ls.innerHTML = ""; ctl.innerHTML = ""; err.innerHTML = "";
+    if (mode === "acid") {
+      kit = AgarCubeKit.create({ mode: "acid" });
+      [5, 10, 20, 30].forEach(function (L) { btn(ls, L + " mm", function () { kit.select(L); }); });
+      btn(ls, "Measure", function () { kit.measure(); });
+      btn(ctl, "Play 8 min", function () { kit.play(); });
+      btn(ctl, "Cut-away", function (b) { var on = !kit.getState().cutaway; kit.setState({ cutaway: on }); b.classList.toggle("on", on); }, true);
+      btn(ctl, "Dye mode (v1)", function () { mode = "dye"; setup(); });
+      ["lateLift", "flatOnFloor", "oversizedCube"].forEach(function (k) {
+        btn(err, k, function (b) { var e = {}; e[k] = !kit.getState().errors[k]; kit.setState({ errors: e }); b.classList.toggle("on", e[k]); });
+      });
+      ["acid", "measure", "measure-done"].forEach(function (n) { });
+      kit.addEventListener("acid-done", function (e) { console.log("event acid-done", JSON.stringify(e.reading)); });
+      kit.addEventListener("measure-done", function (e) { console.log("event measure-done", JSON.stringify(e.measured)); });
+    } else {
+      kit = AgarCubeKit.create({ L_mm: 6, t_min: 30, dyeDepth_mm: 1.0 });
+      AgarCubeKit.LEVELS.forEach(function (L) { btn(ls, "L = " + L + " mm", function () { kit.setState({ L_mm: L }); }); });
+      btn(ctl, "Play dye", function () { kit.play(); });
+      btn(ctl, "Cut-away", function (b) { var on = !kit.getState().cutaway; kit.setState({ cutaway: on }); b.classList.toggle("on", on); }, true);
+      btn(ctl, "Dye 2 mm", function () { kit.setState({ dyeDepth_mm: 2 }); });
+      btn(ctl, "Dye 1 mm", function () { kit.setState({ dyeDepth_mm: 1 }); });
+      btn(ctl, "Acid mode (v2)", function () { mode = "acid"; setup(); });
+      kit.addEventListener("diffusion-done", function (e) { console.log("event diffusion-done", JSON.stringify(e.reading)); });
+    }
+    stage.rig.add(kit); window.kit = kit;
+  }
+  setup(); stage.start();
+  window.demoStage = stage;
+})();
+</script>
+</body></html>

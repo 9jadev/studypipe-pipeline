@@ -220,24 +220,6 @@ body.narr-active:not(.narr-minimised) .hero { padding-bottom: 140px; }
 @media (max-width: 720px) {
   .narr-dock { width: calc(100% - 16px); bottom: max(8px, env(safe-area-inset-bottom)); }
   .narr-dock.mini { right: max(8px, env(safe-area-inset-right)); max-width: calc(100% - 16px); }
-  .narr-pill {
-    padding: 6px 14px 6px 8px;
-    font-size: 13.5px;
-    gap: 10px;
-    background: rgba(var(--ink-900-rgb), 0.94);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12), 0 16px 40px -10px rgba(0, 0, 0, 0.75);
-  }
-  .narr-pill .narr-avatar {
-    width: 36px;
-    height: 36px;
-  }
-  .narr-pill .narr-avatar svg {
-    width: 18px;
-    height: 18px;
-  }
-  .narr-pill small {
-    font-size: 11px;
-  }
   .narr-panel { padding: 4px 12px 10px; border-radius: 18px 18px 16px 16px; }
   /* drag handle: tap or swipe down to minimise */
   .narr-grip {
@@ -274,3 +256,7 @@ body.narr-active:not(.narr-minimised) .hero { padding-bottom: 140px; }
   .narr-spot::before, .narr-spot::after, .sparkle, .narr-cue .hand { animation: none !important; }
   .narr-caption { scroll-behavior: auto; }
 }
+
+/* Shown when the device reports no speech voice, so a silent tour is explained instead of looking broken */
+.narr-novoice { margin: 6px 0 0; padding: 6px 10px; border-radius: calc(8px * var(--corner, 1)); background: rgba(var(--warn-rgb), .14); color: var(--fg-soft, var(--fg)); font-size: 12px; line-height: 1.4; }
+.narr-novoice[hidden] { display: none; }

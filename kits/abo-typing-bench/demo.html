@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: abo-typing-bench</title>
+<style>html,body{margin:0;height:100%;background:#0e1620}#host{width:100vw;height:100vh}</style>
+</head><body>
+<div id="host"></div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="../heart-circulation/heart-kit.js"></script>
+<script src="abo-typing-bench.js"></script>
+<script>
+  window.StudyPipeKits["abo-typing-bench"].mount(document.getElementById("host"), {}, { emit: function (n, d) { console.log("event", n, d && d.view ? d.view : ""); } });
+</script>
+</body></html>

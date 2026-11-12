@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 6 · Energy in SHM and Damping · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2): follow the energy of a bouncing spring and pendulum, measure damping in air, water and oil on a 3D bench, and look inside the okada's leaking shock absorber.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M6 32 Q14 8 22 32 T38 32 T54 32' fill='none' stroke='%23f5a524' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg); background: radial-gradient(circle at 50% 30%, rgba(var(--amber-rgb), .16), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 340px; }
+    .l6-t { fill: var(--fg-soft); font-family: var(--font-mono); font-size: 11px; }
+    .l6-time { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; font-family: var(--font-mono); font-size: 11.5px; }
+    .l6-time span { padding: 5px 10px; border-radius: 999px; background: rgba(var(--fg-rgb, 255,255,255), .06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .l6-time span b { color: var(--amber); font-weight: 600; }
+    .l6-comp { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .l6-comp span { font: 600 11.5px var(--font-mono); padding: 4px 9px; border-radius: 8px; background: rgba(var(--teal-rgb), .14); color: var(--teal); }
+    /* sort */
+    .l6-bins { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+    @media (min-width: 641px) { .l6-bins { grid-template-columns: repeat(3, 1fr); } }
+    .sort-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+    .sort-score { font-family: var(--font-mono); font-size: 12.5px; color: var(--fg-soft); }
+    /* compact bench */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; margin: 0; }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(320px, 90vw, 440px); }
+    .l6-ctl, .l6-util { padding: 8px 12px; gap: 6px; }
+    .l6-ctl .seg { flex: 1 1 100%; display: grid; grid-template-columns: repeat(3, 1fr); }
+    .l6-ctl .seg button { min-height: 38px; padding: 6px 4px; font-size: 12.5px; }
+    .l6-amp { flex: 1 1 100%; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .l6-amp button { min-height: 34px; padding: 4px; font: 600 12px var(--font-mono); border-radius: 9px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); cursor: pointer; }
+    .l6-amp button[aria-pressed="true"] { background: var(--amber); border-color: var(--amber); color: var(--ink-950); }
+    .l6-util .bench-mode { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
+    .l6-util .vt-btn { padding: 8px 4px; font-size: 13px; min-height: 40px; }
+    .l6-util .stage-hint { margin: 0; width: 100%; font-size: 12.5px; }
+    .l6-ctl button.l6-dim { opacity: .55; }
+    .l6-util button:disabled { opacity: .45; cursor: not-allowed; }
+    #bench-stage .bench-readout, #zoom-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div, #zoom-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span, #zoom-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b, #zoom-stage .bench-readout b { font-size: 13px; line-height: 1.2; display: block; white-space: nowrap; }
+    .bench-readout .hot b { color: var(--amber); }
+    .l6-tally { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td, #results-table th { text-align: center; }
+    #results-table tfoot td { font-weight: 600; border-top: 2px solid var(--paper-line); }
+    /* zoom */
+    .l6-zoom-grid { display: grid; grid-template-columns: 1fr; }
+    #zoom-stage .stage-canvas { height: clamp(300px, 86vw, 420px); }
+    .l6-trace { position: relative; height: 210px; border-top: 1px solid var(--line); }
+    .l6-trace canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; touch-action: pan-y; }
+    .l6-trace-tag { position: absolute; z-index: 2; right: 10px; bottom: 6px; font: 600 10px var(--font-mono); color: var(--muted); }
+    @media (min-width: 900px) {
+      .l6-zoom-grid { grid-template-columns: 3fr 2fr; }
+      .l6-trace { height: auto; min-height: 300px; border-top: 0; border-left: 1px solid var(--line); }
+    }
+    .l6-zbar { padding: 8px 12px; gap: 6px; }
+    .l6-zbar .seg { flex: 1 1 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
+    .l6-zbar .seg button { min-height: 38px; padding: 6px 4px; font-size: 12.5px; }
+    .l6-zbar .bench-mode { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 100%; }
+    .l6-zbar .vt-btn { padding: 8px 4px; font-size: 13px; min-height: 40px; }
+    .l6-off { display: none !important; }
+    /* position explorer */
+    .l6-pex { position: relative; height: 230px; margin-top: 14px; border-radius: var(--radius); overflow: hidden; background: var(--ink-900); }
+    .l6-pex canvas { position: absolute; inset: 0; width: 100% !important; height: 100% !important; touch-action: pan-y; }
+    .pos-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    @media (min-width: 641px) { .pos-track { grid-template-columns: repeat(6, 1fr); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: 12px; min-height: 44px; padding: 6px 4px; font-weight: 700; font-size: 12px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 12px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; line-height: 1.55; min-height: 96px; }
+    .pos-info b { color: var(--crimson); }
+    /* model note inside examples (not the wonder-wall sticky note) */
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 20px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .l6-bq { margin-top: 14px; }
+    .l6-bq h4 { margin: 0 0 8px; font-size: 15px; color: var(--fg); }
+    .l6-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l6-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; }
+    .l6-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); background: rgba(var(--ok-rgb), .18); color: var(--fg); }
+    .l6-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--pink); }
+    .l6-bq .why { margin: 8px 0 0; font-size: 13.5px; color: var(--fg-soft); display: none; }
+    .l6-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+    .l6-run { margin-top: 12px; }
+    .l6-break { background: rgba(var(--lime-rgb), .1); }
+    .l6-pager { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--paper-line); flex-wrap: wrap; }
+    @media (min-width: 641px) {
+      .l6-ctl .seg { flex: 1 1 46%; }
+      .l6-amp { flex: 1 1 100%; }
+      .l6-util .bench-mode { display: flex; width: auto; }
+      .l6-util .stage-hint { width: auto; margin-left: auto; }
+      #method-cards div.method { padding: 10px 14px; }
+    }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l06">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> Unit Overview</a>
+      <span class="l-crumb">Lesson 6 of 7 · <b>Energy and damping</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 6 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Energy in SHM <em>and damping</em></h1>
+        <p class="question reveal">Where does the bounce energy go — and what is the shock absorber for?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Describe how <strong>kinetic and potential energy swap</strong> during SHM while the total stays constant (no losses).</span></li>
+          <li><b>02</b><span>Use <strong>E = ½kA² = ½mω²A²</strong>, <strong>PE = ½kx²</strong> and <strong>KE = ½k(A² − x²)</strong>.</span></li>
+          <li><b>03</b><span>Sketch energy against displacement and find where <strong>KE = PE</strong> (x = A/√2).</span></li>
+          <li><b>04</b><span>Define <strong>damping</strong>; compare light, heavy and critical damping and give their uses.</span></li>
+          <li><b>05</b><span>Explain why light damping shrinks the amplitude but leaves the <strong>period almost unchanged</strong>.</span></li>
+        </ul>
+        <div class="l6-comp reveal" aria-label="Competences"><span>L1 Critical thinking</span><span>L3 Road safety</span><span>L4 Energy graphs</span><span>L6 Diagnosis</span></div>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="l6-time reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–45</b> Investigate</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–75</b> Apply</span><span><b>75–80</b> Reflect</span>
+        </div>
+        <nav class="l-switch reveal" aria-label="Lessons in this unit">
+          <a class="home" href="../../index.html">Hub</a>
+          <a href="../lesson-01/index.html">L1</a><a href="../lesson-02/index.html">L2</a><a href="../lesson-03/index.html">L3</a><a href="../lesson-04/index.html">L4</a><a href="../lesson-05/index.html">L5</a><a href="index.html" aria-current="page">L6</a><a href="../lesson-07/index.html">L7</a>
+        </nav>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 340 250">
+          <line x1="20" y1="200" x2="320" y2="200" stroke="var(--line-strong)" stroke-width="1.5"/>
+          <line x1="20" y1="40" x2="20" y2="200" stroke="var(--line-strong)" stroke-width="1.5"/>
+          <path d="M20 120 C 35 40, 50 40, 62 120 S 88 190, 100 120 S 124 62, 136 120 S 158 168, 170 120 S 190 88, 200 120 S 220 145, 230 120 S 248 106, 258 120 S 276 128, 286 120 L 320 120" fill="none" stroke="var(--teal)" stroke-width="2.6"/>
+          <path d="M20 40 Q 170 95 320 112" fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 5"/>
+          <path d="M20 200 Q 170 145 320 128" fill="none" stroke="var(--amber)" stroke-width="1.4" stroke-dasharray="5 5"/>
+          <text class="l6-t" x="170" y="226" text-anchor="middle">a damped bounce: amplitude dies, period stays</text>
+          <text class="l6-t" x="250" y="60" fill="var(--amber)">E = ½kA²</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Sort game</a></li>
+        <li><a href="#practical">Virtual lab</a></li>
+        <li><a href="#concepts">Energy &amp; damping</a></li>
+        <li><a href="#zoom">Inside the shock</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 2, 3 and 5</em></h2>
+        <p class="intro">Four quick cards on energy formulas, the greatest speed in SHM, ω² for a spring and a practical precaution. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The shock absorber that <em>weeps oil</em></h2>
+        <p class="intro">Mallam Sule takes the rear shock off Dayo's okada. The spring is fine, he says, but the oil is leaking out. So what does oil have to do with a bounce?</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas id="story-canvas" aria-label="Animated 3D story: at his roadside shed on Ridge Road, Mallam Sule shows Dayo and Zainab the okada's oil-weeping rear shock absorber, pushes a new and an old damper side by side, and Mrs Okafor then releases a pendulum and a bouncing spring in the school physics lab."></canvas>
+            <div class="stage-label"><i></i>3D story · Sule's shed</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Mallam Sule</strong> (unbolting the rear shock; dark oil streaks its body): <em>“See this? It is weeping. The oil inside is what kills the bounce.”</em></p>
+            <p><strong>Scene 2 · Dayo:</strong> <em>“Kills the bounce? The spring is still strong.”</em></p>
+            <p><strong>Scene 3 · Mallam Sule</strong> (pushing the new and the old damper side by side; the new one resists firmly and slowly, the old one slides freely): <em>“A spring stores the energy and gives it back. The oil turns it to heat. Without oil, nothing takes the energy away.”</em></p>
+            <p><strong>Scene 4 · Zainab:</strong> <em>“So every time the bike bounces, the energy just keeps going round and round?”</em></p>
+            <p><strong>Scene 5 · Mrs Okafor</strong> (in the physics lab, releasing a pendulum and a bouncing spring): <em>“Let's watch where the energy is at every point — and what happens when we make it work through water.”</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Does a pendulum ever really stop by itself? Where would its energy go? Pin your idea before we measure it.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think the energy…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">It keeps going forever (Tunde)</button>
+            <button type="button">Air slows it (Zainab)</button>
+            <button type="button">Does a slowing pendulum tick slower? (Dayo)</button>
+            <button type="button">Why does my new car seat feel less bouncy? (Hajia Ramatu)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 2A. SORT ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Kinetic, potential <em>or both?</em></h2>
+        <p class="intro">Drag or tap each of the nine moments into the right bin: <strong>KE greatest</strong>, <strong>PE greatest</strong>, or <strong>KE = PE</strong>.</p>
+        <div class="sort" id="l6-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to classify"></div>
+          <div class="l6-bins">
+            <div class="bin" data-bin="ke-max" style="--bc:var(--teal)" tabindex="0" role="region" aria-label="KE greatest bin"><h4><i></i>KE greatest <small>fastest</small></h4><div class="drop"></div></div>
+            <div class="bin" data-bin="pe-max" style="--bc:var(--amber)" tabindex="0" role="region" aria-label="PE greatest bin"><h4><i></i>PE greatest <small>at rest, at an end</small></h4><div class="drop"></div></div>
+            <div class="bin" data-bin="equal" style="--bc:var(--violet)" tabindex="0" role="region" aria-label="KE equals PE bin"><h4><i></i>KE = PE <small>each half of E</small></h4><div class="drop"></div></div>
+          </div>
+          <div class="sort-bar">
+            <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 2B. PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>Energy bars and a <em>card vane in water</em></h2>
+        <p class="intro">Load m = 0.20 kg on a spring of k = 24.5 N m⁻¹. Watch the energy swap, then make the load work through air, water and oil. Every number comes from the model.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Watch the energy bars</h4><p>Release from 5.0 cm; watch KE, PE, total.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Fit the card vane</h4><p>Damping: try air, then water, then oil.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Record each amplitude</h4><p>Record the amplitude at five cycle ends.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Compare the periods</h4><p>Compare 10-oscillation times in air and water.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D bench: a helical spring on a retort stand with a slotted-mass load, pointer and metre rule; KE, PE and total energy bars; a card vane dipping into a beaker of water or oil on a lab jack; and a pendulum with its own energy bars."></canvas>
+            <div class="stage-label"><i></i>3D bench · drag to rotate</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the expected results and the graph below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar l6-ctl">
+            <div class="seg" role="group" aria-label="Rig" id="bench-rig">
+              <button type="button" data-rig="energy" aria-pressed="true">Energy bars</button>
+              <button type="button" data-rig="damping" aria-pressed="false">Damping</button>
+              <button type="button" data-rig="pendulum" aria-pressed="false">Pendulum</button>
+            </div>
+            <div class="seg" role="group" aria-label="Medium around the vane" id="bench-medium">
+              <button type="button" data-medium="air" aria-pressed="true">Air</button>
+              <button type="button" data-medium="water" aria-pressed="false">Water</button>
+              <button type="button" data-medium="oil" aria-pressed="false">Oil</button>
+            </div>
+            <div class="l6-amp" role="group" aria-label="Starting amplitude or release height in centimetres" id="bench-amp">
+              <button type="button" data-a="2">2 cm</button><button type="button" data-a="3">3 cm</button><button type="button" data-a="4">4 cm</button><button type="button" data-a="5" aria-pressed="true">5 cm</button><button type="button" data-a="6">6 cm</button>
+            </div>
+          </div>
+          <div class="stage-bar l6-util">
+            <div class="bench-mode">
+              <button class="vt-btn zobo" type="button" id="bench-release">Release</button>
+              <button class="vt-btn" type="button" id="bench-record">Record A</button>
+              <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Release, then watch KE and PE swap.</span>
+          </div>
+        </div>
+
+        <h3>Your amplitudes</h3>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Cycle</th><th>A<sub>air</sub> / cm</th><th>A<sub>water</sub> / cm</th><th>A<sub>oil</sub> / cm</th></tr></thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+        <p class="l6-tally" id="bench-tally">Media recorded: 0 of 3 (air, water, oil)</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected results <small>illustrative model values, A = 5.0 cm</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Cycle</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th></tr></thead>
+                <tbody>
+                  <tr><td>Air (×0.97)</td><td>5.00</td><td>4.85</td><td>4.70</td><td>4.56</td><td>4.43</td><td>4.29</td></tr>
+                  <tr><td>Water (×0.75)</td><td>5.00</td><td>3.75</td><td>2.81</td><td>2.11</td><td>1.58</td><td>1.19</td></tr>
+                  <tr><td>Oil (×0.40)</td><td>5.00</td><td>2.00</td><td>0.80</td><td>0.32</td><td>0.13</td><td>0.05</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Energy at the start: E = ½kA² = ½ × 24.5 × 0.050² = <strong>0.0306 J</strong>. Ten oscillations: air <strong>5.68 s</strong>, water about the same (<strong>≈ 5.7 s</strong>) — light damping barely changes T.</p>
+          </div>
+        </details>
+
+        <div class="graph-card" id="graph-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots as you record</span><h4>Amplitude A against cycle number</h4></div>
+            <span class="gc-badge wait" id="graph-badge">0 of 3 media</span>
+          </div>
+          <div id="graph-decay"></div>
+          <p class="gc-note" id="graph-note"></p>
+        </div>
+
+        <h3>Precautions and sources of error</h3>
+        <ul>
+          <li><strong>Precautions (past tense):</strong> the vane was kept fully immersed at the same depth in each liquid; the amplitude was read with the eye level with the pointer to avoid parallax; the load was released from the same starting amplitude each time.</li>
+          <li><strong>Sources of error:</strong> the vane touched the beaker wall (extra friction); the load swayed sideways instead of moving vertically; the moving pointer was misread at the end of a cycle.</li>
+        </ul>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l06-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Where is KE greatest, and where is PE greatest?</li>
+            <li>Why did the energy (the total) shrink so fast in water?</li>
+            <li>Where did the lost energy go?</li>
+            <li>Did damping change the period noticeably?</li>
+            <li>Which medium would suit a shock absorber, and why?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>KE is greatest as the load passes the equilibrium position (fastest); PE is greatest at the top and bottom of the bounce, where the load is momentarily at rest.</li>
+                <li>The water pushes back on the moving vane, so work is done against this resistance every cycle. The amplitude fell to 0.75 of its value each cycle, so the energy (∝ A²) fell to 0.75² ≈ 0.56 of its value each cycle.</li>
+                <li>It became internal energy (heat) in the water and the vane, plus a tiny amount of sound; it was not destroyed.</li>
+                <li>No: ten oscillations took 5.68 s in air and about 5.70 s in water. Light damping shrinks the amplitude but hardly changes the period.</li>
+                <li>A thick liquid such as oil: it removes a large share of the energy each cycle, so the bounce dies in one or two cycles, close to critical damping.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= MOVEMENT BREAK ================= -->
+      <section class="l-sec l6-break" id="movement-break">
+        <span class="phase" style="--pc:var(--lime)"><b>⏱</b>Movement break · 45 min · 5 minutes</span>
+        <h2>The <em>energy swap</em> squat</h2>
+        <p class="intro">Stand up. Squat down slowly and say “PE stored!” Rise quickly and say “KE!” Freeze at the top for a moment: all PE again. Do it five times. Now “add damping”: repeat as if you were moving through thick oil, slower and smaller each time, until you stop. Shake out your legs and sit down.</p>
+      </section>
+
+      <!-- ================= 3. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Energy sloshes; <em>damping drains it</em></h2>
+        <p class="intro">Now we connect the bars and the curves to the formulas WAEC, NECO and JAMB expect.</p>
+
+        <div class="callout big reveal" id="energy-callout">
+          <p><strong>Energy interchange:</strong> in SHM without losses, the total energy stays fixed while it changes form — all potential at the ends, all kinetic at the centre. For a spring, E = ½kA²; at displacement x, PE = ½kx² and KE = ½k(A² − x²). Since k = mω², E = ½mω²A². The total energy is proportional to <strong>A²</strong>: double the amplitude, four times the energy.</p>
+        </div>
+
+        <div class="callout reveal" id="damp-callout">
+          <p><strong>Damping:</strong> a resistive force (air, a liquid, friction) takes energy out of the oscillation every cycle, so the amplitude dies away. <strong>Light damping:</strong> many shrinking oscillations; the period is almost unchanged. <strong>Heavy damping:</strong> a slow creep back to equilibrium with no oscillation. <strong>Critical damping:</strong> the quickest return to rest without overshooting — what a good shock absorber and a moving-coil meter's needle aim for.</p>
+        </div>
+
+        <span class="eq-label">The equations</span>
+        <div class="eq" id="eq-energy">E = ½kA² = ½mω²A²</div>
+        <div class="eq" id="eq-pe">PE = ½kx² · KE = ½k(A² − x²)</div>
+        <div class="eq" id="eq-equal">KE = PE at x = ±A/√2</div>
+        <div class="eq" id="eq-pend">E = mgh = ½mv_max²</div>
+
+        <h3 id="def-compare">Free and damped oscillations</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th></th><th>Amplitude over time</th><th>Oscillates?</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Free (undamped)</strong></td><td>stays constant</td><td>yes, for ever</td><td>ideal spring with no losses</td></tr>
+              <tr><td><strong>Lightly damped</strong></td><td>shrinks by the same ratio each cycle</td><td>yes, many cycles</td><td>pendulum in air; leaking shock</td></tr>
+              <tr><td><strong>Heavily damped</strong></td><td>creeps slowly back to zero</td><td>no</td><td>vane in thick oil</td></tr>
+              <tr><td><strong>Critically damped</strong></td><td>returns fastest, no overshoot</td><td>no</td><td>good shock absorber; meter needle</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="pos-h">Position explorer</h3>
+        <p>A 0.50 kg mass on a spring of k = 50 N m⁻¹ oscillates with A = 0.10 m (E = 0.25 J). Tap a position and read PE, KE and the speed.</p>
+        <div id="pos-explorer">
+          <div class="l6-pex" id="pos-wrap"><canvas id="pos-canvas" aria-label="Paper.js energy graph: potential energy rises as an upright parabola, kinetic energy falls as an inverted parabola, and the total is a flat line; they cross where KE equals PE."></canvas></div>
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a position to see its energies.</div>
+        </div>
+      </section>
+
+      <!-- ================= ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the shock absorber: <em>oil turns bounce into heat</em></h2>
+        <p class="intro">A cut-away coil-over: the spring outside, a piston with small holes moving through oil inside. Compare <strong>healthy</strong> and <strong>leaking</strong>, then give each ten pushes. The side panel draws the matching trace.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="l6-zoom-grid">
+            <div class="stage-canvas">
+              <canvas id="zoom-canvas" aria-label="3D cut-away of the okada's rear coil-over shock absorber: brass piston with six orifices moving through oil, oil jets warming in colour, and a low oil level with a weeping streak when leaking."></canvas>
+              <div class="stage-label"><i></i>3D zoom · drag to rotate</div>
+              <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+              <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+            </div>
+            <div class="l6-trace" id="zoom-trace">
+              <canvas id="zoom-push-canvas" style="visibility:hidden" aria-label="Paper.js ten-push traces from the same model as the 3D shock: the healthy bounce levels off at 2.0 centimetres, the leaking one climbs past the 6.2 centimetre lift-off line at the fourth push and reaches 8.5 centimetres."></canvas>
+              <canvas id="zoom-trace-canvas" aria-label="Paper.js displacement-time traces: the healthy shock's bounce dies in about one cycle, the leaking one keeps oscillating; or light, critical and heavy damping compared."></canvas>
+            </div>
+          </div>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar l6-zbar">
+            <div class="seg" role="group" aria-label="Damper" id="zoom-damper">
+              <button type="button" data-damper="healthy" aria-pressed="true">Healthy</button>
+              <button type="button" data-damper="leaking" aria-pressed="false">Leaking</button>
+            </div>
+            <div class="bench-mode">
+              <button class="vt-btn" type="button" id="zoom-push">One push</button>
+              <button class="vt-btn zobo" type="button" id="zoom-push10">Ten pushes</button>
+              <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+            </div>
+            <div class="seg" role="group" aria-label="Trace panel" id="zoom-trace-set">
+              <button type="button" data-set="shock" aria-pressed="true">Our two shocks</button>
+              <button type="button" data-set="kinds" aria-pressed="false">Light · critical · heavy</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 10 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each on paper first, then check the working. Keep amplitudes in metres.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Energy at a point</h4></div>
+          <div class="example-body">
+            <p class="q">A 0.50 kg mass on a spring of k = 50 N m⁻¹ oscillates with A = 0.10 m. Find the total energy, and PE, KE and speed at x = 0.060 m.</p>
+            <ol class="steps-sol">
+              <li><strong>Total energy:</strong> <code>E = ½kA² = ½ × 50 × 0.10² = 0.25 J</code></li>
+              <li><strong>Potential energy at x:</strong> <code>PE = ½kx² = ½ × 50 × 0.060² = 0.090 J</code></li>
+              <li><strong>Kinetic energy:</strong> <code>KE = E − PE = 0.25 − 0.090 = 0.16 J</code></li>
+              <li><strong>Speed:</strong> <code>v = √(2KE/m) = √(2 × 0.16 ÷ 0.50) = √0.64 = 0.80 m s⁻¹</code> (check: ω = 10 rad s⁻¹, v = 10√(0.010 − 0.0036) = 0.80)</li>
+            </ol>
+            <div class="answer-line">E = 0.25 J · PE = 0.090 J · KE = 0.16 J · v = 0.80 m s⁻¹</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Where is KE = PE?</h4></div>
+          <div class="example-body">
+            <p class="q">For the same oscillator, where is the kinetic energy equal to the potential energy?</p>
+            <ol class="steps-sol">
+              <li><strong>Each is half the total:</strong> <code>½kx² = ½ × ½kA²</code></li>
+              <li><strong>Simplify:</strong> <code>x² = A²/2</code>, so <code>x = A/√2</code></li>
+              <li><strong>Substitute:</strong> <code>x = 0.10 ÷ 1.414 = 0.071 m</code></li>
+            </ol>
+            <div class="answer-line">x = ±0.071 m (about 71 % of the way out, not halfway)</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Pendulum energy</h4></div>
+          <div class="example-body">
+            <p class="q">A 0.10 kg bob is released from 5.0 cm above its lowest point. Find its total energy and its greatest speed (g = 9.8 m s⁻²).</p>
+            <ol class="steps-sol">
+              <li><strong>Total energy:</strong> <code>E = mgh = 0.10 × 9.8 × 0.050 = 0.049 J</code></li>
+              <li><strong>All KE at the lowest point:</strong> <code>½mv² = 0.049 J</code></li>
+              <li><strong>Greatest speed:</strong> <code>v = √(2gh) = √(2 × 9.8 × 0.050) = √0.98 = 0.99 m s⁻¹</code></li>
+            </ol>
+            <div class="answer-line">E = 0.049 J · v_max ≈ 0.99 m s⁻¹</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>The okada's bounce energy</h4></div>
+          <div class="example-body">
+            <p class="q">For the okada's rear (k = 3.16 × 10⁴ N m⁻¹), compare the energy in a gentle 2.0 cm bounce with that in a 6.2 cm lift-off bounce.</p>
+            <ol class="steps-sol">
+              <li><strong>Gentle bounce:</strong> <code>E₁ = ½ × 31600 × 0.020² = 6.3 J</code></li>
+              <li><strong>Lift-off bounce:</strong> <code>E₂ = ½ × 31600 × 0.062² = 61 J</code></li>
+              <li><strong>Ratio:</strong> <code>E₂/E₁ = (6.2/2.0)² = 9.6</code></li>
+            </ol>
+            <div class="answer-line">about 6.3 J against 61 J — nearly ten times as much energy must build up for lift-off</div>
+            <p class="note model-note">Story numbers are a teaching model, not real measurements.</p>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Mallam Sule's <em>push test</em></h2>
+        <p class="intro">In the zoom, feed the healthy and the leaking shock the same small push every half-second for ten pushes. Then answer the three steps.</p>
+        <button class="btn btn-ghost btn-sm l6-run" type="button" id="bridge-run">Run the push test in the zoom</button>
+
+        <div class="bridge-card" id="bridge-card">
+          <h4>Healthy or leaking: where does the energy go?</h4>
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict vt-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 6:</strong> in SHM, E = ½kA² sloshes between KE and PE; damping drains it. A working shock absorber turns a large share of each cycle's energy into heat, so the road can never pile up the 61 J a 6.2 cm bounce needs.</p>
+        </div>
+      </section>
+
+      <!-- ================= QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from earlier lessons come at the end.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 5. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 6.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can describe the KE–PE interchange.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can calculate E, KE and PE at a point.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can find where KE = PE.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can define and compare types of damping.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can explain what a shock absorber does.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>The amplitude of an oscillator is doubled. By what factor does its energy change?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>E = ½kA², so E ∝ A² <b>(1)</b>; doubling A multiplies the energy by 2² = <strong>4</strong> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min at home</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home investigation: whose shock absorbers are tired?</h3>
+        <div class="aq" data-answer="l06-a1">
+          <div class="aq-top"><h4>Bounce test on two parked vehicles</h4></div>
+          <p><strong>You need:</strong> two parked vehicles (cars, a keke or motorcycles) <strong>with the owners' permission</strong>, a friend to watch, and a notebook. Each vehicle must be switched off, in gear or on its stand, with nobody in it or behind it.</p>
+          <ol class="sub">
+            <li>Press down firmly on one corner (or the back of a motorcycle seat) and let go quickly.</li>
+            <li>Your friend counts how many times that corner rises and falls before it settles, and estimates the height of the first rebound.</li>
+            <li>Repeat three times for the same corner, then do the same on the second vehicle.</li>
+            <li>Ask each owner how old the shock absorbers are, if they know.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Vehicle</th><th>Bounces (3 trials)</th><th>Mean</th><th>First rebound</th></tr></thead><tbody>
+                <tr><td>Neighbour's car (absorbers replaced last year)</td><td>1, 1, 2</td><td>1.3</td><td>Firm, comes straight back</td></tr>
+                <tr><td>Uncle's old car</td><td>4, 3, 4</td><td>3.7</td><td>Bouncy, overshoots several times</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows that the vehicle with healthy shock absorbers settles after about one rebound (close to critical damping), while the one with worn absorbers bounces several times with slowly shrinking amplitude (light damping), so less energy is turned into heat each cycle. A strong answer links this to Mallam Sule's leaking shock absorber: a lightly damped suspension lets energy from a bumpy road build up. It also gives a limitation, for example the push was not the same size each time, or counting depended on judging very small movements.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l06-b1">
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <p>Define: (a) <em>damping</em>; (b) <em>critical damping</em>; (c) a <em>free</em> oscillation.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Damping is the gradual loss of energy from an oscillating system, caused by resistive forces such as friction or air or liquid resistance, so that the amplitude decreases. (1) (b) Critical damping is the amount of damping that returns a displaced system to its equilibrium position in the shortest possible time without oscillating. (1) (c) A free oscillation is one in which the system vibrates at its own natural frequency with no outside periodic force and no loss of energy, so its amplitude stays constant. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) both “energy loss” (or a resistive force) and “amplitude decreases” are expected. In (b) “without oscillating” and “shortest time” are both needed. In (c) “natural frequency” or “constant amplitude” must appear.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b2">
+          <div class="aq-top"><h4>2. Energy Round a Swing</h4><span class="marks">3 marks</span></div>
+          <p>A pendulum bob swings from end-point A through its lowest point O to the other end B. Describe the energy at A, at O, and halfway in energy between them, assuming no losses.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>At A (and B) the bob is momentarily at rest: all its energy is potential, PE is greatest and KE is zero. (1) At O it moves fastest: all its energy is kinetic, KE is greatest and PE is least (zero, taking O as the reference level). (1) In between, the energy is shared, with KE + PE always equal to the same total; they are equal at x = A/√2. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> “Total energy is constant” must appear in some form for the third mark.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b3">
+          <div class="aq-top"><h4>3. Deriving the Energy Expressions</h4><span class="marks">4 marks</span></div>
+          <p>For a mass m on a spring of constant k oscillating with amplitude A: (a) using v = ω√(A² − x²) and ω² = k/m, show that KE = ½k(A² − x²); (b) show that KE + PE = ½kA², a constant; (c) show that KE = PE where x = A/√2.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) KE = ½mv² = ½mω²(A² − x²) (1); since mω² = k, KE = ½k(A² − x²). (1) (b) PE = ½kx², so KE + PE = ½kA² − ½kx² + ½kx² = ½kA², which does not depend on x. (1) (c) KE = PE gives ½k(A² − x²) = ½kx², so A² = 2x² and x = A/√2. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> The substitution mω² = k must be shown in (a). In (c) “x = A/2” scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b4">
+          <div class="aq-top"><h4>4. Energy at a Point</h4><span class="marks">5 marks</span></div>
+          <p>A 0.80 kg mass on a spring of spring constant 20 N m⁻¹ oscillates with amplitude 0.15 m. Calculate: (a) the angular frequency; (b) the total energy; (c) the maximum speed; (d) the potential and kinetic energies at x = 0.090 m; (e) the speed at x = 0.090 m.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>ω = √(k/m) = √(20 ÷ 0.80) = √25 = 5.0 rad s⁻¹</code> (1) (b) <code>E = ½kA² = ½ × 20 × 0.0225 = 0.225 J</code> (1) (c) <code>v_max = ωA = 5.0 × 0.15 = 0.75 m s⁻¹</code> (check: √(2 × 0.225 ÷ 0.80) = 0.75) (1) (d) <code>PE = ½ × 20 × 0.0081 = 0.081 J</code>; <code>KE = 0.225 − 0.081 = 0.144 J</code> (1) (e) <code>v = √(2 × 0.144 ÷ 0.80) = √0.36 = 0.60 m s⁻¹</code> (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Error carried forward allowed throughout. Both energies are needed for (d). Units required.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b5">
+          <div class="aq-top"><h4>5. A Swinging Bob</h4><span class="marks">4 marks</span></div>
+          <p>A 0.20 kg bob is pulled aside until it is 4.0 cm above its lowest point, then released (g = 10 m s⁻²). (a) Calculate its total energy. (b) Calculate its greatest speed. (c) Air resistance removes 20 % of its energy by the time it reaches the other side. How high does it rise there? (d) Where did the lost energy go?</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>E = mgh = 0.20 × 10 × 0.040 = 0.080 J</code> (1) (b) <code>v = √(2gh) = √(2 × 10 × 0.040) = √0.80 = 0.89 m s⁻¹</code> (1) (c) Energy left = 0.80 × 0.080 = 0.064 J; <code>h = E/mg = 0.064 ÷ 2.0 = 0.032 m</code> = 3.2 cm. (1) (d) It was transferred to the surrounding air as heat (internal energy) and a little sound, by the work done against air resistance. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (c) giving 0.8 cm (the 20 % lost, not the height reached) or 4.8 cm loses the mark. In (d) “it was destroyed” scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b6">
+          <div class="aq-top"><h4>6. Practical: Damping in Water</h4><span class="marks">6 marks</span></div>
+          <p>A 0.30 kg load on a spring (k = 23.5 N m⁻¹) carried a card vane dipping into a beaker of water. Zainab recorded the amplitude at the end of each cycle: cycle 0 → 6.00 cm, 1 → 4.50, 2 → 3.38, 3 → 2.53, 4 → 1.90, 5 → 1.42 cm. Ten oscillations took 7.10 s with the vane in air and 7.14 s in water.</p>
+          <p>(a) Show that the amplitude falls by the same ratio each cycle, and find the ratio. (b) What fraction of the energy remains after each cycle? (c) Calculate the energy at cycle 0 and at cycle 5. (d) What do the two timings show about light damping and the period? (e) Describe the shape of a graph of amplitude against cycle number.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) 4.50 ÷ 6.00 = 0.75, 3.38 ÷ 4.50 = 0.75, 2.53 ÷ 3.38 = 0.75 (and so on): a constant ratio of 0.75. (1) (b) E ∝ A², so 0.75² = 0.56 (56 %) remains each cycle and about 44 % is lost. (1) (c) <code>E₀ = ½ × 23.5 × 0.0600² = 0.042 J</code> (1); <code>E₅ = ½ × 23.5 × 0.0142² = 0.0024 J</code> (1) (d) The periods are 0.710 s and 0.714 s: almost the same, so light damping hardly changes the period. (1) (e) A curve that falls steeply at first and then more gently, approaching zero but never quite reaching it (an exponential-type decay), not a straight line. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) at least three ratios must be shown. In (b) giving 0.75 (forgetting E ∝ A²) scores zero. In (c) amplitudes in centimetres lose the mark. In (e) “a straight line downwards” is not accepted.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b7">
+          <div class="aq-top"><h4>7. The Shock Absorber</h4><span class="marks">3 marks</span></div>
+          <p>(a) Explain how an oil-filled shock absorber removes energy from a vehicle's bounce. (b) Why are shock absorbers designed to be close to critical damping rather than heavily damped? (c) Give one other device designed to be critically damped.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) As the suspension moves, a piston is forced through oil; the oil is pushed through small holes, and the work done against this resistance turns the bounce energy into heat in the oil. (1) (b) Heavy damping would make the suspension return too slowly after each bump, so it would not be ready for the next one and the ride would be harsh; critical damping returns it quickly without bouncing. (1) (c) The pointer of a moving-coil meter (a door closer is also accepted). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) the conversion to heat must be stated. In (c) any correct example is accepted.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l06-b8">
+          <div class="aq-top"><h4>8. The Bridge: Mallam Sule's Verdict</h4><span class="marks">2 marks</span></div>
+          <p>For the okada's rear spring (k = 3.16 × 10⁴ N m⁻¹), (a) calculate the energy in a 2.0 cm bounce and in a 6.2 cm bounce, and (b) explain why a working shock absorber stops the bounce reaching 6.2 cm.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>E₁ = ½ × 31600 × 0.020² = 6.3 J</code>; <code>E₂ = ½ × 31600 × 0.062² = 61 J</code> (nearly ten times as much). (1) (b) The working damper turns a large share of each cycle's energy into heat in its oil, so the road can never pile up the 61 J needed; the leaking one removes very little, so energy can build up when the pushes arrive in step. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Both energies are needed for (a). In (b) the energy-removal (heat) idea is essential.</small></p>
+          </div></details>
+        </div>
+      </section>
+
+      <!-- ================= TEACHER NOTES ================= -->
+      <section class="l-sec" id="teacher-notes">
+        <span class="phase" style="--pc:var(--muted)"><b>T</b>Teacher notes</span>
+        <h2>For the <em>teacher</em></h2>
+        <details class="reveal-box">
+          <summary>Timing, damping note, competences, support <small>tap to open</small></summary>
+          <div class="reveal-body">
+            <p><strong>Timing:</strong> 0–5 Do Now · 5–15 Wonder · 15–45 Investigate · 45–50 movement break (energy-swap squat, then “add damping” through imagined thick oil) · 50–65 Make Sense · 65–75 Apply · 75–80 Reflect.</p>
+            <p><strong>Damping note:</strong> textbooks describe shock absorbers as near-critical; real ones are set a little under critical (damping ratio about 0.2–0.4) for comfort, which the model's healthy value of 0.30 reflects. The bench ratios per cycle (0.97 / 0.75 / 0.40) and the okada numbers are an internally consistent teaching model.</p>
+            <p><strong>Competences:</strong> L1 (where did the energy go?), L3 (worn shock absorbers are a road-safety hazard), L4 (energy and decay graphs), L6 (a mechanic's diagnosis).</p>
+            <p><strong>Support:</strong> energy-bars worksheet. <strong>Stretch:</strong> show KE = ½mω²(A² − x²) from v = ω√(A² − x²).</p>
+          </div>
+        </details>
+
+        <div class="l6-pager">
+          <a class="btn btn-ghost" href="../lesson-05/index.html" style="color:var(--paper-ink)">← Lesson 5</a>
+          <a class="btn btn-tour" href="../lesson-07/index.html">Next: Lesson 7, resonance →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/ridge-road-props.js"></script>
+  <script src="../../assets/js/mass-spring.js"></script>
+  <script src="../../assets/js/pendulum.js"></script>
+  <script src="../../assets/js/shm-kinematics-2d.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+</body>
+</html>

@@ -1,387 +1,209 @@
-/* Lesson 01 · Choreographed StudyNarrator Script — Simple Harmonic Motion & the Simple Pendulum */
+/* Lesson 04 · StudyNarrator choreography: The Simple Pendulum (en-NG voice first). 28 steps. */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
 
   waits: {
+    donow: {
+      event: "kit:donow", timeout: 120000,
+      prompt: "Your turn! Answer the four Do Now cards and mark yourself",
+      react: function () { return "Good. Hold on to that last card about small angles. We will need it today."; }
+    },
     note: {
-      event: "kit:note",
-      prompt: "Type a prediction (or tap a seed question) and pin it to the wall",
-      react: function () {
-        return "Pinned! Now let's test your prediction with real physics.";
-      }
+      event: "kit:note", timeout: 120000,
+      prompt: "Your turn! Pin your ranking of what changes a pendulum's period",
+      react: function () { return "Pinned. Now let us sort the claims before we test them on the bench."; }
     },
     sort: {
-      event: "l1:sort-checked",
-      prompt: "Sort all 12 motions into the 3 bins, then tap Check my sorting",
+      event: "l4:sort", timeout: 180000,
+      prompt: "Your turn! Drop all nine cards into the bins, then tap Check",
       react: function (d) {
-        if (!d) return "Good effort!";
-        if (d.score === d.total) return "Twelve out of twelve! You spotted every true harmonic oscillator and didn't fall for the spinning fan trap.";
-        if (d.score >= 9) return "Nice work! " + d.score + " out of " + d.total + ". Check the notes below for the ones that slipped.";
-        return "You got " + d.score + " out of " + d.total + ". Read the explanations below — separating SHM from general periodic motion is a classic WAEC question!";
+        if (!d || d.total == null) return "No wahala, you can try the sort again later.";
+        if (d.correct === d.total) return "Perfect, all nine! Only length and g change the period, and a wide swing changes it a little.";
+        if (d.correct >= 6) return "Well done, " + d.correct + " out of " + d.total + ". Read the reasons under the cards.";
+        return "You got " + d.correct + " out of " + d.total + ". Do not worry. The bench will show you which ones really matter.";
       }
     },
     bench: {
-      event: "l1:bench-done",
-      prompt: "Time at least 4 lengths on the 3D pendulum bench",
-      react: function () {
-        return "Brilliant! You've timed your lengths for twenty oscillations each. Let's look at the numbers in the table.";
-      }
+      event: "l4:bench-done", timeout: 420000,
+      prompt: "Your turn! Change the mass, the angle, the length and g, timing 20 swings each time",
+      react: function () { return "Excellent fair testing! The mass made no difference, small angles made almost none, but length and gravity changed the period."; }
+    },
+    pin: {
+      event: "l4:pin", timeout: 120000,
+      prompt: "Your turn! Tap the angle pins from 5 to 45 degrees",
+      react: function () { return "See how fast the error grows after about ten degrees. That is why WAEC says small angle."; }
+    },
+    zoom: {
+      event: "l4:zoom", timeout: 150000,
+      prompt: "Your turn! Swap 50 grams for 100 grams, or drag the angle",
+      react: function () { return "Every force arrow doubled with the heavier bob, but the acceleration arrow, g sine theta, did not move. Mass cancels."; }
     },
     bridge: {
-      event: "l1:vinegar-done",
-      prompt: "Run Steps 1, 2 and 3 to calibrate Clock B",
-      react: function () {
-        return "Case solved! Shortening the rod by 15.6 centimetres brought Clock B's period right back to 2.00 seconds.";
+      event: "l4:bridge", timeout: 180000,
+      prompt: "Your turn! Answer the three Bridge steps",
+      react: function (d) {
+        return d && d.correct >= 3
+          ? "Puzzle solved! Mass does not set the rhythm, and the okada bounces in time with a six point two centimetre pendulum."
+          : "Nearly. The green rings show the right answers: l equals g T squared over four pi squared, which is six point two centimetres.";
       }
     },
     quiz: {
-      event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB quiz questions",
+      event: "kit:quiz-done", timeout: 600000,
+      prompt: "Answer all the quiz questions, or press Next to move on",
       react: function (d) {
         if (!d) return "Quiz complete!";
-        if (d.score >= 10) return "Outstanding — " + d.score + " out of " + d.total + "! You are ready for any WAEC or JAMB question on Simple Harmonic Motion.";
-        if (d.score >= 7) return "Well done! " + d.score + " out of " + d.total + ". Review the explanations on the ones you missed.";
-        return "You scored " + d.score + " out of " + d.total + ". Replay the Make Sense and Vector Zoom chapters, then hit Retry quiz!";
+        if (d.score >= d.total - 2) return "Sharp work, " + d.score + " out of " + d.total + "! You own the pendulum formula.";
+        if (d.score >= 8) return "Well done, " + d.score + " out of " + d.total + ". Read the explanations you missed.";
+        return "You scored " + d.score + " out of " + d.total + ". Revisit the worked examples, then try again.";
       }
     }
   },
 
   actions: {
-    "pin:0": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(0); },
-    "pin:3": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(3); },
-    "pin:6": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(6); },
-    "bench:heavy": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("heavy"); },
-    "bench:std":   function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("std"); },
-    "clock:1": function () { if (window.L01 && window.L01.vt) window.L01.vt.step1(); },
-    "clock:2": function () { if (window.L01 && window.L01.vt) window.L01.vt.step2(); }
+    story: function (arg) { if (window.StudyScenes && StudyScenes.story) StudyScenes.story.beat(+arg); },
+    open: function (arg) { var el = document.querySelector(arg); if (el && el.tagName === "DETAILS") el.open = true; },
+    bench: function (arg) {
+      var b = window.StudyScenes && StudyScenes.bench; if (!b) return;
+      var p = String(arg).split(":");
+      if (p[0] === "set") b.set(p[1], +p[2]);
+      else if (p[0] === "time") b.time();
+      else if (p[0] === "view") b.view(p[1]);
+      else if (p[0] === "reset") b.reset();
+      else if (p[0] === "hl") b.highlight(p[1] || null);
+    },
+    zoom: function (arg, later) {
+      var z = window.StudyScenes && StudyScenes.zoom; if (!z) return;
+      var p = String(arg).split(":");
+      if (p[0] === "reset") z.reset();
+      else if (p[0] === "sweep") {
+        // demonstrate: 10° then 45°
+        z.setMode("theta:10");
+        if (later) later(function () { z.setMode("theta:45"); }, 2600);
+      } else z.setMode(arg);
+    },
+    pin: function (arg) { if (window.L04 && L04.showPin) L04.showPin(+arg); },
+    bridge: function (arg) { if (arg === "solve" && window.L04 && L04.solveBridge) L04.solveBridge(); }
   },
 
   script: [
-    // ---------------- 0. WELCOME ----------------
     {
       title: "Welcome",
       steps: [
-        {
-          target: ".l-hero .display",
-          cue: "Lesson 4 · Finding Gravity g",
-          sparkle: true,
-          say: "Welcome to Lesson 4! Now that you have collected your pendulum timings in Lesson 3, today we turn those measurements into a straight-line L against T squared graph to determine the acceleration due to gravity g in Lagos."
-        },
-        {
-          target: ".l-hero .question",
-          cue: "Our graph question",
-          say: "How do we transform the square-root pendulum formula T equals two pi root L over g into a straight line, and how do systematic experimental errors shift our calculated value of g?"
-        },
-        {
-          target: "#objectives",
-          cue: "5 goals for Lesson 4",
-          say: "You will linearise the pendulum equation, calculate g equals four pi squared times slope, interpret graph intercepts, diagnose timing errors, and write past-tense WAEC Paper 3 precautions."
-        }
+        { target: ".l-hero .display", cue: "Lesson 4 · The Simple Pendulum", sparkle: true,
+          say: "Welcome to Lesson 4. Today we hang a bob on a thread and ask a simple question that trips up many students in WAEC." },
+        { target: ".l-hero .question", cue: "Our guiding question",
+          say: "Does a heavier bob, or a bigger swing, change the timing of a pendulum? By the end you will know, and you will know why." }
       ]
     },
-
-    // ---------------- 1. DO NOW ----------------
     {
       title: "Do Now",
       steps: [
-        {
-          target: "#donow-list",
-          cue: "Retrieval from Lessons 2 & 3",
-          say: "Begin with these four retrieval cards from Lessons 2 and 3 on the fiducial mark, effective length L, bob mass independence, and the pendulum scaling law."
-        }
+        { target: "#donow-list", cue: "Your turn", wait: "donow",
+          say: "Start with four Do Now cards: where acceleration is greatest in S H M, spring period ratios, components of a force, and sine of a small angle. Answer each in your head, reveal it, and mark yourself. I will wait." }
       ]
     },
-
-    // ---------------- 2. THE STORY ----------------
     {
-      title: "The story",
+      title: "The Story",
       steps: [
-        {
-          target: "#story-stage",
-          action: "story:0",
-          cue: "Yaba Market, Lagos",
-          say: "Let's head to Yaba Market in Lagos. Kunle, a school prefect, has brought back a pendulum wall clock he bought from Mama Ngozi. It loses eight minutes every single hour!"
-        },
-        {
-          target: { scene: "story", part: "cust2" },
-          action: "story:1",
-          cue: "Mrs Adeyemi's theory",
-          say: "Mrs Adeyemi is convinced the brass bob is too light. She says tying a heavier lead weight onto the bob will make gravity pull it faster."
-        },
-        {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:2",
-          cue: "Or the starting angle?",
-          say: "Mama Ngozi wonders if Kunle didn't pull the pendulum out to a wide enough angle when starting it."
-        },
-        {
-          target: { scene: "story", part: "clockB" },
-          action: "story:3",
-          cue: "Compare Clock A and Clock B",
-          say: "Look closely at Clock A and Clock B on the table. Both have identical brass bobs, yet Clock B swings noticeably slower than Clock A."
-        },
-        {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:4",
-          cue: "Three suspects",
-          say: "So we have three suspects: the mass of the bob, the starting angle, or the length of the pendulum rod. Which one really controls the time of one swing?"
-        },
-        {
-          target: { scene: "story", part: "amaka" },
-          action: "story:5",
-          cue: "To the physics lab!",
-          say: "Across town at the University of Lagos Metrology Lab, Dr Amaka has the answer: don't guess — put a pendulum on the retort stand, time twenty swings, and let the numbers speak!"
-        }
+        { target: { scene: "story", part: "tunde" }, action: "story:0", cue: "Tunde's claim",
+          say: "In the school physics lab, Tunde holds up two bobs, brass and wood. He says the heavy one will swing slowly, steady like a loaded lorry." },
+        { target: { scene: "story", part: "zainab" }, action: "story:1", cue: "Zainab's claim",
+          say: "Zainab has her own idea. If she pulls the bob back further, it must take longer, because it has further to go." },
+        { target: { scene: "story", part: "okafor" }, action: "story:2", cue: "Fair tests",
+          say: "Mrs Okafor says: two claims, two fair tests. Change one thing at a time, and time twenty swings." },
+        { target: { scene: "story", part: "shortPendulum" }, action: "story:3", cue: "The puzzle",
+          say: "Then she points at a tiny pendulum, about the length of a finger. It keeps exactly the okada's time. Why that length? Keep this puzzle for later." },
+        { target: { scene: "story", part: "zainab" }, action: "story:4", cue: "In step",
+          say: "Zainab lets a brass pendulum and a wooden pendulum of the same length go together. Tunde, they are together! Hmm. Let us find out why." }
       ]
     },
-
-    // ---------------- 3. WONDER WALL ----------------
     {
       title: "Wonder Wall",
       steps: [
-        {
-          target: "#wall-wonder",
-          cue: "Pin your prediction",
-          wait: "note",
-          say: "Before we touch the lab apparatus, what is your prediction? Does mass, angle, or length control the period of a pendulum? Type your prediction and pin it to the Wonder Wall."
-        }
+        { target: "#wall-wonder", cue: "Pin your ranking", wait: "note",
+          say: "On the Wonder Wall, rank what you think changes a pendulum's period: the bob's mass, the release angle, the thread length, or the planet you are on. Pin one idea." }
       ]
     },
-
-    // ---------------- 4. MOTION SORT ----------------
     {
-      title: "Motion sort",
+      title: "Sort Game",
       steps: [
-        {
-          target: "#kitchen-sort",
-          cue: "SHM vs Periodic vs Non-periodic",
-          wait: "sort",
-          say: "Activity 1! Not every repeating motion is Simple Harmonic. To be SHM, a restoring force must pull the object back towards a central equilibrium position in proportion to its displacement. Sort all twelve cards into the three bins, then tap Check my sorting."
-        }
+        { target: "#pd-sort", cue: "Three bins",
+          say: "Now a sort. For each card, decide: does it change the period, make no change, or change it only when the swing is wide?" },
+        { target: "#pd-sort", cue: "Your turn", wait: "sort",
+          say: "Your turn. Place all nine cards, then tap Check." }
       ]
     },
-
-    // ---------------- 5. 3D PRACTICAL ----------------
     {
-      title: "3D practical",
+      title: "Virtual Lab",
       steps: [
-        {
-          target: "#safety-box",
-          cue: "WAEC setup rules",
-          say: "Now step up to the 3D Pendulum Lab! Pay close attention to this examiner rule: always measure length L from the bottom of the split cork right to the centre of gravity of the bob."
-        },
-        {
-          target: "#m1",
-          action: "method:0",
-          cue: "Step 1 · Measure L",
-          say: "Step 1: Set the length L along the vertical metre rule, keeping your eye perpendicular to the scale to avoid parallax error."
-        },
-        {
-          target: "#m2",
-          action: "method:1",
-          cue: "Step 2 · Fiducial mark at x = 0",
-          say: "Step 2: Place the green fiducial reference pointer at the equilibrium centre. Why the centre? Because the bob flashes past the centre at maximum speed, making the crossing instant super sharp!"
-        },
-        {
-          target: "#m3",
-          action: "method:2",
-          cue: "Step 3 · Small angle (≤ 10°)",
-          say: "Step 3: Displace the bob through a small angle of ten degrees or less so it swings smoothly in a single vertical plane without conical wobble."
-        },
-        {
-          target: "#m4",
-          action: "method:3",
-          cue: "Step 4 · Time 20 oscillations",
-          say: "Step 4: Time twenty complete to-and-fro oscillations and divide by twenty. That divides your stopwatch reaction-time error by twenty!"
-        },
-        {
-          target: { scene: "bench", part: "clamp" },
-          cue: "Split cork suspension",
-          say: "Here on the 3D bench is the split cork clamp holding the top of the thread firmly."
-        },
-        {
-          target: { scene: "bench", part: "fiducial" },
-          cue: "Centre reference pointer",
-          say: "Down below is the green fiducial pointer at x equals zero, and the vertical metre rule on the left."
-        },
-        {
-          target: { scene: "bench", part: "bob" },
-          action: "bench:test:0",
-          cue: "Trial A · L = 0.40 m",
-          say: "Watch me time Trial A at length 0.40 metres. Twenty complete swings take 25.38 seconds, giving a period T of 1.269 seconds!"
-        },
-        {
-          target: "#bench-cond",
-          action: "bench:heavy",
-          cue: "Test the 100 g heavy bob!",
-          say: "What if we switch to the 100 gram heavy bob, or the 10 degree angle? Try them as you time the remaining lengths — you'll see the period stays identical!"
-        },
-        {
-          target: "#bench-stage",
-          action: "bench:std",
-          cue: "Your turn on the bench!",
-          wait: "bench",
-          say: "Now it's your turn! Tap the trial buttons to time at least four different lengths on the 3D bench."
-        },
-        {
-          target: "#results-table",
-          cue: "Record your WAEC table",
-          say: "Fill in your recorded values of t, T, and T squared in the WAEC results table here, and click Check my table."
-        },
-        {
-          target: "#expected",
-          action: "open:#expected",
-          cue: "T² is proportional to L",
-          say: "Look at the completed table and slope calculation: when length L doubles from 0.40 to 0.80 metres, T squared doubles from 1.61 to 3.22! Multiplying the slope by 4 pi squared gives g equals 9.81 metres per second squared."
-        }
+        { target: "#method-cards", action: "bench:reset", cue: "Four fair tests",
+          say: "Now the pendulum bench. Four method cards, four fair tests: the mass, the angle, the length, and gravity. Change only one thing each time." },
+        { target: { scene: "bench", part: "bob" }, action: "bench:view:bob", cue: "The bob",
+          say: "Here is the bob. The brass bob is one hundred grams; the wooden one, the same size, is fifty grams. The black band marks its centre, which sets the length l." },
+        { target: { scene: "bench", part: "protractor" }, action: "bench:view:all", cue: "The release angle",
+          say: "The protractor at the top shows the release angle. We use five, ten and thirty degrees. Timing starts as the bob passes the rest mark, counting zero." },
+        { target: "#bench-stage", action: "bench:time", cue: "Watch the stopwatch",
+          say: "Watch me time twenty swings at zero point five metres and ten degrees. The stopwatch should stop at about twenty eight point four four seconds, so T is about one point four two seconds." },
+        { target: "#bench-stage", action: "bench:view:bob", cue: "Your turn", wait: "bench",
+          say: "Your turn. Swap to the fifty gram bob and time it. Then try five and thirty degrees, the short and long threads, and finally the Moon. I will carry on when all four variables are tested." },
+        { target: "#results-table", action: "open:#expected", cue: "Compare your results",
+          say: "Compare your table with the expected results. Fifty grams and one hundred grams both gave twenty eight point four four seconds. Quadrupling the length doubled the period. And on the Moon, twenty swings took about seventy seconds." }
       ]
     },
-
-    // ---------------- 6. SHM LAWS ----------------
     {
-      title: "SHM laws",
+      title: "Make Sense",
       steps: [
-        {
-          target: "#eq-shm",
-          cue: "The heart of SHM",
-          sparkle: true,
-          say: "Now let's make sense of the theory. Every simple harmonic motion obeys one master equation: a equals minus omega squared x. Acceleration is proportional to displacement x, and the minus sign shows it always points back towards the equilibrium centre."
-        },
-        {
-          target: ["#eq-omega", "#eq-vel", "#eq-pend"],
-          cue: "Your formula toolkit",
-          say: "Here are the equations you'll use in calculations: omega equals 2 pi f, velocity v equals omega root A squared minus x squared, and for a simple pendulum, T equals 2 pi root L over g."
-        },
-        {
-          target: "#all-alkalis",
-          cue: "Classic exam distinction",
-          sparkle: true,
-          say: "Remember this golden rule: all simple harmonic motions are periodic, but not all periodic motions are simple harmonic!"
-        },
-        {
-          target: "#props-table",
-          cue: "Centre vs Extreme Ends",
-          say: "Study this table carefully. At the equilibrium centre x equals zero, speed and kinetic energy are maximum while acceleration is zero. At the extreme ends, speed is zero while acceleration and potential energy are maximum!"
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:0",
-          cue: "Left extreme (−A)",
-          say: "Tap along the Swing Position Explorer: at the left extreme minus A, the bob stops momentarily, so speed is zero, but restoring acceleration is at its peak pulling rightward."
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:3",
-          cue: "Equilibrium centre (x = 0)",
-          say: "Right at the centre x equals zero, potential energy has turned 100 percent into kinetic energy — speed hits maximum and acceleration drops to zero!"
-        }
+        { target: "#concept-forces", cue: "Forces on the bob",
+          say: "Let us make sense of it. The weight m g splits into two parts. M g cos theta pulls along the thread and the tension balances it. M g sin theta pulls along the arc, back to the lowest point. That is the restoring force." },
+        { target: "#concept-small", cue: "The small-angle step", sparkle: true,
+          say: "For a small angle in radians, sine theta is almost equal to theta, which is x over l. So the acceleration is minus g over l times x. The mass cancels! This is S H M with omega squared equal to g over l, so T equals two pi root L over g." },
+        { target: "#props-table", cue: "Pendulum vs spring",
+          say: "Compare with the spring. The spring's period depends on mass but not on g. The pendulum's period depends on g but not on mass. WAEC loves this contrast." },
+        { target: "#pos-explorer", action: "pin:4", cue: "Your turn", wait: "pin",
+          say: "Your turn. Tap the angle pins. At ten degrees, sine theta is only half a per cent below theta. At forty five degrees it is ten per cent below, and the period grows by four per cent." }
       ]
     },
-
-    // ---------------- 7. VECTOR ZOOM ----------------
     {
-      title: "Vector zoom",
+      title: "Zoom",
       steps: [
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:mix",
-          cue: "Teal = v · Amber = a",
-          say: "Zoom in on the oscillating bob in 3D! The teal arrow shows velocity v, and the amber arrow shows restoring acceleration a."
-        },
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:acid",
-          cue: "Frozen at x = 0",
-          say: "Let's freeze the bob right at the equilibrium centre: notice how the teal velocity arrow is at full length, while the amber acceleration arrow has completely vanished!"
-        },
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:base",
-          cue: "Frozen at x = +A",
-          say: "Now freeze at the right extreme plus A: velocity is zero, but the amber restoring acceleration arrow is at maximum strength, pulling the bob back to the left."
-        },
-        {
-          target: { scene: "zoom", part: "bars" },
-          action: "zoom:mode:mix",
-          cue: "Energy conservation",
-          say: "And watch the 3D energy pillars on the right: kinetic energy and potential energy trade places twice every cycle, while total mechanical energy stays constant unless air damping is switched on."
-        }
+        { target: { scene: "zoom", part: "mg-sin" }, action: "zoom:reset", cue: "mg sin θ",
+          say: "In the force zoom, the amber arrow is m g sin theta, along the arc. The violet arrow is m g cos theta, along the thread, cancelled by the tension." },
+        { target: { scene: "zoom", part: "triangle" }, action: "zoom:sweep", cue: "sin θ ≈ x/l",
+          say: "The shaded thin triangle has sides x and l. For small angles, sine theta is almost x over l. Watch the angle go from ten to forty five degrees and see the readout drift apart." },
+        { target: { scene: "zoom", part: "a-arrow" }, action: "zoom:mass:100", cue: "Your turn", wait: "zoom",
+          say: "Your turn. Swap between fifty and one hundred grams. Every force arrow doubles, but the green acceleration arrow, g sine theta, stays the same length. Heavier means more force, but also more inertia." }
       ]
     },
-
-    // ---------------- 8. WORKED EXAMPLES ----------------
     {
-      title: "Worked examples",
+      title: "Worked Examples",
       steps: [
-        {
-          target: "#ex1",
-          cue: "Example 1 · From 20 swings to L",
-          say: "Walk through Worked Example 1: divide 36.0 seconds by 20 swings first to get T equals 1.80 seconds, then find frequency, omega, and length L."
-        },
-        {
-          target: "#ex2",
-          cue: "Example 2 · Speed at displacement x",
-          say: "Example 2 shows how to find maximum speed omega A, maximum acceleration omega squared A, and instantaneous speed at any displacement x."
-        },
-        {
-          target: "#ex3",
-          cue: "Example 3 · Slope of L vs T²",
-          say: "Example 3 is straight from WAEC Paper 3: find the slope delta L over delta T squared, then multiply by 4 pi squared to determine g."
-        },
-        {
-          target: "#ex4",
-          cue: "Example 4 · Quadrupling L",
-          say: "And Example 4 tackles JAMB's favourite scaling trap: because T is proportional to the square root of L, multiplying length by 4 doubles the period!"
-        }
+        { target: "#ex1", cue: "Find the period",
+          say: "Example one. A pendulum zero point nine metres long. T equals two pi root zero point nine over nine point eight, which is one point nine zero seconds." },
+        { target: "#ex2", cue: "Ratios",
+          say: "Example two uses a ratio. T two over T one equals root of l two over l one. Root two point two five is one point five, so the new period is one point nine zero seconds. The same answer as example one." },
+        { target: ["#ex3", "#ex4"], cue: "Moon and seconds pendulum",
+          say: "Example three: on the Moon, g is one sixth, so the period is multiplied by root six, two point four five. Example four: the seconds pendulum, period two seconds, is about zero point nine nine metres long." }
       ]
     },
-
-    // ---------------- 9. THE BIG IDEA ----------------
     {
-      title: "The big idea",
+      title: "Solving the Mystery",
       steps: [
-        {
-          target: ["#vt-a", "#vt-b"],
-          cue: "Clock A vs Clock B",
-          say: "Now let's return to Mama Ngozi's stall and fix Kunle's school clock! Clock A ticks at 2.00 seconds, while Clock B is dragging at 2.15 seconds."
-        },
-        {
-          target: "#vinegar-test",
-          action: "clock:1",
-          cue: "Step 1 · Heavy bob test",
-          say: "When we clip a heavy lead weight onto Clock B in Step 1, its period stays 2.15 seconds! Mrs Adeyemi's mass theory is busted."
-        },
-        {
-          target: "#vinegar-test",
-          cue: "Shorten Clock B's length!",
-          wait: "bridge",
-          say: "Click Step 2 and Step 3 to screw the regulating nut upward, shortening Clock B's effective length L to 0.994 metres."
-        },
-        {
-          target: "#big-idea",
-          cue: "The core principle",
-          sparkle: true,
-          say: "And there is the big idea of this entire topic: the period of a simple pendulum depends only on its effective length L and gravity g — never on its mass!"
-        }
+        { target: "#bridge-card", cue: "Your turn", wait: "bridge",
+          say: "Now the Bridge. First, Tunde's test. Then Mrs Okafor's puzzle: what length of pendulum keeps the okada's half second bounce? Answer the three steps." },
+        { target: "#big-idea", cue: "The big idea", sparkle: true,
+          say: "The big idea. T equals two pi root L over g. Only length and gravity count, for small swings. And the okada bounces in time with a six point two centimetre pendulum, exactly its static sag." }
       ]
     },
-
-    // ---------------- 10. QUIZ & REFLECT ----------------
     {
-      title: "Quiz & Reflect",
+      title: "Quiz & Reflection",
       steps: [
-        {
-          target: "#quiz",
-          cue: "12 exam-style questions",
-          wait: "quiz",
-          say: "Test yourself on these twelve WAEC, NECO, and JAMB questions. Pick your answers and read the instant feedback!"
-        },
-        {
-          target: "#reflect",
-          cue: "Rate your confidence (1–4)",
-          say: "Finally, rate yourself honestly from 1 to 4 on each learning goal, complete the two-mark Exit Ticket, and try the home pendulum investigation in the Assignment section. Well done today!"
-        }
+        { target: "#quiz-list", cue: "Quiz time", wait: "quiz",
+          say: "Now the quiz: twelve questions in WAEC, NECO and JAMB style, plus two review questions from Lessons 2 and 3." },
+        { target: "#reflect", cue: "Reflect",
+          say: "Rate yourself from one to four on each goal, then do the exit ticket and the blank page recall." },
+        { target: "#assignment", cue: "Assignment",
+          say: "For homework, Part A: hang a key and a padlock on equal threads and see if they stay in step. Part B is a thirty mark paper. Well done today!" }
       ]
     }
   ]

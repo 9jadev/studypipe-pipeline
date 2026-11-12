@@ -1,0 +1,784 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 6 · Silicon Roots &amp; Exam Clinic · StudyPipe</title>
+  <meta name="description" content="StudyPipe Computer Studies &amp; Programming (SS1): binary and hexadecimal conversions, decoding 0x7E, syntax/run-time/logic bug taxonomy, WAEC dry-run trace tables, and full microgrid recovery.">
+  <meta name="theme-color" content="#04140f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='18' width='44' height='28' rx='6' fill='%233ee6c4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--teal-rgb, 62, 230, 196), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(310px, 88vw, 420px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    @media (min-width: 540px) {
+      #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    #bench-stage .bench-readout div { padding: 5px 6px; min-width: 0; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13px; display: block; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+    .l6-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .l6-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 56px; }
+    .chip-btn { min-height: 36px; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12px; cursor: pointer; }
+    .chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .l6-bits-bar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .l6-bits-bar > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 56px; }
+    .l6-bits { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 5px; flex: 1; min-width: 210px; }
+    @media (min-width: 520px) {
+      .l6-bits { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    }
+    .bit-btn { min-height: 36px; padding: 3px 4px; border-radius: 8px; border: 1.5px solid var(--line-strong); background: rgba(255,255,255,.03); color: var(--fg-soft); font-family: var(--font-mono); font-size: 11px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; }
+    .bit-btn span { font-size: 9.5px; opacity: .78; }
+    .bit-btn b { font-size: 13px; color: var(--fg); }
+    .bit-btn[aria-pressed="true"] { background: rgba(var(--ok-rgb), .18); border-color: var(--ok); color: var(--fg); }
+    .bit-btn[aria-pressed="true"] b { color: var(--ok); }
+    .l6-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .l6-actions .vt-btn { flex: 1; min-width: 110px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-soft); }
+
+    /* results table (one compact row per reading) */
+    #results-table td .rc-sub { display: block; font-size: 11px; color: var(--paper-muted); margin-top: 2px; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 0.9fr 1.5fr 1fr 1.1fr; padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 0.9fr 1.5fr 1fr 1.1fr; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12px; }
+      #results-table th { font-size: 10.5px; }
+      #results-table td::before { content: none; }
+    }
+
+    /* hex status byte explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 50px; padding: 6px 4px; font-weight: 700; font-size: 11.5px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--crimson); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 12.5px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .prog-bq { margin-top: 14px; }
+    .prog-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; }
+    .prog-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .prog-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; }
+    .prog-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .prog-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .prog-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .prog-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .prog-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l06">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 6 Lessons</a>
+      <span class="l-crumb">Lesson 6 of 6 · <b>Silicon Roots &amp; Exam Clinic</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Computer Studies · Lesson 6 of 6 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Silicon Roots &amp; <em>Exam Clinic</em></h1>
+        <p class="question reveal">How do logic gates, truth tables, and hex codes translate to high-level mastery, and how do we ace the WAEC programming paper?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Convert numbers between <strong>decimal</strong>, <strong>binary (base-2)</strong>, and <strong>hexadecimal (base-16)</strong> numbering systems.</span></li>
+          <li><b>02</b><span>Decode hex machine status codes (such as <code>0x7E</code>) and map them to <strong>8-bit binary flag registers</strong>.</span></li>
+          <li><b>03</b><span>Construct and complete full <strong>WAEC dry-run trace tables</strong> for multi-step algorithms.</span></li>
+          <li><b>04</b><span>Identify and classify <strong>syntax</strong>, <strong>run-time</strong>, and <strong>logic</strong> errors in program snippets.</span></li>
+          <li><b>05</b><span>Integrate all 5 core programming concepts to perform a complete <strong>system reboot</strong> and solve the unit mystery.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Movement break</span><span><b>45–60</b> Make sense</span><span><b>60–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="24" y="26" width="272" height="188" rx="14" fill="none" stroke="rgba(62,230,196,.45)" stroke-width="2.2"/>
+          <text x="160" y="68" fill="var(--amber)" font-family="var(--font-mono)" font-size="22" font-weight="700" text-anchor="middle">0x7E = 0111 1110₂</text>
+          <rect x="44" y="88" width="232" height="62" rx="10" fill="rgba(56,189,248,.12)" stroke="rgba(56,189,248,.45)" stroke-dasharray="4 3"/>
+          <text x="160" y="114" fill="var(--fg)" font-family="var(--font-mono)" font-size="13" text-anchor="middle">(7 × 16) + 14 = 126₁₀</text>
+          <text x="160" y="136" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="12" text-anchor="middle">Dry-Run Trace: sum_even = 36, cnt = 2</text>
+          <text x="160" y="186" fill="var(--teal, #3ee6c4)" font-family="var(--font-mono)" font-size="14" text-anchor="middle">IKOGOSI GRID: 50.0 Hz ONLINE</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">3 Bug Classes</a></li>
+        <li><a href="#practical">Recovery Console</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Silicon Bridge</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- 0. DO NOW -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up your toolkit</em></h2>
+        <p class="intro">Four quick retrieval cards from Lessons 2, 4, and 5 on function definitions, local scope, zero-based array indexing, and boolean negation. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- 1. STORY -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The final reboot at <em>Ikogosi</em></h2>
+        <p class="intro">The rain clears over Ekiti. Every software module is patched, yet the central inverter cabinet stays locked behind one final hardware parity check: decode hexadecimal register <code>0x7E</code> into 8-bit binary.</p>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story at the Ikogosi Microgrid Control Station: Tari, Amina, Chief Babatunde, and Engr. Idris decoding 0x7E into 01111110 binary, running the master boot script, and restoring power across Ikogosi."></canvas>
+            <div class="stage-label"><i></i>3D story · Ikogosi Microgrid Station</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Tari:</strong> <em>“The rainstorm has cleared over Ikogosi! Look at the central console: SYSTEM STATUS: READY FOR REBOOT.”</em></p>
+            <p><strong>Scene 2 · Amina:</strong> <em>“Every module is patched: int('150') + 20 fixed, boolean gate corrected, loops bounded, arrays indexed 0 to 7, and billing modularized!”</em></p>
+            <p><strong>Scene 3 · Chief Babatunde:</strong> <em>“To unlock the central inverter switch, the hardware asks us to decode hex status 0x7E into an 8-bit binary register.”</em></p>
+            <p><strong>Scene 4 · Tari:</strong> <em>“Hex 7 is 0111 in binary, and hex E is 14, which is 1110! Joining the two nibbles gives byte 01111110 — decimal 126!”</em></p>
+            <p><strong>Scene 5 · Amina:</strong> <em>“Master script verified and authenticated! The 50 Hz relays just clicked on — steady power is back at the clinic and across Ikogosi!”</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2. WONDER WALL -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">How does mastering high-level Python code together with low-level binary and hexadecimal representations make you a stronger software problem solver? Pin your idea.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think combining Python with binary/hex helps because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">Hardware registers speak binary, and hex shortens 8 bits to 2 symbols (Tari)</button>
+            <button type="button">Knowing types and memory prevents crashes before the CPU runs code (Amina)</button>
+            <button type="button">A dry-run trace catches logic bugs before closing real power relays (Idris)</button>
+            <button type="button">Every high-level loop and branch ends up as 0 V and 3.3 V pulses (Babatunde)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3. SORT -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Classify the <em>3 bug families</em></h2>
+        <p class="intro">Sort all 9 programming errors into Syntax, Run-Time, or Logic Error. Drag each card, or tap a card then tap a bin.</p>
+        <div class="sort" id="bug-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Bug cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="syntax" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Syntax error bin">
+              <h4><i></i>Syntax error</h4><small>breaks grammar before running</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="runtime" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Run-time error bin">
+              <h4><i></i>Run-time error</h4><small>crashes mid-execution</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="logic" style="--bc:var(--violet)" tabindex="0" role="button" aria-label="Logic error bin">
+              <h4><i></i>Logic error</h4><small>runs cleanly, wrong answer</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3B. PRACTICAL -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>Full System Recovery &amp; <em>Trace Console</em></h2>
+        <p class="intro">Match the 8-bit hardware register to <code>0x7E</code> (<code>01111110₂</code>), then step through the WAEC even-number filter trace on <code>values = [14, 7, 22, 9]</code> to close the 50 Hz microgrid contactor.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Match register 0x7E</h4><p>Toggle switches to 01111110₂ (126₁₀).</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Step trace clock</h4><p>Check v % 2 == 0 across [14, 7, 22, 9].</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Verify sum &amp; count</h4><p>Confirm sum_even reaches 36 and count 2.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Authenticate &amp; Boot</h4><p>Close the 50 Hz contactor for Ikogosi.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D System Recovery and Trace Console: 8-bit toggle switches b7 to b0, dual hexadecimal decoder screen showing 0x7E and 01111110, WAEC dry-run trace monitor, copper busbar contactor, and status beacon."></canvas>
+            <div class="stage-label"><i></i>3D Recovery Console · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D console couldn't start on this device. Use the controls, trace table and worked examples below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar l6-chips" id="bench-hex" role="group" aria-label="Hex register presets">
+            <span class="lab-t">Hex byte</span>
+            <button class="chip-btn" type="button" data-byte="126" aria-pressed="true">0x7E (126)</button>
+            <button class="chip-btn" type="button" data-byte="74" aria-pressed="false">0x4A (74)</button>
+            <button class="chip-btn" type="button" data-byte="83" aria-pressed="false">0x53 (83)</button>
+            <button class="chip-btn" type="button" data-byte="255" aria-pressed="false">0xFF (255)</button>
+          </div>
+          <div class="stage-bar l6-bits-bar">
+            <span class="lab-t">8-bit reg</span>
+            <div class="l6-bits" id="bench-bits" role="group" aria-label="8-bit register toggle switches b7 to b0">
+              <button class="bit-btn" type="button" data-bit="7" aria-pressed="false"><span>b7·128</span><b>0</b></button>
+              <button class="bit-btn" type="button" data-bit="6" aria-pressed="true"><span>b6·64</span><b>1</b></button>
+              <button class="bit-btn" type="button" data-bit="5" aria-pressed="true"><span>b5·32</span><b>1</b></button>
+              <button class="bit-btn" type="button" data-bit="4" aria-pressed="true"><span>b4·16</span><b>1</b></button>
+              <button class="bit-btn" type="button" data-bit="3" aria-pressed="true"><span>b3·8</span><b>1</b></button>
+              <button class="bit-btn" type="button" data-bit="2" aria-pressed="true"><span>b2·4</span><b>1</b></button>
+              <button class="bit-btn" type="button" data-bit="1" aria-pressed="true"><span>b1·2</span><b>1</b></button>
+              <button class="bit-btn" type="button" data-bit="0" aria-pressed="false"><span>b0·1</span><b>0</b></button>
+            </div>
+          </div>
+          <div class="stage-bar l6-actions">
+            <button class="vt-btn" type="button" id="bench-step">Step trace</button>
+            <button class="vt-btn zobo" type="button" id="bench-take">Authenticate &amp; Boot</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Traced 0 of 4 on [14, 7, 22, 9] · Byte: 0x7E</span>
+          </div>
+        </div>
+
+        <h3>Record your dry-run trace table</h3>
+        <p>Each clock step records index <code>i</code>, value <code>v</code>, the modulus condition <code>v % 2 == 0</code>, running <code>sum_even</code>, and parity state.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Step</th><th>Condition</th><th>sum_even</th><th>State</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="results-line">Trace rows recorded: 0</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected WAEC trace table <small>open after you record yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Step</th><th><code>v</code></th><th><code>v % 2 == 0</code></th><th><code>sum_even</code></th><th><code>count</code></th></tr></thead>
+                <tbody>
+                  <tr><td>Init</td><td>—</td><td>—</td><td>0</td><td>0</td></tr>
+                  <tr><td>#1 (i=0)</td><td>14</td><td><code>14 % 2 == 0 → True</code></td><td><b>14</b></td><td>1</td></tr>
+                  <tr><td>#2 (i=1)</td><td>7</td><td><code>7 % 2 == 1 → False</code></td><td>14</td><td>1</td></tr>
+                  <tr><td>#3 (i=2)</td><td>22</td><td><code>22 % 2 == 0 → True</code></td><td><b>36</b></td><td>2</td></tr>
+                  <tr><td>#4 (i=3)</td><td>9</td><td><code>9 % 2 == 1 → False</code></td><td><b>36</b></td><td><b>2</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">0x7E = (7 × 16¹) + (14 × 16⁰) = 112 + 14 = 126₁₀ = 0111 1110₂ · sum_even = 36, count = 2</div>
+            <p>Tracing every variable column before execution proves both the parity lock and the loop output without risking physical switchgear.</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l06-prac-q">
+          <div class="aq-top"><h4>Answer these three questions from your Recovery Console trace, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why does the console refuse to close the contactor if <code>b0</code> is flipped from <code>0</code> to <code>1</code> (changing <code>0x7E</code> to <code>0x7F</code>)?</li>
+            <li>During Step #2 (<code>v = 7</code>), why do <code>sum_even</code> and <code>count</code> stay unchanged?</li>
+            <li>How did completing the dry-run trace table prove the boot script's correctness before energizing the 50 Hz relays?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Flipping bit <code>b0</code> adds 1, changing binary <code>01111110₂</code> (<code>0x7E = 126</code>) to <code>01111111₂</code> (<code>0x7F = 127</code>), which fails the hardware parity check.</li>
+                <li>Because <code>7 % 2 = 1 ≠ 0</code>, the condition <code>v % 2 == 0</code> evaluates to <code>False</code>, so the indented <code>if</code> block is skipped and both accumulators keep their previous values.</li>
+                <li>The trace table verified every intermediate state (0 → 14 → 14 → 36 → 36) and confirmed loop termination at <code>i = 3</code> with no infinite loop or index crash before switching live power.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 4. CONCEPTS -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Silicon roots, <em>bug classes &amp; WAEC traces</em></h2>
+        <p class="intro">Connect the 8-bit switches and dry-run trace table to the number bases, bug taxonomy, and WAEC Chief Examiner marking standards.</p>
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (40 min mark, 5 minutes):</strong> stand up! Hold up 8 fingers for an 8-bit byte: left 4 fingers are the upper nibble (<code>7 = 0111</code>: thumb down, 3 fingers up), right 4 fingers are the lower nibble (<code>E = 1110</code>: 3 fingers up, pinky down). Now trace a loop in the air — test condition, step body, increment! Repeat twice, then sit down.</p>
+        </div>
+
+        <h3 id="def-bases">1. Binary (Base-2) &amp; Hexadecimal (Base-16)</h3>
+        <p>Inside silicon chips, every number and instruction is stored in <strong>binary (base-2)</strong> using bits (<code>0</code> for 0 V LOW, <code>1</code> for 3.3 V HIGH). An 8-bit group forms one <strong>byte</strong> with positional weights <code>128, 64, 32, 16, 8, 4, 2, 1</code>.</p>
+        <p>Long strings of 1s and 0s are hard for humans to read, so engineers group every 4 bits (one <strong>nibble</strong>) into a single <strong>hexadecimal (base-16)</strong> digit using <code>0–9</code> and <code>A–F</code> (where <code>A=10, B=11, C=12, D=13, E=14, F=15</code>). Hexadecimal is used everywhere for memory addresses (<code>0x00FF</code>), status codes (<code>0x7E</code>), and web RGB color codes (<code>#04AA6D</code> = Red <code>04</code>, Green <code>AA</code>, Blue <code>6D</code>).</p>
+
+        <div class="eq" id="eq-hex" data-hook>0x7E = 0111 1110₂ &nbsp;·&nbsp; (7 × 16¹) + (14 × 16⁰) = 126₁₀ &nbsp;<span class="st">(7 = 0111₂, E = 14 = 1110₂)</span></div>
+        <p class="m-eq-note">Split any 2-digit hex byte into two 4-bit nibbles for instant binary conversion, or multiply the left digit by 16 and add the right digit (0–15) to obtain decimal.</p>
+
+        <h3>2. The 3 Classes of Bugs &amp; WAEC Marking Rubric</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Error Class</th><th>When Caught</th><th>Typical Causes &amp; Examples</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Syntax Error</strong></td><td>Before execution (parse / compile time)</td><td>Violates language grammar: missing colon (<code>if x &gt; 5</code>), unmatched bracket, misspelled keyword (<code>whle</code>).</td></tr>
+              <tr><td><strong>Run-Time Error</strong></td><td>Mid-execution (program crashes)</td><td>Legal grammar, illegal operation: <code>ZeroDivisionError</code> (<code>10/0</code>), <code>IndexError</code> (<code>cells[8]</code>), <code>TypeError</code> (<code>"150"+20</code>).</td></tr>
+              <tr><td><strong>Logic Error</strong></td><td>Runs to completion with wrong output</td><td>Flawed reasoning: <code>score &gt; 70</code> instead of <code>&gt;= 70</code>, missing loop counter update, wrong boolean gate (<code>and grid_online</code>).</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout big reveal" id="waec-rubric">
+          <p><strong>WAEC Chief Examiner Marking Scheme:</strong> When grading programming and trace-table questions, examiners award separate method marks for <strong>(1) variable initialization</strong> before the loop, <strong>(2) exact loop conditions &amp; indentation</strong>, <strong>(3) one chronological row per iteration</strong> showing intermediate variable changes, and <strong>(4) the final output line</strong>.</p>
+        </div>
+
+        <h3 id="pos-h">3. Hexadecimal &amp; Binary Status Byte Explorer</h3>
+        <p>Tap any status byte pin below to split the 2-digit hex code into its upper and lower 4-bit nibbles and verify the decimal sum of binary weights.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a status byte pin to inspect its nibbles, 8-bit binary pattern, and decimal value.</div>
+        </div>
+      </section>
+
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Concept Zoom: <em>the Silicon Bridge</em></h2>
+        <p class="intro">Trace a single instruction across all four hardware-software abstraction layers — from high-level Python down to assembly ISA, hexadecimal/binary register bits, and physical 3.3 V CMOS MOSFET gates.</p>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D Silicon Bridge zoom: four stacked vertical layers connecting Python source code, Assembly ISA, 8-bit hexadecimal register 0x7E, and CMOS silicon logic gate voltage probe."></canvas>
+            <div class="stage-label"><i></i>3D Silicon Bridge · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="stage-bar l6-chips" id="zoom-tiers" role="group" aria-label="Architecture abstraction tier">
+            <span class="lab-t">Tier</span>
+            <button class="chip-btn" type="button" data-tier="0" aria-pressed="true">1 · Python</button>
+            <button class="chip-btn" type="button" data-tier="1" aria-pressed="false">2 · Assembly</button>
+            <button class="chip-btn" type="button" data-tier="2" aria-pressed="false">3 · Hex/Bin</button>
+            <button class="chip-btn" type="button" data-tier="3" aria-pressed="false">4 · CMOS</button>
+          </div>
+          <div class="stage-bar l6-chips" id="zoom-bytes" role="group" aria-label="Register byte value">
+            <span class="lab-t">Byte</span>
+            <button class="chip-btn" type="button" data-byte="126" aria-pressed="true">0x7E</button>
+            <button class="chip-btn" type="button" data-byte="74" aria-pressed="false">0x4A</button>
+            <button class="chip-btn" type="button" data-byte="83" aria-pressed="false">0x53</button>
+            <button class="chip-btn" type="button" data-byte="255" aria-pressed="false">0xFF</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each trace and conversion on paper first, then step through the code card and atomic LaTeX derivations below.</p>
+
+        <!-- Example 6.1 -->
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 6.1</span><h4>WAEC Dry-Run Trace Table: Even-Number Filter</h4></div>
+          <div class="example-body">
+            <p class="q">Construct a complete dry-run trace table for the Ikogosi telemetry filter over <code>values = [14, 7, 22, 9]</code>, accumulating only even numbers into <code>sum_even</code> and counting them in <code>count</code>.</p>
+
+            <div class="study-code-snippet"
+                 data-title="even_filter_trace.py"
+                 data-lang="python"
+                 data-notes='{"1":"Initialize array values with four telemetry readings.","2":"Initialize accumulator sum_even to 0 before the loop.","3":"Initialize counter count to 0 before the loop.","4":"Iterate element v across [14, 7, 22, 9].","5":"Check if v has remainder 0 when divided by 2.","6":"Add v to sum_even only when condition is True.","7":"Increment count by 1 only when condition is True.","8":"Print final sum_even and count after loop ends."}'
+                 data-trace='[{"line":2,"vars":{"sum_even":"0","count":"0","status":"Init"}},{"line":5,"vars":{"v":"14","v % 2 == 0":"True","sum_even":"0","count":"0"}},{"line":7,"vars":{"v":"14","sum_even":"14","count":"1"}},{"line":5,"vars":{"v":"7","v % 2 == 0":"False","sum_even":"14","count":"1"}},{"line":5,"vars":{"v":"22","v % 2 == 0":"True","sum_even":"14","count":"1"}},{"line":7,"vars":{"v":"22","sum_even":"36","count":"2"}},{"line":5,"vars":{"v":"9","v % 2 == 0":"False","sum_even":"36","count":"2"}},{"line":8,"vars":{"sum_even":"36","count":"2","output":"Sum: 36 Count: 2"}}]'
+                 data-output="Sum: 36 Count: 2">
+              <code>
+values = [14, 7, 22, 9]
+sum_even = 0
+count = 0
+for v in values:
+    if v % 2 == 0:
+        sum_even += v
+        count += 1
+print("Sum:", sum_even, "Count:", count)
+              </code>
+            </div>
+
+            <div class="tbl-wrap" style="margin-top:12px;">
+              <table class="tbl">
+                <thead><tr><th>Step</th><th><code>v</code></th><th><code>v % 2 == 0</code></th><th><code>sum_even</code></th><th><code>count</code></th><th>Action</th></tr></thead>
+                <tbody>
+                  <tr><td>Init</td><td>—</td><td>—</td><td>0</td><td>0</td><td>Initialize accumulators</td></tr>
+                  <tr><td>1</td><td>14</td><td><code>14 % 2 = 0 (True)</code></td><td>14</td><td>1</td><td>Even: add 14, count + 1</td></tr>
+                  <tr><td>2</td><td>7</td><td><code>7 % 2 = 1 (False)</code></td><td>14</td><td>1</td><td>Odd: skip body</td></tr>
+                  <tr><td>3</td><td>22</td><td><code>22 % 2 = 0 (True)</code></td><td>36</td><td>2</td><td>Even: add 22, count + 1</td></tr>
+                  <tr><td>4</td><td>9</td><td><code>9 % 2 = 1 (False)</code></td><td>36</td><td>2</td><td>Odd: skip body</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="14 \text{ mod } 2 = 0 \Rightarrow \text{sum}_{\text{even}} = 0 + 14 = 14,\text{ count} = 1"></div></div>
+                <p class="m-step-note">At step 1, 14 is divisible by 2 with remainder 0, so 14 is added to <code>sum_even</code> and <code>count</code> becomes 1.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="7 \text{ mod } 2 = 1 \neq 0 \Rightarrow \text{sum}_{\text{even}} = 14,\text{ count} = 1"></div></div>
+                <p class="m-step-note">At step 2, 7 leaves remainder 1, so the <code>if</code> branch is skipped and variables do not change.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="22 \text{ mod } 2 = 0 \Rightarrow \text{sum}_{\text{even}} = 14 + 22 = 36,\text{ count} = 2"></div></div>
+                <p class="m-step-note">At step 3, 22 is even, so adding 22 brings <code>sum_even</code> to 36 and increments <code>count</code> to 2.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="9 \text{ mod } 2 = 1 \neq 0 \Rightarrow \text{sum}_{\text{even}} = \boxed{36},\text{ count} = \boxed{2}"></div></div>
+                <p class="m-step-note">At step 4, 9 is odd and skipped; the loop terminates with final output <code>Sum: 36 Count: 2</code>.</p>
+              </div>
+            </div>
+            <div class="answer-line">sum_even = 36 · count = 2</div>
+          </div>
+        </article>
+
+        <!-- Example 6.2 -->
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 6.2</span><h4>Converting <code>0x4A</code> to Binary &amp; Decimal + In-Place Variable Swap</h4></div>
+          <div class="example-body">
+            <p class="q">(a) Convert hexadecimal telemetry byte <code>0x4A</code> into 8-bit binary and decimal. (b) Trace the classic no-temp variable swap for <code>a = 4</code> and <code>b = 3</code>.</p>
+
+            <div class="study-code-snippet"
+                 data-title="inplace_swap.py"
+                 data-lang="python"
+                 data-notes='{"1":"Initialize a = 4 in RAM.","2":"Initialize b = 3 in RAM.","3":"Add both values into a (a becomes 7).","4":"Subtract b from the new sum to recover original a (b becomes 4).","5":"Subtract new b from sum to recover original b (a becomes 3).","6":"Print swapped variables a=3 and b=4."}'
+                 data-trace='[{"line":1,"vars":{"a":"4"}},{"line":2,"vars":{"a":"4","b":"3"}},{"line":3,"vars":{"a":"7","b":"3"}},{"line":4,"vars":{"a":"7","b":"4"}},{"line":5,"vars":{"a":"3","b":"4"}},{"line":6,"vars":{"a":"3","b":"4","output":"a: 3 b: 4"}}]'
+                 data-output="a: 3 b: 4">
+              <code>
+a = 4
+b = 3
+a = a + b
+b = a - b
+a = a - b
+print("a:", a, "b:", b)
+              </code>
+            </div>
+
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="4_{16} = 0100_2,\text{ A}_{16} = 10_{10} = 1010_2"></div></div>
+                <p class="m-step-note">Expand each hexadecimal digit into a 4-bit binary nibble (remember <code>A = 10 = 8 + 2</code>).</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="0\text{x}4\text{A} = \boxed{01001010_2}"></div></div>
+                <p class="m-step-note">Join the upper nibble <code>0100</code> and lower nibble <code>1010</code> to form the 8-bit binary byte.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="0\text{x}4\text{A} = (4 \times 16^1) + (10 \times 16^0) = 64 + 10 = \boxed{74_{10}}"></div></div>
+                <p class="m-step-note">Multiply the left hex digit by 16 and add the right digit (10) to obtain decimal 74.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="a_1 = 4 + 3 = 7 \rightarrow b_{\text{final}} = 7 - 3 = \boxed{4} \rightarrow a_{\text{final}} = 7 - 4 = \boxed{3}"></div></div>
+                <p class="m-step-note">Using additive arithmetic swaps <code>a</code> and <code>b</code> in place without allocating a temporary third variable.</p>
+              </div>
+            </div>
+            <div class="answer-line">0x4A = 01001010₂ = 74₁₀ · Swapped: a = 3, b = 4</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 7. BRIDGE -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Ikogosi: <em>master system recovery</em></h2>
+        <p class="intro">Complete all three final verification checks to authenticate parity register <code>0x7E</code>, confirm the dry-run filter trace, and bring the 170 kW microgrid permanently back online.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 6:</strong> every reliable software system links <strong>high-level structured logic</strong> (typed variables, boolean gates, bounded loops, 0-based arrays, modular functions) down to <strong>low-level binary &amp; hexadecimal hardware states</strong> — and a disciplined <strong>dry-run trace</strong> proves correctness on paper before switching live hardware.</p>
+        </div>
+      </section>
+
+      <!-- 8. QUIZ -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB</em></h2>
+        <p class="intro">12 original exam-style questions on binary, hexadecimal, bug taxonomy, and dry-run trace tables (plus 2 spaced-retrieval review questions from Lessons 4 and 5).</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- 9. REFLECT -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning objective of Lesson 6.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can convert numbers between decimal, binary (base-2), and hexadecimal (base-16).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can decode hex hardware status bytes like 0x7E into 8-bit binary registers.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can construct and complete full WAEC dry-run trace tables step by step.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can distinguish syntax, run-time, and logic errors in program code.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can integrate variables, conditionals, loops, arrays, and functions to solve real problems.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l06-exit">
+          <div class="aq-top"><h4>Convert hexadecimal <code>0x53</code> to 8-bit binary and decimal, and state what class of error occurs when a loop runs forever because its counter is never updated.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p><code>5 = 0101₂</code> and <code>3 = 0011₂</code>, so <code>0x53 = 01010011₂ = (5 × 16) + 3 = 83₁₀</code> <b>(1)</b>. Forgetting to update a loop counter is a <strong>logic error</strong> (valid syntax that never terminates as intended) <b>(1)</b>.</p></div>
+          </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and write down everything you remember from Lesson 6: <strong>binary weights (128..1) · hexadecimal (0–9, A–F) &amp; nibbles · 0x7E = 01111110₂ = 126 · syntax vs run-time vs logic errors · WAEC dry-run trace columns</strong>.</p>
+        </div>
+      </section>
+
+      <!-- 10. ASSIGNMENT -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Silicon Roots &amp; Exam Clinic</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B from 03-questions.md § Lesson 06</strong>. Type your attempt in each box first to unlock the model solution and marking scheme.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
+
+        <h3>Part A · Practical Home Investigation (Digital Status Decoder)</h3>
+        <div class="aq" data-answer="l06-part-a">
+          <div class="aq-top"><h4>Research hex color codes used in web design (e.g. <code>#FF0000</code> for Red, <code>#00FF00</code> for Green, <code>#38BDF8</code> for Sky Blue). Deconstruct one hex color into its three 8-bit RGB components (Red, Green, Blue) and convert each 2-digit hex byte into its decimal equivalent (0–255) and 8-bit binary form.</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="Deconstruct #38BDF8 (or another hex color) into R, G, B bytes…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model solution &amp; marking guidance <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="math-steps">
+                <div class="m-step">
+                  <div class="m-step-line"><div class="sp-math" data-latex="\text{Red } (38_{16}) = (3 \times 16) + 8 = \boxed{56_{10}} = \boxed{00111000_2}"></div></div>
+                  <p class="m-step-note">For Sky Blue <code>#38BDF8</code>, the first byte <code>0x38</code> expands to nibbles <code>0011</code> and <code>1000</code>, giving decimal 56.</p>
+                </div>
+                <div class="m-step">
+                  <div class="m-step-line"><div class="sp-math" data-latex="\text{Green } (\text{BD}_{16}) = (11 \times 16) + 13 = \boxed{189_{10}} = \boxed{10111101_2}"></div></div>
+                  <p class="m-step-note">The second byte <code>0xBD</code> maps <code>B (11) = 1011</code> and <code>D (13) = 1101</code>, giving decimal 189.</p>
+                </div>
+                <div class="m-step">
+                  <div class="m-step-line"><div class="sp-math" data-latex="\text{Blue } (\text{F8}_{16}) = (15 \times 16) + 8 = \boxed{248_{10}} = \boxed{11111000_2}"></div></div>
+                  <p class="m-step-note">The third byte <code>0xF8</code> maps <code>F (15) = 1111</code> and <code>8 = 1000</code>, giving decimal 248 (<code>rgb(56, 189, 248)</code>).</p>
+                </div>
+              </div>
+              <p><strong>Marking Guidance:</strong> Award <b>2 marks</b> for correct hex-to-decimal conversion, <b>2 marks</b> for binary mapping, and <b>1 mark</b> for clear presentation.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · 30-Mark Written Examination Paper</h3>
+
+        <div class="aq" data-answer="l06-b1">
+          <div class="aq-top"><h4>b1. Differentiate clearly between <em>syntax errors</em>, <em>run-time errors</em>, and <em>logic errors</em>, providing one concrete example of each.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Syntax vs run-time vs logic errors + examples…" aria-label="b1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><strong>Syntax error:</strong> violation of language grammatical rules detected before or during translation (e.g. <code>prnt("Hi")</code> or missing colon) <b>(1.5)</b>.<br>
+            <strong>Run-time error:</strong> occurs during execution causing abrupt termination (e.g. dividing by zero <code>10 / 0</code> or accessing an out-of-bounds array index) <b>(1.5)</b>.<br>
+            <strong>Logic error:</strong> program runs to completion without crashing, but produces incorrect output due to faulty reasoning (e.g. using <code>+</code> instead of <code>*</code>) <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b2">
+          <div class="aq-top"><h4>b2. Convert the following number representations: (i) Decimal <code>43</code> to 8-bit binary; (ii) Binary <code>11100101</code> to decimal; (iii) Decimal <code>188</code> to hexadecimal; (iv) Hexadecimal <code>0x2C</code> to decimal.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(i) … (ii) … (iii) … (iv) …" aria-label="b2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="43_{10} = 32 + 8 + 2 + 1 = \boxed{00101011_2}"></div></div>
+                <p class="m-step-note">(i) Place 1s in the 32, 8, 2, and 1 columns of an 8-bit byte <b>(1 mark)</b>.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="11100101_2 = 128 + 64 + 32 + 4 + 1 = \boxed{229_{10}}"></div></div>
+                <p class="m-step-note">(ii) Sum the binary positional weights where each bit is 1 <b>(1 mark)</b>.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="188 \div 16 = 11\text{ remainder }12 \Rightarrow 11=\text{B}, 12=\text{C} \Rightarrow \boxed{0\text{xBC}}"></div></div>
+                <p class="m-step-note">(iii) Quotient 11 gives hex <code>B</code> and remainder 12 gives hex <code>C</code> <b>(1 mark)</b>.</p>
+              </div>
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="0\text{x}2\text{C} = (2 \times 16) + 12 = 32 + 12 = \boxed{44_{10}}"></div></div>
+                <p class="m-step-note">(iv) Multiply the upper hex digit 2 by 16 and add <code>C = 12</code> <b>(1 mark)</b>.</p>
+              </div>
+            </div>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b3">
+          <div class="aq-top"><h4>b3. Complete the WAEC trace table for: <code>values = [14, 7, 22, 9]; count = 0; sum_even = 0; for v in values: if v % 2 == 0: sum_even += v; count += 1</code>.</h4><span class="marks">6 marks</span></div>
+          <textarea class="l-textarea" placeholder="Step | v | v % 2 == 0 | sum_even | count | State…" aria-label="b3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Step</th><th><code>v</code></th><th>Condition (<code>v % 2 == 0</code>)</th><th><code>sum_even</code></th><th><code>count</code></th><th>State</th></tr></thead>
+                <tbody>
+                  <tr><td>Init</td><td>—</td><td>—</td><td>0</td><td>0</td><td>Start <b>(1)</b></td></tr>
+                  <tr><td>1</td><td>14</td><td><code>14 % 2 == 0 → True</code></td><td>14</td><td>1</td><td>Even added <b>(1)</b></td></tr>
+                  <tr><td>2</td><td>7</td><td><code>7 % 2 == 1 → False</code></td><td>14</td><td>1</td><td>Odd skipped <b>(1)</b></td></tr>
+                  <tr><td>3</td><td>22</td><td><code>22 % 2 == 0 → True</code></td><td>36</td><td>2</td><td>Even added <b>(1)</b></td></tr>
+                  <tr><td>4</td><td>9</td><td><code>9 % 2 == 1 → False</code></td><td>36</td><td>2</td><td>Odd skipped <b>(1)</b></td></tr>
+                  <tr><td>End</td><td>—</td><td>Loop Terminated</td><td><b>36</b></td><td><b>2</b></td><td>Final: sum=36, count=2 <b>(1)</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b4">
+          <div class="aq-top"><h4>b4. Draw the circuit diagram of a 2-input digital logic circuit that evaluates the boolean expression <span class="sp-math" data-latex="Z = (A \text{ AND } B) \text{ OR } (\text{NOT } A)"></span>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Describe the gates, inputs, and connections…" aria-label="b4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>1. Connect inputs <span class="sp-math" data-latex="A"></span> and <span class="sp-math" data-latex="B"></span> into a 2-input <strong>AND gate</strong> to produce <span class="sp-math" data-latex="(A \text{ AND } B)"></span> <b>(1)</b>.<br>
+            2. Tap input <span class="sp-math" data-latex="A"></span> through a <strong>NOT gate (inverter)</strong> to produce <span class="sp-math" data-latex="(\text{NOT } A)"></span> <b>(1)</b>.<br>
+            3. Feed the output of the AND gate and the output of the NOT gate into a 2-input <strong>OR gate</strong> to produce final output <span class="sp-math" data-latex="Z"></span> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b5">
+          <div class="aq-top"><h4>b5. What is a <em>dry run</em> (desk check) and why is it considered the most powerful debugging skill for a programmer?</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Definition and why dry runs matter…" aria-label="b5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>A dry run is a manual, step-by-step mental or written trace of an algorithm using pencil and paper without running it on a computer <b>(2)</b>. It allows programmers to catch logical flaws, understand edge cases, and verify boundary conditions before writing code or deploying to live hardware <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b6">
+          <div class="aq-top"><h4>b6. A school grading system should award <code>"A"</code> for any score <span class="sp-math" data-latex="\ge 70"></span>, but scores of exactly 70 receive <code>"B"</code> in <code>if score &gt; 70: grade = "A" else: grade = "B"</code>. Identify the bug and write the correction.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Bug type + corrected Python code…" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><strong>Bug (Logic Error):</strong> The relational operator <code>&gt;</code> (strictly greater than) was used instead of <code>&gt;=</code> (greater than or equal to) <b>(2)</b>. When <code>score</code> is <code>70</code>, <code>70 &gt; 70</code> evaluates to <code>False</code>, falling into the <code>else</code> branch.</p>
+            <pre><code>if score &gt;= 70:   # (2)
+    grade = "A"
+else:
+    grade = "B"</code></pre>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b7">
+          <div class="aq-top"><h4>b7. State two advantages of writing comments (<code>#</code> or <code>REM</code>) in computer programs.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Two advantages of code comments…" aria-label="b7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) Explains the algorithm's purpose and intent to human developers <b>(1)</b>.<br>
+            (2) Improves long-term software maintenance, debugging, and team collaboration <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l06-b8">
+          <div class="aq-top"><h4>b8. What is the result of applying De Morgan's Law to <span class="sp-math" data-latex="\text{NOT } (A \text{ AND } B)"></span>?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Equivalent boolean expression…" aria-label="b8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><span class="sp-math" data-latex="(\text{NOT } A) \text{ OR } (\text{NOT } B)"></span> <b>(2 marks)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);">
+          <a class="btn btn-ghost" href="../lesson-05/index.html" style="color:var(--paper-ink);border-color:var(--paper-line);">← Lesson 5: Functions &amp; Scope</a>
+          <a class="btn btn-tour" href="../../index.html">Back to Unit Welcome Hub →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/programming-bench.js"></script>
+  <script src="../../assets/js/programming-zoom.js"></script>
+  <script src="../../assets/js/microgrid-props.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
+</body>
+</html>

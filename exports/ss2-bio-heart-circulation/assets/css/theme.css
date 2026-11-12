@@ -1,0 +1,76 @@
+/* theme: editorial-ink — installed by scripts/apply-theme.mjs from themes/editorial-ink/theme.css. Edit the source, not this copy. */
+/* =========================================================
+   StudyPipe theme · Editorial Ink (default)
+   Dark ink studio hub + warm textbook-paper lessons.
+   Loaded LAST on every page, so anything here wins.
+   Full token contract: themes/README.md
+   ========================================================= */
+:root {
+  /* ---- Fonts (files come from themes/_fonts via theme.json) ---- */
+  --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-body: "Manrope", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Consolas, monospace;
+  --font-math: "Fraunces", Georgia, Cambria, "Times New Roman", serif;
+  --font-label: Manrope, sans-serif;            /* 3D canvas label pills */
+
+  /* ---- Dark "ink" surfaces: hub, lesson hero, lab panels (keep dark: white text sits on them) ---- */
+  --ink-950: #060912;  --ink-950-rgb: 6, 9, 18;
+  --ink-900: #0a0f1d;  --ink-900-rgb: 10, 15, 29;
+  --ink-850: #0e1426;
+  --ink-800: #121a30;
+  --ink-700: #1b2543;
+  --ink-600: #2a3660;
+  --line: rgba(206, 220, 255, 0.09);
+  --line-strong: rgba(206, 220, 255, 0.18);
+  --fg: #eef1f8;
+  --fg-soft: #c9d0e3;
+  --muted: #8e98b4;
+  --on-ink-soft: #ded5c4;
+
+  /* ---- Light "paper" surfaces: lesson reading sections (keep light: dark text sits on them) ---- */
+  --paper: #f5efe4;    --paper-rgb: 245, 239, 228;
+  --paper-2: #ece3d3;
+  --paper-card: #fffaf2;
+  --paper-ink: #1b1813; --paper-ink-rgb: 27, 24, 19;
+  --paper-text: #3d362c;
+  --paper-muted: #6b6253;
+  --paper-faint: #a79e8e;
+  --paper-line: rgba(27, 24, 19, 0.12);
+
+  /* ---- Accents ---- */
+  --crimson: #d22e56;  --crimson-rgb: 210, 46, 86;   /* headline em, errors, phase colour */
+  --amber: #ffb23f;    --amber-rgb: 255, 178, 63;    /* eyebrows, focus ring, active step */
+  --on-amber: #1b1206;
+  --pink: #ff3d8b;     --pink-rgb: 255, 61, 139;
+  --pink-soft: #ff8cbc;
+  --orange: #ff7a2f;
+  --teal: #3ee6c4;     --teal-rgb: 62, 230, 196;
+  --sky: #7cc4ff;      --sky-rgb: 124, 196, 255;
+  --lime: #c6f36b;
+  --violet: #9b8cff;   --violet-rgb: 155, 140, 255;
+
+  /* ---- Feedback ---- */
+  --ok: #0d9c7e;       --ok-rgb: 13, 156, 126;
+  --ok-deep: #0b7d65;
+  --ok-tint: #e7f7f1;
+  --ok-tint-2: #f1faf6;
+  --bad-tint: #fff4f4;
+  --bad-tint-2: #fff1ec;
+  --warn: #d98a00;     --warn-rgb: 217, 138, 0;
+  --info: #3b6cf6;     --info-rgb: 59, 108, 246;
+  --wall-notes: #ffe58a, #ffc7d9, #bff0e1, #cfe3ff, #ffd8b0;
+
+  /* ---- Shape & motion ---- */
+  --corner: 1;          /* multiplies every small radius: 0.4 = crisp, 1 = default, 1.5 = bubbly */
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --shadow-lg: 0 30px 80px -30px rgba(0, 0, 0, 0.65);
+  /* ---- Explainer videos (explainer-video skill): world unit|safari|vegetation|fiesta|classic, motion pop|wipe, mascot on|off ---- */
+  --video-world: unit;
+  --video-motion: pop;
+  --video-mascot: on;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* No component overrides: this theme IS the shell's native look. */

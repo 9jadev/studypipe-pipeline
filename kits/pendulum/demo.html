@@ -1,13 +1,195 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kit demo: pendulum</title>
-<style>html,body{margin:0;height:100%;background:#0e1620}#host{width:100vw;height:100vh}</style>
+<title>Kit demo: pendulum v3</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;min-height:100vh}
+  #stage{position:relative;width:100%;height:58vh;min-height:320px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  #modes,#ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  #modes{padding-bottom:0}
+  button,select{min-height:38px;padding:0 10px;border-radius:19px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  select{background:#35505f}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  button.alt.on{background:#b4561b}
+  label.sl{display:flex;align-items:center;gap:6px;width:100%;font-size:12px}
+  label.sl input{flex:1;min-width:0}
+  label.sl b{min-width:64px;text-align:right;font:12px ui-monospace,monospace}
+  #readout{padding:2px 8px 12px}
+  #line{padding:4px 0 6px;font:12px ui-monospace,monospace;white-space:pre-wrap;word-break:break-word}
+  table{border-collapse:collapse;width:100%;font:11.5px ui-monospace,monospace}
+  th,td{border:1px solid rgba(255,255,255,.18);padding:2px 3px;text-align:right}
+  th{background:rgba(255,255,255,.08)}
+  #ev{font:11px ui-monospace,monospace;opacity:.7;padding-top:4px}
+</style>
 </head><body>
-<div id="host"></div>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="modes"></div>
+  <div id="ui"></div>
+  <div id="readout"><div id="line"></div><table id="tbl"></table><div id="ev"></div></div>
+</div>
 <script src="../_vendor/three-bundle.min.js"></script>
-<script src="kit.js"></script>
+<script src="pendulum.js"></script>
 <script>
-  window.StudyPipeKits["pendulum"].mount(document.getElementById("host"), {}, { emit: function (n, d) { console.log("event", n, JSON.stringify(d)); } });
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.02, 60);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.0));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.4); dl.position.set(2, 5, 4); scene.add(dl);
+  var fill = new THREE.DirectionalLight(0xbcd6ff, 0.5); fill.position.set(-3, 2, 2); scene.add(fill);
+
+  var evLog = [];
+  var kit = PendulumKit.create({ mode: "laws", onEvent: function (n) { evLog.unshift(n); evLog.length = Math.min(evLog.length, 7); document.getElementById("ev").textContent = "events: " + evLog.join(" · "); } });
+  scene.add(kit);
+
+  /* camera framing from kit.viewFor(), tweened; distance fitted to the canvas aspect */
+  var view = { target: new THREE.Vector3(0.1, 0.8, 0), dist: 3, pitch: 0.1, yaw: 0 }, goal = null;
+  function fitDist(v) {
+    var t = Math.tan(20 * Math.PI / 180), s = v.size || [1, 1, 0.2];
+    return Math.max(s[1] / 2 / t, s[0] / 2 / (t * camera.aspect)) * 1.1 + s[2] / 2;
+  }
+  function applyView(v) {
+    var d = v.dist;
+    camera.position.set(v.target.x + Math.sin(v.yaw) * Math.cos(v.pitch) * d, v.target.y + Math.sin(v.pitch) * d, v.target.z + Math.cos(v.yaw) * Math.cos(v.pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = kit.viewFor(name);
+    goal = { target: new THREE.Vector3().fromArray(v.target), dist: fitDist(v), pitch: v.pitch, yaw: v.yaw };
+    if (instant) { view.target.copy(goal.target); view.dist = goal.dist; view.pitch = goal.pitch; view.yaw = goal.yaw; applyView(view); goal = null; }
+  }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); gotoView(curView, true); }
+  var curView = "all";
+
+  /* UI helpers */
+  var ui = document.getElementById("ui"), modes = document.getElementById("modes");
+  function btn(parent, label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; parent.appendChild(b); return b; }
+  function choice(opts, cur, fn) { var bs = []; opts.forEach(function (o) { var b = btn(ui, o[1], function () { bs.forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); fn(o[0]); }, "alt"); if (o[0] === cur) b.classList.add("on"); bs.push(b); }); }
+  function slider(label, min, max, step, val, fmt, fn) {
+    var l = document.createElement("label"); l.className = "sl"; l.innerHTML = "<span>" + label + "</span>";
+    var i = document.createElement("input"); i.type = "range"; i.min = min; i.max = max; i.step = step; i.value = val;
+    var b = document.createElement("b"); b.textContent = fmt(+val);
+    i.oninput = function () { b.textContent = fmt(+i.value); fn(+i.value); };
+    l.appendChild(i); l.appendChild(b); ui.appendChild(l); return i;
+  }
+  function select(opts, cur, fn) { var s = document.createElement("select"); opts.forEach(function (o) { var e = document.createElement("option"); e.value = o; e.textContent = "fault: " + o; if (o === cur) e.selected = true; s.appendChild(e); }); s.onchange = function () { fn(s.value); }; ui.appendChild(s); }
+  function toggle(label, on, fn) { var b = btn(ui, label, function () { var v = !b.classList.contains("on"); b.classList.toggle("on", v); fn(v); }, "alt"); if (on) b.classList.add("on"); }
+
+  var PANELS = {
+    trace: function (c) {
+      btn(ui, "Release", function () { kit.release(); });
+      btn(ui, "Start", function () { kit.startWatch(); }); btn(ui, "Stop", function () { kit.stopWatch(); });
+      choice([[1, "n 1"], [10, "n 10"], [20, "n 20"]], c.n, function (v) { kit.setState({ n: v }); });
+      btn(ui, "Auto-time n", function () { kit.time(kit.settings().n); });
+      choice([[0.35, "slow"], [1, "real time"], [4, "×4"]], c.speed, function (v) { kit.setState({ speed: v }); });
+    },
+    laws: function (c) {
+      choice([[50, "50 g wood"], [100, "100 g brass"]], c.bob, function (v) { kit.setState({ bob: v }); });
+      choice([[5, "5°"], [10, "10°"], [30, "30°"]], c.angle_deg, function (v) { kit.setState({ angle_deg: v }); });
+      choice([[0.25, "0.25 m"], [0.5, "0.50 m"], [1.0, "1.00 m"]], c.l, function (v) { kit.setState({ l: v }); gotoView("all"); });
+      choice([[9.8, "Earth"], [1.6, "Moon"]], c.g, function (v) { kit.setState({ g: v }); });
+      choice([["exact", "exact T"], ["small", "small-angle T"]], c.periodModel, function (v) { kit.setState({ periodModel: v }); });
+      btn(ui, "Release & time 20", function () { kit.time(20); });
+      choice([[1, "real time"], [8, "×8"]], c.speed, function (v) { kit.setState({ speed: v }); });
+    },
+    forces: function (c) {
+      slider("θ", 2, 45, 1, c.angle_deg, function (v) { return v + "°"; }, function (v) { kit.setState({ angle_deg: v }); kit.release(); });
+      choice([[50, "50 g"], [100, "100 g"]], c.bob, function (v) { kit.setState({ bob: v }); });
+    },
+    practical: function (c) {
+      choice(PendulumKit.model.presets.map(function (l) { return [l, l.toFixed(3)]; }), c.l, function (v) { kit.setState({ l: v }); });
+      select(PendulumKit.faults, c.fault, function (v) { kit.setState({ fault: v }); if (v === "conical") gotoView("conical"); else gotoView("all"); });
+      btn(ui, "Measure", function () { kit.measure(); });
+      btn(ui, "Release", function () { kit.release(); });
+      btn(ui, "Time 20", function () { kit.time(20); });
+      btn(ui, "Time 20 instantly", function () { kit.time(20, { instant: true }); });
+      choice([[1, "real time"], [8, "×8"]], c.speed, function (v) { kit.setState({ speed: v }); });
+    },
+    ceiling: function (c) {
+      slider("y", 0.6, 2.4, 0.05, c.y, function (v) { return v.toFixed(2) + " m"; }, function (v) { kit.setState({ y: v }); });
+      btn(ui, "Release", function () { kit.release(); });
+      btn(ui, "Time 20 instantly", function () { kit.time(20, { instant: true }); });
+    },
+    energy: function (c) {
+      slider("h₀", 0.01, 0.12, 0.005, c.h0, function (v) { return (v * 100).toFixed(1) + " cm"; }, function (v) { kit.setState({ h0: v }); });
+      choice([[1, "no loss"], [0.97, "air 0.97"], [0.75, "water 0.75"]], c.decay, function (v) { kit.setState({ decay: v }); });
+      btn(ui, "Release", function () { kit.release(); });
+    },
+    barton: function (c) {
+      slider("driver", 0.30, 0.90, 0.15, c.driverL, function (v) { return v.toFixed(2) + " m"; }, function (v) { kit.setState({ driverL: v }); });
+      btn(ui, "Start", function () { kit.start(); });
+      choice([[1, "real time"], [4, "×4"]], c.speed, function (v) { kit.setState({ speed: v }); });
+    }
+  };
+  function render() {
+    ui.innerHTML = ""; var c = kit.settings();
+    PANELS[kit.getMode()](c);
+    btn(ui, "Reset", function () { kit.reset(); render(); }, "alt");
+    btn(ui, "View all", function () { kit.highlight(null); curView = "all"; gotoView("all"); }, "alt");
+    kit.partsFor().slice(0, 6).forEach(function (p) { btn(ui, p, function () { kit.highlight(p); curView = p; gotoView(p); setTimeout(function () { kit.highlight(null); }, 1600); }, "alt"); });
+    toggle("Labels", c.labels !== false, function (v) { kit.setState({ labels: v }); });
+  }
+  var MB = {};
+  PendulumKit.modes.forEach(function (m) {
+    MB[m] = btn(modes, m, function () { kit.setState({ mode: m }); Object.keys(MB).forEach(function (k) { MB[k].classList.toggle("on", k === m); }); render(); curView = "all"; gotoView("all", true); });
+  });
+  MB.laws.classList.add("on"); render();
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* tap a part to highlight it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var rc = cv.getBoundingClientRect(); ptr.set(((e.clientX - rc.left) / rc.width) * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera); var id = kit.pickPart(ray);
+    if (id) { kit.highlight(id); setTimeout(function () { kit.highlight(null); }, 900); }
+  });
+
+  /* live readout — every number from kit.reading() (the model) */
+  var line = document.getElementById("line"), tbl = document.getElementById("tbl"), lastKey = "";
+  function f(x, d) { return x == null || !isFinite(x) ? "–" : (+x).toFixed(d == null ? 2 : d); }
+  function paint() {
+    var r = kit.reading(), s = "";
+    if (r.mode === "barton") s = "driver " + f(r.driverL) + " m  T " + f(r.T, 3) + " s  f " + f(r.fDriver) + " Hz\namps° " + r.amps.join(" / ") + "  phase° " + r.phases.join(" / ") + "\nwidest cone-" + r.widest + " (" + f(r.widestL) + " m)" + (r.steady ? "  steady" : r.running ? "  building…" : "  press Start");
+    else if (r.mode === "ceiling") s = "H " + f(r.H) + "  y " + f(r.y) + "  l = H − y " + f(r.l, 3) + " m\nT " + f(r.T, 3) + " s  T² " + f(r.T2, 3) + " s²  t(20) " + f(r.t) + " s  slope −4π²/g " + f(r.slope, 2);
+    else if (r.mode === "practical") s = "l " + f(r.l, 3) + " m (thread " + f(r.thread, 3) + " + r " + f(r.r_bob, 3) + ")  fault " + r.fault + "\nt1 " + f(r.t1) + "  t2 " + f(r.t2) + "  t̄ " + f(r.tmean) + "  T " + f(r.T, 3) + "  T² " + f(r.T2, 3) + "  g " + f(r.g_from_T) + "\nwatch " + r.watch.display + "  n " + r.watch.n + (r.note ? "  · " + r.note : "");
+    else if (r.mode === "energy") s = "l " + f(r.l) + " m  m " + r.bob + " g  h₀ " + f(r.h0 * 100, 1) + " cm  θ₀ " + f(r.angle, 1) + "°\nE " + f(r.E, 4) + " J  KE " + f(r.KE, 4) + "  PE " + f(r.PE, 4) + "  v " + f(r.v) + " / vmax " + f(r.vmax) + " m/s";
+    else {
+      s = r.mode + "  l " + f(r.l) + " m  " + f(r.angle, 0) + "°  g " + r.g + "  " + r.bob + " g  (" + r.periodModel + ")\nT " + f(r.T, 3) + " s  f " + f(r.f, 3) + " Hz  ω " + f(r.w) + "  t(20) " + f(r.t) + "  watch " + r.watch.display + " n " + r.watch.n;
+      if (r.mode === "trace") s += "\nphase " + r.phase + " (" + f(r.fraction, 2) + ")  A " + r.A_cm + " cm  0.2 s error: 1 osc " + f(r.errOne_pct, 1) + " %, 20 osc " + f(r.errTwenty_pct, 1) + " %";
+      if (r.manual) s += "\nmanual t " + f(r.manual.t) + " s (delays " + f(r.manual.delayStart) + " / " + f(r.manual.delayStop) + ")";
+    }
+    var key = s + r.rows.length; if (key === lastKey) return; lastKey = key; line.textContent = s;
+    if (!r.rows.length) { tbl.innerHTML = ""; return; }
+    var cols = Object.keys(r.rows[r.rows.length - 1]).filter(function (c) { return c !== "mode"; });
+    tbl.innerHTML = "<tr>" + cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr>" + r.rows.slice(-6).map(function (row) { return "<tr>" + cols.map(function (c) { return "<td>" + (row[c] == null ? "–" : row[c]) + "</td>"; }).join("") + "</tr>"; }).join("");
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      var k = Math.min(1, dt * 4);
+      view.target.lerp(goal.target, k); view.dist += (goal.dist - view.dist) * k; view.pitch += (goal.pitch - view.pitch) * k; view.yaw += (goal.yaw - view.yaw) * k;
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.003 && Math.abs(view.dist - goal.dist) < 0.005 && Math.abs(view.yaw - goal.yaw) < 0.005) goal = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    paint();
+  })();
+  window.__kit = kit; window.__gotoView = gotoView; window.__render = render; window.__MB = MB;
+})();
 </script>
 </body></html>

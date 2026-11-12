@@ -1,12 +1,21 @@
 # QA report: topics/ss2-phy-refraction-rectangular-block
-date: 2026-11-05 20:09
+date: 2026-11-08 14:51
 verdict: PASS
 theme: editorial-ink
 lessons checked: 5
 sections checked: 65
 
 ## Issues
-- none
+- **WARN** [lesson-01:layout] tall control bar: div.stage-bar is 349px tall at 360px width; consider tightening
+- **WARN** [lesson-01:layout] tall control bar: div.stage-bar is 384px tall at 360px width; consider tightening
+- **WARN** [lesson-02:layout] tall control bar: div.stage-bar is 349px tall at 360px width; consider tightening
+- **WARN** [lesson-02:layout] tall control bar: div.stage-bar is 425px tall at 360px width; consider tightening
+- **WARN** [lesson-03:layout] tall control bar: div.stage-bar is 349px tall at 360px width; consider tightening
+- **WARN** [lesson-03:layout] tall control bar: div.stage-bar is 384px tall at 360px width; consider tightening
+- **WARN** [lesson-04:layout] tall control bar: div.stage-bar is 349px tall at 360px width; consider tightening
+- **WARN** [lesson-04:layout] tall control bar: div.stage-bar is 425px tall at 360px width; consider tightening
+- **WARN** [lesson-05:layout] tall control bar: div.stage-bar is 349px tall at 360px width; consider tightening
+- **WARN** [lesson-05:layout] tall control bar: div.stage-bar is 467px tall at 360px width; consider tightening
 
 ## Screenshots (review these visually)
 - topics/ss2-phy-refraction-rectangular-block/qa/welcome-00-hero.png

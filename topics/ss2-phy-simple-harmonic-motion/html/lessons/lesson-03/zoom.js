@@ -1,266 +1,115 @@
-/* Lesson 01 · 3D Vector & Energy Zoom Stage — live velocity vector (teal), acceleration vector (amber), and 3D KE/PE/Total Energy pillars */
+/* Lesson 03 · 2D concept zoom (window.StudyScenes.zoom) — Paper.js, ShmKinematics2D v2 "circle" scene:
+   an abstract reference circle on the left, three synchronised x, v and a traces on the right, and a cursor
+   linking them. The "okada" preset uses the story model (ω² = k/m = 158 s⁻², ω ≈ 12.6 rad s⁻¹) and overlays
+   a g line on the a trace: drag A from 2 cm to 8 cm and a_max crosses g at g/ω² = 6.2 cm.
+   Counters come from the kit's reading() only. Emits l3:zoom ({ mode, A_cm, lift }). */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
   var canvas = document.getElementById("zoom-canvas");
-  if (!root || !canvas || typeof THREE === "undefined") return;
+  if (!root || !canvas) return;
 
-  var toastEl = document.getElementById("zoom-toast");
-  var toastT;
+  var $ = function (s) { return root.querySelector(s); };
+  var toastEl = document.getElementById("zoom-toast"), toastT;
   function toast(m) {
     if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3200);
+  }
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+
+  var kit = null;
+  if (window.paper && window.ShmKinematics2D) {
+    try { kit = ShmKinematics2D.create({ canvas: canvas, scene: "circle", preset: "lab", labels: true, surface: "ink", onChange: function () { paint(); } }); }
+    catch (e) { kit = null; if (window.console) console.warn("ShmKinematics2D zoom failed:", e); }
+  }
+  if (!kit) {
+    /* FALLBACK (no Paper.js kit): never throws; the counters stay blank and the fallback note shows */
+    var fb = root.querySelector(".stage-fallback"); if (fb) fb.style.display = "flex";
   }
 
-  var state = {
-    mode: "mix", // "mix" = Live SHM, "acid" = Freeze at Centre (x = 0), "base" = Freeze at Extreme (x = +A)
-    damped: false,
-    ampFactor: 1.0,
-    phase: 0
-  };
+  var mode = "lab";
+  var presetBtns = Array.prototype.slice.call(root.querySelectorAll("#zoom-preset [data-preset]"));
+  var aIn = $("#zoom-A"), aOut = $("#zoom-A-val"), gBtn = $("#zoom-g"), aRow = $("#zoom-arow"), playBtn = $("#zoom-play");
 
-  var highlightPart = null;
+  function set(c, v) { var e = root.querySelector('#zoom-counters [data-c="' + c + '"]'); if (e) e.textContent = v; }
+  function paint() {
+    if (!kit) return;
+    var r = kit.reading(), d = r.display || {};
+    var cm = mode === "okada";
+    set("x", cm ? (r.x * 100).toFixed(1) + " cm" : d.x + " m");
+    set("v", d.v + " m/s");
+    set("a", d.a + " m/s²");
+    set("amax", d.a_max + (cm ? (r.lift ? " > g" : " < g") : ""));
+    set("th", d.g_over_w2_cm + " cm");
+    var am = root.querySelector('#zoom-counters [data-c="amax"]');
+    if (am) am.classList.toggle("lift", cm && !!r.lift);
+  }
+  setInterval(function () { if (kit && kit.isPlaying() && !document.hidden) paint(); }, 200);
+
+  function setMode(m) {
+    if (m !== "okada") m = "lab";
+    mode = m;
+    presetBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-preset") === m)); });
+    if (aRow) aRow.hidden = m !== "okada";
+    if (kit) {
+      kit.setState({ scene: "circle", preset: m });
+      kit.play();
+      if (m === "okada") setA(3, true);
+    }
+    if (gBtn) { gBtn.disabled = m !== "okada"; gBtn.setAttribute("aria-pressed", String(m === "okada")); }
+    if (playBtn) playBtn.textContent = "❚❚ Pause";
+    paint();
+    toast(m === "okada" ? "Okada numbers: ω ≈ 12.6 rad/s. Drag A and watch a_max against g." : "Lab circle: A = 0.30 m, T = 2.0 s (ω = π rad/s).");
+    emit("l3:zoom", { mode: m });
+  }
+  function setA(cm, quiet) {
+    if (mode !== "okada") setMode("okada");
+    cm = Math.max(2, Math.min(8, +cm));
+    if (aIn) aIn.value = cm;
+    if (aOut) aOut.textContent = cm.toFixed(1) + " cm";
+    if (kit) kit.setState({ A: cm / 100, Amax: 0.08 });
+    paint();
+    var r = kit ? kit.reading() : null;
+    if (!quiet && r) toast("A = " + cm.toFixed(1) + " cm → a_max = " + r.display.a_max + " m/s² " + (r.lift ? "> g: the crate lifts off" : "< g: the crate stays on"));
+    emit("l3:zoom", { mode: "okada", A_cm: cm, lift: r ? !!r.lift : cm >= 6.2, a_max: r ? r.a_max : null });
+    return r;
+  }
+  function setG(on) {
+    if (!kit || mode !== "okada") return;
+    kit.setState({ gLine: !!on });
+    if (gBtn) gBtn.setAttribute("aria-pressed", String(!!on));
+  }
+
+  presetBtns.forEach(function (b) { b.addEventListener("click", function () { setMode(b.getAttribute("data-preset")); }); });
+  if (aIn) aIn.addEventListener("input", function () { setA(+aIn.value, true); });
+  if (aIn) aIn.addEventListener("change", function () { setA(+aIn.value, false); });
+  if (gBtn) gBtn.addEventListener("click", function () { setG(gBtn.getAttribute("aria-pressed") !== "true"); });
+  if (playBtn) playBtn.addEventListener("click", function () {
+    if (!kit) return;
+    kit.toggle(); playBtn.textContent = kit.isPlaying() ? "❚❚ Pause" : "▶ Play"; paint();
+  });
+  var rst = document.getElementById("zoom-reset");
+  if (rst) rst.addEventListener("click", function () { setMode("lab"); if (kit) kit.reset(); });
+
   var api = {
     setMode: setMode,
-    add: toggleDamping,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
+    setA: setA,
+    gLine: setG,
+    reset: function () { setMode("lab"); if (kit) kit.reset(); },
+    highlight: function (p) { if (kit) kit.highlight(p || null); },
+    rect: function (p) {
+      if (kit) return kit.rect(p);
+      var b = canvas.getBoundingClientRect(); return { left: b.left, top: b.top, width: b.width, height: b.height };
+    },
+    reading: function () { return kit ? kit.reading() : null; },
+    kit: kit
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.zoom = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.9, 0),
-    pitch: 0.18,
-    yaw: 0,
-    fitWidth: 6.2,
-    distance: 6.2,
-    onFrame: frame
-  });
-
-  var pivotGroup, bobGroup, vArrow, aArrow, keBar, peBar, totBar;
-  var PIVOT_Y = 2.05;
-  var ROD_LEN = 1.35;
-
-  if (stage) build();
-  wireButtons();
-
-  function makeArrow(colorHex) {
-    var g = new THREE.Group();
-    var mat = new THREE.MeshBasicMaterial({ color: colorHex });
-    var shaftGeo = new THREE.CylinderGeometry(0.028, 0.028, 1, 12);
-    shaftGeo.translate(0, 0.5, 0);
-    var shaft = new THREE.Mesh(shaftGeo, mat);
-    shaft.rotation.z = -Math.PI / 2;
-    g.add(shaft);
-
-    var head = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.18, 16), mat);
-    head.rotation.z = -Math.PI / 2;
-    head.position.x = 1;
-    g.add(head);
-
-    g.userData.setVec = function (signedLen) {
-      var abs = Math.abs(signedLen);
-      if (abs < 0.03) {
-        g.visible = false;
-        return;
-      }
-      g.visible = true;
-      var dir = signedLen >= 0 ? 1 : -1;
-      g.scale.x = dir;
-      shaft.scale.y = abs;
-      head.position.x = abs;
-    };
-    return g;
-  }
-
-  function build() {
-    var scene = stage.rig;
-
-    // Reference equilibrium dashed vertical post at x = 0
-    var eqLine = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.01, 0.01, 2.0, 8),
-      new THREE.MeshBasicMaterial({ color: 0x3ee6c4, transparent: true, opacity: 0.35 })
-    );
-    eqLine.position.set(-0.7, 1.0, -0.15);
-    scene.add(eqLine);
-
-    var eqTag = SceneKit.labelTexture("x = 0 (equilibrium)", { size: 32, bg: "rgba(13,156,126,0.88)" });
-    var eqSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: eqTag, transparent: true, depthWrite: false }));
-    eqSpr.scale.set(0.21 * eqTag.userData.aspect, 0.21, 1);
-    eqSpr.position.set(-0.7, 0.15, 0);
-    scene.add(eqSpr);
-
-    // Oscillator pivot at (-0.7, PIVOT_Y, 0)
-    pivotGroup = new THREE.Group();
-    pivotGroup.position.set(-0.7, PIVOT_Y, 0);
-    scene.add(pivotGroup);
-
-    var strGeo = new THREE.CylinderGeometry(0.012, 0.012, ROD_LEN, 12);
-    strGeo.translate(0, -ROD_LEN / 2, 0);
-    var str = new THREE.Mesh(strGeo, new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.4 }));
-    pivotGroup.add(str);
-
-    bobGroup = new THREE.Group();
-    bobGroup.position.y = -ROD_LEN;
-    var bob = new THREE.Mesh(
-      new THREE.SphereGeometry(0.18, 32, 24),
-      new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.2, metalness: 0.85 })
-    );
-    bobGroup.add(bob);
-    pivotGroup.add(bobGroup);
-
-    // Velocity arrow (teal) and Acceleration arrow (amber) in world space following the bob
-    vArrow = makeArrow(0x3ee6c4);
-    aArrow = makeArrow(0xffb23f);
-    scene.add(vArrow);
-    scene.add(aArrow);
-
-    var vTag = SceneKit.labelTexture("v (velocity)", { size: 30, bg: "rgba(13,156,126,0.92)" });
-    var vSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: vTag, transparent: true, depthWrite: false }));
-    vSpr.scale.set(0.19 * vTag.userData.aspect, 0.19, 1);
-    vSpr.position.set(0, 0.22, 0);
-    vArrow.add(vSpr);
-
-    var aTag = SceneKit.labelTexture("a = −ω²x (restoring)", { size: 30, bg: "rgba(217,138,0,0.92)" });
-    var aSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: aTag, transparent: true, depthWrite: false }));
-    aSpr.scale.set(0.19 * aTag.userData.aspect, 0.19, 1);
-    aSpr.position.set(0, -0.22, 0);
-    aArrow.add(aSpr);
-
-    // 3D Live Energy Pillars on the right (x = 1.1 to 2.1)
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.6, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.55, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 32, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.20 * t.userData.aspect, 0.20, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.10, 0x9b8cff, "KE");
-    peBar  = makeBar(1.55, 0xc6f36b, "PE");
-    totBar = makeBar(2.00, 0x7cc4ff, "Total E");
-
-    api.rect = function (part) {
-      if (part === "bob" || part === "vectors") return stage.rectOf([bobGroup, vArrow, aArrow], 16);
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      return stage.rectOf(pivotGroup, 12);
-    };
-
-    stage.start();
-  }
-
-  function setMode(m) {
-    state.mode = m;
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
-    });
-    if (m === "acid") toast("Frozen at equilibrium (x = 0): Speed v and KE are MAXIMUM; acceleration a and PE are ZERO.");
-    else if (m === "base") toast("Frozen at right extreme (x = +A): Speed v is ZERO; inward acceleration a and PE are MAXIMUM.");
-    else toast("Live Simple Harmonic Motion: watch KE and PE trade places twice every cycle.");
-  }
-
-  function toggleDamping() {
-    state.damped = !state.damped;
-    if (!state.damped) state.ampFactor = 1.0;
-    toast(state.damped ? "Air damping ON: amplitude and total energy decay gradually while period stays constant." : "Air damping OFF: undamped SHM with constant mechanical energy.");
-  }
-
-  function reset() {
-    state.damped = false;
-    state.ampFactor = 1.0;
-    state.phase = 0;
-    setMode("mix");
-    toast("Oscillator reset to full amplitude (A = 0.10 m).");
-  }
-
-  function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
-    });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleDamping);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
-  }
-
-  function frame(dt) {
-    if (!pivotGroup) return;
-    var omega = 2.6;
-    if (state.mode === "mix") {
-      state.phase += dt * omega;
-      if (state.damped) {
-        state.ampFactor = Math.max(0.15, state.ampFactor * (1 - 0.12 * dt));
-      } else {
-        state.ampFactor = 1.0;
-      }
-    } else if (state.mode === "acid") {
-      // Equilibrium centre x = 0, moving rightward (cos = 1, sin = 0)
-      state.phase = 0;
-      state.ampFactor = 1.0;
-    } else if (state.mode === "base") {
-      // Right extreme x = +A (sin = 1, cos = 0)
-      state.phase = Math.PI / 2;
-      state.ampFactor = 1.0;
-    }
-
-    var s = Math.sin(state.phase) * state.ampFactor; // normalized displacement x / A0 in [-1, 1]
-    var c = Math.cos(state.phase) * state.ampFactor; // normalized velocity v / vmax in [-1, 1]
-
-    var maxAngle = 0.42;
-    pivotGroup.rotation.z = s * maxAngle;
-
-    var bobWorld = new THREE.Vector3();
-    bobGroup.getWorldPosition(bobWorld);
-
-    vArrow.position.set(bobWorld.x, bobWorld.y + 0.24, bobWorld.z + 0.18);
-    aArrow.position.set(bobWorld.x, bobWorld.y - 0.24, bobWorld.z + 0.18);
-
-    vArrow.userData.setVec(c * 0.95);
-    aArrow.userData.setVec(-s * 0.95); // restoring acceleration always opposite to displacement s!
-
-    var peFrac = s * s;
-    var keFrac = c * c;
-    var totFrac = peFrac + keFrac;
-
-    if (keBar) keBar.scale.y = Math.max(0.03, keFrac);
-    if (peBar) peBar.scale.y = Math.max(0.03, peFrac);
-    if (totBar) totBar.scale.y = Math.max(0.03, totFrac);
-
-    // Update live counters in .stage-bar (A = 0.10 m, ω = 4.0 rad/s => vmax = 0.40 m/s, amax = 1.60 m/s²)
-    var cA = document.querySelector('#zoom-counters [data-c="h"]');
-    var cV = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cKE = document.querySelector('#zoom-counters [data-c="na"]');
-    var cPE = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cTot = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cA) cA.textContent = (Math.abs(s) * 1.60).toFixed(2);
-    if (cV) cV.textContent = (Math.abs(c) * 0.40).toFixed(2);
-    if (cKE) cKE.textContent = Math.round(keFrac * 100);
-    if (cPE) cPE.textContent = Math.round(peFrac * 100);
-    if (cTot) cTot.textContent = Math.round(totFrac * 100);
-  }
+  mode = "lab";
+  if (aRow) aRow.hidden = true;
+  if (gBtn) gBtn.disabled = true;
+  paint();
 })();

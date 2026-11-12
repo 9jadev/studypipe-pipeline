@@ -5,6 +5,7 @@
   "type": "module",
   "description": "Content studio: WAEC/NECO/JAMB topics to offline interactive 3D HTML lessons",
   "scripts": {
+    "status": "node scripts/render-status.mjs --all",
     "setup": "npx playwright install chromium",
     "qa": "node scripts/qa.mjs",
     "qa:example": "node scripts/qa.mjs topics/_example-simple-pendulum",

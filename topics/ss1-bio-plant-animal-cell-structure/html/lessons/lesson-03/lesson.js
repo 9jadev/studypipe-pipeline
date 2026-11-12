@@ -1,40 +1,26 @@
-/* Lesson 03 · interactions: LessonKit boot, Cell Forms & Hierarchy Sort, SA/V Scaling Table, Hierarchy Explorer, and Onion Bulb Organ Bridge */
+/* Lesson 03 · interactions: form sort, results table, cube explorer, level ladder and the scale-up bridge.
+   LessonKit (Do Now, Wonder Wall, quiz, self-rating, locked solutions) starts itself from lesson-kit.js. */
 (function () {
   "use strict";
   var D = window.L03;
   if (!D) return;
 
-  if (window.LessonKit && window.LessonKit.boot) {
-    window.LessonKit.boot({
-      lessonId: "l03",
-      wonderSeeds: [
-        "Why is Euglena viridis called both a plant and an animal by WAEC examiners? — Tunde",
-        "Is a whole onion bulb a cell, a tissue, or a complete plant organ? — Alhaji Musa",
-        "How does a spherical Volvox colony differ from an unbranched Spirogyra filament? — Halima",
-        "Why can't an Amoeba grow to the size of a Tilapia fish and still breathe by simple diffusion? — Chidi"
-      ],
-      quiz: window.LESSON_QUIZ || []
-    });
-  }
-
   var toast = window.LessonKit ? window.LessonKit.toast : function () {};
   var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
   var burst = function (el, n) { if (window.StudyNarrator && el) window.StudyNarrator.burst(el.getBoundingClientRect(), n || 14); };
+  function f1(x) { return (+x).toFixed(1); }
+  function pct(x) { return (x * 100).toFixed(1).replace(/\.0$/, ""); }
 
-  // 1. Forms of Living Cells & Levels of Organisation Sort
+  // ---------- 1. How does it live? sort ----------
   var tray = document.getElementById("sort-tray");
-  var bins = Array.prototype.slice.call(document.querySelectorAll(".bin"));
+  var bins = Array.prototype.slice.call(document.querySelectorAll("#form-sort .bin"));
   var picked = null;
 
   function shuffle(a) {
     a = a.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-
   function buildSort() {
     if (!tray) return;
     tray.innerHTML = "";
@@ -43,15 +29,12 @@
     document.getElementById("sort-score").textContent = "";
     shuffle(D.items).forEach(function (it) {
       var b = document.createElement("button");
-      b.type = "button";
-      b.className = "sort-item";
-      b.setAttribute("data-id", it.id);
-      b.innerHTML = '<span class="emo" aria-hidden="true">' + it.emo + "</span>" + it.name;
+      b.type = "button"; b.className = "sort-item"; b.setAttribute("data-id", it.id);
+      b.innerHTML = '<span class="emo" aria-hidden="true">' + it.emo + "</span><span>" + it.name + "</span>";
       attachDrag(b);
       tray.appendChild(b);
     });
   }
-
   function pick(b) {
     if (picked) picked.classList.remove("picked");
     picked = picked === b ? null : b;
@@ -68,54 +51,14 @@
     bin.addEventListener("click", function (e) { if (e.target.closest(".sort-item")) return; if (picked) place(picked, bin); });
     bin.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && picked) { e.preventDefault(); place(picked, bin); } });
   });
-
   function attachDrag(b) {
-    var sx, sy, dragging = false, ghost = null, pid = null;
-    b.addEventListener("pointerdown", function (e) {
-      if (e.button !== undefined && e.button !== 0) return;
-      sx = e.clientX; sy = e.clientY; pid = e.pointerId; dragging = false;
-      try { b.setPointerCapture(pid); } catch (er) {}
-    });
-    b.addEventListener("pointermove", function (e) {
-      if (pid !== e.pointerId) return;
-      if (!dragging && Math.hypot(e.clientX - sx, e.clientY - sy) > 8) {
-        dragging = true;
-        ghost = b.cloneNode(true);
-        ghost.style.cssText = "position:fixed;z-index:95;pointer-events:none;margin:0;transform:rotate(-3deg) scale(1.05);box-shadow:0 18px 30px -10px rgba(0,0,0,.6)";
-        document.body.appendChild(ghost);
-        b.classList.add("dragging");
-      }
-      if (dragging) {
-        ghost.style.left = (e.clientX - ghost.offsetWidth / 2) + "px";
-        ghost.style.top = (e.clientY - ghost.offsetHeight / 2) + "px";
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        bins.forEach(function (bn) { bn.classList.toggle("over", bn === over); });
-      }
-    });
-    function end(e) {
-      if (pid !== e.pointerId) return;
-      pid = null;
-      if (dragging) {
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        if (ghost) ghost.remove();
-        ghost = null;
-        b.classList.remove("dragging");
-        if (over) place(b, over);
-        else bins.forEach(function (bn) { bn.classList.remove("over"); });
-        dragging = false;
-      } else if (e.type === "pointerup") pick(b);
-    }
-    b.addEventListener("pointerup", end);
-    b.addEventListener("pointercancel", end);
-    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(b); } });
-    b.addEventListener("click", function (e) { e.preventDefault(); });
+    // Shared drag-and-drop (assets/js/sort-dnd.js): auto-scrolls to reach bins that
+    // sit below the fold, snaps to the nearest bin, and survives a stray second touch.
+    SortDnD.attach(b, { bins: bins, onDrop: place, onTap: pick });
   }
 
   function checkSort() {
     var placed = 0, right = 0, rows = [];
-    var labels = { shm: "Single Free-Living Cell", periodic: "Colony or Filament", non: "Tissue, Organ or System" };
     D.items.forEach(function (it) {
       var el = document.querySelector('.sort-item[data-id="' + it.id + '"]');
       var bin = el && el.closest(".bin");
@@ -124,173 +67,172 @@
       var ok = chosen === it.bin;
       if (ok) right++;
       if (el) { el.classList.toggle("right", ok); el.classList.toggle("wrong", !!chosen && !ok); }
-      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" +
-        labels[it.bin] + ". " + it.why + "</span></div>");
+      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.name + "</b><span>" + D.bins[it.bin] + ". " + it.why + "</span></div>");
     });
-    if (placed < D.items.length) {
-      toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray.");
-      return;
-    }
-    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the explanations below.");
+    if (placed < D.items.length) { toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray."); return; }
+    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the notes below.");
     var fb = document.getElementById("sort-feedback");
-    fb.innerHTML = rows.join("");
-    fb.classList.add("on");
-    if (right >= 10) burst(document.getElementById("sort-score"), 20);
-    emit("l3:sort-checked", { score: right, total: D.items.length });
+    fb.innerHTML = rows.join(""); fb.classList.add("on");
+    if (right >= 8) burst(document.getElementById("sort-score"), 20);
+    emit("l3:sort", { correct: right, total: D.items.length });
   }
-
   if (tray) {
     buildSort();
     document.getElementById("sort-check").addEventListener("click", checkSort);
     document.getElementById("sort-reset").addEventListener("click", buildSort);
   }
 
-  // 2. Interactive SA/V Scaling Results Table
+  // ---------- 2. Results table (answers come from the model) ----------
   var tbody = document.querySelector("#results-table tbody");
+  function expectedRow(L) {
+    var m = D.model(L);
+    return { SA: String(m.SA), V: String(m.V), R: f1(m.ratio) };
+  }
   if (tbody) {
-    var opt = function (list) {
-      return '<option value="">choose…</option>' + list.map(function (o) { return "<option>" + o + "</option>"; }).join("");
-    };
-    D.trials.forEach(function (trObj, i) {
+    var opt = function (list) { return '<option value="">choose…</option>' + list.map(function (o) { return "<option>" + o + "</option>"; }).join(""); };
+    D.cubes.forEach(function (L, i) {
       var tr = document.createElement("tr");
       tr.innerHTML =
-        "<td><b>" + trObj.label + "</b></td>" +
-        "<td>" + trObj.L.toFixed(1) + " mm</td>" +
-        '<td><select data-k="t" aria-label="Surface Area SA = 6L² (mm²) for trial ' + trObj.label + '">' + opt(D.tOptions) + "</select></td>" +
-        '<td><select data-k="T" aria-label="Volume V = L³ (mm³) for trial ' + trObj.label + '">' + opt(D.TOptions) + "</select></td>" +
-        '<td><select data-k="T2" aria-label="Ratio SA/V = 6/L (mm⁻¹) for trial ' + trObj.label + '">' + opt(D.T2Options) + "</select></td>";
+        "<td><b>" + L + "</b></td>" +
+        '<td><select data-k="SA" aria-label="Surface area for L = ' + L + ' mm">' + opt(D.SAoptions) + "</select></td>" +
+        '<td><select data-k="V" aria-label="Volume for L = ' + L + ' mm">' + opt(D.Voptions) + "</select></td>" +
+        '<td><select data-k="R" aria-label="SA to V ratio for L = ' + L + ' mm">' + opt(D.RatioOptions) + "</select></td>";
       tbody.appendChild(tr);
-
-      var saved = window.LessonKit ? window.LessonKit.Store.get("bio-l03-table-" + i, {}) : {};
+      var saved = window.LessonKit ? window.LessonKit.Store.get("table-" + i, {}) : {};
       tr.querySelectorAll("select").forEach(function (s) {
         var k = s.getAttribute("data-k");
         if (saved[k]) s.value = saved[k];
         s.addEventListener("change", function () {
           saved[k] = s.value;
-          if (window.LessonKit) window.LessonKit.Store.set("bio-l03-table-" + i, saved);
+          if (window.LessonKit) window.LessonKit.Store.set("table-" + i, saved);
           s.parentElement.classList.remove("ok", "no");
         });
       });
     });
-
     document.getElementById("results-check").addEventListener("click", function () {
-      var right = 0, filled = 0, total = D.trials.length * 3;
+      var right = 0, filled = 0, total = D.cubes.length * 3;
       Array.prototype.forEach.call(tbody.rows, function (tr, i) {
+        var exp = expectedRow(D.cubes[i]);
         tr.querySelectorAll("select").forEach(function (s) {
-          var k = s.getAttribute("data-k"), exp = D.trials[i][k];
           s.parentElement.classList.remove("ok", "no");
           if (!s.value) return;
           filled++;
-          var ok = s.value === exp;
+          var ok = s.value === exp[s.getAttribute("data-k")];
           if (ok) right++;
           s.parentElement.classList.add(ok ? "ok" : "no");
         });
       });
       var out = document.getElementById("results-score");
-      if (!filled) { out.textContent = "Fill in at least one row from your 3D SA/V bench readings first."; return; }
-      out.textContent = right + " of " + filled + " entries match the WAEC table" + (filled < total ? " (" + (total - filled) + " still blank)." : "!");
+      if (!filled) { out.textContent = "Fill in at least one row from the cube readouts first."; return; }
+      out.textContent = right + " of " + filled + " entries match" + (filled < total ? " (" + (total - filled) + " still blank)." : "!");
       emit("l3:table-checked", { right: right, filled: filled });
     });
   }
+  var ebody = document.querySelector("#expected-table tbody");
+  if (ebody) D.cubes.forEach(function (L) {
+    var e = expectedRow(L), tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + L + "</td><td>" + e.SA + "</td><td>" + e.V + "</td><td>" + e.R + "</td>";
+    ebody.appendChild(tr);
+  });
 
-  // 3. Levels of Biological Organisation Explorer
-  var track = document.getElementById("ph-track");
-  if (track && D.pins) {
-    var nums = document.getElementById("ph-nums");
-    var labels = ["1. Cell", "2. Tissue", "3. Organ", "4. System", "5. Organism"];
-    labels.forEach(function (lb, k) {
-      var sp = document.createElement("span");
-      sp.textContent = lb;
-      sp.style.left = (k / (labels.length - 1) * 100) + "%";
-      nums.appendChild(sp);
+  // ---------- 3. Cube explorer ----------
+  var choices = document.getElementById("ex-choices"), detail = document.getElementById("ex-detail");
+  var pinEls = [];
+  function showPin(i) {
+    var L = D.pins[i]; if (L == null) return;
+    var m = D.model(L);
+    pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
+    var outer = Math.round(22 + 14 * L), core = Math.round(outer * m.core_mm / L);
+    detail.innerHTML =
+      '<div class="mini-row"><div class="cube-mini" aria-hidden="true"><div class="outer" style="width:' + outer + 'px;height:' + outer + 'px">' +
+      (core > 0 ? '<div class="core" style="width:' + core + 'px;height:' + core + 'px"></div>' : "") + '</div></div>' +
+      '<div><div class="num" style="color:var(--teal)">L = ' + L + ' mm<small>SA : V = 6 ÷ ' + L + ' = ' + f1(m.ratio) + ' mm⁻¹</small></div>' +
+      '<p>SA = ' + m.SA + ' mm² · V = ' + m.V + ' mm³</p>' +
+      '<p>' + (m.core_mm < 0.01 ? "Fully dyed: no undyed centre." : "Undyed centre " + m.core_mm.toFixed(1) + " mm wide (" + pct(m.undyedFraction) + " % of the volume).") + '</p></div></div>';
+    emit("l3:pin", { L: L });
+  }
+  if (choices && detail) {
+    D.pins.forEach(function (L, i) {
+      var m = D.model(L), b = document.createElement("button");
+      b.type = "button"; b.className = "ph-choice";
+      b.innerHTML = '<span class="k">L = ' + L + ' mm</span><span class="n">SA : V = ' + f1(m.ratio) + '</span>';
+      b.addEventListener("click", function () { showPin(i); });
+      choices.appendChild(b); pinEls.push(b);
     });
-    nums.style.margin = "8px 10px 0";
-
-    var info = document.getElementById("ph-info");
-    var pinEls = [];
-    D.pins.forEach(function (pObj, idx) {
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "ph-pin";
-      var pct = ((pObj.frac + 1) / 2) * 100;
-      btn.style.left = pct + "%";
-      if (idx % 2 === 1) btn.classList.add("up");
-      btn.innerHTML = '<span aria-hidden="true">' + pObj.emo + "</span>";
-      btn.setAttribute("aria-label", pObj.label + ", " + pObj.x);
-      btn.addEventListener("click", function () { showPin(idx); });
-      track.appendChild(btn);
-      pinEls.push(btn);
-    });
-
-    var showPin = function (i) {
-      var pObj = D.pins[i];
-      if (!pObj) return;
-      pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
-      info.innerHTML =
-        "<b>" + pObj.label + " (" + pObj.x + ")</b> · " +
-        "Examples: <code>" + pObj.v + "</code> · " +
-        "Animals: <code>" + pObj.a + "</code> · " +
-        "Key insight: <b>" + pObj.ke + " → " + pObj.pe + "</b><br>" +
-        pObj.note;
-    };
-    window.L03.showPin = showPin;
+    D.showPin = showPin;
     showPin(2);
   }
 
-  // 4. Onion Bulb Organ & SA/V Bridge Solver (#vinegar-test in #bridge)
-  var vt = document.getElementById("vinegar-test");
-  if (vt) {
-    var bStep1 = document.getElementById("vt-zobo");
-    var bStep2 = document.getElementById("vt-drop1");
-    var bStep3 = document.getElementById("vt-drop5");
-    var bReset = document.getElementById("vt-reset");
-    var status = document.getElementById("vt-status");
-    var verdict = document.getElementById("vt-verdict");
-    var timeB = document.getElementById("time-b");
-    var lenBLabel = document.getElementById("len-b-label");
-
-    bStep1.addEventListener("click", function () {
-      bStep1.disabled = true;
-      bStep2.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· L = 6 mm → SA/V = 1.00 mm⁻¹ (1/6)";
-      if (timeB) timeB.textContent = "SA = 216 mm², V = 216 mm³";
-      status.innerHTML = "Step 1: Growing from L = 1 mm to L = 6 mm cuts the surface-area-to-volume ratio from <strong>6.00 mm⁻¹ down to 1.00 mm⁻¹</strong>! Simple diffusion can no longer supply the interior. Now click Step 2.";
+  // ---------- 4. Level ladder ----------
+  var ladderEl = document.getElementById("ladder-list"), ladderTimers = [];
+  function ladderClear() { ladderTimers.forEach(clearTimeout); ladderTimers = []; }
+  function ladderReset() {
+    ladderClear();
+    if (ladderEl) Array.prototype.forEach.call(ladderEl.children, function (li) { li.classList.remove("on"); });
+  }
+  function ladderClimb() {
+    if (!ladderEl) return;
+    ladderReset();
+    var n = ladderEl.children.length;
+    Array.prototype.forEach.call(ladderEl.children, function (li, i) {
+      ladderTimers.push(setTimeout(function () {
+        li.classList.add("on");
+        if (i === n - 1) emit("l3:ladder", { levels: n });
+      }, 450 + i * 650));
     });
-
-    bStep2.addEventListener("click", function () {
-      bStep2.disabled = true;
-      bStep3.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· Epidermis + Parenchyma + Xylem/Phloem";
-      if (timeB) timeB.textContent = "Multiple tissues identified!";
-      status.innerHTML = "Step 2: Dissecting Mama Titi's onion bulb reveals outer protective <strong>epidermal tissue</strong>, fleshy <strong>storage parenchyma tissue</strong>, and <strong>xylem &amp; phloem vascular tissues</strong>! Now click Step 3.";
+  }
+  if (ladderEl) {
+    D.levels.forEach(function (lv, i) {
+      var li = document.createElement("li");
+      li.innerHTML = "<b>" + (i + 1) + "</b><span><strong>" + lv.k + "</strong>" + lv.eg + "</span>";
+      ladderEl.appendChild(li);
     });
+    document.getElementById("ladder-climb").addEventListener("click", ladderClimb);
+    document.getElementById("ladder-reset").addEventListener("click", ladderReset);
+    document.addEventListener("l3:zoom", function (e) { if (e.detail && e.detail.mode === "ladder") ladderClimb(); else ladderReset(); });
+    D.ladder = { climb: ladderClimb, reset: ladderReset };
+  }
 
-    bStep3.addEventListener("click", function () {
-      bStep3.disabled = true;
-      if (lenBLabel) lenBLabel.textContent = "· Classified: ORGAN LEVEL ✓";
-      if (timeB) timeB.textContent = "Onion Bulb = Plant Organ ✓";
-      status.innerHTML = "Mystery solved! Because an onion bulb combines multiple tissues for storage and vegetative perennation, it is an ORGAN!";
-      verdict.innerHTML =
-        "<strong>Hierarchy &amp; Scaling Solved!</strong> Microscopic protists (<em>Amoeba, Euglena</em>) stay small so <strong>SA ÷ V = 6 ÷ L</strong> remains high for simple diffusion. Multicellular plants and animals overcome low SA/V by organising specialized <strong>Cells → Tissues → Organs (like an onion bulb, leaf, or heart) → Organ Systems</strong>!";
-      verdict.classList.add("on");
-      burst(verdict, 24);
-      emit("l3:vinegar-done", { level: "organ" });
+  // ---------- 5. Bridge: scale a cube up, then explain ----------
+  var sizeRow = document.getElementById("size-row"), sizeOut = document.getElementById("size-out");
+  function showSize(i) {
+    var s = D.bridgeSizes[i]; if (!s) return;
+    Array.prototype.forEach.call(sizeRow.children, function (b, k) { b.setAttribute("aria-pressed", k === i ? "true" : "false"); });
+    var ratio = 6 / s.L, d = s.L / 2;
+    sizeOut.innerHTML =
+      '<div><span>Body</span><b>' + s.name + '</b></div><div><span>Side L</span><b>' + s.L + ' mm</b></div>' +
+      '<div><span>SA : V</span><b>' + (ratio >= 10 ? ratio.toFixed(0) : f1(ratio)) + ' mm⁻¹</b></div>' +
+      '<div><span>Surface to centre</span><b>' + (d < 1 ? d.toFixed(2) : d.toFixed(d < 10 ? 1 : 0)) + ' mm</b></div>';
+  }
+  if (sizeRow && sizeOut) {
+    D.bridgeSizes.forEach(function (s, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "vt-btn"; b.setAttribute("aria-pressed", "false");
+      b.textContent = s.name + " · " + s.L + " mm";
+      b.addEventListener("click", function () { showSize(i); });
+      sizeRow.appendChild(b);
     });
-
-    bReset.addEventListener("click", function () {
-      bStep1.disabled = false;
-      bStep2.disabled = true;
-      bStep3.disabled = true;
-      verdict.classList.remove("on");
-      if (lenBLabel) lenBLabel.textContent = "· L = 6 mm multicellular bulb";
-      if (timeB) timeB.textContent = "Tissue or Organ? Test SA/V first";
-      status.innerHTML = "Compare Specimen A (1 mm Unicellular Protist) with Specimen B (Mama Titi's Onion Bulb). Start with Step 1.";
+    showSize(0);
+    D.bridgeScale = showSize;
+  }
+  var bq = document.getElementById("bridge-qtext"), bo = document.getElementById("bridge-opts"), bf = document.getElementById("bridge-fb");
+  if (bq && bo) {
+    bq.textContent = D.bridge.q;
+    var LET = ["A", "B", "C", "D"], answered = false;
+    D.bridge.o.forEach(function (txt, k) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "qopt";
+      b.innerHTML = "<b>" + LET[k] + "</b><span>" + txt + "</span>";
+      b.addEventListener("click", function () {
+        var ok = k === D.bridge.a;
+        Array.prototype.forEach.call(bo.children, function (c, j) { c.classList.toggle("correct", j === D.bridge.a && (ok || answered)); c.classList.toggle("incorrect", j === k && !ok); });
+        bf.className = "bridge-fb on" + (ok ? "" : " bad");
+        bf.textContent = ok ? D.bridge.why : "Not quite. Scale the cube up above and watch SA : V and the distance from the surface to the centre, then try again.";
+        if (ok) { answered = true; burst(bf, 18); }
+        emit("l3:bridge", { correct: ok });
+      });
+      bo.appendChild(b);
     });
-
-    window.L03.vt = {
-      step1: function () { bStep1.click(); },
-      step2: function () { bStep2.click(); },
-      step3: function () { bStep3.click(); }
-    };
+    D.bridgeAnswer = function (k) { var c = bo.children[k]; if (c) c.click(); };
   }
 })();

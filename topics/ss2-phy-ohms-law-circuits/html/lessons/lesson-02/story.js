@@ -1,139 +1,105 @@
-/* Lesson 02 · 3D story beats: Chinedu's 12.0 V battery dropping to 8.4 V under starter load in Aba */
+/* Lesson 02 · 3D story: the missing 3.6 V at Nkechi's auto-electric workshop (Ngwa Rd, Aba).
+   Set 1 (workshop) with the shared auto-workshop props. Cast: Chinedu (apprentice), Tobe (battery seller), Engr. Nkechi. */
 (function () {
   "use strict";
   if (!window.StoryStage || typeof THREE === "undefined") return;
 
-  var WIDE = [[0, 2.6, 7.2], [0, 1.3, 0]];
+  var shop = null, tobe = null;
+  var WIDE = [[0, 2.5, 7.0], [0, 1.3, 0]];
 
-  function buildBatteryRigProp(labelText, voltageText, isLoaded, tagBg) {
-    var g = new THREE.Group();
-    var darkCase = StoryStage.std("#1e293b", 0.45);
-    var brass = new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.25, metalness: 0.85 });
-
-    var box = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.36, 0.30), darkCase);
-    box.position.set(0, 0.18, 0);
-    g.add(box);
-
-    var postL = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.10, 14), StoryStage.std("#ef4444", 0.4));
-    postL.position.set(-0.14, 0.40, 0);
-    var postR = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.10, 14), StoryStage.std("#3b82f6", 0.4));
-    postR.position.set(0.14, 0.40, 0);
-    g.add(postL, postR);
-
-    var rCoreMat = new THREE.MeshStandardMaterial({
-      color: 0xf59e0b,
-      emissive: isLoaded ? 0xef4444 : 0x0d9488,
-      emissiveIntensity: isLoaded ? 0.85 : 0.25,
-      roughness: 0.3
-    });
-    var rCore = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.12, 0.04), rCoreMat);
-    rCore.position.set(0, 0.18, 0.16);
-    g.add(rCore);
-    g.userData.rCoreMat = rCoreMat;
-    g.userData.isLoaded = isLoaded;
-
-    var tag = StoryStage.sign(labelText + " · " + voltageText, tagBg || "rgba(13,156,126,0.95)", "#fff", 0.16);
-    tag.position.set(0, 0.66, 0.05);
-    g.add(tag);
-    return g;
-  }
-
-  function reset(w) {
-    var p = w.people;
-    if (p.ngozi.parent !== w.props.market) { p.ngozi.parent.remove(p.ngozi); w.props.market.add(p.ngozi); }
-    p.ngozi.userData.target = null; p.ngozi.userData.faceTarget = null; p.ngozi.hold(null);
-    p.ngozi.position.set(0, 0, -1.0); p.ngozi.rotation.y = 0;
-  }
+  function face(p, x, z) { if (p) { p.userData.faceTarget = new THREE.Vector3(x, 0, z); } }
+  function useShot(api, name) { if (shop && shop.shots && shop.shots[name]) api.shot(shop.shots[name][0], shop.shots[name][1]); }
 
   var beats = [
     {
-      caption: "Chinedu's Auto-Electric Workshop, Aba. The 12.0 V battery mystery.",
+      caption: "Nkechi Auto-Electric, Ngwa Rd, Aba. Chinedu clips a voltmeter across the resting keke battery.",
       shot: WIDE, instant: true, hold: 5,
-      who: "cust1",
-      text: "Oga Chinedu! With the switch open, this battery reads a full 12.0 volts. Why does it plunge to 8.4 volts the instant I crank the 2.8-ohm starter?",
-      run: function (w) { reset(w); w.people.cust1.set("point"); }
-    },
-    {
-      caption: "Papa Nnamdi thinks the voltmeter is broken.",
-      shot: [[-0.4, 2.0, 5.0], [0.2, 1.3, 0.6]], hold: 5,
-      who: "cust2",
-      text: "A 12-volt battery is a 12-volt battery! Where could 3.6 volts possibly hide? Your digital voltmeter must be faulty!",
-      run: function (w) { reset(w); w.people.cust2.set("talk"); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "Chinedu touches the warm casing of the battery.",
-      shot: [[0.3, 1.9, 2.5], [0, 1.6, -1]], hold: 4.8,
-      who: "ngozi",
-      text: "The meter is fine! Feel the battery casing — it's getting warm because the acid and plates inside have their own internal resistance r!",
-      run: function (w) { reset(w); w.people.ngozi.set("talk"); }
-    },
-    {
-      caption: "Open Circuit (I = 0, V = 12.0 V) vs Loaded Circuit (I = 3.0 A, V = 8.4 V, Lost = 3.6 V).",
-      shot: [[0.65, 1.65, 1.55], [0.65, 1.35, 0.05]], hold: 5.5,
-      who: "ngozi",
-      text: "When 3.0 amps flow through r = 1.2 ohms, v = Ir = 3.6 volts are lost inside the battery itself, leaving only 8.4 volts at the terminals!",
-      run: function (w) { reset(w); w.people.ngozi.set("point"); }
-    },
-    {
-      caption: "How can we measure r and E without cutting the battery open?",
-      shot: [[1.4, 1.75, 2.2], [0.5, 1.35, 0.0]], hold: 5,
-      who: "ngozi",
-      text: "Even better: by connecting two known resistors R₁ and R₂ one after the other, we can calculate both r and E using algebra or a V–I graph!",
-      run: function (w) { reset(w); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "At the Physics Lab with Engr. Nkechi…",
-      shot: [[40.2, 2.3, 3.4], [40.3, 1.4, -1.8]], hold: 5.5,
-      who: "amaka",
-      text: "Step up to the bench! Let's vary the external load R across five steps, record V and I, and watch the straight line V = −rI + E appear!",
+      who: "chinedu",
+      text: "12.0 V, boss. It looks normal.",
       run: function (w) {
-        var a = w.people.amaka;
-        a.userData.faceTarget = new THREE.Vector3(0.6, 0, -2.3);
-        a.set("point");
+        useShot(w, "table");
+        if (shop && shop.battery) shop.battery.setLoad(null);
+        if (shop && shop.meter && shop.meter.setValue) shop.meter.setValue(12.0);
+        w.people.chinedu.set("point");
+        if (w.people.nkechi) w.people.nkechi.set("idle");
       }
+    },
+    {
+      caption: "He throws the starter switch. The reading drops to 8.4 V and the headlamp dims.",
+      shot: (shopShot("battery")) || [[-0.3, 1.9, 4.6], [0.3, 1.2, 0.2]], hold: 5.5,
+      who: "chinedu",
+      text: "It fell! Where did 3.6 volts go?",
+      run: function (w) {
+        useShot(w, "battery");
+        if (shop && shop.battery) shop.battery.setLoad(2.8);     // 12.0 V, 1.2 Ω on 2.8 Ω → 8.4 V, 3.0 A
+        if (shop && shop.meter && shop.meter.setValue) shop.meter.setValue(8.4);
+        if (shop && shop.keke && shop.keke.setLamp) shop.keke.setLamp(0.4);
+        w.people.chinedu.set("talk");
+      }
+    },
+    {
+      caption: "Tobe, the battery seller next door, is quick to judge.",
+      shot: (shopShot("wide")) || [[1.2, 2.0, 5.0], [0.4, 1.3, 0.4]], hold: 5,
+      who: "tobe",
+      text: "The battery is weak, it has lost its voltage. Dump it and buy one from me.",
+      run: function (w) { useShot(w, "wide"); if (w.people.tobe) w.people.tobe.set("point"); w.people.chinedu.set("think"); }
+    },
+    {
+      caption: "Engr. Nkechi is not convinced.",
+      shot: (shopShot("table")) || [[0.2, 1.8, 3.4], [0.2, 1.3, -0.4]], hold: 6,
+      who: "nkechi",
+      text: "The EMF has not fallen. Those volts are spent inside the battery when a big current flows. We will measure how much resistance is hiding in there.",
+      run: function (w) { useShot(w, "table"); if (w.people.nkechi) w.people.nkechi.set("talk"); }
+    },
+    {
+      caption: "She sets up the cell, key, rheostat and both meters on the test bench.",
+      shot: (shopShot("table")) || [[0.6, 1.7, 2.8], [0.2, 1.2, -0.2]], hold: 5.5,
+      who: "nkechi",
+      text: "Open key: you see the EMF. Closed key: you see what is left after the inside takes its cut. Let us plot V against I.",
+      run: function (w) { useShot(w, "table"); if (w.people.nkechi) w.people.nkechi.set("point"); }
     }
   ];
 
+  // resolved lazily — shop is built in setup(), before beats run
+  function shopShot(name) { return shop && shop.shots && shop.shots[name] ? shop.shots[name] : null; }
+
   window.StoryStage.wire("story-stage", "story", beats, {
     names: {
-      ngozi: "Oga Chinedu",
-      cust1: "Kelechi (Apprentice)",
-      cust2: "Papa Nnamdi",
-      amaka: "Engr. Nkechi (Physics Lab)"
+      nkechi: "Engr. Nkechi", ngozi: "Engr. Nkechi", amaka: "Engr. Nkechi",
+      chinedu: "Chinedu", cust1: "Chinedu", tobe: "Tobe", emeka: "Emeka"
     },
     setup: function (api) {
-      var mSign = StoryStage.sign("CHINEDU AUTO-ELECTRIC · LOST VOLTS CASE", "rgba(13,156,126,0.95)", "#fff", 0.45);
+      // signs
+      var mSign = StoryStage.sign("NKECHI AUTO-ELECTRIC · NGWA RD, ABA", "rgba(13,156,126,0.95)", "#fff", 0.5);
       mSign.position.copy(api.props.mSign.position);
-      api.props.market.remove(api.props.mSign);
-      api.props.market.add(mSign);
-      api.props.mSign = mSign;
+      api.props.market.remove(api.props.mSign); api.props.market.add(mSign); api.props.mSign = mSign;
 
-      var lSign = StoryStage.sign("INTERNAL RESISTANCE & V–I GRAPH LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
-      lSign.position.copy(api.props.lSign.position);
-      api.props.lab.remove(api.props.lSign);
-      api.props.lab.add(lSign);
-      api.props.lSign = lSign;
+      // aliases (cast mapping, build plan)
+      api.people.nkechi = api.people.ngozi;
+      api.people.chinedu = api.people.cust1;
+      if (api.people.cust2) api.people.cust2.visible = false;
 
-      if (api.props.bottleA) api.props.bottleA.visible = false;
-      if (api.props.bottleB) api.props.bottleB.visible = false;
-      if (api.props.can) api.props.can.visible = false;
+      // Tobe, the battery seller next door
+      tobe = StoryStage.person({ skin: "#8a5a3c", outfit: "#7a3b1d", pants: "#1c2433", hair: "short" });
+      api.props.market.add(tobe); api.people.tobe = tobe;
 
-      var batOpen = buildBatteryRigProp("Open Key (I=0)", "V = E = 12.0 V", false, "rgba(13,156,126,0.95)");
-      batOpen.position.set(0.38, 0.94, 0.08);
-      api.props.market.add(batOpen);
-      api.props.clockA = batOpen;
-      api.props.bottleA = batOpen;
-
-      var batLoad = buildBatteryRigProp("Loaded (I=3A)", "V = 8.4 V (Ir=3.6V)", true, "rgba(200,38,74,0.95)");
-      batLoad.position.set(0.92, 0.94, 0.08);
-      api.props.market.add(batLoad);
-      api.props.clockB = batLoad;
-      api.props.bottleB = batLoad;
-    },
-    onTick: function (api, dt, t) {
-      if (api.props.clockB && api.props.clockB.userData.rCoreMat) {
-        api.props.clockB.userData.rCoreMat.emissiveIntensity = 0.65 + 0.3 * Math.sin(t * 5);
+      if (window.AutoWorkshopProps) {
+        shop = AutoWorkshopProps.dressWorkshop(api, { tobeStall: true, meterOnBattery: true });
+        // place the cast at the workshop spots
+        var S = shop.spots || {};
+        if (S.chinedu) { api.people.chinedu.position.set(S.chinedu[0], 0, S.chinedu[2]); }
+        if (S.nkechi) { api.people.nkechi.position.set(S.nkechi[0], 0, S.nkechi[2]); }
+        if (S.tobe) { tobe.position.set(S.tobe[0], 0, S.tobe[2]); } else { tobe.position.set(4.0, 0, 0.6); }
+        face(api.people.chinedu, 0.7, 0.9);
+        face(api.people.nkechi, 0.7, 0.9);
+        face(tobe, 0.5, 0.9);
+      } else {
+        // graceful fallback: default market props only
+        tobe.position.set(1.4, 0, 1.6); tobe.rotation.y = Math.PI * 1.1;
+        api.people.chinedu.position.set(-1.0, 0, 1.4);
+        api.people.nkechi.position.set(0, 0, -1.0);
       }
-    }
+    },
+    onTick: function (api, dt, t) { if (shop && shop.update) shop.update(dt, t); }
   });
 })();

@@ -1,0 +1,793 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 4 · The Beating Heart · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): count a radial pulse before and after exercise on a 3D pulse bench, then explore the cardiac cycle, lub and dub, the pacemaker, pulse and blood pressure.">
+  <meta name="theme-color" content="#060912">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 56C12 40 6 28 6 20a13 13 0 0 1 26-4 13 13 0 0 1 26 4c0 8-6 20-26 36z' fill='%23c8264a'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <style>
+    .hero-art {
+      position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
+    }
+    .hero-art svg { width: 100%; height: auto; max-width: 330px; }
+    .hs-ch { fill: rgba(var(--crimson-rgb), .38); stroke: var(--crimson); stroke-width: 2; }
+    .hs-ch.blue { fill: var(--sky); fill-opacity: .3; stroke: var(--sky); }
+    .hs-wall { fill: none; stroke: var(--fg); stroke-width: 3; stroke-linejoin: round; }
+    .hs-t { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+    .hs-m { fill: var(--amber); font-family: var(--font-mono); font-size: 10.5px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    .bench-mode { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .bench-mode .lab { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+    .vt-btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    .bench-readout .hot b { color: var(--amber); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td.empty { color: var(--paper-faint); }
+    #results-table tr.fresh td { background: rgba(var(--amber-rgb), .12); }
+    .wall-bars { display: grid; gap: 8px; margin-top: 14px; }
+    .wall-bars .wb { display: grid; grid-template-columns: 74px 1fr 64px; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); }
+    .wall-bars .wb i { display: block; height: 14px; border-radius: 999px; background: rgba(var(--paper-ink-rgb), .08); position: relative; overflow: hidden; }
+    .wall-bars .wb i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w, 10%); background: var(--crimson); border-radius: 999px; }
+    .wall-bars .wb.on { color: var(--paper-ink); font-weight: 600; }
+    .wall-bars .wb.on i::after { background: var(--amber); }
+    .pos-track { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 48px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 96px; }
+    .pos-info b { color: var(--crimson); }
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+    .bridge-fig { width: 100%; max-width: 360px; margin: 14px auto 0; display: block; }
+    @media (max-width: 560px) {
+      .wall-bars .wb { grid-template-columns: 60px 1fr 54px; }
+      .pos-track { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+      .pos-pin { font-size: 12px; }
+      .stage-bar .seg button { padding: 8px 10px; font-size: 12.5px; }
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 2px; }
+    .chip-btn { min-height: 40px; padding: 6px 12px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12.5px; cursor: pointer; }
+    .chip-btn.ok { background: rgba(var(--ok-rgb), .22); border-color: var(--ok); color: var(--fg); }
+    .chip-btn.no { box-shadow: 0 0 0 2px var(--pink); }
+    .chip-btn[disabled] { opacity: .5; cursor: default; }
+    #free-chips[hidden] { display: none; }
+    .seq { display: grid; gap: 14px; margin-top: 12px; }
+    .seq-tray, .seq-line { display: flex; flex-wrap: wrap; gap: 8px; min-height: 52px; padding: 10px; border-radius: var(--radius); border: 1.5px dashed rgba(var(--paper-ink-rgb), .22); background: var(--paper-card); }
+    .seq-line { flex-direction: column; flex-wrap: nowrap; counter-reset: sq; border-style: solid; border-color: var(--paper-line); }
+    .seq-card { min-height: 44px; padding: 8px 12px; border-radius: calc(12px * var(--corner, 1)); border: 1.5px solid rgba(var(--paper-ink-rgb), .2); background: var(--paper); color: var(--paper-ink); font-weight: 700; font-size: 13.5px; cursor: pointer; text-align: left; }
+    .seq-line .seq-card { display: flex; align-items: center; gap: 10px; counter-increment: sq; }
+    .seq-line .seq-card::before { content: counter(sq); font-family: var(--font-mono); font-size: 12px; min-width: 22px; height: 22px; border-radius: 999px; background: var(--paper-ink); color: var(--paper); display: inline-flex; align-items: center; justify-content: center; }
+    .seq-card.right { border-color: var(--ok); background: rgba(var(--ok-rgb), .12); }
+    .seq-card.wrong { border-color: var(--crimson); background: rgba(var(--crimson-rgb), .1); }
+    .seq-label { font-family: var(--font-mono); font-size: 11.5px; color: var(--paper-muted); margin: 0 0 4px; }
+    .route-cell { font-size: 12px; line-height: 1.45; }
+    #results-table td.lungs-yes { color: var(--crimson); font-weight: 700; }
+    .pos-track.eight { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .loop-fig { width: 100%; max-width: 330px; }
+    .hl-blue { fill: var(--sky); fill-opacity: .25; stroke: var(--sky); stroke-width: 3; }
+    .hl-red { fill: rgba(var(--crimson-rgb), .22); stroke: var(--crimson); stroke-width: 3; }
+    .sort-item .emo { font-weight: 800; }
+    .bench-views { display: flex; flex-wrap: wrap; gap: 6px; }
+    #results-table td.empty { color: var(--paper-faint); }
+    .zoom-cap { position: absolute; left: 50%; top: 14%; transform: translateX(-50%) scale(.8); font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 12vw, 64px); letter-spacing: .06em; padding: 4px 22px; border-radius: 16px; background: rgba(var(--crimson-rgb), .9); color: #fff; opacity: 0; pointer-events: none; transition: opacity .12s, transform .12s; z-index: 4; }
+    .zoom-cap.dub { background: rgba(var(--sky-rgb, 60,130,240), .92); }
+    .zoom-cap.show { opacity: 1; transform: translateX(-50%) scale(1); }
+    .pos-track.six { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .pos-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .st-chain { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-family: var(--font-mono); font-size: 12.5px; }
+    .ecg-fig { width: 100%; max-width: 330px; }
+    .hs-line { fill: none; stroke: var(--crimson); stroke-width: 3; stroke-linejoin: round; stroke-linecap: round; }
+    .hs-grid { stroke: var(--line); stroke-width: 1; }
+    .hs-dash { stroke: var(--teal); stroke-width: 1.5; stroke-dasharray: 5 4; }
+    @media (max-width: 560px) { .zoom-cap { top: 10%; } }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l04">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 7 Lessons</a>
+      <span class="l-crumb">Lesson 4 of 7 · <b>The Beating Heart</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <!-- ================= HERO ================= -->
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 4 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>The Beating <em>Heart</em></h1>
+        <p class="question reveal">Why did Chidi's pulse leap to 132 and then settle again?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Describe the stages of the <strong>cardiac cycle</strong> with approximate timings and the state of each valve.</span></li>
+          <li><b>02</b><span>Explain the causes of the <strong>“lub” and “dub”</strong> sounds.</span></li>
+          <li><b>03</b><span>Describe how the <strong>SAN, AVN, bundle of His and Purkinje fibres</strong> control the beat, and how nerves and adrenaline change its rate.</span></li>
+          <li><b>04</b><span><strong>Measure pulse rate</strong> before and after exercise, and calculate heart rate, cycle time, cardiac output and percentage change.</span></li>
+          <li><b>05</b><span>Define <strong>pulse</strong> and <strong>blood pressure</strong>, and list factors that raise or lower heart rate.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Share results</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 250" role="img" class="ecg-fig">
+          <line class="hs-grid" x1="20" y1="60" x2="310" y2="60"/><line class="hs-grid" x1="20" y1="120" x2="310" y2="120"/><line class="hs-grid" x1="20" y1="180" x2="310" y2="180"/>
+          <!-- a pressure-style trace: rest (slow) then after exercise (fast), resting rate dashed -->
+          <path class="hs-line" d="M20 150 q10 -50 20 0 q10 -50 20 0 q10 -50 20 0 q10 -50 20 0 q5 -90 10 0 q5 -90 10 0 q5 -90 10 0 q5 -90 10 0 q5 -90 10 0 q5 -90 10 0 q5 -90 10 0 q5 -90 10 0"/>
+          <text class="hs-m" x="24" y="30">REST · 68 beats per minute</text>
+          <text class="hs-m" x="190" y="214">AFTER SPRINT · 132</text>
+          <text class="hs-t" x="24" y="236">lub-dub · lub-dub · lub-dub</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Faster or slower?</a></li>
+        <li><a href="#practical">Pulse bench</a></li>
+        <li><a href="#concepts">The cycle</a></li>
+        <li><a href="#zoom">Heart zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- ================= 0. DO NOW ================= -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 1 to 3</em></h2>
+        <p class="intro">Four quick cards on the aorta, the chordae tendineae, the coronary artery and the two loops. Answer each one in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- ================= 1. STORY ================= -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>Chidi's pulse at <em>Oja Oba</em></h2>
+        <p class="intro">Chidi is back at the health-day tent, breathless after his sprint. Dr Aisha counts his pulse for 15 seconds. Why is it so fast, and why will it be back near 68 in five minutes?</p>
+
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Dr Aisha counts Chidi's pulse in the Oja Oba tent; they listen to lub-dub through a stethoscope; Baba Sule says the brain kicks the heart; then a beating heart model sits on the lab bench."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba tent → UCH lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · The tent:</strong> Chidi is back, breathless. Dr Aisha counts his pulse for 15 seconds: <em>33 beats</em>.</p>
+            <p><strong>Scene 2 · The stethoscope:</strong> She hands it to him. <em>“Lub-dub, lub-dub”</em>, racing.</p>
+            <p><strong>Scene 3 · Baba Sule:</strong> <em>“That is his brain kicking the heart. And the noise is the heart muscle clapping.”</em></p>
+            <p><strong>Scene 4 · Dr Aisha:</strong> <em>“Five minutes from now it will be back near 68. Let's see why, and what that knocking really is.”</em></p>
+            <p><strong>Scene 5 · The invitation:</strong> To the pulse bench in the lab.</p>
+          </div>
+        </details>
+      </section>
+
+      <!-- ================= 2. WONDER WALL ================= -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">What makes the “lub” and the “dub”, and who tells the heart to beat faster? Pin your idea before we investigate.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think the lub is…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions and questions">
+            <button type="button">The chambers squeezing (Femi)</button>
+            <button type="button">Valves snapping shut? (Zainab)</button>
+            <button type="button">Adrenaline, like when you are scared (Obinna)</button>
+            <button type="button">The brain sends every single beat (Baba Sule)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3. SORT ================= -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · sort game</span>
+        <h2>Speeds it up or <em>slows it down?</em></h2>
+        <p class="intro">Sort all 10 cards into the two bins. Drag a card, or tap a card and then tap a bin.</p>
+
+        <div class="sort" id="rate-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="faster" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Speeds it up bin">
+              <h4><i></i>Speeds it up</h4>
+              <small>heart rate rises</small>
+              <div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="slower" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Slows it down bin">
+              <h4><i></i>Slows it down</h4>
+              <small>heart rate falls</small>
+              <div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The pulse bench: <em>count, run, count again</em></h2>
+        <p class="intro">Feel the radial pulse at the wrist, then watch the heart behind it. Chidi does step-ups for two minutes and you count his pulse for 15 seconds at a time. The heart faces you, so <strong>the patient's right side is on your left</strong>.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>STEP 01</b><h4>Rest, then find the pulse</h4><p>Chidi sits quietly for five minutes. Find the radial pulse on the thumb side of the wrist with your <strong>index and middle fingers, never the thumb</strong>.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Count at rest, three times</h4><p>Press <em>Rest count</em> three times. Each count lasts 15 s. Take the <strong>mean</strong> and multiply by 4 to get beats per minute.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Exercise, then count at once</h4><p>Press <em>Exercise 2 min</em> for the step-ups. Then <em>Count now</em> for 15 s at once, and <em>Next minute</em> to count at the start of each minute for 5 minutes.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Tabulate and plot</h4><p>The table fills with beats in 15 s and beats per minute. The graph plots heart rate against time after exercise: join the points with a smooth curve.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D pulse bench: a forearm and wrist with the radial artery bulging at the live heart rate, the examiner's two fingers, a stopwatch, a step stool with Chidi stepping up and down, a blood-pressure cuff with a mercury column, and a beating heart with its SAN, AVN, bundle of His and Purkinje fibres."></canvas>
+            <div class="stage-label"><i></i>3D pulse bench · drag to rotate</div>
+            <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the expected table below and the worked examples instead.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <button class="vt-btn zobo" type="button" id="b-rest">Rest count</button>
+            <button class="vt-btn zobo" type="button" id="b-ex" disabled>Exercise 2 min</button>
+            <button class="vt-btn zobo" type="button" id="b-count" disabled>Count now</button>
+            <button class="vt-btn zobo" type="button" id="b-next" disabled>Next minute</button>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" id="b-bp">Blood pressure</button>
+            <button class="vt-btn" type="button" id="b-xray" aria-pressed="false">X-ray</button>
+            <button class="vt-btn" type="button" id="b-speed">Speed ×2</button>
+            <button class="vt-btn" type="button" id="b-all">Run it for me</button>
+            <button class="vt-btn" type="button" id="b-reset">Reset</button>
+          </div>
+          <div class="stage-bar">
+            <div class="bench-views" id="bench-views" role="group" aria-label="Camera view">
+              <button class="vt-btn" type="button" data-view="all" aria-pressed="true">All</button>
+              <button class="vt-btn" type="button" data-view="wrist" aria-pressed="false">Wrist</button>
+              <button class="vt-btn" type="button" data-view="heart" aria-pressed="false">Heart</button>
+              <button class="vt-btn" type="button" data-view="step" aria-pressed="false">Step</button>
+              <button class="vt-btn" type="button" data-view="manometer" aria-pressed="false">Cuff</button>
+            </div>
+            <span class="stage-hint" id="bench-hint">Press Rest count</span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="graph-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live graph · plots as you count</span><h4>Heart rate against time after exercise</h4></div>
+            <span class="gc-badge wait" id="hr-badge">0 points</span>
+          </div>
+          <div id="hr-graph"></div>
+          <div class="gc-stats" id="hr-stats"></div>
+          <p class="gc-note" id="hr-note"></p>
+        </div>
+
+        <h3>Record your results</h3>
+        <p>Each count appears here as you take it. Beats per minute = beats in 15 s × 4.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead>
+              <tr><th>Time after exercise (min)</th><th>Beats in 15 s</th><th>Heart rate (beats min⁻¹)</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="count-line">Counts recorded: 0 of 9 (3 at rest, 6 after exercise)</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected results <small>open after you count</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Time after exercise (min)</th><th>Beats in 15 s</th><th>Heart rate (beats min⁻¹)</th></tr></thead>
+                <tbody>
+                  <tr><td>Rest</td><td>17</td><td>68</td></tr>
+                  <tr><td>0</td><td>33</td><td>132</td></tr>
+                  <tr><td>1</td><td>29</td><td>116</td></tr>
+                  <tr><td>2</td><td>24</td><td>96</td></tr>
+                  <tr><td>3</td><td>20</td><td>80</td></tr>
+                  <tr><td>4</td><td>18</td><td>72</td></tr>
+                  <tr><td>5</td><td>17</td><td>68</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <p>Your repeat counts may differ by one beat, which is 4 beats per minute after multiplying. That is normal.</p>
+            <div class="eq light">heart rate = beats in 15 s × 4</div>
+          </div>
+        </details>
+
+        <h3>Precautions and sources of error</h3>
+        <div class="callout info reveal" id="precautions">
+          <p><strong>Precautions taken (write them in the past tense):</strong> the pulse was felt with two fingers, not the thumb, which has its own pulse · the subject rested for five minutes before the resting count · each resting count was repeated three times and averaged · the stopwatch was started on a beat counted as “zero”.</p>
+        </div>
+        <div class="callout tip reveal" id="errors">
+          <p><strong>Sources of error (always give the direction):</strong> counting the first beat as “one” when the watch started added a beat, so the rate was <strong>too high</strong> by 4 beats per minute · a short delay before the first post-exercise count let the heart slow, so the peak was <strong>too low</strong> · multiplying a 15 s count by 4 turns one missed or extra beat into ±4 beats per minute, so a reading may be <strong>too high or too low</strong> (random) · pressing too hard on the artery blocked some beats, so the rate read <strong>too low</strong>.</p>
+        </div>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l04-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>What was the peak rate, and how long did recovery take?</li>
+            <li>Why did the rate rise during exercise?</li>
+            <li>Why is the graph a curve and not a straight line?</li>
+            <li>Why would a trained athlete recover faster?</li>
+            <li>Why were the fingers used and not the thumb?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>The peak was 132 beats per minute (at 0 min). The rate returned to the resting 68 after about 5 minutes.</li>
+                <li>Working muscles needed more oxygen and glucose and made more carbon dioxide. The cardiac centre and adrenaline sped up the SAN, so the heart beat faster and pumped more blood.</li>
+                <li>The rate fell by different amounts each minute (16, 20, 16, 8, 4): it fell fast at first and then levelled off as it neared the resting rate, so the trend is curved.</li>
+                <li>An athlete's heart is stronger and pumps a larger stroke volume, so it meets the muscles' needs and clears carbon dioxide with fewer beats and settles sooner.</li>
+                <li>The thumb has its own pulse, which could be counted along with the subject's pulse and make the count too high.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 4. CONCEPTS ================= -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>One heartbeat, <em>start to finish</em></h2>
+        <p class="intro">Now we connect what you counted to the names and timings WAEC, NECO and JAMB expect.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>The Beating Heart</b><span class="lv-time">10 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: The Beating Heart" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up and find your own radial pulse with two fingers. Count for 15 seconds, then jog on the spot for 30 seconds and count again. Multiply each by 4. Did your rate rise? Say “lub” as you tap your chest on every beat and “dub” on the short gap between. Sit down slowly and breathe until your pulse feels calm again.</p>
+        </div>
+
+        <div class="callout big reveal" id="cycle-callout">
+          <p><strong>The cardiac cycle (at about 75 beats per minute, one cycle ≈ 0.8 s):</strong></p>
+          <ol>
+            <li><strong>All chambers relaxed</strong> (about 0.4 s): blood flows in from the venae cavae and pulmonary veins, fills the atria and runs on through the open AV valves into the ventricles. The semilunar valves are shut.</li>
+            <li><strong>Atria contract</strong> (about 0.1 s): both atria squeeze together and top up the ventricles.</li>
+            <li><strong>Ventricles contract</strong> (about 0.3 s): pressure in the ventricles rises above that in the atria and the AV valves slam shut (<strong>lub</strong>). It then passes the pressure in the arteries, the semilunar valves open and blood surges into the aorta and pulmonary artery.</li>
+            <li><strong>Ventricles relax</strong>: pressure inside them falls below the arteries, blood starts to fall back, and the semilunar pockets fill and snap shut (<strong>dub</strong>). The cycle repeats.</li>
+          </ol>
+          <p><em>Systole</em> means contraction; <em>diastole</em> means relaxation.</p>
+        </div>
+
+        <h3 id="def-sounds">Heart sounds</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl" id="sounds-table">
+            <thead><tr><th>Sound</th><th>Cause</th><th>Character</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Lub</strong> (first)</td><td>AV valves (tricuspid, bicuspid) closing as the ventricles start to squeeze</td><td>deeper and longer</td></tr>
+              <tr><td><strong>Dub</strong> (second)</td><td>Semilunar valves closing as the ventricles relax</td><td>shorter and sharper</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>A <strong>murmur</strong>, an extra swishing sound, hints at a leaky or narrowed valve.</p>
+
+        <h3>Control of the beat</h3>
+        <div class="eq" id="control-chain">SAN (pacemaker, right atrium wall) → both atria contract → AVN (short delay) → bundle of His (down the septum) → Purkinje fibres (up both ventricle walls, from the apex)</div>
+        <div class="callout info reveal" id="control-note">
+          <p>Cardiac muscle is <strong>myogenic</strong>: the beat begins inside the heart. The <strong>cardiac centre</strong> in the medulla oblongata only adjusts the rate. <strong>Sympathetic nerves</strong> and the hormone <strong>adrenaline</strong> raise the rate, while impulses along the <strong>vagus nerve</strong> lower it. The short delay at the AVN gives the atria time to finish emptying before the ventricles contract.</p>
+        </div>
+
+        <div class="callout tip reveal" id="pulse-bp">
+          <p><strong>Pulse and blood pressure:</strong> a <em>pulse</em> is the rhythmic bulge and spring-back of an artery's wall after every push of the left ventricle into the aorta, so the pulse rate equals the heart rate. It is felt where an artery crosses a bone near the skin: wrist (radial), neck (carotid), temple, groin. <em>Blood pressure</em> is the push of blood against vessel walls, measured with a sphygmomanometer. A typical young adult reads about <strong>120/80 mmHg</strong> (ventricles contracting / relaxed). It peaks in the aorta and drops steadily all the way back to the heart.</p>
+        </div>
+
+        <h3>Four equations to know</h3>
+        <div id="eq-block">
+          <div class="eq">heart rate = beats in t × 60 ÷ t</div>
+          <div class="eq">T = 60 ÷ heart rate</div>
+          <div class="eq">cardiac output = heart rate × stroke volume</div>
+          <div class="eq">% change = (new − old) ÷ old × 100</div>
+        </div>
+
+        <h3>Factors that change the heart rate</h3>
+        <p><strong>Faster:</strong> exercise, fear or excitement (adrenaline), fever, high carbon dioxide in the blood, caffeine. <strong>Slower:</strong> sleep, rest, fitness (resting rate), vagus nerve impulses, lying calm.</p>
+
+        <h3 id="pos-h">Cycle explorer</h3>
+        <p>Tap a time. The 3D heart in the zoom below freezes at that moment and the chambers and valves are listed here. The patient's right side is on your left.</p>
+        <div id="pos-explorer">
+          <div class="pos-track six" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a time to freeze the heart.</div>
+          <div class="pos-actions">
+            <button class="vt-btn" type="button" id="pos-jump">See the 3D heart ↓</button>
+            <button class="vt-btn" type="button" id="pos-run">Let it beat</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 5. ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D zoom</span>
+        <h2>Zoom in: <em>the spark and the valves</em></h2>
+        <p class="intro"><strong>Conduction</strong> shows the spark leaving the SAN, pausing at the AVN, then racing down the septum and up the ventricle walls. <strong>Valves</strong> shows the lub and dub captions. Use <em>Slow motion</em> to catch each one.</p>
+
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D zoom: a beating heart cut open. In conduction mode a spark spreads from the SAN across the atria, pauses at the AVN and runs through the bundle of His and Purkinje fibres. In valves mode the AV and semilunar valves open and shut with LUB and DUB captions."></canvas>
+            <div class="stage-label"><i></i>3D zoom · drag to rotate</div>
+            <div class="zoom-cap" id="zoom-cap" aria-hidden="true"></div>
+            <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Zoom view" id="zoom-mode">
+              <button type="button" data-mode="pace" aria-pressed="true">Conduction</button>
+              <button type="button" data-mode="sys" aria-pressed="false">Valves</button>
+            </div>
+            <button class="vt-btn" type="button" id="zoom-slow" aria-pressed="false">Slow motion</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Try each one on paper first, then check the working. Write the units in every line.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Heart rate and cycle time</h4></div>
+          <div class="example-body">
+            <p class="q">At rest, Chidi's pulse gives 18 beats in 15 s. Find his heart rate and the length of one cycle.</p>
+            <ol class="steps-sol">
+              <li><strong>Scale to one minute:</strong> <code>18 × 60 ÷ 15 = 18 × 4 = 72 beats min⁻¹</code></li>
+              <li><strong>Cycle time:</strong> <code>T = 60 s ÷ 72</code></li>
+              <li><strong>Evaluate:</strong> <code>T = 0.833… ≈ 0.83 s</code></li>
+            </ol>
+            <div class="answer-line">72 beats min⁻¹; about 0.83 s per cycle (close to the textbook 0.8 s).</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Cardiac output at rest and after the sprint</h4></div>
+          <div class="example-body">
+            <p class="q">Stroke volume is 70 cm³ at rest (68 bpm) and 95 cm³ just after the sprint (132 bpm). Find each cardiac output in dm³ min⁻¹ and how many times it rose.</p>
+            <ol class="steps-sol">
+              <li><strong>Rest:</strong> <code>68 × 70 = 4760 cm³ min⁻¹</code></li>
+              <li><strong>Convert:</strong> <code>4760 ÷ 1000 = 4.76 dm³ min⁻¹</code></li>
+              <li><strong>After the sprint:</strong> <code>132 × 95 = 12540 cm³ min⁻¹ = 12.54 dm³ min⁻¹</code></li>
+              <li><strong>Ratio:</strong> <code>12.54 ÷ 4.76 = 2.63 ≈ 2.6</code></li>
+            </ol>
+            <div class="answer-line">4.76 → 12.5 dm³ min⁻¹: about 2.6 times more blood each minute.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex3">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Percentage rise</h4></div>
+          <div class="example-body">
+            <p class="q">By what percentage did Chidi's heart rate rise from 68 to 132 bpm?</p>
+            <ol class="steps-sol">
+              <li><strong>Rise:</strong> <code>132 − 68 = 64 beats min⁻¹</code></li>
+              <li><strong>Fraction of the old value:</strong> <code>64 ÷ 68 = 0.941</code></li>
+              <li><strong>Percentage:</strong> <code>0.941 × 100 = 94.1 %</code></li>
+            </ol>
+            <div class="answer-line">A 94.1% rise (almost double).</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>How long the ventricles rest</h4></div>
+          <div class="example-body">
+            <p class="q">At 75 bpm, ventricular systole lasts 0.30 s. What fraction of each cycle do the ventricles spend relaxing?</p>
+            <ol class="steps-sol">
+              <li><strong>Cycle time:</strong> <code>60 ÷ 75 = 0.80 s</code></li>
+              <li><strong>Relaxing time:</strong> <code>0.80 − 0.30 = 0.50 s</code></li>
+              <li><strong>Fraction:</strong> <code>0.50 ÷ 0.80 × 100 = 62.5 %</code></li>
+            </ol>
+            <div class="answer-line">62.5% of every cycle is rest, which is why heart muscle does not tire.</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- ================= 7. BRIDGE ================= -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the tent: <em>close Case 1</em></h2>
+        <p class="intro">Match Chidi's readings to their causes. You can replay his recovery on the bench first.</p>
+
+        <div class="bridge-card" id="bridge-card">
+          <h4>Why did Chidi's pulse leap and settle?</h4>
+          <div class="bridge-q" data-q="rise">
+            <p>1 · What pushed the rate from 68 up to 132?</p>
+            <div class="opts">
+              <button type="button" data-v="adr">More CO₂ and adrenaline speed the SAN</button>
+              <button type="button" data-v="brain">The brain sends every single beat</button>
+              <button type="button" data-v="clap">The muscle claps harder</button>
+            </div>
+          </div>
+          <div class="bridge-q" data-q="lub">
+            <p>2 · What makes the “lub”?</p>
+            <div class="opts">
+              <button type="button" data-v="av">AV valves shutting</button>
+              <button type="button" data-v="sl">Semilunar valves shutting</button>
+              <button type="button" data-v="muscle">Heart muscle clapping</button>
+            </div>
+          </div>
+          <div class="bridge-q" data-q="fall">
+            <p>3 · What slowed the rate back to 68?</p>
+            <div class="opts">
+              <button type="button" data-v="vagus">Vagus nerve impulses to the SAN</button>
+              <button type="button" data-v="adr2">More adrenaline</button>
+              <button type="button" data-v="stop">The SAN stopped firing</button>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+            <button class="vt-btn" type="button" id="bridge-replay">Replay Chidi's recovery</button>
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
+          </div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 4:</strong> the heart sets its own beat; nerves and hormones only turn the speed up or down.</p>
+        </div>
+      </section>
+
+      <!-- ================= 8. QUIZ ================= -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 3 come at the end.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- ================= 9. REFLECT ================= -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 4.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can describe the four stages of the cardiac cycle.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain the lub and the dub.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can trace the impulse from the SAN to the Purkinje fibres.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can calculate heart rate, cycle time, cardiac output and % change.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can list factors that change the heart rate.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>A pulse gives 21 beats in 15 s. Find the heart rate and the length of one cycle.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>Heart rate = 21 × 4 = <strong>84 beats min⁻¹</strong> <b>(1)</b>; T = 60 ÷ 84 = <strong>0.71 s</strong> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+      </section>
+
+      <!-- ================= 10. ASSIGNMENT ================= -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 04. Type your attempt first to unlock each model solution.</p>
+        <div class="assign-head no-print">
+          <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
+        </div>
+
+        <h3>Part A · Home investigation: does posture or a short climb change your pulse?</h3>
+        <div class="aq" data-answer="l04-a1">
+          <div class="aq-top"><h4>Measure your pulse lying, sitting, standing and after a short climb, then see how quickly it settles.</h4></div>
+          <p><strong>You need:</strong> a phone or wall clock with a seconds hand (or the phone stopwatch), a mat or bed, a flight of stairs or a sturdy low step, a pencil and your notebook.</p>
+          <p><strong>Safety:</strong> anyone with asthma, sickle cell disease or a known heart condition should only take the resting readings and must not do the climb. Climb at a steady pace, hold the rail, and stop at once if you feel dizzy or short of breath. Do not climb straight after a heavy meal.</p>
+          <ol class="sub">
+            <li>Lie still for 3 minutes. Place your index and middle fingers (not the thumb) on the thumb side of the inside of the wrist and count the beats for 15 s. Repeat twice more and take the mean.</li>
+            <li>Sit up and wait 1 minute; take three 15 s counts again. Then stand still for 1 minute and repeat.</li>
+            <li>Climb up and down the stairs (or step up and down the low step) steadily for 1 minute.</li>
+            <li>Count for 15 s at once, then again at 1, 2, 3 and 4 minutes, sitting quietly between counts.</li>
+            <li>Multiply each count by 4 to get beats per minute. Draw a ruled table, then plot heart rate (y) against time after the climb (x) and join the points with a smooth curve.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample results <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Condition</th><th>Mean beats in 15 s</th><th>Heart rate (beats min⁻¹)</th></tr></thead><tbody>
+                <tr><td>Lying</td><td>16</td><td>64</td></tr>
+                <tr><td>Sitting</td><td>17</td><td>68</td></tr>
+                <tr><td>Standing</td><td>19</td><td>76</td></tr>
+                <tr><td>0 min after climb</td><td>30</td><td>120</td></tr>
+                <tr><td>1 min after</td><td>25</td><td>100</td></tr>
+                <tr><td>2 min after</td><td>21</td><td>84</td></tr>
+                <tr><td>3 min after</td><td>19</td><td>76</td></tr>
+                <tr><td>4 min after</td><td>18</td><td>72</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows that the rate is lowest lying down and rises a little on sitting and standing, because on standing blood tends to pool in the legs and the heart beats faster to keep enough blood reaching the brain. The climb raises the rate sharply because working leg muscles need more oxygen and glucose and produce more carbon dioxide, and adrenaline and sympathetic nerves speed up the SAN. Recovery is fast at first and then slows, so the points lie on a curve, not a straight line. The learner states the recovery time (where the curve meets the resting rate), notes at least one source of error with its direction (for example, a delay before the first count makes the peak too low; one miscounted beat becomes an error of 4 beats min⁻¹ after multiplying), and uses a ruled table with units in the column headings.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l04-b1">
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <p>Define each of the following: (a) pulse; (b) blood pressure; (c) cardiac output.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) A pulse is the regular throb felt in an artery as its wall stretches and then springs back each time the left ventricle forces blood into the aorta. (1) (b) Blood pressure is the force with which blood pushes against the walls of the vessels it flows through, measured in mmHg. (1) (c) Cardiac output is the volume of blood pumped out by one ventricle in one minute; it equals heart rate × stroke volume. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> For (a), “the beating of the heart” scores zero: the pulse is felt in an artery, not in the heart. For (c), “the blood in the heart” or a volume with no time (“per minute”) is not credited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b2">
+          <div class="aq-top"><h4>2. The cardiac cycle</h4><span class="marks">5 marks</span></div>
+          <p>At a resting rate of about 75 beats per minute, one heartbeat lasts about 0.8 s. Describe the stages of one cardiac cycle, stating what happens to the valves at each stage.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(1) While all four chambers are relaxed (about 0.4 s), blood from the venae cavae and pulmonary veins fills the atria and flows on through the open AV valves into the ventricles; the semilunar valves are closed. (2) The two atria then contract together (about 0.1 s) and push the last of their blood into the ventricles. (3) Next the ventricles contract (about 0.3 s); as their pressure rises above that in the atria, the tricuspid and bicuspid valves close. (4) When ventricular pressure passes the pressure in the arteries, the semilunar valves open and blood is driven into the aorta and pulmonary artery. (5) The ventricles then relax; their pressure falls below that in the arteries and the semilunar valves close, stopping blood from flowing back. One mark for each numbered point.</p>
+            <p><small><strong>Mark scheme note:</strong> The stages must be in the right order. Candidates who say the AV valves open during ventricular contraction, or that the atria and ventricles contract at the same time, lose that point. Timings help but no extra mark is given for timings alone.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b3">
+          <div class="aq-top"><h4>3. Heart sounds</h4><span class="marks">3 marks</span></div>
+          <p>Through a stethoscope Chidi hears “lub-dub, lub-dub”. (a) State the cause of the “lub”. (1 mark) (b) State the cause of the “dub”. (1 mark) (c) Dr Aisha hears an extra swishing sound in another patient's chest. Suggest what this indicates. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The closing of the AV valves (tricuspid and bicuspid) as the ventricles begin to contract. (1) (b) The closing of the semilunar valves at the bases of the aorta and pulmonary artery as the ventricles begin to relax. (1) (c) A murmur, which suggests a faulty valve that is leaking or narrowed, so blood is flowing the wrong way or through too small an opening. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Swapping the two sounds scores zero for both (a) and (b). “The heart contracting” or “the ventricles squeezing” is not credited: the sounds come from valves closing.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b4">
+          <div class="aq-top"><h4>4. Control of the heartbeat</h4><span class="marks">4 marks</span></div>
+          <p>(a) Describe how an impulse starting in the heart makes the whole heart contract in the correct order. (3 marks) (b) Explain why the impulse is delayed at the atrioventricular node. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The sinoatrial node (pacemaker), set in the right atrium's wall, fires an impulse that spreads across both atria, so they contract. (1) The impulse reaches the atrioventricular node and, after a short pause, travels along the bundle of His running down the septum. (1) The Purkinje fibres carry it through the ventricle walls, so both ventricles contract from the apex upwards, squeezing blood up towards the arteries. (1) (b) The delay gives the atria time to finish emptying into the ventricles before the ventricles start to contract. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Candidates who write “the brain sends the impulse” lose the first mark; the beat is myogenic. In (b), “to rest the heart” is not credited.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b5">
+          <div class="aq-top"><h4>5. Calculation: Baba Sule's heart</h4><span class="marks">6 marks</span></div>
+          <p>Dr Aisha checks Baba Sule at rest. She counts 22 beats in 15 s. His stroke volume is 65 cm³. (a) Calculate his heart rate. (1 mark) (b) Calculate the length of one cardiac cycle, to 2 decimal places. (1 mark) (c) Calculate his cardiac output in dm³ min⁻¹. (2 marks) (d) After carrying a goat carcass to his stall, his heart rate is 121 beats min⁻¹. Calculate the percentage rise in his heart rate. (2 marks)</p>
+          <textarea class="l-textarea" placeholder="Your working and answers…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Heart rate = 22 × 60/15 = 22 × 4 = 88 beats min⁻¹. (1) (b) T = 60 s ÷ 88 = 0.6818… ≈ 0.68 s. (1) (c) Cardiac output = 88 × 65 cm³ = 5720 cm³ min⁻¹ (1); 5720 ÷ 1000 = 5.72 dm³ min⁻¹. (1) (d) Rise = 121 − 88 = 33 beats min⁻¹; % rise = 33/88 × 100 (1) = 37.5%. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (c), the first mark is for the product with its cm³ unit and the second for the correct conversion; 5720 dm³ scores only the first mark. In (d), dividing by 121 instead of 88 (giving 27.3%) loses both marks. Answers without units lose the answer mark in (a) to (c).</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b6">
+          <div class="aq-top"><h4>6. Practical: a recovery curve</h4><span class="marks">5 marks</span></div>
+          <p>Chidi repeated the pulse practical after a training session. His resting rate was 72 beats min⁻¹. His heart rates after exercise were:</p>
+          <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Time after exercise (min)</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr></thead><tbody><tr><td>Heart rate (beats min⁻¹)</td><td>140</td><td>124</td><td>104</td><td>88</td><td>78</td><td>74</td><td>72</td></tr></tbody></table></div>
+          <p>(a) State his recovery time. (1 mark) (b) Explain why these points should be joined with a smooth curve and not a straight line. (1 mark) (c) State <strong>two</strong> sources of error in this practical, giving the direction of each. (2 marks) (d) Suggest why a trained athlete would recover faster than an untrained learner. (1 mark)</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) 6 minutes: the time at which the rate returns to the resting value of 72. (1) (b) The rate does not fall by the same amount each minute (falls of 16, 20, 16, 10, 4 and 2): the fall slows as the rate nears the resting value, so the trend is curved. (1) (c) Any two, each with its direction (1 each): a delay before the first count let the heart slow, so the peak reading was too low · counting the beat at the instant the watch started as “one” added a beat, so that rate was 4 beats min⁻¹ too high · pressing too hard on the artery blocked some beats, so the rate was too low · counting with the thumb picked up the thumb's own pulse, so the count could be too high. (d) An athlete's heart is stronger and pumps a larger stroke volume, so it supplies the muscles' needs and clears the extra carbon dioxide with fewer beats and settles back sooner. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> An error with no direction (“human error”, “the watch was wrong”) scores zero. In (b), “because it looks nicer” is not credited; the answer must refer to the uneven fall.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b7">
+          <div class="aq-top"><h4>7. Precautions</h4><span class="marks">2 marks</span></div>
+          <p>State <strong>two</strong> precautions that were taken to obtain a reliable resting pulse rate in the practical.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Any two (1 each): the pulse was felt with the index and middle fingers, not the thumb · the subject sat quietly for five minutes before the resting count · each resting count was repeated three times and the mean was taken · the stopwatch was started on a beat counted as zero.</p>
+            <p><small><strong>Mark scheme note:</strong> Precautions must be written in the past tense. “Use two fingers” (an instruction) loses the mark. “I was careful” is too vague to score.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l04-b8">
+          <div class="aq-top"><h4>8. Baba Sule's claim</h4><span class="marks">2 marks</span></div>
+          <p>Baba Sule says, “The brain sends every single heartbeat.” Explain why he is wrong, and state what the brain actually does to the heart.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Heart muscle is myogenic: each beat starts in the heart itself, at the sinoatrial node, so the heart would keep beating even if its nerves were cut. (1) The cardiac centre in the medulla oblongata only changes the rate: sympathetic nerves (with the hormone adrenaline) speed it up, and impulses down the vagus nerve slow it down. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> The second mark needs both directions, one route that speeds the heart and one that slows it. “The brain controls the heart” with no detail scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:var(--paper-ink)">← Lesson 3</a>
+          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5, vessels and tissue fluid →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/pulse-bench.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
+</body>
+</html>

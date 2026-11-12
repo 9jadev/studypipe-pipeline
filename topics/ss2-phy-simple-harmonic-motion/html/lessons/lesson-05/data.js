@@ -1,178 +1,161 @@
-/* Lesson 01 · Simple Harmonic Motion & Simple Pendulum — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 05 · WAEC Practical — Determining g with a Simple Pendulum.
+   window.L05 holds the sort cards, the length-explorer pins and the mystery bridge questions.
+   window.LESSON_QUIZ = the 12 MCQs of 03-questions.md § Lesson 05 Part 1 (order and keys unchanged).
+   Every bench / zoom / graph number comes from PendulumKit.model, never from this file. */
 (function () {
   "use strict";
 
-  window.L01 = {
-    // ---- 1. Motion sort items ----
+  window.L05 = {
+    // ---- 2A sort: precaution (past tense, something you did) or source of error ----
+    bins: { precaution: "Precaution", error: "Source of error" },
     items: [
-      { id: "pendulum", name: "Pendulum swinging through 8°", emo: "🕰️", bin: "shm", why: "At small angles, the restoring pull −mg sin θ is directly proportional to displacement x towards the centre." },
-      { id: "spring", name: "Mass bouncing on a spiral spring", emo: "🔩", bin: "shm", why: "Hooke's law gives a restoring force F = −kx proportional to extension or compression from equilibrium." },
-      { id: "tuning", name: "Vibrating prong of a tuning fork", emo: "🎵", bin: "shm", why: "Elasticity of the steel prong pulls it back towards its rest position in proportion to displacement." },
-      { id: "testtube", name: "Loaded test-tube bobbing in water", emo: "🧪", bin: "shm", why: "Extra upthrust when pushed down (or extra weight when lifted) is proportional to vertical displacement x." },
-      { id: "fan", name: "Ceiling fan spinning at steady speed", emo: "🌀", bin: "periodic", why: "Repeats every rotation, so it is periodic — but it moves in one circular direction, not to-and-fro through an equilibrium centre." },
-      { id: "earth", name: "Earth orbiting the Sun each year", emo: "🌍", bin: "periodic", why: "Repeats every 365.25 days (periodic), but does not oscillate back and forth along a restoring path." },
-      { id: "ball", name: "Rubber ball bouncing on concrete", emo: "🏀", bin: "periodic", why: "Periodic while bouncing steadily, but acceleration is constant (−g) in the air rather than proportional to displacement x." },
-      { id: "heartbeat", name: "Heartbeat repeating 72 times/min", emo: "💓", bin: "periodic", why: "Rhythmic and periodic, but driven by biological muscle impulses rather than a linear restoring force −kx." },
-      { id: "mango", name: "Mango falling straight from a tree", emo: "🥭", bin: "non", why: "One-way accelerated fall under gravity; it does not repeat in cycles." },
-      { id: "danfo", name: "Danfo bus braking at a bus stop", emo: "🚌", bin: "non", why: "One-off deceleration to rest; there is no oscillation or cycle." },
-      { id: "stone", name: "Football kicked across a pitch", emo: "⚽", bin: "non", why: "Parabolic projectile flight from kick to landing — not periodic." },
-      { id: "rain", name: "Rainwater flowing down a gutter", emo: "🌧️", bin: "non", why: "Continuous one-way flow with no repeating equilibrium cycle." }
+      { id: "angle",    bin: "precaution", name: "I ensured the bob swung through a small angle", why: "Something done to keep T = 2π√(l/g) valid, written in the past tense." },
+      { id: "parallax", bin: "precaution", name: "I avoided parallax when reading the metre rule", why: "An action that improved the length reading, in the past tense." },
+      { id: "restmark", bin: "precaution", name: "I started timing as the bob passed the rest mark", why: "The bob is fastest there, so the start and stop are sharpest." },
+      { id: "plane",    bin: "precaution", name: "I ensured the bob swung in a vertical plane, not in a circle", why: "A conical path has a shorter period, so this was done to avoid it." },
+      { id: "cork",     bin: "precaution", name: "I ensured the cork was tightly clamped", why: "A firm cork keeps the point of suspension fixed." },
+      { id: "reaction", bin: "error",      name: "Reaction time in starting the stopwatch", why: "It spoils the timing; it is not something you did." },
+      { id: "draught",  bin: "error",      name: "Air draughts in the room", why: "They push the bob and disturb its swing." },
+      { id: "support",  bin: "error",      name: "The support moving slightly", why: "A moving support changes the effective length." },
+      { id: "stretch",  bin: "error",      name: "Stretching of the thread", why: "A longer thread makes the recorded l too short." },
+      { id: "miscount", bin: "error",      name: "Miscounting the oscillations", why: "A wrong n gives a wrong T, for example counting from one." }
     ],
 
-    // ---- 2. 3D Pendulum bench trials (N = 20 oscillations, g = 9.81 m/s²) ----
-    trials: [
-      { label: "A", L: 0.40, t: "25.38", T: "1.269", T2: "1.61" },
-      { label: "B", L: 0.60, t: "31.08", T: "1.554", T2: "2.42" },
-      { label: "C", L: 0.80, t: "35.88", T: "1.794", T2: "3.22" },
-      { label: "D", L: 1.00, t: "40.12", T: "2.006", T2: "4.02" },
-      { label: "E", L: 1.20, t: "43.96", T: "2.198", T2: "4.83" }
-    ],
-    tOptions: ["25.38", "31.08", "35.88", "40.12", "43.96"],
-    TOptions: ["1.269", "1.554", "1.794", "2.006", "2.198"],
-    T2Options: ["1.61", "2.42", "3.22", "4.02", "4.83"],
+    // ---- Position explorer (#pos-explorer): preset lengths, m ----
+    pins: [0.400, 0.550, 0.700, 0.850, 1.000],
 
-    // ---- 3. Swing Position Explorer pins (from -A to +A, A = 0.10 m, ω = 4.0 rad/s) ----
-    pins: [
-      { frac: -1.0, label: "−A", emo: "🛑", x: "−0.10 m", v: "0.00 m s⁻¹ (zero)", a: "+1.60 m s⁻² (max → right)", ke: "0%", pe: "100%", note: "Left extreme: the bob stops for an instant to reverse direction. Speed and KE are zero, while restoring acceleration and PE are at their maximum!" },
-      { frac: -0.6, label: "−0.6A", emo: "↗️", x: "−0.06 m", v: "0.32 m s⁻¹", a: "+0.96 m s⁻² (→ right)", ke: "64%", pe: "36%", note: "Partway in: potential energy is rapidly converting into kinetic energy as the restoring force pulls the bob towards the centre." },
-      { frac: -0.3, label: "−0.3A", emo: "⚡", x: "−0.03 m", v: "0.38 m s⁻¹", a: "+0.48 m s⁻² (→ right)", ke: "91%", pe: "9%", note: "Approaching the centre: speed is nearly at its peak and acceleration is shrinking rapidly as x approaches zero." },
-      { frac: 0.0,  label: "x = 0", emo: "🎯", x: "0.00 m", v: "0.40 m s⁻¹ (MAX)", a: "0.00 m s⁻² (ZERO)", ke: "100%", pe: "0%", note: "Equilibrium centre (fiducial mark): displacement, restoring force, acceleration and PE are all ZERO, while speed (vmax = ωA) and KE are 100% maximum!" },
-      { frac: 0.3,  label: "+0.3A", emo: "⚡", x: "+0.03 m", v: "0.38 m s⁻¹", a: "−0.48 m s⁻² (← left)", ke: "91%", pe: "9%", note: "Just past the centre: inertia carries the bob rightward, but restoring acceleration immediately flips leftward to slow it down." },
-      { frac: 0.6,  label: "+0.6A", emo: "↖️", x: "+0.06 m", v: "0.32 m s⁻¹", a: "−0.96 m s⁻² (← left)", ke: "64%", pe: "36%", note: "Climbing the right arc: speed drops as kinetic energy turns back into gravitational potential energy." },
-      { frac: 1.0,  label: "+A", emo: "🛑", x: "+0.10 m", v: "0.00 m s⁻¹ (zero)", a: "−1.60 m s⁻² (max ← left)", ke: "0%", pe: "100%", note: "Right extreme: speed hits zero at the top of the swing, while inward acceleration reaches its maximum (−ω²A) to pull the bob back." }
+    // ---- the mystery bridge (#bridge) ----
+    bridge: [
+      {
+        q: "Our class graph has a slope of 4.03 s² m⁻¹. What is g?",
+        o: ["4.03 m s⁻²", "9.79 m s⁻²", "39.5 m s⁻²"],
+        a: 1,
+        why: "g = 4π² ÷ slope = 39.48 ÷ 4.03 = 9.79 m s⁻²."
+      },
+      {
+        q: "The crates leave the carrier when the carrier's greatest acceleration…",
+        o: ["ω²A reaches g", "ωA reaches g", "A reaches g"],
+        a: 0,
+        why: "The greatest acceleration in SHM is ω²A; once it reaches g the carrier drops away faster than a free crate falls."
+      },
+      {
+        q: "With ω = 12.57 rad s⁻¹, the danger amplitude A = g ÷ ω² is about…",
+        o: ["0.78 m", "6.2 cm", "16 m"],
+        a: 1,
+        why: "A = 9.79 ÷ 158 = 0.062 m = 6.2 cm."
+      }
     ]
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
   window.LESSON_QUIZ = [
     {
-      q: "Which statement correctly defines <strong>simple harmonic motion (SHM)</strong>?",
-      o: [
-        "Any motion that repeats itself in equal intervals of time",
-        "Motion in which acceleration is proportional to displacement from equilibrium and always directed towards it",
-        "Motion with constant speed along a circular path",
-        "Motion in which restoring force acts in the same direction as displacement"
-      ],
-      a: 1,
-      e: "All SHM is periodic, but only motions obeying <strong>a = −ω²x</strong> (acceleration proportional to displacement and directed <em>towards</em> the equilibrium centre) are simple harmonic.",
-      src: "WAEC-style"
-    },
-    {
-      q: "A student records <strong>36.0 s</strong> for <strong>20 complete oscillations</strong> of a simple pendulum. What are the period <strong>T</strong> and frequency <strong>f</strong>?",
-      o: [
-        "T = 0.56 s, f = 1.80 Hz",
-        "T = 1.80 s, f = 0.56 Hz",
-        "T = 18.0 s, f = 0.056 Hz",
-        "T = 720 s, f = 0.0014 Hz"
-      ],
-      a: 1,
-      e: "Period <strong>T = t ÷ N = 36.0 ÷ 20 = 1.80 s</strong>. Frequency <strong>f = 1 ÷ T = 1 ÷ 1.80 = 0.56 Hz</strong>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "If the effective length of a simple pendulum is <strong>quadrupled (L → 4L)</strong> at the same location, its period T:",
-      o: [
-        "becomes four times as large (4T)",
-        "doubles (2T)",
-        "is halved (½T)",
-        "remains unchanged (T)"
-      ],
-      a: 1,
-      e: "From <strong>T = 2π√(L/g)</strong>, period is proportional to <strong>√L</strong>. Multiplying L by 4 multiplies T by <strong>√4 = 2</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "A simple pendulum has a 50 g brass bob and a period of <strong>1.60 s</strong>. If the bob is replaced with a <strong>150 g lead bob</strong> at the exact same effective length L, the new period is:",
-      o: ["4.80 s", "2.77 s", "1.60 s", "0.53 s"],
+      src: "WAEC PRACTICAL · APPLY",
+      q: "The thread of a pendulum measures 0.850 m from where it leaves the split cork down to the top of the bob. The bob's diameter is 3.0 cm. What is the effective length l?",
+      o: ["0.880 m", "0.850 m", "0.865 m", "0.835 m"],
       a: 2,
-      e: "Mass <strong>m</strong> does not appear in <strong>T = 2π√(L/g)</strong> because gravitational pull and inertia scale equally with mass. The period remains <strong>1.60 s</strong>.",
-      src: "NECO-style"
+      e: "The effective length runs from the point of suspension to the <em>centre</em> of the bob, so add the radius: <code>l = 0.850 + 0.015 = 0.865 m</code>. A added the whole diameter, measuring to the bottom of the bob. B is Tunde's slip of stopping at the top of the bob. D subtracted the radius instead of adding it."
     },
     {
-      q: "As an oscillating pendulum bob passes through its <strong>equilibrium centre (x = 0)</strong>, which pair of quantities is correct?",
-      o: [
-        "Velocity is zero; acceleration is maximum",
-        "Velocity is maximum; acceleration is zero",
-        "Both velocity and acceleration are maximum",
-        "Potential energy is maximum; kinetic energy is zero"
-      ],
+      src: "WAEC PRACTICAL · APPLY",
+      q: "A candidate's graph of T² (vertical) against l (horizontal) has a slope of 4.00 s² m⁻¹. What value of g does it give?",
+      o: ["0.101 m s⁻²", "9.87 m s⁻²", "158 m s⁻²", "1.57 m s⁻²"],
       a: 1,
-      e: "At <strong>x = 0</strong>, acceleration <strong>a = −ω²(0) = 0</strong> and all potential energy has turned into kinetic energy, so speed reaches <strong>v<sub>max</sub> = ωA</strong>.",
-      src: "WAEC-style"
+      e: "T² = (4π²/g) l, so slope = 4π²/g and <code>g = 4π²/slope = 39.48 ÷ 4.00 = 9.87</code> m s⁻². A is slope ÷ 4π², the rearrangement turned over. C multiplied the slope by 4π². D used 2π instead of 4π² (6.283 ÷ 4.00)."
     },
     {
-      q: "A body performs SHM with amplitude <strong>A = 0.05 m</strong> and angular frequency <strong>ω = 10 rad s<sup>−1</sup></strong>. What are its maximum speed <strong>v<sub>max</sub></strong> and maximum acceleration <strong>a<sub>max</sub></strong>?",
+      src: "WAEC PRACTICAL · ANALYSE",
+      q: "Why does the WAEC pendulum practical ask candidates to plot T² against l rather than T against l?",
       o: [
-        "0.50 m s⁻¹ and 5.0 m s⁻²",
-        "5.0 m s⁻¹ and 0.50 m s⁻²",
-        "0.50 m s⁻¹ and 0.05 m s⁻²",
-        "200 m s⁻¹ and 2000 m s⁻²"
+        "T² values are larger and so easier to plot",
+        "Squaring T removes the reaction-time error",
+        "The T–l graph would have a negative slope",
+        "T² is directly proportional to l, so the graph is a straight line through the origin whose slope, 4π²/g, gives g"
+      ],
+      a: 3,
+      e: "Squaring T = 2π√(l/g) gives T² = (4π²/g) l, the form y = mx. A straight line is easy to draw as a best fit and its slope is easy to measure. A is not a reason examiners accept. B is false: squaring cannot remove an error, and it actually doubles the percentage error in T. C is false: T increases with l, but along a curve, not a straight line."
+    },
+    {
+      src: "WAEC PRACTICAL · ANALYSE",
+      q: "Throughout an experiment, Tunde measured every length to the <strong>top</strong> of the bob instead of its centre. How does this affect his T²–l graph?",
+      o: [
+        "The line no longer passes through the origin, but its slope, and so the value of g, is unaffected",
+        "The slope becomes larger, so g comes out too small",
+        "The slope becomes smaller, so g comes out too large",
+        "The points scatter widely about the line"
       ],
       a: 0,
-      e: "<strong>v<sub>max</sub> = ωA = 10 × 0.05 = 0.50 m s⁻¹</strong>, and <strong>a<sub>max</sub> = ω²A = 10² × 0.05 = 5.0 m s⁻²</strong>.",
-      src: "JAMB-style"
+      e: "Every length is too short by the same amount, the radius r, so every point shifts left by r. The line keeps the same slope but now cuts the T² axis above zero (at T² = 4π²r/g). Because g comes from the slope, it is unaffected; this is one reason the graph method beats a single reading. B and C would need an error that grows with length. D describes a random error; a constant mistake on every reading moves the line, not the scatter."
     },
     {
-      q: "In a simple pendulum experiment, a student plots <strong>L (m)</strong> on the vertical axis against <strong>T<sup>2</sup> (s<sup>2</sup>)</strong> on the horizontal axis and obtains a slope <strong>S = 0.248 m s<sup>−2</sup></strong>. The value of g is:",
-      o: [
-        "g = 4π²S ≈ 9.79 m s⁻²",
-        "g = 4π² ÷ S ≈ 159 m s⁻²",
-        "g = 2πS ≈ 1.56 m s⁻²",
-        "g = S ÷ 4π² ≈ 0.0063 m s⁻²"
-      ],
-      a: 0,
-      e: "Since <strong>L = (g ÷ 4π²)T²</strong>, the slope S of L against T² equals <strong>g ÷ 4π²</strong>. Therefore <strong>g = 4π²S = 39.478 × 0.248 ≈ 9.79 m s⁻²</strong>.",
-      src: "WAEC Practical"
+      src: "WAEC PRACTICAL · ANALYSE",
+      q: "Tunde starts the stopwatch and says \"one\" as he does so, then stops at \"twenty\". How does this affect his period and his value of g?",
+      o: ["T is too large, so g is too small", "T and g are both unaffected", "T is too large, so g is too large", "T is too small, so g is too large"],
+      a: 3,
+      e: "Counting \"one\" at the start means only 19 oscillations have passed when he says \"twenty\", but he still divides the time by 20. So T is too small (by the factor 19/20) and g = 4π²l/T² comes out too large, by about 11 %. A has the direction reversed. B ignores the miscount. C pairs a larger T with a larger g, which the formula rules out, since g ∝ 1/T²."
     },
     {
-      q: "Why do WAEC practical instructions ask candidates to place the fiducial reference mark at the <strong>centre of the swing</strong> rather than at one extreme end?",
+      src: "WAEC PRACTICAL · UNDERSTAND",
+      q: "Which of these is correctly written as a <strong>precaution</strong> for the pendulum experiment?",
       o: [
-        "The bob stops at the centre so it is easier to see",
-        "The bob moves fastest through the centre, making the instant of crossing sharp and reducing timing error",
-        "Air resistance acts only at the extreme ends",
-        "The thread is shortest at the centre"
+        "Ensure that the angle of swing is small",
+        "I ensured that the bob swung through a small angle",
+        "Reaction time when starting the stopwatch",
+        "I was careful when taking all my readings"
       ],
       a: 1,
-      e: "At the extreme ends the bob lingers as it reverses, making the turnaround moment blurry. At <strong>x = 0</strong> it flashes past the pointer at maximum speed, giving a crisp timing mark.",
-      src: "WAEC Practical"
+      e: "A precaution states something that <em>was done</em> to improve the result, in the past tense, and it is specific. A is an instruction (a command), which examiners do not credit. C is a source of error, not a precaution. D is too vague: it does not say what was done."
     },
     {
-      q: "A particle in SHM has angular frequency <strong>ω = 3.0 rad s<sup>−1</sup></strong> and amplitude <strong>A = 0.10 m</strong>. Its speed at displacement <strong>x = 0.08 m</strong> is:",
-      o: ["0.30 m s⁻¹", "0.24 m s⁻¹", "0.18 m s⁻¹", "0.06 m s⁻¹"],
+      src: "WAEC PRACTICAL · APPLY",
+      q: "For one length, Zainab's two timings of 20 oscillations were 31.62 s and 31.70 s. What value should she enter in the T² column, to 3 decimal places?",
+      o: ["1.583 s²", "2.500 s²", "2.506 s²", "0.632 s²"],
       a: 2,
-      e: "<strong>v = ω√(A² − x²) = 3.0 × √(0.10² − 0.08²) = 3.0 × √0.0036 = 3.0 × 0.06 = 0.18 m s⁻¹</strong>.",
-      src: "NECO-style"
+      e: "Mean time <code>t̄ = (31.62 + 31.70) ÷ 2 = 31.66</code> s; <code>T = 31.66 ÷ 20 = 1.583</code> s; <code>T² = 1.583² = 2.506</code> s². A is T itself, not squared. B used only the first timing ((31.62 ÷ 20)²), ignoring the repeat. D is 1/T."
     },
     {
-      q: "Which precaution is written in the exact style expected by <strong>WAEC Physics Paper 3</strong> examiners?",
-      o: [
-        "Avoid conical oscillation during the experiment.",
-        "I will make sure the fan is switched off.",
-        "Conical oscillation was avoided by displacing the bob through a small angle in a single vertical plane.",
-        "Do not push the bob when releasing it."
-      ],
-      a: 2,
-      e: "WAEC requires precautions to be stated in the <strong>past tense</strong>, describing what was done and how.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "Why does a pendulum clock that keeps accurate time in Lagos <strong>lose time</strong> when taken to the top of a high mountain where gravity g is slightly smaller?",
-      o: [
-        "Smaller g makes the period T = 2π√(L/g) longer, so each swing takes more time and the clock ticks slowly",
-        "Smaller g makes the period T shorter, so the clock ticks too fast",
-        "The brass bob loses mass at high altitude",
-        "Air resistance increases on a mountain"
-      ],
+      src: "WAEC PRACTICAL · ANALYSE",
+      q: "The ceiling was too high to reach, so a class measured the height y of the bob's centre above the floor instead. Their graph of T² against y is a straight line of slope −4.04 s² m⁻¹ that cuts the horizontal axis (where T² = 0) at y = 3.10 m. What are g and the height H of the point of suspension?",
+      o: ["g = 9.77 m s⁻², H = 3.10 m", "g = −9.77 m s⁻², H = 3.10 m", "g = 9.77 m s⁻², H = 4.04 m", "g = 0.102 m s⁻², H = 3.10 m"],
       a: 0,
-      e: "Because <strong>g</strong> is in the denominator of <strong>T = 2π√(L/g)</strong>, a smaller g produces a longer period T. Each tick takes longer than 1 second, so the clock falls behind.",
-      src: "JAMB-style"
+      e: "Here l = H − y, so T² = (4π²/g)(H − y): the slope is −4π²/g and the line cuts the horizontal axis (T² = 0) at y = H. Then <code>g = 4π²/|slope| = 39.48 ÷ 4.04 = 9.77</code> m s⁻² and H = 3.10 m. B keeps the minus sign; g cannot be negative, since the sign only shows that T² falls as y rises. C takes the slope's size as the height. D is |slope| ÷ 4π², the rearrangement upside down."
     },
     {
-      q: "The gradual decrease in amplitude of a freely swinging pendulum due to air resistance is called:",
-      o: ["Resonance", "Damping", "Diffraction", "Polarization"],
+      src: "WAEC-STYLE · APPLY",
+      q: "A thread is 0.580 m long from the cork to the top of a bob of radius 2.0 cm. Twenty oscillations take 31.20 s. What value of g does this single reading give?",
+      o: ["9.73 m s⁻²", "9.41 m s⁻²", "15.2 m s⁻²", "0.024 m s⁻²"],
+      a: 0,
+      e: "<code>l = 0.580 + 0.020 = 0.600</code> m; <code>T = 31.20 ÷ 20 = 1.560</code> s; T² = 2.434 s²; <code>g = 39.48 × 0.600 ÷ 2.434 = 9.73</code> m s⁻². B left out the radius (l = 0.580 m). C divided by T instead of T². D used the whole time for 20 oscillations as if it were the period."
+    },
+    {
+      src: "WAEC PRACTICAL · UNDERSTAND",
+      q: "When finding the slope of the T²–l line, why should the candidate use a large triangle?",
+      o: [
+        "A large triangle makes the slope come out larger",
+        "Examiners award marks only for the size of the drawing",
+        "The readings of ΔT² and Δl are then large, so the small uncertainty in reading the graph is a small percentage of each",
+        "A large triangle forces the line through the origin"
+      ],
+      a: 2,
+      e: "Each value read from the graph carries roughly the same small reading uncertainty (about half a small square). Over a large Δ that uncertainty is a tiny fraction, so the slope is more accurate. A is false: the slope of a straight line is the same for any triangle drawn on it. B misses the physics. D is false: the triangle cannot change where the line goes."
+    },
+    {
+      src: "WAEC PRACTICAL · ANALYSE",
+      q: "Tunde released the bob through a wide angle of about 40° for every length. How did this most likely affect his value of g?",
+      o: [
+        "No effect, because the period does not depend on the amplitude at any angle",
+        "g came out slightly too small, because each period was slightly too long",
+        "g came out slightly too large, because each period was slightly too short",
+        "g came out much too large, because the bob moved faster"
+      ],
       a: 1,
-      e: "<strong>Damping</strong> is the progressive loss of mechanical energy and amplitude due to resistive forces like air drag.",
-      src: "NECO-style"
+      e: "At 40° the restoring force is no longer proportional to displacement, so each period is a little longer (about 3 %) than 2π√(l/g). A longer T in g = 4π²l/T² gives a smaller g. A applies the small-angle rule outside its range. C has the direction reversed. D ignores that the bob also has further to travel; the overall effect is a slightly <em>longer</em> period."
+    },
+    {
+      src: "WAEC-STYLE · APPLY",
+      q: "The class's value is g = 9.79 m s⁻², and the okada's rear bounces with ω = 12.57 rad s⁻¹. What is the smallest bounce amplitude that makes the crates leave the carrier?",
+      o: ["0.78 m", "2.4 m", "16 m", "6.2 cm"],
+      a: 3,
+      e: "Lift-off when ω²A ≥ g, so <code>A = g/ω² = 9.79 ÷ 158 = 0.062</code> m = 6.2 cm. A divided by ω instead of ω². B divided by f² (2.0² = 4) instead of ω². C is ω²/g, the ratio upside down."
     }
   ];
 })();

@@ -1,186 +1,144 @@
-/* Lesson 04 · 3D Artery vs Vein vs Capillary Wall Cut-Away & Starling Capillary-Lymphatic Bed Zoom */
+/* Lesson 04 · 3D zoom (window.StudyScenes.zoom): the beating HeartKit heart in "pace" mode (SAN spark spreading over the atria,
+   pausing at the AVN, racing down the septum and up the ventricle walls) and in "sys" mode (valves in slow motion with LUB and DUB captions).
+   LUB and DUB come from the heart's own beat model (userData.beat.avOpen / slOpen); rate, cycle time and phase are computed, not typed.
+   The heart (about 120 000 triangles) is built lazily, when the section is near the screen or the narrator / explorer needs it. */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
   var canvas = document.getElementById("zoom-canvas");
-  if (!root || !canvas || typeof THREE === "undefined") return;
+  var D = window.L04;
+  if (!root || !canvas || !D || typeof THREE === "undefined" || !window.HeartKit) return;
 
-  var toastEl = document.getElementById("zoom-toast");
-  var toastT;
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
+  var $ = function (s) { return document.querySelector(s); };
+  var toastEl = $("#zoom-toast"), toastT;
   function toast(m) {
     if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
+    toastEl.textContent = m; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3400);
   }
 
-  var state = {
-    mode: "mix", // "mix" = Vessels + Capillary Bed, "acid" = Artery vs Vein Cut-Away, "base" = Capillary Bed & Lymph Vessel
-    highV: false // Filarial Worm Lymphatic Blockage (Elephantiasis)
-  };
+  var NORMAL_BPM = D.cycleBpm || 75, SLOW_BPM = 18;
+  var state = { mode: "pace", slow: false, hold: null, bpm: NORMAL_BPM };
+  var heart = null, stage = null, hlr = null, built = false;
+  var capEl = $("#zoom-cap"), capT = 0, capWord = "";
+  var readoutEl = $("#zoom-readout");
+  var modeBtns = Array.prototype.slice.call(document.querySelectorAll("#zoom-mode button"));
+  var slowBtn = $("#zoom-slow");
+  var prevAv = 1, prevSl = 0;
 
-  var highlightPart = null;
+  // The same windows the HeartKit beat model uses, so the explorer can describe a frozen moment exactly
+  function describe(ph) {
+    var aSys = ph >= 0.02 && ph < 0.17, vSys = ph >= 0.2 && ph < 0.56;
+    var avClosed = ph >= 0.2 && ph < 0.58, slOpen = ph >= 0.24 && ph < 0.54;
+    var sound = ph >= 0.2 && ph < 0.3 ? "LUB" : ph >= 0.54 && ph < 0.64 ? "DUB" : "";
+    var stg = aSys ? "Atria contract" : vSys ? "Ventricles contract" : ph >= 0.56 && ph < 0.64 ? "Ventricles relax" : "All chambers relaxed";
+    return { aSys: aSys, vSys: vSys, avClosed: avClosed, slOpen: slOpen, sound: sound, stage: stg };
+  }
+  D.describe = describe;
+
+  function flash(word) {
+    if (!capEl) return;
+    capWord = word; capEl.textContent = word; capEl.className = "zoom-cap show " + word.toLowerCase();
+    capT = performance.now() + (state.slow ? 1400 : 420);
+  }
+  function frame(dt, t) {
+    if (heart.userData.update) heart.userData.update(dt, t);
+    if (hlr) hlr.update(dt, t);
+    var b = heart.userData.beat;
+    if (b && state.hold == null) {
+      if (prevAv >= 0.5 && b.avOpen < 0.5 && state.mode === "sys") flash("LUB");
+      if (prevSl >= 0.5 && b.slOpen < 0.5 && state.mode === "sys") flash("DUB");
+      prevAv = b.avOpen; prevSl = b.slOpen;
+    }
+    if (capEl && capWord && performance.now() > capT) { capEl.className = "zoom-cap"; capWord = ""; }
+  }
+
+  function build() {
+    if (built) return;
+    built = true;
+    heart = HeartKit.heart({ mode: "pace", bpm: state.bpm, labels: false });
+    stage = window.SceneKit && SceneKit.createStage({
+      root: root, canvas: canvas, fov: 36, zoomUi: true,
+      target: new THREE.Vector3(0, 0, 0), pitch: 0.06, yaw: 0, distance: 6, portraitPitch: 0.02,
+      minYaw: -0.9, maxYaw: 0.9, minHeight: 330, maxHeight: 470, onFrame: frame
+    });
+    if (stage) { stage.rig.add(heart); hlr = HeartKit.makeHighlighter ? HeartKit.makeHighlighter(stage.rig) : null; stage.start(); }
+    api.heart = heart; api.stage = stage;
+    heart.userData.setState({ mode: state.mode, bpm: state.bpm, hold: state.hold });
+    paint();
+  }
+
+  function paint() {
+    if (!readoutEl) return;
+    var ph = heart ? heart.userData.phase || 0 : 0, d = describe(ph);
+    readoutEl.innerHTML =
+      '<div><span>Heart rate</span><b>' + state.bpm + ' bpm</b></div>' +
+      '<div><span>One cycle</span><b>' + (60 / state.bpm).toFixed(2) + ' s</b></div>' +
+      '<div class="hot"><span>Phase</span><b style="font-size:.82em">' + d.stage + '</b></div>' +
+      '<div><span>AV valves</span><b>' + (d.avClosed ? "shut" : "open") + '</b></div>' +
+      '<div><span>Semilunar</span><b>' + (d.slOpen ? "open" : "shut") + '</b></div>';
+  }
+  function setMode(m) {
+    if (m !== "pace" && m !== "sys") return;
+    build();
+    state.mode = m; heart.userData.setState({ mode: m });
+    modeBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-mode") === m)); });
+    toast(m === "pace"
+      ? "The spark starts at the SAN (patient's right atrium, top left of the screen), pauses at the AVN, then races down the septum and up both ventricle walls."
+      : "Valves in slow motion. AV valves shut with a LUB as the ventricles start to squeeze; semilunar valves shut with a DUB as they relax.");
+    paint(); emit("l4:zoom", { mode: m });
+  }
+  function setSlow(on) {
+    build();
+    state.slow = !!on; state.bpm = on ? SLOW_BPM : NORMAL_BPM;
+    heart.userData.setState({ bpm: state.bpm });
+    if (slowBtn) { slowBtn.setAttribute("aria-pressed", String(state.slow)); slowBtn.textContent = state.slow ? "Normal speed" : "Slow motion"; }
+    paint(); emit("l4:zoom", { mode: state.mode, slow: state.slow });
+  }
+  function hold(ph) {
+    build();
+    state.hold = ph == null ? null : ph;
+    heart.userData.setState({ hold: state.hold });
+    if (capEl) {
+      if (state.hold != null) { var d = describe(state.hold); capWord = ""; capEl.textContent = d.sound; capEl.className = d.sound ? "zoom-cap show held " + d.sound.toLowerCase() : "zoom-cap"; }
+      else capEl.className = "zoom-cap";
+    }
+    paint();
+  }
+  function reset() { hold(null); setSlow(false); setMode("pace"); }
+
+  modeBtns.forEach(function (b) { b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); }); });
+  if (slowBtn) slowBtn.addEventListener("click", function () { setSlow(!state.slow); });
+  var rs = $("#zoom-reset"); if (rs) rs.addEventListener("click", reset);
+
   var api = {
-    setMode: setMode,
-    add: toggleFilariasis,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
+    setMode: function (m) { if (m === "slow") setSlow(true); else if (m === "normal") setSlow(false); else if (m === "free") hold(null); else setMode(m); },
+    slow: setSlow, hold: hold, reset: reset, build: build,
+    highlight: function (p) {
+      build();
+      var o = p && heart.userData.parts ? heart.userData.parts[p] : null;
+      if (hlr) hlr.set(o || null);
+    },
+    rect: function (p) {
+      build();
+      if (!stage) return null;
+      var o = (heart.userData.parts && heart.userData.parts[p]) || heart;
+      return stage.rectOf(o, 12);
+    },
+    state: function () { return { mode: state.mode, slow: state.slow, hold: state.hold, bpm: state.bpm, phase: heart ? heart.userData.phase : 0 }; },
+    heart: null, stage: null
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.zoom = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.85, 0),
-    pitch: 0.14,
-    portraitPitch: 0.06,
-    yaw: 0.08,
-    fitWidth: 6.2,
-    minHeight: 340,
-    distance: 6.0,
-    onFrame: frame
-  });
-
-  var vesselsGroup, capBedGroup, vesselsApi, capBedApi, keBar, peBar, totBar;
-
-  if (stage) build();
-  wireButtons();
-
-  function build() {
-    var scene = stage.rig;
-
-    vesselsGroup = new THREE.Group();
-    vesselsGroup.position.set(-1.15, 0.88, 0);
-    scene.add(vesselsGroup);
-
-    capBedGroup = new THREE.Group();
-    capBedGroup.position.set(0.25, 0.88, 0);
-    scene.add(capBedGroup);
-
-    if (window.HeartKit) {
-      vesselsApi = HeartKit.vessels({ scale: 1 });
-      vesselsGroup.add(vesselsApi.group);
-
-      capBedApi = HeartKit.capillaryBed({ scale: 1 });
-      capBedGroup.add(capBedApi.group);
-    }
-
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.65, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.75, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 30, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.19 * t.userData.aspect, 0.19, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.30, 0x3ee6c4, "Wall");
-    peBar  = makeBar(1.75, 0xffb23f, "P_c");
-    totBar = makeBar(2.20, 0xf43f5e, "Lymph");
-    [keBar, peBar, totBar].forEach(function (b) { b.parent.visible = false; });
-    barBase.visible = false;
-
-    api.rect = function (part) {
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      return stage.rectOf([vesselsGroup, capBedGroup], 16);
-    };
-
-    layout();
-    stage.start();
-  }
-
-  function layout() {
-    if (!vesselsGroup) return;
-    var both = state.mode !== "acid" && state.mode !== "base";
-    vesselsGroup.visible = state.mode !== "base";
-    capBedGroup.visible = state.mode !== "acid";
-    // stacked (vessels above, capillary bed below) so both stay readable on a phone
-    vesselsGroup.position.set(0, both ? 2.4 : 0.9, 0);
-    vesselsGroup.scale.setScalar(both ? 0.72 : 1);
-    capBedGroup.position.set(0, 0.95, 0);
-    capBedGroup.scale.setScalar(both ? 0.82 : 1);
-    if (capBedApi) capBedApi.userData.setState({ mode: state.highV ? "blocked" : "normal" });
-    if (stage && stage.refit) stage.refit();
-  }
-
-  function setMode(m) {
-    state.mode = m;
-    layout();
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
-    });
-    if (m === "acid") toast("Artery vs Vein vs Capillary: Arteries have a thick elastic/muscular tunica media and narrow lumen; veins have a wide lumen and pocket valves; capillaries are 1 endothelial cell thick!");
-    else if (m === "base") toast("Starling Capillary Bed & Lymphatics: +10 mmHg forces tissue fluid out at the arterial end, −10 mmHg reabsorbs 85% at the venous end, and blind-ended lymphatics drain the remaining 15%!");
-    else toast("Side-by-side view: Blood Vessel Wall Layers (left) and Capillary-Lymphatic Exchange Bed (right).");
-  }
-
-  function toggleFilariasis() {
-    state.highV = !state.highV;
-    layout();
-    toast(state.highV
-      ? "Filariasis / Elephantiasis (Wuchereria bancrofti): Parasitic worms block lymphatic drainage, trapping the 15% (3 L/day) tissue fluid and causing severe leg oedema!"
-      : "Normal Lymphatic Return (3.0 L/day drained smoothly to subclavian veins).");
-  }
-
-  function reset() {
-    state.highV = false;
-    setMode("mix");
-    toast("Stage reset to side-by-side vessel and capillary bed view.");
-  }
-
-  function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
-    });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleFilariasis);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
-  }
-
-  function frame(dt, t) {
-    if (!vesselsGroup || !capBedGroup) return;
-    if (vesselsApi && vesselsApi.tick) vesselsApi.tick(dt, t);
-    if (capBedApi && capBedApi.tick) capBedApi.tick(dt, t);
-
-
-    var wallIdx = state.mode === "acid" ? 0.90 : state.mode === "base" ? 0.15 : 0.55;
-    var pcVal = state.mode === "acid" ? 100 : 35;
-    var lymphFlow = state.highV ? 0.08 : 0.85;
-
-    if (keBar) keBar.scale.y = Math.max(0.08, wallIdx);
-    if (peBar) peBar.scale.y = Math.max(0.08, pcVal / 120.0);
-    if (totBar) totBar.scale.y = Math.max(0.08, lymphFlow);
-
-    var cV = document.querySelector('#zoom-counters [data-c="h"]');
-    var cI = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cR = document.querySelector('#zoom-counters [data-c="na"]');
-    var cT = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cP = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cV) cV.textContent = state.mode === "base" ? "1-Cell Cap" : "3 Tunics";
-    if (cI) cI.textContent = "+10 mmHg";
-    if (cR) cR.textContent = "−10 mmHg";
-    if (cT) cT.textContent = state.highV ? "Blocked!" : "3.0 L/day";
-    if (cP) cP.textContent = state.highV ? "Oedema!" : "Normal";
-  }
+  // build when the section is within about a screen of the viewport (or immediately without IntersectionObserver)
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (es) {
+      if (es.some(function (e) { return e.isIntersecting; })) { io.disconnect(); build(); }
+    }, { rootMargin: "700px 0px" });
+    io.observe(root);
+  } else build();
+  paint();
+  setInterval(paint, 250);
 })();

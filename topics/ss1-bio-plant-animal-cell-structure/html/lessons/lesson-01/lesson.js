@@ -1,40 +1,23 @@
-/* Lesson 01 · interactions: LessonKit boot, Cell Pioneer & Type Sort, Microscope Magnification Table, Biological Scale Explorer, and Mile 12 Scale Bridge */
+/* Lesson 01 · interactions: who-discovered-what sort, objective explorer (image size of a 50 µm cell), and the two-slide bridge */
 (function () {
   "use strict";
   var D = window.L01;
   if (!D) return;
 
-  if (window.LessonKit && window.LessonKit.boot) {
-    window.LessonKit.boot({
-      lessonId: "l01",
-      wonderSeeds: [
-        "When Robert Hooke looked at bottle cork in 1665, was he seeing living cells or only dead cell walls? — Alhaji Musa",
-        "Why does an Escherichia coli bacterium have no nuclear membrane or mitochondria? — Tunde",
-        "If I use a ×10 eyepiece and a ×40 objective lens, why is the total magnification ×400 instead of ×50? — Halima",
-        "Why are viruses called the borderline between living and non-living matter? — Chidi"
-      ],
-      quiz: window.LESSON_QUIZ || []
-    });
-  }
-
   var toast = window.LessonKit ? window.LessonKit.toast : function () {};
   var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
   var burst = function (el, n) { if (window.StudyNarrator && el) window.StudyNarrator.burst(el.getBoundingClientRect(), n || 14); };
 
-  // 1. Cell Theory Pioneers & Prokaryote vs Eukaryote Sort
+  /* ---------------- 1. Sort: who discovered what? ---------------- */
   var tray = document.getElementById("sort-tray");
-  var bins = Array.prototype.slice.call(document.querySelectorAll(".bin"));
+  var bins = Array.prototype.slice.call(document.querySelectorAll("#hist-sort .bin"));
   var picked = null;
 
   function shuffle(a) {
     a = a.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var t = a[i]; a[i] = a[j]; a[j] = t;
-    }
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
     return a;
   }
-
   function buildSort() {
     if (!tray) return;
     tray.innerHTML = "";
@@ -43,15 +26,12 @@
     document.getElementById("sort-score").textContent = "";
     shuffle(D.items).forEach(function (it) {
       var b = document.createElement("button");
-      b.type = "button";
-      b.className = "sort-item";
-      b.setAttribute("data-id", it.id);
+      b.type = "button"; b.className = "sort-item"; b.setAttribute("data-id", it.id);
       b.innerHTML = '<span class="emo" aria-hidden="true">' + it.emo + "</span>" + it.name;
       attachDrag(b);
       tray.appendChild(b);
     });
   }
-
   function pick(b) {
     if (picked) picked.classList.remove("picked");
     picked = picked === b ? null : b;
@@ -68,54 +48,14 @@
     bin.addEventListener("click", function (e) { if (e.target.closest(".sort-item")) return; if (picked) place(picked, bin); });
     bin.addEventListener("keydown", function (e) { if ((e.key === "Enter" || e.key === " ") && picked) { e.preventDefault(); place(picked, bin); } });
   });
-
   function attachDrag(b) {
-    var sx, sy, dragging = false, ghost = null, pid = null;
-    b.addEventListener("pointerdown", function (e) {
-      if (e.button !== undefined && e.button !== 0) return;
-      sx = e.clientX; sy = e.clientY; pid = e.pointerId; dragging = false;
-      try { b.setPointerCapture(pid); } catch (er) {}
-    });
-    b.addEventListener("pointermove", function (e) {
-      if (pid !== e.pointerId) return;
-      if (!dragging && Math.hypot(e.clientX - sx, e.clientY - sy) > 8) {
-        dragging = true;
-        ghost = b.cloneNode(true);
-        ghost.style.cssText = "position:fixed;z-index:95;pointer-events:none;margin:0;transform:rotate(-3deg) scale(1.05);box-shadow:0 18px 30px -10px rgba(0,0,0,.6)";
-        document.body.appendChild(ghost);
-        b.classList.add("dragging");
-      }
-      if (dragging) {
-        ghost.style.left = (e.clientX - ghost.offsetWidth / 2) + "px";
-        ghost.style.top = (e.clientY - ghost.offsetHeight / 2) + "px";
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        bins.forEach(function (bn) { bn.classList.toggle("over", bn === over); });
-      }
-    });
-    function end(e) {
-      if (pid !== e.pointerId) return;
-      pid = null;
-      if (dragging) {
-        var under = document.elementFromPoint(e.clientX, e.clientY);
-        var over = under && under.closest(".bin");
-        if (ghost) ghost.remove();
-        ghost = null;
-        b.classList.remove("dragging");
-        if (over) place(b, over);
-        else bins.forEach(function (bn) { bn.classList.remove("over"); });
-        dragging = false;
-      } else if (e.type === "pointerup") pick(b);
-    }
-    b.addEventListener("pointerup", end);
-    b.addEventListener("pointercancel", end);
-    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(b); } });
-    b.addEventListener("click", function (e) { e.preventDefault(); });
+    // Shared drag-and-drop (assets/js/sort-dnd.js): auto-scrolls to reach bins that
+    // sit below the fold, snaps to the nearest bin, and survives a stray second touch.
+    SortDnD.attach(b, { bins: bins, onDrop: place, onTap: pick });
   }
 
   function checkSort() {
     var placed = 0, right = 0, rows = [];
-    var labels = { shm: "Cell Theory Pioneer", periodic: "Prokaryotic Feature", non: "Eukaryotic Feature" };
     D.items.forEach(function (it) {
       var el = document.querySelector('.sort-item[data-id="' + it.id + '"]');
       var bin = el && el.closest(".bin");
@@ -124,173 +64,99 @@
       var ok = chosen === it.bin;
       if (ok) right++;
       if (el) { el.classList.toggle("right", ok); el.classList.toggle("wrong", !!chosen && !ok); }
-      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" +
-        labels[it.bin] + ". " + it.why + "</span></div>");
+      rows.push('<div class="fb-row"><span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓" : "✗") + "</span><b>" + it.emo + " " + it.name + "</b><span>" + D.bins[it.bin] + ". " + it.why + "</span></div>");
     });
-    if (placed < D.items.length) {
-      toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray.");
-      return;
-    }
-    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the explanations below.");
+    if (placed < D.items.length) { toast("Place all " + D.items.length + " cards first. " + (D.items.length - placed) + " still in the tray."); return; }
+    document.getElementById("sort-score").textContent = "You got " + right + " / " + D.items.length + (right === D.items.length ? ". Perfect!" : ". See the reasons below.");
     var fb = document.getElementById("sort-feedback");
-    fb.innerHTML = rows.join("");
-    fb.classList.add("on");
-    if (right >= 10) burst(document.getElementById("sort-score"), 20);
-    emit("l1:sort-checked", { score: right, total: D.items.length });
+    fb.innerHTML = rows.join(""); fb.classList.add("on");
+    if (right >= 8) burst(document.getElementById("sort-score"), 20);
+    emit("l1:sort", { correct: right, total: D.items.length });
   }
-
   if (tray) {
     buildSort();
     document.getElementById("sort-check").addEventListener("click", checkSort);
     document.getElementById("sort-reset").addEventListener("click", buildSort);
   }
 
-  // 2. Interactive WAEC Microscope Magnification Results Table
-  var tbody = document.querySelector("#results-table tbody");
-  if (tbody) {
-    var opt = function (list) {
-      return '<option value="">choose…</option>' + list.map(function (o) { return "<option>" + o + "</option>"; }).join("");
-    };
-    D.trials.forEach(function (trObj, i) {
-      var tr = document.createElement("tr");
-      tr.innerHTML =
-        "<td><b>" + trObj.label + "</b></td>" +
-        "<td>×" + trObj.L + "</td>" +
-        '<td><select data-k="t" aria-label="Objective lens for trial ' + trObj.label + '">' + opt(D.tOptions) + "</select></td>" +
-        '<td><select data-k="T" aria-label="Measured image length I (mm) for trial ' + trObj.label + '">' + opt(D.TOptions) + "</select></td>" +
-        '<td><select data-k="T2" aria-label="Actual length A = I/M (mm) for trial ' + trObj.label + '">' + opt(D.T2Options) + "</select></td>";
-      tbody.appendChild(tr);
-
-      var saved = window.LessonKit ? window.LessonKit.Store.get("bio-l01-table-" + i, {}) : {};
-      tr.querySelectorAll("select").forEach(function (s) {
-        var k = s.getAttribute("data-k");
-        if (saved[k]) s.value = saved[k];
-        s.addEventListener("change", function () {
-          saved[k] = s.value;
-          if (window.LessonKit) window.LessonKit.Store.set("bio-l01-table-" + i, saved);
-          s.parentElement.classList.remove("ok", "no");
-        });
-      });
+  /* ---------------- 2. Explorer: image size of a 50 µm cell at each power ---------------- */
+  var choices = document.getElementById("ex-choices"), detail = document.getElementById("ex-detail");
+  var cellMm = D.cellWidthMm.onion;                       /* 0.050 mm = 50 µm */
+  var pinEls = [];
+  function fmt(n) { return (Math.round(n * 100) / 100).toString(); }
+  function showPin(i) {
+    var p = D.pins[i]; if (!p || !detail) return;
+    var M = D.eyepiece * p.obj, img = cellMm * M, field = D.fieldConstant / M, cells = Math.round(field / cellMm);
+    pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
+    detail.innerHTML =
+      '<div class="num">×' + M + '<small>' + D.eyepiece + " × " + p.obj + " = " + M + "</small></div>" +
+      "<p>A 50 µm cell (" + fmt(cellMm) + " mm) looks <b>" + fmt(img) + " mm</b> wide in the image: " + fmt(cellMm) + " mm × " + M + " = " + fmt(img) + " mm. " +
+      "The field is " + fmt(field) + " mm across, so about <b>" + cells + " cells</b> fit side by side.</p>" +
+      "<p>" + p.note + "</p>";
+    emit("l1:pin", { index: i, M: M, image_mm: img });
+  }
+  if (choices && D.pins) {
+    D.pins.forEach(function (p, i) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "ph-choice"; b.style.setProperty("--pcol", ["var(--amber)", "var(--teal)", "var(--pink)"][i]);
+      b.innerHTML = '<span class="k">×' + p.obj + '</span><span class="n">objective</span>';
+      b.addEventListener("click", function () { showPin(i); });
+      choices.appendChild(b); pinEls.push(b);
     });
-
-    document.getElementById("results-check").addEventListener("click", function () {
-      var right = 0, filled = 0, total = D.trials.length * 3;
-      Array.prototype.forEach.call(tbody.rows, function (tr, i) {
-        tr.querySelectorAll("select").forEach(function (s) {
-          var k = s.getAttribute("data-k"), exp = D.trials[i][k];
-          s.parentElement.classList.remove("ok", "no");
-          if (!s.value) return;
-          filled++;
-          var ok = s.value === exp;
-          if (ok) right++;
-          s.parentElement.classList.add(ok ? "ok" : "no");
-        });
-      });
-      var out = document.getElementById("results-score");
-      if (!filled) { out.textContent = "Fill in at least one row from your 3D microscope readings first."; return; }
-      out.textContent = right + " of " + filled + " entries match the WAEC table" + (filled < total ? " (" + (total - filled) + " still blank)." : "!");
-      emit("l1:table-checked", { right: right, filled: filled });
-    });
+    showPin(0);
+    D.showPin = showPin;
   }
 
-  // 3. Biological Scale & Resolution Explorer
-  var track = document.getElementById("ph-track");
-  if (track && D.pins) {
-    var nums = document.getElementById("ph-nums");
-    var labels = ["0.1 µm Virus", "2 µm E. coli", "7.5 µm RBC", "45 µm Cheek", "60 µm Onion"];
-    labels.forEach(function (lb, k) {
-      var sp = document.createElement("span");
-      sp.textContent = lb;
-      sp.style.left = (k / (labels.length - 1) * 100) + "%";
-      nums.appendChild(sp);
+  /* ---------------- 3. Bridge: which slide is the ugu peel, and how big is a red cell? ---------------- */
+  var bt = document.getElementById("bridge-test");
+  if (bt) {
+    var B = D.bridge, step = 1, wrong = 0, doneFired = false;
+    B.slides.forEach(function (s) {
+      var cv = document.getElementById("bridge-" + s.id.toLowerCase());
+      if (!cv) return;
+      var c = cv.getContext("2d");
+      if (window.MicroscopeBench && MicroscopeBench.renderView) {
+        MicroscopeBench.renderView(c, cv.width, { slide: s.slide, objective: 2, eyepiece: 10, blur: 0, brightness: 1, guide: false });
+      } else {
+        c.fillStyle = "#222"; c.fillRect(0, 0, cv.width, cv.height);
+        c.fillStyle = "#fff"; c.font = "20px sans-serif"; c.fillText("Slide " + s.id, 20, 40);
+      }
     });
-    nums.style.margin = "8px 10px 0";
-
-    var info = document.getElementById("ph-info");
-    var pinEls = [];
-    D.pins.forEach(function (pObj, idx) {
-      var btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "ph-pin";
-      var pct = ((pObj.frac + 1) / 2) * 100;
-      btn.style.left = pct + "%";
-      if (idx % 2 === 1) btn.classList.add("up");
-      btn.innerHTML = '<span aria-hidden="true">' + pObj.emo + "</span>";
-      btn.setAttribute("aria-label", pObj.label + ", " + pObj.x);
-      btn.addEventListener("click", function () { showPin(idx); });
-      track.appendChild(btn);
-      pinEls.push(btn);
-    });
-
-    var showPin = function (i) {
-      var pObj = D.pins[i];
-      if (!pObj) return;
-      pinEls.forEach(function (el, k) { el.classList.toggle("on", k === i); });
-      info.innerHTML =
-        "<b>" + pObj.label + " (" + pObj.x + ")</b> · " +
-        "Optics: <code>" + pObj.v + "</code> · " +
-        "Class: <code>" + pObj.a + "</code> · " +
-        "Key traits: <b>" + pObj.ke + " &amp; " + pObj.pe + "</b><br>" +
-        pObj.note;
+    var qText = document.getElementById("bridge-qtext"), opts = document.getElementById("bridge-opts"), fb = document.getElementById("bridge-fb");
+    var big = document.getElementById("big-idea");
+    var showQ = function () {
+      var q = step === 1 ? B.q1 : B.q2;
+      qText.textContent = (step === 1 ? "Question 1 of 2. " : "Question 2 of 2. ") + q.text;
+      opts.innerHTML = "";
+      q.opts.forEach(function (t, i) {
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "vt-btn"; b.textContent = t;
+        b.addEventListener("click", function () { answer(i, b); });
+        opts.appendChild(b);
+      });
     };
-    window.L01.showPin = showPin;
-    showPin(2);
-  }
-
-  // 4. Yaba Microscopy Calibration Bridge Solver (#vinegar-test in #bridge)
-  var vt = document.getElementById("vinegar-test");
-  if (vt) {
-    var bStep1 = document.getElementById("vt-zobo");
-    var bStep2 = document.getElementById("vt-drop1");
-    var bStep3 = document.getElementById("vt-drop5");
-    var bReset = document.getElementById("vt-reset");
-    var status = document.getElementById("vt-status");
-    var verdict = document.getElementById("vt-verdict");
-    var timeB = document.getElementById("time-b");
-    var lenBLabel = document.getElementById("len-b-label");
-
-    bStep1.addEventListener("click", function () {
-      bStep1.disabled = true;
-      bStep2.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· I = 24 mm = 24,000 µm";
-      if (timeB) timeB.textContent = "Units unified in µm!";
-      status.innerHTML = "Step 1: Multiply image length <strong>I = 24 mm by 1000</strong> to get <strong>I = 24,000 µm</strong> so both I and A share the exact same unit! Now click Step 2 to divide by total magnification M.";
-    });
-
-    bStep2.addEventListener("click", function () {
-      bStep2.disabled = true;
-      bStep3.disabled = false;
-      if (lenBLabel) lenBLabel.textContent = "· M = 10 × 40 = 400×";
-      if (timeB) timeB.textContent = "A = 24,000 ÷ 400 = 60 µm";
-      status.innerHTML = "Step 2: Dividing <strong>24,000 µm by M = 400×</strong> gives the true onion cell length <strong>A = 60 µm</strong>! Now click Step 3 to compare with an E. coli bacterium (2.0 µm).";
-    });
-
-    bStep3.addEventListener("click", function () {
-      bStep3.disabled = true;
-      if (lenBLabel) lenBLabel.textContent = "· Ratio = 60 µm ÷ 2.0 µm = 30 : 1 ✓";
-      if (timeB) timeB.textContent = "A = 60 µm (30× E. coli) ✓";
-      status.innerHTML = "Calibration complete! One onion epidermal cell is 30 times longer than an E. coli bacterium!";
-      verdict.innerHTML =
-        "<strong>Microscopy Puzzle Solved!</strong> Always convert millimetres to micrometres (<strong>1 mm = 1000 µm</strong>) before applying <strong>M = I ÷ A</strong>. At ×400, a 60 µm eukaryotic onion cell spans 24 mm, whereas a 2 µm prokaryotic bacterium spans only 0.8 mm!";
-      verdict.classList.add("on");
-      burst(verdict, 24);
-      emit("l1:vinegar-done", { A: 60 });
-    });
-
-    bReset.addEventListener("click", function () {
-      bStep1.disabled = false;
-      bStep2.disabled = true;
-      bStep3.disabled = true;
-      verdict.classList.remove("on");
-      if (lenBLabel) lenBLabel.textContent = "· I = 24 mm at ×400 (unconverted)";
-      if (timeB) timeB.textContent = "Unit mismatch: mm vs µm";
-      status.innerHTML = "Tunde measured I = 24 mm at ×400 magnification. Start with Step 1 to convert mm to µm.";
-    });
-
-    window.L01.vt = {
-      step1: function () { bStep1.click(); },
-      step2: function () { bStep2.click(); },
-      step3: function () { bStep3.click(); }
+    var answer = function (i, btn) {
+      var q = step === 1 ? B.q1 : B.q2;
+      if (i === q.a) {
+        fb.className = "bridge-fb on";
+        var extra = "";
+        if (step === 2) extra = " Working: " + B.q2.fieldMm.toFixed(2) + " mm ÷ " + B.q2.cells + " = " + (B.q2.fieldMm / B.q2.cells).toFixed(3) + " mm = " + Math.round(B.q2.fieldMm / B.q2.cells * 1000) + " µm.";
+        fb.innerHTML = "<b>Correct.</b> " + q.why + extra;
+        burst(fb, 14);
+        if (step === 1) { step = 2; setTimeout(showQ, 900); }
+        else {
+          opts.innerHTML = ""; qText.textContent = "Both answered. Read the big idea below.";
+          if (big) big.classList.add("unlocked");
+          if (!doneFired) { doneFired = true; emit("l1:bridge", { correct: wrong === 0, wrong: wrong }); }
+        }
+      } else {
+        wrong++;
+        if (btn) btn.disabled = true;
+        fb.className = "bridge-fb on bad";
+        fb.innerHTML = "<b>Not quite.</b> Look at the slides again and try another answer.";
+      }
     };
+    showQ();
+    D.bridgeApi = { solve: function () { answer(step === 1 ? B.q1.a : B.q2.a); } };
   }
 })();

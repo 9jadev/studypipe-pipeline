@@ -1,4 +1,4 @@
-/* Lesson 04 · Choreographed StudyNarrator Script — The Cell & Its Environment: Diffusion, Osmosis, Turgor, Plasmolysis, Haemolysis & Active Transport (en-NG) */
+/* Lesson 04 · Choreographed StudyNarrator script (en-NG): The Cell and Its Environment. 28 steps. */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
@@ -6,55 +6,64 @@ window.NARRATION = {
   waits: {
     note: {
       event: "kit:note",
-      prompt: "Type a prediction (or tap a seed question) and pin it to the Wonder Wall",
-      react: function () {
-        return "Pinned! Now let's test diffusion, osmosis, and active transport.";
-      }
+      prompt: "Pin a prediction to the Wonder Wall (or tap a seed idea)",
+      react: function () { return "Pinned! Hold on to that prediction. We are about to test it with a real potato."; }
     },
     sort: {
-      event: "l4:sort-checked",
-      prompt: "Sort all 12 cards into Simple Diffusion, Osmosis & Tonicity, and Active/Bulk Transport, then tap Check my sorting",
+      event: "l4:sort",
+      prompt: "Sort all nine cards, then tap Check my sorting",
       react: function (d) {
-        if (!d) return "Good effort!";
-        if (d.score === d.total) return "Twelve out of twelve! You distinguished simple diffusion, osmosis, plasmolysis, haemolysis, and ATP-driven active transport like a true biologist.";
-        if (d.score >= 9) return "Nice work! " + d.score + " out of " + d.total + ". Check the notes below for any card that slipped.";
-        return "You got " + d.score + " out of " + d.total + ". Review the feedback below — WAEC and JAMB test these transport mechanisms in every session!";
+        if (!d) return "Good effort. You can come back to the sort any time.";
+        if (d.correct === d.total) return "Nine out of nine! You separated diffusion, osmosis and active transport perfectly.";
+        if (d.correct >= 7) return "Nice. " + d.correct + " out of " + d.total + ". Read the notes for the ones that slipped: they are classic exam traps.";
+        return "You got " + d.correct + " out of " + d.total + ". Read the notes below the bins. Ask yourself: is it only water, and does it go against the gradient?";
       }
     },
     bench: {
       event: "l4:bench-done",
-      prompt: "Record at least 4 sucrose baths (A–E) on the 3D osmosis chamber",
-      react: function () {
-        return "Fantastic! You tracked endosmosis at 0.00 M, the isotonic zero-crossing at 0.30 M, and exosmosis/plasmolysis at 0.70 M!";
-      }
+      timeout: 600000,
+      prompt: "Weigh all six strips, leave them for 30 minutes, then re-weigh each one",
+      already: function () {
+        var b = window.StudyScenes && window.StudyScenes.bench, r = b && b.reading && b.reading();
+        return r && r.nDone === 6 ? r : null;
+      },
+      react: function () { return "Excellent! All six strips are re-weighed. Now we turn those masses into percentages and a curve."; }
     },
     bridge: {
-      event: "l4:vinegar-done",
-      prompt: "Run Steps 1, 2 and 3 to resolve the Mile 12 ugu leaf, salted fish, and hospital IV saline mystery",
-      react: function () {
-        return "Unit mystery solved! You explained why fresh water revives ugu leaves, why salt preserves fish, and why hospitals use 0.9 percent isotonic saline!";
+      event: "l4:bridge",
+      prompt: "Decide which way water moves in all three cases",
+      react: function (d) {
+        if (d && d.correct === d.total) return "All three right the first time! Salty water pulls water out of ugu, plain water floods red cells, and saline keeps them safe.";
+        return "Mystery solved. The ugu wilted because water left its cells, and a plain water drip would burst red cells. Saline is isotonic, so it is safe.";
       }
     },
     quiz: {
       event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB quiz questions",
+      prompt: "Answer all the quiz questions",
       react: function (d) {
         if (!d) return "Quiz complete!";
-        if (d.score >= 10) return "Outstanding — " + d.score + " out of " + d.total + "! You have mastered Diffusion, Osmosis, Turgor, Plasmolysis, Haemolysis, and Active Transport.";
-        if (d.score >= 7) return "Well done! " + d.score + " out of " + d.total + ". Review the explanations on the ones you missed.";
-        return "You scored " + d.score + " out of " + d.total + ". Replay the Make Sense and 3D Bilayer Zoom chapters, then retry!";
+        if (d.score >= 10) return "Outstanding. " + d.score + " out of " + d.total + "! You really understand how water moves.";
+        if (d.score >= 7) return "Well done. " + d.score + " out of " + d.total + ". Read the explanations for the ones you missed.";
+        return "You scored " + d.score + " out of " + d.total + ". Revisit the practical and the zoom, then try again.";
       }
     }
   },
 
   actions: {
-    "pin:0": function () { if (window.L04 && window.L04.showPin) window.L04.showPin(0); },
-    "pin:2": function () { if (window.L04 && window.L04.showPin) window.L04.showPin(2); },
-    "pin:4": function () { if (window.L04 && window.L04.showPin) window.L04.showPin(4); },
-    "bench:wide":  function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("wide"); },
-    "bench:std":   function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("std"); },
-    "clock:1": function () { if (window.L04 && window.L04.vt) window.L04.vt.step1(); },
-    "clock:2": function () { if (window.L04 && window.L04.vt) window.L04.vt.step2(); }
+    story: function (arg) { var s = window.StudyScenes && window.StudyScenes.story; if (s && s.beat) s.beat(parseInt(arg, 10)); },
+    bench: function (arg) {
+      var b = window.StudyScenes && window.StudyScenes.bench; if (!b) return;
+      var p = String(arg).split(":"), fn = b[p[0]];
+      if (typeof fn === "function") fn.apply(b, p.slice(1));
+    },
+    zoom: function (arg) {
+      var z = window.StudyScenes && window.StudyScenes.zoom; if (!z) return;
+      var p = String(arg).split(":");
+      if (p[0] === "mode" && z.setMode) z.setMode(p[1]);
+    },
+    method: function (arg) { if (window.L04 && window.L04.method) window.L04.method(parseInt(arg, 10)); },
+    pin: function (arg) { if (window.L04 && window.L04.showPin) window.L04.showPin(parseInt(arg, 10)); },
+    open: function (arg) { var d = document.querySelector(arg); if (d && d.tagName === "DETAILS") d.open = true; }
   },
 
   script: [
@@ -62,20 +71,10 @@ window.NARRATION = {
       title: "Welcome",
       steps: [
         {
-          target: ".l-hero .display",
-          cue: "Lesson 4 · The Cell & Its Environment",
-          sparkle: true,
-          say: "Welcome to Lesson 4! Today we resolve the central mystery of our unit: how living cells interact with their environment through diffusion, osmosis, turgidity, plasmolysis, haemolysis, crenation, and ATP-driven active transport!"
-        },
-        {
           target: ".l-hero .question",
           cue: "Our guiding question",
-          say: "Here is our guiding puzzle: why does pure water make a wilted ugu leaf firm and crisp, yet burst a human red blood cell — while strong salt brine shrivels both?"
-        },
-        {
-          target: "#objectives",
-          cue: "5 goals for Lesson 4",
-          say: "By the end of this lesson you will compare diffusion, osmosis, and active transport, contrast plant and animal cell responses in hypotonic, isotonic, and hypertonic solutions, calculate yam-strip percentage mass change, and explain why boiling destroys osmosis."
+          sparkle: true,
+          say: "Welcome to Lesson 4 of Plant and Animal Cells. Today we find out why salty water wilts ugu, and why a drip must be nought point nine percent saline, not plain water. By the end you will have measured it yourself, with a potato."
         }
       ]
     },
@@ -84,8 +83,13 @@ window.NARRATION = {
       steps: [
         {
           target: "#donow-list",
-          cue: "Retrieve Lessons 1–3",
-          say: "Start with these four retrieval cards on the plasma membrane vs cellulose wall, the tonoplast, Euglena, and percentage change."
+          cue: "Wake up what you know",
+          say: "Start with four quick questions from earlier lessons. Selectively permeable membranes, the tonoplast, surface area to volume ratio, and the cell wall. Answer in your head first."
+        },
+        {
+          target: "#donow-list",
+          wait: "donow",
+          say: "Your turn. Reveal each answer and mark yourself honestly."
         }
       ]
     },
@@ -93,34 +97,34 @@ window.NARRATION = {
       title: "The Story",
       steps: [
         {
-          target: "#story-stage",
+          target: { scene: "story", part: "ngozi" },
           action: "story:0",
-          cue: "Mama Titi's Ugu & Salted Fish",
-          say: "Back at Mile 12 Market, Tunde watches Mama Titi revive wilted ugu leaves with fresh water while salting Tilapia fish."
+          cue: "Limp ugu at Mile 12",
+          say: "Mile 12 Market, Lagos. Mama Ngozi's nephew washed her ugu in salty water, against flies. One hour later, the leaves are limp. What happened?"
         },
         {
           target: { scene: "story", part: "cust2" },
           action: "story:1",
-          cue: "Why not pure water in an IV drip?",
-          say: "Alhaji Musa asks why hospital nurses never inject pure distilled water into a patient's vein if pure water is so good for ugu leaves."
-        },
-        {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:2",
-          cue: "Cellulose Wall vs No Wall!",
-          say: "Mama Titi explains the secret: plant cells have a rigid cellulose cell wall that resists bursting and builds turgor pressure, whereas red blood cells have no cell wall and burst by haemolysis in pure water!"
-        },
-        {
-          target: { scene: "story", part: "clockB" },
-          action: "story:3",
-          cue: "0.9% Isotonic Normal Saline",
-          say: "That is why hospital drips always use isotonic 0 point 9 percent normal saline!"
+          cue: "Coach Danjuma's theory",
+          say: "Coach Danjuma says the salt soaked into the leaves and made them heavy. Hold that idea. We will test it."
         },
         {
           target: { scene: "story", part: "amaka" },
-          action: "story:5",
-          cue: "To the Yaba Osmosis Lab!",
-          say: "At the Yaba Lab, Doctor Kunle sets up five sucrose baths from 0.00 molar to 0.70 molar so we can test yam strips, plant cells, and red blood cells."
+          action: "story:2",
+          cue: "The drip at LUTH",
+          say: "Now the LUTH lab. Doctor Amaka sets up a drip for a dehydrated patient. She puts the plain water aside and reaches for the nought point nine percent saline."
+        },
+        {
+          target: { scene: "story", part: "cust1" },
+          action: "story:3",
+          cue: "Why not plain water?",
+          say: "Chinedu asks the obvious question: the patient is thirsty, so why not just use water?"
+        },
+        {
+          target: { scene: "story", part: "amaka" },
+          action: "story:4",
+          cue: "Water always moves",
+          say: "Doctor Amaka answers: water always moves. Today you will measure which way it goes, with a potato."
         }
       ]
     },
@@ -131,130 +135,160 @@ window.NARRATION = {
           target: "#wall-wonder",
           cue: "Pin your prediction",
           wait: "note",
-          say: "Pin your prediction to the Wonder Wall before we sort the twelve transport examples!"
+          say: "If you put potato strips in pure water and in very salty water, what will happen to their mass? Pin your prediction to the Wonder Wall."
         }
       ]
     },
     {
-      title: "Transport Sort",
+      title: "Which kind of movement?",
       steps: [
         {
           target: "#kitchen-sort",
-          cue: "Diffusion vs Osmosis vs Active Transport",
+          cue: "Diffusion, osmosis, active",
           wait: "sort",
-          say: "Activity 1! Sort all twelve cards into Simple Diffusion, Osmosis and Tonicity, and Active or Bulk Transport, then tap Check my sorting."
+          say: "Activity A. Sort nine cards into diffusion, osmosis and active transport. Two questions help: is it only water moving, and is it moving against the gradient?"
         }
       ]
     },
     {
-      title: "3D Osmosis Chamber",
+      title: "Potato practical",
       steps: [
         {
-          target: { scene: "bench", part: "clamp" },
-          cue: "3D Plant Cell (Turgor ↔ Plasmolysis)",
-          say: "On the left of our 3D chamber is the plant cell: watch its central vacuole swell turgid in pure water and pull away from the cellulose wall in strong brine!"
+          target: "#method-cards",
+          action: "method:1",
+          cue: "Four steps",
+          say: "Now the potato practical. Four steps. One, cut six equal strips with a cork borer, blot, and weigh each one. Two, leave one strip in each tube for thirty minutes. Three, remove, blot gently, and re-weigh. Four, calculate the percentage change in mass and plot it."
         },
         {
-          target: { scene: "bench", part: "bob" },
-          action: "bench:test:0",
-          cue: "3D Red Blood Cell (Haemolysis ↔ Crenation)",
-          say: "On the right is the mammalian red blood cell: in 0.00 molar distilled water (Trial A), it swells and bursts by haemolysis while the yam strip gains 18 percent in mass!"
+          target: { scene: "bench", part: "balance" },
+          cue: "Zero, then weigh",
+          say: "This is the top-pan balance. Zero it before every weighing, and read to two decimal places. Notice the blotting paper and the tile beside it, because they matter later."
+        },
+        {
+          target: { scene: "bench", part: "rack" },
+          action: "bench:weigh:0",
+          cue: "Tube 1 · pure water",
+          say: "Watch tube one, pure water. The strip is blotted, weighed, and set down. About two point five grams. The six tubes run from zero to one mole per decimetre cubed of sucrose."
         },
         {
           target: "#bench-stage",
-          action: "bench:std",
-          cue: "Your turn on the bench!",
+          cue: "Your turn on the bench",
           wait: "bench",
-          say: "Now it's your turn! Tap Trials A to E to test all five sucrose concentrations from 0.00 molar to 0.70 molar."
+          say: "Your turn. Weigh the other strips, leave them for thirty minutes, then re-weigh all six. Tap Weigh, then Leave, then Re-weigh. Or let the bench run all six for you, and watch closely."
         },
         {
-          target: "#results-table",
-          cue: "Complete the WAEC Osmosis Table",
-          say: "Select the final mass, percentage mass change, and cellular state in the table below."
-        },
-        {
-          target: "#expected",
+          target: "#graph-card",
           action: "open:#expected",
-          cue: "Isotonic Point at 0.30 M (%Δm = 0%)",
-          say: "Look at Trial C: at 0 point 30 molar sucrose, final mass equals initial mass (2.50 grams) and percentage change is zero — that is the isotonic concentration of the yam cell sap!"
+          cue: "A smooth curve",
+          say: "Look at your graph. The dots fall along a curve, so we draw a smooth curve of best fit, never a straight line. It crosses the zero percent line at about nought point three four moles per decimetre cubed. That is the isotonic point."
+        },
+        {
+          target: "#err-panel",
+          cue: "Sources of error",
+          say: "What can go wrong? Surface water left on the strip makes the final mass too high. Blotting too hard, or leaving the strip on the tile, makes it too low. Try each technique on the bench, and watch the curve move."
         }
       ]
     },
     {
-      title: "Tonicity & Water Potential Math",
+      title: "Movement break",
       steps: [
         {
-          target: "#eq-shm",
-          cue: "Percentage Mass Change: %Δm = ((m_f − m_i) ÷ m_i) × 100%",
+          target: "#movement-break",
+          cue: "Be a red blood cell",
           sparkle: true,
-          say: "Here is the WAEC Paper 3 osmometry formula: subtract initial mass from final mass, divide by initial mass, and multiply by 100 percent!"
-        },
-        {
-          target: ["#eq-omega", "#eq-vel"],
-          cue: "Suction Pressure SP = OP − TP & Graham's Law",
-          say: "And for plant water relations, suction pressure equals osmotic pressure minus turgor pressure — which drops to zero when a cell is fully turgid!"
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:0",
-          cue: "Hypotonic Distilled Water (0.00 M)",
-          say: "Tap Pin 1 on the Tonicity Explorer: in pure water, plant cells become fully turgid while red blood cells burst by haemolysis."
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:4",
-          cue: "Hypertonic Brine (0.70 M)",
-          say: "Tap Pin 5: in concentrated brine, plant cells plasmolyse and red blood cells crenate!"
+          say: "Time to move! Stand up. You are a red blood cell. Puff up and clap for pure water. Shrink in tight for salty water. Calm circle for saline. Five minutes, then sit down ready."
         }
       ]
     },
     {
-      title: "3D Lipid Bilayer Zoom",
+      title: "Make sense",
       steps: [
         {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:mix",
-          cue: "Aquaporin Osmosis (High → Low Ψ_w, 0 ATP)",
-          say: "Zoom into the selectively permeable phospholipid bilayer in 3D! Cyan water molecules stream through the aquaporin channel down their water-potential gradient without using any ATP."
+          target: "#defs",
+          cue: "Three movements",
+          say: "Three definitions. Diffusion is the spreading of particles from crowded to few, until they are even. Osmosis is the movement of water only, across a selectively permeable membrane, from dilute to concentrated. Active transport is pumping against the gradient, and it costs energy from respiration."
         },
         {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:acid",
-          cue: "Active Transport Pump (Low → High, Uses ATP)",
-          say: "Switch to Active Transport: watch the amber carrier pump hydrolyse golden ATP spheres to push mineral ions uphill against their concentration gradient!"
+          target: ["#props-table", "#eq-pct"],
+          cue: "Three solutions, one formula",
+          sparkle: true,
+          say: "Hypotonic is more dilute than the cell sap, so a plant cell goes turgid and a red cell bursts. Isotonic is the same, so nothing changes. Hypertonic is more concentrated, so a plant cell is plasmolysed and a red cell crenates. And the percentage change in mass is the final mass minus the initial mass, over the initial mass, times one hundred."
+        },
+        {
+          target: "#pos-explorer",
+          action: "pin:3",
+          cue: "Tap a concentration",
+          say: "Tap along the explorer. At zero point six moles, the strip is limp, the ugu cell is plasmolysed, and the red cell is crenated. Try pure water too, and see the red cell burst."
         }
       ]
     },
     {
-      title: "Worked Examples & Bridge",
+      title: "3D cell zoom",
+      steps: [
+        {
+          target: { scene: "zoom", part: "rbc" },
+          action: "zoom:mode:hypo",
+          cue: "Pure water: hypotonic",
+          say: "Zoom in. Pure water. Water molecules rush in. The ugu cell swells until its wall pushes back, so it is turgid. The red cell has no wall, so it swells and bursts."
+        },
+        {
+          target: { scene: "zoom", part: "plant" },
+          action: "zoom:mode:hyper",
+          cue: "Salty water: hypertonic",
+          say: "Salty water. Water leaves by osmosis. The membrane pulls away from the wall, and that is plasmolysis. The salt did not soak in. The leaf lost water, and the red cell shrinks and wrinkles."
+        },
+        {
+          target: { scene: "zoom", part: "pump" },
+          action: "zoom:mode:active",
+          cue: "Active transport",
+          say: "Now the membrane. Diffusion and osmosis are passive: they follow the gradient, with no energy. Active transport is different. This pump moves ions from the scarce side to the plentiful side, so the cell pays with ATP. Switch between the three modes and watch the counts."
+        }
+      ]
+    },
+    {
+      title: "Worked examples",
       steps: [
         {
           target: "#ex1",
-          cue: "Example 1 · Yam Strip %Δm in Water vs 0.70 M",
-          say: "Study Worked Example 1: every step of the percentage mass gain (+18%) and percentage mass loss (−18%) is expanded in LaTeX with an explainer note underneath."
-        },
-        {
-          target: "#vinegar-test",
-          action: "clock:1",
-          cue: "Solve the Mile 12 & Hospital Mystery!",
-          wait: "bridge",
-          say: "Now click Steps 1, 2, and 3 in the Bridge solver to connect turgidity, salted-fish plasmolysis, and hospital isotonic saline!"
+          cue: "Percentage change",
+          say: "Worked examples. First find the change, final minus initial. Then divide by the initial mass, and multiply by one hundred. Zero point three five over two point five, times one hundred, is plus fourteen percent. In example three, the line crosses zero between plus four point eight and minus two point zero, which puts the isotonic point at about zero point three four."
         }
       ]
     },
     {
-      title: "Quiz & Reflect",
+      title: "Explainer video",
+      steps: [
+        {
+          target: ["#lesson-video"],
+          cue: "Watch the video",
+          say: "Before the final challenge, press play on the short explainer video at the start of the Make Sense section. It shows water crossing the membrane step by step."
+        }
+      ]
+    },
+    {
+      title: "The mystery, solved",
+      steps: [
+        {
+          target: "#mystery-box",
+          cue: "Solve the mystery",
+          wait: "bridge",
+          say: "Back to Mile 12 and the LUTH lab. For each case, decide which way water moves. Salty bowl, plain water drip, and saline drip."
+        }
+      ]
+    },
+    {
+      title: "Quiz and reflect",
       steps: [
         {
           target: "#quiz",
-          cue: "12 WAEC & JAMB Questions",
+          cue: "WAEC, NECO and JAMB",
           wait: "quiz",
-          say: "Test yourself on these twelve exam-style questions on diffusion, osmosis, plasmolysis, haemolysis, boiled yam controls, and active transport."
+          say: "Test yourself on these exam-style questions. Watch for the common traps: dividing by the final mass instead of the initial mass, and calling a red cell plasmolysed."
         },
         {
           target: "#reflect",
-          cue: "Rate your confidence & Assignment",
-          say: "Rate your confidence from 1 to 4, complete the Exit Ticket, and try the 30-mark assignment before moving to our final Practical Clinic in Lesson 5!"
+          cue: "Rate yourself, then the assignment",
+          say: "Finally, rate your confidence from one to four, try the exit ticket, and then do Part A and Part B of the assignment at home. Well done today."
         }
       ]
     }

@@ -1,0 +1,103 @@
+/* =========================================================
+   StudyPipe · Simple Harmonic Motion — Welcome Hub extras
+   Topic-specific hub styling only. Tokens only (no literal colours / fonts),
+   so any theme restyles it. Linked after style.css; theme.css stays last.
+   Lessons never link this file.
+   ========================================================= */
+
+/* ---- 3D Hero Lab: mode tabs, controls, readouts ---- */
+.lab-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; margin-bottom: 10px; }
+.lab-modes .btn-chip { text-align: center; padding: 9px 6px; }
+.lab-modes .btn-chip[aria-selected="true"] { background: var(--amber); color: var(--on-amber); border-color: var(--amber); }
+#lab .hud-readouts { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#lab .hud-k { text-transform: none; letter-spacing: 0.02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } /* physics symbols: never uppercase (l ≠ L) */
+#lab .hud-v { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.lab-ctrl { display: grid; gap: 8px; margin-top: 10px; }
+.lab-ctrl[hidden] { display: none; }
+.lab-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.lab-row-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lab-row .btn-chip { text-align: center; padding: 8px 4px; font-size: 12.5px; }
+.lab-ctrl .btn-chip[aria-pressed="true"] { background: rgba(var(--teal-rgb), 0.18); border-color: var(--teal); color: var(--fg); box-shadow: inset 0 0 0 1px var(--teal); }
+.lab-act { background: rgba(var(--amber-rgb), 0.16); border-color: var(--amber); color: var(--fg); }
+.lab-slide { display: flex; align-items: center; gap: 10px; min-width: 0; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+.lab-slide > span { min-width: 3.4em; }
+.lab-slide input[type="range"] { flex: 1; min-width: 0; accent-color: var(--amber); height: 28px; }
+.lab-slide output { min-width: 5em; text-align: right; color: var(--fg); font-variant-numeric: tabular-nums; }
+.lab-info { margin: 10px 2px 0; font-size: 13.5px; line-height: 1.5; color: var(--fg-soft); min-height: 3em; }
+.lab-info b { color: var(--fg); }
+.lab-info .lab-bad { color: var(--pink-soft); }
+.lab-nogl { position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; text-align: center; color: var(--fg-soft); font-size: 14px; }
+.lab-nogl[hidden] { display: none; }
+#lab .stage-legend .sw-amp { background: var(--amber); }
+#lab .stage-legend .sw-g { background: var(--pink-soft); }
+#lab .endpoint-toast { max-width: min(300px, calc(100% - 24px)); padding: 8px 12px; top: 10px; }
+#lab .endpoint-toast b { font-size: 15px; }
+#lab .endpoint-toast .mono { font-size: 11px; }
+#lab .endpoint-toast.is-bad { border-color: var(--crimson); box-shadow: 0 0 0 2px rgba(var(--crimson-rgb), 0.35); }
+#lab .endpoint-toast.is-bad b { color: var(--crimson); }
+
+/* ---- Mystery clue cards + realism note ---- */
+.clues { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 18px 0 0; padding: 0; list-style: none; }
+.clues li {
+  background: rgba(var(--paper-rgb), 0.04); border: 1px solid var(--line); border-radius: var(--radius-sm);
+  padding: 12px 14px; font-size: 14px; line-height: 1.45; color: var(--fg-soft);
+}
+.clues li b { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; color: var(--amber); margin-bottom: 4px; }
+.case-note { margin: 14px 0 0; font-size: 12.5px; line-height: 1.5; color: var(--muted); }
+.case-note b { color: var(--fg-soft); }
+@media (min-width: 900px) { #mystery .stats { grid-template-columns: repeat(3, 1fr); } }
+
+/* ---- Explorer: five tabs + Paper.js chart (welcome-explorer.js) ---- */
+#explorer .combo-tabs { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.combo-plot {
+  position: relative; width: 100%; height: 260px; min-height: 220px;
+  background: rgba(var(--ink-950-rgb), 0.65); border: 1px solid var(--line); border-radius: calc(14px * var(--corner, 1));
+  overflow: hidden;
+}
+.combo-plot canvas { display: block; width: 100%; height: 100%; touch-action: pan-y; }
+.combo-marker-dot {
+  position: absolute; width: 22px; height: 22px; margin: -11px 0 0 -11px; border-radius: 50%;
+  border: 2px solid rgba(var(--amber-rgb), 0.55); pointer-events: none;
+  transition: left 0.08s linear, top 0.08s linear;
+}
+.combo-nochart { position: absolute; inset: 0; display: grid; place-items: center; padding: 18px; text-align: center; color: var(--fg-soft); font-size: 13.5px; }
+.combo-nochart[hidden] { display: none; }
+.combo-tools { display: flex; justify-content: flex-end; margin-top: 8px; }
+.combo-tools[hidden], .combo-tools .btn-chip[hidden] { display: none; }
+#combo-damp[aria-pressed="true"] { background: rgba(var(--teal-rgb), 0.18); border-color: var(--teal); color: var(--fg); }
+#explorer .combo-read { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+/* ---- Calculation archetypes: step-by-step chains with a note under every line ---- */
+.arch-steps { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 8px; }
+.arch-steps li { background: rgba(var(--ink-950-rgb), 0.55); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 8px 10px; min-width: 0; }
+.arch-steps .tex { display: block; font-family: var(--font-math); font-size: 15px; color: var(--fg); overflow-x: auto; }
+.arch-steps .note { display: block; margin-top: 4px; font-size: 12.5px; line-height: 1.45; color: var(--muted); }
+.arch-steps .note::before { content: "↳ "; color: var(--amber); }
+
+/* ---- 7 lesson cards: keep the grid even ---- */
+@media (min-width: 900px) { #journey .lessons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---- Small phones ---- */
+@media (max-width: 560px) {
+  .clues { grid-template-columns: 1fr; }
+  .lab-modes .btn-chip { font-size: 12.5px; }
+  #lab .hud-readouts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  #lab .hud-cell { display: block; padding: 6px 8px; min-width: 0; }
+  #lab .hud-v { font-size: 13px; text-align: left; overflow: hidden; text-overflow: ellipsis; }
+  #lab .hud-k { max-width: none; }
+  #explorer .combo-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #explorer .combo-tabs .combo-tab:last-child { grid-column: 1 / -1; }
+  #explorer .combo-read { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* ---- Hero lab canvas: taller on phones (tall spring and pendulum rigs), SceneKit zoom buttons ---- */
+@media (max-width: 560px) { #lab-canvas { height: 320px !important; } }
+#lab .stage-zoom { position: absolute; right: 8px; bottom: 8px; display: flex; gap: 5px; z-index: 3; }
+#lab .stage-zoom button {
+  width: 36px; height: 36px; border-radius: calc(11px * var(--corner, 1)); border: 1px solid var(--line-strong);
+  background: rgba(var(--ink-900-rgb), 0.6); color: var(--fg); font: 700 18px/1 var(--font-body);
+  display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+#lab .stage-zoom button:active { transform: scale(0.94); }
+#lab .stage-zoom svg { width: 18px; height: 18px; }
+#lab.no-webgl .stage-zoom { display: none; }

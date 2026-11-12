@@ -1,166 +1,148 @@
-/* Lesson 01 · Ohm's Law, Metallic Conduction & Wire Resistivity — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 01 · Current, P.D., Ohm's Law & the Resistance of Wires
+   Content data + the 12 WAEC/NECO/JAMB MCQs (window.LESSON_QUIZ) from 03-questions.md § Lesson 01.
+   Every number here is for display/checking only; the live bench numbers come from the dc-circuit-bench model. */
 (function () {
   "use strict";
 
+  var RHO = 4.9e-7;                 // constantan, Ω m (matches the bench model)
+  function area(d_mm) { return Math.PI * Math.pow(d_mm / 1000, 2) / 4; }   // m²
+  function wireR(L_cm, d_mm) { return RHO * (L_cm / 100) / area(d_mm); }    // Ω
+
   window.L01 = {
-    // ---- 1. Conductor & Circuit Rule Sort items ----
+    RHO: RHO,
+    area: area,
+    wireR: wireR,
+
+    // ---- 2A Sort game · "Ohmic or not?" (3 bins) ----
+    bins: {
+      ohmic: "Ohmic (straight V–I through the origin)",
+      nonohmic: "Non-ohmic (V–I curves)",
+      insulator: "Barely conducts (insulator-ish)"
+    },
     items: [
-      { id: "constantan", name: "Constantan resistance wire at constant T", emo: "🧵", bin: "shm", why: "Constantan has a negligible temperature coefficient of resistance, so V is strictly proportional to I (ohmic)." },
-      { id: "copper", name: "Thick copper jumper cable at room T", emo: "🔌", bin: "shm", why: "At constant temperature, metallic copper obeys Ohm's law (V = IR) with a linear V–I graph through the origin." },
-      { id: "manganin", name: "Standard 2.0 Ω manganin lab coil", emo: "🌀", bin: "shm", why: "Manganin alloy keeps constant resistance across normal lab currents, making it an ideal ohmic standard resistor." },
-      { id: "acid", name: "Dilute tetraoxosulphate(VI) acid with copper electrodes", emo: "🧪", bin: "shm", why: "Above zero back-e.m.f. with copper electrodes in CuSO₄/acid, metallic/electrolytic conduction under constant conditions is linear." },
-      { id: "filament", name: "Tungsten filament headlamp bulb", emo: "💡", bin: "periodic", why: "Non-ohmic: as current increases, the tungsten filament heats up (> 2000 °C), lattice vibrations intensify, and resistance R increases." },
-      { id: "diode", name: "Silicon p–n junction semiconductor diode", emo: "📲", bin: "periodic", why: "Non-ohmic: conducts easily in forward bias above ~0.7 V but blocks current in reverse bias." },
-      { id: "thermistor", name: "NTC semiconductor thermistor bead", emo: "🌡️", bin: "periodic", why: "Non-ohmic: heating releases more charge carriers so its resistance drops sharply as temperature rises." },
-      { id: "led", name: "Workshop indicator light-emitting diode (LED)", emo: "🔴", bin: "periodic", why: "Non-ohmic semiconductor device whose I–V characteristic is strongly curved and one-way." },
-      { id: "ammeter", name: "Connecting the ammeter in SERIES with the wire", emo: "🧭", bin: "non", why: "Mandatory WAEC circuit rule: an ammeter has very low resistance and must be placed in series so all current flows through it." },
-      { id: "voltmeter", name: "Connecting the voltmeter in PARALLEL across the wire", emo: "📟", bin: "non", why: "Mandatory WAEC circuit rule: a voltmeter has very high resistance and must be connected in parallel across the test wire." },
-      { id: "keyopen", name: "Removing the plug key immediately after each reading", emo: "🔑", bin: "non", why: "Mandatory WAEC precaution: prevents continuous current from heating the constantan wire and altering its resistance." },
-      { id: "tight", name: "Ensuring clean and tight brass terminal connections", emo: "🔩", bin: "non", why: "Mandatory WAEC precaution: prevents unwanted contact resistance from distorting V and I readings." }
+      { id: "constantan", name: "Constantan resistance wire at steady temperature", emo: "🧵", bin: "ohmic", why: "Constantan's resistance hardly changes, so at a steady temperature V ÷ I stays constant and the graph is a straight line through the origin." },
+      { id: "metalrod", name: "A metal rod kept cool", emo: "🪙", bin: "ohmic", why: "A metal at a fixed, low temperature obeys Ohm's law: its V–I graph is a straight line through the origin." },
+      { id: "carbon", name: "A carbon-film resistor", emo: "🟫", bin: "ohmic", why: "A carbon-film resistor keeps a near-constant resistance over normal currents, so it is ohmic." },
+      { id: "lamp", name: "A filament lamp", emo: "💡", bin: "nonohmic", why: "As the current rises, the filament heats up (over 2000 °C), its ions vibrate harder and its resistance rises, so the V–I graph curves." },
+      { id: "diode", name: "A semiconductor diode", emo: "📟", bin: "nonohmic", why: "A diode conducts easily one way and hardly at all the other way, so its V–I graph is far from a straight line." },
+      { id: "electrolyte", name: "Salty water between two inert plates", emo: "🧪", bin: "nonohmic", why: "An electrolyte does not keep V ÷ I constant (gas forms at the plates and the solution changes), so it is non-ohmic." },
+      { id: "thermistor", name: "A thermistor (NTC bead)", emo: "🌡️", bin: "nonohmic", why: "A thermistor loses resistance as it warms, so more charge carriers appear and its V–I graph curves." },
+      { id: "wood", name: "Dry wood", emo: "🪵", bin: "insulator", why: "Dry wood has very few free charges, so almost no current flows: it behaves as an insulator." },
+      { id: "air", name: "Dry air", emo: "🌬️", bin: "insulator", why: "Dry air is an insulator: it barely conducts until the voltage is huge enough to spark." },
+      { id: "purewater", name: "Pure distilled water", emo: "💧", bin: "insulator", why: "Pure water has almost no dissolved ions, so it barely conducts (it is the dissolved salts, not the water, that carry current)." }
     ],
 
-    // ---- 2. 3D Ohm's Law V–I Practical trials (Standard R = 2.20 Ω constantan coil) ----
-    trials: [
-      { label: "A", L: 0.25, t: "0.25", T: "0.55", T2: "2.20" },
-      { label: "B", L: 0.50, t: "0.50", T: "1.10", T2: "2.20" },
-      { label: "C", L: 0.75, t: "0.75", T: "1.65", T2: "2.20" },
-      { label: "D", L: 1.00, t: "1.00", T: "2.20", T2: "2.20" },
-      { label: "E", L: 1.25, t: "1.25", T: "2.75", T2: "2.20" }
-    ],
-    tOptions: ["0.25", "0.50", "0.75", "1.00", "1.25"],
-    TOptions: ["0.55", "1.10", "1.65", "2.20", "2.75"],
-    T2Options: ["1.80", "2.00", "2.20", "2.50", "3.00"],
-
-    // ---- 3. Wire Resistivity & Dimension Explorer pins (R = 4ρL / πd²) ----
+    // ---- Make Sense · Pin/Scale Explorer (constantan, sweep L and d) ----
+    // Each pin recomputes R = ρL/A from the same model the bench uses.
     pins: [
-      { frac: -1.0, label: "Short & Thick", emo: "🟢", x: "L = 0.50 m, d = 0.80 mm", v: "R = 0.50 Ω (Lowest)", a: "I = 4.00 A at 2.0 V", ke: "Low R", pe: "High I", note: "Short length (½L₀) and double diameter (2d₀ → 4× area A) slash resistance to one-eighth of a 1 m thin wire!" },
-      { frac: -0.5, label: "Double Diameter", emo: "🔵", x: "L = 1.00 m, d = 0.80 mm", v: "R = 1.00 Ω (¼ R₀)", a: "I = 2.00 A at 2.0 V", ke: "4× Area", pe: "¼ R", note: "Doubling wire diameter d quadruples the circular cross-sectional area A = πd²/4, dividing resistance R by 4!" },
-      { frac: 0.0,  label: "Reference Wire", emo: "🎯", x: "L = 1.00 m, d = 0.40 mm", v: "R₀ = 4.00 Ω", a: "I = 0.50 A at 2.0 V", ke: "1× Area", pe: "1× R₀", note: "Standard constantan reference wire: L₀ = 1.00 m, d₀ = 0.40 mm (A = 1.26 × 10⁻⁷ m²), giving R₀ = 4.00 Ω." },
-      { frac: 0.5,  label: "Double Length", emo: "🟠", x: "L = 2.00 m, d = 0.40 mm", v: "R = 8.00 Ω (2 R₀)", a: "I = 0.25 A at 2.0 V", ke: "2× Length", pe: "2× R", note: "Since R = ρL/A, doubling length L at the same diameter doubles the electron path and doubles resistance to 8.00 Ω." },
-      { frac: 1.0,  label: "Long & Half d", emo: "🛑", x: "L = 2.00 m, d = 0.20 mm", v: "R = 32.0 Ω (8 R₀!)", a: "I = 0.063 A at 2.0 V", ke: "¼ Area", pe: "8× R!", note: "Doubling L (×2) while halving diameter d (÷0.5² = ×4) multiplies resistance by 2 × 4 = 8 times to 32.0 Ω!" }
-    ]
+      { L: 40, d: 1.20, label: "Short-ish & thick", note: "Four times the reference diameter means 16× the area, so the resistance is far lower than the thin reference wire." },
+      { L: 40, d: 0.60, label: "Double diameter", note: "Doubling the diameter (0.30 → 0.60 mm) quadruples the area A = πd²/4, so the resistance falls to one quarter." },
+      { L: 20, d: 0.30, label: "Half length", note: "Half the length means half the electron path, so half the resistance of the reference wire." },
+      { L: 40, d: 0.30, label: "Reference wire", note: "The bench default: constantan, L = 40 cm, d = 0.30 mm. This is the 2.77 Ω wire you plotted." },
+      { L: 80, d: 0.30, label: "Double length", note: "Doubling the length doubles the electron path, so the resistance doubles (R ∝ L)." },
+      { L: 100, d: 0.30, label: "Long & thin", note: "The longest, thinnest wire here has the highest resistance: R grows with length and falls as the square of the diameter." }
+    ],
+    refPin: 3,
+
+    // ---- Apply · The Bridge (thin vs thick jumper cable, same material & length) ----
+    bridge: [
+      {
+        q: "Emeka's two jumper cables are the same metal and length, but the thin one is d = 0.30 mm and the thick one d = 1.20 mm. How do their cross-sectional areas compare?",
+        o: ["The thick cable has 4 times the area", "The thick cable has 16 times the area", "They have the same area"],
+        a: 1,
+        why: "A = πd²/4 depends on d², and 1.20 ÷ 0.30 = 4, so the thick cable has 4² = 16 times the area of the thin one."
+      },
+      {
+        q: "Using R = ρL/A, how do their resistances compare?",
+        o: ["The thin cable has 16 times the resistance", "The thick cable has 16 times the resistance", "They have equal resistance"],
+        a: 0,
+        why: "Same ρ and L, and R ∝ 1/A, so the thin cable (16× smaller area) has 16 times the resistance of the thick one."
+      },
+      {
+        q: "They carry the SAME current. Using P = I²R, which cable heats more, and by how much?",
+        o: ["The thick one, 16× the power", "Equal heating", "The thin one, 16× the power"],
+        a: 2,
+        why: "With the same current, P = I²R is proportional to R, so the thin cable dissipates 16 times the power and runs hot. It is the thin wire, not a 'bad' one."
+      }
+    ],
+
+    // ---- 12 WAEC / NECO / JAMB MCQs (03-questions.md § Lesson 01, keys unchanged) ----
+    quiz: []
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
   window.LESSON_QUIZ = [
     {
-      q: "Which statement accurately expresses <strong>Ohm's law</strong> for a metallic conductor?",
-      o: [
-        "Current is inversely proportional to potential difference at all temperatures",
-        "Current is directly proportional to potential difference across its ends, provided temperature and other physical conditions remain constant",
-        "Resistance is directly proportional to current when the wire is heated white-hot",
-        "Potential difference equals the ratio of resistance to current (V = R/I)"
-      ],
+      q: "Chinedu notices that his workshop voltmeter is marked in volts. One volt is the same as",
+      o: ["one coulomb per second", "one joule per coulomb", "one joule per second", "one ohm per ampere"],
       a: 1,
-      e: "Ohm's law states that <strong>I ∝ V</strong> (or <strong>V = IR</strong>) provided <strong>temperature and other physical conditions (such as mechanical strain) remain constant</strong>.",
-      src: "WAEC-style"
+      e: "Potential difference is energy changed per unit charge, <strong>V = W/Q</strong>, so 1 V = 1 J ÷ 1 C = 1 J C⁻¹. One coulomb per second is the ampere (current); one joule per second is the watt (power); and V = IR gives ohms × amperes, not ohms ÷ amperes."
     },
     {
-      q: "Why does the electrical resistance of a pure metallic wire <strong>increase</strong> when its temperature rises?",
-      o: [
-        "The metal ions vibrate with greater amplitude, increasing the frequency of collisions with drifting free electrons",
-        "The number of protons inside the nucleus increases with temperature",
-        "The wire becomes shorter when heated",
-        "All free electrons evaporate out of the wire above 50 °C"
-      ],
+      q: "Emeka leaves his keke headlamp on while he waits for a passenger. It draws a steady 1.6 A for 5.0 minutes. How much charge passes through the lamp?",
+      o: ["8.0 C", "187.5 C", "0.32 C", "480 C"],
+      a: 3,
+      e: "Change the time to seconds first: t = 5.0 × 60 = 300 s. Then <strong>Q = It = 1.6 × 300 = 480 C</strong>. Forgetting to convert the minutes (1.6 × 5.0 = 8.0 C) or inverting the formula gives the wrong options."
+    },
+    {
+      q: "Engr. Nkechi says Ohm's law applies to a metal wire \"only under one condition\". Which condition does she mean?",
+      o: ["The temperature and other physical conditions of the wire stay the same", "The current through the wire is kept below 1 A", "The voltmeter is connected in parallel with the wire", "The p.d. across the wire is raised in equal steps"],
       a: 0,
-      e: "Heating increases the thermal vibration amplitude of positive lattice ions, obstructing drifting electrons and raising resistance <strong>R</strong>.",
-      src: "JAMB-style"
+      e: "Current is proportional to p.d. only while the wire's <strong>temperature (and physical state) stays constant</strong>; once it warms, its resistance rises and V ÷ I is no longer constant. There is no fixed 1 A rule, and meter placement is a wiring rule, not a condition of the law."
     },
     {
-      q: "A constantan wire of resistance <strong>8.0 Ω</strong> is connected across a steady p.d. of <strong>12.0 V</strong> for <strong>2.5 minutes</strong>. What total electric charge Q passes through the wire?",
-      o: ["3.75 C", "18.0 C", "225 C", "1440 C"],
+      q: "Tobe tests a small filament lamp and records (0.10 A, 0.20 V), (0.20 A, 0.60 V) and (0.30 A, 1.35 V). What do these readings show?",
+      o: ["The lamp has a constant resistance of 2.0 Ω, so it is ohmic", "The lamp's resistance falls as it heats up, so it is non-ohmic", "The lamp's resistance rises as the filament heats up, so it is non-ohmic", "The lamp obeys Ohm's law, because V rises whenever I rises"],
       a: 2,
-      e: "Current <strong>I = V ÷ R = 12.0 ÷ 8.0 = 1.5 A</strong>. Convert time to seconds: <strong>t = 2.5 × 60 = 150 s</strong>. Charge <strong>Q = It = 1.5 × 150 = 225 C</strong>.",
-      src: "WAEC-style"
+      e: "Work out V ÷ I: 2.0 Ω, 3.0 Ω, 4.5 Ω. The ratio is not constant and <strong>grows with the current (and temperature)</strong>, which is non-ohmic. Falling resistance with temperature describes a thermistor, not a metal filament."
     },
     {
-      q: "Wire X and Wire Y are made of the same alloy. Wire Y has <strong>twice the length</strong> and <strong>twice the diameter</strong> of Wire X. If the resistance of Wire X is <strong>12.0 Ω</strong>, what is the resistance of Wire Y?",
-      o: ["6.0 Ω", "12.0 Ω", "24.0 Ω", "3.0 Ω"],
+      q: "In the sort game, which of these would give a straight-line V–I graph through the origin?",
+      o: ["A constantan resistance wire kept at room temperature", "A semiconductor diode", "A thermistor", "Salty water between two copper plates"],
       a: 0,
-      e: "Since <strong>R = 4ρL ÷ (πd²) ∝ L ÷ d²</strong>, doubling L multiplies R by 2 while doubling d divides R by 2² = 4: <strong>R<sub>Y</sub> = 12.0 × (2 ÷ 4) = 6.0 Ω</strong>.",
-      src: "JAMB-style"
+      e: "Constantan is an alloy whose resistance hardly changes, so at a steady temperature V ÷ I is constant and the graph is a straight line through the origin (ohmic). A diode, a thermistor and an electrolyte all give curved V–I graphs."
     },
     {
-      q: "A uniform resistance wire of length <strong>2.0 m</strong> and cross-sectional area <strong>5.0 × 10<sup>−7</sup> m<sup>2</sup></strong> has a resistance of <strong>4.0 Ω</strong>. Calculate the resistivity ρ of the material.",
-      o: [
-        "1.0 × 10⁻⁶ Ω m",
-        "4.0 × 10⁻⁶ Ω m",
-        "1.6 × 10⁶ Ω m",
-        "2.5 × 10⁻⁷ Ω m"
-      ],
-      a: 0,
-      e: "Using <strong>ρ = RA ÷ L = (4.0 × 5.0 × 10⁻⁷) ÷ 2.0 = 1.0 × 10⁻⁶ Ω m</strong>.",
-      src: "NECO-style"
-    },
-    {
-      q: "In a WAEC Physics Paper 3 experiment to verify Ohm's law for a standard resistor R, how must the <strong>ammeter</strong> and <strong>voltmeter</strong> be connected?",
-      o: [
-        "Both ammeter and voltmeter in series with R",
-        "Both ammeter and voltmeter in parallel with R",
-        "Ammeter in series with R; voltmeter in parallel across R",
-        "Ammeter in parallel across R; voltmeter in series with R"
-      ],
-      a: 2,
-      e: "An <strong>ammeter</strong> (low resistance) is always connected in <strong>series</strong> to measure through-current, while a <strong>voltmeter</strong> (high resistance) is connected in <strong>parallel</strong> to measure potential difference across R.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "Why are candidates instructed to <strong>remove the plug key immediately after taking each reading</strong> during an electricity practical?",
-      o: [
-        "To prevent the resistance wire from heating up and changing its resistance, and to avoid running down the cell",
-        "To allow the voltmeter needle to swing faster",
-        "To convert alternating current into direct current",
-        "To increase the resistivity of the copper connecting leads"
-      ],
-      a: 0,
-      e: "Continuous current causes Joule heating (<strong>I²Rt</strong>), which raises the temperature and resistance of the wire and drains the accumulator/cell.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "During an Ohm's law practical, a student plots potential difference <strong>V (vertical axis)</strong> against current <strong>I (horizontal axis)</strong>. Two points on the line of best fit are <strong>(0.25 A, 0.55 V)</strong> and <strong>(1.15 A, 2.53 V)</strong>. What is the resistance R represented by the slope?",
-      o: ["0.45 Ω", "2.20 Ω", "1.98 Ω", "2.75 Ω"],
+      q: "Wires P and Q are made of the same alloy. Q is three times as long as P and has half its diameter. The resistance of P is 2.0 Ω. What is the resistance of Q?",
+      o: ["3.0 Ω", "24 Ω", "12 Ω", "1.5 Ω"],
       a: 1,
-      e: "Slope <strong>R = ΔV ÷ ΔI = (2.53 − 0.55) ÷ (1.15 − 0.25) = 1.98 ÷ 0.90 = 2.20 Ω</strong>.",
-      src: "WAEC Practical"
+      e: "R ∝ L/d². Tripling the length multiplies R by 3; halving the diameter makes the area one quarter, multiplying R by 2² = 4. So <strong>R_Q = 2.0 × 3 × 4 = 24 Ω</strong>."
     },
     {
-      q: "Which of the following devices is a <strong>non-ohmic conductor</strong>?",
-      o: [
-        "Constantan wire at constant temperature",
-        "Manganin standard resistor coil",
-        "Semiconductor p–n junction diode",
-        "Copper rod kept in a constant-temperature bath"
-      ],
+      q: "Chinedu fits a new copper battery lead 5.0 m long with a cross-sectional area of 2.5 mm². Copper has a resistivity of 1.7 × 10⁻⁸ Ω m. What is the resistance of the lead?",
+      o: ["1.4 × 10⁻³ Ω", "3.4 × 10⁻⁵ Ω", "8.5 × 10⁻¹⁵ Ω", "3.4 × 10⁻² Ω"],
+      a: 3,
+      e: "Convert the area: 2.5 mm² = 2.5 × 10⁻⁶ m². Then <strong>R = ρL/A = (1.7 × 10⁻⁸ × 5.0) ÷ (2.5 × 10⁻⁶) = 3.4 × 10⁻² Ω</strong> (0.034 Ω)."
+    },
+    {
+      q: "On Chinedu's V–I graph for a coil (V on the vertical axis), the line of best fit passes through the origin and through (0.30 A, 1.05 V) and (1.20 A, 4.20 V). What is the resistance of the coil?",
+      o: ["0.29 Ω", "4.0 Ω", "3.5 Ω", "3.15 Ω"],
       a: 2,
-      e: "A <strong>semiconductor diode</strong> has a non-linear I–V curve and conducts predominantly in one direction, so it does not obey Ohm's law.",
-      src: "JAMB-style"
+      e: "The slope of a V–I graph is the resistance: <strong>R = ΔV/ΔI = (4.20 − 1.05) ÷ (1.20 − 0.30) = 3.15 ÷ 0.90 = 3.5 Ω</strong>. The inverse slope, a bare voltage ratio and ΔV alone all give the wrong options."
     },
     {
-      q: "Two wires P and Q made of the same metal have equal lengths, but the diameter of P is <strong>three times</strong> the diameter of Q (d<sub>P</sub> = 3d<sub>Q</sub>). What is the ratio of their resistances <strong>R<sub>P</sub> : R<sub>Q</sub></strong>?",
-      o: ["1 : 9", "1 : 3", "3 : 1", "9 : 1"],
-      a: 0,
-      e: "For equal lengths of the same material, <strong>R ∝ 1 ÷ d²</strong>. Therefore <strong>R<sub>P</sub> ÷ R<sub>Q</sub> = (d<sub>Q</sub> ÷ d<sub>P</sub>)² = (1 ÷ 3)² = 1 : 9</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "What is the SI unit of <strong>electrical conductivity (σ)</strong>, the reciprocal of resistivity ρ?",
-      o: ["Ω m", "Ω⁻¹ m⁻¹ (siemens per metre)", "V A⁻¹", "J C⁻¹"],
+      q: "During the V–I practical, Tobe left the plug key closed all session and the constantan wire became warm. How did this most likely affect the slope of his V–I graph?",
+      o: ["Too low, because a warm wire has a lower resistance", "Too high, because the warm wire's resistance rose, so the later V readings were too high for their currents", "Unaffected, because Ohm's law holds at any temperature", "Too low, because the ammeter read too high when the wire was warm"],
       a: 1,
-      e: "Since resistivity ρ is measured in <strong>Ω m</strong>, electrical conductivity <strong>σ = 1 ÷ ρ</strong> is measured in <strong>Ω⁻¹ m⁻¹</strong> (or S m⁻¹).",
-      src: "NECO-style"
+      e: "Warming makes the ions vibrate more, the electrons collide more often and the resistance rises, so each later V reading is too big for its current and the slope (R) comes out <strong>too high</strong>. Lower resistance with temperature describes a thermistor, not a metal."
     },
     {
-      q: "Which of the following is an acceptable <strong>past-tense precaution</strong> in a WAEC Paper 3 Ohm's law practical?",
-      o: [
-        "I ensured tight and clean electrical connections at all terminals.",
-        "I will remove the key after every reading.",
-        "I closed the windows to prevent draught.",
-        "I was careful with the voltmeter."
-      ],
+      q: "Emeka has two copper jumper cables of the same length. The thin one is 0.50 mm across and the thick one 1.50 mm. Carrying the same current, what is the ratio of the heating power in the thin cable to that in the thick cable?",
+      o: ["9 : 1", "3 : 1", "1 : 9", "81 : 1"],
       a: 0,
-      e: "WAEC rewards specific electrical precautions written in the <strong>past tense</strong>, such as <em>'I ensured tight and clean electrical connections'</em> or <em>'I opened the key between readings so the wire did not heat up'</em>.",
-      src: "WAEC Practical"
+      e: "R ∝ 1/d², so R_thin : R_thick = (1.50 ÷ 0.50)² = 3² = 9. With the same current, P = I²R is in the same ratio as R, so <strong>9 : 1</strong>, and the thin cable runs hot."
+    },
+    {
+      q: "Nkechi's soldering iron is rated 60 W on the 240 V mains. What is the resistance of its element when it is working?",
+      o: ["4.0 Ω", "0.25 Ω", "14 400 Ω", "960 Ω"],
+      a: 3,
+      e: "From P = V²/R, <strong>R = V²/P = 240² ÷ 60 = 57 600 ÷ 60 = 960 Ω</strong>. (Check: I = P/V = 0.25 A, and R = V/I = 240 ÷ 0.25 = 960 Ω.)"
+    },
+    {
+      q: "Chinedu wants to halve the resistance of a length of constantan wire without changing the material. Which change does exactly that?",
+      o: ["Doubling the length of the wire", "Doubling the diameter of the wire", "Doubling the cross-sectional area of the wire", "Halving the diameter of the wire"],
+      a: 2,
+      e: "R = ρL/A is inversely proportional to the area, so <strong>doubling A halves R</strong>. Doubling the diameter quadruples A (R falls to a quarter), doubling the length doubles R, and halving the diameter quadruples R."
     }
   ];
+  window.L01.quiz = window.LESSON_QUIZ;
 })();

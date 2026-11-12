@@ -57,6 +57,10 @@
   --radius: 10px;
   --radius-lg: 14px;
   --shadow-lg: 0 24px 60px -30px rgba(11, 21, 48, 0.55);
+  /* ---- Explainer videos (explainer-video skill): world unit|safari|vegetation|fiesta|classic, motion pop|wipe, mascot on|off ---- */
+  --video-world: unit;
+  --video-motion: wipe;
+  --video-mascot: off;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 

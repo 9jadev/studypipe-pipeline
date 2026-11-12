@@ -1,387 +1,203 @@
-/* Lesson 01 · Choreographed StudyNarrator Script — Simple Harmonic Motion & the Simple Pendulum */
+/* Lesson 03 · StudyNarrator choreography: SHM as a Circle's Shadow (en-NG). 30 steps.
+   Spotlights: story people/props, bench parts lump, shadow, a-arrow, v-arrow, zoom traces and g line.
+   narrator.js has no built-in story/open/bench actions here; they are defined below. */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
 
   waits: {
+    donow: {
+      event: "kit:donow", timeout: 120000,
+      prompt: "Your turn! Answer the four Do Now cards, then mark yourself",
+      react: function () { return "Good. Now let us go back to Ridge Road and watch Dayo's crates."; }
+    },
     note: {
-      event: "kit:note",
-      prompt: "Type a prediction (or tap a seed question) and pin it to the wall",
-      react: function () {
-        return "Pinned! Now let's test your prediction with real physics.";
-      }
+      event: "kit:note", timeout: 120000,
+      prompt: "Your turn! Pin your idea: where is the carrier fastest, and where is its acceleration biggest?",
+      react: function () { return "Pinned. Let us sort what happens at the centre and what happens at the ends."; }
     },
     sort: {
-      event: "l1:sort-checked",
-      prompt: "Sort all 12 motions into the 3 bins, then tap Check my sorting",
+      event: "l3:sort", timeout: 180000,
+      prompt: "Your turn! Drag all ten cards into Centre, Ends or Nowhere, then tap Check",
       react: function (d) {
-        if (!d) return "Good effort!";
-        if (d.score === d.total) return "Twelve out of twelve! You spotted every true harmonic oscillator and didn't fall for the spinning fan trap.";
-        if (d.score >= 9) return "Nice work! " + d.score + " out of " + d.total + ". Check the notes below for the ones that slipped.";
-        return "You got " + d.score + " out of " + d.total + ". Read the explanations below — separating SHM from general periodic motion is a classic WAEC question!";
+        if (!d || d.total == null) return "No problem, you can try the sort again later.";
+        if (d.correct === d.total) return "Perfect! Ten out of ten.";
+        return "You got " + d.correct + " out of " + d.total + ". Read the notes, then let us test it on the wheel.";
       }
     },
     bench: {
-      event: "l1:bench-done",
-      prompt: "Time at least 4 lengths on the 3D pendulum bench",
-      react: function () {
-        return "Brilliant! You've timed your lengths for twenty oscillations each. Let's look at the numbers in the table.";
-      }
+      event: "l3:bench-done", timeout: 300000,
+      prompt: "Your turn! Press Step thirty degrees until you have recorded 0°, 30°, 60° and 90°",
+      react: function () { return "Well done. The shadow was fastest at zero degrees, and its acceleration was biggest at ninety degrees, where it stopped."; }
+    },
+    pin: {
+      event: "l3:pin", timeout: 120000,
+      prompt: "Your turn! Tap the phase pins and compare x, v and a",
+      filter: function (d) { return d && d.deg === 90; },
+      react: function () { return "At ninety degrees the shadow is at the end. The velocity is zero, but the acceleration is at its greatest, omega squared A."; }
+    },
+    zoom: {
+      event: "l3:zoom", timeout: 180000,
+      prompt: "Your turn! On the okada circle, drag A up until a max crosses the g line",
+      filter: function (d) { return d && d.mode === "okada" && d.lift; },
+      react: function (d) { return "There! At about six point two centimetres, a max passes g, and the crates would lift off."; }
     },
     bridge: {
-      event: "l1:vinegar-done",
-      prompt: "Run Steps 1, 2 and 3 to calibrate Clock B",
-      react: function () {
-        return "Case solved! Shortening the rod by 15.6 centimetres brought Clock B's period right back to 2.00 seconds.";
+      event: "l3:bridge", timeout: 180000,
+      prompt: "Your turn! Try A = 3 cm and A = 8 cm, answer the three questions, then give your verdict",
+      react: function (d) {
+        return d && d.correct
+          ? "Exactly. The crates fly at the top, where the speed is zero but the downward acceleration is greatest. And they need a bounce of at least six point two centimetres."
+          : "Not quite. Remember, only gravity pulls the crate down. It leaves at the top, once omega squared A is bigger than g.";
       }
     },
     quiz: {
-      event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB quiz questions",
+      event: "kit:quiz-done", timeout: 600000,
+      prompt: "Your turn! Answer the quiz questions, or press Next to skip",
       react: function (d) {
         if (!d) return "Quiz complete!";
-        if (d.score >= 10) return "Outstanding — " + d.score + " out of " + d.total + "! You are ready for any WAEC or JAMB question on Simple Harmonic Motion.";
-        if (d.score >= 7) return "Well done! " + d.score + " out of " + d.total + ". Review the explanations on the ones you missed.";
-        return "You scored " + d.score + " out of " + d.total + ". Replay the Make Sense and Vector Zoom chapters, then hit Retry quiz!";
+        if (d.score >= d.total - 2) return "Excellent, " + d.score + " out of " + d.total + "!";
+        return "You scored " + d.score + " out of " + d.total + ". Read the explanations on the ones you missed.";
       }
     }
   },
 
   actions: {
-    "pin:0": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(0); },
-    "pin:3": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(3); },
-    "pin:6": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(6); },
-    "bench:heavy": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("heavy"); },
-    "bench:std":   function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("std"); },
-    "clock:1": function () { if (window.L01 && window.L01.vt) window.L01.vt.step1(); },
-    "clock:2": function () { if (window.L01 && window.L01.vt) window.L01.vt.step2(); }
+    story: function (arg) { if (window.StudyScenes && StudyScenes.story) StudyScenes.story.beat(+arg); },
+    open: function (arg) { var el = document.querySelector(arg); if (el && el.tagName === "DETAILS") el.open = true; },
+    bench: function (arg) {
+      var b = window.StudyScenes && StudyScenes.bench; if (!b) return;
+      var p = String(arg).split(":");
+      if (p[0] === "reset") b.reset();
+      else if (p[0] === "spin") b.spin(true);
+      else if (p[0] === "angle") b.setAngle(+p[1]);
+      else if (p[0] === "graphs") b.graphs(p[1] !== "off");
+    },
+    zoom: function (arg) {
+      var z = window.StudyScenes && StudyScenes.zoom; if (!z) return;
+      var p = String(arg).split(":");
+      if (p[0] === "mode") z.setMode(p[1]);
+      else if (p[0] === "A") z.setA(+p[1], true);
+      else if (p[0] === "reset") z.reset();
+    },
+    pin: function (arg) { if (window.L03 && L03.showPin) L03.showPin(+arg, true); },
+    video: function () { var v = document.getElementById("lesson-video"); if (v && v.scrollIntoView) v.scrollIntoView({ block: "center" }); }
   },
 
   script: [
-    // ---------------- 0. WELCOME ----------------
     {
       title: "Welcome",
       steps: [
-        {
-          target: ".l-hero .display",
-          cue: "Lesson 3 · Paper 3 Practical",
-          sparkle: true,
-          say: "Welcome to Lesson 3! Today we step onto the WAEC Physics Paper 3 laboratory bench to master the Simple Pendulum Practical — from the split cork and effective length L to the central fiducial mark and twenty-swing timing."
-        },
-        {
-          target: ".l-hero .question",
-          cue: "Our practical question",
-          say: "Why do WAEC examiners insist on clamping the thread in a split cork, placing a chalk fiducial mark at the centre of the swing, and timing twenty oscillations instead of just one?"
-        },
-        {
-          target: "#objectives",
-          cue: "5 goals for Lesson 3",
-          say: "Today you will set up the apparatus in 3D, measure effective length L to the centre of the bob, test whether mass or small release angle changes the period, and record a complete WAEC composite table."
-        }
+        { target: ".l-hero .display", cue: "Lesson 3 · SHM as a circle's shadow", sparkle: true,
+          say: "Welcome to Lesson 3 of simple harmonic motion. Today we find out exactly when the crates leave Dayo's carrier, using the shadow of a turning wheel." },
+        { target: ".l-hero .question", cue: "Our guiding question",
+          say: "Here is our question. When exactly do the crates leave the carrier? Is it where the bike moves fastest, or somewhere else?" }
       ]
     },
-
-    // ---------------- 1. DO NOW ----------------
     {
       title: "Do Now",
       steps: [
-        {
-          target: "#donow-list",
-          cue: "Retrieval from Lessons 1 & 2",
-          say: "Start with these four spaced-retrieval questions from Lessons 1 and 2 on maximum speed, maximum acceleration, and instantaneous velocity. Flip each card once you have your answer."
-        }
+        { target: "#donow-list", cue: "Four quick cards", wait: "donow",
+          say: "Start with four Do Now cards on circular motion, the SHM condition, omega and radians. Answer each in your head, reveal it, and mark yourself." }
       ]
     },
-
-    // ---------------- 2. THE STORY ----------------
     {
-      title: "The story",
+      title: "The Story",
       steps: [
-        {
-          target: "#story-stage",
-          action: "story:0",
-          cue: "Yaba Market, Lagos",
-          say: "Let's head to Yaba Market in Lagos. Kunle, a school prefect, has brought back a pendulum wall clock he bought from Mama Ngozi. It loses eight minutes every single hour!"
-        },
-        {
-          target: { scene: "story", part: "cust2" },
-          action: "story:1",
-          cue: "Mrs Adeyemi's theory",
-          say: "Mrs Adeyemi is convinced the brass bob is too light. She says tying a heavier lead weight onto the bob will make gravity pull it faster."
-        },
-        {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:2",
-          cue: "Or the starting angle?",
-          say: "Mama Ngozi wonders if Kunle didn't pull the pendulum out to a wide enough angle when starting it."
-        },
-        {
-          target: { scene: "story", part: "clockB" },
-          action: "story:3",
-          cue: "Compare Clock A and Clock B",
-          say: "Look closely at Clock A and Clock B on the table. Both have identical brass bobs, yet Clock B swings noticeably slower than Clock A."
-        },
-        {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:4",
-          cue: "Three suspects",
-          say: "So we have three suspects: the mass of the bob, the starting angle, or the length of the pendulum rod. Which one really controls the time of one swing?"
-        },
-        {
-          target: { scene: "story", part: "amaka" },
-          action: "story:5",
-          cue: "To the physics lab!",
-          say: "Across town at the University of Lagos Metrology Lab, Dr Amaka has the answer: don't guess — put a pendulum on the retort stand, time twenty swings, and let the numbers speak!"
-        }
+        { target: { scene: "story", part: "dayo" }, action: "story:0", cue: "Dayo on Ridge Road",
+          say: "On Ridge Road near Ogbomoso, Dayo rides over the concrete ridges at a moderate pace. The carrier pumps up and down. The crates rattle, but today they stay on." },
+        { target: { scene: "story", part: "zainab" }, action: "story:1", cue: "Zainab's observation",
+          say: "Zainab has been watching closely. The crates stay on while the carrier rises, she says. They only jump at the top, just as it starts down." },
+        { target: { scene: "story", part: "tunde" }, action: "story:2", cue: "Tunde's idea",
+          say: "Tunde disagrees. They jump because that is where the bike is moving fastest. Hold on to that idea. We will test it." },
+        { target: { scene: "story", part: "mud" }, action: "story:3", cue: "The mud's shadow",
+          say: "Mrs Okafor puts the okada on its centre stand and spins the rear wheel. A lump of red mud goes round, and the midday sun throws its shadow on the ground. Watch the shadow slide to and fro, exactly like the bounce." },
+        { target: { scene: "story", part: "okafor" }, action: "story:4", cue: "The top of the bounce",
+          say: "At the top of the bounce, she says, the carrier is barely moving, but it is accelerating downwards harder than anywhere else. If that acceleration beats g, the carrier falls away faster than the crate can." }
       ]
     },
-
-    // ---------------- 3. WONDER WALL ----------------
     {
       title: "Wonder Wall",
       steps: [
-        {
-          target: "#wall-wonder",
-          cue: "Pin your prediction",
-          wait: "note",
-          say: "Before we touch the lab apparatus, what is your prediction? Does mass, angle, or length control the period of a pendulum? Type your prediction and pin it to the Wonder Wall."
-        }
+        { target: "#wall-wonder", cue: "Pin your idea", wait: "note",
+          say: "Where in the bounce is the carrier moving fastest, and where is its acceleration biggest? Same place, or different? Pin your idea on the Wonder Wall." }
       ]
     },
-
-    // ---------------- 4. MOTION SORT ----------------
     {
-      title: "Motion sort",
+      title: "Sort Game",
       steps: [
-        {
-          target: "#kitchen-sort",
-          cue: "SHM vs Periodic vs Non-periodic",
-          wait: "sort",
-          say: "Activity 1! Not every repeating motion is Simple Harmonic. To be SHM, a restoring force must pull the object back towards a central equilibrium position in proportion to its displacement. Sort all twelve cards into the three bins, then tap Check my sorting."
-        }
+        { target: "#shm-sort", cue: "Centre, ends or nowhere?", wait: "sort",
+          say: "Sort ten statements. Does each one happen at the centre, at the ends, or nowhere in simple harmonic motion? Drag each card, then tap Check." }
       ]
     },
-
-    // ---------------- 5. 3D PRACTICAL ----------------
     {
-      title: "3D practical",
+      title: "Virtual Lab",
       steps: [
-        {
-          target: "#safety-box",
-          cue: "WAEC setup rules",
-          say: "Now step up to the 3D Pendulum Lab! Pay close attention to this examiner rule: always measure length L from the bottom of the split cork right to the centre of gravity of the bob."
-        },
-        {
-          target: "#m1",
-          action: "method:0",
-          cue: "Step 1 · Measure L",
-          say: "Step 1: Set the length L along the vertical metre rule, keeping your eye perpendicular to the scale to avoid parallax error."
-        },
-        {
-          target: "#m2",
-          action: "method:1",
-          cue: "Step 2 · Fiducial mark at x = 0",
-          say: "Step 2: Place the green fiducial reference pointer at the equilibrium centre. Why the centre? Because the bob flashes past the centre at maximum speed, making the crossing instant super sharp!"
-        },
-        {
-          target: "#m3",
-          action: "method:2",
-          cue: "Step 3 · Small angle (≤ 10°)",
-          say: "Step 3: Displace the bob through a small angle of ten degrees or less so it swings smoothly in a single vertical plane without conical wobble."
-        },
-        {
-          target: "#m4",
-          action: "method:3",
-          cue: "Step 4 · Time 20 oscillations",
-          say: "Step 4: Time twenty complete to-and-fro oscillations and divide by twenty. That divides your stopwatch reaction-time error by twenty!"
-        },
-        {
-          target: { scene: "bench", part: "clamp" },
-          cue: "Split cork suspension",
-          say: "Here on the 3D bench is the split cork clamp holding the top of the thread firmly."
-        },
-        {
-          target: { scene: "bench", part: "fiducial" },
-          cue: "Centre reference pointer",
-          say: "Down below is the green fiducial pointer at x equals zero, and the vertical metre rule on the left."
-        },
-        {
-          target: { scene: "bench", part: "bob" },
-          action: "bench:test:0",
-          cue: "Trial A · L = 0.40 m",
-          say: "Watch me time Trial A at length 0.40 metres. Twenty complete swings take 25.38 seconds, giving a period T of 1.269 seconds!"
-        },
-        {
-          target: "#bench-cond",
-          action: "bench:heavy",
-          cue: "Test the 100 g heavy bob!",
-          say: "What if we switch to the 100 gram heavy bob, or the 10 degree angle? Try them as you time the remaining lengths — you'll see the period stays identical!"
-        },
-        {
-          target: "#bench-stage",
-          action: "bench:std",
-          cue: "Your turn on the bench!",
-          wait: "bench",
-          say: "Now it's your turn! Tap the trial buttons to time at least four different lengths on the 3D bench."
-        },
-        {
-          target: "#results-table",
-          cue: "Record your WAEC table",
-          say: "Fill in your recorded values of t, T, and T squared in the WAEC results table here, and click Check my table."
-        },
-        {
-          target: "#expected",
-          action: "open:#expected",
-          cue: "T² is proportional to L",
-          say: "Look at the completed table and slope calculation: when length L doubles from 0.40 to 0.80 metres, T squared doubles from 1.61 to 3.22! Multiplying the slope by 4 pi squared gives g equals 9.81 metres per second squared."
-        }
+        { target: "#method-cards", action: "bench:reset", cue: "Four method cards",
+          say: "Now the wheel and shadow bench. The wheel has radius A equal to zero point three zero metres and period two seconds, so omega is pi radians per second." },
+        { target: { scene: "bench", part: "shadow" }, action: "bench:spin", cue: "The lump and its shadow",
+          say: "The mud lump goes round at a steady rate. Now look only at its shadow on the ground. It slides fast through the middle, slows down, stops at each end, and comes back. That is simple harmonic motion." },
+        { target: { scene: "bench", part: "a-arrow" }, action: "bench:angle:60", cue: "a always points to O",
+          say: "The amber arrow is the acceleration. Wherever the shadow is, it points back to the centre O. That is the minus sign in a equals minus omega squared x." },
+        { target: "#bench-stage", action: "bench:angle:0", cue: "Your turn", wait: "bench",
+          say: "Your turn. Press Step thirty degrees to pause at zero, thirty, sixty and ninety degrees. Each one goes into the table. I will carry on when all four are in." },
+        { target: { scene: "bench", part: "trace-x" }, action: "bench:graphs:on", cue: "Three time-graphs",
+          say: "Now the graphs. x against t is a sine curve. v against t is a cosine, a quarter cycle ahead, peaking where x is zero. And a against t is the upside-down copy of x." },
+        { target: "#expected", action: "open:#expected", cue: "Expected results",
+          say: "Compare your table with the expected values. Notice that a over x is minus nine point eight seven at every angle. That is minus omega squared. Then try the five locked analysis questions." }
       ]
     },
-
-    // ---------------- 6. SHM LAWS ----------------
     {
-      title: "SHM laws",
+      title: "Make Sense",
       steps: [
-        {
-          target: "#eq-shm",
-          cue: "The heart of SHM",
-          sparkle: true,
-          say: "Now let's make sense of the theory. Every simple harmonic motion obeys one master equation: a equals minus omega squared x. Acceleration is proportional to displacement x, and the minus sign shows it always points back towards the equilibrium centre."
-        },
-        {
-          target: ["#eq-omega", "#eq-vel", "#eq-pend"],
-          cue: "Your formula toolkit",
-          say: "Here are the equations you'll use in calculations: omega equals 2 pi f, velocity v equals omega root A squared minus x squared, and for a simple pendulum, T equals 2 pi root L over g."
-        },
-        {
-          target: "#all-alkalis",
-          cue: "Classic exam distinction",
-          sparkle: true,
-          say: "Remember this golden rule: all simple harmonic motions are periodic, but not all periodic motions are simple harmonic!"
-        },
-        {
-          target: "#props-table",
-          cue: "Centre vs Extreme Ends",
-          say: "Study this table carefully. At the equilibrium centre x equals zero, speed and kinetic energy are maximum while acceleration is zero. At the extreme ends, speed is zero while acceleration and potential energy are maximum!"
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:0",
-          cue: "Left extreme (−A)",
-          say: "Tap along the Swing Position Explorer: at the left extreme minus A, the bob stops momentarily, so speed is zero, but restoring acceleration is at its peak pulling rightward."
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:3",
-          cue: "Equilibrium centre (x = 0)",
-          say: "Right at the centre x equals zero, potential energy has turned 100 percent into kinetic energy — speed hits maximum and acceleration drops to zero!"
-        }
+        { target: "#movement-break", cue: "Movement break",
+          say: "Forty-five minutes! Time for the shadow dance. One person walks a circle; a partner on the wall line copies only their side-to-side position. Then sit down." },
+        { target: ["#lesson-video", "#concepts h2"], action: "video", cue: "Explainer video",
+          say: "If your lesson has the explainer video, watch it now. It shows the circle's shadow, where v and a peak, and the lift-off rule, step by step." },
+        { target: "#ref-circle", cue: "The reference circle",
+          say: "Here is the big idea. A point going round a circle of radius A at steady omega casts a shadow on a diameter that moves in simple harmonic motion, with amplitude A and the same omega. So x equals A sine omega t." },
+        { target: "#eq-xva", cue: "The four equations",
+          say: "Learn these. v equals omega root A squared minus x squared, so v max is omega A at the centre. a equals minus omega squared x, so a max is omega squared A at the ends. Always use radians for omega t." },
+        { target: "#lift-rule", cue: "The lift-off rule", sparkle: true,
+          say: "Now the lift-off rule. The carrier can push the crate up, but it cannot pull it down. Only gravity pulls the crate down. So if the carrier accelerates downwards faster than g, at the top of the bounce, the crate is left behind." },
+        { target: "#pos-explorer", action: "pin:1", cue: "Position Explorer", wait: "pin",
+          say: "Your turn. Tap the phase pins and compare x, v and a. Find the pin where the speed is zero and the acceleration is biggest." }
       ]
     },
-
-    // ---------------- 7. VECTOR ZOOM ----------------
     {
-      title: "Vector zoom",
+      title: "Zoom",
       steps: [
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:mix",
-          cue: "Teal = v · Amber = a",
-          say: "Zoom in on the oscillating bob in 3D! The teal arrow shows velocity v, and the amber arrow shows restoring acceleration a."
-        },
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:acid",
-          cue: "Frozen at x = 0",
-          say: "Let's freeze the bob right at the equilibrium centre: notice how the teal velocity arrow is at full length, while the amber acceleration arrow has completely vanished!"
-        },
-        {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:base",
-          cue: "Frozen at x = +A",
-          say: "Now freeze at the right extreme plus A: velocity is zero, but the amber restoring acceleration arrow is at maximum strength, pulling the bob back to the left."
-        },
-        {
-          target: { scene: "zoom", part: "bars" },
-          action: "zoom:mode:mix",
-          cue: "Energy conservation",
-          say: "And watch the 3D energy pillars on the right: kinetic energy and potential energy trade places twice every cycle, while total mechanical energy stays constant unless air damping is switched on."
-        }
+        { target: { scene: "zoom", part: "cursor" }, action: "zoom:mode:lab", cue: "Circle and traces",
+          say: "In the zoom, the reference circle is on the left and the three traces on the right. The cursor links them, so you can see the shadow, its velocity and its acceleration at the same instant." },
+        { target: { scene: "zoom", part: "g-line" }, action: "zoom:mode:okada", cue: "The okada and the g line",
+          say: "Switch to the okada numbers. Omega is about twelve point six radians per second. The dashed line on the acceleration trace is g, nine point eight metres per second squared." },
+        { target: "#zoom-stage", cue: "Your turn", wait: "zoom",
+          say: "Your turn. Drag A up from two centimetres. Watch the acceleration peak grow until it crosses the g line." }
       ]
     },
-
-    // ---------------- 8. WORKED EXAMPLES ----------------
     {
-      title: "Worked examples",
+      title: "Worked Examples",
       steps: [
-        {
-          target: "#ex1",
-          cue: "Example 1 · From 20 swings to L",
-          say: "Walk through Worked Example 1: divide 36.0 seconds by 20 swings first to get T equals 1.80 seconds, then find frequency, omega, and length L."
-        },
-        {
-          target: "#ex2",
-          cue: "Example 2 · Speed at displacement x",
-          say: "Example 2 shows how to find maximum speed omega A, maximum acceleration omega squared A, and instantaneous speed at any displacement x."
-        },
-        {
-          target: "#ex3",
-          cue: "Example 3 · Slope of L vs T²",
-          say: "Example 3 is straight from WAEC Paper 3: find the slope delta L over delta T squared, then multiply by 4 pi squared to determine g."
-        },
-        {
-          target: "#ex4",
-          cue: "Example 4 · Quadrupling L",
-          say: "And Example 4 tackles JAMB's favourite scaling trap: because T is proportional to the square root of L, multiplying length by 4 doubles the period!"
-        }
+        { target: ["#ex1", "#ex2", "#ex3", "#ex4"], action: "zoom:A:3", cue: "Four worked examples",
+          say: "Four worked examples. Speed and acceleration at a point, displacement at a time with the calculator in radians, a gentle three centimetre bounce, and the threshold A equals g over omega squared, six point two centimetres." }
       ]
     },
-
-    // ---------------- 9. THE BIG IDEA ----------------
     {
-      title: "The big idea",
+      title: "Solving the Mystery",
       steps: [
-        {
-          target: ["#vt-a", "#vt-b"],
-          cue: "Clock A vs Clock B",
-          say: "Now let's return to Mama Ngozi's stall and fix Kunle's school clock! Clock A ticks at 2.00 seconds, while Clock B is dragging at 2.15 seconds."
-        },
-        {
-          target: "#vinegar-test",
-          action: "clock:1",
-          cue: "Step 1 · Heavy bob test",
-          say: "When we clip a heavy lead weight onto Clock B in Step 1, its period stays 2.15 seconds! Mrs Adeyemi's mass theory is busted."
-        },
-        {
-          target: "#vinegar-test",
-          cue: "Shorten Clock B's length!",
-          wait: "bridge",
-          say: "Click Step 2 and Step 3 to screw the regulating nut upward, shortening Clock B's effective length L to 0.994 metres."
-        },
-        {
-          target: "#big-idea",
-          cue: "The core principle",
-          sparkle: true,
-          say: "And there is the big idea of this entire topic: the period of a simple pendulum depends only on its effective length L and gravity g — never on its mass!"
-        }
+        { target: "#bridge-card", cue: "Do the crates fly?", wait: "bridge",
+          say: "Back to Tunde's claim. Try A equal to three centimetres and eight centimetres in the zoom, answer the three questions, and give your verdict." },
+        { target: "#big-idea", cue: "The big idea", sparkle: true,
+          say: "The big idea. In simple harmonic motion, speed peaks at the centre, omega A, and acceleration peaks at the ends, omega squared A. Something on Ridge Road must be pumping the bounce past six point two centimetres." }
       ]
     },
-
-    // ---------------- 10. QUIZ & REFLECT ----------------
     {
-      title: "Quiz & Reflect",
+      title: "Quiz & Reflection",
       steps: [
-        {
-          target: "#quiz",
-          cue: "12 exam-style questions",
-          wait: "quiz",
-          say: "Test yourself on these twelve WAEC, NECO, and JAMB questions. Pick your answers and read the instant feedback!"
-        },
-        {
-          target: "#reflect",
-          cue: "Rate your confidence (1–4)",
-          say: "Finally, rate yourself honestly from 1 to 4 on each learning goal, complete the two-mark Exit Ticket, and try the home pendulum investigation in the Assignment section. Well done today!"
-        }
+        { target: "#quiz-list", cue: "Quiz time", wait: "quiz",
+          say: "Now the quiz. Twelve exam-style questions, plus two review questions from earlier lessons." },
+        { target: "#assignment", cue: "Assignment",
+          say: "Finish with the exit ticket and the blank page recall. For homework, do the bottle cap shadow investigation and the thirty mark paper. Each model answer unlocks after you try. Well done today!" }
       ]
     }
   ]

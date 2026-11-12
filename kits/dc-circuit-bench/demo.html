@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit demo: dc-circuit-bench</title>
+<style>
+  html,body{margin:0;background:#0e1620;color:#e8eef5;font:13px/1.35 system-ui,sans-serif}
+  #wrap{display:flex;flex-direction:column;min-height:100vh}
+  #stage{position:relative;width:100%;height:56vh;min-height:300px}
+  canvas{display:block;width:100%;height:100%;touch-action:none}
+  #modes,#ui{padding:6px 8px;display:flex;flex-wrap:wrap;gap:6px}
+  #modes{padding-bottom:0}
+  button{min-height:40px;padding:0 11px;border-radius:20px;border:0;background:#1f5e8c;color:#fff;font:600 12.5px system-ui;cursor:pointer}
+  button.on{background:#b4561b}
+  button.alt{background:#35505f}
+  button.alt.on{background:#b4561b}
+  label.sl{display:flex;align-items:center;gap:6px;width:100%;font-size:12px}
+  label.sl input{flex:1}
+  label.sl b{min-width:70px;text-align:right;font:12px ui-monospace,monospace}
+  #readout{padding:2px 8px 12px}
+  #line{padding:4px 0 6px;font:12px ui-monospace,monospace;white-space:pre-wrap}
+  table{border-collapse:collapse;width:100%;font:12px ui-monospace,monospace}
+  th,td{border:1px solid rgba(255,255,255,.18);padding:2px 4px;text-align:right}
+  th{background:rgba(255,255,255,.08)}
+  #ev{font:11px ui-monospace,monospace;opacity:.7;padding-top:4px}
+</style>
+</head><body>
+<div id="wrap">
+  <div id="stage"><canvas id="c"></canvas></div>
+  <div id="modes"></div>
+  <div id="ui"></div>
+  <div id="readout"><div id="line"></div><table id="tbl"></table><div id="ev"></div></div>
+</div>
+<script src="../_vendor/three-bundle.min.js"></script>
+<script src="kit.js"></script>
+<script>
+(function () {
+  var host = document.getElementById("stage"), cv = document.getElementById("c");
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  var scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1620);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.05, 80);
+  var controls = new THREE.OrbitControls(camera, cv); controls.enablePan = false; controls.enableDamping = true;
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 1.05));
+  var dl = new THREE.DirectionalLight(0xffffff, 1.3); dl.position.set(2, 5, 4); scene.add(dl);
+  var fill = new THREE.DirectionalLight(0xbcd6ff, 0.45); fill.position.set(-3, 2, 2); scene.add(fill);
+
+  var evLog = [];
+  var kit = DcCircuitBench.create({ mode: "ohms-law", onEvent: function (n, d) { evLog.unshift(n); evLog.length = Math.min(evLog.length, 6); document.getElementById("ev").textContent = "events: " + evLog.join(" · "); } });
+  scene.add(kit);
+
+  /* camera framing, tweened */
+  var view = { target: new THREE.Vector3(0, 0.25, 0.2), dist: 9, pitch: 0.8 }, goal = null;
+  function fitDist(d) { var a = camera.aspect; return d * Math.max(1, Math.min(2.0, 1.15 / a)); }
+  function applyView(v) {
+    var d = fitDist(v.dist);
+    camera.position.set(v.target.x, v.target.y + Math.sin(v.pitch) * d, v.target.z + Math.cos(v.pitch) * d);
+    controls.target.copy(v.target); camera.lookAt(v.target);
+  }
+  function gotoView(name, instant) {
+    var v = kit.viewFor(name); goal = { target: new THREE.Vector3().fromArray(v.target), dist: v.dist, pitch: v.pitch };
+    if (instant) { view.target.copy(goal.target); view.dist = goal.dist; view.pitch = goal.pitch; applyView(view); goal = null; }
+  }
+  function resize() { var w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); applyView(view); }
+  new ResizeObserver(resize).observe(host); resize();
+
+  /* UI */
+  var ui = document.getElementById("ui"), modes = document.getElementById("modes");
+  function btn(parent, label, fn, cls) { var b = document.createElement("button"); b.textContent = label; if (cls) b.className = cls; b.onclick = function () { fn(b); }; parent.appendChild(b); return b; }
+  function slider(label, min, max, step, val, fmt, fn) {
+    var l = document.createElement("label"); l.className = "sl"; l.innerHTML = "<span>" + label + "</span>";
+    var i = document.createElement("input"); i.type = "range"; i.min = min; i.max = max; i.step = step; i.value = val;
+    var b = document.createElement("b"); b.textContent = fmt(+val);
+    i.oninput = function () { b.textContent = fmt(+i.value); fn(+i.value); };
+    l.appendChild(i); l.appendChild(b); ui.appendChild(l); return i;
+  }
+  function choice(opts, cur, fn) { var bs = []; opts.forEach(function (o) { var b = btn(ui, o[1], function () { bs.forEach(function (x) { x.classList.remove("on"); }); b.classList.add("on"); fn(o[0]); }, "alt"); if (o[0] === cur) b.classList.add("on"); bs.push(b); }); }
+  function toggle(label, on, fn) { var b = btn(ui, label, function () { var v = !b.classList.contains("on"); b.classList.toggle("on", v); fn(v); }, "alt"); if (on) b.classList.add("on"); }
+  function err(name, label) { var e = kit.reading().errors; toggle("Error: " + label, !!e[name], function (v) { var o = {}; o[name] = v; kit.setState({ errors: o }); }); }
+
+  var PANELS = {
+    "ohms-law": function (c) {
+      choice([["constantan", "Constantan"], ["copper", "Copper"], ["nichrome", "Nichrome"], ["lamp", "Lamp"]], c.comp, function (v) { kit.setState({ comp: v }); });
+      choice([[0.30, "d 0.30"], [0.60, "d 0.60"], [1.20, "d 1.20 mm"]], c.d, function (v) { kit.setState({ d: v }); });
+      slider("L (cm)", 20, 100, 20, c.L, function (v) { return v + " cm"; }, function (v) { kit.setState({ L: v }); });
+      slider("Rheostat", 0.5, 30, 0.1, c.Rh, function (v) { return v.toFixed(1) + " Ω"; }, function (v) { kit.setState({ Rh: v }); });
+      toggle("Key closed", c.key, function (v) { kit.setState({ key: v }); });
+      btn(ui, "Take reading", function () { kit.takeReading(); });
+      err("warming", "warm wire"); err("contact", "contact"); err("voltmeter", "low-R voltmeter");
+      return ["cell", "key", "ammeter", "voltmeter", "rheostat", "wire", "lamp"];
+    },
+    "internal-resistance": function (c) {
+      choice([["lesson-cell", "E 6.0 V, r 1.5 Ω"], ["keke", "Keke 12 V, r 1.2 Ω"]], c.E === 12 ? "keke" : "lesson-cell", function (v) { kit.setState({ preset: v }); render(); });
+      slider("Load R", 0.5, 30, 0.1, c.R, function (v) { return v.toFixed(1) + " Ω"; }, function (v) { kit.setState({ R: v }); });
+      toggle("Key closed", c.key, function (v) { kit.setState({ key: v }); });
+      btn(ui, "Take reading", function () { kit.takeReading(); });
+      err("voltmeter", "finite-R voltmeter"); err("warming", "worked cell"); err("contact", "terminal contact");
+      return ["cell", "key", "ammeter", "voltmeter", "rheostat"];
+    },
+    "network-cells": function (c) {
+      choice([["single", "1 cell"], ["series", "Cells series"], ["parallel", "Cells parallel"]], c.cells, function (v) { kit.setState({ cells: v }); });
+      choice([["load", "Load R"], ["series", "R series"], ["parallel", "R parallel"], ["mixed", "Mixed"]], c.net, function (v) { kit.setState({ net: v }); });
+      slider("Load R", 0.1, 4, 0.1, c.R, function (v) { return v.toFixed(1) + " Ω"; }, function (v) { kit.setState({ R: v }); });
+      btn(ui, "Measure", function () { kit.takeReading(); });
+      err("warming", "warm cells"); err("ammeter", "ammeter R"); err("contact", "loose R₂");
+      return ["cellA", "R1", "node", "ammeter"];
+    },
+    "galvanometer": function (c) {
+      choice([["ammeter", "Ammeter (shunt)"], ["voltmeter", "Voltmeter (multiplier)"], ["bare", "Bare coil"]], c.conv, function (v) { kit.setState({ conv: v }); render(); });
+      if (c.conv === "ammeter") slider("Range I", 1, 5, 1, c.rangeA, function (v) { return v + " A"; }, function (v) { kit.setState({ rangeA: v }); });
+      if (c.conv === "voltmeter") slider("Range V", 5, 150, 5, c.rangeV, function (v) { return v + " V"; }, function (v) { kit.setState({ rangeV: v }); });
+      var rg = c.conv === "ammeter" ? c.rangeA : c.conv === "voltmeter" ? c.rangeV : c.Ig;
+      slider("Test", 0, 1.1, 0.01, 0.8, function (v) { return Math.round(v * 100) + " % FSD"; }, function (v) { var R = kit.reading(); kit.setState({ test: v * (R.conv === "ammeter" ? R.controls.rangeA : R.conv === "voltmeter" ? R.controls.rangeV : R.controls.Ig) }); });
+      btn(ui, "Build & test", function () { kit.build(); });
+      err("contact", "shunt contact"); err("warming", "warm shunt"); err("forgotRg", "R_total as R_m"); void rg;
+      return ["coil", "pointer", "shunt", "multiplier", "scale"];
+    },
+    "bridge-potentiometer": function (c) {
+      choice([["bridge", "Metre bridge"], ["potentiometer", "Potentiometer"]], c.sub, function (v) { kit.setState({ sub: v }); render(); });
+      if (c.sub === "bridge") {
+        slider("Standard R", 1, 20, 0.5, c.Rx, function (v) { return v.toFixed(1) + " Ω"; }, function (v) { kit.setState({ Rx: v }); });
+        slider("Unknown X", 1, 20, 0.5, c.Ru, function (v) { return v.toFixed(1) + " Ω"; }, function (v) { kit.setState({ Ru: v }); });
+        err("warming", "warm coil"); err("ends", "end corrections");
+      } else {
+        choice([["keke-pot", "Keke 12 V / 24 V driver"], ["school-pot", "Dry cell / 2 V driver"]], c.cell === "battery" ? "keke-pot" : "school-pot", function (v) { kit.setState({ preset: v }); render(); });
+        toggle("K2 (R across cell)", c.k2, function (v) { kit.setState({ k2: v }); });
+        err("driverFall", "driver falls");
+      }
+      slider("Jockey", 0, 100, 0.1, c.l, function (v) { return v.toFixed(1) + " cm"; }, function (v) { kit.setState({ l: v }); });
+      btn(ui, "Find balance", function () { kit.findBalance(); });
+      return ["slidewire", "jockey", "galvanometer", c.sub === "bridge" ? "standard" : "testcell"];
+    }
+  };
+  var hl = null;
+  function render() {
+    ui.innerHTML = ""; var r = kit.reading(), views = PANELS[r.mode](r.controls);
+    btn(ui, "Reset", function () { kit.reset(); render(); }, "alt");
+    btn(ui, "View all", function () { kit.highlight(null); gotoView("all"); }, "alt");
+    views.forEach(function (v) { btn(ui, "View " + v, function () { kit.highlight(v); gotoView(v); setTimeout(function () { kit.highlight(null); }, 1600); }, "alt"); });
+    toggle("Labels", true, function (v) { kit.setState({ labels: v }); });
+  }
+  var MB = {};
+  DcCircuitBench.modes.forEach(function (m) {
+    MB[m] = btn(modes, m, function () { kit.setState({ mode: m }); Object.keys(MB).forEach(function (k) { MB[k].classList.toggle("on", k === m); }); render(); gotoView("all", true); });
+  });
+  MB["ohms-law"].classList.add("on"); render(); gotoView("all", true);
+
+  /* tap a part to highlight it */
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2(), down = null;
+  cv.addEventListener("pointerdown", function (e) { down = [e.clientX, e.clientY]; });
+  cv.addEventListener("pointerup", function (e) {
+    if (!down || Math.abs(e.clientX - down[0]) + Math.abs(e.clientY - down[1]) > 6) return;
+    var rc = cv.getBoundingClientRect(); ptr.set(((e.clientX - rc.left) / rc.width) * 2 - 1, -((e.clientY - rc.top) / rc.height) * 2 + 1);
+    ray.setFromCamera(ptr, camera); var id = kit.pickPart(ray);
+    if (id) { kit.highlight(id); setTimeout(function () { kit.highlight(null); }, 800); }
+  });
+
+  /* live readout (every number from kit.reading(), i.e. the model) */
+  var line = document.getElementById("line"), tbl = document.getElementById("tbl"), lastKey = "";
+  function f2(x) { return x == null || !isFinite(x) ? "–" : (+x).toFixed(2); }
+  function paint() {
+    var r = kit.reading(), s = "";
+    if (r.mode === "ohms-law") s = (r.comp === "lamp" ? "lamp " + Math.round(r.lampT) + " K" : r.material + " L " + r.L_cm + " cm d " + r.d_mm + " mm R=ρL/A " + f2(r.R_wire) + " Ω") + "\nI " + f2(r.I) + " A  V " + f2(r.V) + " V  V/I " + f2(r.ratio) + " Ω";
+    else if (r.mode === "internal-resistance") s = "E " + f2(r.E) + " V  r " + f2(r.r) + " Ω  R " + f2(r.R) + " Ω  key " + (r.key ? "closed" : "open") + "\nI " + f2(r.I) + " A  V " + f2(r.V) + " V  lost volts Ir " + f2(r.lost) + " V";
+    else if (r.mode === "network-cells") s = "E_t " + f2(r.E_t) + " V  r_t " + f2(r.r_t) + " Ω  R_eq " + f2(r.R_eq) + " Ω\nI " + f2(r.I) + " A  I1/I2/I3 " + f2(r.I1) + "/" + f2(r.I2) + "/" + f2(r.I3) + "  P " + f2(r.P) + " W  η " + (r.eta_pct || 0).toFixed(1) + " %";
+    else if (r.mode === "galvanometer") s = "I_g " + (r.Ig * 1000) + " mA  R_g " + r.Rg + " Ω  " + (r.R_s != null ? "R_s " + DcCircuitBench.model.sf3(r.R_s) + " Ω" : r.R_m != null ? "R_m " + DcCircuitBench.model.sf3(r.R_m) + " Ω" : "bare") + "\ncoil " + (r.I_coil * 1000).toFixed(2) + " mA  deflection " + Math.round(r.deflection * 100) + " %  reads " + (+r.indicated).toFixed(3);
+    else s = (r.sub === "bridge" ? "bridge  balance at " + r.l_balance.toFixed(1) + " cm  X = " + f2(r.deduced_at_balance) + " Ω" : "potentiometer  k " + r.k.toFixed(4) + " V/cm  balance " + (r.l_balance || 0).toFixed(1) + " cm  E " + f2(r.deduced) + " V") + "\njockey " + r.l.toFixed(1) + " cm  I_G " + (r.I_G * 1e6).toFixed(0) + " µA";
+    var key = s + r.rows.length; if (key === lastKey) return; lastKey = key; line.textContent = s;
+    if (!r.rows.length) { tbl.innerHTML = ""; return; }
+    var cols = Object.keys(r.rows[0]).filter(function (k) { return k !== "cells" && k !== "net"; });
+    tbl.innerHTML = "<tr>" + cols.map(function (c) { return "<th>" + c + "</th>"; }).join("") + "</tr>" + r.rows.map(function (row) { return "<tr>" + cols.map(function (c) { return "<td>" + (row[c] == null ? "–" : row[c]) + "</td>"; }).join("") + "</tr>"; }).join("");
+  }
+
+  var clock = new THREE.Clock();
+  (function loop() {
+    requestAnimationFrame(loop);
+    var dt = clock.getDelta();
+    kit.update(dt, clock.elapsedTime);
+    if (goal) {
+      var k = Math.min(1, dt * 4);
+      view.target.lerp(goal.target, k); view.dist += (goal.dist - view.dist) * k; view.pitch += (goal.pitch - view.pitch) * k;
+      applyView(view);
+      if (view.target.distanceTo(goal.target) < 0.005 && Math.abs(view.dist - goal.dist) < 0.01) goal = null;
+    }
+    controls.update();
+    renderer.render(scene, camera);
+    paint();
+  })();
+  window.__kit = kit; window.__gotoView = gotoView; window.__render = render; window.__MB = MB;
+})();
+</script>
+</body></html>

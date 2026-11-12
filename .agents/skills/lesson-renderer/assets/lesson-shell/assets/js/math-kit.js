@@ -1000,30 +1000,40 @@
         codeEl.outerHTML = renderLatex(txt, false);
       });
 
-      // Second: if plain text in .qexp or .dn-a has an equation calculation (like "n = sin i / sin r = 0.500 / 0.333 = 1.50")
-      if (extractedChains.length === 0) {
+      // Second: if a Do Now answer has plain-text calculations, decompose them.
+      // Quiz explanations and assignment solutions use their <code> chains above;
+      // running prose through the same parser turns sentences into fake equations.
+      if (extractedChains.length === 0 && el.classList.contains("dn-a")) {
         var plain = htmlToMathTokens(el.innerHTML);
-        var eqRegex = /([a-zA-Z0-9_^{}()[\]\sθλωρσπΔΩ]+=\s*[^.;]+?[0-9][^.;]*)/g;
-        var match;
-        while ((match = eqRegex.exec(plain)) !== null) {
-          var candidate = match[1].trim();
-          // Trim leading prose words before the actual LHS symbol
-          var lhsClean = candidate.replace(/^(?:Using|From|Since|Therefore|Thus|So|Because|Here|With|And|where|gives|is|at)\s+/i, "");
-          var eqSplit = lhsClean.split("=");
-          if (eqSplit.length >= 2 && hasNumbers(lhsClean)) {
-            // Keep only the last token/expression of LHS before the first '='
-            var firstLhs = eqSplit[0].trim();
-            var lhsWords = firstLhs.split(/\s+/);
-            if (lhsWords.length > 3) {
-              firstLhs = lhsWords.slice(-2).join(" ");
-            }
-            var rebuilt = firstLhs + " = " + eqSplit.slice(1).join(" = ");
-            var cSteps = decomposeEquationChain(rebuilt);
-            if (cSteps.length >= 1) {
-              extractedChains.push(cSteps);
-            }
+        // Split at semicolons and sentence-ending periods, but never at decimal points.
+        var clauses = [];
+        plain.split(/\s*;\s*/).forEach(function (part) {
+          part.split(/\.\s+/).forEach(function (sentence) { clauses.push(sentence); });
+        });
+        clauses.forEach(function (clause) {
+          clause = clause.trim().replace(/\.+$/, "");
+          if (!clause || clause.indexOf("=") === -1) return;
+          // A colon before the calculation is prose (keep the part after it);
+          // a colon after the calculation starts an explanation (keep the part before it).
+          var firstEq = clause.indexOf("=");
+          var colon = clause.lastIndexOf(":");
+          if (colon !== -1 && firstEq !== -1) {
+            if (colon < firstEq) clause = clause.slice(colon + 1).trim();
+            else if (clause.slice(firstEq + 1, colon).indexOf("=") === -1) clause = clause.slice(0, colon).trim();
           }
-        }
+          var eqSplit = clause.split(/\s*=\s*/);
+          if (eqSplit.length < 2) return;
+          // Drop a leading list label like "(a)" or "b4."
+          var firstLhs = eqSplit[0].trim().replace(/^(?:\([a-z]\)|[a-z]\d{1,2}[.)])\s*/i, "");
+          firstLhs = firstLhs.replace(/^(?:Using|From|Since|Therefore|Thus|So|Because|Here|With|And|where|gives|is|at)\s+/i, "");
+          var lhsWords = firstLhs.split(/\s+/).filter(Boolean);
+          if (lhsWords.length > 4) firstLhs = lhsWords.slice(-2).join(" ");
+          firstLhs = firstLhs.replace(/^(?:and|or)\s+/i, "");
+          if (!firstLhs || !hasNumbers(clause)) return;
+          var rebuilt = firstLhs + " = " + eqSplit.slice(1).join(" = ");
+          var cSteps = decomposeEquationChain(rebuilt);
+          if (cSteps.length >= 1) extractedChains.push(cSteps);
+        });
       }
 
       if (extractedChains.length > 0) {

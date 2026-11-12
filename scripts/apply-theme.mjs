@@ -47,6 +47,7 @@ export function tokenizeDir(dir) {
   let total = 0;
   for (const f of walk(dir, ".css")) {
     if (path.basename(f) === "fonts.css" || path.basename(f) === "theme.css") continue;
+    if (f.split(path.sep).includes("video")) continue;   // explainer-video player + KaTeX: themed through tokens at runtime, never rewritten
     const before = fs.readFileSync(f, "utf8");
     const { css, changes } = tokenizeCss(before, { mathFile: path.basename(f) === "math.css" });
     if (changes) { fs.writeFileSync(f, css); total += changes; }

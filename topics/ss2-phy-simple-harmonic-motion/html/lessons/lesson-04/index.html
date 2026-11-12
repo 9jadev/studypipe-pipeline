@@ -3,57 +3,104 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 4 · Determining Gravity (g) — L–T² Graphs, Slope &amp; Precautions · StudyPipe</title>
-  <meta name="description" content="StudyPipe Physics (SS2): Simple Harmonic Motion and the Simple Pendulum — 3D virtual practical, vector & energy zoom, worked examples, WAEC quiz and guided narrator.">
+  <title>Lesson 4 · The Simple Pendulum · StudyPipe</title>
+  <meta name="description" content="StudyPipe Physics (SS2), Simple Harmonic Motion Lesson 4: the restoring force mg sin θ, the small-angle condition, T = 2π√(l/g), and fair tests of bob mass, angle, length and g on a 3D pendulum bench.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%233ee6c4'/%3E%3Cstop offset='1' stop-color='%23ffb23f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cline x1='32' y1='6' x2='44' y2='44' stroke='%23f5efe4' stroke-width='3'/%3E%3Ccircle cx='44' cy='46' r='11' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 6 L46 46' stroke='%23ffb23f' stroke-width='3'/%3E%3Ccircle cx='46' cy='48' r='9' fill='%23ffb23f'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
   <style>
-    /* Custom Hero pendulum art + position explorer pin styling */
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(62,230,196,.18), rgba(255,178,63,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
-    }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pend-swing-group {
-      transform-origin: 160px 28px;
-      animation: heroSwing 2.6s ease-in-out infinite alternate;
-    }
-    @keyframes heroSwing {
-      0%   { transform: rotate(-22deg); }
-      100% { transform: rotate(22deg); }
-    }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #ff3d8b 0%, #ffb23f 25%, #2fb344 50%, #ffb23f 75%, #ff3d8b 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-    }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 155px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 20%, rgba(62,230,196,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; justify-content: center;
-    }
-    .clock-rod {
-      position: absolute; top: 10px; width: 3px; background: linear-gradient(180deg, #cbd5e1, #94a3b8);
-      transform-origin: 50% 0%;
-    }
-    .clock-bob {
-      position: absolute; bottom: -14px; left: -14px; width: 31px; height: 31px; border-radius: 50%;
-      background: radial-gradient(circle at 35% 30%, #ffe699, #d98a00 65%, #784500);
-      box-shadow: 0 6px 16px rgba(255,178,63,.45);
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 28%, rgba(var(--amber-rgb), .16), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 340px; }
+    .pd-t { fill: var(--fg-soft); font-family: var(--font-mono); font-size: 11px; }
+    .pd-m { fill: var(--amber); font-family: var(--font-mono); font-size: 11px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(var(--sky-rgb), .06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    .pd-comp { margin-top: 12px; font-size: 13.5px; color: var(--fg-soft); }
+    .pd-comp b { color: var(--teal); font-family: var(--font-mono); }
+    /* sort */
+    .pd-bins { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 14px; }
+    @media (min-width: 641px) { .pd-bins { grid-template-columns: repeat(3, 1fr); } }
+    .sort-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 14px; }
+    .sort-score { font-family: var(--font-mono); font-size: 12.5px; color: var(--fg-soft); }
+    /* compact bench */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 26px 1fr; column-gap: 8px; row-gap: 0; padding: 5px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 12px; align-self: center; }
+    #method-cards div.method h4 { font-size: 14px; }
+    #method-cards div.method p { font-size: 12.5px; line-height: 1.35; margin: 0; }
+    #method-cards div.method.now { border-color: var(--amber); box-shadow: 0 0 0 2px rgba(var(--amber-rgb), .25); }
+    #method-cards div.method.done b::after { content: " ✓"; color: var(--ok); }
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(330px, 95vw, 440px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    #bench-stage .bench-readout div, #zoom-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span, #zoom-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b, #zoom-stage .bench-readout b { font-size: 13px; line-height: 1.2; display: block; }
+    .pd-ctl { padding: 8px 12px; display: grid; grid-template-columns: 1fr; gap: 6px; }
+    .pd-row { display: grid; grid-template-columns: 54px 1fr; gap: 6px; align-items: center; }
+    .pd-lbl { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+    .pd-opts { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 5px; }
+    .pd-btn { min-height: 36px; padding: 6px 4px; font: 600 12.5px var(--font-body); border-radius: calc(10px * var(--corner, 1)); border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); cursor: pointer; }
+    .pd-btn[aria-pressed="true"] { background: var(--teal); color: var(--ink-950); border-color: var(--teal); }
+    .pd-btn.tried::after { content: " ·"; color: var(--amber); }
+    .pd-act { padding: 8px 12px; gap: 6px; }
+    .pd-act .pd-acts { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px; width: 100%; }
+    .pd-act .vt-btn { padding: 8px 4px; font-size: 13px; min-height: 40px; }
+    .pd-act .stage-hint { margin: 0; width: 100%; font-size: 12.5px; }
+    .pd-res-wrap { margin-top: 12px; border: 1px solid var(--paper-line); border-radius: var(--radius); background: var(--paper-card); overflow: hidden; }
+    table.pd-res { width: 100%; border-collapse: collapse; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+    table.pd-res th { text-align: left; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600; color: var(--paper-muted); padding: 7px 6px; border-bottom: 1px solid var(--paper-line); }
+    table.pd-res td { padding: 6px; border-bottom: 1px solid var(--paper-line); color: var(--paper-ink); }
+    table.pd-res td small { display: block; color: var(--paper-muted); font-size: 10.5px; }
+    table.pd-res tr.fresh td { background: rgba(var(--amber-rgb), .12); }
+    table.pd-res td.yes { color: var(--crimson); font-weight: 700; }
+    table.pd-res td.no { color: var(--ok-deep); font-weight: 700; }
+    table.pd-res .pd-empty td { color: var(--paper-muted); font-style: italic; }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    /* movement break */
+    #movement-break .pd-move { display: grid; gap: 8px; margin: 14px 0 0; padding: 0; list-style: none; }
+    #movement-break .pd-move li { background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 15px; }
+    /* angle explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 44px; padding: 6px 2px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 12px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; line-height: 1.55; min-height: 96px; }
+    .pos-info b { color: var(--crimson); }
+    .pos-bar { height: 8px; border-radius: 999px; background: rgba(var(--paper-ink-rgb), .08); margin-top: 8px; overflow: hidden; }
+    .pos-bar i { display: block; height: 100%; background: var(--crimson); border-radius: inherit; }
+    /* zoom */
+    #zoom-stage .stage-canvas { height: clamp(360px, 100vw, 470px); }
+    .pd-ctx { position: absolute; left: 8px; top: 8px; width: 30%; max-width: 170px; height: 40%; border-radius: calc(12px * var(--corner, 1)); border: 1px solid var(--line-strong); background: rgba(var(--ink-950-rgb), .55); overflow: hidden; z-index: 2; }
+    .pd-ctx-lbl { position: absolute; left: 6px; bottom: 4px; font-family: var(--font-mono); font-size: 9.5px; color: var(--muted); pointer-events: none; }
+    #zoom-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    .pd-zbar { padding: 8px 12px; gap: 8px; }
+    .pd-zbar label { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; width: 100%; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+    .pd-zbar input[type=range] { width: 100%; accent-color: var(--amber); }
+    .pd-zrow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; width: 100%; }
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .pd-bq { margin-top: 14px; }
+    .pd-bq h4 { margin: 0 0 8px; font-size: 15px; color: var(--fg); }
+    .pd-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pd-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; }
+    .pd-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); background: rgba(var(--ok-rgb), .18); color: var(--fg); }
+    .pd-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--pink); }
+    .pd-bq .why { margin: 8px 0 0; font-size: 13.5px; color: var(--fg-soft); display: none; }
+    .pd-bq .why.on { display: block; }
+    @media (min-width: 641px) {
+      #bench-stage .stage-canvas { height: clamp(360px, 46vw, 480px); }
+      #method-cards div.method { padding: 10px 14px; }
+      .pd-ctl { grid-template-columns: 1fr 1fr; }
+      .pd-act .pd-acts { width: auto; flex: 1; }
     }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
@@ -65,8 +112,8 @@
 
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
-      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 4 of 5 · <b>Determining Gravity (g): L–T² Graphs &amp; Error Detective</b></span>
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> Unit Overview</a>
+      <span class="l-crumb">Lesson 4 of 7 · <b>The Simple Pendulum</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -75,15 +122,15 @@
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Physics · Lesson 4 of 5 · Graphs &amp; Deductions · 55 minutes</span>
-        <h1 class="display reveal" data-hook>Determining Gravity (g): <em>L–T<sup>2</sup> Graphs, Slope &amp; Precautions</em></h1>
-        <p class="question reveal">How do we turn a curved pendulum relationship into a straight line whose slope reveals Earth's gravitational acceleration in Lagos?</p>
+        <span class="eyebrow reveal">SS2 Physics · Lesson 4 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>The Simple <em>Pendulum</em></h1>
+        <p class="question reveal">Does a heavier bob or a bigger swing change the timing?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Linearise <strong>T = 2π√(L/g)</strong> by squaring both sides to obtain <strong>T<sup>2</sup> = (4π<sup>2</sup>/g)L</strong> and <strong>L = (g/4π<sup>2</sup>)T<sup>2</sup></strong>.</span></li>
-          <li><b>02</b><span>Plot <strong>L against T<sup>2</sup></strong> (or <strong>T<sup>2</sup> against L</strong>), draw a large slope triangle, and compute <strong>g = 4π<sup>2</sup>S</strong> (or <strong>g = 4π<sup>2</sup>/S'</strong>).</span></li>
-          <li><b>03</b><span>Interpret physical intercepts when length is measured only to the hook rather than the centre of gravity of the bob.</span></li>
-          <li><b>04</b><span>Predict how systematic experimental errors (fast/slow stopwatch, conical swing, parallax) shift the calculated value of <strong>g</strong>.</span></li>
-          <li><b>05</b><span>Write top-scoring <strong>WAEC/NECO Paper 3 precautions</strong> in acceptable past-tense experimental language.</span></li>
+          <li><b>01</b><span>Identify the <strong>restoring force</strong> on a pendulum bob (<strong>mg sin θ</strong>) and explain why the motion is SHM only for small angles.</span></li>
+          <li><b>02</b><span>Show that <strong>a = −(g/l)x</strong>, so <strong>T = 2π√(l/g)</strong>.</span></li>
+          <li><b>03</b><span>Show by <strong>fair tests</strong> that T does not depend on bob mass or (small) amplitude, but depends on l and g.</span></li>
+          <li><b>04</b><span>Solve <strong>ratio problems</strong> (T ∝ √l, T ∝ 1/√g), including the seconds pendulum and the Moon.</span></li>
+          <li><b>05</b><span>Contrast the pendulum (mass has <strong>no</strong> effect) with the spring (T ∝ √m).</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -92,37 +139,36 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <p class="pd-comp reveal">Competences: <b>L1</b> fair testing · <b>L2</b> clocks &amp; swings · <b>L4</b> force diagrams · <b>L5</b> simulation</p>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–45</b> Investigate</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–75</b> Apply</span><span><b>75–80</b> Reflect</span>
+        </div>
+        <nav class="l-switch reveal" aria-label="Lessons in this unit">
+          <a class="home" href="../../index.html">Hub</a>
+          <a href="../lesson-01/index.html">L1</a><a href="../lesson-02/index.html">L2</a><a href="../lesson-03/index.html">L3</a><a href="index.html" aria-current="page">L4</a><a href="../lesson-05/index.html">L5</a><a href="../lesson-06/index.html">L6</a><a href="../lesson-07/index.html">L7</a>
+        </nav>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
 
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <defs>
-            <radialGradient id="bobGrad" cx="35%" cy="30%" r="65%">
-              <stop offset="0%" stop-color="#fff3c4"/>
-              <stop offset="55%" stop-color="#ffb23f"/>
-              <stop offset="100%" stop-color="#9a5b00"/>
-            </radialGradient>
-          </defs>
-          <!-- Retort cross-bar & split cork -->
-          <rect x="95" y="14" width="130" height="8" rx="4" fill="#64748b"/>
-          <rect x="148" y="18" width="24" height="14" rx="3" fill="#b45309"/>
-          <!-- Dashed equilibrium line & arc -->
-          <line x1="160" y1="32" x2="160" y2="232" stroke="rgba(62,230,196,0.35)" stroke-width="1.5" stroke-dasharray="5,5"/>
-          <path d="M 88 188 A 165 165 0 0 0 232 188" fill="none" stroke="rgba(255,178,63,0.3)" stroke-width="1.5" stroke-dasharray="4,4"/>
-          <!-- Fiducial pointer -->
-          <polygon points="160,212 154,228 166,228" fill="#3ee6c4"/>
-          <text x="160" y="244" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">x = 0 (fiducial)</text>
-          <text x="68" y="182" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">−A</text>
-          <text x="252" y="182" fill="#ffb23f" font-family="JetBrains Mono, monospace" font-size="10" text-anchor="middle">+A</text>
-          <!-- Animated swinging rod + bob -->
-          <g class="pend-swing-group">
-            <line x1="160" y1="28" x2="160" y2="186" stroke="#f5efe4" stroke-width="2.2"/>
-            <circle cx="160" cy="196" r="16" fill="url(#bobGrad)"/>
-          </g>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 340 250">
+          <line x1="110" y1="22" x2="230" y2="22" stroke="var(--fg-soft)" stroke-width="3" stroke-linecap="round"/>
+          <line x1="170" y1="22" x2="170" y2="200" stroke="var(--line-strong)" stroke-dasharray="4 5"/>
+          <path d="M108 184 Q170 214 232 184" fill="none" stroke="var(--muted)" stroke-dasharray="3 5"/>
+          <line x1="170" y1="22" x2="226" y2="182" stroke="var(--fg)" stroke-width="2"/>
+          <path d="M170 62 A40 40 0 0 0 183 60" fill="none" stroke="var(--lime)" stroke-width="2.4"/>
+          <text class="pd-t" x="178" y="80" fill="var(--lime)">θ</text>
+          <circle cx="228" cy="187" r="13" fill="var(--amber)"/>
+          <line x1="228" y1="200" x2="228" y2="236" stroke="var(--pink-soft)" stroke-width="3"/>
+          <line x1="222" y1="190" x2="196" y2="203" stroke="var(--amber)" stroke-width="3"/>
+          <text class="pd-m" x="140" y="224">mg sin θ</text>
+          <text class="pd-t" x="236" y="236" fill="var(--pink-soft)">mg</text>
+          <text class="pd-t" x="20" y="120">T = 2π√(l/g)</text>
+          <text class="pd-t" x="20" y="140">mass cancels</text>
+          <text class="pd-t" x="20" y="160">small θ only</text>
         </svg>
       </div>
     </div>
@@ -134,10 +180,10 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Motion sort</a></li>
-        <li><a href="#practical">3D practical</a></li>
-        <li><a href="#concepts">SHM laws</a></li>
-        <li><a href="#neutralise">Vector zoom</a></li>
+        <li><a href="#sort">Sort game</a></li>
+        <li><a href="#practical">Pendulum bench</a></li>
+        <li><a href="#concepts">Why T = 2π√(l/g)</a></li>
+        <li><a href="#zoom">Forces on the bob</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -149,30 +195,28 @@
     </nav>
 
     <main class="l-main" id="main">
-
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
-        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>wake up your mechanics toolkit</em></h2>
-        <p class="intro">Four quick building blocks from earlier topics. Answer each one in your head or on paper <strong>before</strong> you reveal the card — pulling an idea from memory is what makes new physics stick.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lessons 2 and 3</em></h2>
+        <p class="intro">Four quick cards: where acceleration peaks, spring period ratios, components of a force, and small angles. Answer each in your head <strong>before</strong> you reveal it.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
         </div>
-        <p class="donow-teacher no-print"><strong>Teachers:</strong> give students 3 minutes to jot down answers as they settle in, then reveal and check with a quick show of hands.</p>
       </section>
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>A mystery at <em>Yaba Market</em></h2>
-        <p class="intro">Every physics law begins with a real puzzle. At Yaba Market in Lagos, Mama Ngozi sells mechanical regulator wall clocks to schools and churches — and today an angry school prefect has brought one back.</p>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>Tunde's heavy bob and <em>Zainab's wide swing</em></h2>
+        <p class="intro">In the school physics lab, Tunde and Zainab each make a confident claim about what slows a pendulum down. Mrs Okafor sets them a fair test — and a puzzle about the okada.</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Kunle and Mrs Adeyemi at Mama Ngozi's Yaba Market clock stall, then at the UNILAG Metrology Lab with Dr Amaka."></canvas>
-            <div class="stage-label"><i></i>3D story · Yaba Market → UNILAG Lab</div>
+            <canvas id="story-canvas" aria-label="Animated 3D story in the school physics lab: Tunde holds a brass bob and a wooden bob and says the heavy one will swing slowly; Zainab says a wider swing must take longer; Mrs Okafor asks for fair tests and shows a tiny 6.2 centimetre pendulum that keeps the okada's time; two equal pendulums, brass and wood, swing in step."></canvas>
+            <div class="stage-label"><i></i>3D story · physics lab</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -182,589 +226,485 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · Yaba Market Stall:</strong> Kunle points at the pendulum wall clock he bought for his school assembly hall: <em>“Mama! This regulator clock loses eight minutes every single hour! By break time it is already twenty minutes behind!”</em></p>
-            <p><strong>Scene 2 · A bystander's theory:</strong> Mrs Adeyemi shakes her head: <em>“I told them! The brass bob at the bottom is too light. Tie a heavier lead weight onto it so gravity pulls it faster!”</em></p>
-            <p><strong>Scene 3 · Mama Ngozi's worry:</strong> Mama Ngozi looks puzzled: <em>“Ah-ah! Or maybe the prefect didn't pull the pendulum wide enough when starting it? Clock A and Clock B came from the same workshop!”</em></p>
-            <p><strong>Scene 4 · Side-by-side comparison:</strong> Mama Ngozi hangs Clock A (accurate) and Clock B (the faulty school clock) side by side. Both bobs look identical, yet Clock B takes noticeably longer for every swing.</p>
-            <p><strong>Scene 5 · The puzzle:</strong> <em>“Same brass bob. Same tick-tock mechanism. What actually sets the time of one swing — the mass of the bob, the starting angle, or the length of the rod?”</em></p>
-            <p><strong>Scene 6 · Across town at the UNILAG Metrology &amp; Physics Lab:</strong> Dr Amaka taps a retort stand fitted with a split cork, metre rule, and stopwatch: <em>“Don't guess! Bring both pendulums to the bench. With twenty swings and a stopwatch, we'll settle this once and for all.”</em></p>
+            <p><strong>Scene 1 · Tunde</strong> (holding a brass bob and a wooden bob): <em>“This heavy one will swing slowly, steady like a loaded lorry. I'm sure.”</em></p>
+            <p><strong>Scene 2 · Zainab:</strong> <em>“And if I pull it back further, it must take longer — it has further to go.”</em></p>
+            <p><strong>Scene 3 · Mrs Okafor:</strong> <em>“Two claims, two fair tests. Change one thing at a time and time 20 swings.”</em></p>
+            <p><strong>Scene 4 · Mrs Okafor</strong> (pointing at a pendulum about the length of a finger): <em>“And here's a puzzle for later. This little pendulum keeps exactly the okada's time. Why that length?”</em></p>
+            <p><strong>Scene 5 · Zainab</strong> (two pendulums of equal length, one brass, one wood, swinging side by side): <em>“Tunde… they're together.”</em></p>
           </div>
         </details>
       </section>
 
-      <!-- ================= 2. WONDER WALL ================= -->
+      <!-- ================= WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">Who do you think is right — Mrs Adeyemi (heavier bob), Mama Ngozi (wider starting angle), or is something else controlling the period? Pin your prediction or question before we test it.</p>
+        <p class="intro">Rank what you think changes a pendulum's period: bob mass, release angle, thread length, the planet you're on. Pin your idea before you test it.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that the time of one swing depends on… because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I think the period depends on…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Does a heavier brass bob swing faster?</button>
-            <button type="button">Does a wider angle take more time?</button>
-            <button type="button">Why do we time 20 swings instead of 1?</button>
-            <button type="button">How can a string measure gravity g?</button>
+            <button type="button">Mass matters most (Tunde)</button>
+            <button type="button">Bigger angle = longer time (Zainab)</button>
+            <button type="button">Length surely matters (Dayo)</button>
+            <button type="button">On the Moon would it stop? (Hajia Ramatu)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 3. SORT GAME ================= -->
+      <!-- ================= 2A. SORT ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
-        <h2>Everyday motions: <em>which ones are truly harmonic?</em></h2>
-        <p class="intro">Many motions repeat, but only special ones are <strong>Simple Harmonic Motion (SHM)</strong> — where a restoring force always pulls the object back towards a central equilibrium position in proportion to how far it has moved. Drag each card into a bin (or tap a card, then tap a bin).</p>
-
-        <div class="sort" id="kitchen-sort">
-          <div class="sort-tray" id="sort-tray" aria-label="Motions to sort"></div>
-          <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Simple Harmonic Motion bin">
-              <h4><i></i>Simple Harmonic (SHM)</h4>
-              <small>restoring force ∝ displacement</small>
-              <div class="drop"></div>
-            </div>
-            <div class="bin" data-bin="periodic" style="--bc:#ffb23f" tabindex="0" role="button" aria-label="Periodic but not SHM bin">
-              <h4><i></i>Periodic (not SHM)</h4>
-              <small>repeats, no central restoring law</small>
-              <div class="drop"></div>
-            </div>
-            <div class="bin" data-bin="non" style="--bc:#ff4b3a" tabindex="0" role="button" aria-label="Not periodic bin">
-              <h4><i></i>Not periodic</h4>
-              <small>one-way motion, no cycle</small>
-              <div class="drop"></div>
-            </div>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Does it change the <em>pendulum's period?</em></h2>
+        <p class="intro">Drag or tap each of the nine cards into a bin: <strong>Changes T</strong>, <strong>No change</strong>, or <strong>Only at large angles</strong> (changes only when the swing is wide).</p>
+        <div class="sort" id="pd-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to classify"></div>
+          <div class="pd-bins">
+            <div class="bin" data-bin="changes" style="--bc:var(--crimson)" tabindex="0" role="region" aria-label="Changes T bin"><h4><i></i>Changes T <small>l or g</small></h4><div class="drop"></div></div>
+            <div class="bin" data-bin="no-change" style="--bc:var(--teal)" tabindex="0" role="region" aria-label="No change bin"><h4><i></i>No change <small>T stays the same</small></h4><div class="drop"></div></div>
+            <div class="bin" data-bin="only-large-angles" style="--bc:var(--amber)" tabindex="0" role="region" aria-label="Only at large angles bin"><h4><i></i>Only at large angles <small>wide swings</small></h4><div class="drop"></div></div>
           </div>
           <div class="sort-bar">
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
-              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
-            </div>
+            <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+            <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
             <span class="sort-score" id="sort-score" aria-live="polite"></span>
           </div>
           <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 3B. 3D PRACTICAL ================= -->
+      <!-- ================= 2B. PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 20 min</span>
-        <h2>The Simple Pendulum: <em>what really controls the period?</em></h2>
-        <p class="intro">Now step up to Dr Amaka's bench. In WAEC and NECO Physics Paper 3, you measure the time <strong>t</strong> for <strong>20 complete oscillations</strong> across five lengths <strong>L</strong>, then compute the period <strong>T = t ÷ 20</strong> and <strong>T<sup>2</sup></strong>.</p>
-
-        <div class="callout warn" id="safety-box">
-          <p><strong>Examiner's practical setup rules:</strong> Clamp the thread firmly between <strong>two pieces of split cork</strong> so the point of suspension does not slip. Measure length <strong>L</strong> from the bottom of the split cork to the <strong>centre of gravity of the bob</strong> — never just to the top hook.</p>
-        </div>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The pendulum-laws bench: <em>one variable at a time</em></h2>
+        <p class="intro">Change one setting, press <strong>Release &amp; time 20</strong>, and watch the stopwatch. Every time comes from the exact large-angle period of the pendulum model.</p>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Set length L to the bob's centre</h4><p>Choose a length from <code>0.40 m</code> to <code>1.20 m</code> using the vertical metre rule, reading perpendicular to the scale to avoid parallax error.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Place the fiducial mark at x = 0</h4><p>Position the green reference pointer at the equilibrium centre where the bob moves fastest, giving a crisp timing mark.</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Displace slightly (θ ≤ 10°)</h4><p>Pull the bob aside through a small angle so it swings smoothly in a single vertical plane without wobbling in a cone.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Time 20 full swings &amp; tabulate</h4><p>Count <code>20</code> complete cycles (centre → right → left → centre is 1 cycle). Divide total time <code>t</code> by <code>20</code> so reaction-time error is divided by 20!</p></div>
+          <div class="method now" id="m1"><b>01</b><h4>Test the mass</h4><p>0.50 m, 10°: time 50 g, then 100 g.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Test the angle</h4><p>100 g: time 5°, 10° and 30°.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Test the length</h4><p>10°: time 0.25 m, 0.50 m, 1.00 m.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Test gravity</h4><p>0.50 m on the Moon: time again.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D Simple Pendulum apparatus with retort stand, split cork clamp, brass bob, vertical metre rule, centre fiducial mark and digital stopwatch."></canvas>
-            <div class="stage-label"><i></i>3D virtual practical · drag to rotate · tap bob or buttons to time</div>
+            <canvas id="bench-canvas" aria-label="3D pendulum bench: retort stand with a split cork in a clamp, a thread and a turned brass or wooden bob, a protractor showing the release angle, a chalk rest mark, a metre rule and a stopwatch with a live display."></canvas>
+            <div class="stage-label"><i></i>3D bench · drag to rotate</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D pendulum bench couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the expected results and worked examples below.</p></div>
           </div>
-          <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Myth-buster condition" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">50 g · 6° (Standard)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">100 g · 6° (Heavier bob)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">50 g · 10° (Wider angle)</button>
-            </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Time A · 0.40 m</button>
-              <button class="vt-btn" type="button" data-trial="1">Time B · 0.60 m</button>
-              <button class="vt-btn" type="button" data-trial="2">Time C · 0.80 m</button>
-              <button class="vt-btn" type="button" data-trial="3">Time D · 1.00 m</button>
-              <button class="vt-btn" type="button" data-trial="4">Time E · 1.20 m</button>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar pd-ctl" id="bench-ctl">
+            <div class="pd-row" data-var="bob"><span class="pd-lbl">Bob</span><div class="pd-opts" role="group" aria-label="Bob mass"><button class="pd-btn" type="button" data-v="50">50 g wood</button><button class="pd-btn" type="button" data-v="100">100 g brass</button></div></div>
+            <div class="pd-row" data-var="g"><span class="pd-lbl">g</span><div class="pd-opts" role="group" aria-label="Gravity"><button class="pd-btn" type="button" data-v="9.8">Earth 9.8</button><button class="pd-btn" type="button" data-v="1.6">Moon 1.6</button></div></div>
+            <div class="pd-row" data-var="angle_deg"><span class="pd-lbl">Angle</span><div class="pd-opts" role="group" aria-label="Release angle"><button class="pd-btn" type="button" data-v="5">5°</button><button class="pd-btn" type="button" data-v="10">10°</button><button class="pd-btn" type="button" data-v="30">30°</button></div></div>
+            <div class="pd-row" data-var="l"><span class="pd-lbl">Length</span><div class="pd-opts" role="group" aria-label="Thread length"><button class="pd-btn" type="button" data-v="0.25">0.25 m</button><button class="pd-btn" type="button" data-v="0.5">0.50 m</button><button class="pd-btn" type="button" data-v="1">1.00 m</button></div></div>
+          </div>
+          <div class="stage-bar pd-act">
+            <div class="pd-acts">
+              <button class="vt-btn zobo" type="button" id="bench-time">Release &amp; time 20</button>
+              <button class="vt-btn" type="button" id="bench-speed" aria-pressed="true">Fast ×4</button>
               <button class="vt-btn" type="button" id="bench-reset">Reset</button>
             </div>
-            <span class="stage-hint" id="bench-hint">Timed 0 of 5 lengths</span>
+            <span class="stage-hint" id="bench-hint">Change one setting, then time 20 oscillations.</span>
           </div>
         </div>
 
-        <h3>Record your readings (N = 20 oscillations)</h3>
-        <p>As you time each length on the 3D bench above, select the matching time <strong>t (s)</strong>, period <strong>T = t ÷ 20 (s)</strong>, and <strong>T<sup>2</sup> (s<sup>2</sup>)</strong> in the WAEC results table below.</p>
-        <div class="tbl-wrap">
-          <table class="tbl" id="results-table">
-            <thead>
-              <tr>
-                <th>Trial</th>
-                <th>L (m)</th>
-                <th>Time for 20 swings, t (s)</th>
-                <th>Period T = t ÷ 20 (s)</th>
-                <th>T<sup>2</sup> (s<sup>2</sup>)</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
+        <h3>Your results</h3>
+        <div class="pd-res-wrap">
+          <table class="pd-res" id="results-table">
+            <thead><tr><th>Test · value</th><th>t₂₀ / s</th><th>T / s</th><th>Changed?</th></tr></thead>
+            <tbody><tr class="pd-empty"><td colspan="4">Your timings appear here, one row per run.</td></tr></tbody>
           </table>
         </div>
-        <div class="sort-bar">
-          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
-          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
-        </div>
+        <p class="sheet-note" id="vars-line">Variables tested: 0 of 4 (mass · angle · length · g)</p>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table, L–T<sup>2</sup> graph slope &amp; value of g <small>open after you've recorded yours</small></summary>
+          <summary>Expected results <small>open after you test</small></summary>
           <div class="reveal-body">
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>L (m)</th><th>t for 20 swings (s)</th><th>T = t ÷ 20 (s)</th><th>T<sup>2</sup> (s<sup>2</sup>)</th></tr></thead>
+                <thead><tr><th>Test (10°, 0.50 m, Earth unless stated)</th><th>t / s (20 osc)</th><th>T / s</th><th>Changed?</th></tr></thead>
                 <tbody>
-                  <tr><td>A</td><td>0.40</td><td>25.38</td><td>1.269</td><td>1.61</td></tr>
-                  <tr><td>B</td><td>0.60</td><td>31.08</td><td>1.554</td><td>2.42</td></tr>
-                  <tr><td>C</td><td>0.80</td><td>35.88</td><td>1.794</td><td>3.22</td></tr>
-                  <tr><td>D</td><td>1.00</td><td>40.12</td><td>2.006</td><td>4.02</td></tr>
-                  <tr><td>E</td><td>1.20</td><td>43.96</td><td>2.198</td><td>4.83</td></tr>
+                  <tr><td>Mass 50 g</td><td>28.44</td><td>1.42</td><td>—</td></tr>
+                  <tr><td>Mass 100 g</td><td>28.44</td><td>1.42</td><td>✗ no</td></tr>
+                  <tr><td>Angle 5°</td><td>28.40</td><td>1.42</td><td>✗ no</td></tr>
+                  <tr><td>Angle 30°</td><td>28.88</td><td>1.44</td><td>slightly (≈ 1.7 % longer than at 5°)</td></tr>
+                  <tr><td>Length 0.25 m</td><td>20.11</td><td>1.01</td><td>✓ yes</td></tr>
+                  <tr><td>Length 1.00 m</td><td>40.22</td><td>2.01</td><td>✓ yes (quadrupling l doubles T)</td></tr>
+                  <tr><td>Moon (g = 1.6), 0.50 m</td><td>70.38</td><td>3.52</td><td>✓ yes</td></tr>
                 </tbody>
               </table>
             </div>
-            <p><strong>What the numbers prove:</strong></p>
-            <ul>
-              <li>Switching from the <strong>50 g bob to the 100 g bob</strong> (or from <strong>6° to 10°</strong>) gave the <em>exact same period T</em>. Neither mass nor a small release angle changes the period!</li>
-              <li>Doubling the length does <em>not</em> double the period — instead, <strong>T<sup>2</sup> is directly proportional to L</strong>. Look at Trial A (<code>L = 0.40 m, T² = 1.61 s²</code>) and Trial C (<code>L = 0.80 m, T² = 3.22 s²</code>): when <code>L</code> doubles, <code>T²</code> doubles!</li>
-              <li><strong>Finding g from the slope:</strong> Plotting <code>L</code> on the vertical axis against <code>T²</code> on the horizontal axis gives a straight line through the origin with slope:
-                <div class="eq light">Slope S = ΔL ÷ ΔT<sup>2</sup> = (1.20 − 0.40) ÷ (4.83 − 1.61) = 0.80 ÷ 3.22 = 0.2484 m s<sup>−2</sup></div>
-                <div class="eq light">g = 4π<sup>2</sup> × S = 39.478 × 0.2484 ≈ 9.81 m s<sup>−2</sup></div>
-              </li>
-            </ul>
+            <p><strong>Precautions (as written in a report):</strong> only one variable was changed at a time; the angle was kept small (≤ 10°) for the fair tests; the bob swung in one plane, not in a circle; timing started as the bob passed the rest mark.</p>
+            <p><strong>Sources of error:</strong> reaction time at the start and stop (shared out over 20 oscillations); the support moved slightly, adding to the effective length.</p>
           </div>
         </details>
 
-        <h3>Analysis questions</h3>
-        <div class="aq" data-answer="prac-q">
-          <div class="aq-top"><h4>Answer these five questions from your investigation, then compare with the model answers.</h4></div>
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l04-prac-q">
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>What happened to the period <code>T</code> when you doubled the mass of the bob from 50 g to 100 g? Why?</li>
-            <li>Why did we place the green fiducial mark at the equilibrium centre (<code>x = 0</code>) instead of at one extreme end?</li>
-            <li>Why do we time 20 oscillations and divide by 20 instead of timing just 1 oscillation?</li>
-            <li>When length <code>L</code> increased from <code>0.40 m</code> to <code>0.80 m</code>, did <code>T</code> double, or did <code>T²</code> double?</li>
-            <li>State two precautions in the <strong>past tense</strong> as required in WAEC Physics Paper 3.</li>
+            <li>Which variables changed T?</li>
+            <li>Why did 30° give a slightly longer period?</li>
+            <li>By what factor did T grow when l was quadrupled?</li>
+            <li>Why did the Moon lengthen T?</li>
+            <li>Why was the bob-mass test a <em>fair</em> test?</li>
           </ol>
-          <textarea class="l-textarea" placeholder="Type your answers here. They're saved on this device." aria-label="Your answers to the analysis questions"></textarea>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>The period <code>T</code> stayed completely unchanged. Although a heavier bob experiences a larger gravitational pull, it also has proportionally greater inertia (mass), so its acceleration at every angle is identical.</li>
-                <li>The bob travels at its <strong>maximum speed</strong> as it passes through the equilibrium centre, so the instant it crosses the pointer is sharp and unmistakable. At the extreme ends it slows down and lingers, increasing timing uncertainty.</li>
-                <li>Human stopwatch reaction time is about <code>±0.2 s</code>. Dividing total time <code>t</code> by <code>N = 20</code> divides the reaction-time uncertainty by 20 (down to <code>±0.01 s</code> per period).</li>
-                <li><code>T²</code> doubled (from <code>1.61 s²</code> to <code>3.22 s²</code>), whereas <code>T</code> increased by a factor of <code>√2 ≈ 1.414</code> (from <code>1.27 s</code> to <code>1.79 s</code>).</li>
-                <li>Any two in the past tense: <em>“Parallax error was avoided by reading the metre rule with the eye perpendicular to the scale.”</em> · <em>“Conical oscillation was avoided by displacing the bob through a small angle in a single vertical plane.”</em> · <em>“Draught was avoided by switching off the laboratory fans and closing nearby windows.”</em></li>
+                <li>Only the <strong>length</strong> and <strong>g</strong> changed T. Bob mass (50 g and 100 g both 28.44 s) and small angles (5° and 10°: 28.40 s and 28.44 s) made no real difference.</li>
+                <li>At 30° sin θ is noticeably smaller than θ (about 4.5 % smaller), so the restoring force grows less than in proportion to the displacement and the bob takes a little longer: 28.88 s against 28.40 s at 5°, about 1.7 % longer.</li>
+                <li>40.22 ÷ 20.11 = 2.00, so T doubled — the square root of 4, because T ∝ √l.</li>
+                <li>The restoring force mg sin θ comes from gravity. With a smaller g the bob accelerates back more weakly, so each swing takes longer: 70.38 ÷ 28.44 = 2.47 ≈ √(9.8 ÷ 1.6).</li>
+                <li>Only the mass was changed: the same thread length, the same 10° release and the same g were used, and both bobs were the same size, so their centres were at the same distance from the cork.</li>
               </ol>
             </div>
           </details>
         </div>
       </section>
 
-      <!-- ================= 4. CONCEPTS ================= -->
+      <!-- ================= MOVEMENT BREAK ================= -->
+      <section class="l-sec" id="movement-break">
+        <span class="phase" style="--pc:var(--lime)"><b>☺</b>Movement break · 45 min mark · 5 min</span>
+        <h2>Be a <em>pendulum</em></h2>
+        <p class="intro">Stand up and use your own arm as a pendulum.</p>
+        <ol class="pd-move">
+          <li><strong>1.</strong> Let one arm hang loosely and swing it gently forward and back. Feel its natural rhythm.</li>
+          <li><strong>2.</strong> Now hold your school bag in that hand and swing again. The rate hardly changes — mass does not set the rhythm.</li>
+          <li><strong>3.</strong> Bend your elbow to make a shorter “pendulum” and swing. Feel it quicken — length does.</li>
+        </ol>
+      </section>
+
+      <!-- ================= 3. MAKE SENSE ================= -->
       <section class="l-sec" id="concepts">
         <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
-        <h2>What makes a motion <em>Simple Harmonic?</em></h2>
-        <p class="intro">You've seen the pendulum swing and timed its period. Now let's connect what you observed to the exact laws and equations WAEC, NECO and JAMB test.</p>
+        <h2>Why only <em>length and gravity</em> count</h2>
+        <p class="intro">Now we connect the bench to the formula WAEC, NECO and JAMB expect — and see exactly why WAEC says “small angle”.</p>
 
-        <h3 id="def-shm">The defining law of SHM</h3>
-        <p>A body performs <strong>simple harmonic motion (SHM)</strong> if it moves to and fro about a fixed equilibrium point such that its <strong>acceleration is directly proportional to its displacement from equilibrium, and is always directed towards that equilibrium point</strong>:</p>
-        <div class="eq" id="eq-shm" data-hook>a = −ω<sup>2</sup>x &nbsp;&nbsp;&nbsp;&nbsp;<span class="st">and</span>&nbsp;&nbsp;&nbsp;&nbsp; F = −kx = −mω<sup>2</sup>x</div>
-        <p>Why is there a <strong>minus sign (−)</strong>? Because displacement <strong>x</strong> (measured outward from the centre) and acceleration <strong>a</strong> (pointing back towards the centre) are always in <strong>opposite directions</strong>. When the bob is to the right (<code>x &gt; 0</code>), the restoring pull accelerates it to the left (<code>a &lt; 0</code>).</p>
-
-        <h3 id="def-terms">The four core quantities</h3>
-        <p>Every harmonic oscillator is described by four numbers you must define and use fluently:</p>
-        <ul>
-          <li><strong>Displacement (x):</strong> distance in a specified direction from the equilibrium centre at any instant (unit: <code>m</code>).</li>
-          <li><strong>Amplitude (A):</strong> the <strong>maximum displacement</strong> from the equilibrium position on either side (unit: <code>m</code>).</li>
-          <li><strong>Period (T):</strong> the time taken to complete <strong>one full to-and-fro oscillation</strong> (unit: <code>s</code>). If <code>N</code> oscillations take time <code>t</code>, then <strong>T = t ÷ N</strong>.</li>
-          <li><strong>Frequency (f):</strong> the number of complete oscillations per second (unit: <strong>hertz, Hz</strong> or <code>s⁻¹</code>), where <strong>f = 1 ÷ T</strong>.</li>
-        </ul>
-        <div class="eq" id="eq-omega">ω = 2πf = 2π ÷ T &nbsp;&nbsp;<span class="st">(angular frequency in rad s<sup>−1</sup>)</span></div>
-        <div class="eq" id="eq-vel">v = ω√(A<sup>2</sup> − x<sup>2</sup>) &nbsp;&nbsp;<span class="arr">→</span>&nbsp;&nbsp; v<sub>max</sub> = ωA <span class="st">(at x = 0)</span> &nbsp;·&nbsp; a<sub>max</sub> = ω<sup>2</sup>A <span class="st">(at x = ±A)</span></div>
-        <div class="eq" id="eq-pend">Simple pendulum: T = 2π√(L ÷ g) &nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp; Loaded spring: T = 2π√(m ÷ k)</div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>All simple harmonic motions are periodic, but not all periodic motions are simple harmonic.</strong> The Earth orbits the Sun every 365.25 days, so its motion is periodic — but it does not move back and forth through a central equilibrium point with <code>a = −ω²x</code>, so it is not SHM.</p>
+        <div class="callout reveal" id="concept-forces">
+          <p><strong>Forces on the bob:</strong> the weight <strong>mg</strong> splits into <strong>mg cos θ</strong> along the thread (balanced by the tension) and <strong>mg sin θ</strong> along the arc, pulling the bob back towards the lowest point. That component is the <strong>restoring force</strong>.</p>
         </div>
 
-        <h3 id="props">Centre vs Extreme Ends side by side</h3>
-        <p>One of the most common exam questions asks what happens to speed, acceleration, force, and energy as the bob swings from one extreme (<code>−A</code>) through the centre (<code>x = 0</code>) to the other extreme (<code>+A</code>):</p>
+        <div class="callout big reveal" id="concept-small">
+          <p><strong>The small-angle step:</strong> for small θ (in radians), sin θ ≈ θ ≈ x/l, so the restoring force is F ≈ −mg(x/l) and a = F/m = <strong>−(g/l)x</strong>. The <strong>mass cancels</strong>. This matches a = −ω²x with ω² = g/l, so <strong>T = 2π√(l/g)</strong>. For large angles sin θ falls noticeably below θ, the force is no longer proportional to x, and the period grows.</p>
+        </div>
+
+        <span class="eq-label">The equations</span>
+        <div class="eq" id="eq-force">F = −mg sin θ</div>
+        <div class="eq" id="eq-acc">a ≈ −(g/l)x</div>
+        <div class="eq" id="eq-omega">ω² = g/l</div>
+        <div class="eq" id="eq-period">T = 2π√(l/g)</div>
+        <div class="eq" id="eq-ratio">T₂/T₁ = √(l₂/l₁)</div>
+        <div class="eq" id="eq-length">l = gT²/4π²</div>
+
+        <h3 id="def-compare">Simple pendulum vs loaded spring</h3>
         <div class="tbl-wrap" id="props-table">
           <table class="tbl">
-            <thead><tr><th>Quantity</th><th>At Extreme Ends (x = −A or +A)</th><th>At Equilibrium Centre (x = 0)</th></tr></thead>
+            <thead><tr><th></th><th>Simple pendulum</th><th>Loaded spring</th></tr></thead>
             <tbody>
-              <tr><td>Displacement <code>|x|</code></td><td><strong>Maximum</strong> (<code>A</code>)</td><td><strong>Zero</strong> (<code>0</code>)</td></tr>
-              <tr><td>Linear speed <code>|v|</code></td><td><strong>Zero</strong> (momentarily stops to reverse)</td><td><strong>Maximum</strong> (<code>v<sub>max</sub> = ωA</code>)</td></tr>
-              <tr><td>Magnitude of acceleration <code>|a|</code></td><td><strong>Maximum</strong> (<code>a<sub>max</sub> = ω²A</code>)</td><td><strong>Zero</strong> (<code>0</code>)</td></tr>
-              <tr><td>Restoring force <code>|F|</code></td><td><strong>Maximum</strong> (<code>mω²A</code>, pulling inward)</td><td><strong>Zero</strong> (net tangential force is 0)</td></tr>
-              <tr><td>Kinetic energy (<code>KE = ½mv²</code>)</td><td><strong>Zero</strong> (<code>0 J</code>)</td><td><strong>Maximum</strong> (<code>½mω²A²</code>)</td></tr>
-              <tr><td>Potential energy (<code>PE</code>)</td><td><strong>Maximum</strong> (highest point of arc)</td><td><strong>Zero</strong> (lowest reference point)</td></tr>
-              <tr><td>Total mechanical energy (<code>KE + PE</code>)</td><td>Constant (equals <code>PE<sub>max</sub></code>)</td><td>Constant (equals <code>KE<sub>max</sub></code>)</td></tr>
+              <tr><td><strong>Period formula</strong></td><td>T = 2π√(l/g)</td><td>T = 2π√(m/k)</td></tr>
+              <tr><td><strong>Depends on mass?</strong></td><td>no</td><td>yes, T ∝ √m</td></tr>
+              <tr><td><strong>Depends on g?</strong></td><td>yes, T ∝ 1/√g</td><td>no</td></tr>
+              <tr><td><strong>Depends on small amplitude?</strong></td><td>no</td><td>no</td></tr>
+              <tr><td><strong>Restoring force from</strong></td><td>weight component mg sin θ</td><td>spring tension kx</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 id="ph-h">Swing Position Explorer: from −A to +A</h3>
-        <p>Tap any pin along the swing path below to inspect the exact displacement, speed, acceleration, and energy split at that point (for an oscillator with <code>A = 0.10 m</code> and <code>ω = 4.0 rad s⁻¹</code>):</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Left extreme (−A)</div><div>Equilibrium (x = 0)</div><div>Right extreme (+A) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a pin along the swing to see its speed, acceleration and energy split.</div>
-        </div>
-
-        <h3 id="indicators-h">Three oscillator truths examiners love</h3>
-        <div class="grid-3" id="lab-indicators">
-          <div class="card"><h4>1 · Isochronism (Small angles)</h4><p>For angles up to about <strong>10°</strong>, <code>sin θ ≈ θ</code> (in radians). A slightly wider swing travels faster through the middle, taking the <strong>same time T</strong>.</p></div>
-          <div class="card"><h4>2 · Mass cancels out</h4><p>In a pendulum, both gravity and inertia are proportional to mass <code>m</code>. They cancel out in <code>ma = −mg sin θ</code>, so <strong>mass never appears in T = 2π√(L/g)</strong>.</p></div>
-          <div class="card"><h4>3 · Damping vs Resonance</h4><p>Air drag causes <strong>damping</strong> (amplitude fades while period stays steady). Pushing at the natural frequency <code>f₀</code> causes <strong>resonance</strong> (huge amplitude).</p></div>
+        <h3 id="pos-h">Angle explorer: how small is “small”?</h3>
+        <p>Tap a release angle. The numbers come from the same pendulum models as the bench and the zoom.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap an angle to compare sin θ with θ.</div>
         </div>
       </section>
 
-      <!-- ================= 5. VECTOR & ENERGY ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Vector &amp; Energy Zoom</span>
-        <h2>Inside the swing: <em>when velocity meets restoring acceleration</em></h2>
-        <p class="intro">Students often assume that when speed is zero, acceleration must also be zero. Watch the <strong>teal velocity arrow (v)</strong> and the <strong>amber acceleration arrow (a)</strong> below: when one is longest, the other vanishes!</p>
+      <!-- ================= ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 2D force zoom</span>
+        <h2>Forces on the bob: <em>mg sin θ pulls it home</em></h2>
+        <p class="intro">Drag the angle and watch the components. Swap the 50 g bob for 100 g: every force arrow doubles, but the green acceleration arrow <strong>g sin θ</strong> stays the same. The small 3D view shows the real pendulum swinging.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D close-up view of a harmonic oscillator showing live velocity vector in teal, restoring acceleration vector in amber, and 3D kinetic, potential and total energy bars."></canvas>
-            <div class="stage-label"><i></i>3D Vector &amp; Energy Zoom · v (teal) vs a (amber)</div>
+            <canvas id="zoom-canvas" aria-label="2D force diagram: the thread at angle theta, the bob, the weight mg straight down, the tension along the thread, the components mg cos theta along the thread and mg sin theta along the arc, a shaded triangle showing sin theta is about x over l, and the acceleration g sin theta."></canvas>
+            <div class="pd-ctx" id="zoom-ctx"><canvas id="zoom-canvas-3d" aria-label="Small 3D view of the pendulum swinging."></canvas><span class="pd-ctx-lbl">3D view</span></div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D vector view couldn't start on this device. The equations below show the same relationship.</p></div>
+            <div class="stage-fallback"><p>The force zoom couldn't start on this device.</p></div>
           </div>
-          <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Oscillator view mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Live SHM</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Freeze at Centre (x = 0)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Freeze at Extreme (x = +A)</button>
-            </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Toggle air damping</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset swing</button>
-            <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#ffb23f"></i>|a| (m s⁻²)<b data-c="h">0.00</b></span>
-              <span class="counter"><i style="--c:#3ee6c4"></i>|v| (m s⁻¹)<b data-c="oh">0.40</b></span>
-              <span class="counter"><i style="--c:#9b8cff"></i>KE (%)<b data-c="na">100</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>PE (%)<b data-c="cl">0</b></span>
-              <span class="counter"><i style="--c:#7cc4ff"></i>Total E (%)<b data-c="w">100</b></span>
+          <div class="bench-readout" id="zoom-readout" aria-live="polite"></div>
+          <div class="stage-bar pd-zbar">
+            <label for="zoom-theta"><span>θ</span><input type="range" id="zoom-theta" min="2" max="45" step="1" value="20" aria-label="Angle theta in degrees"><b id="zoom-theta-v">20°</b></label>
+            <div class="pd-zrow">
+              <button class="pd-btn" type="button" data-mass="50" aria-pressed="true">50 g</button>
+              <button class="pd-btn" type="button" data-mass="100" aria-pressed="false">100 g</button>
+              <button class="pd-btn" type="button" id="zoom-swing" aria-pressed="false">Swing</button>
             </div>
           </div>
-        </div>
-
-        <span class="eq-label">Total mechanical energy at any displacement x</span>
-        <div class="eq" id="eq-full">E<sub>total</sub> = KE + PE = ½mω<sup>2</sup>(A<sup>2</sup> − x<sup>2</sup>) + ½mω<sup>2</sup>x<sup>2</sup> = ½mω<sup>2</sup>A<sup>2</sup></div>
-        <span class="eq-label">Period rearrangement for practical graph work</span>
-        <div class="eq" id="eq-ionic" data-hook>T = 2π√(L ÷ g) &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; T<sup>2</sup> = (4π<sup>2</sup> ÷ g)L &nbsp;&nbsp;<span class="arr">⇒</span>&nbsp;&nbsp; g = 4π<sup>2</sup> × (L ÷ T<sup>2</sup>)</div>
-        <div class="callout big reveal" id="neut-def">
-          <p><strong>Look at the extreme end (x = +A):</strong> the bob stops for an instant (<code>v = 0</code>), yet the restoring pull is at its fiercest, so <strong>acceleration is maximum (a<sub>max</sub> = ω²A)</strong>. Without that maximum inward acceleration, the bob could never start moving back!</p>
         </div>
       </section>
 
-      <!-- ================= 6. WORKED EXAMPLES ================= -->
+      <!-- ================= 4. WORKED EXAMPLES ================= -->
       <section class="l-sec" id="examples">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 10 min</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Cover the numbered steps with your hand, attempt each calculation on paper first, and then check how every mark is earned.</p>
+        <p class="intro">Try each on paper first, then check the working. Watch the square roots — most lost marks come from leaving one out.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Period, frequency, ω and length from 20 swings</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>The period of a 0.90 m pendulum</h4></div>
           <div class="example-body">
-            <p class="q">In a school physics laboratory, a simple pendulum takes 36.0 s to complete 20 oscillations. Taking g = 9.8 m s<sup>−2</sup> and π = 3.142, calculate: (a) the period T, (b) the frequency f, (c) the angular frequency ω, and (d) the effective length L of the pendulum.</p>
+            <p class="q">Find the period of a simple pendulum 0.90 m long (g = 9.8 m s⁻²).</p>
             <ol class="steps-sol">
-              <li><strong>Period T:</strong> divide the total time <code>t = 36.0 s</code> by the number of oscillations <code>N = 20</code>: <code>T = 36.0 ÷ 20 = 1.80 s</code>.</li>
-              <li><strong>Frequency f:</strong> take the reciprocal of the period: <code>f = 1 ÷ T = 1 ÷ 1.80 = 0.556 Hz</code>.</li>
-              <li><strong>Angular frequency ω:</strong> use <code>ω = 2π ÷ T = (2 × 3.142) ÷ 1.80 = 3.49 rad s⁻¹</code>.</li>
-              <li><strong>Length L:</strong> square both sides of <code>T = 2π√(L/g)</code> to get <code>L = gT² ÷ (4π²) = (9.8 × 1.80²) ÷ (4 × 3.142²) = 31.752 ÷ 39.489 = 0.804 m (80.4 cm)</code>.</li>
+              <li><strong>Write the formula and substitute:</strong> <code>T = 2π√(0.90 ÷ 9.8)</code></li>
+              <li><strong>Divide inside the root:</strong> <code>T = 2π√0.0918 = 2 × 3.142 × 0.303</code></li>
+              <li><strong>Multiply:</strong> <code>T = 1.90 s</code></li>
             </ol>
-            <div class="answer-line">(a) T = 1.80 s &nbsp;·&nbsp; (b) f = 0.556 Hz &nbsp;·&nbsp; (c) ω = 3.49 rad s<sup>−1</sup> &nbsp;·&nbsp; (d) L = 0.804 m</div>
+            <div class="answer-line">T ≈ 1.90 s</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Maximum speed, maximum acceleration &amp; speed at x</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>A ratio: lengthening the thread</h4></div>
           <div class="example-body">
-            <p class="q">A particle executes simple harmonic motion with amplitude A = 0.10 m and angular frequency ω = 4.0 rad s<sup>−1</sup>. Find: (a) its maximum speed v<sub>max</sub>, (b) its maximum acceleration a<sub>max</sub>, and (c) its speed when it is at displacement x = 0.06 m from the equilibrium centre.</p>
+            <p class="q">A pendulum 0.40 m long has period 1.27 s. The thread is lengthened to 0.90 m. Find the new period.</p>
             <ol class="steps-sol">
-              <li><strong>Maximum speed (at x = 0):</strong> <code>v<sub>max</sub> = ωA = 4.0 × 0.10 = 0.40 m s⁻¹</code>.</li>
-              <li><strong>Maximum acceleration (at x = ±A):</strong> <code>a<sub>max</sub> = ω²A = 4.0² × 0.10 = 16 × 0.10 = 1.60 m s⁻²</code>.</li>
-              <li><strong>Speed at x = 0.06 m:</strong> substitute into <code>v = ω√(A² − x²) = 4.0 × √(0.10² − 0.06²) = 4.0 × √(0.0100 − 0.0036) = 4.0 × √0.0064 = 4.0 × 0.08 = 0.32 m s⁻¹</code>.</li>
+              <li><strong>Use T ∝ √l:</strong> <code>T₂/T₁ = √(0.90 ÷ 0.40)</code></li>
+              <li><strong>Evaluate the root:</strong> <code>T₂/T₁ = √2.25 = 1.5</code></li>
+              <li><strong>Multiply by the old period:</strong> <code>T₂ = 1.5 × 1.27 = 1.90 s</code></li>
             </ol>
-            <div class="answer-line">(a) v<sub>max</sub> = 0.40 m s<sup>−1</sup> &nbsp;·&nbsp; (b) a<sub>max</sub> = 1.60 m s<sup>−2</sup> &nbsp;·&nbsp; (c) v = 0.32 m s<sup>−1</sup></div>
+            <div class="answer-line">T₂ ≈ 1.90 s (agrees with Example 1)</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Finding g from the slope of a WAEC practical graph</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>The same pendulum on the Moon</h4></div>
           <div class="example-body">
-            <p class="q">During a WAEC Paper 3 practical, a student plots length L (m) on the vertical axis against T<sup>2</sup> (s<sup>2</sup>) on the horizontal axis. Two widely separated points on the line of best fit are (1.60 s<sup>2</sup>, 0.40 m) and (4.44 s<sup>2</sup>, 1.10 m). Determine: (a) the slope S of the graph, and (b) the acceleration due to gravity g.</p>
+            <p class="q">A pendulum has period 2.0 s on Earth. Find its period on the Moon, where g is one-sixth of Earth's.</p>
             <ol class="steps-sol">
-              <li><strong>Slope S:</strong> <code>S = ΔL ÷ ΔT² = (1.10 − 0.40) ÷ (4.44 − 1.60) = 0.70 ÷ 2.84 = 0.2465 m s⁻²</code>.</li>
-              <li><strong>Relate slope to g:</strong> since <code>L = (g ÷ 4π²)T²</code>, the slope of <code>L</code> against <code>T²</code> equals <code>g ÷ 4π²</code>.</li>
-              <li><strong>Calculate g:</strong> <code>g = 4π² × S = 4 × (3.142)² × 0.2465 = 39.489 × 0.2465 = 9.73 m s⁻²</code>.</li>
+              <li><strong>Use T ∝ 1/√g:</strong> <code>T_M/T_E = √(g_E/g_M) = √6</code></li>
+              <li><strong>Evaluate the root:</strong> <code>√6 = 2.45</code></li>
+              <li><strong>Multiply:</strong> <code>T_M = 2.0 × 2.45 = 4.9 s</code></li>
             </ol>
-            <div class="answer-line">(a) Slope S = 0.247 m s<sup>−2</sup> &nbsp;·&nbsp; (b) g = 9.73 m s<sup>−2</sup></div>
+            <div class="answer-line">T ≈ 4.9 s</div>
           </div>
         </article>
 
         <article class="example" id="ex4">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>JAMB scaling trap: quadrupling the length</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>The seconds pendulum</h4></div>
           <div class="example-body">
-            <p class="q">A simple pendulum has a period of 1.50 s at a certain location. What becomes its new period and frequency if its length is quadrupled (multiplied by 4) at the same location?</p>
+            <p class="q">A “seconds pendulum” ticks once per second, so its period is 2.0 s. Find its length (g = 9.8 m s⁻²).</p>
             <ol class="steps-sol">
-              <li>From <code>T = 2π√(L/g)</code>, when <code>g</code> is constant, <code>T ∝ √L</code>.</li>
-              <li>Therefore <code>T₂ ÷ T₁ = √(L₂ ÷ L₁) = √4 = 2</code>.</li>
-              <li>New period: <code>T₂ = 2 × 1.50 s = 3.00 s</code>. New frequency: <code>f₂ = 1 ÷ 3.00 = 0.333 Hz</code> (half the original frequency).</li>
+              <li><strong>Rearrange T = 2π√(l/g):</strong> <code>l = gT²/4π²</code></li>
+              <li><strong>Substitute:</strong> <code>l = 9.8 × 2.0² ÷ 39.5 = 39.2 ÷ 39.5</code></li>
+              <li><strong>Divide:</strong> <code>l = 0.99 m</code></li>
             </ol>
-            <div class="answer-line">New period T<sub>2</sub> = 3.00 s (doubled) &nbsp;·&nbsp; New frequency f<sub>2</sub> = 0.333 Hz (halved)</div>
+            <div class="answer-line">l ≈ 0.99 m</div>
           </div>
         </article>
       </section>
 
-      <!-- ================= 7. BRIDGE ================= -->
+      <!-- ================= BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 10 min</span>
-        <h2>Back to Mama Ngozi: <em>how do we fix the school clock?</em></h2>
-        <p class="intro">Now you have the physics to solve Kunle's complaint! Test Mrs Adeyemi's idea first (making Clock B's bob heavier), then time 10 swings of both clocks, and finally turn the regulating nut to adjust Clock B's length.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Tunde's test and <em>Mrs Okafor's puzzle</em></h2>
+        <p class="intro">Run Tunde's test on the bench (50 g and 100 g at 0.50 m), then find the pendulum that keeps the okada's 0.50 s bounce.</p>
 
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Clock A · Accurate reference <small style="color:var(--muted);font-weight:500">· L = 0.994 m</small></h4>
-              <div class="clock-well">
-                <div class="clock-rod" id="rod-a" style="height:105px;animation:heroSwing 1.0s ease-in-out infinite alternate"><div class="clock-bob"></div></div>
-              </div>
-              <div class="vt-count"><span id="time-a">2.00 s</span><small>period T (target: 2.00 s)</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Clock B · School hall clock <small style="color:var(--muted);font-weight:500" id="len-b-label">· L = 1.150 m</small></h4>
-              <div class="clock-well">
-                <div class="clock-rod" id="rod-b" style="height:124px;animation:heroSwing 1.075s ease-in-out infinite alternate"><div class="clock-bob" id="bob-b"></div></div>
-              </div>
-              <div class="vt-count"><span id="time-b">2.15 s</span><small>period T (loses 4.5 min/hr!)</small></div>
-            </div>
-          </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Add heavy lead weight to Clock B</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Screw nut UP (−5 cm length)</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Fine-tune nut to L = 0.994 m</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset clocks</button>
-          </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Clock A ticks with T = 2.00 s, while Clock B is dragging at T = 2.15 s. Start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
+        <div class="bridge-card" id="bridge-card">
+          <h4>Mass, and the 6.2 cm pendulum</h4>
+          <div id="bridge-steps"></div>
+          <div class="vt-verdict" id="bridge-verdict" aria-live="polite"></div>
+          <p class="model-note">Story numbers are a teaching model, not real measurements.</p>
         </div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of this whole topic:</strong> a simple pendulum is a natural timekeeper because its period <strong>T = 2π√(L/g)</strong> depends only on its effective length <strong>L</strong> and local gravity <strong>g</strong> — never on the mass of the bob or small changes in swing width. To make a slow pendulum clock tick faster, you shorten <strong>L</strong> by turning the regulating nut upward; to measure <strong>g</strong> anywhere on Earth, you measure <strong>L</strong> and <strong>T</strong>!</p>
+          <p><strong>The big idea of Lesson 4:</strong> T = 2π√(l/g) — only length and gravity count, for small swings. A heavier bob is not slower, and the okada's bounce keeps the time of a 6.2 cm pendulum.</p>
         </div>
       </section>
 
-      <!-- ================= 8. QUIZ ================= -->
+      <!-- ================= QUIZ ================= -->
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
-        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option to see immediately whether you're right and why. Your score is saved on this device.</p>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lessons 2 and 3 come at the end.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
-          <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
         </div>
       </section>
 
-      <!-- ================= 9. REFLECT ================= -->
+      <!-- ================= 5. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate yourself honestly from 1 to 4. This isn't a high-stakes test — it's a personal map of what you've mastered and what to review.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 4.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can distinguish Simple Harmonic Motion from other periodic motions using a = −ω²x.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can define amplitude, period, frequency and angular frequency and convert between them.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can explain where speed, acceleration, KE and PE are zero or maximum during a swing.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can use T = 2π√(L/g) and the slope of an L–T² graph to calculate g.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can state WAEC pendulum precautions in the past tense and explain why mass does not affect T.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can name the restoring force on a bob.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can explain the small-angle condition.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can use T = 2π√(l/g).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can solve length and g ratio problems.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can contrast the pendulum and the spring.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
         <div class="aq" data-answer="exit">
-          <div class="aq-top"><h4>In one or two sentences: why didn't adding a heavier weight fix Kunle's slow school clock, and what adjustment actually solved it?</h4><span class="marks">2 marks</span></div>
+          <div class="aq-top"><h4>A pendulum's length is reduced to one quarter. What happens to its period?</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>The period of a simple pendulum <code>T = 2π√(L/g)</code> is independent of the mass of the bob, so adding weight did not change the swing time <b>(1)</b>. Turning the regulating nut upward shortened the effective length <code>L</code>, which decreased the period <code>T</code> from <code>2.15 s</code> back to <code>2.00 s</code> so the clock kept accurate time <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>T ∝ √l <b>(1)</b>, so <code>T₂/T₁ = √(1/4) = 0.5</code>: the period is <strong>halved</strong> <b>(1)</b>.</p></div>
           </details>
-        </div>
-
-        <h3>Back to your Wonder Wall</h3>
-        <p>Look back at the predictions you pinned at the start of the lesson. Which ones stood up to the 3D lab test? Pin one takeaway or follow-up question below.</p>
-        <div data-wall="wonder" id="wall-review">
-          <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="One thing I discovered today or want to test next…" aria-label="Add a new note">
-            <button class="btn btn-ink btn-sm" type="submit">Pin it</button>
-          </form>
-          <div class="wall" aria-live="polite"></div>
         </div>
       </section>
 
-      <!-- ================= 10. ASSIGNMENT ================= -->
+      <!-- ================= ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · about 40 min at home</span>
-        <h2>Assignment: <em>prove what you know</em></h2>
-        <p class="intro">Part A is a hands-on home pendulum investigation and Part B is a 30-mark structured exam paper. Type or write your attempt first — each model solution unlocks once you've tried the question.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Type your attempt first to unlock each model solution.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
-          <span style="font-size:13.5px;color:var(--paper-muted)">Your typed answers are saved on this device only.</span>
         </div>
 
-        <h3>Part A · Home gravity measurement (practical task)</h3>
-        <div class="aq" data-answer="a1">
-          <div class="aq-top"><h4>Tie a small stone, metal key or heavy hex nut to a piece of sewing thread. Hang it from the edge of a table or door frame. Using a ruler/measuring tape and your phone stopwatch, measure the time t for 20 swings at two lengths: L<sub>1</sub> = 0.40 m (40 cm) and L<sub>2</sub> = 0.80 m (80 cm). Calculate T, T<sup>2</sup>, and estimate local g from g = 4π<sup>2</sup>L ÷ T<sup>2</sup>.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="L1 = 0.40 m: t = … s, T = … s, T² = … s², g = … m/s². L2 = 0.80 m: t = … s, T = … s, T² = … s², g = … m/s²." aria-label="Part A answer"></textarea>
-          <div class="attempt-row"><label><input type="checkbox"> I've carried out this home task and recorded my readings on paper</label></div>
+        <h3>Part A · Home investigation: key against padlock</h3>
+        <div class="aq" data-answer="l04-a1">
+          <div class="aq-top"><h4>Does mass change the swing?</h4></div>
+          <p><strong>You need:</strong> two pieces of thread about 80 cm long, a light key, a heavy padlock, a broom handle or rod laid across two chairs, tape, a tape measure and a phone stopwatch.</p>
+          <ol class="sub">
+            <li>Tie the key to one thread and the padlock to the other. Hang both from the rod so that each length, from the rod to the middle of the object, is the same (say 60 cm). Keep them about 30 cm apart.</li>
+            <li>Pull both aside by the same small angle (about 10°, roughly 10 cm sideways) and release them together. Watch for 20 swings: do they stay in step?</li>
+            <li>Time 20 oscillations of each separately, twice.</li>
+            <li>Now shorten the key's thread to 30 cm and release both together again. Watch which one gets ahead.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
           <details class="reveal-box solution">
-            <summary>Sample readings &amp; marking guide <small>unlocks after you try</small></summary>
+            <summary>Sample results <small>unlocks after you try</small></summary>
             <div class="reveal-body">
-              <div class="tbl-wrap"><table class="tbl">
-                <thead><tr><th>Length L (m)</th><th>Typical t for 20 swings (s)</th><th>Period T = t ÷ 20 (s)</th><th>T<sup>2</sup> (s<sup>2</sup>)</th><th>Estimated g = 4π<sup>2</sup>L ÷ T<sup>2</sup></th></tr></thead>
-                <tbody>
-                  <tr><td>0.40 m</td><td>25.2 – 25.6 s</td><td>1.26 – 1.28 s</td><td>1.59 – 1.64 s<sup>2</sup></td><td>9.6 – 9.9 m s<sup>−2</sup></td></tr>
-                  <tr><td>0.80 m</td><td>35.6 – 36.2 s</td><td>1.78 – 1.81 s</td><td>3.17 – 3.28 s<sup>2</sup></td><td>9.6 – 10.0 m s<sup>−2</sup></td></tr>
-                </tbody>
-              </table></div>
-              <p class="mark-scheme"><b>Good response:</b> both lengths measured to the centre of the stone/key, <code>t</code> recorded for 20 full swings, <code>T</code> and <code>T²</code> calculated accurately, and <code>g</code> within <code>9.4–10.2 m s⁻²</code>.</p>
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Pendulum</th><th>Length (m)</th><th>t₁ for 20 (s)</th><th>t₂ for 20 (s)</th><th>T (s)</th></tr></thead><tbody>
+                <tr><td>Key</td><td>0.60</td><td>31.2</td><td>31.0</td><td>1.56</td></tr>
+                <tr><td>Padlock</td><td>0.60</td><td>31.1</td><td>31.2</td><td>1.56</td></tr>
+                <tr><td>Key (shortened)</td><td>0.30</td><td>22.1</td><td>21.9</td><td>1.10</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows that the key and the padlock at the same length stay in step and have the same period within timing error (about 1.56 s), so the mass of the bob does not change T, which disproves Tunde's “heavier is steadier”; halving the length shortens the period by a factor of about √2 (1.56 ÷ 1.10 ≈ 1.4), so length does change it. A strong answer explains why mass cancels (bigger weight but also bigger inertia), notes that the angle was kept small and the same for a fair test, and names a source of error: the lengths were measured to the top of the objects rather than their centres, or a draught pushed the light key more than the padlock.</p>
             </div>
           </details>
         </div>
 
-        <h3>Part B · Written questions <span style="font-size:1rem;color:var(--paper-muted);font-family:var(--font-body)">(30 marks)</span></h3>
-
-        <div class="aq" data-answer="b1">
-          <div class="aq-top"><h4>1. Define each term and state its SI unit: (a) simple harmonic motion (b) amplitude (c) period (d) frequency.</h4><span class="marks">4 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) … (d) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <ol type="a">
-              <li>Simple harmonic motion is a periodic to-and-fro motion in which the acceleration of the body is directly proportional to its displacement from a fixed equilibrium point and is always directed towards that point (<code>a = −ω²x</code>). <b>(1)</b></li>
-              <li>Amplitude is the maximum displacement of an oscillating body from its equilibrium position (SI unit: metre, <code>m</code>). <b>(1)</b></li>
-              <li>Period is the time taken to complete one full oscillation (SI unit: second, <code>s</code>). <b>(1)</b></li>
-              <li>Frequency is the number of complete oscillations made in one second (SI unit: hertz, <code>Hz</code> or <code>s⁻¹</code>). <b>(1)</b></li>
-            </ol>
+        <h3>Part B · Written paper (30 marks)</h3>
+        <div class="aq" data-answer="l04-b1">
+          <div class="aq-top"><h4>1. Definitions</h4><span class="marks">3 marks</span></div>
+          <p>Define: (a) a <em>simple pendulum</em>; (b) a <em>seconds pendulum</em>; (c) the <em>effective length</em> of a simple pendulum.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) A small heavy bob hung from a fixed point by a light, inextensible thread, free to swing to and fro in a vertical plane. (1) (b) A simple pendulum that takes exactly 2 s for one complete oscillation (each swing from one end to the other takes 1 s). (1) (c) The distance from the point of suspension to the centre of mass (centre) of the bob. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (a) “light thread” and “heavy (small) bob” are both needed. In (b) “period 1 s” is a common error and scores zero. In (c) “the length of the thread” alone is not accepted.</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b2">
-          <div class="aq-top"><h4>2. “All simple harmonic motions are periodic, but not all periodic motions are simple harmonic.” Explain this statement with one example of each.</h4><span class="marks">3 marks</span></div>
-          <textarea class="l-textarea" placeholder="Your explanation…" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>Every simple harmonic motion repeats at regular time intervals <code>T</code>, so it is periodic <b>(1)</b>. However, to be simple harmonic, the motion must also have a restoring acceleration proportional to displacement towards a central equilibrium point (<code>a = −ω²x</code>) <b>(1)</b>. Example of SHM: a simple pendulum swinging through a small angle (or a mass on a spiral spring). Example of periodic motion that is not SHM: the uniform rotation of ceiling fan blades (or the Earth orbiting the Sun) <b>(1)</b>.</p>
+        <div class="aq" data-answer="l04-b2">
+          <div class="aq-top"><h4>2. What Sets the Period?</h4><span class="marks">3 marks</span></div>
+          <p>(a) Name the two quantities on which the period of a simple pendulum depends. (b) Name two quantities that do <strong>not</strong> affect it (for small swings). (c) Why must the swing be small?</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The length l and the acceleration due to gravity g. (1) (b) The mass of the bob and the amplitude (angle) of a small swing; also accept the material or colour of the bob. (1) (c) Only for small angles is sin θ ≈ θ, so that the restoring force is proportional to displacement and the motion is SHM. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Both answers are needed in (a) and in (b). “Small angles are safer” scores zero in (c).</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b3">
-          <div class="aq-top"><h4>3. A body of mass 0.20 kg executes simple harmonic motion with amplitude A = 0.12 m and frequency f = 2.5 Hz. Calculate: (a) its angular frequency ω, (b) its maximum speed v<sub>max</sub>, (c) its maximum acceleration a<sub>max</sub>, and (d) its speed when displaced x = 0.09 m from equilibrium. (Take π = 3.142)</h4><span class="marks">5 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) ω = … (b) vmax = … (c) amax = … (d) v = …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <div class="eq light">(a) ω = 2πf = 2 × 3.142 × 2.5 = 15.71 rad s<sup>−1</sup> <b>(1)</b></div>
-            <div class="eq light">(b) v<sub>max</sub> = ωA = 15.71 × 0.12 = 1.89 m s<sup>−1</sup> <b>(1)</b></div>
-            <div class="eq light">(c) a<sub>max</sub> = ω<sup>2</sup>A = (15.71)<sup>2</sup> × 0.12 = 246.8 × 0.12 = 29.6 m s<sup>−2</sup> <b>(1)</b></div>
-            <div class="eq light">(d) v = ω√(A<sup>2</sup> − x<sup>2</sup>) = 15.71 × √(0.12<sup>2</sup> − 0.09<sup>2</sup>) = 15.71 × √0.0063 = 15.71 × 0.07937 = 1.25 m s<sup>−1</sup> <b>(2)</b></div>
+        <div class="aq" data-answer="l04-b3">
+          <div class="aq-top"><h4>3. Deriving T = 2π√(l/g) (extension)</h4><span class="marks">5 marks</span></div>
+          <p>A bob of mass m on a thread of length l is displaced through a small angle θ, its displacement along the arc being x. (a) Draw and label the forces on the bob. (b) Write the restoring force. (c) Using the small-angle approximation, show that a = −(g/l)x. (d) Hence show that the motion is SHM and that T = 2π√(l/g). (e) Explain why the mass of the bob does not appear.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Weight mg vertically down and tension along the thread towards the support; mg resolved into mg cos θ along the thread and mg sin θ along the arc. (1) (b) F = −mg sin θ (towards the lowest point). (1) (c) For small θ in radians, sin θ ≈ θ = x/l, so F ≈ −mg(x/l) and a = F/m = −(g/l)x. (1) (d) g/l is a positive constant, so a ∝ −x: SHM with ω² = g/l; T = 2π/ω = 2π√(l/g). (1) (e) m appears in both the restoring force and in F = ma, so it cancels. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> The small-angle step (sin θ ≈ θ = x/l) must be stated for (c). A formula quoted without derivation earns only (d) if the comparison with a = −ω²x is shown.</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b4">
-          <div class="aq-top"><h4>4. For an undamped simple pendulum swinging between −A and +A, state the position(s) where each quantity is maximum: (a) kinetic energy, (b) magnitude of restoring force, (c) linear velocity, (d) gravitational potential energy.</h4><span class="marks">4 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) … (d) …" aria-label="Question 4 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Kinetic energy is maximum at the <strong>equilibrium centre (x = 0)</strong> <b>(1)</b>.<br>
-               (b) Restoring force is maximum at the <strong>two extreme ends (x = −A and x = +A)</strong> <b>(1)</b>.<br>
-               (c) Linear velocity is maximum at the <strong>equilibrium centre (x = 0)</strong> <b>(1)</b>.<br>
-               (d) Gravitational potential energy is maximum at the <strong>two extreme ends (x = −A and x = +A)</strong> <b>(1)</b>.</p>
+        <div class="aq" data-answer="l04-b4">
+          <div class="aq-top"><h4>4. A Long Pendulum</h4><span class="marks">4 marks</span></div>
+          <p>A pendulum in a school hall is 1.21 m long. (Take g = 9.8 m s⁻².) Calculate: (a) its period; (b) the time for 50 oscillations; (c) the length needed for a period of 1.10 s; (d) the frequency of the 1.10 s pendulum.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>T = 2π√(1.21 ÷ 9.8) = 2π × 0.3514 = 2.21 s</code> (1) (b) <code>t = 50 × 2.208 = 110 s</code> (1) (c) <code>l = 9.8 × 1.21 ÷ 39.48 = 0.300 m</code> (1) (d) <code>f = 1 ÷ 1.10 = 0.909 Hz</code> (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Error carried forward into (b). In (c) forgetting to square T gives 0.273 m and loses the mark. Units required.</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b5">
-          <div class="aq-top"><h4>5. In a simple pendulum practical (N = 20 oscillations), a candidate recorded t<sub>1</sub> = 28.40 s for L<sub>1</sub> = 0.50 m, and t<sub>2</sub> = 40.16 s for L<sub>2</sub> = 1.00 m. (a) Find T and T<sup>2</sup> for both lengths. (b) Calculate the slope S = ΔL ÷ ΔT<sup>2</sup>. (c) Hence determine the acceleration due to gravity g.</h4><span class="marks">5 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 5 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) For <code>L₁ = 0.50 m</code>: <code>T₁ = 28.40 ÷ 20 = 1.420 s</code>; <code>T₁² = 2.016 s²</code> <b>(1)</b>.<br>
-               For <code>L₂ = 1.00 m</code>: <code>T₂ = 40.16 ÷ 20 = 2.008 s</code>; <code>T₂² = 4.032 s²</code> <b>(1)</b>.</p>
-            <p>(b) Slope <code>S = (1.00 − 0.50) ÷ (4.032 − 2.016) = 0.50 ÷ 2.016 = 0.2480 m s⁻²</code> <b>(1)</b>.</p>
-            <p>(c) <code>g = 4π² × S = 39.489 × 0.2480 = 9.79 m s⁻²</code> <b>(2)</b>.</p>
+        <div class="aq" data-answer="l04-b5">
+          <div class="aq-top"><h4>5. Earth and Moon</h4><span class="marks">5 marks</span></div>
+          <p>A clock pendulum has a period of 2.40 s on Earth (g = 9.8 m s⁻²). (a) Calculate its length. (b) Calculate its period on the Moon, where g is one-sixth of Earth's. (c) What length would give a period of 2.40 s on the Moon? (d) Explain why a pendulum clock taken to the Moon without adjustment would show the wrong time, and say whether it would gain or lose.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>l = 9.8 × 5.76 ÷ 39.48 = 1.43 m</code> (1) (b) <code>T_M = 2.40 × 2.449 = 5.88 s</code> (1) (c) For the same T, l ∝ g, so <code>l_M = 1.43 ÷ 6 = 0.238 m</code> (0.24 m). (1) (d) Each swing takes longer, so the clock ticks fewer times per real hour (1): it loses time (runs slow). (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (b) multiplying by 6 (14.4 s) loses the mark. In (c) “l × 6” is the inverse error. In (d) “gains” scores zero for the last mark.</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b6">
-          <div class="aq-top"><h4>6. State and explain how the period T of a simple pendulum changes if: (a) the mass of the bob is tripled, (b) the length of the thread is multiplied by 9, (c) the pendulum is taken to the Moon where g<sub>Moon</sub> = ⅙ g<sub>Earth</sub>.</h4><span class="marks">3 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 6 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) <strong>Unchanged</strong>, because period <code>T = 2π√(L/g)</code> is independent of mass <b>(1)</b>.<br>
-               (b) <strong>Triples (3T)</strong>, because <code>T ∝ √L</code> and <code>√9 = 3</code> <b>(1)</b>.<br>
-               (c) <strong>Increases by a factor of √6 (≈ 2.45T)</strong>, because <code>T ∝ 1/√g</code> <b>(1)</b>.</p>
+        <div class="aq" data-answer="l04-b6">
+          <div class="aq-top"><h4>6. Practical: Testing the Pendulum Laws</h4><span class="marks">5 marks</span></div>
+          <p>Zainab changed one variable at a time and timed 20 oscillations:</p>
+          <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Test</th><th>Length / m</th><th>Bob mass / g</th><th>Angle / °</th><th>t (20 osc.) / s</th></tr></thead><tbody>
+            <tr><td>1</td><td>0.60</td><td>50</td><td>8</td><td>31.10</td></tr>
+            <tr><td>2</td><td>0.60</td><td>100</td><td>8</td><td>31.12</td></tr>
+            <tr><td>3</td><td>0.60</td><td>100</td><td>4</td><td>31.08</td></tr>
+            <tr><td>4</td><td>0.30</td><td>100</td><td>8</td><td>22.00</td></tr>
+            <tr><td>5</td><td>1.20</td><td>100</td><td>8</td><td>43.98</td></tr>
+          </tbody></table></div>
+          <p>(a) Calculate T for tests 1, 4 and 5. (b) What do tests 1 and 2 show? (c) What do tests 2 and 3 show? (d) Use tests 4 and 5 to show that T ∝ √l.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) T₁ = 31.10 ÷ 20 = 1.555 s; T₄ = 22.00 ÷ 20 = 1.100 s; T₅ = 43.98 ÷ 20 = 2.199 s. (1) (b) Doubling the mass left T unchanged (within 0.02 s in 31 s), so T does not depend on the bob's mass. (1) (c) Halving the (small) angle left T unchanged, so for small swings T does not depend on amplitude. (1) (d) l₅/l₄ = 1.20 ÷ 0.30 = 4 (1); T₅/T₄ = 2.199 ÷ 1.100 = 2.0 = √4, so T ∝ √l. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> All three periods are needed in (a). In (b) and (c) the conclusion must name the variable. In (d) the ratio comparison is required; “T increases with l” alone earns no marks.</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b7">
-          <div class="aq-top"><h4>7. Kunle's school hall pendulum clock has a period of 2.15 s instead of 2.00 s, so it loses time. (a) Why did attaching a heavier lead weight to the bob fail to speed it up? (b) By how many centimetres must the effective length be shortened to bring the period from 2.15 s back to 2.00 s? (Take g = 9.81 m s<sup>−2</sup>)</h4><span class="marks">4 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 7 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Mass does not affect the period of a simple pendulum because gravitational force and inertia both scale equally with mass <b>(1)</b>.</p>
-            <p>(b) Using <code>L = gT² ÷ 4π²</code>:<br>
-               At <code>T₁ = 2.15 s</code>: <code>L₁ = 9.81 × (2.15)² ÷ 39.478 = 1.149 m</code> <b>(1)</b>.<br>
-               At <code>T₂ = 2.00 s</code>: <code>L₂ = 9.81 × (2.00)² ÷ 39.478 = 0.994 m</code> <b>(1)</b>.<br>
-               Shorten by <code>ΔL = 1.149 − 0.994 = 0.155 m = 15.5 cm</code> <b>(1)</b>.</p>
+        <div class="aq" data-answer="l04-b7">
+          <div class="aq-top"><h4>7. Pendulum or Spring?</h4><span class="marks">3 marks</span></div>
+          <p>For each change, say whether the period of (i) a simple pendulum and (ii) a mass on a spring increases, decreases or stays the same: (a) the mass of the bob or load is doubled; (b) the system is taken to the Moon; (c) the amplitude is halved (still small).</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Pendulum: same; spring: increases (×√2). (1) (b) Pendulum: increases (×√6); spring: same. (1) (c) Both stay the same. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Each part needs both systems right for its mark.</small></p>
           </div></details>
         </div>
-
-        <div class="aq" data-answer="b8">
-          <div class="aq-top"><h4>8. State two precautions, written in the standard WAEC past-tense format, that you took during the simple pendulum experiment.</h4><span class="marks">2 marks</span></div>
-          <textarea class="l-textarea" placeholder="1… 2…" aria-label="Question 8 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>Any two, 1 mark each (must be in the past tense):<br>
-               1. <em>“Parallax error was avoided by keeping my line of sight perpendicular to the metre rule when measuring the length L.”</em><br>
-               2. <em>“Conical oscillation was avoided by displacing the bob through a small angle (≤ 10°) so that it swung in a single vertical plane.”</em><br>
-               3. <em>“Air disturbance was avoided by switching off the laboratory fans during timing.”</em></p>
+        <div class="aq" data-answer="l04-b8">
+          <div class="aq-top"><h4>8. The Bridge: The 6.2 cm Pendulum</h4><span class="marks">2 marks</span></div>
+          <p>Mrs Okafor's short pendulum keeps time with the okada's bounce (T = 0.50 s). (Take g = 9.8 m s⁻².) (a) Calculate its length. (b) Show that it equals the okada's static sag, mg/k, with m = 200 kg and k = 3.16 × 10⁴ N m⁻¹.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) <code>l = 9.8 × 0.25 ÷ 39.48 = 0.062 m</code> (6.2 cm). (1) (b) <code>mg/k = 200 × 9.8 ÷ 31600 = 0.062 m</code>: the same, because the two periods are equal when l/g = m/k. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> In (b) the numerical check alone earns the mark; the l/g = m/k reason is credit-worthy but not required. Story numbers are a teaching model, not real measurements.</small></p>
           </div></details>
         </div>
+      </section>
 
-        <div class="callout tip">
-          <p><strong>Grade yourself:</strong> 26–30 Excellent · 20–25 Good · 14–19 Fair (review Sections 4–6) · below 14 Not yet (replay the narrator for Sections 4–7, then retry).</p>
-        </div>
-
-        <details class="reveal-box teacher" id="teacher-notes">
-          <summary>For teachers · 80-minute lesson plan and preparation</summary>
+      <!-- ================= TEACHER NOTES ================= -->
+      <section class="l-sec" id="teacher-notes">
+        <span class="phase" style="--pc:var(--paper-muted)"><b>T</b>Teacher notes</span>
+        <h2>Running this lesson in <em>80 minutes</em></h2>
+        <details class="reveal-box">
+          <summary>Timings, competences and differentiation <small>for the teacher</small></summary>
           <div class="reveal-body">
-            <div class="tbl-wrap"><table class="tbl">
-              <thead><tr><th>Time (min)</th><th>Phase</th><th>Classroom activity</th></tr></thead>
-              <tbody>
-                <tr><td>0–5</td><td>Do Now</td><td>Students answer the 4 retrieval cards from memory, then mark in pairs.</td></tr>
-                <tr><td>5–15</td><td>Wonder</td><td>Play the Yaba Market 3D story; pairs pin predictions about mass, angle and length on the Wonder Wall.</td></tr>
-                <tr><td>15–25</td><td>Investigate 1</td><td>Motion Sort in pairs (SHM vs Periodic vs Non-periodic), then whole-class discussion of fan blades vs pendulum.</td></tr>
-                <tr><td>25–45</td><td>3D / Bench Practical</td><td>Groups test 5 lengths (0.40 m – 1.20 m) and the 50 g vs 100 g myth-buster, recording <code>t</code>, <code>T</code> and <code>T²</code>.</td></tr>
-                <tr><td>45–50</td><td>Movement Break</td><td>5-minute active break: students stand and sway in phase as “human pendulums” — freeze at <code>x = 0</code> (shout “Max speed!”) and at <code>x = ±A</code> (shout “Max acceleration!”).</td></tr>
-                <tr><td>50–65</td><td>Make sense</td><td>Formal SHM law <code>a = −ω²x</code>, Centre vs Extreme table, Swing Position Explorer, and 3D Vector &amp; Energy Zoom.</td></tr>
-                <tr><td>65–75</td><td>Apply</td><td>Worked examples 1–3 together; crack Mama Ngozi's clock mystery in Section 7; 12-question quiz.</td></tr>
-                <tr><td>75–80</td><td>Reflect</td><td>1–4 self-rating rubric, Exit Ticket, and setting the Part A + Part B home assignment.</td></tr>
-              </tbody>
-            </table></div>
-            <p><strong>Prepare the day before:</strong> retort stands, split corks, cotton thread, 50 g and 100 g pendulum bobs, metre rules, stopwatches, and chalk or optical pins for fiducial marks.</p>
-            <p><strong>Support:</strong> provide a pre-drawn table with <code>L</code> values filled in and pair each reader with a timekeeper. <strong>Stretch:</strong> ask students to plot <code>T²</code> against <code>L</code> when length is measured only to the top of the bob, and show how the intercept reveals the bob's radius <code>r</code>.</p>
-            <p><strong>Transversal competences:</strong> L1 thinking and learning to learn (predicting and testing variables), L4 multiliteracy (connecting 3D vectors, tables, graphs and equations), L6 working-life skills and metrology (instrument calibration and tolerances).</p>
+            <p><strong>Timings:</strong> 0–5 Do Now · 5–15 Wonder · 15–45 Investigate · <strong>45–50 movement break</strong> (swing one arm loosely, then holding a bag: the rate hardly changes; bend the elbow — a shorter “pendulum” — and feel it quicken) · 50–65 Make Sense · 65–75 Apply · 75–80 Reflect.</p>
+            <p><strong>Competences:</strong> L1 fair testing (one variable at a time) · L2 clock pendulums and playground swings · L4 force diagrams (resolving mg) · L5 using the simulation.</p>
+            <p><strong>Support:</strong> a ratio card “T ∝ √l: four times the length, twice the period”. <strong>Stretch:</strong> why does a grandfather clock lose time if its rod expands in the afternoon heat?</p>
+            <p><strong>Bench note:</strong> the bench uses the exact large-angle period, so 30° runs about 1.7 % slower than 5°; at 5° and 10° the difference (0.04 s in 20 swings) is below what a hand stopwatch can resolve.</p>
           </div>
         </details>
 
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 3: Pendulum Practical</a>
-          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5 — Energy, Springs &amp; Resonance →</a>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:var(--paper-ink)">← Lesson 3</a>
+          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5, finding g →</a>
         </div>
       </section>
     </main>
@@ -773,10 +713,15 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/ridge-road-props.js"></script>
+  <script src="../../assets/js/pendulum.js"></script>
+  <script src="../../assets/js/shm-kinematics-2d.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="../../assets/js/story-scene.js"></script>
   <script src="story.js"></script>
   <script src="bench.js"></script>

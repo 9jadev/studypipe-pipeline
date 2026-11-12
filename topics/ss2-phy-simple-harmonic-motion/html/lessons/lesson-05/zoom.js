@@ -1,266 +1,166 @@
-/* Lesson 01 · 3D Vector & Energy Zoom Stage — live velocity vector (teal), acceleration vector (amber), and 3D KE/PE/Total Energy pillars */
+/* Lesson 05 · 3D Zoom "Error detective" (window.StudyScenes.zoom)
+   PendulumKit v3 "practical" replays a chosen fault in slow motion (count overlay 1, 2, 3… vs 0, 1, 2…; watch started
+   at the extreme; set-square stopping at the top of the bob; a 40° swing; a conical path seen from above) and
+   "ceiling" shows the floor-height variant (H = 2.80 m, l = H − y). A mini StudyGraph in #zoom-graph shows how the
+   points and g shift. Every number comes from PendulumKit.model. Emits l5:zoom { mode }. */
 (function () {
   "use strict";
   var root = document.getElementById("zoom-stage");
   var canvas = document.getElementById("zoom-canvas");
-  if (!root || !canvas || typeof THREE === "undefined") return;
+  if (!root || !canvas) return;
+  var $ = function (s) { return document.querySelector(s); };
+  var emit = function (n, d) { document.dispatchEvent(new CustomEvent(n, { detail: d || {} })); };
 
-  var toastEl = document.getElementById("zoom-toast");
-  var toastT;
-  function toast(m) {
-    if (!toastEl) return;
-    toastEl.textContent = m;
-    toastEl.classList.add("show");
-    clearTimeout(toastT);
-    toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 3000);
+  var FOURPI2 = 4 * Math.PI * Math.PI, G_CLASS = 9.79, L0 = 0.400, H = 2.80, G_CEIL = 9.8;
+  var LABEL = { "none": "No fault", "count-from-1": "Counts from one", "time-from-extreme": "Starts at the extreme", "length-to-top": "Length to the top", "wide-angle": "Wide 40° swing", "conical": "Conical swing" };
+  var HINT = {
+    "none": "Counting starts at zero as the bob passes the rest mark.",
+    "count-from-1": "Watch the counter: \"1\" at the start, so \"20\" is only 19 swings. T too small, g too large.",
+    "time-from-extreme": "The bob is slowest at the extreme, so the start and stop are fuzzy. A random error.",
+    "length-to-top": "The set-square stops at the top of the bob: every l is short by r. The line shifts left, the slope stays.",
+    "wide-angle": "At 40° the period is about 3 % longer than 2π√(l/g), so g comes out too small.",
+    "conical": "Seen from above the bob traces a circle. The period is shorter, so g comes out too large."
+  };
+  var YS = [1.80, 2.00, 2.20, 2.40];
+  var st = { mode: "detective", fault: "count-from-1", y: 1.80 };
+
+  var M = window.PendulumKit ? PendulumKit.model : null;
+  var readout = $("#zoom-readout"), hint = $("#zoom-hint");
+  var faultWrap = $("#zoom-faults"), yWrap = $("#zoom-ys");
+  var faultBtns = Array.prototype.slice.call(document.querySelectorAll("#zoom-faults [data-f]"));
+  var yBtns = Array.prototype.slice.call(document.querySelectorAll("#zoom-ys [data-y]"));
+  var modeBtns = Array.prototype.slice.call(document.querySelectorAll("#zoom-mode [data-zm]"));
+
+  // ---------- mini graph ----------
+  var graphEl = $("#zoom-graph"), graph = null;
+  if (graphEl && window.StudyGraph) graph = StudyGraph.create(graphEl, { theme: "paper", x: { label: "l", unit: "m", min: 0, max: 1.1, step: 0.2, decimals: 1 }, y: { label: "T²", unit: "s²", min: 0, max: 4.5, step: 1, decimals: 0 }, ratio: 0.7, aria: "Mini graph of T squared against l with and without the chosen fault" });
+
+  function lineFit(pts) { return window.StudyGraph ? StudyGraph.leastSquares(pts, false) : null; }
+  function faultPoints(f) { return M.presets.map(function (l) { var P = M.practical(l, { fault: f, g: G_CLASS }); return [+P.l.toFixed(3), +P.T2.toFixed(4)]; }); }
+
+  function paintDetective() {
+    var P = M.practical(L0, { fault: st.fault, g: G_CLASS }), pct = 100 * (P.g_from_T - G_CLASS) / G_CLASS;
+    var good = faultPoints("none"), bad = faultPoints(st.fault), fg = lineFit(good), fb = lineFit(bad);
+    var gSlope = fb ? FOURPI2 / fb.m : null;
+    if (readout) readout.innerHTML =
+      "<div><span>l / m</span><b>" + P.l.toFixed(3) + "</b></div>" +
+      "<div><span>T / s</span><b>" + P.T.toFixed(3) + "</b></div>" +
+      '<div class="' + (Math.abs(pct) > 0.5 ? "is-warn" : "is-ok") + '"><span>g · 1 reading</span><b>' + P.g_from_T.toFixed(2) + "</b></div>" +
+      '<div class="' + (Math.abs(pct) > 0.5 ? "is-warn" : "is-ok") + '"><span>error</span><b>' + (pct >= 0 ? "+" : "−") + Math.abs(pct).toFixed(1) + " %</b></div>";
+    if (graph) {
+      var series = [{ id: "good", name: "Correct", tone: "teal", points: good, fit: "line", extend: true }];
+      if (st.fault !== "none") series.push({ id: "bad", name: LABEL[st.fault] + " · g from slope " + gSlope.toFixed(2), tone: "pink", points: bad, fit: "line", extend: true, yIntercept: st.fault === "length-to-top" ? "c" : null, yDec: 3 });
+      graph.set({ x: { label: "l", unit: "m", min: 0, max: 1.1, step: 0.2, decimals: 1 }, y: { label: "T²", unit: "s²", min: 0, max: 4.5, step: 1, decimals: 0 }, series: series, marker: null });
+    }
+    var gn = $("#zoom-graph-note");
+    if (gn) gn.innerHTML = st.fault === "none"
+      ? "Correct readings: slope " + fg.m.toFixed(2) + " s² m⁻¹ → g = <b>" + (FOURPI2 / fg.m).toFixed(2) + " m s⁻²</b>."
+      : "With this fault the slope is " + fb.m.toFixed(2) + " s² m⁻¹ → g = <b>" + gSlope.toFixed(2) + " m s⁻²</b>" +
+        (st.fault === "length-to-top" ? " — unchanged: the line only moves left and misses the origin. A single reading would be " + Math.abs(pct).toFixed(1) + " % too low." : ".");
+    if (hint) hint.textContent = HINT[st.fault];
+  }
+  function paintCeiling() {
+    var C = M.ceiling(H, st.y, G_CEIL, 20);
+    if (readout) readout.innerHTML =
+      "<div><span>y / m</span><b>" + st.y.toFixed(2) + "</b></div>" +
+      "<div><span>l = H − y</span><b>" + C.l.toFixed(2) + " m</b></div>" +
+      "<div><span>T² / s²</span><b>" + C.T2.toFixed(3) + "</b></div>" +
+      '<div class="is-ok"><span>slope</span><b>' + C.slope.toFixed(2).replace("-", "−") + "</b></div>";
+    if (graph) {
+      var pts = YS.map(function (y) { return [y, +M.ceiling(H, y, G_CEIL, 20).T2.toFixed(3)]; });
+      graph.set({ x: { label: "Height y", unit: "m", min: 0, max: 3.0, step: 0.5, decimals: 1 }, y: { label: "T²", unit: "s²", min: 0, max: 6, step: 1, decimals: 0 },
+        series: [{ id: "ceil", name: "T² against y", tone: "violet", points: pts, fit: "line", extend: true, xIntercept: "H", xDec: 2 }],
+        marker: { x: st.y, y: C.T2, label: "y " + st.y.toFixed(2), tone: "amber" } });
+    }
+    var gn = $("#zoom-graph-note");
+    if (gn) gn.innerHTML = "The line slopes <b>downwards</b> (slope −4π²/g = " + C.slope.toFixed(2).replace("-", "−") + " s² m⁻¹, so g = " + (FOURPI2 / -C.slope).toFixed(2) + " m s⁻²) and cuts the horizontal (y) axis, where T² = 0, at <b>y = H = " + H.toFixed(2) + " m</b>, the height of the support.";
+    if (hint) hint.textContent = "Ceiling rig: measure y, the height of the bob's centre above the floor; then l = H − y.";
+  }
+  function paint() { if (!M) return; if (st.mode === "ceiling") paintCeiling(); else paintDetective(); }
+
+  // ---------- 3D ----------
+  var kit = null, stage = null;
+  if (typeof THREE !== "undefined" && window.PendulumKit && window.SceneKit) {
+    kit = PendulumKit.create({ mode: "practical", g: G_CLASS, periodModel: "small", r_bob: 0.020, l: L0, fault: st.fault, speed: 0.4, labels: window.innerWidth >= 560 });
+    stage = SceneKit.createStage({ root: root, canvas: canvas, fov: 32, target: new THREE.Vector3(0, 0.7, 0), pitch: 0.1, distance: 4, portraitPitch: 0.05, onFrame: function (dt, t) { kit.update(dt, t); } });
+    if (stage) { stage.rig.add(kit); stage.start(); }
+  } else {
+    root.classList.add("no-webgl");
+  }
+  var replayT = null;
+  function topView(on) {
+    if (!stage) return;
+    stage.resize();
+    if (on) stage.pitch = 1.1;
+  }
+  function replay() {
+    if (!kit) return;
+    clearTimeout(replayT);
+    if (st.mode === "ceiling") {
+      kit.setState({ mode: "ceiling", y: st.y, H: H, g: G_CEIL, speed: 0.6 });
+      kit.release();
+      return;
+    }
+    kit.setState({ mode: "practical", l: L0, fault: st.fault, g: G_CLASS, speed: 0.4 });
+    if (st.fault === "length-to-top") { kit.measure(); return; }
+    kit.release();
+    replayT = setTimeout(function () { kit.time(20); }, 1200);
   }
 
-  var state = {
-    mode: "mix", // "mix" = Live SHM, "acid" = Freeze at Centre (x = 0), "base" = Freeze at Extreme (x = +A)
-    damped: false,
-    ampFactor: 1.0,
-    phase: 0
-  };
+  function setFault(f) {
+    if (!LABEL[f]) return;
+    st.fault = f;
+    faultBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-f") === f)); });
+    if (st.mode !== "detective") setZoomMode("detective", true);
+    paint(); replay();
+    topView(f === "conical");
+    emit("l5:zoom", { mode: "fault:" + f });
+  }
+  function setY(y) {
+    st.y = +y;
+    yBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(Math.abs(+b.getAttribute("data-y") - st.y) < 1e-6)); });
+    paint(); replay();
+    emit("l5:zoom", { mode: "ceiling", y: st.y });
+  }
+  function setZoomMode(m, quiet) {
+    if (m !== "detective" && m !== "ceiling") return;
+    st.mode = m;
+    modeBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-zm") === m)); });
+    if (faultWrap) faultWrap.hidden = m !== "detective";
+    if (yWrap) yWrap.hidden = m !== "ceiling";
+    if (kit) { kit.setState({ mode: m === "ceiling" ? "ceiling" : "practical" }); if (stage) { stage.refit(); } }
+    if (!quiet) { paint(); replay(); topView(m === "detective" && st.fault === "conical"); emit("l5:zoom", { mode: m }); }
+  }
 
-  var highlightPart = null;
+  faultBtns.forEach(function (b) { b.addEventListener("click", function () { setFault(b.getAttribute("data-f")); }); });
+  yBtns.forEach(function (b) { b.addEventListener("click", function () { setY(b.getAttribute("data-y")); }); });
+  modeBtns.forEach(function (b) { b.addEventListener("click", function () { setZoomMode(b.getAttribute("data-zm")); }); });
+  var rp = $("#zoom-replay"); if (rp) rp.addEventListener("click", replay);
+  var rs = $("#zoom-reset"); if (rs) rs.addEventListener("click", function () { api.reset(); });
+
   var api = {
-    setMode: setMode,
-    add: toggleDamping,
-    reset: reset,
-    rect: function () { return null; },
-    highlight: function (p) { highlightPart = p || null; }
+    setMode: function (m) {
+      m = String(m || "");
+      if (m.indexOf("fault:") === 0) setFault(m.slice(6));
+      else if (m === "ceiling" || m === "detective") setZoomMode(m);
+      else if (LABEL[m]) setFault(m);
+    },
+    setY: setY, replay: replay,
+    reset: function () { st.y = 1.80; setZoomMode("detective", true); setFault("count-from-1"); },
+    highlight: function (p) { if (kit) kit.highlight(p || null); },
+    rect: function (p) {
+      if (!stage || !kit) { var r = root.getBoundingClientRect(); return { left: r.left, top: r.top, width: r.width, height: r.height }; }
+      var o = (p && kit.parts && kit.parts[p]) || kit;
+      return stage.rectOf(o, 12);
+    },
+    state: st, kit: kit, stage: stage
   };
   window.StudyScenes = window.StudyScenes || {};
   window.StudyScenes.zoom = api;
 
-  var stage = window.SceneKit && window.SceneKit.createStage({
-    root: root,
-    canvas: canvas,
-    fov: 34,
-    target: new THREE.Vector3(0, 0.9, 0),
-    pitch: 0.18,
-    yaw: 0,
-    fitWidth: 6.2,
-    distance: 6.2,
-    onFrame: frame
-  });
-
-  var pivotGroup, bobGroup, vArrow, aArrow, keBar, peBar, totBar;
-  var PIVOT_Y = 2.05;
-  var ROD_LEN = 1.35;
-
-  if (stage) build();
-  wireButtons();
-
-  function makeArrow(colorHex) {
-    var g = new THREE.Group();
-    var mat = new THREE.MeshBasicMaterial({ color: colorHex });
-    var shaftGeo = new THREE.CylinderGeometry(0.028, 0.028, 1, 12);
-    shaftGeo.translate(0, 0.5, 0);
-    var shaft = new THREE.Mesh(shaftGeo, mat);
-    shaft.rotation.z = -Math.PI / 2;
-    g.add(shaft);
-
-    var head = new THREE.Mesh(new THREE.ConeGeometry(0.075, 0.18, 16), mat);
-    head.rotation.z = -Math.PI / 2;
-    head.position.x = 1;
-    g.add(head);
-
-    g.userData.setVec = function (signedLen) {
-      var abs = Math.abs(signedLen);
-      if (abs < 0.03) {
-        g.visible = false;
-        return;
-      }
-      g.visible = true;
-      var dir = signedLen >= 0 ? 1 : -1;
-      g.scale.x = dir;
-      shaft.scale.y = abs;
-      head.position.x = abs;
-    };
-    return g;
-  }
-
-  function build() {
-    var scene = stage.rig;
-
-    // Reference equilibrium dashed vertical post at x = 0
-    var eqLine = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.01, 0.01, 2.0, 8),
-      new THREE.MeshBasicMaterial({ color: 0x3ee6c4, transparent: true, opacity: 0.35 })
-    );
-    eqLine.position.set(-0.7, 1.0, -0.15);
-    scene.add(eqLine);
-
-    var eqTag = SceneKit.labelTexture("x = 0 (equilibrium)", { size: 32, bg: "rgba(13,156,126,0.88)" });
-    var eqSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: eqTag, transparent: true, depthWrite: false }));
-    eqSpr.scale.set(0.21 * eqTag.userData.aspect, 0.21, 1);
-    eqSpr.position.set(-0.7, 0.15, 0);
-    scene.add(eqSpr);
-
-    // Oscillator pivot at (-0.7, PIVOT_Y, 0)
-    pivotGroup = new THREE.Group();
-    pivotGroup.position.set(-0.7, PIVOT_Y, 0);
-    scene.add(pivotGroup);
-
-    var strGeo = new THREE.CylinderGeometry(0.012, 0.012, ROD_LEN, 12);
-    strGeo.translate(0, -ROD_LEN / 2, 0);
-    var str = new THREE.Mesh(strGeo, new THREE.MeshStandardMaterial({ color: 0xe2e8f0, roughness: 0.4 }));
-    pivotGroup.add(str);
-
-    bobGroup = new THREE.Group();
-    bobGroup.position.y = -ROD_LEN;
-    var bob = new THREE.Mesh(
-      new THREE.SphereGeometry(0.18, 32, 24),
-      new THREE.MeshStandardMaterial({ color: 0xffb23f, roughness: 0.2, metalness: 0.85 })
-    );
-    bobGroup.add(bob);
-    pivotGroup.add(bobGroup);
-
-    // Velocity arrow (teal) and Acceleration arrow (amber) in world space following the bob
-    vArrow = makeArrow(0x3ee6c4);
-    aArrow = makeArrow(0xffb23f);
-    scene.add(vArrow);
-    scene.add(aArrow);
-
-    var vTag = SceneKit.labelTexture("v (velocity)", { size: 30, bg: "rgba(13,156,126,0.92)" });
-    var vSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: vTag, transparent: true, depthWrite: false }));
-    vSpr.scale.set(0.19 * vTag.userData.aspect, 0.19, 1);
-    vSpr.position.set(0, 0.22, 0);
-    vArrow.add(vSpr);
-
-    var aTag = SceneKit.labelTexture("a = −ω²x (restoring)", { size: 30, bg: "rgba(217,138,0,0.92)" });
-    var aSpr = new THREE.Sprite(new THREE.SpriteMaterial({ map: aTag, transparent: true, depthWrite: false }));
-    aSpr.scale.set(0.19 * aTag.userData.aspect, 0.19, 1);
-    aSpr.position.set(0, -0.22, 0);
-    aArrow.add(aSpr);
-
-    // 3D Live Energy Pillars on the right (x = 1.1 to 2.1)
-    var barBase = new THREE.Mesh(
-      new THREE.BoxGeometry(1.6, 0.06, 0.5),
-      new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.6 })
-    );
-    barBase.position.set(1.55, 0.22, 0);
-    scene.add(barBase);
-
-    function makeBar(xPos, colorHex, label) {
-      var g = new THREE.Group();
-      g.position.set(xPos, 0.25, 0);
-      var geo = new THREE.BoxGeometry(0.28, 1.35, 0.28);
-      geo.translate(0, 0.675, 0);
-      var mesh = new THREE.Mesh(geo, new THREE.MeshStandardMaterial({ color: colorHex, roughness: 0.3, metalness: 0.2 }));
-      g.add(mesh);
-
-      var t = SceneKit.labelTexture(label, { size: 32, bg: "rgba(10,15,29,0.88)" });
-      var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, depthWrite: false }));
-      s.scale.set(0.20 * t.userData.aspect, 0.20, 1);
-      s.position.set(0, -0.18, 0.15);
-      g.add(s);
-
-      scene.add(g);
-      return mesh;
-    }
-
-    keBar  = makeBar(1.10, 0x9b8cff, "KE");
-    peBar  = makeBar(1.55, 0xc6f36b, "PE");
-    totBar = makeBar(2.00, 0x7cc4ff, "Total E");
-
-    api.rect = function (part) {
-      if (part === "bob" || part === "vectors") return stage.rectOf([bobGroup, vArrow, aArrow], 16);
-      if (part === "bars") return stage.rectOf([keBar, peBar, totBar], 14);
-      return stage.rectOf(pivotGroup, 12);
-    };
-
-    stage.start();
-  }
-
-  function setMode(m) {
-    state.mode = m;
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-mode") === m ? "true" : "false");
-    });
-    if (m === "acid") toast("Frozen at equilibrium (x = 0): Speed v and KE are MAXIMUM; acceleration a and PE are ZERO.");
-    else if (m === "base") toast("Frozen at right extreme (x = +A): Speed v is ZERO; inward acceleration a and PE are MAXIMUM.");
-    else toast("Live Simple Harmonic Motion: watch KE and PE trade places twice every cycle.");
-  }
-
-  function toggleDamping() {
-    state.damped = !state.damped;
-    if (!state.damped) state.ampFactor = 1.0;
-    toast(state.damped ? "Air damping ON: amplitude and total energy decay gradually while period stays constant." : "Air damping OFF: undamped SHM with constant mechanical energy.");
-  }
-
-  function reset() {
-    state.damped = false;
-    state.ampFactor = 1.0;
-    state.phase = 0;
-    setMode("mix");
-    toast("Oscillator reset to full amplitude (A = 0.10 m).");
-  }
-
-  function wireButtons() {
-    root.querySelectorAll(".seg [data-mode]").forEach(function (b) {
-      b.addEventListener("click", function () { setMode(b.getAttribute("data-mode")); });
-    });
-    var addBtn = document.getElementById("zoom-add");
-    if (addBtn) addBtn.addEventListener("click", toggleDamping);
-    var rstBtn = document.getElementById("zoom-reset");
-    if (rstBtn) rstBtn.addEventListener("click", reset);
-  }
-
-  function frame(dt) {
-    if (!pivotGroup) return;
-    var omega = 2.6;
-    if (state.mode === "mix") {
-      state.phase += dt * omega;
-      if (state.damped) {
-        state.ampFactor = Math.max(0.15, state.ampFactor * (1 - 0.12 * dt));
-      } else {
-        state.ampFactor = 1.0;
-      }
-    } else if (state.mode === "acid") {
-      // Equilibrium centre x = 0, moving rightward (cos = 1, sin = 0)
-      state.phase = 0;
-      state.ampFactor = 1.0;
-    } else if (state.mode === "base") {
-      // Right extreme x = +A (sin = 1, cos = 0)
-      state.phase = Math.PI / 2;
-      state.ampFactor = 1.0;
-    }
-
-    var s = Math.sin(state.phase) * state.ampFactor; // normalized displacement x / A0 in [-1, 1]
-    var c = Math.cos(state.phase) * state.ampFactor; // normalized velocity v / vmax in [-1, 1]
-
-    var maxAngle = 0.42;
-    pivotGroup.rotation.z = s * maxAngle;
-
-    var bobWorld = new THREE.Vector3();
-    bobGroup.getWorldPosition(bobWorld);
-
-    vArrow.position.set(bobWorld.x, bobWorld.y + 0.24, bobWorld.z + 0.18);
-    aArrow.position.set(bobWorld.x, bobWorld.y - 0.24, bobWorld.z + 0.18);
-
-    vArrow.userData.setVec(c * 0.95);
-    aArrow.userData.setVec(-s * 0.95); // restoring acceleration always opposite to displacement s!
-
-    var peFrac = s * s;
-    var keFrac = c * c;
-    var totFrac = peFrac + keFrac;
-
-    if (keBar) keBar.scale.y = Math.max(0.03, keFrac);
-    if (peBar) peBar.scale.y = Math.max(0.03, peFrac);
-    if (totBar) totBar.scale.y = Math.max(0.03, totFrac);
-
-    // Update live counters in .stage-bar (A = 0.10 m, ω = 4.0 rad/s => vmax = 0.40 m/s, amax = 1.60 m/s²)
-    var cA = document.querySelector('#zoom-counters [data-c="h"]');
-    var cV = document.querySelector('#zoom-counters [data-c="oh"]');
-    var cKE = document.querySelector('#zoom-counters [data-c="na"]');
-    var cPE = document.querySelector('#zoom-counters [data-c="cl"]');
-    var cTot = document.querySelector('#zoom-counters [data-c="w"]');
-    if (cA) cA.textContent = (Math.abs(s) * 1.60).toFixed(2);
-    if (cV) cV.textContent = (Math.abs(c) * 0.40).toFixed(2);
-    if (cKE) cKE.textContent = Math.round(keFrac * 100);
-    if (cPE) cPE.textContent = Math.round(peFrac * 100);
-    if (cTot) cTot.textContent = Math.round(totFrac * 100);
-  }
+  setZoomMode("detective", true);
+  faultBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(b.getAttribute("data-f") === st.fault)); });
+  yBtns.forEach(function (b) { b.setAttribute("aria-pressed", String(+b.getAttribute("data-y") === st.y)); });
+  paint();
+  setTimeout(replay, 600);
 })();

@@ -1,171 +1,225 @@
-/* Lesson 01 · Discovery of the Cell, Cell Theory & Prokaryotes vs Eukaryotes — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 01 · Discovering the Cell: Microscopes, Cell Theory and Prokaryotes vs Eukaryotes
+   Content data: sort items, microscope constants, explorer pins, bridge questions, and the 12 exam-style quiz questions.
+   Every microscope number below is COMPUTED (eyepiece x objective, field = 160 / M, width = field / cells), never typed as a result. */
 (function () {
   "use strict";
 
   window.L01 = {
-    // ---- 1. Cell Pioneers & Prokaryote vs Eukaryote Sort items ----
+    /* ---- 2A. Sort game: who discovered what? (9 cards, 3 bins) ---- */
+    bins: {
+      hooke: "Robert Hooke (1665)",
+      dujardin: "Félix Dujardin (1835)",
+      "schleiden-schwann": "Schleiden (1838) and Schwann (1839)"
+    },
     items: [
-      { id: "hooke", name: "Robert Hooke (1665) — honeycomb 'cellulae' in cork", emo: "🔬", bin: "shm", why: "Cell Theory Pioneer: Hooke coined the term 'cell' in 1665 after viewing dead suberised cork cell walls." },
-      { id: "schleiden", name: "Matthias Schleiden (1838) — all plants are built of cells", emo: "🌿", bin: "shm", why: "Cell Theory Pioneer: German botanist who established that all plant tissues originate from cells." },
-      { id: "schwann", name: "Theodor Schwann (1839) — all animals are built of cells", emo: "🦌", bin: "shm", why: "Cell Theory Pioneer: German zoologist who unified botany and zoology into the classical Cell Theory." },
-      { id: "virchow", name: "Rudolf Virchow (1855) — Omnis cellula e cellula", emo: "🧬", bin: "shm", why: "Cell Theory Pioneer: Proved that every new cell arises only by division of a pre-existing living cell." },
-      { id: "nucleoid", name: "Circular naked DNA in a cytoplasmic nucleoid (no envelope)", emo: "🦠", bin: "periodic", why: "Prokaryotic Feature: Bacteria and cyanobacteria lack a nuclear membrane; their circular DNA lies in the nucleoid." },
-      { id: "ribo70", name: "70S ribosomes & peptidoglycan (murein) cell wall", emo: "🧱", bin: "periodic", why: "Prokaryotic Feature: Prokaryotes synthesise proteins on smaller 70S ribosomes and have a peptidoglycan wall." },
-      { id: "no-mito", name: "Respiration on mesosomes (no mitochondria or chloroplasts)", emo: "⚡", bin: "periodic", why: "Prokaryotic Feature: Prokaryotes have zero membrane-bound organelles; respiratory enzymes sit on plasma-membrane infoldings." },
-      { id: "plasmid", name: "Small accessory plasmid DNA rings in Escherichia coli", emo: "⭕", bin: "periodic", why: "Prokaryotic Feature: Bacteria frequently carry extra-chromosomal circular plasmid rings alongside their nucleoid DNA." },
-      { id: "nucleus", name: "True nucleus bounded by a double-membrane nuclear envelope", emo: "🎯", bin: "non", why: "Eukaryotic Feature: Protists, fungi, plants, and animals enclose linear chromosomes inside a perforated nuclear envelope." },
-      { id: "ribo80", name: "80S cytoplasmic ribosomes & linear DNA bound to histones", emo: "🧵", bin: "non", why: "Eukaryotic Feature: Eukaryotes have larger 80S cytoplasmic ribosomes and linear chromosomes wrapped around histone proteins." },
-      { id: "organelles", name: "Membrane-bound mitochondria, ER, Golgi & chloroplasts", emo: "🔋", bin: "non", why: "Eukaryotic Feature: Internal compartmentalisation into membrane-bound organelles is the hallmark of eukaryotic cells." },
-      { id: "cellulose", name: "Cellulose cell wall (in plants) or chitin cell wall (in fungi)", emo: "🌳", bin: "non", why: "Eukaryotic Feature: When eukaryotic cells have a cell wall, it is made of cellulose (plants) or chitin (fungi), never peptidoglycan." }
+      { id: "named-cells", name: "Named the box-like spaces in cork “cells”", emo: "📦", bin: "hooke", why: "Hooke looked at a thin slice of cork in 1665 and called the little box-like spaces cells." },
+      { id: "dead-cork", name: "Looked at the walls of dead cork", emo: "🪵", bin: "hooke", why: "Cork is dead bark, so Hooke saw only the empty walls that once surrounded living cells." },
+      { id: "own-scope", name: "Used an early compound microscope that he improved himself", emo: "🔭", bin: "hooke", why: "Hooke built and improved his own compound microscope before he examined the cork." },
+      { id: "living-jelly", name: "First reported the living jelly that fills cells", emo: "🫧", bin: "dujardin", why: "Dujardin (1835) saw that cells hold a living, jelly-like material, not just walls." },
+      { id: "sarcode", name: "Called that jelly “sarcode”", emo: "🏷️", bin: "dujardin", why: "Sarcode was Dujardin’s name for the living material inside the cell." },
+      { id: "living-material", name: "Showed that cells contain living material, not just walls", emo: "💧", bin: "dujardin", why: "This was the step beyond Hooke: the cell is alive inside, not merely an empty box." },
+      { id: "all-plants", name: "Concluded that every plant is built of cells", emo: "🌿", bin: "schleiden-schwann", why: "Schleiden, studying plants in 1838, concluded that plants are made of cells." },
+      { id: "all-animals", name: "Extended the idea to every animal", emo: "🐐", bin: "schleiden-schwann", why: "Schwann, in 1839, showed that animal tissues are made of cells too." },
+      { id: "together", name: "Together laid the base of the cell theory", emo: "🧱", bin: "schleiden-schwann", why: "Plants (Schleiden) plus animals (Schwann) together gave the foundation of the cell theory." }
     ],
 
-    // ---- 2. 3D Compound Microscope Magnification Practical trials (Onion Epidermal Cell actual length A = 0.060 mm = 60 µm) ----
-    trials: [
-      { label: "A", L: 40,  t: "4×",  T: "2.40",  T2: "0.060" },
-      { label: "B", L: 100, t: "10×", T: "6.00",  T2: "0.060" },
-      { label: "C", L: 200, t: "20×", T: "12.00", T2: "0.060" },
-      { label: "D", L: 400, t: "40×", T: "24.00", T2: "0.060" },
-      { label: "E", L: 600, t: "60×", T: "36.00", T2: "0.060" }
-    ],
-    tOptions: ["4×", "10×", "20×", "40×", "60×"],
-    TOptions: ["2.40", "6.00", "12.00", "24.00", "36.00"],
-    T2Options: ["0.002", "0.015", "0.060", "0.240", "0.600"],
+    /* ---- 2B. Microscope bench: constants used by the explorer and the answer table (all derived) ---- */
+    eyepiece: 10,
+    objectives: [4, 10, 40],
+    fieldConstant: 160,           /* field diameter (mm) = 160 / total magnification at eyepiece x10, the scope's model */
+    cellWidthMm: { cork: 0.050, onion: 0.050, blood: 0.008 },
+    slideNames: { cork: "Cork", onion: "Onion peel", blood: "Blood smear" },
+    slideNotes: {
+      cork: "dead cells: empty walls only",
+      onion: "living cells with walls, nucleus stained by iodine",
+      blood: "round cells, no wall, no nucleus"
+    },
 
-    // ---- 3. Biological Scale & Resolution Explorer pins (1 mm = 1000 µm) ----
+    /* ---- 3. Explorer: image size of a 50 µm cell (computed from M x width) ---- */
     pins: [
-      { frac: -1.0, label: "Virus Particle (T4 Phage)", emo: "👾", x: "A = 0.10 µm (100 nm)", v: "Electron Microscope Only", a: "Acelluar (Non-living outside host)", ke: "DNA/RNA + Capsid", pe: "No Protoplasm", note: "At 0.10 µm (below the 0.20 µm light resolution limit), viruses require an electron microscope and crystallise outside living hosts." },
-      { frac: -0.5, label: "Escherichia coli Bacterium", emo: "🦠", x: "A = 2.0 µm (0.002 mm)", v: "M = 1000× oil immersion", a: "Prokaryote (70S, Nucleoid)", ke: "Peptidoglycan Wall", pe: "No Nucleus", note: "At 2.0 µm, bacteria are just visible under a 100× oil-immersion objective (M = 1000×), giving an image I = 2.0 mm." },
-      { frac: 0.0,  label: "Human Red Blood Cell", emo: "🩸", x: "A = 7.5 µm (0.0075 mm)", v: "M = 400× → I = 3.0 mm", a: "Specialized Eukaryote", ke: "Biconcave Disc", pe: "Haemoglobin Packed", note: "At 7.5 µm diameter, a mature mammalian erythrocyte lacks a nucleus to maximise room for oxygen-carrying haemoglobin." },
-      { frac: 0.5,  label: "Human Cheek Epithelial Cell", emo: "🧬", x: "A = 45 µm (0.045 mm)", v: "M = 400× → I = 18.0 mm", a: "Animal Eukaryote (80S)", ke: "Flexible Membrane", pe: "Central Nucleus", note: "A classic WAEC animal wet-mount specimen stained with methylene blue: irregular shape, central nucleus, no cell wall." },
-      { frac: 1.0,  label: "Allium cepa Onion Epidermal Cell", emo: "🧅", x: "A = 60 µm (0.060 mm)", v: "M = 400× → I = 24.0 mm", a: "Plant Eukaryote (80S)", ke: "Cellulose Wall", pe: "Large Sap Vacuole", note: "Brick-shaped plant epidermal cell stained with iodine solution; rigid cellulose wall keeps regular hexagonal geometry." }
+      { obj: 4, note: "Wide field, so you can find the specimen first. The cell is tiny in the image." },
+      { obj: 10, note: "A medium view. Nuclei begin to show on a stained onion peel." },
+      { obj: 40, note: "A narrow field, so only a few cells fit. Focus with the fine knob only." }
+    ],
+
+    /* ---- 4. Bridge: the two unlabelled slides from the story ---- */
+    bridge: {
+      slides: [
+        { id: "P", slide: "blood" },
+        { id: "Q", slide: "onion" }
+      ],
+      q1: {
+        text: "Which slide is the ugu leaf peel?",
+        opts: ["Slide P: round cells, no walls", "Slide Q: regular box-shaped cells with walls"],
+        a: 1,
+        why: "Plant cells such as ugu have a cell wall, so they look like neat boxes. Slide P has round cells with no walls: that is the blood smear."
+      },
+      q2: {
+        text: "On Slide P at ×400 the field is 0.40 mm wide and 50 red cells lie across it. About how wide is one red cell?",
+        opts: ["0.8 µm", "8 µm", "80 µm", "800 µm"],
+        a: 1,
+        fieldMm: 0.40,
+        cells: 50,
+        why: "Cell width = 0.40 mm ÷ 50 = 0.008 mm, and 0.008 × 1000 = 8 µm. Choosing 0.8 µm or 80 µm means a slip of ×10 in the conversion."
+      }
+    },
+
+    /* ---- 5. Self-rating items (I can, 1 to 4) ---- */
+    can: [
+      "I can state the three ideas of the cell theory.",
+      "I can name four scientists and say what each contributed.",
+      "I can calculate total magnification.",
+      "I can find the actual size of a cell in µm.",
+      "I can compare prokaryotic and eukaryotic cells."
     ]
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
-  window.LESSON_QUIZ = [
+  /* ---- 12 exam-style questions, wording and keys from 03-questions.md § Lesson 01 ---- */
+  window.LESSON_QUIZ =
+[
     {
-      q: "When Robert Hooke examined thin slices of bottle cork under his compound microscope in 1665, what structure did he actually observe?",
-      o: [
-        "Living protoplasm streaming around a central nucleus",
-        "Empty dead suberised plant cell walls lacking living protoplasm",
-        "Dividing bacterial cells undergoing binary fission",
-        "Chloroplasts arranged around a large sap vacuole"
+      "q": "At Mile 12 Market, Chinedu tells Mama Ngozi that Robert Hooke \"saw cells\" in a thin slice of cork in 1665. Which statement best describes what Hooke actually saw?",
+      "o": [
+        "Living cells, each with a clear nucleus",
+        "The jelly-like living material he called \"sarcode\"",
+        "The empty box-like walls of dead cork cells",
+        "Bacteria swimming between the cork fibres"
       ],
-      a: 1,
-      e: "Bottle cork is dead bark tissue; Hooke observed only the <strong>hollow box-like non-living cell walls</strong> ('cellulae'), not the living protoplasm inside.",
-      src: "WAEC-style"
+      "a": 2,
+      "e": "Cork is dead bark tissue, so Hooke saw only the empty walls that once surrounded living cells; he named these box-like spaces \"cells\". Option B is the main trap: the living jelly (\"sarcode\") was described by Félix Dujardin in 1835, about 170 years later, not by Hooke.",
+      "src": "WAEC-style · Understand"
     },
     {
-      q: "Which of the following scientists introduced the term <strong>'sarcode'</strong> in 1835 before Purkinje (1839) and von Mohl (1846) established the term <strong>'protoplasm'</strong>?",
-      o: [
+      "q": "Which scientist first described the living, jelly-like contents of cells and named this material \"sarcode\"?",
+      "o": [
         "Félix Dujardin",
-        "Antonie van Leeuwenhoek",
-        "Rudolf Virchow",
-        "Robert Brown"
-      ],
-      a: 0,
-      e: "<strong>Félix Dujardin (1835)</strong> studied the jelly-like living substance inside single-celled animals and named it <em>sarcode</em>; Purkinje and von Mohl later renamed it <strong>protoplasm</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "The statement <em>'Omnis cellula e cellula'</em> (every cell arises from a pre-existing living cell) was added to the Cell Theory in 1855 by:",
-      o: [
         "Matthias Schleiden",
         "Theodor Schwann",
-        "Rudolf Virchow",
-        "Louis Pasteur"
+        "Robert Hooke"
       ],
-      a: 2,
-      e: "<strong>Rudolf Virchow (1855)</strong> corrected Schleiden and Schwann's earlier belief in free-cell formation by proving that cells arise only by division of pre-existing cells.",
-      src: "WAEC-style"
+      "a": 0,
+      "e": "Dujardin (1835) showed that cells contain living material, not just walls, and called it sarcode. Schleiden (1838) and Schwann (1839) are remembered for stating that plants and animals respectively are made of cells; Hooke only named the empty compartments in dead cork.",
+      "src": "NECO-style · Remember"
     },
     {
-      q: "Why are <strong>viruses</strong> regarded as the borderline between living and non-living matter and an exception to the classical Cell Theory?",
-      o: [
-        "They possess both a cellulose cell wall and a chitin cell wall",
-        "They have 80S ribosomes instead of 70S ribosomes",
-        "They are acellular (lack protoplasm and plasma membrane), can be crystallised outside a host, and reproduce only inside a living host cell",
-        "They carry out aerobic respiration inside mitochondria"
+      "q": "The cell theory grew from the work of Schleiden on plants (1838) and Schwann on animals (1839). Which of the following is NOT a statement of the cell theory?",
+      "o": [
+        "Every organism consists of one cell or of many cells.",
+        "Organisms are built from cells, and cells carry out their life processes.",
+        "New cells form only when existing cells divide.",
+        "Every cell contains a nucleus that controls its activities."
       ],
-      a: 2,
-      e: "Viruses consist only of a nucleic acid core (<strong>DNA or RNA, never both</strong>) inside a protein coat (<strong>capsid</strong>); they have no protoplasm or metabolism outside a living host cell.",
-      src: "JAMB-style"
+      "a": 3,
+      "e": "The cell theory makes no claim that every cell has a nucleus, and such a claim would be false: bacteria (prokaryotes) have no true nucleus, and a mature human red blood cell has lost its nucleus. Options A, B and C are the three accepted ideas (C is credited to Virchow, 1855). Candidates often pick C as \"not part of it\" because it was added later, but it is part of the modern theory.",
+      "src": "JAMB-style · Understand"
     },
     {
-      q: "A biological specimen is examined under a compound light microscope fitted with a <strong>×10 eyepiece</strong> and a <strong>×40 high-power objective lens</strong>. What is the total linear magnification?",
-      o: ["×4", "×50", "×400", "×4000"],
-      a: 2,
-      e: "Total magnification is the product of the lens powers: <code>M = M_eyepiece × M_objective = 10 × 40 = 400×</code>.",
-      src: "NECO-style"
-    },
-    {
-      q: "A student makes a biological drawing of an onion epidermal cell that measures <strong>48 mm</strong> in length. If the actual length of the cell is <strong>60 µm</strong>, calculate the linear magnification of the drawing.",
-      o: ["×80", "×800", "×1.25", "×2880"],
-      a: 1,
-      e: "Convert units to µm first: <code>I = 48 mm × 1000 = 48000 µm</code>. Then <code>M = I ÷ A = 48000 ÷ 60 = 800×</code>.",
-      src: "WAEC Practical"
-    },
-    {
-      q: "Which of the following features is present in a <strong>prokaryotic bacterial cell</strong> such as <em>Escherichia coli</em>?",
-      o: [
-        "Double-membrane nuclear envelope surrounding linear chromosomes",
-        "Membrane-bound mitochondria with cristae",
-        "Circular naked DNA located in a nucleoid region and 70S ribosomes",
-        "80S ribosomes attached to rough endoplasmic reticulum"
+      "q": "Which of the following best defines an organelle?",
+      "o": [
+        "The smallest unit of a living organism that can carry out all life processes",
+        "A tiny part inside the cytoplasm that is specialised to do one particular job for the cell",
+        "A group of similar cells working together to perform one function",
+        "The jelly-like fluid that fills the space between the nucleus and the membrane"
       ],
-      a: 2,
-      e: "Prokaryotes lack a nuclear envelope and membrane-bound organelles; they have <strong>circular naked DNA in a nucleoid</strong>, <strong>70S ribosomes</strong>, and a <strong>peptidoglycan cell wall</strong>.",
-      src: "JAMB-style"
+      "a": 1,
+      "e": "An organelle is a specialised part inside a cell (e.g. mitochondrion, chloroplast) with a definite job. Option A is the definition of a cell, the commonest mix-up; C defines a tissue; D describes cytoplasm, which is not itself an organelle.",
+      "src": "WAEC-style · Remember"
     },
     {
-      q: "The cell wall of a typical bacterium is strengthened by <strong>peptidoglycan (murein)</strong>, whereas the cell wall of a fungus such as <em>Rhizopus</em> or yeast is strengthened by:",
-      o: ["Cellulose", "Chitin", "Starch", "Glycogen"],
-      a: 1,
-      e: "Bacterial cell walls contain <strong>peptidoglycan</strong>, fungal cell walls contain <strong>chitin</strong>, and plant cell walls contain <strong>cellulose</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "Under a compound microscope at <strong>×400</strong> magnification, the image of a rod-shaped bacterium measures <strong>0.8 mm</strong> in length. What is the actual length of the bacterium in micrometres (µm)?",
-      o: ["0.002 µm", "2.0 µm", "20 µm", "320 µm"],
-      a: 1,
-      e: "Convert image size to µm: <code>I = 0.8 mm × 1000 = 800 µm</code>. Then actual size <code>A = I ÷ M = 800 ÷ 400 = 2.0 µm</code>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Which of the following eukaryotic cell types is an exception to the rule that every living cell contains a single nucleus at maturity?",
-      o: [
-        "Onion epidermal cell",
-        "Palisade mesophyll cell",
-        "Mature mammalian red blood cell (erythrocyte) and coenocytic Rhizopus hyphae",
-        "Human cheek epithelial cell"
+      "q": "Dr Amaka shows her class a single Amoeba in a drop of pond water from Badagry. On its own it feeds, respires, excretes, responds to light and divides. This observation best supports the idea that the cell is",
+      "o": [
+        "the basic unit of life: the smallest part of an organism that is both its building block (structure) and its working unit (function)",
+        "always one part of a larger tissue",
+        "made only of organelles, with no cytoplasm",
+        "a building block (structure) of life but not a working unit (function)"
       ],
-      a: 2,
-      e: "Mature mammalian red blood cells and phloem sieve tube elements are <strong>anucleate</strong> (0 nuclei), while skeletal muscle fibres and <em>Rhizopus</em> hyphae are <strong>multinucleate / coenocytic</strong>.",
-      src: "WAEC-style"
+      "a": 0,
+      "e": "One Amoeba is one cell, yet it carries out every life process, so the cell is both the building block and the working unit of life. Option D is the trap: the evidence here is all about functions (feeding, respiring), so it shows the cell is a working unit as well as a building block. Option B is wrong because Amoeba is free-living, not part of a tissue.",
+      "src": "NECO-style · Understand"
     },
     {
-      q: "Who discovered and named the <strong>cell nucleus</strong> in 1831 while examining orchid epidermal cells?",
-      o: [
-        "Robert Brown",
-        "Robert Hooke",
-        "Theodor Schwann",
-        "Johannes Purkinje"
+      "q": "At the LUTH teaching laboratory, a student uses a microscope with a ×8 eyepiece and a ×40 objective. What is the total magnification?",
+      "o": [
+        "×48",
+        "×5",
+        "×3200",
+        "×320"
       ],
-      a: 0,
-      e: "Scottish botanist <strong>Robert Brown (1831)</strong> identified and named the constant spherical structure inside plant cells the <strong>nucleus</strong>.",
-      src: "NECO-style"
+      "a": 3,
+      "e": "Total magnification = eyepiece × objective = 8 × 40 = ×320. Option A (×48) comes from adding the two powers, the classic examiner trap; lenses in series multiply each other's effect. Option B divides 40 by 8, and C has a misplaced zero.",
+      "src": "WAEC Practical · Apply"
     },
     {
-      q: "Why can an electron microscope resolve ribosomes (25 nm) and viral capsids that are completely invisible under a school light microscope?",
-      o: [
-        "Electron beams have a much shorter wavelength than visible light, giving a ~1000× finer resolution limit (0.2 nm vs 200 nm)",
-        "Electron microscopes use iodine stain instead of methylene blue",
-        "Visible light travels faster through a vacuum than electrons",
-        "Glass lenses magnify specimens more than electromagnetic lenses"
+      "q": "Having focused an onion peel on the ×4 objective, Chinedu turns to the ×40 objective. Which knob should he now use to focus, and why?",
+      "o": [
+        "The coarse adjustment knob, because it brings the image into view faster",
+        "The fine adjustment knob, because the ×40 objective sits very close to the slide and could crack it if moved a lot",
+        "The coarse adjustment knob, because the ×40 lens needs a large movement to focus",
+        "The fine adjustment knob, because it changes the magnification of the eyepiece"
       ],
-      a: 0,
-      e: "Resolution depends on wavelength. Electrons have a wavelength thousands of times shorter than visible light, lowering the resolution limit from <strong>200 nm (0.2 µm)</strong> to <strong>0.2 nm</strong>.",
-      src: "JAMB-style"
+      "a": 1,
+      "e": "The high-power objective has a very short working distance, so only the small movements of the fine knob are safe; large coarse-knob turns can drive the lens into the slide and damage both. Option D is wrong because no focusing knob changes magnification; magnification is set by the lenses chosen.",
+      "src": "WAEC Practical · Understand"
+    },
+    {
+      "q": "At ×100, the field of view of a microscope is 1.2 mm in diameter. Fifteen cheek cells lie end to end across it. What is the approximate length of one cheek cell?",
+      "o": [
+        "18 µm",
+        "8 µm",
+        "80 µm",
+        "800 µm"
+      ],
+      "a": 2,
+      "e": "Cell length = field diameter ÷ number of cells = 1.2 mm ÷ 15 = 0.08 mm; 0.08 mm × 1000 = 80 µm. Option B (8 µm) comes from multiplying by 100 instead of 1000 when converting; remember 1 mm = 1000 µm. Option A comes from multiplying 1.2 by 15.",
+      "src": "WAEC-style · Apply"
+    },
+    {
+      "q": "A photomicrograph of a ugu leaf cell taken at ×450 shows the cell as 18 mm long. What is the actual length of the cell?",
+      "o": [
+        "4 µm",
+        "40 µm",
+        "400 µm",
+        "8100 µm"
+      ],
+      "a": 1,
+      "e": "Actual size = image size ÷ magnification = 18 mm ÷ 450 = 0.04 mm; 0.04 mm × 1000 = 40 µm. Option D comes from multiplying 18 × 450 = 8100, which makes the real cell larger than its photograph, which is impossible. Options A and C are conversion slips by a factor of ten.",
+      "src": "NECO-style · Apply"
+    },
+    {
+      "q": "A cheek cell with an actual length of 0.07 mm is drawn 28 mm long in a practical notebook. What is the magnification of the drawing?",
+      "o": [
+        "×400",
+        "400 mm",
+        "×40",
+        "×0.0025"
+      ],
+      "a": 0,
+      "e": "Magnification = drawing length ÷ actual length = 28 mm ÷ 0.07 mm = ×400. Both lengths are in mm, so the units cancel and the answer has no unit; option B (400 mm) loses the mark for attaching a unit. Option D (0.07 ÷ 28 = 0.0025) divides the wrong way round.",
+      "src": "JAMB-style · Apply"
+    },
+    {
+      "q": "A swab from a hospital ward at LUTH contains cells with a cell wall, ribosomes, and a single loop of circular DNA lying free in the cytoplasm. No nuclear membrane or mitochondria can be found. The cells are most likely",
+      "o": [
+        "yeast cells",
+        "onion epidermal cells",
+        "bacteria",
+        "human red blood cells"
+      ],
+      "a": 2,
+      "e": "Circular DNA free in the cytoplasm, no nuclear membrane and no membrane-bound organelles such as mitochondria are the marks of a prokaryote, i.e. a bacterium. Yeast (A) and onion cells (B) also have cell walls, but they are eukaryotes with a nucleus and mitochondria; the wall alone cannot identify a prokaryote. Red blood cells (D) have no wall.",
+      "src": "WAEC-style · Analyse"
+    },
+    {
+      "q": "Which structure is found in BOTH prokaryotic and eukaryotic cells?",
+      "o": [
+        "Nuclear membrane",
+        "Mitochondria",
+        "Endoplasmic reticulum",
+        "Ribosomes"
+      ],
+      "a": 3,
+      "e": "All cells make proteins, so both prokaryotes and eukaryotes have ribosomes; prokaryotic ribosomes are smaller. A nuclear membrane, mitochondria and endoplasmic reticulum are membrane-bound structures found only in eukaryotes. Ribosomes themselves have no membrane, which is why prokaryotes can have them.",
+      "src": "JAMB-style · Analyse"
     }
   ];
 })();

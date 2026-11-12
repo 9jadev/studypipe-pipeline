@@ -1,179 +1,258 @@
 /* ==========================================================
-   StudyPipe — Spaced Retrieval Bank for Plant & Animal Cell Structure (L1–L5)
-   Used by LessonKit across lessons/lesson-01 .. lesson-05
+   StudyPipe — Spaced Retrieval Bank · Plant and Animal Cells (L1–L5)
+   Read by LessonKit in lessons/lesson-01 .. lesson-05 (classic script, offline).
+   donow  : 4 warm-up cards per lesson (from: 0 = prerequisite, from: N = Lesson N;
+            sec = the section id in that earlier lesson the "Revisit" link opens)
+   quiz   : review MCQs from earlier lessons, appended after the lesson's own quiz
+   recall : blank-page recall prompt + the key points to tick off
+   Content matches 02-lesson.md (Do Now and Recall lists) — all original wording.
    ========================================================== */
 window.RETRIEVAL_BANK = {
   l01: {
-    title: "Discovery of the Cell, Cell Theory & Prokaryotes vs Eukaryotes",
+    title: "Discovering the Cell: Microscopes, Cell Theory and Prokaryotes vs Eukaryotes",
     donow: [
       {
-        from: 0, sec: "concepts", where: "Characteristics of Living Things",
-        q: "What do the letters in MR NIGER D stand for in Biology, and what is the smallest structural unit that performs all of them?",
-        a: "<strong>Movement, Respiration, Nutrition, Irritability, Growth, Excretion, Reproduction, Death</strong> — and the <strong>cell</strong> is the smallest structural and functional unit of life."
+        from: 0, sec: "concepts", where: "Living things",
+        q: "List four characteristics that every living thing shows.",
+        a: "Any four of: <strong>nutrition, respiration, movement, growth, reproduction, excretion, irritability (sensitivity)</strong>."
       },
       {
-        from: 0, sec: "concepts", where: "Microscopy Unit Conversion",
-        q: "How many millimetres (mm) are in 1 centimetre (cm), and how many micrometres (μm) are in 1 mm and in 1 cm?",
-        a: "<code>1 cm = 10 mm</code> and <code>1 mm = 1000 μm</code>. Therefore <code>1 cm = 10 × 1000 = 10000 μm</code>."
+        from: 0, sec: "concepts", where: "Units of length",
+        q: "How many micrometres (µm) are in 1 millimetre?",
+        a: "<strong>1 mm = 1000 µm</strong>, so to turn millimetres into micrometres you multiply by 1000."
       },
       {
-        from: 0, sec: "practical", where: "Simple Magnification Ratio",
-        q: "A student draws a 2.0 cm beetle with a drawing length of 10.0 cm. What is the magnification M of the drawing?",
-        a: "<code>M = I ÷ A = 10.0 ÷ 2.0 = ×5</code> (written with a multiplication sign and no units)."
+        from: 0, sec: "examples", where: "Decimals",
+        q: "Calculate 0.25 × 400 and 24 ÷ 400.",
+        a: "<strong>0.25 × 400 = 100</strong> and <strong>24 ÷ 400 = 0.06</strong>."
       },
       {
-        from: 0, sec: "practical", where: "Compound Microscope Lenses",
-        q: "How do you calculate the total magnification of a compound light microscope from its eyepiece and objective lenses?",
-        a: "Multiply the two lens powers: <code>M_total = M_eyepiece × M_objective</code> (for example, <code>×10 × ×40 = ×400</code>)."
+        from: 0, sec: "practical", where: "Hand lens",
+        q: "What does a hand lens do to an object's image?",
+        a: "It makes the image <strong>appear larger</strong> (it magnifies it), so we can see more detail."
       }
     ],
+    quiz: [],
     recall: {
-      prompt: "Without looking back at the notes, tick off every core idea from Lesson 1 you can state from memory:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 1, then tick each point below that you wrote, even in your own words:",
       points: [
-        "Robert Hooke (1665) examined thin slices of dead oak cork and named the empty cellulose chambers 'cells', while Félix Dujardin (1835) discovered the living jelly inside cells ('sarcode' / protoplasm).",
-        "Matthias Schleiden (1838, plants) and Theodor Schwann (1839, animals) formulated the Cell Theory, and Rudolf Virchow (1855) added that all cells arise from pre-existing living cells.",
-        "Prokaryotic cells (bacteria, blue-green algae) lack a nuclear envelope and membrane-bound organelles, have naked circular DNA and 70S ribosomes; eukaryotic cells have a double-membrane nucleus, linear DNA, 80S ribosomes, and mitochondria/ER/Golgi.",
-        "Drawing magnification is M = I ÷ A (in identical units: 1 cm = 10 mm = 10,000 μm) and compound microscope magnification is M_total = M_eyepiece × M_objective."
+        "The cell theory: every organism is made of one cell or many cells; cells are the building blocks of organisms and carry out their life processes; new cells form only when existing cells divide.",
+        "Hooke (1665) looked at cork and named the empty box-like walls of dead cells \"cells\".",
+        "Dujardin (1835) described the living jelly inside cells; Schleiden (1838) said plants are made of cells and Schwann (1839) said animals are too.",
+        "Total magnification = eyepiece × objective (multiply, never add).",
+        "Actual size = image size ÷ magnification, and 1 mm = 1000 µm.",
+        "A prokaryote (e.g. a bacterium) has no nucleus and no membrane-bound organelles; its DNA lies free in the cytoplasm."
       ]
     }
   },
 
   l02: {
-    title: "Inside the Eukaryotic Cell — Organelles & Plant vs Animal Cells",
+    title: "Inside the Cell: Organelles, Plant vs Animal Cells",
     donow: [
       {
-        from: 1, sec: "concepts", where: "Hooke vs Dujardin",
-        q: "Why did Robert Hooke see only empty box-like walls in 1665 cork, and who discovered the living protoplasm inside cells in 1835?",
-        a: "Cork is dead bark tissue, so Hooke saw only empty <strong>cellulose cell walls</strong>. <strong>Félix Dujardin (1835)</strong> discovered the living jelly (<em>sarcode</em> / protoplasm)."
+        from: 1, sec: "concepts", where: "Cell theory",
+        q: "State the three ideas of the cell theory.",
+        a: "(1) Every organism consists of <strong>one cell or many cells</strong>. (2) Organisms are <strong>built from cells</strong>, and cells carry out their life processes. (3) New cells form <strong>only when existing cells divide</strong>."
       },
       {
-        from: 1, sec: "concepts", where: "Prokaryote vs Eukaryote",
-        q: "Which protein-synthesising organelle is present in BOTH a bacterial cell and a human liver cell?",
-        a: "The <strong>ribosome</strong> (70S in prokaryotes, 80S in eukaryotes). Bacteria have no nuclear membrane and no mitochondria or chloroplasts."
+        from: 1, sec: "examples", where: "Total magnification",
+        q: "What is the total magnification with a ×10 eyepiece and a ×40 objective?",
+        a: "Multiply the two lenses: <strong>10 × 40 = ×400</strong> (never add them)."
       },
       {
-        from: 1, sec: "examples", where: "Drawing Magnification",
-        q: "An onion cell of actual length A = 150 μm is drawn I = 7.5 cm long. What is the drawing magnification M?",
-        a: "Convert to μm: <code>I = 7.5 × 10000 = 75000 μm</code>. Then <code>M = I ÷ A = 75000 ÷ 150 = ×500</code>."
+        from: 1, sec: "concepts", where: "Prokaryotes",
+        q: "Name one structure that a prokaryote lacks.",
+        a: "A <strong>nuclear membrane</strong> (true nucleus), or any <strong>membrane-bound organelle</strong> such as a mitochondrion."
       },
       {
-        from: 1, sec: "concepts", where: "Viruses & Cell Theory",
-        q: "Why are viruses considered exceptions to the Cell Theory?",
-        a: "Viruses are acellular nucleoprotein particles (DNA or RNA inside a protein capsid) with no plasma membrane, cytoplasm, or ribosomes; they crystallise outside host cells."
+        from: 1, sec: "sort", where: "Hooke and cork",
+        q: "What did Robert Hooke actually see in his slice of cork?",
+        a: "The <strong>empty walls of dead cells</strong>. Cork is dead tissue, so there was no living material inside."
+      }
+    ],
+    quiz: [
+      {
+        from: 1,
+        q: "A student's microscope has a ×15 eyepiece and a ×10 objective. What is the total magnification?",
+        o: ["×25", "×150", "×1.5", "×1500"],
+        a: 1,
+        e: "Total magnification = eyepiece × objective = 15 × 10 = ×150. Adding the powers (×25) is the classic trap."
+      },
+      {
+        from: 1,
+        q: "Which of these is found in a bacterium?",
+        o: ["A nucleus with a nuclear membrane", "Mitochondria", "Ribosomes", "A Golgi body"],
+        a: 2,
+        e: "Ribosomes have no membrane, and prokaryotes such as bacteria have them (smaller ones). A true nucleus, mitochondria and a Golgi body are all membrane-bound, so bacteria lack them."
       }
     ],
     recall: {
-      prompt: "Close your notes and recall the organelle functions, membrane counts, and plant vs animal cell differences:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 2, then tick each point below that you wrote:",
       points: [
-        "Double-membrane organelles: Nucleus (controls cell & holds DNA), Mitochondrion (folded inner cristae & matrix; aerobic respiration producing ATP), and Chloroplast (thylakoid grana & stroma; photosynthesis).",
-        "Single-membrane organelles: Rough ER (protein transport), Smooth ER (lipid synthesis), Golgi body (packages & secretes macromolecules, forms lysosomes), Lysosome ('suicide bag' with hydrolytic enzymes), and Vacuole (bounded by tonoplast).",
-        "Non-membranous organelles: Ribosomes (protein synthesis) and Centrioles/Centrosome (spindle fibre formation in animal cells).",
-        "Plant cells have a rigid freely permeable cellulose cell wall, chloroplasts, large central permanent vacuole, and store starch; animal cells have no cell wall, have centrioles, small temporary vacuoles, and store glycogen."
+        "Nucleus: controls the cell and carries its inherited instructions. Mitochondrion: releases energy in aerobic respiration. Chloroplast: traps light to make food.",
+        "Rough ER carries materials and is studded with ribosomes; ribosomes make proteins; the Golgi body sorts, packs and sends out products; lysosomes hold digestive enzymes.",
+        "Double membrane: nucleus, mitochondrion, chloroplast. Single membrane: lysosome, vacuole (tonoplast), ER, Golgi body. No membrane: ribosome, centrioles. The cell wall is not a membrane.",
+        "Plant-only: cellulose cell wall, chloroplasts, large central sap vacuole. Safest animal-only answers: centrioles and glycogen granules.",
+        "Cell wall: cellulose, fully permeable, rigid, non-living, plants only. Cell membrane: lipid and protein, selectively permeable, flexible, living, in all cells.",
+        "Ribosomes are too small for any light microscope to resolve; mitochondria are big enough but are not stained on a school slide."
       ]
     }
   },
 
   l03: {
-    title: "Forms of Living Cells & Levels of Biological Organisation",
+    title: "Forms of Cells and Levels of Organisation",
     donow: [
       {
-        from: 2, sec: "concepts", where: "Membrane Count Trap",
-        q: "Classify ribosome, mitochondrion, lysosome, and cellulose cell wall by whether they have 0, 1, or 2 membranes.",
-        a: "<strong>Ribosome:</strong> 0 membranes · <strong>Lysosome:</strong> 1 membrane · <strong>Mitochondrion:</strong> 2 membranes · <strong>Cellulose cell wall:</strong> non-living structural wall (not a membrane!)."
+        from: 2, sec: "concepts", where: "Contractile vacuole",
+        q: "What is the function of the contractile vacuole?",
+        a: "It <strong>collects and pumps out excess water</strong> from a freshwater protozoan such as <em>Amoeba</em>."
       },
       {
-        from: 2, sec: "concepts", where: "Cell Wall vs Cell Membrane",
-        q: "Contrast the permeability and chemical composition of the plant cell wall vs the plasma membrane.",
-        a: "<strong>Cell wall:</strong> cellulose, rigid, non-living, <strong>freely permeable</strong>. <strong>Cell membrane:</strong> lipoprotein bilayer, flexible, living, <strong>selectively permeable</strong>."
+        from: 2, sec: "concepts", where: "Plant-only structures",
+        q: "Name the three structures found only in plant cells.",
+        a: "The <strong>cellulose cell wall</strong>, <strong>chloroplasts</strong> and the <strong>large central sap vacuole</strong>."
       },
       {
-        from: 2, sec: "concepts", where: "Plant vs Animal Storage",
-        q: "In what carbohydrate form do plant cells store excess glucose, and in what form do animal cells (and fungi) store it?",
-        a: "Plant cells store carbohydrate as <strong>starch</strong> (in plastids); animal cells and fungi store carbohydrate as <strong>glycogen</strong> granules."
+        from: 2, sec: "concepts", where: "Organelle functions",
+        q: "Which organelle releases energy in respiration?",
+        a: "The <strong>mitochondrion</strong>, the cell's power station."
       },
       {
-        from: 1, sec: "examples", where: "Actual Size Calculation",
-        q: "Under ×400 magnification, a Chlamydomonas image measures 16 mm across. What is its actual diameter in μm?",
-        a: "<code>I = 16 × 1000 = 16000 μm</code>. Actual size <code>A = I ÷ M = 16000 ÷ 400 = 40 μm</code>."
+        from: 1, sec: "examples", where: "Actual size",
+        q: "A cell's image is 30 mm long at ×600. What is its actual size?",
+        a: "Actual = image ÷ magnification = 30 ÷ 600 = <strong>0.05 mm</strong>, and 0.05 × 1000 = <strong>50 µm</strong>."
+      }
+    ],
+    quiz: [
+      {
+        from: 2,
+        q: "Which organelle is bounded by a double membrane?",
+        o: ["Lysosome", "Golgi body", "Ribosome", "Mitochondrion"],
+        a: 3,
+        e: "The mitochondrion has two membranes (the inner one folded into cristae). Lysosomes and the Golgi body have one membrane; ribosomes have none."
+      },
+      {
+        from: 1,
+        q: "A cell 0.04 mm long is shown 20 mm long in a photograph. What is the magnification?",
+        o: ["×50", "×80", "×500", "×800"],
+        a: 2,
+        e: "Magnification = image ÷ actual = 20 mm ÷ 0.04 mm = ×500. Both lengths must be in the same unit first."
       }
     ],
     recall: {
-      prompt: "Without looking back, recall the four forms of living cells, the levels of organisation, and SA/V scaling:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 3, then tick each point below that you wrote:",
       points: [
-        "Living cells exist as: (1) Single free-living cells (Amoeba, Paramecium, Euglena, Chlamydomonas), (2) Colonies (Volvox), (3) Filaments (Spirogyra), and (4) Specialised cells in multicellular tissues (palisade, cheek, neurone).",
-        "Euglena shares plant features (chloroplasts for photosynthesis in light) and animal features (pellicle, flagellum, eyespot, gullet, contractile vacuole, saprophytic feeding in dark).",
-        "In a colony (Volvox) or filament (Spirogyra), cells are alike and independent; in a true tissue (Hydra), cells are specialised and interdependent.",
-        "Hierarchy: Organelle → Cell → Tissue (Hydra, blood) → Organ (onion bulb, rhizome, leaf, heart) → System → Organism. Small unicellular organisms have a huge SA/V ratio (6/L) so simple diffusion suffices."
+        "Free-living single cells: Amoeba, Paramecium, Euglena, Chlamydomonas. Colony: Volvox. Filament: Spirogyra. Tissue level: Hydra.",
+        "Nutrition: autotrophic (Chlamydomonas, Spirogyra, Euglena in light); saprophytic (Euglena in darkness); holozoic (Amoeba, Paramecium).",
+        "In a colony every cell is alike and nearly self-sufficient; in a tissue the cells are specialised and depend on one another.",
+        "Levels of organisation: organelle → cell → tissue → organ → system → organism.",
+        "Being big costs a transport system, more food and dependence of every cell on the whole; it gains specialised cells, larger size and life in many places.",
+        "For a cube, SA : V = 6L² ÷ L³ = 6/L, so the ratio falls as the cube gets bigger."
       ]
     }
   },
 
   l04: {
-    title: "The Cell & Its Environment — Diffusion, Osmosis, Turgor & Haemolysis",
+    title: "The Cell and Its Environment: Diffusion, Osmosis and Active Transport",
     donow: [
       {
-        from: 3, sec: "concepts", where: "Euglena & Protozoan Osmoregulation",
-        q: "Which organelle prevents freshwater Amoeba, Paramecium, and Euglena from bursting by expelling excess water?",
-        a: "The <strong>contractile vacuole</strong> (osmoregulation)."
+        from: 2, sec: "concepts", where: "Cell membrane",
+        q: "What does \"selectively permeable\" mean?",
+        a: "The membrane <strong>lets some substances pass through but holds others back</strong>, so it controls what enters and leaves the cell."
       },
       {
-        from: 3, sec: "concepts", where: "Colony vs Tissue & Onion Bulb",
-        q: "At what level of organisation is an onion bulb or ginger rhizome classified, and why?",
-        a: "At the <strong>organ level</strong>, because it consists of several different tissues (epidermis, storage parenchyma, xylem and phloem) working together."
-      },
-      {
-        from: 3, sec: "examples", where: "Surface-Area-to-Volume Ratio",
-        q: "How many times larger is the SA/V ratio (6/L) of a 0.1 mm Amoeba cube compared to a 10 mm tissue cube?",
-        a: "<code>R_1 = 6 ÷ 0.1 = 60 mm⁻¹</code> and <code>R_2 = 6 ÷ 10 = 0.6 mm⁻¹</code>. Ratio <code>F = 60 ÷ 0.6 = 100 times</code> larger!"
-      },
-      {
-        from: 2, sec: "concepts", where: "Vacuole & Tonoplast",
-        q: "What is the name of the selectively permeable membrane surrounding a plant cell's central sap vacuole?",
+        from: 2, sec: "concepts", where: "Sap vacuole",
+        q: "Name the membrane around the plant cell's sap vacuole.",
         a: "The <strong>tonoplast</strong>."
+      },
+      {
+        from: 3, sec: "concepts", where: "Surface area : volume",
+        q: "Why can an Amoeba rely on diffusion alone?",
+        a: "It is tiny, so it has a <strong>large surface area to volume ratio</strong>: every part of the cell is close to the surface."
+      },
+      {
+        from: 2, sec: "bridge", where: "Cell wall",
+        q: "Which structure lets a plant cell resist bursting?",
+        a: "The <strong>cellulose cell wall</strong>: it is strong enough to stop the cell swelling until it bursts."
+      }
+    ],
+    quiz: [
+      {
+        from: 3,
+        q: "What is the surface area to volume ratio of a cube with sides of 3 mm?",
+        o: ["0.5 mm⁻¹", "2.0 mm⁻¹", "3.0 mm⁻¹", "18 mm⁻¹"],
+        a: 1,
+        e: "SA = 6 × 3² = 54 mm² and V = 3³ = 27 mm³, so SA : V = 54 ÷ 27 = 2.0 mm⁻¹ (check: 6 ÷ 3 = 2.0)."
+      },
+      {
+        from: 2,
+        q: "Which statement about the cell wall and the cell membrane is correct?",
+        o: ["Both are selectively permeable", "The wall is fully permeable; the membrane is selectively permeable", "The wall is living; the membrane is non-living", "Only animal cells have a cell membrane"],
+        a: 1,
+        e: "The cellulose wall lets almost anything through; the living membrane chooses what passes. Every cell, plant or animal, has a cell membrane."
       }
     ],
     recall: {
-      prompt: "Close your notes and recall diffusion, osmosis, active transport, turgidity, plasmolysis, and haemolysis:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 4, then tick each point below that you wrote:",
       points: [
-        "Diffusion is passive movement down a concentration gradient; Osmosis is net movement of water from a dilute (hypotonic) to a concentrated (hypertonic) solution across a selectively permeable membrane; Active transport moves ions against a gradient using ATP.",
-        "In distilled water (hypotonic), a plant cell swells until its rigid cellulose cell wall exerts opposing turgor pressure (turgidity — never bursts), whereas a red blood cell has no cell wall so it swells and bursts (haemolysis).",
-        "In concentrated salt/sugar (hypertonic), a plant cell loses water and its protoplasm pulls away from the cell wall (plasmolysis), whereas a red blood cell shrinks and wrinkles (crenation).",
-        "Percentage mass change is %Δm = ((m_f − m_i) ÷ m_i) × 100%, and plant water potential is Ψ_w = Ψ_s + Ψ_p."
+        "Diffusion: particles spread from where they are crowded to where they are fewer. Osmosis: water crosses a selectively permeable membrane from a dilute to a more concentrated solution. Active transport: the cell pumps substances against their gradient, using energy (ATP).",
+        "Hypotonic solution: plant cell turgid (the wall stops it bursting); red cell swells and bursts (haemolysis).",
+        "Isotonic solution: plant cell flaccid, red cell normal. Hypertonic solution: plant cell plasmolysed; red cell shrinks and crenates.",
+        "% change in mass = (final − initial) ÷ initial × 100.",
+        "The isotonic point is where the graph of % change crosses 0% (about 0.34 mol dm⁻³ for our potato).",
+        "Salty water wilted the ugu by drawing water out (plasmolysis); plain water in a vein would burst red cells; 0.9% saline is isotonic with blood."
       ]
     }
   },
 
   l05: {
-    title: "WAEC Paper 3 Practical — Wet-Mount Microscopy & Biological Drawing Clinic",
+    title: "WAEC Paper 3 Clinic: Slides, Biological Drawing and Magnification",
     donow: [
       {
-        from: 4, sec: "concepts", where: "Turgidity vs Haemolysis",
-        q: "Why does a red blood cell burst (haemolyse) in distilled water whereas an onion epidermal cell becomes turgid without bursting?",
-        a: "Water enters both by osmosis, but the onion cell has a rigid <strong>cellulose cell wall</strong> that resists bursting, whereas the red blood cell has <strong>no cell wall</strong>."
+        from: 1, sec: "examples", where: "Actual size",
+        q: "A cell's image is 36 mm long at ×400. What is its actual size?",
+        a: "Actual = image ÷ magnification = 36 ÷ 400 = <strong>0.09 mm</strong>, and 0.09 × 1000 = <strong>90 µm</strong>."
       },
       {
-        from: 4, sec: "examples", where: "Plant Water Potential",
-        q: "Cell X has Ψ_s = −500 kPa and Ψ_p = +300 kPa; adjacent Cell Y has Ψ_s = −900 kPa and Ψ_p = +450 kPa. Which way does water move?",
-        a: "<code>Ψ_wX = -500 + 300 = -200 kPa</code> and <code>Ψ_wY = -900 + 450 = -450 kPa</code>. Water moves from higher (less negative) <strong>Cell X (−200 kPa) to Cell Y (−450 kPa)</strong>."
+        from: 2, sec: "concepts", where: "Plant vs animal",
+        q: "Name two structures found only in plant cells.",
+        a: "Any two of: <strong>cellulose cell wall</strong>, <strong>chloroplasts</strong>, <strong>large central sap vacuole</strong>."
       },
       {
-        from: 2, sec: "concepts", where: "Plastids in Underground Organs",
-        q: "Why do fleshy onion bulb scale leaves contain leucoplasts instead of green chloroplasts?",
-        a: "Because the onion bulb grows <strong>underground without sunlight</strong> and stores food rather than photosynthesising."
+        from: 4, sec: "concepts", where: "Plasmolysis",
+        q: "What is plasmolysis?",
+        a: "When a plant cell loses water by osmosis in a hypertonic solution, its <strong>membrane and cytoplasm pull away from the cell wall</strong>."
       },
       {
-        from: 1, sec: "examples", where: "Magnification Formula",
-        q: "A specimen of actual length A = 4.0 mm is drawn I = 8.0 cm long. What is the magnification M of the drawing?",
-        a: "Convert to mm: <code>I = 8.0 × 10 = 80.0 mm</code>. Then <code>M = I ÷ A = 80.0 ÷ 4.0 = ×20</code>."
+        from: 3, sec: "concepts", where: "Colony vs tissue",
+        q: "Why is Volvox not a tissue?",
+        a: "Its cells are <strong>all alike and each can feed, respire and move by itself</strong>; in a tissue the cells are specialised and depend on one another."
+      }
+    ],
+    quiz: [
+      {
+        from: 4,
+        q: "A potato strip changed from 2.00 g to 1.80 g in a sucrose solution. What was the percentage change in mass?",
+        o: ["−0.20%", "−10.0%", "−11.1%", "+10.0%"],
+        a: 1,
+        e: "Change = 1.80 − 2.00 = −0.20 g; % change = −0.20 ÷ 2.00 × 100 = −10.0%. Always divide by the initial mass."
+      },
+      {
+        from: 4,
+        q: "Red blood cells are placed in distilled water. What happens to them?",
+        o: ["They shrink and crenate", "They stay the same", "They swell and burst (haemolysis)", "They become turgid and stop swelling"],
+        a: 2,
+        e: "Distilled water is hypotonic to red cells, so water enters by osmosis. With no cell wall to resist, they swell and burst: haemolysis."
       }
     ],
     recall: {
-      prompt: "Without looking back, recall the WAEC Paper 3 slide staining protocol, observable differences, and 9 drawing rules:",
+      prompt: "Close your notes. Write down everything you remember from Lesson 5, then tick each point below that you wrote:",
       points: [
-        "Stain onion epidermis (Specimen A) with iodine solution and cheek cells (Specimen B) with methylene blue; lower the coverslip at a 45° angle with a mounting needle to prevent trapping air bubbles.",
-        "Focus under low power (×4 or ×10) first before switching to high power (×40) using the fine adjustment knob only.",
-        "Do NOT label chloroplasts in an onion bulb cell (grows underground), do NOT label the cell membrane separately unless plasmolysed, and do NOT label mitochondria/ER/ribosomes on light-microscope drawings.",
-        "WAEC Chief Examiner 9 Drawing Rules: Title, Magnification (×100), specified size (6–8 cm), sharp HB continuous unshaded lines, double lines for cell walls/cut surfaces, horizontal parallel ruled guidelines touching parts without crossing, singular labels, correct spelling & capitalised Genus names."
+        "Onion slide: peel the thin inner epidermis, lay it flat in a drop of iodine, lower the cover slip at about 45° to keep out air bubbles, view on low power then high power.",
+        "Cheek slide: scrape gently with a clean spatula, smear on the slide, add methylene blue, add a cover slip; put the used spatula in disinfectant.",
+        "Drawing rules: title, magnification, correct size, clean lines with no shading, ruled horizontal guidelines that touch the part and never cross, singular labels in a column, correct spelling, double lines for cut surfaces, draw only what you see.",
+        "Observable differences: onion cells are regular and box-like with a wall, a side nucleus and a visible vacuole (iodine, yellow-brown); cheek cells are irregular, with no wall and a central nucleus (methylene blue).",
+        "Drawing magnification = drawing length ÷ actual length, in the same units, written with no unit (e.g. ×200)."
       ]
     }
   }

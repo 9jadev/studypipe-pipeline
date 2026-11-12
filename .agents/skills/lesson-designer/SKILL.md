@@ -24,7 +24,7 @@ Before writing, read:
    - **Marquee:** 12 scrolling key terms/constants for the unit.
    - **Section 01 (`#mystery`):** The Unit Mystery Case File (narrative card + `.case-card` clues) and 3 Exam Weight `.stat` cards (`Marks at stake`, `Exam boards`, `Core laws`).
    - **Section 02 (`#journey`):** The Multi-Lesson Journey list (`<article class="lesson reveal is-live">` cards linking to `lessons/lesson-01/index.html` … `lessons/lesson-0N/index.html`, showing duration, tags, description, and `"Start lesson →"` CTA) + `.thread-note` explaining how spaced retrieval connects every lesson.
-   - **Section 03 (`#explorer`):** Interactive Concept Sneak-Preview with 4 `.combo-tab` switcher buttons, dynamic SVG curve (`#combo-curve` + `#combo-marker`), and detail readout card (`#combo-title`, `#combo-jump`, `#combo-eq`, `#combo-ind`, `#combo-why`).
+   - **Section 03 (`#explorer`):** Interactive Concept Sneak-Preview with 4 `.combo-tab` switcher buttons, dynamic 2D Paper.js animated curve (`#combo-canvas` / `#combo-curve` + `#combo-marker`), and detail readout card (`#combo-title`, `#combo-jump`, `#combo-eq`, `#combo-ind`, `#combo-why`).
    - **Section 04 (`#master`):** 6 outcomes cards (`01`–`06`) + **6 Calculation Archetypes (`#archetypes`)** + `.formula-strip` of the unit's core equations + **3 Common Myths (`#myths`)** interactive 3D flip cards.
    - **Section 05 (`#method`):** The 5-Step Inquiry Loop (`1. Wonder → 2. Investigate → 3. Make sense → 4. Apply → 5. Reflect`) + What's inside every lesson (`#kit`) + Finale CTA.
 3. Design **Part II — The Multi-Lesson Sequence (`Lesson 01` … `Lesson 0N`)**:
@@ -35,14 +35,19 @@ Before writing, read:
      - **3D Story Scene (`StoryStage`):** 5–6 animated 3D story beats advancing the Nigerian mystery thread for that lesson, plus collapsible transcript.
      - **Wonder Wall:** Guiding prediction prompt + 4 student seed questions.
    - **Phase 2 · Investigate (`#sort` & `#practical` · 25 min):**
-     - **Interactive Sort / Classify Game:** 8–12 items sorted into 2–3 category bins.
-     - **3D Virtual Lab Bench (`SceneKit`):** Step-by-step `.method` cards, interactive 3D apparatus (`#bench-stage`), interactive `#results-table`, collapsible `#expected` results & graph, and locked `.aq` Analysis Questions.
+     - **Interactive Sort / Classify Game:** 8–12 items sorted into 2–3 category bins using pure HTML/CSS/DOM drag & drop (`sort-dnd.js`). Keep this untouched.
+     - **Virtual Lab Bench (`#bench-stage`):**
+       - **Dimensionality Check (3D Three.js vs 2D Paper.js):**
+         - **Planar Surfaces & Mathematics $\to$ 2D Paper.js (`PaperKit`):** When the topic is planar, especially in Mathematics (plane geometry, Euclidean proofs, triangle drawing and construction, circle theorems, coordinate geometry, angles, vectors) or 2D physics ray diagrams, specify an **interactive 2D Paper.js stage** running on an HTML5 `<canvas>`. Never approximate 2D plane geometry in Three.js.
+         - **Volumetric / Spatial $\to$ 3D Three.js (`SceneKit`):** When the experiment requires spatial depth, orbiting, or volumetric glassware/organs (titration, 4-chamber heart, electrolysis), specify a 3D `SceneKit` stage.
+       - Step-by-step `.method` cards, interactive apparatus (`#bench-stage`), interactive `#results-table`, collapsible `#expected` results & graph, and locked `.aq` Analysis Questions.
    - **Phase 3 · Make sense (`#concepts` & `#zoom` · 15 min):**
-     - Definitions, `.eq` formula blocks, `.callout.big` rules, comparison tables (`.tbl`), interactive Pin/Scale Explorer (`#ph-explorer`), and **Second 3D Zoom Stage (`#zoom-stage`)** with live `.counters`.
+     - Definitions, `.eq` formula blocks, `.callout.big` rules, comparison tables (`.tbl`), interactive Pin/Scale Explorer (`#ph-explorer`), and **Second Zoom Stage (`#zoom-stage`)** (3D `SceneKit` or 2D `PaperKit` depending on dimensionality) with live `.counters`.
    - **Phase 4 · Apply (`#examples`, `#bridge`, `#quiz` · 20 min):**
      - **3–4 Worked Examples (`.example`):** Every worked example MUST write out all intermediate calculation steps (Governing Formula → Numerical Substitution → Intermediate Trig/Power/Bracket Evaluation → Arithmetic Operation → Final Boxed Result with SI Unit) so `StudyMath` (`math-kit.js`) renders each step in LaTeX with a plain-English explainer note underneath every single line.
      - **The Bridge (`#bridge`)** two-sample/mystery test + `.callout.big#big-idea`, and **Instant-Feedback Quiz (`#quiz`)**.
    - **Phase 5 · Reflect & Assignment (`#reflect` & `#assignment` · 10 min + 40 min home):**
      - **Self-Assessment Rubric (`1`–`4`)**, **Exit Ticket (`.aq`)**, **Blank-Page Recall (`#recall-box`)**, **Home Assignment** (Part A practical + Part B 30-mark structured questions with locked solutions), and collapsible **Teacher Notes (`#teacher-notes`)** with the 80-minute timetable (including the **5-minute active movement break** at `45–50 min`) and **Transversal Competences (`L1`–`L7`)**.
 4. Outline the **Narrator Choreography Plan** (in Nigerian English `en-NG`) for the Welcome Hub (`welcome-narration.js`) and for each lesson (`lessons/lesson-0X/narration.js`).
-5. Run the self-check in `references/teaching-standards.md` before saving `02-lesson.md`.
+5. **Recommend explainer videos.** Score every lesson with `references/video-criteria.md` and write `## 7. Explainer Video Plan` (score, yes/no, the `+N`/`−N` reasons, what the video would cover). Recommend only lessons scoring ≥ 5, at most `video_cap` (default 3). Check it with `node scripts/video-picks.mjs topics/<slug>`: every score must equal its reasons.
+6. Run the self-check in `references/teaching-standards.md` before saving `02-lesson.md`.

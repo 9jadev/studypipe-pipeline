@@ -1,12 +1,17 @@
 # QA report: topics/ss2-bio-heart-circulation
-date: 2026-11-06 07:06
+date: 2026-11-10 09:17
 verdict: PASS
 theme: editorial-ink
-lessons checked: 5
-sections checked: 60
+lessons checked: 7
+sections checked: 84
 
 ## Issues
 - none
+
+## Notes
+- [lesson-04:video] explainer video OK: 61 lines, world unit, iframe 639px. Deep checks: node .agents/skills/explainer-video/scripts/qa.cjs topics/ss2-bio-heart-circulation/html/lessons/lesson-04/video.html
+- [lesson-05:video] explainer video OK: 46 lines, world unit, iframe 639px. Deep checks: node .agents/skills/explainer-video/scripts/qa.cjs topics/ss2-bio-heart-circulation/html/lessons/lesson-05/video.html
+- [lesson-06:video] explainer video OK: 43 lines, world unit, iframe 639px. Deep checks: node .agents/skills/explainer-video/scripts/qa.cjs topics/ss2-bio-heart-circulation/html/lessons/lesson-06/video.html
 
 ## Screenshots (review these visually)
 - topics/ss2-bio-heart-circulation/qa/welcome-00-hero.png
@@ -20,7 +25,7 @@ sections checked: 60
 - topics/ss2-bio-heart-circulation/qa/lesson-01-02-story.png
 - topics/ss2-bio-heart-circulation/qa/lesson-01-04-sort.png
 - topics/ss2-bio-heart-circulation/qa/lesson-01-06-concepts.png
-- topics/ss2-bio-heart-circulation/qa/lesson-01-07-neutralise.png
+- topics/ss2-bio-heart-circulation/qa/lesson-01-07-zoom.png
 - topics/ss2-bio-heart-circulation/qa/lesson-01-08-examples.png
 - topics/ss2-bio-heart-circulation/qa/lesson-01-09-bridge.png
 - topics/ss2-bio-heart-circulation/qa/lesson-01-10-quiz.png
@@ -29,7 +34,7 @@ sections checked: 60
 - topics/ss2-bio-heart-circulation/qa/lesson-02-02-story.png
 - topics/ss2-bio-heart-circulation/qa/lesson-02-04-sort.png
 - topics/ss2-bio-heart-circulation/qa/lesson-02-06-concepts.png
-- topics/ss2-bio-heart-circulation/qa/lesson-02-07-neutralise.png
+- topics/ss2-bio-heart-circulation/qa/lesson-02-07-zoom.png
 - topics/ss2-bio-heart-circulation/qa/lesson-02-08-examples.png
 - topics/ss2-bio-heart-circulation/qa/lesson-02-09-bridge.png
 - topics/ss2-bio-heart-circulation/qa/lesson-02-10-quiz.png
@@ -38,7 +43,7 @@ sections checked: 60
 - topics/ss2-bio-heart-circulation/qa/lesson-03-02-story.png
 - topics/ss2-bio-heart-circulation/qa/lesson-03-04-sort.png
 - topics/ss2-bio-heart-circulation/qa/lesson-03-06-concepts.png
-- topics/ss2-bio-heart-circulation/qa/lesson-03-07-neutralise.png
+- topics/ss2-bio-heart-circulation/qa/lesson-03-07-zoom.png
 - topics/ss2-bio-heart-circulation/qa/lesson-03-08-examples.png
 - topics/ss2-bio-heart-circulation/qa/lesson-03-09-bridge.png
 - topics/ss2-bio-heart-circulation/qa/lesson-03-10-quiz.png
@@ -47,7 +52,7 @@ sections checked: 60
 - topics/ss2-bio-heart-circulation/qa/lesson-04-02-story.png
 - topics/ss2-bio-heart-circulation/qa/lesson-04-04-sort.png
 - topics/ss2-bio-heart-circulation/qa/lesson-04-06-concepts.png
-- topics/ss2-bio-heart-circulation/qa/lesson-04-07-neutralise.png
+- topics/ss2-bio-heart-circulation/qa/lesson-04-07-zoom.png
 - topics/ss2-bio-heart-circulation/qa/lesson-04-08-examples.png
 - topics/ss2-bio-heart-circulation/qa/lesson-04-09-bridge.png
 - topics/ss2-bio-heart-circulation/qa/lesson-04-10-quiz.png
@@ -56,14 +61,29 @@ sections checked: 60
 - topics/ss2-bio-heart-circulation/qa/lesson-05-02-story.png
 - topics/ss2-bio-heart-circulation/qa/lesson-05-04-sort.png
 - topics/ss2-bio-heart-circulation/qa/lesson-05-06-concepts.png
-- topics/ss2-bio-heart-circulation/qa/lesson-05-07-neutralise.png
+- topics/ss2-bio-heart-circulation/qa/lesson-05-07-zoom.png
 - topics/ss2-bio-heart-circulation/qa/lesson-05-08-examples.png
 - topics/ss2-bio-heart-circulation/qa/lesson-05-09-bridge.png
 - topics/ss2-bio-heart-circulation/qa/lesson-05-10-quiz.png
 - topics/ss2-bio-heart-circulation/qa/lesson-05-99-narrator-spotlight.png
-
-## Visual review
-- Verified with `HeartKit v2` (`kits/heart-circulation/heart-kit.js` / `html/assets/js/heart-kit.js`) across the Unit Welcome Hub and all 5 lessons (60 sections) at `360×740`:
-  - `editorial-ink` theme fonts (Fraunces, Plus Jakarta Sans, JetBrains Mono) load cleanly offline with zero network calls and zero console errors.
-  - 3D anatomical heart and circulation stages use `HeartKit v2` extruded chamber cavities, 3:1 LV/RV myocardium walls, procedural striated muscle textures, GLSL systole deformation, articulating valves/chordae tendineae, and Lathe biconcave RBCs.
-- Final QA verdict: **PASS**.
+- topics/ss2-bio-heart-circulation/qa/lesson-06-00-hero.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-02-story.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-04-sort.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-06-concepts.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-07-zoom.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-08-examples.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-09-bridge.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-10-quiz.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-99-narrator-spotlight.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-00-hero.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-02-story.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-04-sort.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-06-concepts.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-07-zoom.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-08-examples.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-09-bridge.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-10-quiz.png
+- topics/ss2-bio-heart-circulation/qa/lesson-07-99-narrator-spotlight.png
+- topics/ss2-bio-heart-circulation/qa/lesson-04-video.png
+- topics/ss2-bio-heart-circulation/qa/lesson-05-video.png
+- topics/ss2-bio-heart-circulation/qa/lesson-06-video.png

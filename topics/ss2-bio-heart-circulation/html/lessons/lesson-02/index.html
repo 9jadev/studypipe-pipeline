@@ -3,39 +3,70 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Lesson 2 · Structure of the Mammalian Heart &amp; The Double-Circulation Pathway · StudyPipe</title>
-  <meta name="description" content="StudyPipe Biology (SS2): Mammalian Heart Chambers, 3:1 Ventricular Wall Ratio, Tricuspid &amp; Bicuspid Valves, Chordae Tendineae, Coronary Arteries, Hepatic Portal Vein, and Double-Circulation Pathway.">
+  <title>Lesson 2 · The Heart Up Close · StudyPipe</title>
+  <meta name="description" content="StudyPipe Biology (SS2): chambers, walls, valves and the goat-heart dissection, with wall measurements, drawing magnification and the WAEC Paper 3 practical.">
   <meta name="theme-color" content="#060912">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23fb7185'/%3E%3Cstop offset='1' stop-color='%2338bdf8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect x='12' y='14' width='40' height='36' rx='10' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23060912'/%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 56C12 40 6 28 6 20a13 13 0 0 1 26-4 13 13 0 0 1 26 4c0 8-6 20-26 36z' fill='%23c8264a'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="../../assets/css/fonts.css">
   <link rel="stylesheet" href="../../assets/css/style.css">
   <link rel="stylesheet" href="../../assets/css/lesson.css">
   <link rel="stylesheet" href="../../assets/css/narrator.css">
   <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
   <style>
-    .pend-hero-art {
-      position: relative; height: 280px; border-radius: var(--r-lg);
-      background: radial-gradient(circle at 50% 25%, rgba(251,113,133,.18), rgba(56,189,248,.08) 55%, transparent 75%),
-                  linear-gradient(180deg, rgba(16,23,42,.9), rgba(10,15,29,.95));
-      border: 1px solid var(--line-strong);
-      display: flex; align-items: center; justify-content: center; overflow: hidden;
-      box-shadow: var(--shadow-lg);
+    .hero-art {
+      position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--crimson-rgb), .22), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center;
+      overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px;
     }
-    .pend-hero-svg { width: 100%; height: 100%; max-width: 320px; }
-    .pos-track {
-      position: relative; height: 22px; border-radius: 999px; margin: 42px 10px 8px;
-      background: linear-gradient(90deg, #2563eb 0%, #38bdf8 25%, #e11d48 50%, #fb7185 75%, #f59e0b 100%);
-      box-shadow: inset 0 2px 5px rgba(0,0,0,.35);
-    }
-    .clock-card {
-      background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: var(--r-md);
-      padding: 18px; text-align: center; position: relative;
-    }
-    .clock-well {
-      height: 115px; border-radius: 12px; margin: 12px auto;
-      background: radial-gradient(circle at 50% 50%, rgba(251,113,133,.12), rgba(6,9,18,.9));
-      border: 1px solid rgba(255,255,255,.12); position: relative; overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
+    .hero-art svg { width: 100%; height: auto; max-width: 330px; }
+    .hs-ch { fill: rgba(var(--crimson-rgb), .38); stroke: var(--crimson); stroke-width: 2; }
+    .hs-ch.blue { fill: var(--sky); fill-opacity: .3; stroke: var(--sky); }
+    .hs-wall { fill: none; stroke: var(--fg); stroke-width: 3; stroke-linejoin: round; }
+    .hs-t { fill: var(--fg); font-family: var(--font-mono); font-size: 11px; }
+    .hs-m { fill: var(--amber); font-family: var(--font-mono); font-size: 10.5px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+    .bench-mode { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+    .bench-mode .blab { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); }
+    .vt-btn[disabled] { opacity: .45; cursor: not-allowed; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+    .bench-readout .hot b { color: var(--amber); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    #results-table td.empty { color: var(--paper-faint); }
+    #results-table tr.fresh td { background: rgba(var(--amber-rgb), .12); }
+    .wall-bars { display: grid; gap: 8px; margin-top: 14px; }
+    .wall-bars .wb { display: grid; grid-template-columns: 74px 1fr 64px; gap: 10px; align-items: center; font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); }
+    .wall-bars .wb i { display: block; height: 14px; border-radius: 999px; background: rgba(var(--paper-ink-rgb), .08); position: relative; overflow: hidden; }
+    .wall-bars .wb i::after { content: ""; position: absolute; inset: 0 auto 0 0; width: var(--w, 10%); background: var(--crimson); border-radius: 999px; }
+    .wall-bars .wb.on { color: var(--paper-ink); font-weight: 600; }
+    .wall-bars .wb.on i::after { background: var(--amber); }
+    .pos-track { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 48px; padding: 6px 4px; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 15px; min-height: 96px; }
+    .pos-info b { color: var(--crimson); }
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 28px); margin-top: 24px; }
+    .bridge-card h4 { margin: 0 0 6px; color: var(--fg); }
+    .bridge-q { margin-top: 14px; }
+    .bridge-q p { margin: 0 0 8px; font-weight: 700; color: var(--fg); }
+    .bridge-q .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .bridge-q .opts button { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 700; cursor: pointer; }
+    .bridge-q .opts button[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .bridge-q .opts button.ok { box-shadow: 0 0 0 2px var(--ok); }
+    .bridge-q .opts button.no { box-shadow: 0 0 0 2px var(--pink); }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+    .bridge-verdict.bad { background: rgba(var(--crimson-rgb), .14); border-color: var(--crimson); }
+    .bridge-fig { width: 100%; max-width: 360px; margin: 14px auto 0; display: block; }
+    @media (max-width: 560px) {
+      .wall-bars .wb { grid-template-columns: 60px 1fr 54px; }
+      .pos-track { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; }
+      .pos-pin { font-size: 12px; }
+      .stage-bar .seg button { padding: 8px 10px; font-size: 12.5px; }
     }
   </style>
   <script>document.documentElement.classList.remove('no-js');</script>
@@ -47,8 +78,8 @@
 
   <header class="nav l-nav" id="nav">
     <div class="wrap nav-inner">
-      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 5 Lessons</a>
-      <span class="l-crumb">Lesson 2 of 5 · <b>Mammalian Heart &amp; Circulation Pathway</b></span>
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 7 Lessons</a>
+      <span class="l-crumb">Lesson 2 of 7 · <b>The Heart Up Close</b></span>
       <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
     </div>
   </header>
@@ -57,15 +88,15 @@
   <section class="l-hero" id="top">
     <div class="wrap l-hero-grid">
       <div>
-        <span class="eyebrow reveal">SS2 Biology · Lesson 2 of 5 · 80 minutes</span>
-        <h1 class="display reveal" data-hook>Structure of the <em>Mammalian Heart</em> &amp; Double-Circulation Pathway</h1>
-        <p class="question reveal">Why is your left ventricular wall three times thicker than your right ventricular wall even though both ventricles pump the exact same 70 mL of blood on every beat?</p>
+        <span class="eyebrow reveal">SS2 Biology · Lesson 2 of 7 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>The Heart <em>Up Close</em></h1>
+        <p class="question reveal">Baba Sule says the thick side is the right side. Who is right?</p>
         <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
-          <li><b>01</b><span>Describe the position of the mammalian heart in the thoracic mediastinum and the protective functions of the <strong>pericardium</strong> and <strong>pericardial fluid</strong>.</span></li>
-          <li><b>02</b><span>Explain the myocardial wall-thickness hierarchy (<strong>Left Ventricle ~15 mm &gt; Right Ventricle ~5 mm &gt; Atria ~2 mm</strong>) and the role of the <strong>interventricular septum</strong>.</span></li>
-          <li><b>03</b><span>Locate and state the functions of the four one-way valves (<strong>tricuspid, bicuspid/mitral, pulmonary semilunar, aortic semilunar</strong>), <strong>chordae tendineae</strong>, and <strong>papillary muscles</strong>.</span></li>
-          <li><b>04</b><span>Trace a red blood cell through the complete <strong>double-circulation pathway</strong>, explaining why the <strong>pulmonary artery</strong> carries deoxygenated blood, why the <strong>pulmonary vein</strong> carries oxygenated blood, and the roles of the <strong>coronary arteries</strong> and <strong>hepatic portal vein</strong>.</span></li>
-          <li><b>05</b><span>Calculate <strong>stroke volume (SV = EDV − ESV)</strong>, <strong>ejection fraction (EF%)</strong>, and Paper 3 heart drawing magnification (<strong>M = I ÷ A</strong>).</span></li>
+          <li><b>01</b><span>Describe the <strong>position</strong> of the heart and its three-layered <strong>covering and wall</strong>.</span></li>
+          <li><b>02</b><span>Name the <strong>four chambers</strong>, state where each receives blood from and sends it to, and explain their <strong>wall thicknesses</strong>.</span></li>
+          <li><b>03</b><span>Name and locate the <strong>four valves</strong>, the <strong>septum</strong>, the <strong>chordae tendineae</strong> and the great vessels.</span></li>
+          <li><b>04</b><span>Carry out (or follow) a <strong>goat-heart dissection</strong> and measure wall thickness.</span></li>
+          <li><b>05</b><span>Draw a labelled <strong>longitudinal section</strong> to WAEC rules and calculate <strong>drawing magnification</strong> and actual size.</span></li>
         </ul>
         <div class="l-meta reveal" id="lesson-meta">
           <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
@@ -74,28 +105,28 @@
           <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
           <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
         </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Share results</span><span><b>45–50</b> Movement break</span><span><b>50–65</b> Make sense</span><span><b>65–80</b> Apply &amp; reflect</span>
+        </div>
         <div class="hero-cta reveal">
           <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
           <a class="btn btn-ghost" href="#donow">Read on my own</a>
         </div>
       </div>
 
-      <div class="pend-hero-art reveal" aria-hidden="true">
-        <svg class="pend-hero-svg" viewBox="0 0 320 260">
-          <rect x="20" y="34" width="128" height="172" rx="14" fill="rgba(37,99,235,0.14)" stroke="#38bdf8" stroke-width="2"/>
-          <text x="84" y="58" fill="#38bdf8" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">RIGHT PUMP (PULM)</text>
-          <rect x="52" y="76" width="64" height="32" rx="6" fill="none" stroke="#38bdf8" stroke-width="2"/>
-          <text x="84" y="96" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">RA → Tricuspid (3)</text>
-          <rect x="52" y="118" width="64" height="44" rx="8" fill="none" stroke="#38bdf8" stroke-width="3.5"/>
-          <text x="84" y="144" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">RV (5 mm · 25 mmHg)</text>
-
-          <rect x="172" y="34" width="128" height="172" rx="14" fill="rgba(225,29,72,0.14)" stroke="#fb7185" stroke-width="2"/>
-          <text x="236" y="58" fill="#fb7185" font-family="JetBrains Mono, monospace" font-size="10.5" text-anchor="middle">LEFT PUMP (SYSTEMIC)</text>
-          <rect x="204" y="76" width="64" height="32" rx="6" fill="none" stroke="#fb7185" stroke-width="2"/>
-          <text x="236" y="96" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9.5" text-anchor="middle">LA → Bicuspid (2)</text>
-          <rect x="204" y="118" width="64" height="44" rx="8" fill="none" stroke="#fb7185" stroke-width="7"/>
-          <text x="236" y="144" fill="#f5efe4" font-family="JetBrains Mono, monospace" font-size="9" text-anchor="middle">LV (15 mm · 120 mmHg)</text>
-          <text x="160" y="234" fill="#3ee6c4" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle">w_LV : w_RV = 3 : 1 &nbsp;·&nbsp; SV = EDV − ESV</text>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 330 290" role="img">
+          <!-- front view: the patient's RIGHT is on the reader's LEFT -->
+          <path class="hs-wall" d="M165 268C84 214 40 164 40 112c0-42 28-70 64-70 28 0 46 14 61 36 15-22 33-36 61-36 36 0 64 28 64 70 0 52-44 102-125 156z"/>
+          <path class="hs-ch blue" d="M56 108c0-26 14-42 38-42 14 0 24 8 30 20v30H56z"/>
+          <path class="hs-ch blue" d="M56 134h68v34c-18 0-46-8-68-34z" transform="translate(0 6)"/>
+          <path class="hs-ch" d="M206 86c6-12 16-20 30-20 24 0 38 16 38 42v8h-68z"/>
+          <path class="hs-ch" d="M206 124h68c0 44-44 92-108 130 2-40 4-90 40-130z" transform="translate(0 0)"/>
+          <path d="M165 60V256" stroke="var(--fg)" stroke-width="3" stroke-dasharray="2 5" fill="none"/>
+          <text class="hs-t" x="62" y="96">RA</text><text class="hs-t" x="62" y="156">RV</text>
+          <text class="hs-t" x="226" y="104">LA</text><text class="hs-t" x="226" y="176">LV</text>
+          <text class="hs-m" x="26" y="283">patient's right = your left</text>
+          <text class="hs-m" x="190" y="283">thick LV</text>
         </svg>
       </div>
     </div>
@@ -107,10 +138,10 @@
         <li><a href="#donow">Do Now</a></li>
         <li><a href="#story">The story</a></li>
         <li><a href="#wonder">Wonder Wall</a></li>
-        <li><a href="#sort">Heart structure sort</a></li>
-        <li><a href="#practical">3D heart dissector</a></li>
-        <li><a href="#concepts">Chambers &amp; pathway</a></li>
-        <li><a href="#neutralise">3D valve zoom</a></li>
+        <li><a href="#sort">Which side?</a></li>
+        <li><a href="#practical">Goat-heart dissection</a></li>
+        <li><a href="#concepts">Chambers &amp; valves</a></li>
+        <li><a href="#zoom">Valve zoom</a></li>
         <li><a href="#examples">Worked examples</a></li>
         <li><a href="#bridge">The big idea</a></li>
         <li><a href="#quiz">Quiz</a></li>
@@ -125,26 +156,26 @@
 
       <!-- ================= 0. DO NOW ================= -->
       <section class="l-sec" id="donow">
-        <span class="phase" style="--pc:var(--teal)"><b>0</b>Warm-up · Do Now · 5 min</span>
-        <h2>Before we start: <em>retrieve Lesson 1 concepts</em></h2>
-        <p class="intro">Four spaced-retrieval flashcards from Lesson 1 on SA/V scaling, cockroach haemolymph, fish gill pressure loss, and cardiac output. Answer each in your head <strong>before</strong> flipping the card.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>wake up Lesson 1</em></h2>
+        <p class="intro">Four quick cards on why big bodies need a transport system. Answer each one in your head <strong>before</strong> you reveal it.</p>
         <div class="donow" id="donow-list"></div>
         <div class="quiz-score">
           <span data-donow-score></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Try again</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
         </div>
       </section>
 
       <!-- ================= 1. STORY ================= -->
       <section class="l-sec" id="story">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · The case · 8 min</span>
-        <h2>At the LUTH Cardiac Echo Desk: <em>The 3:1 Ventricular Wall Mystery</em></h2>
-        <p class="intro">At Lagos University Teaching Hospital (LUTH) in Idi-Araba, Tunde, Amaka, Nurse Chidinma, and Dr Bamidele inspect Tunde’s echocardiogram and a dissected mammalian heart specimen.</p>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>A goat heart on the table at <em>Oja Oba</em></h2>
+        <p class="intro">At the health-day tent, Baba Sule slaps a goat heart on the table and starts an argument. Dr Aisha promises to settle it with a scalpel and a ruler.</p>
 
         <div class="stage story-stage" id="story-stage">
           <div class="stage-canvas">
-            <canvas aria-label="Animated 3D story: Tunde, Amaka, Nurse Chidinma, and Dr Bamidele at LUTH examining the 3:1 ventricular wall ratio, chordae tendineae, and pulmonary vessels."></canvas>
-            <div class="stage-label"><i></i>3D story · LUTH Echo Desk → Dissection Lab</div>
+            <canvas aria-label="Animated 3D story: Baba Sule shows a goat heart at the Oja Oba health tent and claims the thick side is the right; Dr Aisha draws a heart on her laboratory board."></canvas>
+            <div class="stage-label"><i></i>3D story · Oja Oba tent → UCH lab</div>
             <div class="story-bubble" aria-live="polite"></div>
             <div class="story-caption"></div>
             <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
@@ -154,38 +185,37 @@
             <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
             <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
             <div class="story-dots" aria-label="Scenes"></div>
-            <span class="stage-hint story-count">Scene 1 of 6</span>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
           </div>
         </div>
 
         <details class="reveal-box" id="story-text">
           <summary>Read the story as text <small>or use the 3D player above</small></summary>
           <div class="reveal-body">
-            <p><strong>Scene 1 · LUTH Echo Desk:</strong> Tunde looks at his ultrasound scan: <em>“Why is the muscular wall of my left ventricle 15 mm thick while my right ventricle is only 5 mm thick?”</em></p>
-            <p><strong>Scene 2 · The Stroke Volume Question:</strong> Amaka asks: <em>“Does a 3-times thicker wall mean the left ventricle pumps three times more blood per beat than the right ventricle?”</em></p>
-            <p><strong>Scene 3 · Same Volume, Different Pressure:</strong> Nurse Chidinma explains: <em>“No! Both ventricles pump the exact same 70 mL stroke volume! If the left pumped more than the right, all your blood would pile up in the systemic circuit within seconds. The left wall is 3× thicker because it must generate ~120 mmHg to reach your brain and toes, while the right ventricle needs only ~25 mmHg to reach the nearby lungs!”</em></p>
-            <p><strong>Scene 4 · Chordae Tendineae &amp; Papillary Muscles:</strong> Tough collagen strings (<code>chordae tendineae</code>) anchored to <code>papillary muscles</code> hold the 3-flap <strong>tricuspid</strong> and 2-flap <strong>bicuspid (mitral)</strong> valves taut during ventricular contraction.</p>
-            <p><strong>Scene 5 · The Great Vessel Exception:</strong> Because arteries go <em>away</em> from the heart and veins come <em>towards</em> the heart, the <strong>pulmonary artery</strong> carries deoxygenated blood and the <strong>pulmonary vein</strong> carries oxygenated blood.</p>
-            <p><strong>Scene 6 · 3D Dissection Bench:</strong> Dr Bamidele invites the students to measure chamber wall thickness and peak systolic pressure across all four chambers.</p>
+            <p><strong>Scene 1 · The tent:</strong> Baba Sule slaps a goat heart on the table: <em>“One side is thick like my thumb. That is the right side, because right is strong!”</em></p>
+            <p><strong>Scene 2 · Turn it over:</strong> Chidi turns the heart over: <em>“How do you even know which side is which?”</em></p>
+            <p><strong>Scene 3 · Clues on the outside:</strong> Dr Aisha points to the groove running down the front and the vessels at the top: <em>“These tell us. We will cut it open properly.”</em></p>
+            <p><strong>Scene 4 · The lab:</strong> On the board she draws a heart facing the class, then asks why the labels “right” and “left” look backwards.</p>
+            <p><strong>Scene 5 · The invitation:</strong> To the dissection bench, to measure instead of arguing.</p>
           </div>
         </details>
       </section>
 
       <!-- ================= 2. WONDER WALL ================= -->
       <section class="l-sec" id="wonder">
-        <span class="phase" style="--pc:#d98a00"><b>1</b>Wonder · Your predictions</span>
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
         <h2>The <em>Wonder Wall</em></h2>
-        <p class="intro">What would happen if the chordae tendineae snapped during left ventricular contraction? Pin your prediction before we dissect the 3D heart.</p>
+        <p class="intro">Why might one side of the heart need a thicker wall than the other? Pin your idea before we cut.</p>
         <div data-wall="wonder" id="wall-wonder">
           <form class="wall-form">
-            <input type="text" maxlength="160" placeholder="I predict that the left ventricle wall is 3× thicker than the right because…" aria-label="Add your prediction or question">
+            <input type="text" maxlength="160" placeholder="I think one side is thicker because…" aria-label="Add your prediction or question">
             <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
           </form>
           <div class="seed-qs" aria-label="Example predictions and questions">
-            <button type="button">Why do both ventricles pump the exact same 70 mL stroke volume?</button>
-            <button type="button">Why does the pulmonary artery carry deoxygenated blood?</button>
-            <button type="button">What is the job of chordae tendineae and papillary muscles?</button>
-            <button type="button">How does cardiac muscle get its own oxygen and glucose?</button>
+            <button type="button">The thick side pumps further? (Kemi)</button>
+            <button type="button">It holds more blood (Sani)</button>
+            <button type="button">The thin side is weak or sick (Ngozi)</button>
+            <button type="button">Right is always the stronger side (Baba Sule)</button>
           </div>
           <div class="wall" aria-live="polite"></div>
         </div>
@@ -193,27 +223,21 @@
 
       <!-- ================= 3. SORT GAME ================= -->
       <section class="l-sec" id="sort">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1 · 10 min</span>
-        <h2>Right Pump, Left Pump &amp; <em>Valves / Septum Sort</em></h2>
-        <p class="intro">Sort all 12 cards into <strong>Right Side / Pulmonary (Deoxygenated)</strong>, <strong>Left Side / Systemic (Oxygenated)</strong>, and <strong>Valves, Chordae &amp; Septum</strong>.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Which side of the <em>heart</em>?</h2>
+        <p class="intro">Sort all 10 cards into <strong>right</strong>, <strong>left</strong> or <strong>both</strong>. Tap a card, then tap a bin (or drag it).</p>
 
-        <div class="sort" id="kitchen-sort">
+        <div class="sort" id="side-sort">
           <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
           <div class="bins">
-            <div class="bin" data-bin="shm" style="--bc:#38bdf8" tabindex="0" role="button" aria-label="Right Side Pulmonary bin">
-              <h4><i></i>Right / Pulmonary (Deoxy)</h4>
-              <small>vena cava · RV (5 mm) · pulm. artery</small>
-              <div class="drop"></div>
+            <div class="bin" data-bin="right" style="--bc:var(--sky)" tabindex="0" role="button" aria-label="Right side bin">
+              <h4><i></i>Right side</h4><small>oxygen-poor</small><div class="drop"></div>
             </div>
-            <div class="bin" data-bin="periodic" style="--bc:#fb7185" tabindex="0" role="button" aria-label="Left Side Systemic bin">
-              <h4><i></i>Left / Systemic (Oxy)</h4>
-              <small>pulm. vein · LV (15 mm) · aorta</small>
-              <div class="drop"></div>
+            <div class="bin" data-bin="left" style="--bc:var(--crimson)" tabindex="0" role="button" aria-label="Left side bin">
+              <h4><i></i>Left side</h4><small>oxygen-rich</small><div class="drop"></div>
             </div>
-            <div class="bin" data-bin="non" style="--bc:#3ee6c4" tabindex="0" role="button" aria-label="Valves and Septum bin">
-              <h4><i></i>Valves, Chordae &amp; Septum</h4>
-              <small>tricuspid · bicuspid · chordae</small>
-              <div class="drop"></div>
+            <div class="bin" data-bin="both" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Both sides bin">
+              <h4><i></i>Both</h4><small>one on each side</small><div class="drop"></div>
             </div>
           </div>
           <div class="sort-bar">
@@ -229,114 +253,121 @@
 
       <!-- ================= 3B. 3D PRACTICAL ================= -->
       <section class="l-sec" id="practical">
-        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 15 min</span>
-        <h2>3D 4-Chamber Heart Dissector: <em>Wall Thickness w (mm) vs Peak Systolic Pressure P (mmHg)</em></h2>
-        <p class="intro">Inspect the cut-away mammalian heart across five regions (<code>Right Atrium 1.5 mm, Left Atrium 2.0 mm, Right Ventricle 5.0 mm, Mid Septum 10.0 mm, Left Ventricle 15.0 mm</code>). Measure how peak systolic pressure <strong>P = 8 × w (mmHg)</strong> scales with myocardial wall thickness.</p>
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The goat-heart dissection: <em>measure every wall</em></h2>
+        <p class="intro">Dr Aisha's bench holds a fresh goat heart, a scalpel and a 30 cm ruler. Cut the heart open, then measure each chamber wall and the septum <strong>twice</strong> at mid-height. The heart faces you, so the animal's <strong>right side is on your left</strong>.</p>
 
-        <div class="callout warn" id="safety-box">
-          <p><strong>WAEC Paper 3 Anatomical Orientation Rule:</strong> When viewing the <strong>anterior (ventral) aspect</strong> of a dissected mammalian heart on your tray, the <strong>anatomical RIGHT side is on the observer’s LEFT</strong> and the <strong>anatomical LEFT side is on the observer’s RIGHT</strong>. Always identify the <strong>left ventricle</strong> by pinching its firm, thick muscular wall (~15 mm) and noting that it forms the pointed <strong>apex</strong> of the heart.</p>
+        <div class="callout safety" id="safety-box">
+          <p><strong>Safety:</strong> wear gloves, keep the blade facing away from you, cut on the dissecting board and wash your hands afterwards.</p>
         </div>
 
         <div class="methods" id="method-cards">
-          <div class="method" id="m1"><b>STEP 01</b><h4>Orient anterior view</h4><p>Locate the diagonal coronary (interventricular) groove on the ventral surface and identify the thick-walled apex on the right of your tray.</p></div>
-          <div class="method" id="m2"><b>STEP 02</b><h4>Measure wall thickness w</h4><p>Use calipers to measure the myocardium of the Right Atrium (1.5 mm), Left Atrium (2.0 mm), Right Ventricle (5.0 mm), and Left Ventricle (15.0 mm).</p></div>
-          <div class="method" id="m3"><b>STEP 03</b><h4>Inspect AV &amp; SL valves</h4><p>Count the 3 cusps of the right tricuspid valve and 2 cusps of the left bicuspid valve anchored by chordae tendineae to papillary muscles.</p></div>
-          <div class="method" id="m4"><b>STEP 04</b><h4>Plot P against w</h4><p>Record peak pressure <code>P (mmHg)</code> against wall thickness <code>w (mm)</code> and verify the 3 : 1 left-to-right ventricular wall ratio.</p></div>
+          <div class="method now" id="m1"><b>STEP 01</b><h4>Rinse, lay flat, find the vessels</h4><p>Wearing gloves, rinse the heart and lay it front side up (the side with the diagonal groove). Feel for the thick, rubbery aorta and the thinner pulmonary artery.</p></div>
+          <div class="method" id="m2"><b>STEP 02</b><h4>Cut from apex to base</h4><p>With the blade facing away from you, cut from the apex upwards through both ventricles to expose all four chambers. Press <em>Cut section</em>.</p></div>
+          <div class="method" id="m3"><b>STEP 03</b><h4>Find the inside parts</h4><p>Find the septum, both atrioventricular valves, the chordae tendineae and papillary muscles, and the semilunar pockets at the exit vessels. Press <em>Show parts</em>.</p></div>
+          <div class="method" id="m4"><b>STEP 04</b><h4>Measure each wall twice</h4><p>At mid-height, measure the wall of each chamber and the septum twice with the ruler at eye level, and record the mean. Tap the <em>Measure</em> buttons.</p></div>
         </div>
 
         <div class="stage" id="bench-stage">
           <div class="stage-canvas">
-            <canvas id="bench-canvas" aria-label="3D cut-away 4-chamber mammalian heart dissector and AV valve with chordae tendineae."></canvas>
-            <div class="stage-label"><i></i>Cut-open heart &amp; AV valve</div>
+            <canvas id="bench-canvas" aria-label="3D dissection bench: a goat heart on a dissecting board with a scalpel and a ruler. The section reveals four chambers, valves, chordae and the septum, and each wall can be measured."></canvas>
+            <div class="stage-label"><i></i>3D dissection bench · drag to rotate</div>
             <div class="stage-toast" id="bench-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D Heart Dissector couldn't start on this device. Use the trial buttons and results table below.</p></div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the Measure buttons and the results table below.</p></div>
           </div>
           <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Myocardial condition" id="bench-cond">
-              <button type="button" data-cond="std" aria-pressed="true">Normal Heart (P = 8w)</button>
-              <button type="button" data-cond="heavy" aria-pressed="false">Athlete Heart (P = 10w)</button>
-              <button type="button" data-cond="wide" aria-pressed="false">Valve Regurgitation (Leak!)</button>
+            <div class="bench-mode">
+              <button class="vt-btn zobo" type="button" id="bench-cut">Cut section</button>
+              <button class="vt-btn" type="button" id="bench-parts" disabled>Show parts</button>
+              <button class="vt-btn" type="button" id="bench-rotate" aria-pressed="false">Rotate</button>
+              <button class="vt-btn" type="button" id="bench-labels" aria-pressed="false">Labels</button>
             </div>
-            <div class="vt-actions" id="bench-trials">
-              <button class="vt-btn" type="button" data-trial="0">Trial A · 1.5 mm (RA)</button>
-              <button class="vt-btn" type="button" data-trial="1">Trial B · 2.0 mm (LA)</button>
-              <button class="vt-btn" type="button" data-trial="2">Trial C · 5.0 mm (RV)</button>
-              <button class="vt-btn" type="button" data-trial="3">Trial D · 10.0 mm (Septum)</button>
-              <button class="vt-btn" type="button" data-trial="4">Trial E · 15.0 mm (LV)</button>
+          </div>
+          <div class="stage-bar">
+            <div class="bench-mode" id="bench-measure" role="group" aria-label="Measure a wall">
+              <span class="blab">MEASURE</span>
+              <button class="vt-btn" type="button" data-region="ra" disabled>RA</button>
+              <button class="vt-btn" type="button" data-region="la" disabled>LA</button>
+              <button class="vt-btn" type="button" data-region="rv" disabled>RV</button>
+              <button class="vt-btn" type="button" data-region="lv" disabled>LV</button>
+              <button class="vt-btn" type="button" data-region="septum" disabled>Septum</button>
+            </div>
+          </div>
+          <div class="stage-bar">
+            <div class="bench-mode">
+              <span class="blab">SPECIMEN</span>
+              <div class="seg" role="group" aria-label="Specimen condition" id="bench-cond">
+                <button type="button" data-cond="fresh" aria-pressed="true">Fresh, clean cut</button>
+                <button type="button" data-cond="slant" aria-pressed="false">Slanting cut</button>
+                <button type="button" data-cond="papilla" aria-pressed="false">Through papillary muscle</button>
+                <button type="button" data-cond="shrunk" aria-pressed="false">Kept in fridge for days</button>
+              </div>
               <button class="vt-btn" type="button" id="bench-reset">Reset</button>
             </div>
-            <span class="stage-hint" id="bench-hint">Recorded 0 of 5 chamber walls</span>
+            <span class="stage-hint" id="bench-hint">Cut the heart open first</span>
           </div>
         </div>
 
-        <div class="graph-card" id="vi-card">
-          <div class="gc-head">
-            <div><span class="gc-kicker">Live graph · plots as you measure chambers</span><h4>Peak Systolic Pressure P (mmHg) against Wall Thickness w (mm)</h4></div>
-            <span class="gc-badge wait" id="vi-badge">0 points</span>
-          </div>
-          <div id="vi-graph"></div>
-          <div class="gc-stats" id="vi-stats"></div>
-          <p class="gc-note" id="vi-note"></p>
-        </div>
-
-        <h3>Record your Chamber Wall-Thickness &amp; Pressure readings</h3>
-        <p>As you test Trials A–E on the 3D Heart Dissector, select the matching <strong>Heart Chamber / Region</strong>, <strong>Peak Systolic Pressure P (mmHg)</strong>, and <strong>Wall Ratio w ÷ w<sub>RV</sub></strong> below.</p>
+        <h3>Record your readings</h3>
+        <p>The table fills as you measure. Each row needs <strong>two</strong> readings; the mean is worked out for you.</p>
         <div class="tbl-wrap">
           <table class="tbl" id="results-table">
             <thead>
-              <tr>
-                <th>Trial</th>
-                <th>Wall Thickness w (mm)</th>
-                <th>Heart Chamber / Region</th>
-                <th>Peak Pressure P (mmHg)</th>
-                <th>Ratio w ÷ w<sub>RV</sub> (w ÷ 5 mm)</th>
-              </tr>
+              <tr><th>Region</th><th>Reading 1 (mm)</th><th>Reading 2 (mm)</th><th>Mean (mm)</th><th>Pumps blood to</th></tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
-        <div class="sort-bar">
-          <button class="btn btn-ink btn-sm" type="button" id="results-check">Check my table</button>
-          <span class="sort-score" id="results-score" style="color:var(--paper-muted)" aria-live="polite"></span>
-        </div>
+        <p class="sheet-note" id="ratio-line">LV : RV = measure both ventricles to find out</p>
 
         <details class="reveal-box" id="expected">
-          <summary>Expected WAEC table &amp; wall-thickness slope calculation <small>open after recording yours</small></summary>
+          <summary>Expected readings for the fresh specimen <small>open after you measure</small></summary>
           <div class="reveal-body">
             <div class="tbl-wrap">
               <table class="tbl">
-                <thead><tr><th>Trial</th><th>Wall w (mm)</th><th>Chamber / Region</th><th>Peak Pressure P (mmHg)</th><th>Ratio w ÷ w<sub>RV</sub></th></tr></thead>
+                <thead><tr><th>Region</th><th>Reading 1 (mm)</th><th>Reading 2 (mm)</th><th>Mean (mm)</th><th>Pumps blood to</th></tr></thead>
                 <tbody>
-                  <tr><td>A</td><td>1.5</td><td>Right Atrium</td><td>12.0</td><td>0.30</td></tr>
-                  <tr><td>B</td><td>2.0</td><td>Left Atrium</td><td>16.0</td><td>0.40</td></tr>
-                  <tr><td>C</td><td>5.0</td><td>Right Ventricle</td><td>40.0</td><td>1.00</td></tr>
-                  <tr><td>D</td><td>10.0</td><td>Mid Septum</td><td>80.0</td><td>2.00</td></tr>
-                  <tr><td>E</td><td>15.0</td><td>Left Ventricle</td><td>120.0</td><td>3.00</td></tr>
+                  <tr><td>RA</td><td>1.6</td><td>1.4</td><td>1.5</td><td>right ventricle</td></tr>
+                  <tr><td>LA</td><td>2.1</td><td>1.9</td><td>2.0</td><td>left ventricle</td></tr>
+                  <tr><td>RV</td><td>4.2</td><td>3.8</td><td>4.0</td><td>lungs</td></tr>
+                  <tr><td>LV</td><td>12.4</td><td>11.6</td><td>12.0</td><td>whole body</td></tr>
+                  <tr><td>Septum</td><td>10.8</td><td>11.2</td><td>11.0</td><td>(divides the halves)</td></tr>
                 </tbody>
               </table>
             </div>
-            <p><strong>Slope of Peak Pressure P against Wall Thickness w:</strong></p>
-            <div class="eq light">k = ΔP ÷ Δw = (120.0 − 40.0) ÷ (15.0 − 5.0) = 80.0 ÷ 10.0 = 8.0 mmHg/mm</div>
+            <div class="eq light">LV : RV = 12.0 ÷ 4.0 = 3.0</div>
           </div>
         </details>
 
-        <h3>Practical Analysis Questions</h3>
+        <h3>Precautions and sources of error</h3>
+        <div class="callout tip">
+          <p><strong>Precautions (past tense):</strong> gloves were worn and hands were washed afterwards · the scalpel was used on a dissecting board and cut away from the body · every wall was measured at the same height, midway between base and apex · the ruler was read with the eye level with the mark · each wall was measured twice and the mean taken.</p>
+        </div>
+        <div class="callout info">
+          <p><strong>Sources of error (with direction):</strong> a slanting cut exposed the wall at an angle, so its thickness read <strong>too high</strong> · measuring where a papillary muscle joined the wall added muscle that is not wall, so the reading was <strong>too high</strong> · a specimen stored in a fridge for days had shrunk and lost fluid, so walls read <strong>too low</strong> · reading the ruler from above or below the mark (parallax) made each reading <strong>too high or too low</strong> at random. Try each one with the <em>Specimen</em> buttons.</p>
+        </div>
+
+        <h3>Practical analysis questions</h3>
         <div class="aq" data-answer="l02-prac-q">
-          <div class="aq-top"><h4>Answer these three WAEC heart dissection questions, then compare with the model answers.</h4></div>
+          <div class="aq-top"><h4>Answer these five questions, then compare with the model answers.</h4></div>
           <ol class="sub">
-            <li>Why do the right and left atria have much thinner muscular walls (~2 mm) than the ventricles?</li>
-            <li>How can you distinguish the <strong>left ventricle</strong> from the <strong>right ventricle</strong> in a transverse (cross) section of a sheep’s heart?</li>
-            <li>What defect occurs in a newborn baby if the foramen ovale or interventricular septum fails to close (“hole in the heart”)?</li>
+            <li>Which wall was thickest, and why?</li>
+            <li>Why are both atrial walls thin?</li>
+            <li>What stops the AV valve flaps from flipping into the atria?</li>
+            <li>Why is the septum important?</li>
+            <li>Using the table, how many times thicker is the LV than the RV?</li>
           </ol>
           <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
           <details class="reveal-box solution">
             <summary>Model answers <small>unlocks after you try</small></summary>
             <div class="reveal-body">
               <ol>
-                <li>The atria only need to pump blood a very short distance downward through the open AV valves into the adjacent ventricles just below them.</li>
-                <li>The <strong>left ventricle</strong> has a circular cavity surrounded by a very thick muscular wall (~15 mm), whereas the <strong>right ventricle</strong> has a crescent-shaped cavity with a much thinner wall (~5 mm).</li>
-                <li>Oxygenated and deoxygenated blood mix across the septal defect, reducing systemic oxygen delivery and causing breathlessness, fatigue, and cyanosis (“blue baby” syndrome).</li>
+                <li>The left ventricle wall (mean 12.0 mm) was thickest, because it has to push blood all the way round the body.</li>
+                <li>Each atrium only squeezes blood a few centimetres down into the ventricle below it, so a thin wall is enough.</li>
+                <li>The chordae tendineae, tough cords tied to the papillary muscles, hold the flaps so they shut but cannot be blown back into the atria.</li>
+                <li>The septum separates the right and left halves, keeping oxygen-poor and oxygen-rich blood apart.</li>
+                <li>The LV is 12.0 ÷ 4.0 = <strong>3.0</strong> times thicker than the RV.</li>
               </ol>
             </div>
           </details>
@@ -346,98 +377,106 @@
       <!-- ================= 4. CONCEPTS ================= -->
       <section class="l-sec" id="concepts">
         <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
-        <h2>Heart Membranes, Four Chambers, <em>Four One-Way Valves</em> &amp; Pathway</h2>
-        <p class="intro">Let’s assemble the complete anatomical and physiological blueprint of the mammalian heart required for WAEC, NECO, and JAMB Biology.</p>
+        <h2>Chambers, walls, valves and <em>vessels</em></h2>
+        <p class="intro">Now we connect what your hands and eyes found on the bench to the names and jobs WAEC, NECO and JAMB expect.</p>
 
-        <h3 id="def-shm">1 · Pericardium, Heart Wall Layers &amp; The Four Chambers</h3>
-        <p>The human heart is a hollow, cone-shaped muscular organ about the size of a clenched fist (~300 g), located in the <strong>mediastinum</strong> of the thoracic cavity between the two lungs, slightly tilted to the left. It is enclosed by a tough, double-walled fibrous sac called the <strong>pericardium</strong>. Between the inner visceral and outer parietal pericardial membranes lies <strong>pericardial fluid</strong>, which:</p>
-        <ul>
-          <li><strong>Reduces friction</strong> as the heart contracts and relaxes ~100,000 times every day, and</li>
-          <li><strong>Cushions mechanical shocks</strong> and prevents over-expansion (over-filling) of the heart chambers.</li>
-        </ul>
-        <p>The heart wall itself consists of three layers: the outer <strong>epicardium</strong>, the thick middle <strong>myocardium</strong> (branched, striated, involuntary <strong>cardiac muscle</strong> rich in mitochondria and linked by intercalated discs that never fatigues), and the smooth inner endothelial lining called the <strong>endocardium</strong>.</p>
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (45 min mark, 5 minutes):</strong> stand up. Make a fist, the size of your own heart, and hold it in the middle of your chest, tilted a little to the left. Squeeze it gently twice for the right ventricle: a short push to the lungs beside it. Now squeeze hard and stretch your arm out to your toes and then your head for the left ventricle: a long push round the whole body. Shake out your hands and sit down.</p>
+        </div>
 
-        <div class="tbl-wrap">
+        <h3 id="def-position">1 · Position and coverings</h3>
+        <p>The heart sits in the chest between the two lungs, tilted a little to the left, shielded by the breastbone and ribs. It is wrapped in the <strong>pericardium</strong>, a two-layered sac with slippery fluid between the layers so the beating heart does not rub. Its wall has a thick central layer of heart muscle, the <strong>myocardium</strong>, which beats rhythmically, never tires and starts each beat itself. Inside, the smooth <strong>endocardium</strong> lets blood slide past.</p>
+
+        <h3 id="def-chambers">2 · The four chambers</h3>
+        <div class="tbl-wrap" id="props-table">
           <table class="tbl">
-            <thead><tr><th>Chamber</th><th>Blood Received From</th><th>Oxygen Status</th><th>Wall Thickness &amp; Reason</th><th>Pumps Blood Into</th></tr></thead>
+            <thead><tr><th>Chamber</th><th>Receives blood from</th><th>Sends blood to</th><th>Wall</th></tr></thead>
             <tbody>
-              <tr><td><strong>Right Atrium (RA)</strong></td><td>Superior vena cava (head/arms), Inferior vena cava (trunk/legs) &amp; Coronary sinus (heart wall)</td><td><strong>Deoxygenated</strong> (dark red / drawn blue)</td><td><strong>Thin (~1.5–2 mm)</strong> — receives low-pressure venous blood and pushes it only into the adjacent right ventricle.</td><td>Right Ventricle via the <strong>Tricuspid valve (3 flaps)</strong>.</td></tr>
-              <tr><td><strong>Right Ventricle (RV)</strong></td><td>Right Atrium</td><td><strong>Deoxygenated</strong></td><td><strong>Moderately thick (~5 mm)</strong> — generates ~25 mmHg to pump blood the short distance to the nearby lungs without rupturing delicate alveolar capillaries.</td><td><strong>Pulmonary artery</strong> via the <strong>Pulmonary semilunar valve</strong>.</td></tr>
-              <tr><td><strong>Left Atrium (LA)</strong></td><td>Four <strong>Pulmonary veins</strong> (two from each lung)</td><td><strong>Oxygenated</strong> (bright red)</td><td><strong>Thin (~2 mm)</strong> — receives oxygenated blood from the lungs and pushes it into the adjacent left ventricle.</td><td>Left Ventricle via the <strong>Bicuspid / Mitral valve (2 flaps)</strong>.</td></tr>
-              <tr><td><strong>Left Ventricle (LV)</strong></td><td>Left Atrium</td><td><strong>Oxygenated</strong></td><td><strong>Very thick (~15 mm — 3× thicker than RV)</strong> — generates ~120 mmHg to overcome resistance through the entire systemic circuit from head to toes.</td><td><strong>Arch of the Aorta</strong> via the <strong>Aortic semilunar valve</strong>.</td></tr>
+              <tr><td><strong>Right atrium (RA)</strong></td><td>both venae cavae (oxygen-poor)</td><td>right ventricle</td><td>thin</td></tr>
+              <tr><td><strong>Right ventricle (RV)</strong></td><td>right atrium</td><td>lungs, by the pulmonary artery</td><td>thicker than the atria</td></tr>
+              <tr><td><strong>Left atrium (LA)</strong></td><td>four pulmonary veins (oxygen-rich)</td><td>left ventricle</td><td>thin</td></tr>
+              <tr><td><strong>Left ventricle (LV)</strong></td><td>left atrium</td><td>whole body, by the aorta</td><td>thickest, about three times the RV</td></tr>
             </tbody>
           </table>
         </div>
 
-        <h3 id="def-terms">2 · The Four One-Way Valves, Chordae Tendineae &amp; Papillary Muscles</h3>
+        <div class="callout big reveal" id="why-walls" data-hook>
+          <p><strong>Why the walls differ:</strong> a chamber's wall matches its job. The atria only squeeze blood a few centimetres down into the ventricles. The right ventricle pushes blood a short way to the nearby lungs. The left ventricle must drive blood through every organ from scalp to toes, so it needs the most muscle.</p>
+        </div>
+
+        <h3 id="def-valves">3 · Valves and supports</h3>
         <div class="tbl-wrap">
           <table class="tbl">
-            <thead><tr><th>Valve Name</th><th>Exact Location</th><th>Number of Cusps / Flaps</th><th>Chordae Tendineae Present?</th><th>Exact Function (One-Way Rule)</th></tr></thead>
+            <thead><tr><th>Part</th><th>Where</th><th>Detail</th></tr></thead>
             <tbody>
-              <tr><td><strong>Tricuspid Valve</strong> (Right AV valve)</td><td>Right atrioventricular aperture (between RA and RV)</td><td><strong>3 membranous flaps</strong></td><td><strong>Yes</strong> — attached to papillary muscles in RV</td><td>Permits blood flow <code>RA → RV</code> during diastole; snaps shut during ventricular systole to prevent backflow into the right atrium.</td></tr>
-              <tr><td><strong>Bicuspid / Mitral Valve</strong> (Left AV valve)</td><td>Left atrioventricular aperture (between LA and LV)</td><td><strong>2 strong membranous flaps</strong></td><td><strong>Yes</strong> — attached to thick papillary muscles in LV</td><td>Permits blood flow <code>LA → LV</code> during diastole; snaps shut during ventricular systole to prevent backflow into the left atrium.</td></tr>
-              <tr><td><strong>Pulmonary Semilunar Valve</strong></td><td>Base of the <strong>pulmonary artery</strong> at RV exit</td><td><strong>3 half-moon pocket cusps</strong></td><td><strong>No</strong> (pocket shape locks under back-pressure)</td><td>Forced open during ventricular systole (<code>RV → Pulmonary artery</code>); snaps shut in diastole to prevent backflow into RV.</td></tr>
-              <tr><td><strong>Aortic Semilunar Valve</strong></td><td>Base of the <strong>ascending aorta</strong> at LV exit</td><td><strong>3 half-moon pocket cusps</strong></td><td><strong>No</strong> (pocket shape locks under back-pressure)</td><td>Forced open during ventricular systole (<code>LV → Aorta</code>); snaps shut in diastole to prevent backflow into LV.</td></tr>
+              <tr><td><strong>Tricuspid valve</strong></td><td>between RA and RV</td><td>three flaps</td></tr>
+              <tr><td><strong>Bicuspid (mitral) valve</strong></td><td>between LA and LV</td><td>two flaps</td></tr>
+              <tr><td><strong>Pulmonary semilunar valve</strong></td><td>base of the pulmonary artery</td><td>three half-moon pockets</td></tr>
+              <tr><td><strong>Aortic semilunar valve</strong></td><td>base of the aorta</td><td>three pockets</td></tr>
             </tbody>
           </table>
         </div>
-        <p><strong>Function of Chordae Tendineae &amp; Papillary Muscles:</strong> During ventricular systole, the papillary muscles contract and pull taut on the inelastic collagenous <strong>chordae tendineae</strong> (“heart strings”), holding the tricuspid and bicuspid valve flaps in position so they <strong>cannot invert (turn inside out) into the atria</strong> under high ventricular pressure.</p>
+        <p><strong>Chordae tendineae</strong> are tough cords anchoring the AV flaps to small <strong>papillary muscles</strong> that jut from the ventricle wall. When the ventricles squeeze, they hold the flaps so they cannot be blown back into the atria. The <strong>septum</strong> is the muscle partition that keeps right-side and left-side blood apart.</p>
 
-        <h3>3 · Governing Equations: Wall Ratio, Stroke Volume, Ejection Fraction &amp; Magnification</h3>
-        <div class="eq" id="eq-shm" data-hook>w_LV ÷ w_RV = 15 mm ÷ 5 mm = 3.0 &nbsp;&nbsp;(3 : 1 ratio)</div>
-        <div class="eq" id="eq-omega">SV = EDV − ESV = 120 − 50 = 70 mL &nbsp;·&nbsp; EF% = (SV ÷ EDV) × 100 = 58.3%</div>
-        <div class="eq" id="eq-vel">M = I ÷ A = 9.6 cm ÷ 12.0 cm = ×0.8</div>
-
-        <div class="callout big reveal" id="all-alkalis">
-          <p><strong>Active 5-Minute Movement Break (Mid-Lesson Reset):</strong> Stand up! Hold up <strong>3 fingers on your right hand</strong> (for the <strong>Tricuspid valve</strong> on the right side of your heart) and <strong>2 fingers on your left hand</strong> (for the <strong>Bicuspid/Mitral valve</strong> on the left side). Remember the mnemonic <strong>“TRI before you BI”</strong> — blood meets the 3-flap Tricuspid valve on the right side before it visits the lungs and meets the 2-flap Bicuspid valve on the left side!</p>
+        <h3 id="def-vessels">4 · The great vessels</h3>
+        <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Vessel</th><th>Carries blood</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Superior vena cava</strong></td><td>from head, neck and arms, into the RA</td></tr>
+              <tr><td><strong>Inferior vena cava</strong></td><td>from trunk and legs, into the RA</td></tr>
+              <tr><td><strong>Pulmonary artery</strong></td><td>RV to the lungs; the one artery with oxygen-poor blood</td></tr>
+              <tr><td><strong>Pulmonary veins (four)</strong></td><td>lungs to the LA; the veins with oxygen-rich blood</td></tr>
+              <tr><td><strong>Aorta</strong></td><td>LV to the whole body</td></tr>
+              <tr><td><strong>Coronary arteries</strong></td><td>the earliest branches off the aorta, feeding the heart muscle itself</td></tr>
+            </tbody>
+          </table>
         </div>
 
-        <h3 id="props">4 · Complete Double-Circulation Pathway, Coronary Vessels &amp; Portal Systems</h3>
-        <p>Trace one complete lap of a red blood cell through the mammalian cardiovascular system:</p>
-        <p><code>Venae Cavae → Right Atrium → Tricuspid Valve → Right Ventricle → Pulmonary Semilunar Valve → Pulmonary Artery (deoxygenated!) → Lung Alveolar Capillaries (O₂ in, CO₂ out) → Pulmonary Veins (oxygenated!) → Left Atrium → Bicuspid (Mitral) Valve → Left Ventricle → Aortic Semilunar Valve → Aorta → Systemic Arteries → Organ Capillaries → Systemic Veins → Venae Cavae</code>.</p>
-        <ul>
-          <li><strong>The Great Vessel Exception:</strong> Every <strong>artery</strong> carries blood <strong>away from the heart</strong> and every <strong>vein</strong> carries blood <strong>towards the heart</strong>. Therefore, the <strong>pulmonary artery</strong> is the only artery in an adult mammal that carries deoxygenated blood, and the <strong>pulmonary veins</strong> are the only veins that carry oxygenated blood. (In a mammalian foetus, the <strong>umbilical artery</strong> also carries deoxygenated blood to the placenta, while the <strong>umbilical vein</strong> carries oxygenated blood from the placenta to the foetus.)</li>
-          <li><strong>Coronary Circulation:</strong> The thick myocardium cannot absorb oxygen quickly enough from the blood rushing through its chambers. Instead, the left and right <strong>coronary arteries</strong> branch directly off the base of the ascending aorta (just above the aortic semilunar valve) to deliver oxygenated blood and glucose to cardiac muscle cells, draining via cardiac veins and the <strong>coronary sinus</strong> into the right atrium. Blockage of a coronary artery by a blood clot (thrombus) or atheroma causes a <strong>myocardial infarction (heart attack)</strong>.</li>
-          <li><strong>Hepatic Portal System:</strong> A portal vein begins and ends in capillaries. The <strong>hepatic portal vein</strong> collects blood rich in newly absorbed <strong>glucose and amino acids</strong> from the capillaries of the small intestine (ileum villi) and delivers it directly to the sinusoids of the <strong>liver</strong> before the <strong>hepatic vein</strong> drains into the inferior vena cava. This allows the liver to regulate blood glucose (converting excess glucose to glycogen under insulin), deaminate excess amino acids into urea, and detoxify poisons before blood reaches the rest of the body.</li>
-        </ul>
+        <div class="callout info" id="drawing-rules">
+          <p><strong>Drawing rules (WAEC):</strong> draw the heart facing you, so the patient's right side is on your left · septum down the middle, AV boundary across each side · LV wall clearly thicker than RV · valves and chordae in place · flow arrows inside chambers · title in capitals below, e.g. LONGITUDINAL SECTION OF A MAMMALIAN HEART · ruled horizontal label lines with no arrowheads · magnification stated.</p>
+        </div>
 
-        <h3 id="ph-h">Interactive Double-Circulation Pathway Explorer</h3>
-        <p>Tap any pin below to follow a red blood cell step by step through the five stations of double circulation:</p>
-        <div class="ph-explorer" id="ph-explorer">
-          <div class="pos-track" id="ph-track"></div>
-          <div class="ph-nums" id="ph-nums"></div>
-          <div class="ph-zones"><div>← Right / Pulmonary (Deoxygenated)</div><div>Lungs (Gas Exchange)</div><div>Left / Systemic (Oxygenated) →</div></div>
-          <div class="ph-info" id="ph-info" aria-live="polite">Tap a station pin to inspect chamber wall thickness, valve action, and pressure.</div>
+        <h3 id="pos-h">Wall explorer</h3>
+        <p>Tap a pin. The wall lights up on the 3D section above, and you see its mean thickness, where it pumps to and how far the blood must go.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="wall-bars" id="wall-bars"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to inspect a wall.</div>
         </div>
       </section>
 
-      <!-- ================= 5. 3D VALVE ZOOM ================= -->
-      <section class="l-sec" id="neutralise">
-        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D AV Valve, Chordae Tendineae &amp; Papillary Muscle Zoom</span>
-        <h2>Inside the valve: <em>How Chordae Tendineae &amp; Papillary Muscles Prevent Backflow</em></h2>
-        <p class="intro">Rotate the 3D valve apparatus below! Toggle between <strong>Diastole (Filling — AV flaps open downward, chordae slack)</strong> and <strong>Ventricular Systole (Pumping — AV flaps locked shut, papillary muscles pulling chordae tendineae taut)</strong>.</p>
+      <!-- ================= 5. VALVE ZOOM ================= -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside a valve: <em>why the cords matter</em></h2>
+        <p class="intro">Open and close one atrioventricular valve, compare three flaps with two, then <strong>cut the chordae</strong> and watch the flaps blow back. Switch to <em>Chambers</em> to see the four chambers fill and empty.</p>
 
         <div class="stage" id="zoom-stage">
           <div class="stage-canvas">
-            <canvas id="zoom-canvas" aria-label="3D close-up of an atrioventricular valve with cusps, chordae tendineae, and papillary muscles alongside a 4-chamber heart cut-away."></canvas>
-            <div class="stage-label"><i></i>AV valve &amp; chordae close-up</div>
+            <canvas id="zoom-canvas" aria-label="3D zoom: an atrioventricular valve with its flaps, chordae tendineae and papillary muscles, or a beating heart section showing the four chambers."></canvas>
+            <div class="stage-label"><i></i>3D zoom · drag to rotate</div>
             <div class="stage-toast" id="zoom-toast" role="status" aria-live="polite"></div>
-            <div class="stage-fallback"><p>The 3D valve comparison stage couldn't start on this device.</p></div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
           </div>
           <div class="stage-bar">
-            <div class="seg" role="group" aria-label="Valve phase mode">
-              <button type="button" data-mode="mix" aria-pressed="true">Live Beat Cycle</button>
-              <button type="button" data-mode="acid" aria-pressed="false">Diastole (AV Open · Filling)</button>
-              <button type="button" data-mode="base" aria-pressed="false">Systole (AV Locked · Chordae Taut)</button>
+            <div class="seg" role="group" aria-label="Zoom view" id="zoom-mode">
+              <button type="button" data-mode="valve" aria-pressed="true">Valve</button>
+              <button type="button" data-mode="chambers" aria-pressed="false">Chambers</button>
             </div>
-            <button class="vt-btn zobo" type="button" id="zoom-add">Switch Bicuspid (2) ⇄ Tricuspid (3)</button>
-            <button class="vt-btn" type="button" id="zoom-reset">Reset view</button>
+            <div class="seg" role="group" aria-label="Number of flaps" id="zoom-cusps">
+              <button type="button" data-cusps="3" aria-pressed="true">Tricuspid (3)</button>
+              <button type="button" data-cusps="2" aria-pressed="false">Bicuspid (2)</button>
+            </div>
+          </div>
+          <div class="stage-bar">
+            <label class="counter" style="gap:10px;display:flex;align-items:center"><i style="--c:var(--teal)"></i>Valve open
+              <input type="range" id="zoom-open" min="0" max="1" step="0.01" value="0.5" aria-label="How open the valve is" style="width:clamp(110px,40vw,220px)"></label>
+            <button class="vt-btn zobo" type="button" id="zoom-cut" aria-pressed="false">Cut the chordae</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
             <div class="counters" id="zoom-counters">
-              <span class="counter"><i style="--c:#3ee6c4"></i>Valve<b data-c="h">Bicuspid (2)</b></span>
-              <span class="counter"><i style="--c:#ffb23f"></i>AV State<b data-c="oh">Open (Fill)</b></span>
-              <span class="counter"><i style="--c:#7cc4ff"></i>Chordae<b data-c="na">Slack</b></span>
-              <span class="counter"><i style="--c:#f43f5e"></i>Vent. P<b data-c="cl">120 mmHg</b></span>
-              <span class="counter"><i style="--c:#c6f36b"></i>Semilunar<b data-c="w">Open</b></span>
+              <span class="counter"><i style="--c:var(--amber)"></i>Flaps<b data-c="flaps">3</b></span>
+              <span class="counter"><i style="--c:var(--crimson)"></i>Backflow<b data-c="leak">none</b></span>
             </div>
           </div>
         </div>
@@ -445,178 +484,245 @@
 
       <!-- ================= 6. WORKED EXAMPLES ================= -->
       <section class="l-sec" id="examples">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples</span>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
         <h2>Worked examples, <em>step by step</em></h2>
-        <p class="intro">Every calculation is broken down one atomic mathematical step at a time with a plain-English explainer note underneath.</p>
+        <p class="intro">Try each problem on paper first, then check the working.</p>
 
         <article class="example" id="ex1">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Stroke Volume (SV), Ejection Fraction (EF%) &amp; Ventricular Wall Ratio</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 1</span><h4>Wall ratio from readings</h4></div>
           <div class="example-body">
-            <p class="q">On Tunde’s echocardiogram at LUTH, his left ventricular wall thickness is w<sub>LV</sub> = 15.0 mm and his right ventricular wall thickness is w<sub>RV</sub> = 5.0 mm. At the end of diastole, his left ventricle holds EDV = 120 mL of blood, and at the end of systole ESV = 50 mL remains. Calculate: (a) the ratio of left-to-right ventricular wall thickness, (b) his stroke volume SV, and (c) his left ventricular ejection fraction EF%.</p>
+            <p class="q">LV readings are 12.4 mm and 11.6 mm; RV readings are 4.2 mm and 3.8 mm. How many times thicker is the LV wall?</p>
             <ol class="steps-sol">
-              <li><strong>Part (a) — Divide left ventricular wall thickness by right ventricular wall thickness:</strong> <code>R_w = 15.0 ÷ 5.0 = 3.0</code>.</li>
-              <li><strong>Part (b) — Subtract ESV from EDV to find stroke volume SV:</strong> <code>SV = 120 − 50 = 70 mL</code>.</li>
-              <li><strong>Part (c) — Divide SV by EDV and multiply by 100% to find ejection fraction EF%:</strong> <code>EF = (70 ÷ 120) × 100 = 58.3%</code>.</li>
+              <li><strong>Mean LV:</strong> <code>(12.4 + 11.6) ÷ 2 = 12.0 mm</code>.</li>
+              <li><strong>Mean RV:</strong> <code>(4.2 + 3.8) ÷ 2 = 4.0 mm</code>.</li>
+              <li><strong>Ratio:</strong> <code>12.0 ÷ 4.0 = 3.0</code>.</li>
             </ol>
-            <div class="answer-line">(a) Wall Thickness Ratio = 3 : 1 &nbsp;·&nbsp; (b) Stroke Volume SV = 70 mL &nbsp;·&nbsp; (c) Ejection Fraction = 58.3%</div>
+            <div class="answer-line">The LV wall is 3.0 times thicker, matching the “about three times” rule.</div>
           </div>
         </article>
 
         <article class="example" id="ex2">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>WAEC Paper 3 Dissected Heart Drawing Magnification (M = I ÷ A)</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 2</span><h4>Drawing magnification</h4></div>
           <div class="example-body">
-            <p class="q">During a WAEC Paper 3 practical exam, Amaka examines a dissected longitudinal section of a goat’s heart of actual length A = 85 mm. She makes a biological drawing of length I = 11.9 cm. Calculate the linear magnification M of her drawing.</p>
+            <p class="q">The goat heart is 8.0 cm from base to apex. Chidi draws it 120 mm long. Find the magnification.</p>
             <ol class="steps-sol">
-              <li><strong>Step 1 — Convert drawing length I from centimetres to millimetres (× 10):</strong> <code>I = 11.9 × 10 = 119 mm</code>.</li>
-              <li><strong>Step 2 — Divide drawing length I by actual specimen length A:</strong> <code>M = 119 ÷ 85 = 1.4×</code>.</li>
+              <li><strong>Same unit:</strong> <code>120 mm = 12.0 cm</code>.</li>
+              <li><strong>Magnification:</strong> <code>M = 12.0 cm ÷ 8.0 cm</code>.</li>
+              <li><strong>Result:</strong> <code>M = 1.5</code>, written ×1.5 with no unit.</li>
             </ol>
-            <div class="answer-line">Linear Magnification of Heart Drawing M = ×1.4</div>
+            <div class="answer-line">Magnification = ×1.5</div>
           </div>
         </article>
 
         <article class="example" id="ex3">
-          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Comparing Systemic vs Pulmonary Pressure &amp; Ventricular Work</h4></div>
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3</span><h4>Actual size from a drawing</h4></div>
           <div class="example-body">
-            <p class="q">During a single heartbeat, both the left and right ventricles eject the same stroke volume SV = 70 mL. However, the left ventricle ejects blood at a peak systolic pressure of P<sub>LV</sub> = 120 mmHg whereas the right ventricle ejects blood at P<sub>RV</sub> = 24 mmHg. Calculate how many times greater the peak pressure (and mechanical stroke work per beat) of the left ventricle is compared to the right ventricle.</p>
+            <p class="q">On that ×1.5 drawing the LV wall is 18 mm thick. Find its real thickness in cm.</p>
             <ol class="steps-sol">
-              <li><strong>Step 1 — Write the ratio of peak systolic pressures P<sub>LV</sub> ÷ P<sub>RV</sub>:</strong> <code>F_P = 120 ÷ 24 = 5.0</code>.</li>
-              <li><strong>Step 2 — Multiply equal stroke volumes (70 mL ÷ 70 mL = 1) by the pressure ratio:</strong> <code>W_ratio = 5.0 × 1 = 5.0</code>.</li>
+              <li><strong>Rearrange:</strong> <code>actual = drawing ÷ M</code>.</li>
+              <li><strong>Substitute:</strong> <code>18 mm ÷ 1.5 = 12 mm</code>.</li>
+              <li><strong>Convert:</strong> <code>12 mm ÷ 10 = 1.2 cm</code>.</li>
             </ol>
-            <div class="answer-line">The Left Ventricle generates 5.0 times higher peak pressure and mechanical work per beat</div>
+            <div class="answer-line">Real thickness = 1.2 cm, consistent with the 12.0 mm bench reading.</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex4">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4</span><h4>Functions of three parts</h4></div>
+          <div class="example-body">
+            <p class="q">State the function of the septum, the tricuspid valve and the aorta.</p>
+            <ol class="steps-sol">
+              <li><strong>Septum:</strong> it keeps oxygen-rich and oxygen-poor blood apart.</li>
+              <li><strong>Tricuspid valve:</strong> it stops blood flowing back from the RV into the RA.</li>
+              <li><strong>Aorta:</strong> it carries oxygen-rich blood from the LV to the body.</li>
+            </ol>
+            <div class="answer-line">Septum separates the halves · tricuspid stops backflow · aorta carries blood to the body</div>
           </div>
         </article>
       </section>
 
       <!-- ================= 7. BRIDGE ================= -->
       <section class="l-sec" id="bridge">
-        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea · 8 min</span>
-        <h2>Back to LUTH Echo Desk: <em>verify Tunde’s 3:1 wall ratio &amp; 70 mL stroke volume!</em></h2>
-        <p class="intro">Run Steps 1, 2, and 3 to complete Tunde’s echocardiogram report and prove why a 3× thicker left ventricle still pumps the exact same volume as the right ventricle.</p>
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to the tent: <em>settle Baba Sule's argument</em></h2>
+        <p class="intro">Rotate Baba Sule's goat heart on the bench, find the thick wall and the vessel leaving it, then answer the three questions below.</p>
 
-        <div class="vt" id="vinegar-test">
-          <div class="vt-cups">
-            <div class="clock-card" id="vt-a">
-              <h4>Right Ventricle (Pulmonary) <small style="color:var(--muted);font-weight:500">· w = 5 mm · Tricuspid &amp; Pulm. SL</small></h4>
-              <div class="clock-well">
-                <div style="width:48px;height:48px;border-radius:12px;border:3px solid #38bdf8;background:rgba(56,189,248,.18);display:flex;align-items:center;justify-content:center;font-weight:700;color:#bae6fd">5 mm</div>
-              </div>
-              <div class="vt-count"><span id="time-a">P = 25 mmHg · SV = 70 mL to Lungs</span><small>short pulmonary circuit</small></div>
-            </div>
-            <div class="clock-card" id="vt-b">
-              <h4>Left Ventricle (Systemic) <small style="color:var(--muted);font-weight:500" id="len-b-label">· w = 15 mm · EDV = 120 mL, ESV = 50 mL</small></h4>
-              <div class="clock-well">
-                <div style="width:56px;height:56px;border-radius:14px;border:9px solid #fb7185;background:rgba(225,29,72,.22);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fecdd3">15 mm</div>
-              </div>
-              <div class="vt-count"><span id="time-b">120 mmHg systemic pump</span><small>run Steps 1–3 below!</small></div>
-            </div>
+        <div class="bridge-card" id="bridge-card">
+          <h4>Baba Sule's heart</h4>
+          <svg class="bridge-fig" viewBox="0 0 360 150" role="img" aria-label="A person facing you has their left hand on your right. A heart drawn facing you therefore shows the left ventricle on your right.">
+            <rect x="8" y="10" width="344" height="130" rx="14" fill="none" stroke="var(--line-strong)"/>
+            <circle cx="180" cy="42" r="18" fill="none" stroke="var(--fg)" stroke-width="3"/>
+            <path d="M180 62v52M180 74L130 100M180 74L230 100M180 114l-24 20M180 114l24 20" fill="none" stroke="var(--fg)" stroke-width="3" stroke-linecap="round"/>
+            <text class="hs-m" x="24" y="104">you see their RIGHT hand</text>
+            <text class="hs-m" x="196" y="40">they</text>
+            <text class="hs-t" x="214" y="124">their LEFT = your RIGHT</text>
+          </svg>
+          <div class="bridge-q" data-q="wall"><p>1 · The thick wall is the…</p><div class="opts"><button type="button" data-v="rv">Right ventricle</button><button type="button" data-v="lv">Left ventricle</button></div></div>
+          <div class="bridge-q" data-q="vessel"><p>2 · The vessel leaving the thick chamber is the…</p><div class="opts"><button type="button" data-v="pa">Pulmonary artery</button><button type="button" data-v="aorta">Aorta</button></div></div>
+          <div class="bridge-q" data-q="side"><p>3 · Drawn facing you, that chamber appears on…</p><div class="opts"><button type="button" data-v="left">your left</button><button type="button" data-v="right">your right</button></div></div>
+          <div class="vt-actions" style="margin-top:16px">
+            <button class="vt-btn zobo" type="button" id="bridge-check">Give my verdict</button>
+            <button class="vt-btn" type="button" id="bridge-reset">Reset</button>
           </div>
-          <div class="vt-actions">
-            <button class="vt-btn zobo" type="button" id="vt-zobo">Step 1 · Verify Wall Ratio (15 mm ÷ 5 mm)</button>
-            <button class="vt-btn" type="button" id="vt-drop1" disabled>Step 2 · Compute Stroke Volume (120 − 50 mL)</button>
-            <button class="vt-btn" type="button" id="vt-drop5" disabled>Step 3 · Compute Ejection Fraction EF%</button>
-            <button class="vt-btn" type="button" id="vt-reset">Reset echocardiogram</button>
-          </div>
-          <p class="vt-status" id="vt-status" aria-live="polite">Tunde's echocardiogram shows w_LV = 15 mm, w_RV = 5 mm, EDV = 120 mL, ESV = 50 mL. Start with Step 1.</p>
-          <div class="vt-verdict" id="vt-verdict"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
         </div>
 
         <div class="callout big reveal" id="big-idea" data-hook>
-          <p><strong>The big idea of Lesson 2:</strong> The mammalian heart is a dual four-chambered pump separated by an impermeable <strong>septum</strong>. Both ventricles eject the <strong>exact same stroke volume (~70 mL)</strong>, but the <strong>left ventricular wall (~15 mm)</strong> is 3× thicker than the right (~5 mm) to generate ~120 mmHg for systemic circulation, while four one-way valves (<strong>tricuspid, bicuspid, and two semilunar valves</strong>) anchored by <strong>chordae tendineae</strong> enforce strict one-way flow!</p>
+          <p><strong>The big idea of Lesson 2:</strong> each part of the heart is shaped for its job: thick where the push is long, valves where backflow must stop.</p>
         </div>
       </section>
 
       <!-- ================= 8. QUIZ ================= -->
       <section class="l-sec" id="quiz">
         <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
-        <h2>Quick quiz: <em>12 WAEC, NECO &amp; JAMB questions</em></h2>
-        <p class="intro">Choose an option for instant feedback and full explanations.</p>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB questions</em></h2>
+        <p class="intro">Choose an option for instant feedback and a full explanation. Two review questions from Lesson 1 come at the end.</p>
         <div class="quiz" id="quiz-list"></div>
         <div class="quiz-score">
           <span data-quiz-score>Score <b>0 / 12</b></span>
-          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset style="color:var(--paper);box-shadow:inset 0 0 0 1px rgba(245,239,228,.3)">Retry quiz</button>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
         </div>
       </section>
 
       <!-- ================= 9. REFLECT ================= -->
       <section class="l-sec" id="reflect">
-        <span class="phase" style="--pc:#7a9a00"><b>5</b>Reflect · 5 min</span>
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect</span>
         <h2>How did <em>you</em> do?</h2>
-        <p class="intro">Rate your confidence from 1 to 4 on each learning goal from Lesson 2.</p>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 2.</p>
         <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
         <div class="rate-list" id="rate-list">
-          <div class="rate" data-rate="r1"><p>I can describe the pericardium, pericardial fluid, myocardium, and interventricular septum.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r2"><p>I can explain why the left ventricle wall is 3× thicker than the right ventricle wall and why atria are thin-walled.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r3"><p>I can locate the tricuspid, bicuspid, and semilunar valves and explain the role of chordae tendineae and papillary muscles.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r4"><p>I can trace a red blood cell through all chambers, valves, pulmonary vessels, coronary arteries, and the hepatic portal vein.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
-          <div class="rate" data-rate="r5"><p>I can calculate stroke volume (SV = EDV − ESV), ejection fraction (EF%), and drawing magnification (M = I ÷ A).</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r1"><p>I can locate the heart and name its three layers.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can state what each chamber receives and sends.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can explain the wall thicknesses.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can name the four valves and their sides.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can draw and label the heart and find its magnification.</p><div class="rate-btns"><button type="button" data-v="1" data-r="1">1</button><button type="button" data-v="2" data-r="2">2</button><button type="button" data-v="3" data-r="3">3</button><button type="button" data-v="4" data-r="4">4</button></div></div>
         </div>
 
         <h3>Exit ticket</h3>
-        <div class="aq" data-answer="l02-exit">
-          <div class="aq-top"><h4>In two sentences: state the exact function of the chordae tendineae, and explain why the pulmonary artery is classified as an artery even though it carries deoxygenated blood.</h4><span class="marks">2 marks</span></div>
+        <div class="aq" data-answer="exit">
+          <div class="aq-top"><h4>Name the valve guarding the opening from the left atrium into the left ventricle, and the vessel that leaves the right ventricle.</h4><span class="marks">2 marks</span></div>
           <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
           <details class="reveal-box solution">
             <summary>Model answer <small>unlocks after you try</small></summary>
-            <div class="reveal-body"><p>The chordae tendineae are inelastic tendons attached to papillary muscles that hold the bicuspid and tricuspid valve flaps taut during ventricular systole so they cannot invert into the atria <b>(1)</b>. The pulmonary artery is classified as an artery because it carries blood <strong>away from the heart</strong> (from the right ventricle to the lungs), and vessel classification depends on direction of flow rather than oxygen content <b>(1)</b>.</p></div>
+            <div class="reveal-body"><p>The <strong>bicuspid (mitral) valve</strong> <b>(1)</b>; the <strong>pulmonary artery</strong> <b>(1)</b>.</p></div>
           </details>
         </div>
       </section>
 
       <!-- ================= 10. ASSIGNMENT ================= -->
       <section class="l-sec" id="assignment">
-        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 35 min</span>
-        <h2>Assignment: <em>Mammalian Heart Structure &amp; Double-Circulation Pathway</em></h2>
-        <p class="intro">Complete Part A (labelled longitudinal heart diagram) and Part B (30-mark structured WAEC paper). Type your attempt first to unlock each model solution.</p>
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment</span>
+        <h2>Assignment: <em>Part A and Part B</em></h2>
+        <p class="intro">Part A and Part B from 03-questions.md § Lesson 02. Type your attempt first to unlock each model solution.</p>
         <div class="assign-head no-print">
           <button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button>
         </div>
 
-        <h3>Part A · Longitudinal Heart Section Drawing &amp; Magnification</h3>
+        <h3>Part A · Home investigation: kitchen heart check</h3>
         <div class="aq" data-answer="l02-a1">
-          <div class="aq-top"><h4>In your biology practical book, make a clean 10 cm unshaded HB pencil drawing of the longitudinal section of the mammalian heart showing the 3:1 left-to-right ventricular wall ratio and 10 horizontal labels. Given that an actual human heart is 12.5 cm long, calculate the magnification M of your 10.0 cm drawing and list the 10 structures you labelled.</h4><span class="marks">Practical task</span></div>
-          <textarea class="l-textarea" placeholder="Magnification calculation and 10 labels…" aria-label="Part A answer"></textarea>
+          <div class="aq-top"><h4>Measure a real heart and draw it to scale.</h4></div>
+          <p><strong>You need:</strong> a goat heart bought fresh from a market butcher by an adult (if none can be bought, use the 3D bench in this lesson and measure the screen model instead), disposable gloves or clean nylon bags over your hands, a chopping board, a sharp kitchen knife (the adult does all the cutting), a 30 cm ruler and plain paper.</p>
+          <ol class="sub">
+            <li>Rinse the heart in clean water and lay it on the board with the front (the side with the slanting groove) facing up.</li>
+            <li>Measure its length from the top, where the vessels leave, to the pointed tip (apex), in cm.</li>
+            <li>Make a large outline drawing of the heart, at least half a page tall, and measure the drawing's length in mm.</li>
+            <li>Ask the adult to cut across both ventricles midway between top and tip. Measure the left and right ventricle walls twice each, away from any bulging papillary muscle, and find the means.</li>
+            <li>Calculate the magnification of your drawing, and the ratio of left to right ventricle wall thickness.</li>
+            <li>Wrap the heart for cooking or disposal, scrub the board and knife with soap, and wash your hands well.</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Your results table and conclusion…" aria-label="Part A answer"></textarea>
           <details class="reveal-box solution">
-            <summary>Sample answer <small>unlocks after you try</small></summary>
+            <summary>Sample results <small>unlocks after you try</small></summary>
             <div class="reveal-body">
-              <p>Magnification: <code>M = I ÷ A = 10.0 cm ÷ 12.5 cm = ×0.8</code>.<br>
-              10 required singular labels: 1. Superior vena cava, 2. Inferior vena cava, 3. Right atrium, 4. Tricuspid valve, 5. Right ventricle, 6. Chordae tendineae, 7. Interventricular septum, 8. Pulmonary artery, 9. Pulmonary vein, 10. Left atrium, 11. Bicuspid (mitral) valve, 12. Thick left ventricular wall, 13. Arch of aorta.</p>
+              <div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Measurement</th><th>Reading 1</th><th>Reading 2</th><th>Mean</th></tr></thead><tbody>
+                <tr><td>Heart length, base to apex (cm)</td><td>8.4</td><td>n/a</td><td>8.4</td></tr>
+                <tr><td>Drawing length (mm)</td><td>168</td><td>n/a</td><td>168</td></tr>
+                <tr><td>Left ventricle wall (mm)</td><td>11.0</td><td>11.4</td><td>11.2</td></tr>
+                <tr><td>Right ventricle wall (mm)</td><td>3.6</td><td>3.8</td><td>3.7</td></tr>
+                <tr><td><strong>Magnification of drawing</strong></td><td></td><td></td><td><strong>×2.0</strong> (16.8 cm ÷ 8.4 cm)</td></tr>
+                <tr><td><strong>LV : RV wall ratio</strong></td><td></td><td></td><td><strong>3.0</strong> (11.2 ÷ 3.7)</td></tr>
+              </tbody></table></div>
+              <p>A good answer shows both lengths in the same unit before dividing, magnification with no unit, each wall measured twice and averaged, and a left ventricle about three times thicker than the right, explained by the left side pumping to the whole body and the right only to the lungs. The thick wall with the aorta leaving it is the <em>left</em> ventricle, which settles Baba Sule's argument. A strong answer gives one source of error with its direction, e.g. a heart kept in the fridge for days has shrunk, so its walls read too low.</p>
             </div>
           </details>
         </div>
 
-        <h3>Part B · Structured Written Questions (30 marks)</h3>
+        <h3>Part B · Written paper (30 marks)</h3>
         <div class="aq" data-answer="l02-b1">
-          <div class="aq-top"><h4>1. (a) State two functions of the pericardium and pericardial fluid [2 marks]. (b) Explain why the wall of the left ventricle is much thicker than the wall of the right ventricle, and why the walls of the atria are thinner than both [4 marks]. (c) State the exact location and function of (i) the tricuspid valve, (ii) the bicuspid valve, and (iii) the chordae tendineae [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 1 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) 1. Pericardial fluid lubricates the heart surfaces to reduce friction during contraction <b>(1)</b>. 2. The fibrous pericardium protects the heart from mechanical shock and prevents over-expansion <b>(1)</b>.<br>
-            (b) The left ventricle must generate high pressure (~120 mmHg) to pump blood through the long systemic circuit around the entire body, whereas the right ventricle pumps blood only a short distance to the lungs at low pressure (~25 mmHg) <b>(2)</b>. The atria have thin walls (~2 mm) because they only push blood into the immediately adjacent ventricles <b>(2)</b>.<br>
-            (c) (i) <strong>Tricuspid valve:</strong> Between right atrium and right ventricle; prevents backflow into RA <b>(1)</b>. (ii) <strong>Bicuspid valve:</strong> Between left atrium and left ventricle; prevents backflow into LA <b>(1)</b>. (iii) <strong>Chordae tendineae:</strong> Link AV valve cusps to papillary muscles in ventricles; prevent the valve flaps from turning inside out into the atria during ventricular systole <b>(2)</b>.</p>
+          <div class="aq-top"><h4>1. Position and Coverings</h4><span class="marks">3 marks</span></div>
+          <p>(a) Describe the position of the heart in the body. (b) Name the double-layered sac around the heart, and state the job of the fluid between its layers.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) It lies in the chest (thoracic cavity) between the two lungs, tilted a little to the left, protected by the breastbone and ribs. (1) (b) The pericardium. (1) Its fluid reduces friction, so the beating heart does not rub against the sac. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Equivalent wordings that keep the key ideas are credited. "On the left side of the chest" alone is not accepted in (a); the heart lies near the middle, between the lungs, only tilted to the left. Writing "pericardium" for the inner lining or "endocardium" for the sac loses the mark.</small></p>
           </div></details>
         </div>
-
         <div class="aq" data-answer="l02-b2">
-          <div class="aq-top"><h4>2. (a) Trace the sequential pathway of a urea molecule from the hepatic vein of the liver until it enters the renal artery of the kidney, naming every heart chamber, valve, and major blood vessel passed through [6 marks]. (b) Explain the roles of (i) the coronary arteries and (ii) the hepatic portal vein [4 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) …" aria-label="Question 2 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) Hepatic vein → <strong>Inferior vena cava</strong> → <strong>Right atrium</strong> → <strong>Tricuspid valve</strong> → <strong>Right ventricle</strong> → <strong>Pulmonary semilunar valve</strong> → <strong>Pulmonary artery</strong> → <strong>Lung capillaries</strong> → <strong>Pulmonary vein</strong> → <strong>Left atrium</strong> → <strong>Bicuspid (mitral) valve</strong> → <strong>Left ventricle</strong> → <strong>Aortic semilunar valve</strong> → <strong>Aorta</strong> → <strong>Renal artery</strong> <b>(6 marks)</b>.<br>
-            (b) (i) <strong>Coronary arteries:</strong> Branch from the base of the aorta to supply cardiac muscle cells with oxygenated blood and glucose for aerobic respiration <b>(2)</b>. (ii) <strong>Hepatic portal vein:</strong> Carries nutrient-rich blood directly from the ileum villi to the liver so excess glucose is stored as glycogen and toxins are removed before blood enters general circulation <b>(2)</b>.</p>
+          <div class="aq-top"><h4>2. What Each Chamber Receives and Sends</h4><span class="marks">4 marks</span></div>
+          <p>Copy and complete the table.</p><div class="tbl-wrap"><table class="tbl" style="min-width:0"><thead><tr><th>Chamber</th><th>Blood comes in from</th><th>Blood goes out to</th></tr></thead><tbody><tr><td>Left atrium</td><td>(i) ______</td><td>(ii) ______</td></tr><tr><td>Right ventricle</td><td>(iii) ______</td><td>(iv) ______</td></tr></tbody></table></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(i) The lungs, through the pulmonary veins. (1) (ii) The left ventricle, through the bicuspid valve. (1) (iii) The right atrium, through the tricuspid valve. (1) (iv) The lungs, through the pulmonary artery. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Naming the vessel alone is accepted where it identifies the source correctly (e.g. "pulmonary veins" for (i)). "From the body" in (i) or "to the body" in (iv) is the commonest swap and scores zero.</small></p>
           </div></details>
         </div>
-
         <div class="aq" data-answer="l02-b3">
-          <div class="aq-top"><h4>3. (a) During a cardiac scan, a patient’s left ventricle has an end-diastolic volume (EDV) of 140 mL and an end-systolic volume (ESV) of 63 mL. Calculate (i) the stroke volume SV and (ii) the ejection fraction EF% [4 marks]. (b) If the patient’s heart rate is 80 beats/min, calculate the cardiac output in L/min [3 marks]. (c) A student draws a dissected heart specimen 13.5 cm long. If the actual heart length is 90 mm, calculate the linear magnification of the drawing [3 marks].</h4><span class="marks">10 marks</span></div>
-          <textarea class="l-textarea" placeholder="(a) … (b) … (c) …" aria-label="Question 3 answer"></textarea>
-          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
-            <p>(a) (i) Stroke volume: <code>SV = 140 − 63 = 77 mL</code> <b>(2)</b>. (ii) Ejection fraction: <code>EF = (77 ÷ 140) × 100 = 55.0%</code> <b>(2)</b>.<br>
-            (b) Cardiac output: <code>CO = 80 × 77 = 6160 mL/min</code> <b>(1.5)</b>; in L/min: <code>CO_L = 6160 ÷ 1000 = 6.16 L/min</code> <b>(1.5)</b>.<br>
-            (c) Convert drawing length to mm: <code>I = 13.5 × 10 = 135 mm</code> <b>(1)</b>. Magnification: <code>M = 135 ÷ 90 = ×1.5</code> <b>(2)</b>.</p>
+          <div class="aq-top"><h4>3. Settling Baba Sule's Argument</h4><span class="marks">3 marks</span></div>
+          <p>Baba Sule says, "The thick side of the heart is the right side, because right is strong." (a) Explain why the left ventricle has a thicker wall than the right ventricle. (b) Explain why both atria have thin walls.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) The left ventricle must drive its blood, under high pressure, along the aorta and out to every organ from head to feet, a long journey with much resistance. (1) The right ventricle has a short trip to make, to the lungs lying beside the heart, so it needs less muscle. (1) (b) Each atrium needs only to squeeze its blood a few centimetres down into the ventricle directly beneath it. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> The two marks in (a) are for two separate ideas: the long whole-body route for the left, and the short lung route for the right. "The left ventricle works harder" with no reason earns nothing. "The left ventricle holds more blood" is wrong and is penalised.</small></p>
           </div></details>
         </div>
-
-        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
-          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 1: Transport &amp; Circulatory Systems</a>
-          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3 — Cardiac Cycle, Pacemaker &amp; Blood Pressure →</a>
+        <div class="aq" data-answer="l02-b4">
+          <div class="aq-top"><h4>4. The Four Valves</h4><span class="marks">4 marks</span></div>
+          <p>Name the four valves of the mammalian heart and state where each is found.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Tricuspid valve: between the right atrium and the right ventricle. (1) Bicuspid (mitral) valve: between the left atrium and the left ventricle. (1) Pulmonary semilunar valve: at the base of the pulmonary artery, where it leaves the right ventricle. (1) Aortic semilunar valve: at the base of the aorta, where it leaves the left ventricle. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Each mark needs the name <em>and</em> the correct position. Placing the tricuspid on the left or the bicuspid on the right is the commonest lost mark ("tRi = Right"). "Semilunar valves" written once without saying which vessel scores one mark at most.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b5">
+          <div class="aq-top"><h4>5. Supports and Partitions</h4><span class="marks">3 marks</span></div>
+          <p>(a) Describe the chordae tendineae and explain why they are needed. (b) State the function of the septum.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) They are tough cords joining the flaps of the atrioventricular valves to the papillary muscles on the ventricle wall. (1) When the ventricles contract, they hold the flaps so they shut but cannot be blown back into the atria, so blood does not leak backwards. (1) (b) The septum separates the right and left halves of the heart, keeping oxygen-poor and oxygen-rich blood apart. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> The first mark in (a) is for structure and attachment, the second for function; "they prevent backflow" alone earns only the second. "The septum pumps blood" is wrong and scores zero.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b6">
+          <div class="aq-top"><h4>6. Wall Ratio and Drawing Magnification</h4><span class="marks">5 marks</span></div>
+          <p>In a dissection, a student measured the left ventricle wall as 13.1 mm and 12.7 mm, and the right ventricle wall as 4.4 mm and 4.2 mm. The goat heart was 8.6 cm long and his drawing of it was 172 mm long.<br>(a) Calculate the mean thickness of each ventricle wall. (b) Calculate how many times thicker the left ventricle wall is. (c) Calculate the magnification of the drawing.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Mean LV = (13.1 + 12.7) ÷ 2 = 12.9 mm. (1) Mean RV = (4.4 + 4.2) ÷ 2 = 4.3 mm. (1) (b) Ratio = 12.9 ÷ 4.3 = 3.0. (1) (c) Same units: 172 mm = 17.2 cm (1); magnification = 17.2 ÷ 8.6 = ×2.0. (1)</p>
+            <p><small><strong>Mark scheme note:</strong> Units are needed on the means in (a). In (b), the difference (8.6 mm) is not a ratio and scores zero. In (c), dividing 172 by 8.6 without converting (×20) loses the final mark, and so does writing "2.0 cm": magnification has no unit.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b7">
+          <div class="aq-top"><h4>7. Practical: The Goat-Heart Dissection</h4><span class="marks">4 marks</span></div>
+          <p>(a) State two precautions that were taken during the dissection and measurement. (b) Give two sources of error in the wall measurements, stating for each whether the reading was too high or too low.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(a) Any two, in the past tense: gloves were worn and hands were washed afterwards (1); the scalpel was used on a dissecting board and cut away from the body (1); every wall was measured at the same height, midway between base and apex (1); the eye was level with the ruler mark when reading (1); each wall was measured twice and the mean taken (1). (Maximum 2.) (b) Any two: a slanting cut exposed the wall at an angle, so the reading was too high (1); measuring where a papillary muscle joined the wall added extra muscle, so the reading was too high (1); a specimen stored for days had shrunk and lost fluid, so the walls read too low (1). (Maximum 2.)</p>
+            <p><small><strong>Mark scheme note:</strong> Precautions written as instructions or in the future tense lose the marks. In (b) the error and its direction must both be right; "human error" or "the ruler was faulty" with no direction scores zero. Parallax is accepted only if the answer says it can make readings too high or too low at random.</small></p>
+          </div></details>
+        </div>
+        <div class="aq" data-answer="l02-b8">
+          <div class="aq-top"><h4>8. Drawing the Longitudinal Section</h4><span class="marks">4 marks</span></div>
+          <p>State four rules a candidate should follow when drawing a labelled longitudinal section of the mammalian heart for WAEC.</p>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Question 8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Model solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Any four: draw the heart in front view, so the right side of the heart is on the reader's left (1); make the left ventricle wall clearly thicker than the right (1); draw it large, at least half a page, with clean, unshaded lines (1); use ruled horizontal label lines with no arrowheads (1); add arrows showing the direction of blood flow inside the chambers (1); write a title in capitals below the drawing, e.g. LONGITUDINAL SECTION OF A MAMMALIAN HEART, and state the magnification (1). (Maximum 4.)</p>
+            <p><small><strong>Mark scheme note:</strong> Each rule must be different; "label clearly" and "label neatly" count as one vague point and earn nothing. A rule that puts the left ventricle on the reader's left is wrong and is penalised.</small></p>
+          </div></details>
+        </div>
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid var(--paper-line);flex-wrap:wrap">
+          <a class="btn btn-ghost" href="../lesson-01/index.html" style="color:var(--paper-ink)">← Lesson 1</a>
+          <a class="btn btn-tour" href="../lesson-03/index.html">Next: Lesson 3, the double circuit →</a>
         </div>
       </section>
     </main>
@@ -627,18 +733,19 @@
   <script src="../../assets/js/three.min.js"></script>
   <script src="../../assets/js/scene-kit.js"></script>
   <script src="../../assets/js/heart-kit.js"></script>
+  <script src="../../assets/js/dissection-bench.js"></script>
   <script src="../../assets/js/retrieval-bank.js"></script>
   <script src="data.js"></script>
   <script src="../../assets/js/lesson-kit.js"></script>
   <script src="../../assets/js/story-scene.js"></script>
   <script src="story.js"></script>
   <script src="bench.js"></script>
-  <script src="../../assets/js/study-graph.js"></script>
-  <script src="graph.js"></script>
   <script src="zoom.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
   <script src="lesson.js"></script>
   <script src="narration.js"></script>
   <script src="../../assets/js/narrator.js"></script>
   <script src="../../assets/js/math-kit.js"></script>
+  <script src="../../assets/js/code-kit.js"></script>
 </body>
 </html>

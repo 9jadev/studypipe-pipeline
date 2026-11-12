@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 3 · The Power of Repetition: Counter &amp; Conditional Loops · StudyPipe</title>
+  <meta name="description" content="StudyPipe Computer Studies &amp; Programming: counter-controlled FOR loops, condition-controlled WHILE loops, the accumulator pattern, sentinel values, and infinite loop protection at the Ikogosi Solar Microgrid.">
+  <meta name="theme-color" content="#04140f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='10' y='24' width='44' height='16' rx='5' fill='%2310b981'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--teal-rgb), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench (360px compliant: <260px per bar, <600px total below canvas) */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(320px, 92vw, 430px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    @media (min-width: 560px) { #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    #bench-stage .bench-readout div { padding: 5px 6px; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13.5px; display: block; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--crimson); }
+    #bench-ds { width: 100%; }
+    #bench-ds button { flex: 1; font-size: 12px; padding: 6px 8px; }
+    .l3-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .l3-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 54px; }
+    .chip-btn { min-height: 36px; padding: 5px 10px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12px; cursor: pointer; }
+    .chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .l3-slider { display: flex; align-items: center; gap: 10px; width: 100%; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+    .l3-slider input { flex: 1; }
+    .l3-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .l3-actions .vt-btn { flex: 1; min-width: 96px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 11.5px; color: var(--fg-soft); width: 100%; }
+
+    /* results table (one compact row per iteration) */
+    #results-table td .rc-sub { display: block; font-size: 11px; color: var(--paper-muted); margin-top: 2px; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 1.1fr 1.1fr 1fr 1.1fr; padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 1.1fr 1.1fr 1fr 1.1fr; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12.5px; }
+      #results-table th { font-size: 10.5px; }
+      #results-table td::before { content: none; }
+    }
+
+    /* range & syntax explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 50px; padding: 6px 4px; font-weight: 700; font-size: 11.5px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin small { font-weight: 500; opacity: .82; font-size: 10.5px; }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--teal); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 12.5px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .l3-bq { margin-top: 14px; }
+    .l3-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; }
+    .l3-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l3-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; }
+    .l3-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .l3-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .l3-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .l3-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .l3-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l03">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 6 Lessons</a>
+      <span class="l-crumb">Lesson 3 of 6 · <b>Counter &amp; Conditional Loops</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1–SS3 Computer Studies · Lesson 3 of 6 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>The Power of Repetition: <em>Counter &amp; Conditional Loops</em></h1>
+        <p class="question reveal">Why write hundreds of lines of code when three lines can automate repetitive tasks thousands of times?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Explain the purpose of <strong>iteration</strong> and identify tasks requiring loop structures.</span></li>
+          <li><b>02</b><span>Construct counter-controlled loops (<strong><code>FOR</code> loops</strong> with start, stop, and step parameters).</span></li>
+          <li><b>03</b><span>Construct condition-controlled loops (<strong><code>WHILE</code> loops</strong>) and guarantee loop termination.</span></li>
+          <li><b>04</b><span>Implement the <strong>accumulator pattern</strong> (<code>total = total + value</code>) to calculate sums and averages.</span></li>
+          <li><b>05</b><span>Detect and resolve <strong>infinite loop</strong> bugs in automated software systems.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–55</b> Make sense</span><span><b>55–75</b> Apply</span><span><b>75–80</b> Reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="24" y="28" width="272" height="184" rx="14" fill="none" stroke="rgba(var(--teal-rgb),.55)" stroke-width="2.2"/>
+          <text x="160" y="76" fill="var(--amber)" font-family="var(--font-mono)" font-size="17" text-anchor="middle">for x in daily_readings:</text>
+          <text x="160" y="110" fill="var(--fg)" font-family="var(--font-mono)" font-size="19" text-anchor="middle">total_kwh += x</text>
+          <path d="M 244 116 C 272 116, 272 68, 244 68" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-dasharray="4 3"/>
+          <polygon points="244,64 236,68 244,72" fill="var(--teal)"/>
+          <text x="160" y="152" fill="var(--teal)" font-family="var(--font-mono)" font-size="15" text-anchor="middle">7 days → 382 kWh</text>
+          <text x="160" y="182" fill="var(--fg-soft)" font-family="var(--font-mono)" font-size="13" text-anchor="middle">mean = 54.57 kWh / day</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">FOR or WHILE?</a></li>
+        <li><a href="#practical">Loop bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Loop tracer</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- 0. DO NOW -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up your logic &amp; types</em></h2>
+        <p class="intro">Four quick retrieval cards from Lessons 1 and 2 on boolean <code>not</code>, <code>if-elif-else</code> branching, floating-point data types, and the modulus operator <code>%</code>. Answer each in your head <strong>before</strong> revealing it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- 1. STORY -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>99% CPU at <em>Ikogosi Microgrid</em></h2>
+        <p class="intro">Inside the Ikogosi Smart Solar Microgrid station, the SCADA terminal cooling fans scream at 4200 RPM and processor load hits 99%. Millions of identical log lines flood the screen. Why won't the monitoring loop stop?</p>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story at the Ikogosi Microgrid Control Room: Amina, Tari, and Chief Babatunde inspecting the SCADA terminal pinned at 99% CPU by an infinite while loop in solar_monitor.py."></canvas>
+            <div class="stage-label"><i></i>3D story · Ikogosi Microgrid, Ekiti</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Amina:</strong> <em>“Listen to the SCADA terminal fans spinning at maximum speed! System CPU and memory usage just hit 99%!”</em></p>
+            <p><strong>Scene 2 · Tari:</strong> points at the scrolling monitor. <em>“Look at the log console! It is scrolling millions of identical messages: ‘Checking solar array 1... Checking solar array 1...’.”</em></p>
+            <p><strong>Scene 3 · Amina:</strong> opens <code>solar_monitor.py</code> at line 22. <em>“Here is the culprit: <code>while solar_output &gt; 0: print('Active')</code>.”</em></p>
+            <p><strong>Scene 4 · Tari:</strong> <em>“The variable <code>solar_output</code> never changes inside the loop! In daytime sun it stays positive forever — it is stuck in an infinite cycle!”</em></p>
+            <p><strong>Scene 5 · Chief Babatunde:</strong> <em>“How do we make the computer check each solar panel or daily reading once, accumulate the total kWh, and stop cleanly?”</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2. WONDER WALL -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Before we step onto the bench: what prevents a computer loop from running forever and draining battery or processor resources? Pin your prediction.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="A loop stops cleanly when…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">A counter variable must step toward a stop limit (Tari)</button>
+            <button type="button">The loop condition must eventually become False (Amina)</button>
+            <button type="button">Use a FOR loop when the number of items is known (Chidi)</button>
+            <button type="button">Hardware watchdog timers halt frozen loops (Engr. Idris)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3. SORT -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Counted <code>FOR</code> <em>or Conditional <code>WHILE</code>?</em></h2>
+        <p class="intro">Classify each computational scenario into its ideal loop structure. Drag a card or tap a card then tap a bin: use a <strong><code>FOR</code> loop</strong> when the iteration count is predetermined, and a <strong><code>WHILE</code> loop</strong> when repeating until a condition or sentinel changes.</p>
+        <div class="sort" id="loop-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Scenarios to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="for_bin" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Use FOR Loop bin">
+              <h4><i></i>Use FOR Loop (Counted)</h4><small>known, predetermined number of iterations</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="while_bin" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Use WHILE Loop bin">
+              <h4><i></i>Use WHILE Loop (Conditional)</h4><small>repeats until condition becomes False</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3B. PRACTICAL -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The Loop Stepper Bench: <em>trace counters &amp; accumulators</em></h2>
+        <p class="intro">Step the 16-tooth brass counter gear through the 7-day solar dataset <code>[45, 52, 60, 58, 49, 63, 55]</code> and <code>range(1, 6)</code>, watch the accumulator register grow, and test how the watchdog breaker halts an un-incremented <code>while count &lt; 5</code> loop.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Select a loop dataset</h4><p>Pick 7-day solar kWh or range(1, 6).</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Step iteration by iteration</h4><p>Record counter i and running accumulator sum.</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Inspect the accumulator curve</h4><p>Watch total_kwh climb to 382 kWh on the graph.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Test the infinite loop</h4><p>Run while count &lt; 5 until watchdog trips.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Iterative Loop Stepper Bench: extruded 16-tooth brass gear wheel, loop counter register i, accumulator register total, flowchart condition diamond, purple watchdog emergency beacon, and execution trace console."></canvas>
+            <div class="stage-label"><i></i>3D Loop Stepper · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the controls, graph and trace table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar">
+            <div class="seg" role="group" aria-label="Loop preset dataset" id="bench-ds">
+              <button type="button" data-ds="solar" aria-pressed="true">7-Day Solar [382 kWh]</button>
+              <button type="button" data-ds="range5" aria-pressed="false">FOR range(1, 6)</button>
+              <button type="button" data-ds="infinite" aria-pressed="false">Infinite WHILE</button>
+            </div>
+          </div>
+          <div class="stage-bar">
+            <label class="l3-slider">Iteration
+              <input type="range" id="bench-iter" min="0" max="7" step="1" value="0" aria-label="Loop iteration step">
+            </label>
+          </div>
+          <div class="stage-bar l3-actions">
+            <button class="vt-btn zobo" type="button" id="bench-step">Step iteration</button>
+            <button class="vt-btn" type="button" id="bench-run">Run all</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Mode: <b>solar [7 days]</b> · Step <b>0 of 7</b></span>
+          </div>
+        </div>
+
+        <div class="graph-card" id="graph-card">
+          <div class="gc-head">
+            <div><span class="gc-kicker">Live accumulator curve · plots as you step</span><h4>Cumulative solar generation <code>total_kwh</code> &amp; <code>sum</code> vs iteration step</h4></div>
+            <span class="gc-badge wait" id="loop-graph-badge">0 steps plotted</span>
+          </div>
+          <div id="graph-canvas"></div>
+          <p class="gc-note" id="loop-graph-note"></p>
+        </div>
+
+        <h3>Record your loop trace</h3>
+        <p>Each step adds a row showing the counter <code>i</code>, current reading added, running accumulator <code>total</code>, and boolean condition evaluation.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Step</th><th>Counter <code>i</code></th><th>Accumulator</th><th>Condition</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="results-line">Iterations recorded: 0</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected dry-run trace tables <small>open after you step the bench</small></summary>
+          <div class="reveal-body">
+            <h4>1. 7-Day Solar Generation (<code>daily_readings = [45, 52, 60, 58, 49, 63, 55]</code>)</h4>
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Step / Day</th><th>Index <code>i</code></th><th>Reading (kWh)</th><th>Accumulator <code>total_kwh</code></th><th>More items?</th></tr></thead>
+                <tbody>
+                  <tr><td>1</td><td>0</td><td>45</td><td>45 kWh</td><td>True</td></tr>
+                  <tr><td>2</td><td>1</td><td>52</td><td>97 kWh</td><td>True</td></tr>
+                  <tr><td>3</td><td>2</td><td>60</td><td>157 kWh</td><td>True</td></tr>
+                  <tr><td>4</td><td>3</td><td>58</td><td>215 kWh</td><td>True</td></tr>
+                  <tr><td>5</td><td>4</td><td>49</td><td>264 kWh</td><td>True</td></tr>
+                  <tr><td>6</td><td>5</td><td>63</td><td>327 kWh</td><td>True</td></tr>
+                  <tr><td>7</td><td>6</td><td>55</td><td>382 kWh</td><td>False (Exit)</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">total_kwh = 382 kWh &nbsp;·&nbsp; average_kwh = 382 ÷ 7 = 54.57 kWh/day</div>
+            <h4>2. Counter Loop <code>for i in range(1, 6): sum += i</code></h4>
+            <p>Steps through <code>i = 1, 2, 3, 4, 5</code> with running accumulator <code>sum = 1, 3, 6, 10, 15</code>. When <code>i</code> reaches <code>6</code>, <code>6 &lt; 6</code> is <code>False</code> and the loop terminates cleanly.</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l03-prac-q">
+          <div class="aq-top"><h4>Answer these two analysis questions from your bench trace, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Why did the accumulator <code>total_kwh</code> (or <code>sum</code>) increase monotonically with each iteration step, and why must it be initialized to <code>0</code> before the loop starts?</li>
+            <li>In the <code>while count &lt; 5</code> test, what statement was missing inside the loop body, and why did the watchdog timer have to interrupt execution?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your analysis answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>Each iteration executes <code>total = total + reading</code>, adding the positive daily kWh value onto the previous running sum (45 → 97 → 157 → … → 382 kWh). Initializing <code>total = 0</code> outside the loop provides the additive identity; if initialized inside the loop, it would reset to zero on every pass.</li>
+                <li>The increment statement <code>count = count + 1</code> (or <code>count += 1</code>) was missing. Because <code>count</code> stayed fixed below 5, the condition <code>count &lt; 5</code> evaluated to <code>True</code> forever, creating an infinite loop that required an emergency hardware watchdog interrupt.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 4. CONCEPTS -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 15 min</span>
+        <h2>Iteration, Counters, Accumulators &amp; <em>Loop Termination</em></h2>
+        <p class="intro">Connect your 3D stepper traces to the formal programming definitions, flowchart back-edges, and Python vs BASIC loop syntax tested in WAEC, NECO, and JAMB.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>The Power of Repetition — Counter &amp; Conditional Loops</b><span class="lv-time">6 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: The Power of Repetition — Counter &amp; Conditional Loops" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <h3 id="def-iteration">Core looping vocabulary</h3>
+        <p><strong>Iteration</strong> is the automated repetition of a block of instructions until a specified condition is met. A <strong>Counter</strong> is a variable (such as <code>i</code> or <code>count</code>) that tracks the number of times a loop has executed, stepping by a fixed increment. An <strong>Accumulator</strong> is a variable (initialized to <code>0</code> for sums or <code>1</code> for products before the loop) that collects a running total across iterations: <code>total = total + value</code>.</p>
+
+        <div class="callout big reveal" id="eq-loop">
+          <p><strong>Sentinel Values &amp; Infinite Loops:</strong> In a condition-controlled <code>WHILE</code> loop where the count is not known in advance, a <strong>sentinel value</strong> (such as typing <code>-1</code> or <code>"QUIT"</code>) is a special input marker that signals the end of data entry. An <strong>infinite loop</strong> occurs when the termination condition never evaluates to <code>False</code> (for example, forgetting to increment the counter variable inside a <code>while</code> loop). Inside any loop, <code>break</code> exits the entire loop immediately, whereas <code>continue</code> skips only the remainder of the current iteration and jumps to the next cycle test.</p>
+        </div>
+
+        <h3>Python vs QBASIC loop syntax comparison</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Construct</th><th>Python Syntax</th><th>BASIC / QBASIC Syntax</th><th>Key Exam Rule</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Counted 1 to 5</strong></td><td><code>for i in range(1, 6):</code></td><td><code>FOR I = 1 TO 5 ... NEXT I</code></td><td>Python <code>stop</code> (6) is <strong>exclusive</strong>; BASIC <code>TO 5</code> is <strong>inclusive</strong>.</td></tr>
+              <tr><td><strong>Default start</strong></td><td><code>for i in range(5):</code></td><td><code>FOR I = 0 TO 4 ... NEXT I</code></td><td>Single-argument <code>range(n)</code> starts at <code>0</code> and stops at <code>n - 1</code>.</td></tr>
+              <tr><td><strong>Custom step (+2)</strong></td><td><code>for i in range(2, 10, 2):</code></td><td><code>FOR I = 2 TO 8 STEP 2</code></td><td>Generates <code>2, 4, 6, 8</code> (exactly 4 iterations).</td></tr>
+              <tr><td><strong>Countdown (-1)</strong></td><td><code>for k in range(5, 0, -1):</code></td><td><code>FOR K = 5 TO 1 STEP -1</code></td><td>Generates <code>5, 4, 3, 2, 1</code> (stops before 0; final <code>k = 1</code>).</td></tr>
+              <tr><td><strong>Conditional loop</strong></td><td><code>while count &lt;= 5:</code></td><td><code>WHILE COUNT &lt;= 5 ... WEND</code></td><td>Must update <code>count += 1</code> inside the body to avoid an infinite loop.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Atomic mathematical derivation: Accumulator sum &amp; mean</h3>
+        <p>Whether summing consecutive integers in <code>range(1, 6)</code> or computing the 7-day mean solar generation at Ikogosi, the accumulator updates one addition at a time:</p>
+        <div class="m-calc-wrap">
+          <div class="m-calc-head">
+            <span>Accumulator Sum &amp; Mean Derivation</span>
+            <span class="m-tex-badge">LaTeX · 3 Steps</span>
+          </div>
+          <div class="m-step-list">
+            <div class="m-step">
+              <div class="m-step-meta">
+                <span class="m-step-num"><b>1</b> Step 1</span>
+                <span class="m-step-tag">Counter Sum</span>
+              </div>
+              <div class="m-step-eq"><div class="sp-math" data-latex="\text{sum}_{1..5} = 0 + 1 + 2 + 3 + 4 + 5 = \frac{n(n+1)}{2} = \frac{5(6)}{2} = \boxed{15}"></div></div>
+              <div class="m-step-note"><i class="m-step-note-icon" aria-hidden="true">💡</i><span>Initializing the accumulator to 0 and adding each integer generated by <code>range(1, 6)</code> produces a final sum of 15.</span></div>
+            </div>
+            <div class="m-step">
+              <div class="m-step-meta">
+                <span class="m-step-num"><b>2</b> Step 2</span>
+                <span class="m-step-tag">7-Day Accumulation</span>
+              </div>
+              <div class="m-step-eq"><div class="sp-math" data-latex="\text{total}\_\text{kwh} = 45 + 52 + 60 + 58 + 49 + 63 + 55 = \boxed{382\text{ kWh}}"></div></div>
+              <div class="m-step-note"><i class="m-step-note-icon" aria-hidden="true">💡</i><span>Across the 7 solar array daily logs, the accumulator adds each day's generation onto the running total to reach 382 kWh.</span></div>
+            </div>
+            <div class="m-step">
+              <div class="m-step-meta">
+                <span class="m-step-num"><b>3</b> Step 3</span>
+                <span class="m-step-tag">Daily Mean</span>
+              </div>
+              <div class="m-step-eq"><div class="sp-math" data-latex="\text{average}\_\text{kwh} = \frac{\text{total}\_\text{kwh}}{\text{len}(\text{daily}\_\text{readings})} = \frac{382}{7} \approx \boxed{54.57\text{ kWh per day}}"></div></div>
+              <div class="m-step-note"><i class="m-step-note-icon" aria-hidden="true">💡</i><span>Dividing the final accumulated total (382 kWh) by the number of elements (7 days) yields a mean daily output of 54.57 kWh.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <h3 id="pos-h">Loop range &amp; syntax explorer</h3>
+        <p>Tap a pin to inspect the exact integer sequence, iteration count, accumulator sum, and side-by-side Python vs BASIC code.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to inspect how start, stop, and step control loop execution.</div>
+        </div>
+      </section>
+
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside the loop pipeline: <em>the back-edge jump</em></h2>
+        <p class="intro">Trace how the processor executes a loop in four distinct stages: <strong>1. Initialization</strong> → <strong>2. Condition Diamond</strong> → <strong>3. Body Accumulator</strong> → <strong>4. Step Increment &amp; Back-Edge Jump</strong>. As long as <code>i &lt; 6</code> is <code>True</code>, the glowing cyan feedback arc jumps control backwards to the condition diamond; when <code>i = 6</code>, control exits down the green chute.</p>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D Loop Execution Tracer: vertical pipeline with Init Node, Condition Diamond, Body Accumulator Node, Step Node, glowing cyan Back-Edge Jump Arc, and green Exit Chute."></canvas>
+            <div class="stage-label"><i></i>3D Loop Jump Tracer · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D concept zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="stage-bar l3-chips" id="zoom-steps" role="group" aria-label="Pipeline stage">
+            <span class="lab-t">Stage</span>
+            <button class="chip-btn" type="button" data-step="0" aria-pressed="true">1. Init</button>
+            <button class="chip-btn" type="button" data-step="1" aria-pressed="false">2. Test (i &lt; 6)</button>
+            <button class="chip-btn" type="button" data-step="2" aria-pressed="false">3. Body (+kWh)</button>
+            <button class="chip-btn" type="button" data-step="3" aria-pressed="false">4. Back-Jump</button>
+          </div>
+          <div class="stage-bar">
+            <label class="l3-slider">Counter
+              <input type="range" id="zoom-iter" min="1" max="6" step="1" value="1" aria-label="Loop counter i from 1 to 6">
+              <b id="zoom-iter-val">i = 1</b>
+            </label>
+            <button class="vt-btn zobo" type="button" id="zoom-next">Advance pulse</button>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 15 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Step through the interactive Python code traces and atomic calculations before tackling the Bridge Challenge.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3.1</span><h4>Accumulating 7-day solar power output &amp; daily average</h4></div>
+          <div class="example-body">
+            <p class="q">The Ikogosi solar array logs 7 daily generation values in kilowatt-hours: <code>daily_readings = [45, 52, 60, 58, 49, 63, 55]</code>. Write and trace a Python program that accumulates the 7-day total and computes the average daily generation rounded to 2 decimal places.</p>
+
+            <div class="study-code-snippet"
+                 data-title="solar_accumulator.py — 7-Day Solar Generation"
+                 data-lang="python"
+                 data-output="Total Generation: 382 kWh&#10;Average Generation: 54.57 kWh"
+                 data-notes='{"1":"Store the 7 daily solar generation readings (in kWh) in a list.","2":"Initialize the accumulator variable total_kwh to 0 before the loop begins.","4":"Counter-controlled FOR loop visits each element in daily_readings one by one.","5":"Accumulator pattern: add the current reading onto total_kwh.","7":"Divide final accumulated sum (382) by number of days (7) to get 54.5714...","8":"Convert numeric total_kwh to str and print 382 kWh.","9":"Round average_kwh to 2 decimal places (54.57 kWh) and print."}'
+                 data-trace='[{"line":1,"vars":{"len":7,"total_kwh":"—"},"note":"Allocate the 7-day solar readings list [45, 52, 60, 58, 49, 63, 55]."},{"line":2,"vars":{"len":7,"total_kwh":0},"note":"Initialize accumulator total_kwh = 0 outside the loop."},{"line":5,"vars":{"reading":45,"total_kwh":45},"note":"Day 1: total_kwh = 0 + 45 = 45 kWh."},{"line":5,"vars":{"reading":52,"total_kwh":97},"note":"Day 2: total_kwh = 45 + 52 = 97 kWh."},{"line":5,"vars":{"reading":60,"total_kwh":157},"note":"Day 3: total_kwh = 97 + 60 = 157 kWh."},{"line":5,"vars":{"reading":58,"total_kwh":215},"note":"Day 4: total_kwh = 157 + 58 = 215 kWh."},{"line":5,"vars":{"reading":49,"total_kwh":264},"note":"Day 5: total_kwh = 215 + 49 = 264 kWh."},{"line":5,"vars":{"reading":63,"total_kwh":327},"note":"Day 6: total_kwh = 264 + 63 = 327 kWh."},{"line":5,"vars":{"reading":55,"total_kwh":382},"note":"Day 7: total_kwh = 327 + 55 = 382 kWh. Loop finishes cleanly!"},{"line":7,"vars":{"total_kwh":382,"average_kwh":54.57},"note":"Compute mean: 382 / 7 = 54.5714... → rounds to 54.57 kWh."}]'><code>daily_readings = [45, 52, 60, 58, 49, 63, 55]
+total_kwh = 0
+
+for reading in daily_readings:
+    total_kwh += reading
+
+average_kwh = total_kwh / len(daily_readings)
+print("Total Generation: " + str(total_kwh) + " kWh")
+print("Average Generation: " + str(round(average_kwh, 2)) + " kWh")</code></div>
+
+            <ol class="steps-sol">
+              <li><strong>Initialize accumulator outside the loop:</strong> set <code>total_kwh = 0</code> so prior memory values cannot corrupt the sum.</li>
+              <li><strong>Accumulate across all 7 iterations:</strong>
+                <div class="m-calc-wrap">
+                  <div class="m-calc-head">
+                    <span>Accumulator &amp; Mean Calculation</span>
+                    <span class="m-tex-badge">LaTeX · 2 Steps</span>
+                  </div>
+                  <div class="m-step-list">
+                    <div class="m-step">
+                      <div class="m-step-meta">
+                        <span class="m-step-num"><b>1</b> Step 1</span>
+                        <span class="m-step-tag">Running Total</span>
+                      </div>
+                      <div class="m-step-eq"><div class="sp-math" data-latex="\text{total}\_\text{kwh} = ((((((0 + 45) + 52) + 60) + 58) + 49) + 63) + 55 = \boxed{382\text{ kWh}}"></div></div>
+                      <div class="m-step-note"><i class="m-step-note-icon" aria-hidden="true">💡</i><span>Each pass adds one day's reading: 45 → 97 → 157 → 215 → 264 → 327 → 382 kWh.</span></div>
+                    </div>
+                    <div class="m-step">
+                      <div class="m-step-meta">
+                        <span class="m-step-num"><b>2</b> Step 2</span>
+                        <span class="m-step-tag">Final Answer</span>
+                      </div>
+                      <div class="m-step-eq"><div class="sp-math" data-latex="\text{average}\_\text{kwh} = \frac{382}{7} = 54.5714… \approx \boxed{54.57\text{ kWh}}"></div></div>
+                      <div class="m-step-note"><i class="m-step-note-icon" aria-hidden="true">💡</i><span>Divide the final sum after the loop exits by <code>len(daily_readings)</code> (7 days) and round to 2 decimal places.</span></div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ol>
+            <div class="answer-line">Total Generation = 382 kWh · Average Generation = 54.57 kWh</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 3.2</span><h4>Countdown loop for diesel backup generator warm-up timer</h4></div>
+          <div class="example-body">
+            <p class="q">Before the backup diesel generator transfers load at night, its glow-plug controller counts down from 5 seconds to 1 second and then prints <code>"Generator Ready"</code>. Trace both the negative-step <code>FOR</code> loop and the equivalent <code>WHILE</code> loop.</p>
+
+            <div class="study-code-snippet"
+                 data-title="generator_warmup.py — Countdown Loop (Step = -1)"
+                 data-lang="python"
+                 data-output="Warm-up: 5 s&#10;Warm-up: 4 s&#10;Warm-up: 3 s&#10;Warm-up: 2 s&#10;Warm-up: 1 s&#10;Final k = 1 · Generator Ready"
+                 data-notes='{"1":"Start at 5, stop BEFORE 0, and step backwards by -1 each iteration.","2":"Prints 5, then 4, 3, 2, and finally 1.","3":"After the loop finishes, k retains its last assigned value (1) and prints Generator Ready."}'
+                 data-trace='[{"line":1,"vars":{"k":5},"note":"Iteration 1: k starts at 5 (5 > 0 is True)."},{"line":2,"vars":{"k":4},"note":"Iteration 2: step -1 updates k to 4."},{"line":2,"vars":{"k":3},"note":"Iteration 3: step -1 updates k to 3."},{"line":2,"vars":{"k":2},"note":"Iteration 4: step -1 updates k to 2."},{"line":2,"vars":{"k":1},"note":"Iteration 5: step -1 updates k to 1 (last value before 0)."},{"line":3,"vars":{"k":1,"status":"Ready"},"note":"Next value 0 hits stop bound; loop exits with k = 1."}]'><code>for k in range(5, 0, -1):
+    print("Warm-up:", k, "s")
+print("Final k =", k, "· Generator Ready")</code></div>
+
+            <ol class="steps-sol">
+              <li><strong>Start, stop, and negative step:</strong> <code>range(5, 0, -1)</code> begins at <code>5</code> and adds <code>-1</code> on each cycle while <code>k &gt; 0</code>.</li>
+              <li><strong>Generated sequence:</strong> <code>5, 4, 3, 2, 1</code> (5 iterations). Zero is the exclusive stop boundary and is never assigned to <code>k</code>.</li>
+              <li><strong>Equivalent <code>WHILE</code> countdown:</strong> initialize <code>sec = 5</code>, test <code>while sec &gt; 0:</code>, and include <code>sec -= 1</code> inside the loop body so <code>sec</code> reaches <code>0</code> and terminates cleanly.</li>
+            </ol>
+            <div class="answer-line">Sequence = 5, 4, 3, 2, 1 (5 iterations) · Final value of k after loop = 1</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 7. BRIDGE -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Ikogosi: <em>repair <code>solar_monitor.py</code></em></h2>
+        <p class="intro">Replace the runaway <code>while solar_output &gt; 0:</code> bug on Amina's terminal with a safe, bounded loop that totals all 7 solar logs and terminates cleanly. Complete the three steps below.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 3:</strong> Three lines of loop code can process thousands of readings automatically — but every loop must guarantee termination, either by iterating over a finite sequence with <code>FOR</code> or by stepping its control state toward <code>False</code> inside <code>WHILE</code>.</p>
+        </div>
+      </section>
+
+      <!-- 8. QUIZ -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB</em></h2>
+        <p class="intro">12 original exam-style questions plus 2 spaced-retrieval review questions. Select an option for instant feedback.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 12</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- 9. REFLECT -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each learning objective of Lesson 3.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can explain the purpose of iteration and choose between FOR and WHILE loops.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can trace <code>range(start, stop, step)</code> including negative countdown steps.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can write a condition-controlled WHILE loop that is guaranteed to terminate.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can use the accumulator pattern (<code>total += x</code>) to compute sums and averages.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can spot and fix infinite loop bugs and use <code>break</code>, <code>continue</code>, and sentinel values.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l03-exit">
+          <div class="aq-top"><h4>What sequence of numbers is printed by <code>for n in range(10, 2, -3): print(n, end=" ")</code>, and how many iterations run?</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="Your answer…" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>It prints <code>10 7 4</code> <b>(1)</b> — exactly <strong>3 iterations</strong> (the next step <code>1</code> is less than the exclusive stop bound <code>2</code>, so the loop stops) <b>(1)</b>.</p></div>
+          </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and write down everything you remember, then tick each: <strong>FOR vs WHILE</strong> · <strong><code>range(start, stop, step)</code></strong> stops at <code>stop - 1</code> · <strong>accumulator</strong> initialized to <code>0</code> outside the loop · <strong>infinite loop</strong> cause &amp; fix · <strong><code>break</code> vs <code>continue</code></strong> · <strong>sentinel value</strong>.</p>
+        </div>
+      </section>
+
+      <!-- 10. ASSIGNMENT -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Counter &amp; Conditional Loops</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B (30 marks) from 03-questions.md § Lesson 03</strong>. Type your attempt in each box first to unlock the model marking scheme.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
+
+        <h3>Part A · Practical Home Investigation (Trace Table Construction)</h3>
+        <div class="aq" data-answer="l03-part-a">
+          <div class="aq-top"><h4>Construct a manual dry-run trace table for an algorithm that calculates the total amount of fuel consumed by a backup generator running for 5 hours, consuming 1.5 litres during the first hour and increasing by 0.2 litres each subsequent hour (<code>hour = 1..5</code>). Record <code>hour</code>, <code>rate</code>, <code>total_fuel</code>, and <code>hour &lt;= 5</code>.</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="Hour 1: rate = 1.5 L, total_fuel = 1.5 L, cond = True …" aria-label="Part A trace table answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model trace table <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <div class="tbl-wrap">
+                <table class="tbl">
+                  <thead><tr><th>Iteration (<code>hour</code>)</th><th>Fuel Added (<code>rate</code>)</th><th>Accumulator (<code>total_fuel</code>)</th><th>Condition (<code>hour &lt;= 5</code>)</th></tr></thead>
+                  <tbody>
+                    <tr><td>1</td><td>1.5 L</td><td>1.5 L</td><td>True</td></tr>
+                    <tr><td>2</td><td>1.7 L</td><td>3.2 L</td><td>True</td></tr>
+                    <tr><td>3</td><td>1.9 L</td><td>5.1 L</td><td>True</td></tr>
+                    <tr><td>4</td><td>2.1 L</td><td>7.2 L</td><td>True</td></tr>
+                    <tr><td>5</td><td>2.3 L</td><td>9.5 L</td><td>True</td></tr>
+                    <tr><td>Post-loop (6)</td><td>—</td><td><strong>9.5 L</strong></td><td>False</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><b>(3 marks)</b> for accurate step-by-step variable values; <b>(2 marks)</b> for final accumulated fuel consumption of <strong>9.5 L</strong>.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · 30-Mark Written Examination Paper</h3>
+
+        <div class="aq" data-answer="l03-b1">
+          <div class="aq-top"><h4>b1. Differentiate between counter-controlled loops and condition-controlled loops with examples.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Counter-controlled vs condition-controlled…" aria-label="b1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>A <strong>counter-controlled loop</strong> repeats a specific, predetermined number of times governed by an index variable (e.g. <code>for i in range(10):</code>) <b>(2)</b>. A <strong>condition-controlled loop</strong> executes as long as a boolean condition remains <code>True</code>, where the number of iterations is not known in advance (e.g. <code>while sensor_val &gt; 0:</code>) <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b2">
+          <div class="aq-top"><h4>b2. Complete the dry-run trace table for:<br><code>p = 1</code><br><code>for i in range(1, 5):</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;p = p * i</code></h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Init: p = 1; Step 1 (i=1): p = …" aria-label="b2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Step</th><th><code>i</code></th><th>Calculation</th><th><code>p</code></th></tr></thead>
+                <tbody>
+                  <tr><td>Init</td><td>—</td><td>—</td><td>1 <b>(1)</b></td></tr>
+                  <tr><td>1</td><td>1</td><td><span class="sp-math" data-latex="1 \times 1"></span></td><td>1 <b>(1)</b></td></tr>
+                  <tr><td>2</td><td>2</td><td><span class="sp-math" data-latex="1 \times 2"></span></td><td>2 <b>(1)</b></td></tr>
+                  <tr><td>3</td><td>3</td><td><span class="sp-math" data-latex="2 \times 3"></span></td><td>6 <b>(0.5)</b></td></tr>
+                  <tr><td>4</td><td>4</td><td><span class="sp-math" data-latex="6 \times 4"></span></td><td>24 <b>(0.5)</b></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b3">
+          <div class="aq-top"><h4>b3. Explain what an <em>infinite loop</em> is, give code demonstrating one, and show how to fix it.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Definition, faulty code, and fixed code…" aria-label="b3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>An infinite loop is a loop whose exit condition is never satisfied (never becomes <code>False</code>), causing it to repeat endlessly without terminating <b>(1)</b>.<br>
+            <strong>Infinite loop example:</strong> <code>x = 1; while x &lt;= 5: print(x)</code> <b>(1)</b>.<br>
+            <strong>Fixed code:</strong> Increment the control variable inside the loop body: <code>x = 1; while x &lt;= 5: print(x); x += 1</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b4">
+          <div class="aq-top"><h4>b4. Write a Python program using a <code>for</code> loop to compute the sum of all odd integers from 1 to 19 inclusive.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="total = 0 …" aria-label="b4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><code>total = 0</code> <b>(1)</b><br>
+            <code>for num in range(1, 20, 2):</code> <b>(2)</b><br>
+            <code>&nbsp;&nbsp;&nbsp;&nbsp;total += num</code> <b>(1)</b><br>
+            <code>print("Sum:", total)</code> (Output: <code>Sum: 100</code>).</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b5">
+          <div class="aq-top"><h4>b5. Explain the difference between <code>break</code> and <code>continue</code> statements inside a loop.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="break vs continue…" aria-label="b5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><code>break</code> terminates the entire enclosing loop immediately and transfers execution to the statement directly after the loop <b>(2)</b>. <code>continue</code> skips only the remaining statements in the current iteration and jumps directly back to the next iteration test <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b6">
+          <div class="aq-top"><h4>b6. Describe the flowchart representation of a <code>while</code> loop that reads a sensor value until <code>sensor_value == 0</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Start oval -> Input parallelogram -> Decision diamond…" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>Start terminal oval <b>(1)</b> → Input parallelogram reading <code>sensor_value</code> <b>(1)</b> → Decision diamond testing <code>sensor_value != 0</code> <b>(1)</b> → <code>True</code> branch executes the loop body rectangle and follows a backward arrow (back-edge) to read the next sensor value; <code>False</code> branch exits to the End oval <b>(1)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b7">
+          <div class="aq-top"><h4>b7. What is the exact output of <code>for x in range(3, 15, 3): print(x, end=" ")</code>?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="Output values…" aria-label="b7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><code>3 6 9 12</code> <b>(3 marks)</b> (15 is the exclusive stop boundary and is not printed).</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l03-b8">
+          <div class="aq-top"><h4>b8. Why must the accumulator variable be initialized outside the loop rather than inside?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="If initialized inside the loop…" aria-label="b8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>If initialized inside the loop body, the accumulator resets to zero on every single iteration, erasing the running total from previous steps and leaving only the value of the final iteration <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-02/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 2: Conditional Logic &amp; Branching</a>
+          <a class="btn btn-tour" href="../lesson-04/index.html">Next: Lesson 4 — Arrays, Collections &amp; Indexing →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/programming-bench.js"></script>
+  <script src="../../assets/js/programming-zoom.js"></script>
+  <script src="../../assets/js/microgrid-props.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="../../assets/js/study-graph.js"></script>
+  <script src="graph.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script>
+    (function () {
+      if (!window.StudyMath || !window.StudyMath.renderLatex) return;
+      document.querySelectorAll(".sp-math[data-latex]").forEach(function (el) {
+        if (el.children.length || el.textContent.trim()) return;
+        var tex = el.getAttribute("data-latex");
+        if (!tex) return;
+        el.outerHTML = window.StudyMath.renderLatex(tex, el.tagName === "DIV");
+      });
+    })();
+  </script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
+</body>
+</html>

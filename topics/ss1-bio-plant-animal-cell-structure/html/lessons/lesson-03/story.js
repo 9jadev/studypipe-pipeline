@@ -1,114 +1,106 @@
-/* Lesson 03 · 3D story beats: Ogun River Pond Water & Onion Bulb at Mile 12 Market → 3D Protist & SA/V Lab */
+/* Lesson 03 · 3D story: green drain water at Mile 12 Market, then the pond organisms under Dr Amaka's microscope */
 (function () {
   "use strict";
   if (!window.StoryStage || typeof THREE === "undefined") return;
 
   var WIDE = [[0, 2.6, 7.2], [0, 1.3, 0]];
 
-  function buildSafariProp(labelText, kind, tagBg) {
+  // a glass jar of green drain water, held by Chinedu
+  function buildJar() {
     var g = new THREE.Group();
-    if (window.CellKit) {
-      var pr = CellKit.protist({ type: kind, scale: 0.44 });
-      pr.group.position.y = 0.28;
-      g.add(pr.group);
-    }
-    var tag = StoryStage.sign(labelText, tagBg || "rgba(13,156,126,0.95)", "#fff", 0.16);
-    tag.position.set(0, 0.68, 0.05);
-    g.add(tag);
+    var glass = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, transparent: true, opacity: 0.32, clearcoat: 1, depthWrite: false, side: THREE.DoubleSide });
+    var body = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.24, 20, 1, true), glass); body.position.y = 0.12; g.add(body);
+    var water = new THREE.Mesh(new THREE.CylinderGeometry(0.092, 0.092, 0.17, 20), StoryStage.std("#4f9a3a", 0.25, { transparent: true, opacity: 0.88 })); water.position.y = 0.09; g.add(water);
+    var base = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.012, 20), glass); g.add(base);
+    g.userData.water = water;
     return g;
   }
 
-  function reset(w) {
-    var p = w.people;
-    if (p.ngozi.parent !== w.props.market) { p.ngozi.parent.remove(p.ngozi); w.props.market.add(p.ngozi); }
-    p.ngozi.userData.target = null; p.ngozi.userData.faceTarget = null; p.ngozi.hold(null);
-    p.ngozi.position.set(0, 0, -1.0); p.ngozi.rotation.y = 0;
+  // a watch-glass dish of pond water with four animated protists (the "microscope view")
+  function buildDish() {
+    var g = new THREE.Group(), live = [];
+    var glass = new THREE.MeshPhysicalMaterial({ color: 0xffffff, roughness: 0.05, transparent: true, opacity: 0.28, clearcoat: 1, depthWrite: false });
+    var rim = new THREE.Mesh(new THREE.CylinderGeometry(0.62, 0.62, 0.05, 40), glass); rim.position.y = 0.025; g.add(rim);
+    var water = new THREE.Mesh(new THREE.CylinderGeometry(0.58, 0.58, 0.036, 40), StoryStage.std("#7fbf6a", 0.2, { transparent: true, opacity: 0.55 })); water.position.y = 0.032; g.add(water);
+    if (window.CellKit) {
+      [["amoeba", -0.34, 0.12, 0.2, 0.33], ["paramecium", 0.18, 0.22, 0.2, 0.24], ["euglena", -0.12, -0.26, 0.2, 0.2], ["volvox", 0.32, -0.16, 0.2, 0.2]].forEach(function (c) {
+        var o = window.CellKit.protist(c[0]);
+        o.scale.setScalar(c[4]);
+        o.position.set(c[1], 0.15, c[2]);
+        g.add(o); live.push(o);
+      });
+    }
+    g.userData.live = live;
+    return g;
   }
 
   var beats = [
     {
-      caption: "Ogun River bank near Mile 12 Market. Tunde scoops green pond water and holds an onion bulb.",
+      caption: "Mile 12 Market, Lagos. A drain runs beside the stalls.",
       shot: WIDE, instant: true, hold: 5,
       who: "cust1",
-      text: "Mama Titi! In this jar of green Ogun River water, single cells swim on their own — so why do humans and onion plants need millions of cells arranged into tissues and organs?",
-      run: function (w) { reset(w); w.people.cust1.set("point"); }
+      text: "Coach, look what I scooped from the drain beside the market! The water is green.",
+      run: function (w) { w.people.cust1.hold(w.props.jarProp, "right"); w.people.cust1.set("talk"); }
     },
     {
-      caption: "Alhaji Musa calls the whole onion bulb a 'plant tissue'.",
-      shot: [[-0.4, 2.0, 5.0], [0.2, 1.3, 0.6]], hold: 5,
+      caption: "Coach Danjuma is not impressed.",
+      shot: [[0.3, 2.0, 5.0], [0.3, 1.2, 1.4]], hold: 4.8,
       who: "cust2",
-      text: "And look at this purple onion bulb on the table — isn't an onion bulb just a single storage tissue?",
-      run: function (w) { reset(w); w.people.cust2.set("talk"); w.people.ngozi.set("think"); }
+      text: "Nothing lives in that. It is just dirty water. Throw it away!",
+      run: function (w) { w.people.cust2.set("talk"); w.people.cust1.set("think"); }
     },
     {
-      caption: "Mama Titi explains the 4 forms of living cells and why an onion bulb is an ORGAN!",
-      shot: [[0.3, 1.9, 2.5], [0, 1.6, -1]], hold: 5.2,
-      who: "ngozi",
-      text: "Careful! The peeling skin is an epidermal tissue, but the whole onion bulb combines epidermis, storage parenchyma, xylem, and phloem — so an onion bulb is a complete ORGAN!",
-      run: function (w) { reset(w); w.people.ngozi.set("talk"); }
-    },
-    {
-      caption: "Four forms of living cells: Free-Living (Euglena), Colony (Volvox), Filament (Spirogyra), and Tissue/Organ.",
-      shot: [[0.65, 1.65, 1.55], [0.65, 1.35, 0.05]], hold: 5.5,
-      who: "ngozi",
-      text: "And in your pond jar live the other three forms: single free-living Euglena and Amoeba, spherical Volvox colonies, and unbranched Spirogyra filaments!",
-      run: function (w) { reset(w); w.people.ngozi.set("point"); }
-    },
-    {
-      caption: "Why can't a single Amoeba grow as large as a catfish?",
-      shot: [[1.4, 1.75, 2.2], [0.5, 1.35, 0.0]], hold: 5,
-      who: "ngozi",
-      text: "As a cell grows bigger, its volume L³ grows much faster than its surface area 6L² — so its surface-area-to-volume ratio 6 over L plummets and simple diffusion can no longer feed its centre!",
-      run: function (w) { reset(w); w.people.ngozi.set("think"); }
-    },
-    {
-      caption: "At the Yaba Microscopy Lab with Dr. Kunle…",
-      shot: [[40.2, 2.3, 3.4], [40.3, 1.4, -1.8]], hold: 5.5,
+      caption: "At the LUTH lab: four organisms in one drop.",
+      shot: [[40.9, 2.3, 1.0], [40.05, 1.05, -2.1]], instant: true, hold: 6,
       who: "amaka",
-      text: "Let's inspect the 3D pond protists on the bench and test how surface-area-to-volume ratio SA ÷ V = 6 ÷ L changes across five cube sizes!",
-      run: function (w) {
-        var a = w.people.amaka;
-        a.userData.faceTarget = new THREE.Vector3(0.6, 0, -2.3);
-        a.set("point");
-      }
+      text: "Look: a blob that keeps changing shape, a slipper covered in hairs, a green spindle with a whip, and a hollow green ball.",
+      run: function (w) { w.people.amaka.userData.faceTarget = new THREE.Vector3(0, 0, -2.1); w.people.amaka.set("talk"); }
+    },
+    {
+      caption: "A puzzle about size and cells.",
+      shot: [[40.4, 2.2, 3.2], [40.2, 1.4, -1.8]], hold: 5.5,
+      who: "amaka",
+      text: "Each of these is a whole living thing. Yet Chinedu is billions of cells working together. Why the difference?",
+      run: function (w) { w.people.amaka.set("think"); }
+    },
+    {
+      caption: "Your turn: the pond survey and the cube bench.",
+      shot: [[40.2, 2.3, 3.4], [40.3, 1.4, -1.8]], hold: 5, 
+      who: "amaka",
+      text: "Come, let us survey the pond and then cut some agar cubes. The numbers will tell the story.",
+      run: function (w) { w.people.amaka.set("talk"); }
     }
   ];
 
   window.StoryStage.wire("story-stage", "story", beats, {
-    names: {
-      ngozi: "Mama Titi",
-      cust1: "Tunde (SS1 Student)",
-      cust2: "Alhaji Musa",
-      amaka: "Dr. Kunle (Yaba Lab)"
-    },
+    names: { ngozi: "Mama Ngozi", cust1: "Chinedu", cust2: "Coach Danjuma", amaka: "Dr Amaka" },
     setup: function (api) {
-      var mSign = StoryStage.sign("OGUN RIVER POND SAFARI · MILE 12", "rgba(13,156,126,0.95)", "#fff", 0.44);
+      var mSign = StoryStage.sign("MILE 12 MARKET · LAGOS", "rgba(13,156,126,0.95)", "#fff", 0.5);
       mSign.position.copy(api.props.mSign.position);
-      api.props.market.remove(api.props.mSign);
-      api.props.market.add(mSign);
-      api.props.mSign = mSign;
-
-      var lSign = StoryStage.sign("YABA CELL FORMS & SA/V LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
+      api.props.market.remove(api.props.mSign); api.props.market.add(mSign); api.props.mSign = mSign;
+      var lSign = StoryStage.sign("LUTH BIOLOGY LAB", "rgba(59,108,246,0.95)", "#fff", 0.42);
       lSign.position.copy(api.props.lSign.position);
-      api.props.lab.remove(api.props.lSign);
-      api.props.lab.add(lSign);
-      api.props.lSign = lSign;
+      api.props.lab.remove(api.props.lSign); api.props.lab.add(lSign); api.props.lSign = lSign;
 
-      if (api.props.bottleA) api.props.bottleA.visible = false;
-      if (api.props.bottleB) api.props.bottleB.visible = false;
-      if (api.props.can) api.props.can.visible = false;
+      // chemistry-lab props are not needed in a biology lab
+      ["bottleA", "bottleB", "can", "balance", "burette", "flask", "vflask"].forEach(function (k) { if (api.props[k]) api.props[k].visible = false; });
 
-      var propA = buildSafariProp("Volvox (Hollow Colony)", "volvox", "rgba(34,197,94,0.95)");
-      propA.position.set(0.38, 0.94, 0.08);
-      api.props.market.add(propA);
-      api.props.clockA = propA;
-      api.props.bottleA = propA;
-
-      var propB = buildSafariProp("Spirogyra (Filament)", "spirogyra", "rgba(13,156,126,0.95)");
-      propB.position.set(0.92, 0.94, 0.08);
-      api.props.market.add(propB);
-      api.props.clockB = propB;
-      api.props.bottleB = propB;
+      var jar = buildJar();
+      api.props.jarProp = jar;
+      api.props.jar = jar;
+      var dish = buildDish();
+      dish.position.set(0, 1.0, -2.1);
+      api.props.lab.add(dish);
+      api.props.dish = dish;
+    },
+    onTick: function (api, dt, t) {
+      var live = api.props.dish && api.props.dish.userData.live;
+      if (!live) return;
+      live.forEach(function (o, i) {
+        if (o.userData.update) o.userData.update(dt, t);
+        o.position.y = 0.15 + 0.03 * Math.sin(t * 1.2 + i);
+        o.rotation.y = Math.sin(t * 0.4 + i * 2) * 0.4;
+      });
     }
   });
 })();

@@ -1,186 +1,170 @@
-/* Lesson 04 · Blood Vessels, Capillary Exchange, the Lymphatic System & Cardiovascular Disorders — content data and 12 WAEC/NECO/JAMB quiz questions */
+/* Lesson 04 · The Beating Heart — sort items, cycle-explorer pins and the 12 quiz questions (03-questions.md § Lesson 04) */
 (function () {
   "use strict";
 
   window.L04 = {
-    // ---- 1. Arteries, Capillaries & Veins/Lymphatics Sort items (12 cards across 3 bins) ----
+    // ---- 2A sort: speeds it up or slows it down? ----
     items: [
-      { id: "art-wall", name: "Thick tunica media rich in smooth muscle and elastic fibres", emo: "🔴", bin: "shm", why: "Arteries & Arterioles: Thick muscular and elastic walls withstand high systolic surges (~120 mmHg) and recoil during diastole." },
-      { id: "art-lumen", name: "Narrow circular lumen with NO internal valves along vessel length", emo: "⭕", bin: "shm", why: "Arteries & Arterioles: High pulsatile pressure drives blood rapidly away from the heart without needing pocket valves (except semilunar valves at the heart base)." },
-      { id: "art-deep", name: "Usually located deep within body muscles and spurts rhythmically if cut", emo: "💥", bin: "shm", why: "Arteries & Arterioles: Deep placement protects high-pressure arteries; severing an artery causes bright-red pulsatile spurting." },
-      { id: "arteriole", name: "Arterioles constrict or dilate (vasoconstriction / vasodilation) to regulate flow", emo: "🎛️", bin: "shm", why: "Arteries & Arterioles: Smooth muscle rings in arterioles control blood distribution to organs and cause the steepest pressure drop." },
-      { id: "cap-wall", name: "Wall is ONE cell thick — a single layer of squamous endothelium", emo: "🔬", bin: "periodic", why: "Capillaries & Tissue Fluid: Lacking tunica media and externa reduces diffusion distance to ~1 µm for rapid gas and nutrient exchange." },
-      { id: "cap-slow", name: "Huge total cross-sectional area (~4,500 cm²) slows velocity to ~0.03 cm/s", emo: "🐢", bin: "periodic", why: "Capillaries & Tissue Fluid: By continuity (v = Q ÷ A), branching into billions of capillaries slows blood flow 1,000-fold to maximise exchange time." },
-      { id: "ultra-out", name: "Arterial end: hydrostatic pressure P_c (35 mmHg) > π_c (25 mmHg) forces fluid out", emo: "💧", bin: "periodic", why: "Capillaries & Tissue Fluid: Net Filtration Pressure NFP = +10 mmHg drives ultrafiltration of water, glucose, amino acids, and O₂ into intercellular spaces." },
-      { id: "no-rbc-prot", name: "Tissue fluid lacks red blood cells, platelets, and large plasma proteins", emo: "🚫", bin: "periodic", why: "Capillaries & Tissue Fluid: Erythrocytes, platelets, albumin, and fibrinogen are too large to pass through normal capillary endothelial pores." },
-      { id: "vein-lumen", name: "Thin, less elastic wall surrounding a wide, easily collapsible lumen", emo: "🔵", bin: "non", why: "Veins & Lymphatic System: Veins carry blood back toward the heart under very low hydrostatic pressure (~2–10 mmHg)." },
-      { id: "vein-valves", name: "Internal pocket semilunar valves + skeletal muscle contraction prevent backflow", emo: "🚪", bin: "non", why: "Veins & Lymphatic System: Contracting leg muscles squeeze thin-walled veins and pocket valves ensure blood moves only uphill toward the heart." },
-      { id: "lymph-return", name: "Blind-ended lymph capillaries drain excess 15% tissue fluid to subclavian veins", emo: "🟢", bin: "non", why: "Veins & Lymphatic System: While 85% of tissue fluid re-enters venules by osmosis (NFP = −10 mmHg), 15% drains as lymph via the thoracic duct into the subclavian veins." },
-      { id: "lacteals", name: "Intestinal lacteals absorb fatty acids & glycerol; lymph nodes make lymphocytes", emo: "🛡️", bin: "non", why: "Veins & Lymphatic System: Lacteals in ileum villi absorb emulsified lipids, while lymph nodes filter bacteria and produce antibodies." }
+      { id: "exercise", name: "Exercise", emo: "↑", bin: "faster", why: "Working muscles need more oxygen and make more carbon dioxide, so the cardiac centre speeds up the SAN." },
+      { id: "fear", name: "Fear or excitement (adrenaline)", emo: "↑", bin: "faster", why: "Adrenaline acts on the SAN and raises the rate." },
+      { id: "fever", name: "Fever", emo: "↑", bin: "faster", why: "A raised body temperature speeds up the heart's activity." },
+      { id: "co2", name: "High carbon dioxide in the blood", emo: "↑", bin: "faster", why: "The cardiac centre senses the extra carbon dioxide and speeds the heart up." },
+      { id: "coffee", name: "Strong coffee (caffeine)", emo: "↑", bin: "faster", why: "Caffeine is a stimulant and raises the heart rate." },
+      { id: "sleep", name: "Sleep", emo: "↓", bin: "slower", why: "The body needs little oxygen at rest, so the vagus nerve keeps the rate low." },
+      { id: "rest", name: "Rest after exercise", emo: "↓", bin: "slower", why: "Once the muscles stop working, the rate glides back towards the resting value." },
+      { id: "fit", name: "Long-term athletic fitness (resting rate)", emo: "↓", bin: "slower", why: "A trained heart pumps more blood per beat, so it needs fewer beats at rest." },
+      { id: "vagus", name: "Impulses in the vagus nerve", emo: "↓", bin: "slower", why: "The vagus nerve carries the cardiac centre's slow-down signal to the SAN." },
+      { id: "still", name: "Lying still and calm", emo: "↓", bin: "slower", why: "A calm, still body asks for little blood flow, so the rate is low." }
     ],
 
-    // ---- 2. 3D Starling Capillary Filtration Bench trials (Distance along capillary L in %, π_c = 25.0 mmHg) ----
-    trials: [
-      { label: "A", L: 0,   t: "35.0",  T: "25.0",  T2: "+10.0" },
-      { label: "B", L: 25,  t: "30.0",  T: "25.0",  T2: "+5.0" },
-      { label: "C", L: 50,  t: "25.0",  T: "25.0",  T2: "0.0" },
-      { label: "D", L: 75,  t: "20.0",  T: "25.0",  T2: "-5.0" },
-      { label: "E", L: 100, t: "15.0",  T: "25.0",  T2: "-10.0" }
-    ],
-    tOptions: ["35.0", "30.0", "25.0", "20.0", "15.0"],
-    TOptions: ["10.0", "15.0", "25.0", "35.0", "45.0"],
-    T2Options: ["+10.0", "+5.0", "0.0", "-5.0", "-10.0"],
-
-    // ---- 3. Systemic Vascular Tree & Lymphatic Explorer pins ----
+    // ---- cycle explorer: six time pins; each maps to a heart phase (0..1) of the HeartKit beat model ----
+    // time t (s) is read on a clock where one cycle at 75 beats per minute lasts 0.8 s;
+    // the six phases are chosen so the 3D heart shows: filling, filling, atria squeezing, lub, ejecting, dub.
+    cycleBpm: 75,
     pins: [
-      { frac: -1.0, label: "1 · Elastic Aorta & Muscular Arteries", emo: "🔴", x: "P = 120/80 mmHg · v ≈ 35 cm/s", v: "Thick Tunica Media", a: "Narrow Lumen · No Valves", ke: "Elastic Recoil", pe: "Away from Heart", note: "Arteries carry blood away from the heart under high pulsatile pressure. Thick smooth muscle and elastic fibres prevent bursting and maintain diastolic flow." },
-      { frac: -0.5, label: "2 · Arterioles & Pre-Capillary Sphincters", emo: "🎛️", x: "P drops 95 → 35 mmHg", v: "Smooth Muscle Rings", a: "Vasoconstriction / Dilation", ke: "Resistance Vessels", pe: "Shunts Blood to Organs", note: "Arterioles are the main resistance vessels of the body: they dilate in active skeletal muscles during exercise and constrict in the gut or skin during cold/fright." },
-      { frac: 0.0,  label: "3 · Capillary Bed (Arterial End — Ultrafiltration)", emo: "💧", x: "P_c = 35 > π_c = 25 mmHg", v: "NFP = +10 mmHg (Outward)", a: "1-Cell Squamous Endothelium", ke: "Forms Tissue Fluid", pe: "No RBCs or Albumin", note: "At the arterial end of a capillary, outward hydrostatic pressure (35 mmHg) exceeds inward plasma protein osmotic pressure (25 mmHg), forcing water, glucose, amino acids, and O₂ out as tissue fluid." },
-      { frac: 0.5,  label: "4 · Capillary Bed (Venous End — Osmotic Reabsorption)", emo: "🔄", x: "P_c = 15 < π_c = 25 mmHg", v: "NFP = −10 mmHg (Inward)", a: "85% Fluid Reabsorbed", ke: "Carries CO₂ & Urea", pe: "Drains to Venules", note: "By the venous end, friction has lowered hydrostatic pressure to 15 mmHg while retained plasma proteins still exert 25 mmHg osmotic pull (NFP = −10 mmHg), drawing ~85% of fluid and CO₂/urea back into the blood." },
-      { frac: 1.0,  label: "5 · Veins (Pocket Valves) & Lymphatic Ducts", emo: "🟢", x: "P = 10 → 2 mmHg · 15% Lymph", v: "Wide Lumen + Pocket Valves", a: "Skeletal Muscle Pump", ke: "Lymph Nodes & Lacteals", pe: "Subclavian Vein Return", note: "The remaining 15% of tissue fluid (~3.0 L/day) enters blind-ended lymph capillaries, passes through lymph nodes (phagocytes + lymphocytes), and rejoins venous blood at the left and right subclavian veins." }
-    ]
+      { t: 0.0, ph: 0.64, label: "0.0 s" },
+      { t: 0.1, ph: 0.80, label: "0.1 s" },
+      { t: 0.2, ph: 0.93, label: "0.2 s" },
+      { t: 0.4, ph: 0.08, label: "0.4 s" },
+      { t: 0.6, ph: 0.22, label: "0.6 s" },
+      { t: 0.8, ph: 0.57, label: "0.8 s" }
+    ],
+
+    quizNote: "03-questions.md § Lesson 04"
   };
 
-  // ---- 4. 12 WAEC / NECO / JAMB Quiz Questions ----
   window.LESSON_QUIZ = [
-    {
-      q: "Which of the following structural features correctly distinguishes a mammalian <strong>artery</strong> from a <strong>vein</strong> in transverse section?",
-      o: [
-        "An artery has a thin muscular wall, a wide lumen, and internal pocket valves",
-        "An artery has a thick muscular and elastic wall (tunica media), a relatively narrow circular lumen, and no valves along its length",
-        "An artery has a wall that is only one endothelial cell thick",
-        "An artery carries blood under low non-pulsatile pressure toward the heart"
-      ],
-      a: 1,
-      e: "<strong>Arteries</strong> have a thick <strong>tunica media</strong> (elastic and smooth muscle fibres) and a <strong>narrow circular lumen</strong> without internal valves; <strong>veins</strong> have thin walls, a <strong>wide lumen</strong>, and <strong>semilunar pocket valves</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "Why do mammalian <strong>veins</strong> possess pocket (semilunar) valves at intervals along their length whereas arteries do not?",
-      o: [
-        "Because veins carry oxygenated blood at 120 mmHg",
-        "Because blood in veins flows at very low pressure (often uphill against gravity), so valves are needed to prevent backflow",
-        "To prevent red blood cells from entering the right atrium",
-        "To slow down blood velocity inside the aorta"
-      ],
-      a: 1,
-      e: "Venous blood pressure is very low (<code>2–10 mmHg</code>); <strong>pocket valves</strong> work with surrounding <strong>skeletal muscle contractions</strong> and respiratory movements to keep blood moving one-way toward the heart.",
-      src: "WAEC-style"
-    },
-    {
-      q: "How is the structure of a <strong>blood capillary</strong> specifically adapted for rapid exchange of oxygen, glucose, and carbon dioxide with surrounding tissue cells?",
-      o: [
-        "Its wall consists of three thick layers of collagen and smooth muscle",
-        "Its wall is a single layer of flattened squamous endothelial cells (one cell thick) with microscopic pores and a very narrow lumen (~8 µm) through which red blood cells pass in single file",
-        "It contains pocket valves every 10 micrometres",
-        "Blood flows fastest in capillaries (~35 cm/s)"
-      ],
-      a: 1,
-      e: "A <strong>one-cell-thick squamous endothelium</strong> minimises diffusion distance (~1 µm), and the 8 µm diameter forces biconcave RBCs to brush directly against the capillary wall in single file.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Although an individual capillary is microscopic, why does blood flow <strong>slowest</strong> in the capillary beds (~0.03 cm/s) compared to the aorta (~35 cm/s)?",
-      o: [
-        "Because the heart stops beating whenever blood enters capillaries",
-        "Because the combined total cross-sectional area of billions of parallel capillaries (~4,500 cm²) is over 1,000 times larger than the cross-sectional area of the aorta (~4.5 cm²), and v = Q ÷ A",
-        "Because capillaries have the highest blood pressure in the body",
-        "Because red blood cells solidify inside capillaries"
-      ],
-      a: 1,
-      e: "By the law of continuity (<code>A₁v₁ = A₂v₂</code>), when total cross-sectional area <code>A</code> increases 1,000-fold in the capillary bed, flow velocity <code>v</code> drops 1,000-fold, giving ample time for diffusion.",
-      src: "JAMB-style"
-    },
-    {
-      q: "At the <strong>arterial end</strong> of a systemic capillary, blood hydrostatic pressure is <strong>P_c = 35 mmHg</strong> and plasma protein colloid osmotic pressure is <strong>π_c = 25 mmHg</strong>. What is the Net Filtration Pressure (NFP) and what process occurs?",
-      o: [
-        "NFP = +10 mmHg; ultrafiltration of water, glucose, amino acids, and oxygen outward to form tissue fluid",
-        "NFP = −10 mmHg; osmotic reabsorption of fluid into the capillary",
-        "NFP = +60 mmHg; bursting of red blood cells",
-        "NFP = 0 mmHg; no movement of fluid"
-      ],
-      a: 0,
-      e: "At the arterial end, <code>NFP = P_c − π_c = 35 − 25 = +10 mmHg</code> (outward), driving <strong>ultrafiltration</strong> to form interstitial <strong>tissue fluid</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "Which of the following components of whole mammalian blood are <strong>ABSENT</strong> from normal intercellular <strong>tissue fluid</strong> and <strong>lymph</strong>?",
-      o: [
-        "Water, glucose, and mineral ions",
-        "Amino acids and dissolved oxygen",
-        "Red blood cells (erythrocytes), platelets (thrombocytes), and large plasma proteins (such as albumin and fibrinogen)",
-        "Leucocytes (lymphocytes) and urea"
-      ],
-      a: 2,
-      e: "<strong>Erythrocytes, platelets, and large plasma proteins</strong> cannot pass through the tiny endothelial pores of normal capillary walls; phagocytes and lymphocytes can squeeze through by amoeboid movement.",
-      src: "WAEC-style"
-    },
-    {
-      q: "At the <strong>venous end</strong> of a capillary bed, hydrostatic pressure has fallen to <strong>P_c = 15 mmHg</strong> while plasma protein osmotic pressure remains <strong>π_c = 25 mmHg</strong>. What happens to the tissue fluid?",
-      o: [
-        "All tissue fluid remains permanently trapped between cells",
-        "NFP = −10 mmHg (inward), so ~85% of the tissue fluid (carrying CO₂ and urea) is reabsorbed into the capillary by osmosis, while the remaining ~15% drains into blind-ended lymphatic capillaries",
-        "Red blood cells are forced out of the venule",
-        "Hydrostatic pressure rises back to 120 mmHg"
-      ],
-      a: 1,
-      e: "Because <code>P_c (15) < π_c (25)</code>, <code>NFP = −10 mmHg</code> pulls ~85% of fluid back into the venule; the remaining ~15% enters <strong>lymphatic vessels</strong> as <strong>lymph</strong>.",
-      src: "JAMB-style"
-    },
-    {
-      q: "Through which major veins does <strong>lymph</strong> from the thoracic duct and right lymphatic duct finally return into the blood circulatory system?",
-      o: [
-        "Renal veins",
-        "Pulmonary veins",
-        "Left and right subclavian veins (near the collarbones)",
-        "Hepatic portal vein"
-      ],
-      a: 2,
-      e: "The lymphatic ducts empty lymph back into the venous bloodstream at the <strong>left and right subclavian veins</strong> just before they join the superior vena cava.",
-      src: "NECO-style"
-    },
-    {
-      q: "Which of the following is NOT a function of the mammalian <strong>lymphatic system</strong>?",
-      o: [
-        "Returning excess tissue fluid and leaked proteins to the bloodstream to prevent oedema",
-        "Absorbing fatty acids and glycerol via lacteals in the intestinal villi",
-        "Producing lymphocytes and filtering bacteria inside lymph nodes",
-        "Transporting oxygen bound to haemoglobin from the lungs to the brain"
-      ],
-      a: 3,
-      e: "Lymph contains <strong>no red blood cells or haemoglobin</strong>, so it does not transport oxygen from the lungs; its three roles are <strong>fluid return, lipid absorption (lacteals), and immune defence (lymph nodes)</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "Severe swelling (<strong>elephantiasis / lymphoedema</strong>) of the legs in tropical West Africa is caused when adult parasitic filarial worms (<em>Wuchereria bancrofti</em>, transmitted by mosquitoes) block the:",
-      o: [
-        "Coronary arteries",
-        "Pulmonary veins",
-        "Lymphatic vessels and lymph nodes, preventing drainage of excess tissue fluid",
-        "Bicuspid valve"
-      ],
-      a: 2,
-      e: "When <strong><em>Wuchereria bancrofti</em></strong> worms obstruct lymphatic vessels, the 15% excess tissue fluid (~3 L/day) cannot drain back to the subclavian veins, causing massive <strong>oedema (elephantiasis)</strong>.",
-      src: "WAEC-style"
-    },
-    {
-      q: "Why does a child suffering from severe protein malnutrition (<strong>kwashiorkor</strong>) develop a swollen abdomen and puffy ankles (<strong>oedema</strong>)?",
-      o: [
-        "High blood protein concentration pulls too much water into veins",
-        "Deficiency of plasma proteins (especially albumin) lowers plasma colloid osmotic pressure (π_c), so water cannot be reabsorbed at the venous end of capillaries and accumulates in tissue spaces",
-        "Excessive red blood cells block the aorta",
-        "The tricuspid valve has four flaps"
-      ],
-      a: 1,
-      e: "In <strong>kwashiorkor</strong>, low liver synthesis of <strong>albumin</strong> reduces inward osmotic pull <code>π_c</code> below 15 mmHg, crippling venous reabsorption and leaving excess fluid in the tissues.",
-      src: "JAMB-style"
-    },
-    {
-      q: "If <strong>20.0 L/day</strong> of fluid filters out at the arterial ends of systemic capillaries and <strong>85%</strong> is reabsorbed directly at the venous ends, what volume of <strong>lymph</strong> must be returned to the subclavian veins per day to prevent oedema?",
-      o: ["1.5 L/day", "3.0 L/day", "17.0 L/day", "20.0 L/day"],
-      a: 1,
-      e: "Reabsorbed volume <code>V_reabs = 0.85 × 20.0 = 17.0 L/day</code>. Remaining lymph volume <code>V_lymph = 20.0 − 17.0 = 3.0 L/day</code> (15% of 20.0 L).",
-      src: "JAMB-style"
-    }
-  ];
+ {
+  "q": "Chidi listens through Dr Aisha's stethoscope after his sprint. Baba Sule insists the \"lub\" is the heart muscle clapping as it squeezes. What really produces the \"lub\"?",
+  "o": [
+   "The semilunar valves snapping shut as the ventricles relax",
+   "The tricuspid and bicuspid valves shutting as the ventricles begin to contract",
+   "The atria contracting and blood striking the ventricle walls",
+   "Blood rushing into the aorta as the semilunar valves open"
+  ],
+  "a": 1,
+  "e": "When ventricular pressure climbs above atrial pressure, the two atrioventricular (AV) valves, the tricuspid and the bicuspid, are forced shut; that closure is the first sound, \"lub\". Option A describes the second sound, \"dub\", so it swaps the two sounds. Option C is Baba Sule's slip in another form: a heart sound comes from valves closing, not from a chamber squeezing. Option D names a valve opening, and valves make their sound when they close, not when they open."
+ },
+ {
+  "q": "At the screening tent, Dr Aisha counts 25 beats at a volunteer's wrist in 15 seconds. What are the volunteer's heart rate and the length of one cardiac cycle?",
+  "o": [
+   "100 beats min⁻¹; 1.67 s",
+   "25 beats min⁻¹; 2.4 s",
+   "375 beats min⁻¹; 0.16 s",
+   "100 beats min⁻¹; 0.60 s"
+  ],
+  "a": 3,
+  "e": "Heart rate = beats in t × 60/t = 25 × 60/15 = 25 × 4 = 100 beats min⁻¹. Cycle time T = 60 s ÷ heart rate = 60 ÷ 100 = 0.60 s. Option A has the right rate but turns the division upside down (100 ÷ 60 = 1.67). Option B forgets to scale the 15 s count up to one minute. Option C multiplies by 15 instead of by 60/15 = 4, a scaling slip that gives an impossible rate."
+ },
+ {
+  "q": "Which sequence shows the correct path of the electrical impulse that starts each heartbeat?",
+  "o": [
+   "Sinoatrial node → atrioventricular node → bundle of His → Purkinje fibres",
+   "Atrioventricular node → sinoatrial node → Purkinje fibres → bundle of His",
+   "Sinoatrial node → bundle of His → atrioventricular node → Purkinje fibres",
+   "Medulla oblongata → sinoatrial node → atrioventricular node → bundle of His"
+  ],
+  "a": 0,
+  "e": "The SAN in the right atrium wall fires first and the wave crosses both atria; the AVN holds it for a moment, then the bundle of His carries it down the septum and the Purkinje fibres spread it through the ventricle walls. Option B starts at the wrong node and reverses the last two steps. Option C places the bundle of His before the AVN, but the bundle can only receive the impulse after the AVN has passed it on. Option D is Baba Sule's myth: heart muscle is myogenic, and the brain only changes the rate; it does not start each beat."
+ },
+ {
+  "q": "Chidi's heart rate after his sprint was 132, 116, 96, 80, 72 and 68 beats min⁻¹ at 0, 1, 2, 3, 4 and 5 minutes. Between which two readings did his heart rate fall by the largest amount?",
+  "o": [
+   "0 and 1 minute",
+   "3 and 4 minutes",
+   "1 and 2 minutes",
+   "4 and 5 minutes"
+  ],
+  "a": 2,
+  "e": "The falls are 132 − 116 = 16, 116 − 96 = 20, 96 − 80 = 16, 80 − 72 = 8 and 72 − 68 = 4 beats min⁻¹, so the biggest drop (20) is between 1 and 2 minutes. Option A is the tempting guess \"the first minute always falls most\", but it fell by 16, not 20. Options B and D are the smallest drops, where the curve is flattening out as it nears the resting rate, which is why the points are joined with a smooth curve, not a straight line."
+ },
+ {
+  "q": "While the ventricles are contracting and blood is being driven into the aorta and pulmonary artery, which statement about the valves is correct?",
+  "o": [
+   "The AV valves are shut and the semilunar valves are open.",
+   "The AV valves are open and the semilunar valves are shut.",
+   "The AV valves and the semilunar valves are both open.",
+   "The AV valves and the semilunar valves are both shut."
+  ],
+  "a": 0,
+  "e": "To push blood out into the arteries, the semilunar valves must be open; at the same moment the AV valves must be shut, or blood would be forced back up into the atria. Option B is the state while the heart is relaxed and filling, the reverse of this stage. Option C would let blood escape backwards into the atria. Option D can only last an instant at the very start of contraction, before ventricular pressure passes arterial pressure; while blood is actually flowing out, the semilunar valves are open."
+ },
+ {
+  "q": "Dr Aisha's own resting heart rate is 64 beats min⁻¹ and her stroke volume is 75 cm³. What is her cardiac output?",
+  "o": [
+   "4800 dm³ min⁻¹",
+   "0.48 dm³ min⁻¹",
+   "4.80 dm³ min⁻¹",
+   "1.17 dm³ min⁻¹"
+  ],
+  "a": 2,
+  "e": "Cardiac output = heart rate × stroke volume = 64 × 75 cm³ = 4800 cm³ min⁻¹; then 4800 ÷ 1000 = 4.80 dm³ min⁻¹. Option A keeps the cm³ number but writes the dm³ unit (forgot to divide by 1000). Option B is a ÷10 slip in the conversion (dividing by 10 000). Option D divides the stroke volume by the rate (75 ÷ 64) instead of multiplying."
+ },
+ {
+  "q": "Where in the heart is the natural pacemaker (sinoatrial node) found?",
+  "o": [
+   "In the wall of the left atrium",
+   "In the septum between the two ventricles",
+   "In the medulla oblongata of the brain",
+   "In the right atrium's wall"
+  ],
+  "a": 3,
+  "e": "The SAN is a small patch of special muscle set into the right atrium's wall, close to where the venae cavae enter. Option A puts it on the wrong side. Option B is where the bundle of His runs, not where the beat begins. Option C is the cardiac centre, which only adjusts the rate through nerves; it is not part of the heart."
+ },
+ {
+  "q": "After a full school football match, Chidi's heart rate rose from a resting 70 to 154 beats min⁻¹. By what percentage did it rise?",
+  "o": [
+   "54.5%",
+   "120%",
+   "220%",
+   "84%"
+  ],
+  "a": 1,
+  "e": "% change = (new − old)/old × 100 = (154 − 70)/70 × 100 = 84/70 × 100 = 120%. Option A divides the rise by the new value (84/154) instead of the old one. Option C gives the new rate as a percentage of the old one (154/70 × 100), forgetting to subtract the starting value first. Option D stops at the rise in beats (84) and never divides by the old value."
+ },
+ {
+  "q": "In the pulse-rate practical, a learner waited about 20 seconds after the step-ups before starting the first count. How did this affect the peak heart rate she recorded?",
+  "o": [
+   "It made the peak too high, because the heart keeps speeding up after exercise stops.",
+   "It had no effect, because the rate stays steady for the first minute after exercise.",
+   "It made the peak too low, because the heart had already begun to slow down during the delay.",
+   "It made the peak too high, because multiplying by 4 doubles any error."
+  ],
+  "a": 2,
+  "e": "Recovery starts the moment exercise stops, so a delayed count catches the rate after it has already dropped and the recorded peak is too low. Option A gets the direction wrong: the rate falls, not rises, once the step-ups end. Option B ignores the recovery curve, which is falling steeply in the first minutes. Option D confuses two different errors: the ×4 step magnifies a miscount by four, it does not double it, and it does not push the reading in one fixed direction."
+ },
+ {
+  "q": "Which of the following slows the heart rate?",
+  "o": [
+   "Impulses travelling along the vagus nerve",
+   "Release of adrenaline into the blood",
+   "A rise in the carbon dioxide level of the blood",
+   "A fever"
+  ],
+  "a": 0,
+  "e": "The cardiac centre in the medulla slows the SAN by sending impulses down the vagus nerve; this is how Chidi's rate glided back to 68. Options B, C and D all raise the rate: adrenaline (fear, excitement) acts directly on the SAN, extra carbon dioxide from busy muscles signals the cardiac centre to speed the heart up, and a fever speeds up the heart's activity."
+ },
+ {
+  "q": "A resting heart beats at 60 beats min⁻¹, and ventricular contraction lasts 0.30 s in each cycle. What percentage of every cycle do the ventricles spend relaxed?",
+  "o": [
+   "30%",
+   "0.70%",
+   "43%",
+   "70%"
+  ],
+  "a": 3,
+  "e": "Cycle time = 60 ÷ 60 = 1.0 s. Relaxed time = 1.0 − 0.30 = 0.70 s. Percentage = 0.70/1.0 × 100 = 70%. Option A gives the contracting fraction, not the relaxed one. Option B is the fraction 0.70 with a % sign added but never multiplied by 100. Option C divides contracting time by relaxed time (0.30/0.70) instead of relaxed time by the whole cycle. The long rest in each cycle is why heart muscle does not tire."
+ },
+ {
+  "q": "Mama Bisi's blood pressure reading is 160/100 mmHg. What does the figure 100 represent?",
+  "o": [
+   "The pressure in the arteries while the ventricles are contracting",
+   "The pressure in the arteries while the ventricles are relaxed",
+   "Her pulse rate in beats per minute",
+   "The pressure of blood in her veins as it returns to the heart"
+  ],
+  "a": 1,
+  "e": "A reading is written as pressure during ventricular contraction over pressure during ventricular relaxation, both measured in a large artery (usually the upper arm) with a sphygmomanometer. The lower figure, 100, is therefore the pressure while the ventricles relax; a healthy young adult would read about 80 here. Option A describes the upper figure, 160. Option C confuses pressure (mmHg) with rate (beats per minute). Option D is wrong because venous pressure is far lower, only a few mmHg near the heart, and is not what the cuff measures."
+ }
+];
 })();

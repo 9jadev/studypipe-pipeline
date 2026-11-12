@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Lesson 4 · Organising Data: Arrays, Collections &amp; Indexing · StudyPipe</title>
+  <meta name="description" content="StudyPipe Computer Studies (SS1): arrays, lists, contiguous memory offsets (Base + i × Size), zero-based indexing (0..N−1), traversal algorithms, and preventing IndexError.">
+  <meta name="theme-color" content="#04140f">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='8' y='20' width='48' height='24' rx='6' fill='%233ee6c4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../assets/css/fonts.css">
+  <link rel="stylesheet" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="../../assets/css/lesson.css">
+  <link rel="stylesheet" href="../../assets/css/narrator.css">
+  <link rel="stylesheet" href="../../assets/css/math.css">
+  <link rel="stylesheet" href="../../assets/css/code.css">
+  <link rel="stylesheet" href="../../assets/css/lesson-video.css">
+  <style>
+    .hero-art { position: relative; border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 50% 30%, rgba(var(--teal-rgb, 62, 230, 196), .18), transparent 70%), var(--ink-900);
+      border: 1px solid var(--line-strong); display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: var(--shadow-lg); padding: 14px; }
+    .hero-art svg { width: 100%; height: auto; max-width: 320px; }
+    .timeline { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; font-family: var(--font-mono); font-size: 11.5px; }
+    .timeline span { padding: 5px 10px; border-radius: 999px; background: rgba(255,255,255,.06); color: var(--fg-soft); border: 1px solid var(--line); }
+    .timeline span b { color: var(--amber); font-weight: 600; }
+
+    /* compact method cards (phone first) */
+    #method-cards { gap: 6px; margin-top: 10px; }
+    #method-cards div.method { display: grid; grid-template-columns: 30px 1fr; column-gap: 8px; row-gap: 0; padding: 6px 10px; align-items: start; }
+    #method-cards div.method:hover { transform: none; }
+    #method-cards div.method b { grid-row: 1 / span 2; font-size: 11px; align-self: center; }
+    #method-cards div.method h4 { font-size: 13.5px; margin: 0; }
+    #method-cards div.method p { font-size: 12px; line-height: 1.35; margin: 0; }
+    .method.done { border-color: var(--ok); }
+    .method.now { border-color: var(--amber); box-shadow: 0 0 0 3px rgba(var(--amber-rgb), .25); }
+
+    /* compact bench */
+    #bench-stage { margin-top: 14px; }
+    #bench-stage .stage-canvas { height: clamp(320px, 92vw, 430px); }
+    #bench-stage .bench-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 8px 12px 0; gap: 5px; }
+    @media (min-width: 560px) {
+      #bench-stage .bench-readout { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    #bench-stage .bench-readout div { padding: 5px 6px; min-width: 0; }
+    #bench-stage .bench-readout span { font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b { font-size: 13.5px; display: block; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    #bench-stage .bench-readout b.sm { font-size: 11.5px; }
+    #bench-stage .bench-readout .hot b { color: var(--amber); }
+    .l04-chips { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+    .l04-chips > span.lab-t { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); min-width: 50px; }
+    .chip-btn { min-height: 36px; padding: 4px 10px; border-radius: 999px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 12px; cursor: pointer; font-family: var(--font-mono); }
+    .chip-btn[aria-pressed="true"] { background: var(--fg); color: var(--ink-950); border-color: var(--fg); }
+    .chip-btn.oob { border-color: rgba(var(--crimson-rgb), .65); color: var(--crimson); }
+    .chip-btn.oob[aria-pressed="true"] { background: var(--crimson); color: #fff; border-color: var(--crimson); }
+    .l04-rheo { display: flex; align-items: center; gap: 10px; width: 100%; font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+    .l04-rheo input { flex: 1; }
+    .l04-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .l04-actions .vt-btn { flex: 1; min-width: 105px; }
+    .stage-hint { font-family: var(--font-mono); font-size: 12px; color: var(--fg-soft); }
+
+    /* results table (one compact row per reading) */
+    #results-table td .rc-sub { display: block; font-size: 11px; color: var(--paper-muted); margin-top: 2px; }
+    #results-table tr.fresh { background: rgba(var(--amber-rgb), .12); }
+    .sheet-note { font-family: var(--font-mono); font-size: 12px; color: var(--paper-muted); margin-top: 8px; }
+    @media (max-width: 640px) {
+      #results-table, #results-table tbody, #results-table thead { display: block; width: 100%; }
+      #results-table thead { position: static; width: auto; height: auto; clip: auto; overflow: visible; }
+      #results-table thead tr { display: grid; grid-template-columns: 1.1fr 1.2fr 1fr 1.1fr; padding: 6px 10px; background: rgba(var(--paper-ink-rgb), .03); }
+      #results-table tbody tr { display: grid; grid-template-columns: 1.1fr 1.2fr 1fr 1.1fr; padding: 8px 10px; border-bottom: 1px solid var(--paper-line); }
+      #results-table th, #results-table td { display: block; padding: 0; border: 0; font-size: 12.5px; }
+      #results-table th { font-size: 10.5px; }
+      #results-table td::before { content: none; }
+    }
+
+    /* memory-offset explorer */
+    .pos-track { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px; }
+    @media (min-width: 560px) { .pos-track { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+    .pos-pin { border: 1.5px solid rgba(var(--paper-ink-rgb), .18); background: var(--paper-card); color: var(--paper-ink); border-radius: calc(12px * var(--corner, 1)); min-height: 50px; padding: 6px 4px; font-weight: 700; font-size: 12px; line-height: 1.25; cursor: pointer; font-family: var(--font-mono); }
+    .pos-pin[aria-pressed="true"] { background: var(--paper-ink); color: var(--paper); border-color: var(--paper-ink); }
+    .pos-info { margin-top: 14px; background: var(--paper-card); border: 1px solid var(--paper-line); border-radius: var(--radius); padding: 14px 16px; font-size: 14.5px; min-height: 92px; line-height: 1.5; }
+    .pos-info b { color: var(--crimson); }
+
+    /* zoom counters */
+    #zoom-stage .counters { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 0; }
+    #zoom-stage .counter { font-family: var(--font-mono); font-size: 11px; color: var(--fg-soft); display: flex; align-items: center; gap: 6px; }
+    #zoom-stage .counter b { color: var(--fg); font-size: 13px; }
+    #zoom-stage .counter i { width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--muted)); display: inline-block; }
+
+    /* bridge */
+    .bridge-card { background: var(--ink-900); color: var(--fg); border-radius: var(--radius-lg); padding: clamp(16px, 3vw, 26px); margin-top: 18px; }
+    .l04-bq { margin-top: 14px; }
+    .l04-bq h4 { margin: 0 0 8px; color: var(--fg); font-size: 15px; }
+    .l04-bq .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .l04-bq .opts button { min-height: 44px; padding: 8px 14px; border-radius: 12px; border: 1.5px solid var(--line-strong); background: transparent; color: var(--fg-soft); font-weight: 600; font-size: 13px; cursor: pointer; text-align: left; font-family: var(--font-mono); }
+    .l04-bq .opts button.correct { box-shadow: 0 0 0 2px var(--ok); color: var(--fg); }
+    .l04-bq .opts button.incorrect { box-shadow: 0 0 0 2px var(--crimson); }
+    .l04-bq .opts button[disabled] { opacity: .85; cursor: default; }
+    .l04-bq .why { margin: 8px 0 0; font-size: 13px; color: var(--fg-soft); display: none; }
+    .l04-bq .why.on { display: block; }
+    .bridge-verdict { margin-top: 16px; display: none; padding: 14px 16px; border-radius: var(--radius); background: rgba(var(--ok-rgb), .14); border: 1px solid var(--ok); color: var(--fg); }
+    .bridge-verdict.on { display: block; }
+  </style>
+  <script>document.documentElement.classList.remove('no-js');</script>
+  <link rel="stylesheet" href="../../assets/css/theme.css">
+</head>
+<body class="lesson-page" data-lesson="l04">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="progress" aria-hidden="true"></div>
+
+  <header class="nav l-nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="l-back" href="../../index.html"><span aria-hidden="true">←</span> All 6 Lessons</a>
+      <span class="l-crumb">Lesson 4 of 6 · <b>Organising Data — Arrays, Collections &amp; Indexing</b></span>
+      <span class="offline-pill" title="Everything on this page is stored on your device"><i></i>Offline<span class="txt-long">&nbsp;· en-NG</span></span>
+    </div>
+  </header>
+
+  <section class="l-hero" id="top">
+    <div class="wrap l-hero-grid">
+      <div>
+        <span class="eyebrow reveal">SS1 Computer Studies · Lesson 4 of 6 · 80 minutes</span>
+        <h1 class="display reveal" data-hook>Organising Data: <em>Arrays, Collections &amp; Indexing</em></h1>
+        <p class="question reveal">How does a system track readings from 50 solar panels or 100 students without creating 100 separate variables?</p>
+        <ul class="objectives reveal" id="objectives" aria-label="Learning objectives">
+          <li><b>01</b><span>Explain an <strong>array/list</strong> as a contiguous ordered collection of data elements under one identifier.</span></li>
+          <li><b>02</b><span>Access, update, and manipulate array elements using <strong>zero-based indexing</strong> (<code>0..N−1</code>) and negative indices.</span></li>
+          <li><b>03</b><span>Calculate the relationship between <strong>array length N</strong>, maximum valid index <strong>N − 1</strong>, and byte offsets.</span></li>
+          <li><b>04</b><span>Traverse arrays using loops to <strong>search for values</strong> and find minimum, maximum, and average elements.</span></li>
+          <li><b>05</b><span>Diagnose and resolve <strong>IndexError / Out of Bounds</strong> runtime exceptions in software applications.</span></li>
+        </ul>
+        <div class="l-meta reveal" id="lesson-meta">
+          <span class="chip" style="--c:var(--amber)"><i></i>Wonder</span>
+          <span class="chip" style="--c:var(--pink)"><i></i>Investigate</span>
+          <span class="chip" style="--c:var(--violet)"><i></i>Make sense</span>
+          <span class="chip" style="--c:var(--teal)"><i></i>Apply</span>
+          <span class="chip" style="--c:var(--lime)"><i></i>Reflect</span>
+        </div>
+        <div class="timeline reveal" id="timetable" aria-label="Lesson timetable">
+          <span><b>0–5</b> Do Now</span><span><b>5–15</b> Wonder</span><span><b>15–40</b> Investigate</span><span><b>40–45</b> Movement break</span><span><b>45–60</b> Make sense</span><span><b>60–80</b> Apply &amp; reflect</span>
+        </div>
+        <div class="hero-cta reveal">
+          <button class="btn btn-tour" type="button" data-tour><span class="wave" aria-hidden="true"><i></i><i></i><i></i></span>Start with your narrator</button>
+          <a class="btn btn-ghost" href="#donow">Read on my own</a>
+        </div>
+      </div>
+      <div class="hero-art reveal" aria-hidden="true">
+        <svg viewBox="0 0 320 240" role="img">
+          <rect x="18" y="28" width="284" height="184" rx="14" fill="none" stroke="rgba(62,230,196,.45)" stroke-width="2"/>
+          <text x="160" y="64" fill="var(--amber)" font-family="var(--font-mono)" font-size="14" text-anchor="middle">cells[0..7] · Base = 0x1000</text>
+          <g font-family="var(--font-mono)" font-size="10.5" text-anchor="middle">
+            <rect x="28" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="43" y="102" fill="var(--fg)">[0]</text><text x="43" y="118" fill="var(--fg-soft)">3.25</text>
+            <rect x="61" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="76" y="102" fill="var(--fg)">[1]</text><text x="76" y="118" fill="var(--fg-soft)">3.18</text>
+            <rect x="94" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="109" y="102" fill="var(--fg)">[2]</text><text x="109" y="118" fill="var(--fg-soft)">3.30</text>
+            <rect x="127" y="82" width="30" height="44" rx="4" fill="rgba(245,158,11,.22)" stroke="var(--amber)"/><text x="142" y="102" fill="var(--amber)">[3]</text><text x="142" y="118" fill="var(--amber)">2.95</text>
+            <rect x="160" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="175" y="102" fill="var(--fg)">[4]</text><text x="175" y="118" fill="var(--fg-soft)">3.22</text>
+            <rect x="193" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="208" y="102" fill="var(--fg)">[5]</text><text x="208" y="118" fill="var(--fg-soft)">3.15</text>
+            <rect x="226" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="241" y="102" fill="var(--fg)">[6]</text><text x="241" y="118" fill="var(--fg-soft)">3.28</text>
+            <rect x="259" y="82" width="30" height="44" rx="4" fill="rgba(62,230,196,.15)" stroke="var(--teal)"/><text x="274" y="102" fill="var(--fg)">[7]</text><text x="274" y="118" fill="var(--fg-soft)">3.20</text>
+          </g>
+          <text x="160" y="158" fill="var(--fg)" font-family="var(--font-mono)" font-size="14" text-anchor="middle">Addr(i) = Base + i × 4</text>
+          <text x="160" y="186" fill="var(--crimson)" font-family="var(--font-mono)" font-size="12" text-anchor="middle">cells[8] → IndexError (Out of Bounds)</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="l-layout">
+    <nav class="l-rail" aria-label="Lesson parts">
+      <ol>
+        <li><a href="#donow">Do Now</a></li>
+        <li><a href="#story">The story</a></li>
+        <li><a href="#wonder">Wonder Wall</a></li>
+        <li><a href="#sort">Sort operations</a></li>
+        <li><a href="#practical">Array rack bench</a></li>
+        <li><a href="#concepts">Make sense</a></li>
+        <li><a href="#zoom">Offset zoom</a></li>
+        <li><a href="#examples">Worked examples</a></li>
+        <li><a href="#bridge">The big idea</a></li>
+        <li><a href="#quiz">Quiz</a></li>
+        <li><a href="#reflect">Reflect</a></li>
+        <li><a href="#assignment">Assignment</a></li>
+      </ol>
+      <div class="rail-progress"><i></i></div>
+      <small>0 parts visited</small>
+    </nav>
+
+    <main class="l-main" id="main">
+      <!-- 0. DO NOW -->
+      <section class="l-sec" id="donow">
+        <span class="phase" style="--pc:var(--teal)"><b>0</b>Do Now · 5 min</span>
+        <h2>Before we start: <em>warm up your toolkit</em></h2>
+        <p class="intro">Four quick retrieval cards from Lessons 1 to 3 on <code>range()</code>, loop counts, compound boolean logic, and string casting. Answer each in your head <strong>before</strong> you reveal it.</p>
+        <div class="donow" id="donow-list"></div>
+        <div class="quiz-score">
+          <span data-donow-score></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-donow-reset>Try again</button>
+        </div>
+      </section>
+
+      <!-- 1. STORY -->
+      <section class="l-sec" id="story">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · The case · 10 min</span>
+        <h2>The cold-chain alarm at <em>Ikogosi Health Clinic</em></h2>
+        <p class="intro">At the Ikogosi Clinic telemetry lab, the vaccine refrigerator alarm flashes red at +9.8 °C because <code>battery_check.py</code> crashed with an <code>IndexError</code> on an 8-cell lithium battery rack. Why did counting from 1 to 8 bring down the system?</p>
+        <div class="stage story-stage" id="story-stage">
+          <div class="stage-canvas">
+            <canvas aria-label="Animated 3D story: Dr. Folake, Amina, Tari, and Chief Babatunde in the Ikogosi SCADA &amp; Clinic Cold-Chain Lab inspecting the 8-cell lithium battery rack and the IndexError on the terminal."></canvas>
+            <div class="stage-label"><i></i>3D story · Ikogosi Clinic Telemetry Lab</div>
+            <div class="story-bubble" aria-live="polite"></div>
+            <div class="story-caption"></div>
+            <div class="stage-fallback"><p>The 3D story couldn't start on this device. Read the dialogue below instead.</p></div>
+          </div>
+          <div class="stage-bar">
+            <button class="vt-btn" type="button" data-story-prev aria-label="Previous scene">◀</button>
+            <button class="vt-btn zobo" type="button" data-story-play>▶ Play story</button>
+            <button class="vt-btn" type="button" data-story-next aria-label="Next scene">▶</button>
+            <div class="story-dots" aria-label="Scenes"></div>
+            <span class="stage-hint story-count">Scene 1 of 5</span>
+          </div>
+        </div>
+        <details class="reveal-box" id="story-text">
+          <summary>Read the story as text <small>or use the 3D player above</small></summary>
+          <div class="reveal-body">
+            <p><strong>Scene 1 · Dr. Folake:</strong> <em>“Amina, Tari! An alarm is sounding at the clinic — the vaccine refrigerator cooling sensor is offline and the cabinet is warming to +9.8 °C!”</em></p>
+            <p><strong>Scene 2 · Amina:</strong> checks the clinic telemetry dashboard. <em>“Look at line 34: <code>Fatal Error: IndexError: list index out of range</code>. The battery scanner crashed mid-cycle!”</em></p>
+            <p><strong>Scene 3 · Tari:</strong> opens <code>battery_check.py</code>. <em>“Here is line 34: <code>for i in range(1, 9): check_cell(battery_cells[i])</code>. Whoever wrote it counted cells from 1 to 8!”</em></p>
+            <p><strong>Scene 4 · Amina:</strong> points to the 8-slot lithium rack. <em>“There are 8 battery cells in the rack! In zero-based indexing, their valid indices are 0 to 7. When <code>i</code> reaches 8, the program crashes!”</em></p>
+            <p><strong>Scene 5 · Chief Babatunde:</strong> <em>“So the first battery at index 0 was skipped, and asking for index 8 crashed the whole clinic cooling unit! Let us test the array rack on the bench.”</em></p>
+          </div>
+        </details>
+      </section>
+
+      <!-- 2. WONDER WALL -->
+      <section class="l-sec" id="wonder">
+        <span class="phase" style="--pc:var(--amber)"><b>1</b>Wonder · Your predictions</span>
+        <h2>The <em>Wonder Wall</em></h2>
+        <p class="intro">Why do computer scientists start counting at zero instead of one, and why does this cause the most common boundary bugs in software? Pin your idea.</p>
+        <div data-wall="wonder" id="wall-wonder">
+          <form class="wall-form">
+            <input type="text" maxlength="160" placeholder="I think arrays start at index 0 because…" aria-label="Add your prediction or question">
+            <button class="btn btn-ink btn-sm" type="submit">Pin to the wall</button>
+          </form>
+          <div class="seed-qs" aria-label="Example predictions">
+            <button type="button">Index 0 means 0 bytes distance from the start address (Amina)</button>
+            <button type="button">Humans count 1..8, so index 8 feels like the 8th item (Tari)</button>
+            <button type="button">What happens in RAM if you read past the last slot? (Dr. Folake)</button>
+            <button type="button">Can Python count backwards from the end of a list? (Babatunde)</button>
+          </div>
+          <div class="wall" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3. SORT -->
+      <section class="l-sec" id="sort">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · Activity 1</span>
+        <h2>Access &amp; query <em>or mutate &amp; update?</em></h2>
+        <p class="intro">Sort each Python list operation into its bin. Drag it, or tap a card then tap a bin. Does the operation merely <strong>read/query</strong> the collection, or does it <strong>mutate/modify</strong> the stored elements?</p>
+        <div class="sort" id="arr-sort">
+          <div class="sort-tray" id="sort-tray" aria-label="Cards to sort"></div>
+          <div class="bins">
+            <div class="bin" data-bin="access" style="--bc:var(--teal)" tabindex="0" role="button" aria-label="Access and Query bin">
+              <h4><i></i>Access &amp; Query</h4><small>reads value or length without altering list</small><div class="drop"></div>
+            </div>
+            <div class="bin" data-bin="mutate" style="--bc:var(--amber)" tabindex="0" role="button" aria-label="Mutate and Update bin">
+              <h4><i></i>Mutate &amp; Update</h4><small>overwrites, appends, inserts, or removes items</small><div class="drop"></div>
+            </div>
+          </div>
+          <div class="sort-bar">
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <button class="btn btn-primary btn-sm" type="button" id="sort-check">Check my sorting</button>
+              <button class="btn btn-ghost btn-sm" type="button" id="sort-reset">Shuffle &amp; reset</button>
+            </div>
+            <span class="sort-score" id="sort-score" aria-live="polite"></span>
+          </div>
+          <div class="sort-feedback" id="sort-feedback" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <!-- 3B. PRACTICAL -->
+      <section class="l-sec" id="practical">
+        <span class="phase" style="--pc:var(--pink)"><b>2</b>Investigate · 3D Practical · 25 min</span>
+        <h2>The Array Locker Rack: <em>zero-based indexing &amp; bounds</em></h2>
+        <p class="intro">Eight lithium cells sit in contiguous 4-byte memory slots from <code>0x1000</code> (Index 0) to <code>0x101C</code> (Index 7). Dial indices <code>0..8</code>, log your readings, and run the minimum-voltage scan.</p>
+
+        <div class="methods" id="method-cards">
+          <div class="method now" id="m1"><b>01</b><h4>Read Index 0 (Base)</h4><p>Dial [0] at 0x1000 and record 3.25 V.</p></div>
+          <div class="method" id="m2"><b>02</b><h4>Read Index 7 (N − 1)</h4><p>Dial [7] at 0x101C, the 8th cell (3.20 V).</p></div>
+          <div class="method" id="m3"><b>03</b><h4>Trigger Index 8 OOB</h4><p>Dial [8] at 0x1020 to observe IndexError.</p></div>
+          <div class="method" id="m4"><b>04</b><h4>Scan 0..7 for Weak Cell</h4><p>Run 0..7 scan to flag cells[3] = 2.95 V.</p></div>
+        </div>
+
+        <div class="stage" id="bench-stage">
+          <div class="stage-canvas">
+            <canvas id="bench-canvas" aria-label="3D Contiguous Array Locker Rack: 8 lithium cells in slots 0..7 (0x1000..0x101C), motorized pointer carriage on a guide rail, red out-of-bounds hazard zone at index 8 (0x1020), alarm beacon, and OLED offset screen."></canvas>
+            <div class="stage-label"><i></i>3D Array Rack · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D bench couldn't start on this device. Use the controls and table below.</p></div>
+          </div>
+          <div class="bench-readout" id="bench-readout" aria-live="polite"></div>
+          <div class="stage-bar l04-chips" id="bench-idx" role="group" aria-label="Array index dial">
+            <span class="lab-t">Index i</span>
+            <button class="chip-btn" type="button" data-idx="0" aria-pressed="true">[0]</button>
+            <button class="chip-btn" type="button" data-idx="1" aria-pressed="false">[1]</button>
+            <button class="chip-btn" type="button" data-idx="2" aria-pressed="false">[2]</button>
+            <button class="chip-btn" type="button" data-idx="3" aria-pressed="false">[3]</button>
+            <button class="chip-btn" type="button" data-idx="4" aria-pressed="false">[4]</button>
+            <button class="chip-btn" type="button" data-idx="5" aria-pressed="false">[5]</button>
+            <button class="chip-btn" type="button" data-idx="6" aria-pressed="false">[6]</button>
+            <button class="chip-btn" type="button" data-idx="7" aria-pressed="false">[7]</button>
+            <button class="chip-btn oob" type="button" data-idx="8" aria-pressed="false">[8] OOB</button>
+          </div>
+          <div class="stage-bar l04-actions">
+            <button class="vt-btn zobo" type="button" id="bench-take">Read index</button>
+            <button class="vt-btn" type="button" id="bench-scan">Scan 0..7 (min)</button>
+            <button class="vt-btn" type="button" id="bench-reset">Reset</button>
+            <span class="stage-hint" id="bench-hint">Recorded 0 readings</span>
+          </div>
+        </div>
+
+        <h3>Record your array readings</h3>
+        <p>Each tap on <strong>Read index</strong> logs the slot, memory address, stored voltage, and boundary status.</p>
+        <div class="tbl-wrap">
+          <table class="tbl" id="results-table">
+            <thead><tr><th>Index / Slot</th><th>Address (Offset)</th><th>Reading</th><th>Status</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="sheet-note" id="results-line">Readings recorded: 0</p>
+
+        <details class="reveal-box" id="expected">
+          <summary>Expected memory rack table <small>open after you record yours</small></summary>
+          <div class="reveal-body">
+            <div class="tbl-wrap">
+              <table class="tbl">
+                <thead><tr><th>Slot Position</th><th>Array Index</th><th>RAM Address</th><th>Stored Reading</th><th>Status</th></tr></thead>
+                <tbody>
+                  <tr><td>1st cell</td><td><code>cells[0]</code></td><td><code>0x1000 (+0B)</code></td><td>3.25 V</td><td>Healthy (Base)</td></tr>
+                  <tr><td>2nd cell</td><td><code>cells[1]</code></td><td><code>0x1004 (+4B)</code></td><td>3.18 V</td><td>Healthy</td></tr>
+                  <tr><td>3rd cell</td><td><code>cells[2]</code></td><td><code>0x1008 (+8B)</code></td><td>3.30 V</td><td>Healthy</td></tr>
+                  <tr><td>4th cell</td><td><code>cells[3]</code></td><td><code>0x100C (+12B)</code></td><td><strong>2.95 V</strong></td><td><strong>WEAKEST CELL</strong></td></tr>
+                  <tr><td>5th cell</td><td><code>cells[4]</code></td><td><code>0x1010 (+16B)</code></td><td>3.22 V</td><td>Healthy</td></tr>
+                  <tr><td>6th cell</td><td><code>cells[5]</code></td><td><code>0x1014 (+20B)</code></td><td>3.15 V</td><td>Healthy</td></tr>
+                  <tr><td>7th cell</td><td><code>cells[6]</code></td><td><code>0x1018 (+24B)</code></td><td>3.28 V</td><td>Healthy</td></tr>
+                  <tr><td>8th cell</td><td><code>cells[7]</code></td><td><code>0x101C (+28B)</code></td><td>3.20 V</td><td>Healthy (Last: N−1)</td></tr>
+                  <tr><td>9th (Unallocated)</td><td><code>cells[8]</code></td><td><code>0x1020 (+32B)</code></td><td>—</td><td><strong>IndexError: out of range</strong></td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="eq light">Length N = 8 · Valid indices = 0 .. (N − 1) = 0 .. 7 · Weakest cell = cells[3] = 2.95 V (4th cell)</div>
+            <p>Because the first element sits right at <code>0x1000</code> (+0 bytes), the 8th element sits at index <code>7</code> (+28 bytes). Asking for <code>cells[8]</code> points to <code>0x1020</code>, outside the array's 32-byte allocation.</p>
+          </div>
+        </details>
+
+        <h3>Practical analysis questions</h3>
+        <div class="aq" data-answer="l04-prac-q">
+          <div class="aq-top"><h4>Answer these four questions from your bench investigation, then compare with the model answers.</h4></div>
+          <ol class="sub">
+            <li>Write out the mathematical formula linking array length <span class="sp-math" data-latex="N"></span> to the maximum valid positive index.</li>
+            <li>Why is the weakest cell (<code>2.95 V</code>) at index <code>3</code> even though it is the 4th physical battery in the rack?</li>
+            <li>What exact byte address corresponds to <code>cells[5]</code> if the base address is <code>0x1000</code> (4096) and each float takes 4 bytes?</li>
+            <li>Why does Python raise an <code>IndexError</code> at <code>cells[8]</code> instead of silently returning <code>0</code>?</li>
+          </ol>
+          <textarea class="l-textarea" placeholder="Type your answers here…" aria-label="Practical analysis answers"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answers <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <ol>
+                <li>For an array of length <span class="sp-math" data-latex="N"></span>, the maximum valid index is <span class="sp-math" data-latex="\text{Max Index} = N - 1"></span> (so for <span class="sp-math" data-latex="N = 8"></span>, <span class="sp-math" data-latex="\text{Max Index} = 7"></span>).</li>
+                <li>Because machine indexing is zero-based: the 1st cell is at index 0, 2nd at 1, 3rd at 2, and the 4th physical cell is at index <span class="sp-math" data-latex="4 - 1 = 3"></span>.</li>
+                <li><span class="sp-math" data-latex="\text{Address}(5) = \text{Base} + 5 \times 4 = 4096 + 20 = 4116_{10} = \text{0x1014}"></span>.</li>
+                <li>Address <code>0x1020</code> belongs to other variables or unallocated RAM; halting with <code>IndexError</code> prevents silent data corruption or security breaches.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- 4. CONCEPTS -->
+      <section class="l-sec" id="concepts">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Phase 3 · Make sense · 15 min</span>
+        <h2>Organising data: <em>arrays, contiguous memory &amp; indexing</em></h2>
+        <p class="intro">Now connect what you observed on the 8-slot battery rack to the formal definitions and memory-offset mathematics tested in WAEC, NECO, and JAMB.</p>
+        <!-- studypipe:video -->
+        <figure class="lesson-video" id="lesson-video">
+          <figcaption class="lesson-video-cap"><span class="chip" style="--c:var(--violet)"><i></i>Explainer video</span><b>Contiguous Arrays &amp; Zero-Based Indexing</b><span class="lv-time">8 min · narrated · captions</span><span class="lv-done">Watched ✓</span></figcaption>
+          <iframe class="lesson-video-frame" src="video.html" title="Explainer video: Contiguous Arrays &amp; Zero-Based Indexing" allow="fullscreen; autoplay" allowfullscreen loading="lazy"></iframe>
+        </figure>
+        <!-- /studypipe:video -->
+
+        <div class="callout big reveal" id="movement-break">
+          <p><strong>Movement break (40 min mark, 5 minutes):</strong> stand up with 7 classmates in a single row of 8 students. Count off starting from <strong>"Index zero!"</strong> at the left end up to <strong>"Index seven!"</strong> at the right end. When the caller shouts <code>cells[3]</code>, the 4th student squats; when the caller shouts <code>cells[8]</code>, everyone freezes and shouts <strong>"IndexError: Out of Bounds!"</strong></p>
+        </div>
+
+        <h3 id="def-array">Formal definitions</h3>
+        <p>An <strong>array</strong> (implemented as a dynamic <code>list</code> in Python) is an ordered collection of data elements stored in <strong>contiguous (adjoining) memory locations</strong> under a single identifier. Each individual item stored in the collection is called an <strong>element</strong>, and its position number inside square brackets <code>[i]</code> is called its <strong>index</strong> (or subscript).</p>
+
+        <div class="callout big reveal" id="eq-offset">
+          <p><strong>Zero-Based Indexing &amp; the Offset Model:</strong> in C, Java, JavaScript, and Python, an index is not a human counting number — it is the <strong>offset</strong> (number of element steps) from the array's starting <strong>Base Address</strong>. Because the first element sits right at the base address, its offset is <code>0</code>. For an array of length <span class="sp-math" data-latex="N"></span>, valid positive indices run from <span class="sp-math" data-latex="0"></span> to <span class="sp-math" data-latex="N - 1"></span>.</p>
+        </div>
+
+        <div class="eq" data-hook data-math-upgraded="1"><div class="eq-latex-wrap"><div class="sp-math-display"><span class="sp-math" data-latex="\text{Address}(i) = \text{Base Address} + (i \times \text{Element Size})"></span><span class="sp-op" style="padding:0 0.45em">·</span><span class="sp-math" data-latex="\text{Valid Index Range: } 0 \le i \le N - 1"></span></div><div class="m-eq-note"><i class="m-step-note-icon" aria-hidden="true">📐</i><span><strong>Calculation &amp; Formula Guide:</strong> Multiply the 0-based index <em>i</em> by the element byte size and add to the base address to jump directly to any slot in O(1) constant time. Valid positive indices run from 0 to N − 1.</span></div></div></div>
+
+        <div class="math-steps">
+          <div class="m-step">
+            <div class="m-step-line"><div class="sp-math" data-latex="\text{Address}(0) = 4096 + (0 \times 4) = 4096_{10} = \text{0x1000}"></div></div>
+            <p class="m-step-note">At index 0 (1st element), the byte offset is zero, pointing directly to the array's base address 0x1000.</p>
+          </div>
+          <div class="m-step">
+            <div class="m-step-line"><div class="sp-math" data-latex="\text{Address}(3) = 4096 + (3 \times 4) = 4096 + 12 = 4108_{10} = \text{0x100C}"></div></div>
+            <p class="m-step-note">At index 3 (4th element, holding 2.95 V), the CPU adds 3 × 4 = 12 bytes to jump straight to 0x100C in O(1) constant time.</p>
+          </div>
+          <div class="m-step">
+            <div class="m-step-line"><div class="sp-math" data-latex="\text{Max Valid Index} = N - 1 = 8 - 1 = 7 \Rightarrow \text{Address}(7) = 4096 + 28 = 4124_{10} = \text{0x101C}"></div></div>
+            <p class="m-step-note">The 8th and final element sits at index 7 (0x101C..0x101F); asking for index 8 (0x1020) steps past the 32-byte boundary and raises IndexError.</p>
+          </div>
+        </div>
+
+        <h3>Core Python list operations &amp; traversal patterns</h3>
+        <div class="tbl-wrap" id="props-table">
+          <table class="tbl">
+            <thead><tr><th>Operation / Pattern</th><th>Python Syntax</th><th>Effect &amp; Time Complexity</th></tr></thead>
+            <tbody>
+              <tr><td>Read first element</td><td><code>cells[0]</code></td><td>Direct <span class="sp-math" data-latex="O(1)"></span> offset read at <code>Base + 0</code></td></tr>
+              <tr><td>Read <span class="sp-math" data-latex="k"></span>-th human item</td><td><code>cells[k - 1]</code></td><td>Direct <span class="sp-math" data-latex="O(1)"></span> offset read (e.g. 4th cell is <code>cells[3]</code>)</td></tr>
+              <tr><td>Read last element</td><td><code>cells[len(cells) - 1]</code> or <code>cells[-1]</code></td><td>Accesses final slot at index <span class="sp-math" data-latex="N - 1"></span></td></tr>
+              <tr><td>Update element in place</td><td><code>cells[3] = 3.30</code></td><td>Overwrites slot 3 without changing length <span class="sp-math" data-latex="N"></span></td></tr>
+              <tr><td>Append to end</td><td><code>cells.append(3.26)</code></td><td>Adds new item at index <span class="sp-math" data-latex="N"></span>; length becomes <span class="sp-math" data-latex="N + 1"></span></td></tr>
+              <tr><td>Safe index traversal</td><td><code>for i in range(len(cells)):</code></td><td>Generates <span class="sp-math" data-latex="i = 0, 1, …, N - 1"></span>; prevents off-by-one crashes</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 id="pos-h">Memory offset &amp; index explorer</h3>
+        <p>Tap any pin to inspect how the 0-based index, 1-based human slot, Python negative index, and hardware byte address align.</p>
+        <div id="pos-explorer">
+          <div class="pos-track" id="pos-track"></div>
+          <div class="pos-info" id="pos-info" aria-live="polite">Tap a pin to inspect its memory offset and stored voltage.</div>
+        </div>
+      </section>
+
+      <!-- 5. ZOOM -->
+      <section class="l-sec" id="zoom">
+        <span class="phase" style="--pc:var(--violet)"><b>3</b>Make sense · 3D Zoom</span>
+        <h2>Inside RAM: <em>the memory offset inspector</em></h2>
+        <p class="intro">Zoom into the PCB memory bus. Each slot holds four 1-byte lanes (32-bit float). Watch the green offset caliper stretch by <code>i × 4</code> bytes from the gold Base Marker at <code>0x1000</code> — and hit the red boundary wall at Index 8 (<code>0x1020</code>).</p>
+        <div class="stage" id="zoom-stage">
+          <div class="stage-canvas">
+            <canvas id="zoom-canvas" aria-label="3D RAM bus microscope: gold Base Address marker at 0x1000, 8 contiguous 4-byte memory blocks, glowing green offset caliper, laser address pointer, and red Out-of-Bounds boundary wall at Index 8 (0x1020)."></canvas>
+            <div class="stage-label"><i></i>3D RAM Offset Zoom · drag to rotate</div>
+            <div class="stage-fallback"><p>The 3D zoom couldn't start on this device.</p></div>
+          </div>
+          <div class="counters" id="zoom-counters" aria-live="polite"></div>
+          <div class="stage-bar l04-chips" id="zoom-idx" role="group" aria-label="Inspect index offset">
+            <span class="lab-t">Jump to</span>
+            <button class="chip-btn" type="button" data-zidx="0" aria-pressed="true">[0] Base</button>
+            <button class="chip-btn" type="button" data-zidx="1" aria-pressed="false">[1] +4B</button>
+            <button class="chip-btn" type="button" data-zidx="3" aria-pressed="false">[3] Weak</button>
+            <button class="chip-btn" type="button" data-zidx="7" aria-pressed="false">[7] N−1</button>
+            <button class="chip-btn oob" type="button" data-zidx="8" aria-pressed="false">[8] OOB!</button>
+          </div>
+          <div class="stage-bar">
+            <label class="l04-rheo">Index
+              <input type="range" id="zoom-slider" min="0" max="8" step="1" value="0" aria-label="Memory index slider from 0 to 8">
+              <b id="zoom-idx-val">[0]</b>
+            </label>
+            <button class="vt-btn" type="button" id="zoom-reset">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. WORKED EXAMPLES -->
+      <section class="l-sec" id="examples">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Worked examples · 10 min</span>
+        <h2>Worked examples, <em>step by step</em></h2>
+        <p class="intro">Step through each Python program line by line and follow the atomic mathematical working.</p>
+
+        <article class="example" id="ex1">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4.1</span><h4>Finding the lowest battery cell voltage in an array</h4></div>
+          <div class="example-body">
+            <p class="q">The 8-cell lithium rack at the Ikogosi Clinic records voltages <code>cells = [3.25, 3.18, 3.30, 2.95, 3.22, 3.15, 3.28, 3.20]</code>. Write and trace a Python program that finds the lowest voltage and prints both its 1-based physical cell number and voltage.</p>
+
+            <div class="study-code-snippet"
+                 data-title="find_weak_cell.py"
+                 data-lang="python"
+                 data-notes='{"1": "Store all 8 battery cell voltages in a contiguous list (indices 0..7).", "2": "Initialize min_voltage to the first element cells[0] (3.25 V), never 0!", "3": "Track the index of the weakest cell starting at 0.", "5": "Loop i safely across 0, 1, 2, 3, 4, 5, 6, 7 using range(len(cells)).", "6": "Compare current slot voltage cells[i] against min_voltage.", "7": "When a lower voltage is found (e.g. 2.95 at i=3), update min_voltage.", "8": "Save the index i where the new minimum occurred.", "10": "Add 1 to convert 0-based min_index (3) to human Cell 4.", "11": "Display the minimum voltage (2.95 V)."}'
+                 data-output=">>> python find_weak_cell.py&#10;Weakest Cell: Cell 4&#10;Voltage: 2.95 V">
+              <code>cells = [3.25, 3.18, 3.30, 2.95, 3.22, 3.15, 3.28, 3.20]
+min_voltage = cells[0]
+min_index = 0
+
+for i in range(len(cells)):
+    if cells[i] < min_voltage:
+        min_voltage = cells[i]
+        min_index = i
+
+print("Weakest Cell: Cell " + str(min_index + 1))
+print("Voltage: " + str(min_voltage) + " V")</code>
+            </div>
+
+            <ol class="steps-sol">
+              <li><strong>Seed with first element:</strong> set <code>min_voltage = cells[0] = 3.25</code> and <code>min_index = 0</code>. (If we seeded <code>min_voltage = 0</code>, no positive cell voltage would ever be smaller!)</li>
+              <li><strong>Iteration <code>i = 1</code>:</strong> <code>cells[1] = 3.18 &lt; 3.25</code> is <code>True</code> → <code>min_voltage = 3.18</code>, <code>min_index = 1</code>.</li>
+              <li><strong>Iteration <code>i = 2</code>:</strong> <code>cells[2] = 3.30 &lt; 3.18</code> is <code>False</code> → unchanged.</li>
+              <li><strong>Iteration <code>i = 3</code>:</strong> <code>cells[3] = 2.95 &lt; 3.18</code> is <code>True</code> → <code>min_voltage = 2.95</code>, <code>min_index = 3</code>.</li>
+              <li><strong>Iterations <code>i = 4..7</code>:</strong> values <code>3.22, 3.15, 3.28, 3.20</code> are all <span class="sp-math" data-latex="\ge 2.95">≥ 2.95</span>, so <code>min_voltage</code> stays <code>2.95</code> at <code>min_index = 3</code>.</li>
+            </ol>
+
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{Human Position} = \text{min index} + 1 = 3 + 1 = 4\text{ (Cell 4)}"></div></div>
+                <p class="m-step-note">Adding 1 converts the 0-based machine index (3) into the technician's 1-based physical slot number (Cell 4).</p>
+              </div>
+            </div>
+            <div class="answer-line">Weakest Cell = Cell 4 (index 3, address 0x100C) · Minimum Voltage = 2.95 V</div>
+          </div>
+        </article>
+
+        <article class="example" id="ex2">
+          <div class="example-head"><span class="tag-ex">EXAMPLE 4.2</span><h4>Indexing and averaging student test marks</h4></div>
+          <div class="example-body">
+            <p class="q">Given <code>marks = [70, 80, 90, 100]</code>: (a) find <code>marks[1] + marks[3]</code>, and (b) trace a loop to compute the class average of all four scores.</p>
+
+            <div class="study-code-snippet"
+                 data-title="average_marks.py"
+                 data-lang="python"
+                 data-notes='{"1": "Four student test scores at indices 0, 1, 2, 3.", "2": "marks[1] is the 2nd item (80); marks[3] is the 4th item (100).", "3": "Initialize accumulator total to 0 before the loop.", "4": "Traverse every score m in the marks list.", "5": "Add current score m into total (70 -> 150 -> 240 -> 340).", "6": "Divide total (340) by len(marks) (4) to get 85.0."}'
+                 data-output=">>> python average_marks.py&#10;Pair sum: 180&#10;Average mark: 85.0">
+              <code>marks = [70, 80, 90, 100]
+print("Pair sum:", marks[1] + marks[3])
+total = 0
+for m in marks:
+    total += m
+average = total / len(marks)
+print("Average mark:", average)</code>
+            </div>
+
+            <ol class="steps-sol">
+              <li><strong>Identify indexed elements:</strong> <code>marks[0] = 70</code>, <code>marks[1] = 80</code>, <code>marks[2] = 90</code>, <code>marks[3] = 100</code>.</li>
+              <li><strong>Evaluate pair sum:</strong> <code>marks[1] + marks[3] = 80 + 100 = 180</code>. (Similarly, for JAMB MCQ 5 with <code>[65, 80, 45, 90]</code>, <code>marks[1] + marks[3] = 80 + 90 = 170</code>.)</li>
+              <li><strong>Accumulate and divide:</strong> <code>total = 70 + 80 + 90 + 100 = 340</code>, and <code>len(marks) = 4</code>.</li>
+            </ol>
+
+            <div class="math-steps">
+              <div class="m-step">
+                <div class="m-step-line"><div class="sp-math" data-latex="\text{Average} = \frac{\sum_{i=0}^{3} \text{marks}[i]}{\text{len}(\text{marks})} = \frac{70 + 80 + 90 + 100}{4} = \frac{340}{4} = 85.0"></div></div>
+                <p class="m-step-note">Dividing the accumulated sum (340) by the list length (4) yields a floating-point mean of 85.0.</p>
+              </div>
+            </div>
+            <div class="answer-line">marks[1] + marks[3] = 180 · Total = 340 · Average = 85.0</div>
+          </div>
+        </article>
+      </section>
+
+      <!-- 7. BRIDGE -->
+      <section class="l-sec" id="bridge">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · The big idea</span>
+        <h2>Back to Ikogosi Clinic: <em>patch <code>battery_check.py</code></em></h2>
+        <p class="intro">Dr. Folake's vaccine refrigerator is waiting. Diagnose the two boundary flaws in Tari's loop, pinpoint the weak cell, and deploy the patched zero-based loop.</p>
+        <div class="bridge-card" id="bridge-card">
+          <div id="bridge-steps"></div>
+          <div class="bridge-verdict" id="bridge-verdict" aria-live="polite"></div>
+        </div>
+        <div class="callout big reveal" id="big-idea" data-hook>
+          <p><strong>The big idea of Lesson 4:</strong> an array stores <span class="sp-math" data-latex="N"></span> elements in contiguous memory at byte offsets <span class="sp-math" data-latex="\text{Base} + i \times \text{Size}"></span>. Because the first item has offset <code>0</code>, valid indices are strictly <code>0</code> to <code>N − 1</code> — and iterating with <code>range(len(arr))</code> eliminates off-by-one <code>IndexError</code> crashes.</p>
+        </div>
+      </section>
+
+      <!-- 8. QUIZ -->
+      <section class="l-sec" id="quiz">
+        <span class="phase" style="--pc:var(--teal)"><b>4</b>Apply · Check yourself</span>
+        <h2>Quick quiz: <em>WAEC, NECO &amp; JAMB</em></h2>
+        <p class="intro">12 Lesson 4 questions plus 2 spaced-retrieval review questions. Choose an option for instant feedback and a full explanation.</p>
+        <div class="quiz" id="quiz-list"></div>
+        <div class="quiz-score">
+          <span data-quiz-score>Score <b>0 / 14</b></span>
+          <button class="btn btn-ghost btn-sm" type="button" data-quiz-reset>Retry quiz</button>
+        </div>
+      </section>
+
+      <!-- 9. REFLECT -->
+      <section class="l-sec" id="reflect">
+        <span class="phase" style="--pc:var(--lime)"><b>5</b>Reflect · 5 min</span>
+        <h2>How did <em>you</em> do?</h2>
+        <p class="intro">Rate your confidence from 1 to 4 on each goal of Lesson 4.</p>
+        <div class="rate-key"><span><b>1</b> Not yet</span><span><b>2</b> With help</span><span><b>3</b> On my own</span><span><b>4</b> I could teach it</span></div>
+        <div class="rate-list" id="rate-list">
+          <div class="rate" data-rate="r1"><p>I can explain an array/list as a contiguous ordered collection of elements.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r2"><p>I can access and update elements using zero-based indices (0..N−1) and negative indices.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r3"><p>I can calculate byte addresses from Address(i) = Base + i × Size.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r4"><p>I can traverse an array with a loop to find the minimum, maximum, or average.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+          <div class="rate" data-rate="r5"><p>I can spot and fix off-by-one loops that cause IndexError.</p><div class="rate-btns"><button type="button" data-v="1">1</button><button type="button" data-v="2">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button></div></div>
+        </div>
+
+        <h3>Exit ticket</h3>
+        <div class="aq" data-answer="l04-exit">
+          <div class="aq-top"><h4>An array <code>panels</code> holds 50 solar panel readings starting at base address <code>2000</code>, with each reading occupying 4 bytes. Find (a) the maximum valid index, and (b) the byte address of <code>panels[10]</code>.</h4><span class="marks">2 marks</span></div>
+          <textarea class="l-textarea" placeholder="(a) Max index = … (b) Address(10) = …" aria-label="Exit ticket answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Model answer <small>unlocks after you try</small></summary>
+            <div class="reveal-body"><p>(a) <span class="sp-math" data-latex="\text{Max valid index} = N - 1 = 50 - 1 = 49"></span> <b>(1)</b>.<br>(b) <span class="sp-math" data-latex="\text{Address}(10) = 2000 + (10 \times 4) = 2040"></span> <b>(1)</b>.</p></div>
+          </details>
+        </div>
+
+        <h3>Blank-page recall</h3>
+        <div class="callout tip reveal" id="recall-box">
+          <p>Close your notes and write down everything you remember, then tick each point: <strong>contiguous memory</strong> · <strong>zero-based offset indexing (0..N−1)</strong> · <strong>Address(i) = Base + i × Size</strong> · <strong>IndexError at index N</strong> · <strong>seeding min/max with arr[0]</strong>.</p>
+        </div>
+      </section>
+
+      <!-- 10. ASSIGNMENT -->
+      <section class="l-sec" id="assignment">
+        <span class="phase" style="--pc:var(--crimson)"><b>5</b>Assignment · 40 min home</span>
+        <h2>Assignment: <em>Arrays, Collections &amp; Indexing</em></h2>
+        <p class="intro">Complete <strong>Part A and Part B from 03-questions.md § Lesson 04</strong>. Type your attempt first to unlock each model solution and marking scheme.</p>
+        <div class="assign-head no-print"><button class="btn btn-ink btn-sm" type="button" data-print>Print or save as PDF</button></div>
+
+        <h3>Part A · Practical Home Investigation (Array Inventory Audit)</h3>
+        <div class="aq" data-answer="l04-a1">
+          <div class="aq-top"><h4>Create an inventory list of 6 electrical or computer appliances in your house (e.g. <code>["Fan", "TV", "Refrigerator", "Laptop", "Router", "Bulb"]</code>). Draw or write out the memory representation showing: Item Value, 1-based Human Position, 0-based Machine Index, and Python Negative Index (<code>-1</code> to <code>-6</code>).</h4><span class="marks">5 marks</span></div>
+          <textarea class="l-textarea" placeholder="List your 6 appliances with their 1-based position, 0-based index, and negative index…" aria-label="Part A answer"></textarea>
+          <details class="reveal-box solution">
+            <summary>Sample answer &amp; marking guidance <small>unlocks after you try</small></summary>
+            <div class="reveal-body">
+              <p>For <code>appliances = ["Fan", "TV", "Refrigerator", "Laptop", "Router", "Bulb"]</code> (<span class="sp-math" data-latex="N = 6"></span>):</p>
+              <ul>
+                <li><code>"Fan"</code>: 1st item · 0-based index <code>0</code> · negative index <code>-6</code></li>
+                <li><code>"TV"</code>: 2nd item · 0-based index <code>1</code> · negative index <code>-5</code></li>
+                <li><code>"Refrigerator"</code>: 3rd item · 0-based index <code>2</code> · negative index <code>-4</code></li>
+                <li><code>"Laptop"</code>: 4th item · 0-based index <code>3</code> · negative index <code>-3</code></li>
+                <li><code>"Router"</code>: 5th item · 0-based index <code>4</code> · negative index <code>-2</code></li>
+                <li><code>"Bulb"</code>: 6th item · 0-based index <code>5</code> · negative index <code>-1</code></li>
+              </ul>
+              <p><em>Marking guidance:</em> 2 marks for complete 6-item table, 2 marks for accurate 0-based (<code>0..5</code>) and negative (<code>-6..-1</code>) indices, 1 mark for clear labelling.</p>
+            </div>
+          </details>
+        </div>
+
+        <h3>Part B · 30-Mark Written Examination Paper</h3>
+
+        <div class="aq" data-answer="l04-b1">
+          <div class="aq-top"><h4>b1. Explain what an <em>array</em> is and describe how array elements are stored in physical computer memory.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Define an array and its physical RAM storage…" aria-label="b1 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>An array is an ordered data structure holding multiple values under a single identifier <b>(2)</b>. In physical RAM, elements are stored in contiguous (adjoining) memory blocks of equal size, allowing direct <span class="sp-math" data-latex="O(1)"></span> address calculation <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b2">
+          <div class="aq-top"><h4>b2. Given the Python list <code>tariffs = [45.0, 52.5, 68.0, 72.0, 85.0]</code>, write expressions to: (i) access the first element; (ii) access the last element using length; (iii) change <code>52.5</code> to <code>55.0</code>; (iv) add <code>90.0</code> to the end of the list.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="(i) … (ii) … (iii) … (iv) …" aria-label="b2 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>(i) <code>tariffs[0]</code> <b>(1)</b><br>(ii) <code>tariffs[len(tariffs) - 1]</code> <b>(1)</b><br>(iii) <code>tariffs[1] = 55.0</code> <b>(1)</b><br>(iv) <code>tariffs.append(90.0)</code> <b>(1)</b></p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b3">
+          <div class="aq-top"><h4>b3. Explain what an <em>off-by-one error</em> is and identify the error in this code:<br><code>cells = [3.2, 3.3, 3.1, 3.4]</code><br><code>for i in range(1, 5): print(cells[i])</code></h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="Explain off-by-one error and what fails in range(1, 5)…" aria-label="b3 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>An off-by-one error occurs when an iterative loop executes one time too many or one time too few due to incorrect boundary conditions <b>(2)</b>. In this code, <code>range(1, 5)</code> starts at index <code>1</code> (skipping <code>cells[0]</code>) and attempts to access <code>cells[4]</code>, which is out of range for a 4-item list (valid indices <code>0..3</code>), raising an <code>IndexError</code> <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b4">
+          <div class="aq-top"><h4>b4. Write a complete Python program that calculates both the sum and the average of all numbers in <code>scores = [55, 70, 82, 64, 90, 75]</code>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="scores = [55, 70, 82, 64, 90, 75]&#10;total = 0…" aria-label="b4 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <pre><code>scores = [55, 70, 82, 64, 90, 75]
+total = 0                            # (1)
+for score in scores:                 # (1)
+    total += score                   # (1)
+average = total / len(scores)        # (1)
+print("Sum:", total, "Average:", average)</code></pre>
+            <p>(Sum = <code>436</code>, Average = <code>72.67</code>.)</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b5">
+          <div class="aq-top"><h4>b5. Write an algorithm in pseudocode to find the maximum number in an array <code>arr</code> of size <span class="sp-math" data-latex="N"></span>.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="SET max_val = arr[0]…" aria-label="b5 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <pre><code>SET max_val = arr[0]                 // (1)
+FOR i = 1 TO N - 1 DO                // (1)
+    IF arr[i] &gt; max_val THEN         // (1)
+        SET max_val = arr[i]
+    ENDIF
+ENDFOR
+OUTPUT max_val                       // (1)</code></pre>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b6">
+          <div class="aq-top"><h4>b6. Differentiate between a <em>one-dimensional array</em> and a <em>two-dimensional array</em>, giving an everyday example of each.</h4><span class="marks">4 marks</span></div>
+          <textarea class="l-textarea" placeholder="1D array vs 2D array + examples…" aria-label="b6 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>A one-dimensional array is a linear list accessed with a single index <code>[i]</code> representing a single row of items (e.g. daily rainfall readings or the 8-cell battery rack) <b>(2)</b>. A two-dimensional array is a table of rows and columns accessed via two indices <code>[row][col]</code> (e.g. a school timetable or spreadsheet grid) <b>(2)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b7">
+          <div class="aq-top"><h4>b7. What is the result of <code>len(["Lagos", "Abuja", "Kano", "Enugu"])</code> and what is the index of <code>"Enugu"</code>?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="len = … , index of 'Enugu' = …" aria-label="b7 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p><code>len = 4</code> <b>(1.5)</b>; Index of <code>"Enugu"</code> = <code>3</code> (or negative index <code>-1</code>) <b>(1.5)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="aq" data-answer="l04-b8">
+          <div class="aq-top"><h4>b8. Why is zero-based indexing mathematically more natural for memory address calculation than one-based indexing?</h4><span class="marks">3 marks</span></div>
+          <textarea class="l-textarea" placeholder="Explain using the Base + offset formula…" aria-label="b8 answer"></textarea>
+          <details class="reveal-box solution"><summary>Solution <small>unlocks after you try</small></summary><div class="reveal-body">
+            <p>The index represents the direct <em>offset</em> (distance) from the array's starting base address. Because the first element resides right at the base address (<span class="sp-math" data-latex="\text{offset} = 0"></span>), <span class="sp-math" data-latex="\text{Address}(0) = \text{Base} + (0 \times \text{Size}) = \text{Base}"></span> without needing an extra subtraction <span class="sp-math" data-latex="(i - 1)"></span> on every memory access <b>(3)</b>.</p>
+          </div></details>
+        </div>
+
+        <div class="l-pager" style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:32px;padding-top:20px;border-top:1px solid rgba(15,23,42,.12);">
+          <a class="btn btn-ghost" href="../lesson-03/index.html" style="color:#0f172a;border-color:rgba(15,23,42,.2);">← Lesson 3: Loops &amp; Repetition</a>
+          <a class="btn btn-tour" href="../lesson-05/index.html">Next: Lesson 5 — Modular Architecture &amp; Functions →</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="../../assets/js/three.min.js"></script>
+  <script src="../../assets/js/paper-core.min.js"></script>
+  <script src="../../assets/js/scene-kit.js"></script>
+  <script src="../../assets/js/programming-bench.js"></script>
+  <script src="../../assets/js/programming-zoom.js"></script>
+  <script src="../../assets/js/microgrid-props.js"></script>
+  <script src="../../assets/js/retrieval-bank.js"></script>
+  <script src="data.js"></script>
+  <script src="../../assets/js/lesson-kit.js"></script>
+  <script src="../../assets/js/sort-dnd.js"></script>
+  <script src="../../assets/js/story-scene.js"></script>
+  <script src="story.js"></script>
+  <script src="bench.js"></script>
+  <script src="zoom.js"></script>
+  <script src="lesson.js"></script>
+  <script src="narration.js"></script>
+  <script src="../../assets/js/narrator.js"></script>
+  <script src="../../assets/js/math-kit.js"></script>
+  <script>
+    (function () {
+      if (!window.StudyMath || !window.StudyMath.renderLatex) return;
+      document.querySelectorAll(".sp-math[data-latex]").forEach(function (el) {
+        if (el.children.length) return;
+        var tex = el.getAttribute("data-latex");
+        var isBlock = el.tagName === "DIV";
+        var tmp = document.createElement("div");
+        tmp.innerHTML = window.StudyMath.renderLatex(tex, isBlock);
+        var rendered = tmp.firstElementChild;
+        if (rendered) {
+          el.className = rendered.className;
+          el.setAttribute("aria-label", rendered.getAttribute("aria-label") || "");
+          el.innerHTML = rendered.innerHTML;
+        }
+      });
+    })();
+  </script>
+  <script src="../../assets/js/code-kit.js"></script>
+  <script src="../../assets/js/video-embed.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-/* Lesson 01 · Choreographed StudyNarrator Script — Need for Transport: Open vs Closed & Single vs Double Circulation (en-NG) */
+/* Lesson 01 · Choreographed StudyNarrator script: Why big bodies need a transport system (Nigerian English, en-NG ranked first) */
 window.NARRATION = {
   rate: 0.96,
   pitch: 1.01,
@@ -7,54 +7,66 @@ window.NARRATION = {
     note: {
       event: "kit:note",
       prompt: "Type a prediction (or tap a seed question) and pin it to the Wonder Wall",
-      react: function () {
-        return "Pinned! Now let's test your ideas on open, single, and double circulatory systems.";
-      }
+      react: function () { return "Pinned! Now let us test your idea on the cubes."; }
     },
     sort: {
-      event: "l1:sort-checked",
-      prompt: "Sort all 12 cards into Open Circulation, Single Closed Circulation, and Double Closed Circulation, then tap Check my sorting",
+      event: "l1:sort",
+      prompt: "Sort all ten animals into the four bins, then tap Check my sorting",
       react: function (d) {
         if (!d) return "Good effort!";
-        if (d.score === d.total) return "Twelve out of twelve! You distinguished insect open haemocoel, fish single circulation, and tetrapod double circulation flawlessly.";
-        if (d.score >= 9) return "Nice work! " + d.score + " out of " + d.total + ". Check the notes below for any card that slipped.";
-        return "You got " + d.score + " out of " + d.total + ". Review the feedback below — WAEC and JAMB love testing cockroach haemolymph and the crocodile 4-chamber exception!";
+        if (d.correct === d.total) return "Ten out of ten! You sorted open, closed single and closed double like a real biologist.";
+        if (d.correct >= 7) return "Nice work, " + d.correct + " out of " + d.total + ". Read the reasons below for any card that slipped.";
+        return "You got " + d.correct + " out of " + d.total + ". Read the reasons below. The earthworm and the pigeon are the classic traps.";
       }
     },
     bench: {
       event: "l1:bench-done",
-      prompt: "Record at least 4 cube size trials (A–E) on the 3D SA/V bench",
-      react: function () {
-        return "Splendid! You measured surface area, volume, and SA over V across four cube sizes and proved that SA over V equals 6 divided by L.";
+      prompt: "Drop the cubes in the acid, wait, then cut and measure all four cubes",
+      react: function () { return "All four cubes measured. Look at how the share of colourless volume falls as the cube gets bigger."; }
+    },
+    pin: {
+      event: "l1:pin",
+      prompt: "Tap any pin on the cube-side explorer",
+      react: function (d) {
+        if (d && d.L >= 20) return "See that? The acid went the same distance, yet a big cube keeps a large pink core.";
+        return "Good. A small cube is cleared right through.";
       }
     },
     bridge: {
-      event: "l1:vinegar-done",
-      prompt: "Run Steps 1, 2 and 3 to solve Tunde's Surulere Stadium transport puzzle",
-      react: function () {
-        return "Puzzle solved! At 150 beats per minute and 110 millilitres stroke volume, Tunde's cardiac output reaches 16 point 5 litres per minute!";
+      event: "l1:bridge",
+      prompt: "Answer the three steps of Dr Aisha's first clue",
+      react: function (d) {
+        if (d && d.correct === d.total) return "Clue one solved, all three steps right!";
+        return "Clue one solved. Read the reasons again if a step surprised you.";
       }
     },
     quiz: {
       event: "kit:quiz-done",
-      prompt: "Answer all 12 WAEC/NECO/JAMB quiz questions",
+      prompt: "Answer all twelve quiz questions",
       react: function (d) {
         if (!d) return "Quiz complete!";
-        if (d.score >= 10) return "Outstanding — " + d.score + " out of " + d.total + "! You have mastered SA/V ratios, Open versus Closed, and Single versus Double Circulation.";
-        if (d.score >= 7) return "Well done! " + d.score + " out of " + d.total + ". Review the explanations on the ones you missed.";
-        return "You scored " + d.score + " out of " + d.total + ". Replay the Make Sense and 3D Circuit Zoom chapters, then retry!";
+        if (d.score >= 10) return "Outstanding, " + d.score + " out of " + d.total + "!";
+        if (d.score >= 7) return "Well done, " + d.score + " out of " + d.total + ". Read the explanations for the ones you missed.";
+        return "You scored " + d.score + " out of " + d.total + ". Go back to the bench and the circuit zoom, then retry.";
       }
     }
   },
 
   actions: {
-    "pin:0": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(0); },
-    "pin:1": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(1); },
-    "pin:4": function () { if (window.L01 && window.L01.showPin) window.L01.showPin(4); },
-    "bench:heavy": function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("heavy"); },
-    "bench:std":   function () { if (window.StudyScenes && window.StudyScenes.bench) window.StudyScenes.bench.setCond("std"); },
-    "clock:1": function () { if (window.L01 && window.L01.vt) window.L01.vt.step1(); },
-    "clock:2": function () { if (window.L01 && window.L01.vt) window.L01.vt.step2(); }
+    story: function (arg) { if (window.StudyScenes && window.StudyScenes.story) window.StudyScenes.story.beat(parseInt(arg, 10) || 0); },
+    bench: function (arg) {
+      var b = window.StudyScenes && window.StudyScenes.bench;
+      if (!b) return;
+      var p = String(arg).split(":");
+      if (p[0] === "drop") b.drop();
+      else if (p[0] === "skip") b.skip();
+      else if (p[0] === "select") b.select(p[1]);
+      else if (p[0] === "measure") b.measure(p[1] ? +p[1] : undefined);
+      else if (p[0] === "reset") b.reset();
+    },
+    zoom: function (arg) { if (window.StudyScenes && window.StudyScenes.zoom) window.StudyScenes.zoom.setMode(String(arg)); },
+    pin: function (arg) { if (window.L01 && window.L01.showPin) window.L01.showPin(parseInt(arg, 10) || 0); },
+    open: function (sel) { var d = document.querySelector(sel); if (d && d.tagName === "DETAILS") d.open = true; }
   },
 
   script: [
@@ -63,29 +75,14 @@ window.NARRATION = {
       steps: [
         {
           target: ".l-hero .display",
-          cue: "Lesson 1 · Need for Transport, Open vs Closed & Single vs Double Circulation",
+          cue: "Lesson 1 · Why big bodies need a heart",
           sparkle: true,
-          say: "Welcome to Lesson 1 of The Human Heart and Blood Circulation! Today we prove mathematically why large organisms need a transport system, contrast open and closed circulation, and compare single and double vertebrate circulation."
-        },
-        {
-          target: ".l-hero .question",
-          cue: "Our guiding question",
-          say: "Here is our guiding puzzle: why can a microscopic pond Amoeba breathe by simple diffusion, a cockroach survive with colourless haemolymph, and a human sprinter require a four-chambered double pump?"
+          say: "Welcome to Lesson 1 of The Human Heart and Blood Circulation! Today we find out why a big, active body like Chidi needs a heart and blood vessels, when a tiny Amoeba needs neither."
         },
         {
           target: "#objectives",
-          cue: "5 goals for Lesson 1",
-          say: "By the end of this lesson you will calculate surface-area-to-volume ratios, explain why insect haemolymph does not carry oxygen, contrast open and closed systems, compare two-chamber fish, three-chamber amphibian, and four-chamber mammalian hearts, and compute cardiac output."
-        }
-      ]
-    },
-    {
-      title: "Do Now",
-      steps: [
-        {
-          target: "#donow-list",
-          cue: "Wake up your biology toolkit",
-          say: "Start with these four quick Do Now cards on diffusion distance, surface-area-to-volume formulas, cellular respiration, and levels of organisation. Answer each in your head before flipping!"
+          cue: "Our guiding question and goals",
+          say: "Our guiding question is: an Amoeba has no heart, so why does Chidi need one? By the end you will give four reasons, calculate S A to V with unit changes, and compare open, closed, single and double circulation."
         }
       ]
     },
@@ -93,34 +90,24 @@ window.NARRATION = {
       title: "The Story",
       steps: [
         {
-          target: "#story-stage",
-          action: "story:0",
-          cue: "Surulere National Stadium, Lagos",
-          say: "Let's step onto the track at Surulere National Stadium, Lagos. Tunde has just finished a 400-metre sprint with his heart hammering at 150 beats per minute."
+          target: "#story-stage", action: "story:0", cue: "Oja Oba health-day tent",
+          say: "We are at the Oja Oba health-day tent. Dr Aisha sends Chidi on a sprint across the market to fetch a cable, and he comes back with his chest heaving."
         },
         {
-          target: { scene: "story", part: "cust2" },
-          action: "story:1",
-          cue: "The SA/V = 6 ÷ L Mathematical Trap",
-          say: "Amaka explains the mathematical reason: as an organism's side length L increases a thousand-fold, its surface-area-to-volume ratio 6 over L drops a thousand-fold, making simple diffusion far too slow."
+          target: { scene: "story", part: "amaka" }, action: "story:1", cue: "Two fingers on the wrist",
+          say: "Dr Aisha presses two fingers on his wrist and checks her watch. His heart has nearly doubled its speed. Why should running do that?"
         },
         {
-          target: { scene: "story", part: "ngozi" },
-          action: "story:2",
-          cue: "Cockroach Open Haemocoel",
-          say: "Coach Musa points to a cockroach by the bench: insects have an open circulatory system where colourless haemolymph bathes organs directly in a haemocoel."
+          target: { scene: "story", part: "cust2" }, action: "story:2", cue: "Baba Sule's frog",
+          say: "Baba Sule laughs. A frog in a gutter has no need to run like that, he says. Small heart, small trouble!"
         },
         {
-          target: { scene: "story", part: "clockA" },
-          action: "story:3",
-          cue: "Tracheae Carry O₂ in Insects!",
-          say: "Remember this classic WAEC exam fact: cockroach haemolymph lacks haemoglobin and carries zero oxygen! Instead, tracheal tubes deliver oxygen directly to insect tissues."
+          target: { scene: "story", part: "amaka" }, action: "story:3", cue: "An Amoeba in pond water",
+          say: "Now in the lab, Dr Aisha shows an Amoeba under the microscope. It has no heart and no blood. It gets everything by diffusion. Chidi cannot. Today we find out why."
         },
         {
-          target: { scene: "story", part: "amaka" },
-          action: "story:5",
-          cue: "To the LUTH Cardiovascular Lab!",
-          say: "At the LUTH Cardiovascular Lab, Doctor Bamidele invites us to test cube scaling and circulation loops on the 3D bench."
+          target: { scene: "story", part: "cubeBeaker" }, action: "story:4", cue: "Pink cubes in acid",
+          say: "She drops four pink agar cubes of different sizes into acid. Watch how far the colour fades from the edge. That is our bench."
         }
       ]
     },
@@ -128,132 +115,115 @@ window.NARRATION = {
       title: "Wonder Wall",
       steps: [
         {
-          target: "#wall-wonder",
-          cue: "Pin your prediction",
-          wait: "note",
-          say: "Before we touch the 3D bench, pin your prediction or question to the Wonder Wall!"
+          target: "#wall-wonder", cue: "Pin your prediction", wait: "note",
+          say: "Before the bench, pin your prediction. If oxygen can spread by itself, why bother with a heart and blood at all?"
         }
       ]
     },
     {
-      title: "Circulatory Systems Sort",
+      title: "Circulation Sort",
       steps: [
         {
-          target: "#kitchen-sort",
-          cue: "Open vs Single Closed vs Double Closed",
-          wait: "sort",
-          say: "Activity 1! Sort all twelve cards into Open Circulation, Single Closed Circulation, and Double Closed Circulation, then tap Check my sorting."
+          target: "#circ-sort", cue: "Four bins, ten animals", wait: "sort",
+          say: "Sort all ten animals: no system, open, closed single, or closed double. The earthworm and the pigeon are the classic traps. Then tap Check my sorting."
         }
       ]
     },
     {
-      title: "3D SA/V & Pump Bench",
+      title: "Agar-Cube Bench",
       steps: [
         {
-          target: "#safety-box",
-          cue: "Why Size Demands Mass Flow",
-          say: "Now step up to the 3D Surface-Area-to-Volume and Pump Bench! Watch how subdividing a tissue block into capillary-fed units restores exchange area."
+          target: "#method-cards", cue: "Four method cards",
+          say: "Here are the four steps. Cut four cubes of side 5, 10, 20 and 30 millimetres. Drop them all into the acid at the same moment. After 8 minutes, blot, cut and measure. Then calculate S A to V and the percentage that turned colourless."
         },
         {
-          target: { scene: "bench", part: "clamp" },
-          cue: "3D Subdivided Tissue Cube",
-          say: "On the left is our 3D tissue cube showing surface area 6 L squared and volume L cubed."
+          target: { scene: "bench", part: "cube" }, action: "bench:select:30", cue: "Four pink cubes",
+          say: "These are the four cubes, cut open so you can see inside. Pink means the acid has not reached it. Colourless means it has. Right now they are all pink."
         },
         {
-          target: { scene: "bench", part: "bob" },
-          action: "bench:test:1",
-          cue: "Trial B · L = 1.0 mm (SA/V = 6.00 mm⁻¹)",
-          say: "Watch Trial B: at side length L equals 1 millimetre, surface area is 6 square millimetres, volume is 1 cubic millimetre, and SA over V is 6 per millimetre."
+          target: { scene: "bench", part: "beaker" }, action: "bench:drop", cue: "Into the dilute acid",
+          say: "In go all four cubes, together, held with forceps. Watch the clock and the colourless rim creep inwards from every face. After 8 minutes the acid has moved in 3 millimetres on every face of every cube."
         },
         {
-          target: "#bench-stage",
-          action: "bench:std",
-          cue: "Your turn on the 3D bench!",
-          wait: "bench",
-          say: "Now it's your turn! Tap the trial buttons A to E to record at least four organism sizes."
+          target: "#bench-stage", action: "bench:skip", cue: "Your turn on the bench", wait: "bench",
+          say: "Your turn. Pick each cube and tap Cut and measure. Notice that the acid went the same depth in each, yet the big cube is still pink in the middle."
         },
         {
-          target: "#results-table",
-          cue: "Complete the WAEC table",
-          say: "Select your recorded surface area, volume, and SA over V ratio in the table below."
+          target: "#graph-card", cue: "A smooth curve, not a straight line",
+          say: "Your results land on the graph. The share of colourless volume climbs steeply and then levels off at 100 percent, so draw a smooth curve of best fit, never a straight line. Then complete the table."
+        },
+        {
+          target: "#expected", action: "open:#expected", cue: "Expected results and errors",
+          say: "Compare with the expected table. For example, the 30 millimetre cube is only 48.8 percent colourless. And note the sources of error: lifting a cube late makes the reading too high, and a cube lying flat makes it too low."
         }
       ]
     },
     {
-      title: "Open vs Closed & Single vs Double",
+      title: "Make Sense",
       steps: [
         {
-          target: "#eq-shm",
-          cue: "Surface-Area-to-Volume: SA/V = 6 ÷ L",
-          sparkle: true,
-          say: "Let's lock in the two core equations of Lesson 1: first, for a cube of side L, surface-area-to-volume ratio equals 6 divided by L."
+          target: "#why-four", cue: "Four reasons",
+          say: "Four reasons big animals need a transport system. One, a small S A to V. Two, cells far from the surface, and diffusion is too slow over long distances. Three, active animals burn oxygen and food fast. Four, materials are made in one organ and used in another."
         },
         {
-          target: ["#eq-omega", "#eq-vel"],
-          cue: "Cardiac Output: CO = HR × SV",
-          say: "Second, cardiac output equals heart rate multiplied by stroke volume, and full blood circulation time equals total blood volume divided by cardiac output."
+          target: "#props-table", cue: "Open vs closed, single vs double",
+          say: "Learn these two tables. Open: blood pools in the haemocoel at low pressure, as in the cockroach. Closed: blood stays in vessels. Single: one trip through the heart per circuit, as in tilapia. Double: two trips, as in the pigeon and in Chidi."
         },
         {
-          target: "#ph-explorer",
-          action: "pin:1",
-          cue: "Cockroach Open Circulation",
-          say: "Tap along the Comparative Transport Explorer: in the cockroach, a 13-chambered dorsal heart pumps colourless haemolymph through ostia into the haemocoel."
-        },
-        {
-          target: "#ph-explorer",
-          action: "pin:4",
-          cue: "4-Chamber Complete Double Circulation",
-          say: "In birds, mammals, and crocodiles, a four-chambered heart completely separates oxygenated and deoxygenated blood!"
+          target: "#pos-explorer", action: "pin:5", cue: "Cube-side explorer", wait: "pin",
+          say: "Try the cube-side explorer. Tap a pin, and see how S A to V halves each time the side doubles."
         }
       ]
     },
     {
-      title: "3D Vertebrate Circuit Zoom",
+      title: "Circuit Zoom",
       steps: [
         {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:acid",
-          cue: "Fish Single Circulation (2 Chambers)",
-          say: "Zoom inside the 3D Fish Single Circulation loop on the left! Blood passes through the two-chambered heart once per lap, losing pressure across the gill capillaries before reaching the body."
+          target: { scene: "zoom", part: "pump" }, action: "zoom:open", cue: "Open: low pressure",
+          say: "Zoom in. In open circulation, haemolymph is pumped into the body cavity and sloshes round the organs. One trip, low pressure."
         },
         {
-          target: { scene: "zoom", part: "vectors" },
-          action: "zoom:mode:base",
-          cue: "Mammalian Double Circulation (4 Chambers)",
-          say: "Now switch to Mammalian Double Circulation on the right: the figure-eight loop returns oxygenated blood from the lungs to the thick left ventricle, repumping it at 120 millimetres of mercury!"
+          target: { scene: "zoom", part: "pump" }, action: "zoom:single", cue: "Single: pressure lost at the gills",
+          say: "In closed single circulation, the blood goes heart, gills, body, heart. Pressure is lost across the fine gill capillaries, so it reaches the body reduced."
+        },
+        {
+          target: { scene: "zoom", part: "pump" }, action: "zoom:double", cue: "Double: pumped twice",
+          say: "In closed double circulation, the blood returns to the heart after the lungs and is pumped a second time. Two trips through the heart, and it reaches the body at high pressure with no mixing."
         }
       ]
     },
     {
-      title: "Worked Examples & Bridge",
+      title: "Worked Examples",
       steps: [
         {
-          target: "#ex1",
-          cue: "Example 1 · SA/V Scaling Calculation",
-          say: "Study Worked Example 1: every step is rendered in LaTeX with a plain-English explainer note underneath — showing why a 0 point 1 millimetre Amoeba has a 1,000 times larger SA over V ratio than a 100 millimetre tissue cube."
+          target: "#ex1", cue: "SA : V with a unit change",
+          say: "Example one. A cube of side 2.0 centimetres. Surface area is 6 times 2.0 squared, 24 square centimetres. Volume is 8.0 cubic centimetres. The ratio is 3.0 per centimetre, which is 0.30 per millimetre."
         },
         {
-          target: "#vinegar-test",
-          action: "clock:1",
-          cue: "Solve Tunde's Surulere Sprint Output!",
-          wait: "bridge",
-          say: "Now help Tunde and Amaka connect SA over V scaling to his 400-metre sprint cardiac output! Click Steps 1, 2, and 3."
+          target: "#ex3", cue: "Share of a cube reached by acid",
+          say: "Example three. In the 20 millimetre cube the acid moved in 3.0 millimetres from every face. The pink centre is 20 minus 6, which is 14 millimetres, so its volume is 2744 cubic millimetres. The cube is 8000, so the colourless share is 65.7 percent."
         }
       ]
     },
     {
-      title: "Quiz & Reflect",
+      title: "The Big Idea",
       steps: [
         {
-          target: "#quiz",
-          cue: "12 WAEC & JAMB Questions",
-          wait: "quiz",
-          say: "Test yourself on these twelve exam-style questions on SA over V ratios, cockroach haemolymph, fish single circulation, and mammalian double circulation."
+          target: "#bridge-steps", cue: "Dr Aisha's first clue", wait: "bridge",
+          say: "Now solve Dr Aisha's first clue in three steps: Chidi's tiny S A to V, the oxygen demand of a sprint, and the design that can keep up."
+        }
+      ]
+    },
+    {
+      title: "Quiz and Reflect",
+      steps: [
+        {
+          target: "#quiz", cue: "12 exam-style questions", wait: "quiz",
+          say: "Test yourself on these twelve questions. Read the explanation for every option, not only the one you picked."
         },
         {
-          target: "#reflect",
-          cue: "Rate your confidence & Assignment",
-          say: "Finally, rate your confidence from 1 to 4, complete the Exit Ticket, and try the 30-mark assignment before moving to Lesson 2!"
+          target: "#reflect", cue: "Rate yourself, then the assignment",
+          say: "Finally, rate your confidence from one to four, write your exit ticket, and do Part A and Part B of the assignment at home. Well done on Lesson 1!"
         }
       ]
     }
